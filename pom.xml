@@ -27,9 +27,7 @@
 	<modules>
 		<module>hp-soa-dependencies</module>
 		<module>hp-soa-framework</module>
-		<!--
 		<module>hp-soa-starter</module>
-		-->
 	</modules>
 
 	<repositories>

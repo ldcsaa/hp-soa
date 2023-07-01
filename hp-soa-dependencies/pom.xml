@@ -554,12 +554,12 @@
 			</dependency>
 
 			<dependency>
-				<groupId>com.alibaba.lcb</groupId>
+				<groupId>com.alibaba</groupId>
 				<artifactId>fastjson</artifactId>
 				<version>${fastjson.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.alibaba.lcb</groupId>
+				<groupId>com.alibaba.fastjson2</groupId>
 				<artifactId>fastjson2</artifactId>
 				<version>${fastjson2.version}</version>
 			</dependency>
@@ -1123,8 +1123,6 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
 					</configuration>
 				</plugin>
