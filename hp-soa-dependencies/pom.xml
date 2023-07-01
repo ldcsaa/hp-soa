@@ -14,11 +14,6 @@
 	<packaging>pom</packaging>
 
     <properties>
-		<build.timestamp>${maven.build.timestamp}</build.timestamp>
-		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-		<maven.surefire.conf.forkCount>0</maven.surefire.conf.forkCount>
-		<maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
-		<maven.surefire.conf.argLine>${env.MAVEN_FORK_JVM_ARGS}</maven.surefire.conf.argLine>
 		<spring-boot-main_class>org.hpsocket.framework.core.server.main.AppStarter</spring-boot-main_class>
 
 		<fastjson.version>2.0.34</fastjson.version>
@@ -700,6 +695,13 @@
 				<artifactId>spring-webmvc</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+			
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-test</artifactId>
+			    <version>${spring-boot.version}</version>
+			    <scope>test</scope>
+			</dependency>
 
 			<dependency>
 				<groupId>junit</groupId>
@@ -709,7 +711,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-api</artifactId>
+				<artifactId>junit-jupiter-engine</artifactId>
 				<version>${junit5.version}</version>
 				<scope>test</scope>
 			</dependency>
