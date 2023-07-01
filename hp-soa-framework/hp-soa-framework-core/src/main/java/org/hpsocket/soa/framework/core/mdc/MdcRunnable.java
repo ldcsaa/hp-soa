@@ -1,6 +1,4 @@
-package org.hpsocket.soa.framework.core.thread;
-
-import org.hpsocket.soa.framework.core.mdc.MdcAttr;
+package org.hpsocket.soa.framework.core.mdc;
 
 abstract public class MdcRunnable extends MdcAttr implements Runnable
 {

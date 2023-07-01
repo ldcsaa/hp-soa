@@ -37,7 +37,7 @@
 			</snapshots>
 			<id>local-snapshots</id>
 			<name>Local Snapshots</name>
-			<url>http://nexus.myserver.com:8081/repository/maven-snapshots</url>
+			<url>http://192.168.56.23:8081/repository/maven-snapshots</url>
 		</repository>
 
 		<repository>
@@ -46,7 +46,7 @@
 			</snapshots>
 			<id>local-thirdparty</id>
 			<name>Local 3rd-party</name>
-			<url>http://nexus.myserver.com:8081/repository/maven-thirdparty</url>
+			<url>http://192.168.56.23:8081/repository/maven-thirdparty</url>
 		</repository>
 
 		<repository>
@@ -55,7 +55,7 @@
 			</snapshots>
 			<id>local-releases</id>
 			<name>Local Releases</name>
-			<url>http://nexus.myserver.com:8081/repository/maven-releases</url>
+			<url>http://192.168.56.23:8081/repository/maven-releases</url>
 		</repository>
 
 		<repository>
@@ -91,12 +91,12 @@
 		<repository>
 			<id>local-releases</id>
 			<name>Local Nexus Releases Repository</name>
-			<url>http://nexus.myserver.com:8081/repository/maven-releases/</url>
+			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>local-snapshots</id>
 			<name>Local Nexus Snapshots Repository</name>
-			<url>http://nexus.myserver.com:8081/repository/maven-snapshots/</url>
+			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 

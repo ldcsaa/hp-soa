@@ -14,7 +14,7 @@
 	<packaging>pom</packaging>
 
     <properties>
-		<spring-boot-main_class>org.hpsocket.framework.core.server.main.AppStarter</spring-boot-main_class>
+		<spring-boot.main_class>org.hpsocket.framework.web.server.main.AppStarter</spring-boot.main_class>
 
 		<fastjson.version>2.0.34</fastjson.version>
 		<fastjson2.version>2.0.34</fastjson2.version>
@@ -90,7 +90,6 @@
 		<okhttp2.version>2.7.5</okhttp2.version>
 		<okhttp3.version>4.11.0</okhttp3.version>
 		<guava.version>32.0.1-jre</guava.version>
-		<lombok.version>1.18.28</lombok.version>
 		
 		<jsoup.version>1.16.1</jsoup.version>
 		<sipsoup.version>1.7</sipsoup.version>
@@ -106,6 +105,9 @@
         <hutool.version>5.8.20</hutool.version>      
         <jjwt.version>0.11.5</jjwt.version>
         <json-lib.version>2.4</json-lib.version>
+        
+		<lombok.version>1.18.28</lombok.version>
+		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
 
 		<seata.version>1.6.1</seata.version>
@@ -434,12 +436,6 @@
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-api</artifactId>
 				<version>${log4j.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>${lombok.version}</version>
 			</dependency>
 
 			<dependency>
@@ -849,6 +845,17 @@
 			    <artifactId>json-lib</artifactId>
 			    <version>${json-lib.version}</version>
 			</dependency>
+			<!-- lombok -->
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.projectlombok</groupId>
+			    <artifactId>lombok-mapstruct-binding</artifactId>
+			    <version>${lombok-mapstruct-binding.version}</version>
+			</dependency>
 			<!-- mapstruct -->
             <dependency>
                 <groupId>org.mapstruct</groupId>
@@ -1123,7 +1130,24 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
+						<encoding>${project.build.sourceEncoding}</encoding>
+	                    <annotationProcessorPaths>
+	                        <path>
+	                            <groupId>org.projectlombok</groupId>
+	                            <artifactId>lombok</artifactId>
+	                            <version>${lombok.version}</version>
+	                        </path>
+	                        <path>
+	                            <groupId>org.mapstruct</groupId>
+	                            <artifactId>mapstruct-processor</artifactId>
+	                            <version>${mapstruct.version}</version>
+	                        </path>
+	                        <path>
+							    <groupId>org.projectlombok</groupId>
+							    <artifactId>lombok-mapstruct-binding</artifactId>
+							    <version>${lombok-mapstruct-binding.version}</version>
+	                        </path>
+	                   </annotationProcessorPaths>
 					</configuration>
 				</plugin>
 
@@ -1260,7 +1284,7 @@
 	                <artifactId>spring-boot-maven-plugin</artifactId>
 	                <version>${spring-boot.version}</version>
 	                <configuration>
-	                	<mainClass>${spring-boot-main_class}</mainClass>
+	                	<mainClass>${spring-boot.main_class}</mainClass>
 	                </configuration>
 	                <executions>
 	                    <execution>

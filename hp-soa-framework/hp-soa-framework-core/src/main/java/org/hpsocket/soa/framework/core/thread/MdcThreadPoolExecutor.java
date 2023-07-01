@@ -7,6 +7,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.hpsocket.soa.framework.core.mdc.MdcRunnable;
+
 import lombok.Getter;
 
 @Getter

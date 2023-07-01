@@ -1,8 +1,6 @@
-package org.hpsocket.soa.framework.core.thread;
+package org.hpsocket.soa.framework.core.mdc;
 
 import java.util.concurrent.Callable;
-
-import org.hpsocket.soa.framework.core.mdc.MdcAttr;
 
 abstract public class MdcCallable<T> extends MdcAttr implements Callable<T>
 {

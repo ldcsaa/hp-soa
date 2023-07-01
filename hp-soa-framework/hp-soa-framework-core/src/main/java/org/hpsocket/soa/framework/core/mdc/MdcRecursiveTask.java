@@ -1,8 +1,6 @@
-package org.hpsocket.soa.framework.core.thread;
+package org.hpsocket.soa.framework.core.mdc;
 
 import java.util.concurrent.RecursiveTask;
-
-import org.hpsocket.soa.framework.core.mdc.MdcAttr;
 
 @SuppressWarnings("serial")
 abstract public class MdcRecursiveTask<T> extends RecursiveTask<T>
