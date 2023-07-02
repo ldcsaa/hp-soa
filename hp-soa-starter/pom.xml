@@ -17,6 +17,7 @@
 	</properties>
 	
 	<modules>
+		<module>hp-soa-starter-web</module>
 	</modules>
 	
 	<dependencyManagement>
@@ -57,7 +58,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
