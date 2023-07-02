@@ -20,7 +20,7 @@
 		<fastjson2.version>2.0.34</fastjson2.version>
 		<nacos-client.version>2.2.4</nacos-client.version>
 
-		<dubbo.version>3.2.2</dubbo.version>
+		<dubbo.version>3.2.3</dubbo.version>
 		<netty.version>4.1.94.Final</netty.version>
 		<zookeeper.version>3.8.1</zookeeper.version>
 		<zkclient.version>0.11</zkclient.version>
@@ -164,6 +164,7 @@
 				<groupId>org.apache.dubbo</groupId>
 				<artifactId>dubbo</artifactId>
 				<version>${dubbo.version}</version>
+				<!--
 				<exclusions>
 					<exclusion>
 						<artifactId>spring-core</artifactId>
@@ -190,6 +191,7 @@
 						<groupId>org.springframework</groupId>
 					</exclusion>
 				</exclusions>
+				-->
 			</dependency>
 			<dependency>
 				<groupId>io.netty</groupId>
@@ -700,55 +702,6 @@
 				<scope>import</scope>
 			</dependency>
 			
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter</artifactId>
-				<version>${spring-boot.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			
-	        <dependency>
-	            <groupId>org.springframework.boot</groupId>
-	            <artifactId>spring-boot-starter-web</artifactId>
-	            <version>${spring-boot.version}</version>
-	        </dependency>
-	        
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-security</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-log4j2</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			
-	        <dependency>
-	            <groupId>org.springframework.boot</groupId>
-	            <artifactId>spring-boot-starter-actuator</artifactId>
-	            <version>${spring-boot.version}</version>
-	        </dependency>
-	        
-			<dependency>
-			    <groupId>org.springframework.boot</groupId>
-			    <artifactId>spring-boot-starter-test</artifactId>
-			    <version>${spring-boot.version}</version>
-			    <scope>test</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			
 	        <dependency>
 	            <groupId>org.springframework.boot</groupId>
 	            <artifactId>spring-boot-configuration-processor</artifactId>
@@ -1229,16 +1182,16 @@
 				
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>${maven-deploy-plugin.version}</version>
-				</plugin>
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
 					<version>${maven-install-plugin.version}</version>
 				</plugin>
 				
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${maven-deploy-plugin.version}</version>
+				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>

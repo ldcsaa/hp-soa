@@ -11,12 +11,14 @@
 	<artifactId>hp-soa-framework</artifactId>
 	<name>hp-soa-framework</name>
 	<packaging>pom</packaging>
+
 	<properties>
 	</properties>
 
 	<modules>
 		<module>hp-soa-framework-core</module>
 		<module>hp-soa-framework-web</module>
+		<module>hp-soa-framework-dubbo</module>
 	</modules>
 
 	<dependencyManagement>
@@ -24,13 +26,13 @@
 			<dependency>
 				<groupId>org.hpsocket</groupId>
 				<artifactId>hp-soa-dependencies</artifactId>
-				<version>${parent.version}</version>
+				<version>${project.parent.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -44,4 +46,47 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.yml</include>
+					<include>**/*.yaml</include>
+					<include>**/*.properties</include>
+					<include>**/*.conf</include>
+					<include>**/*.Filter</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
