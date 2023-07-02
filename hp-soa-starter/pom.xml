@@ -18,5 +18,24 @@
 	
 	<modules>
 	</modules>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.hpsocket</groupId>
+				<artifactId>hp-soa-dependencies</artifactId>
+				<version>${parent.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-configuration-processor</artifactId>
+	    </dependency>
+	</dependencies>
 
 </project>
