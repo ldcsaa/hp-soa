@@ -32,7 +32,7 @@ import java.util.Date;
  * {@link InternalTestResult#value} - 结果值
  * 
  * */
-public class Result<F extends Object, V extends Object>
+public class Result<F, V>
 {
 	/** 获取一个 {@link InternalTestResult} 对象初始值：{{@link Boolean#FALSE}, null} */
 	@SuppressWarnings({ "unchecked", "rawtypes" })

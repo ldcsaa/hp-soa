@@ -20,9 +20,6 @@
 		<maven.compiler.compilerVersion>17</maven.compiler.compilerVersion>
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
 		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-		<maven.surefire.conf.forkCount>0</maven.surefire.conf.forkCount>
-		<maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
-		<maven.surefire.conf.argLine>${env.MAVEN_FORK_JVM_ARGS}</maven.surefire.conf.argLine>
 		
 		<spring-boot.main_class>org.hpsocket.framework.web.server.main.AppStarter</spring-boot.main_class>
 
@@ -42,6 +39,12 @@
 		<maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
 		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
 		<docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
+
+		<maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
+		<maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
+		<maven.surefire.conf.parallel>all</maven.surefire.conf.parallel>
+		<maven.surefire.conf.useSystemClassLoader>true</maven.surefire.conf.useSystemClassLoader>
+		<maven.surefire.conf.argLine>${env.MAVEN_FORK_JVM_ARGS}</maven.surefire.conf.argLine>
 	</properties>
 
 	<modules>
@@ -57,7 +60,7 @@
 			</snapshots>
 			<id>local-snapshots</id>
 			<name>Local Snapshots</name>
-			<url>http://192.168.56.23:8081/repository/maven-snapshots</url>
+			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
 		</repository>
 
 		<repository>
@@ -66,7 +69,7 @@
 			</snapshots>
 			<id>local-thirdparty</id>
 			<name>Local 3rd-party</name>
-			<url>http://192.168.56.23:8081/repository/maven-thirdparty</url>
+			<url>http://192.168.56.23:8081/repository/maven-thirdparty/</url>
 		</repository>
 
 		<repository>
@@ -75,7 +78,7 @@
 			</snapshots>
 			<id>local-releases</id>
 			<name>Local Releases</name>
-			<url>http://192.168.56.23:8081/repository/maven-releases</url>
+			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
 		</repository>
 
 		<repository>
@@ -86,7 +89,7 @@
 			<name>aliyun maven</name>
 			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
 		</repository>
-
+<!--
 		<repository>
 			<snapshots>
 				<enabled>false</enabled>
@@ -105,6 +108,7 @@
 			<id>JBoss repository public</id>
 			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
+-->
 	</repositories>
 
 	<distributionManagement>
@@ -302,6 +306,8 @@
 						<encoding>${project.build.sourceEncoding}</encoding>
 						<forkCount>${maven.surefire.conf.forkCount}</forkCount>
 						<reuseForks>${maven.surefire.conf.reuseForks}</reuseForks>
+						<parallel>${maven.surefire.conf.parallel}</parallel>
+						<useSystemClassLoader>${maven.surefire.conf.useSystemClassLoader}</useSystemClassLoader>
 						<argLine>${maven.surefire.conf.argLine}</argLine>
 					</configuration>
 					<executions>

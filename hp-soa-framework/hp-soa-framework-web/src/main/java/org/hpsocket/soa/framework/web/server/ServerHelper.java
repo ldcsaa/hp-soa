@@ -1,15 +1,16 @@
-package org.hpsocket.soa.framework.core.mdc;
+package org.hpsocket.soa.framework.web.server;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.mutable.MutableInt;
-import org.hpsocket.soa.framework.core.util.AppConfigHolder;
+import org.hpsocket.soa.framework.core.mdc.MdcAttr;
 import org.hpsocket.soa.framework.core.util.GeneralHelper;
+import org.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import org.slf4j.MDC;
 
 
-public class MdcHelper
+public class ServerHelper
 {
 	public static final int COOKIE_MAX_AGE			= 10 * 365 * 24 * 60 * 60;
 	public static final String DEFAULT_CHARSET		= "UTF-8";

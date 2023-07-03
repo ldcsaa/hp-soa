@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 
  * */
 @SuppressWarnings("serial")
-public class Pair<F extends Object, S extends Object> implements Serializable
+public class Pair<F, S> implements Serializable
 {	
 	private F first;
 	private S second;

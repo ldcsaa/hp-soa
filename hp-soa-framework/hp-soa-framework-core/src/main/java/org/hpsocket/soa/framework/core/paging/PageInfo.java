@@ -3,9 +3,13 @@ package org.hpsocket.soa.framework.core.paging;
 
 import java.io.Serializable;
 
-import com.alibaba.fastjson2.annotation.JSONField;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @SuppressWarnings("serial")
 public class PageInfo implements Serializable
 {
@@ -30,76 +34,14 @@ public class PageInfo implements Serializable
 		return pageCount;
 	}
 	
-	@JSONField(serialize = false)
-	public boolean isOutofBounds()
+	public boolean outofBounds()
 	{
 		return currentPage > pageCount || currentPage < 1;
 	}
 	
-	@JSONField(serialize = false)
-	public int getLimitStart()
+	public int limitStart()
 	{
 		return (currentPage - 1) * pageSize;
-	}
-
-	public int getRowCount()
-	{
-		return rowCount;
-	}
-
-	public void setRowCount(int rowCount)
-	{
-		this.rowCount = rowCount;
-	}
-
-	public int getCurrentPage()
-	{
-		return currentPage;
-	}
-
-	public void setCurrentPage(int currentPage)
-	{
-		this.currentPage = currentPage;
-	}
-
-	public int getPageSize()
-	{
-		return pageSize;
-	}
-
-	public void setPageSize(int pageSize)
-	{
-		this.pageSize = pageSize;
-	}
-
-	public int getPageCount()
-	{
-		return pageCount;
-	}
-
-	public void setPageCount(int pageCount)
-	{
-		this.pageCount = pageCount;
-	}
-
-	public int getTotalCount()
-	{
-		return totalCount;
-	}
-
-	public void setTotalCount(int totalCount)
-	{
-		this.totalCount = totalCount;
-	}
-
-	public String getOrderBy()
-	{
-		return orderBy;
-	}
-
-	public void setOrderBy(String orderBy)
-	{
-		this.orderBy = orderBy;
 	}
 
 }

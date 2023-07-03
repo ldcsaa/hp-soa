@@ -49,7 +49,6 @@
 		    		<include>**/*.yaml</include>
 		    		<include>**/*.properties</include>
 		    		<include>**/*.conf</include>
-		    		<include>**/*.Filter</include>
 		    	</includes>
 	       </resource> 
 	    </resources>

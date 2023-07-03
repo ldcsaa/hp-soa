@@ -115,6 +115,27 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.hpsocket</groupId>
+				<artifactId>hp-soa-framework-core</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hpsocket</groupId>
+				<artifactId>hp-soa-framework-web</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hpsocket</groupId>
+				<artifactId>hp-soa-framework-dubbo</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hpsocket</groupId>
+				<artifactId>hp-soa-starter-web</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			
+			<dependency>
 				<groupId>org.apache.curator</groupId>
 				<artifactId>curator-recipes</artifactId>
 				<version>${curator.version}</version>
@@ -980,6 +1001,42 @@
 				<version>${selenium.version}</version>
 			</dependency>
 
+			<!-- swagger -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>io.springfox</groupId>
+			    <artifactId>springfox-spring-webmvc</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+			
+			<!-- seata -->
+			<dependency>
+				<groupId>io.seata</groupId>
+				<artifactId>seata-all</artifactId>
+				<version>${seata.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.seata</groupId>
+				<artifactId>seata-seata-spring-boot-starter</artifactId>
+				<version>${seata.version}</version>
+			</dependency>
+
+			<!-- micrometer-jvm-extras -->
+			<dependency>
+				<groupId>io.github.mweirauch</groupId>
+				<artifactId>micrometer-jvm-extras</artifactId>
+				<version>${micrometer-jvm-extras.version}</version>
+			</dependency>
+
 			<!-- zipkin -->
 			<dependency>
 				<groupId>io.zipkin.brave</groupId>
@@ -1036,42 +1093,6 @@
 				<artifactId>zipkin-reporter-spring-beans</artifactId>
 				<version>${zipkin-reporter.version}</version>
 			</dependency>
-
-			<!-- swagger -->
-			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger2</artifactId>
-				<version>${swagger.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger-ui</artifactId>
-				<version>${swagger.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-spring-webmvc</artifactId>
-				<version>${swagger.version}</version>
-			</dependency>
-			
-			<!-- micrometer-jvm-extras -->
-			<dependency>
-				<groupId>io.github.mweirauch</groupId>
-				<artifactId>micrometer-jvm-extras</artifactId>
-				<version>${micrometer-jvm-extras.version}</version>
-			</dependency>
-
-		<!-- seata -->
-		<dependency>
-			<groupId>io.seata</groupId>
-			<artifactId>seata-all</artifactId>
-			<version>${seata.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.seata</groupId>
-			<artifactId>seata-seata-spring-boot-starter</artifactId>
-			<version>${seata.version}</version>
-		</dependency>
 
 		</dependencies>
 	</dependencyManagement>

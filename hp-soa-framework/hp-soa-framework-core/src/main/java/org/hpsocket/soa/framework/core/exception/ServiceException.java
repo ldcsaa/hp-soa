@@ -2,8 +2,6 @@ package org.hpsocket.soa.framework.core.exception;
 
 import org.slf4j.Logger;
 
-import com.alibaba.fastjson2.annotation.JSONField;
-
 @SuppressWarnings("serial")
 public class ServiceException extends RuntimeException
 {
@@ -73,9 +71,8 @@ public class ServiceException extends RuntimeException
 	public static final ServiceException LOGIN_INVALID_EXCEPTION	= new UnimportantException("登录已失效", LOGIN_INVALID);
 	public static final ServiceException NOT_LOGGED_IN_EXCEPTION	= new UnimportantException("未登录", NOT_LOGGED_IN);
 	
-	@JSONField(serialize = false)
-	private int resultCode;	
 	private int statusCode;
+	private transient int resultCode;	
 	
 	public ServiceException()
 	{
