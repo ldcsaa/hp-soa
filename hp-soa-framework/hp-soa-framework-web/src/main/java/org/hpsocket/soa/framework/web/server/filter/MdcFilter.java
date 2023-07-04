@@ -15,15 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hpsocket.soa.framework.core.mdc.MdcAttr;
-import org.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import org.hpsocket.soa.framework.core.util.SystemUtil;
 import org.hpsocket.soa.framework.web.server.RequestContext;
 import org.hpsocket.soa.framework.web.server.ServerHelper;
 import org.hpsocket.soa.framework.web.server.model.RequestAttribute;
-import org.hpsocket.soa.framework.web.server.model.Response;
-import org.slf4j.MDC;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import static org.hpsocket.soa.framework.web.server.ServerHelper.*;
 
@@ -66,23 +61,40 @@ public class MdcFilter implements Filter
 		try
 		{
 			RequestAttribute reqAttr = RequestContext.parseRequestAttribute();
-			MdcAttr mdc = 
+			MdcAttr mdcAttr = createMdcAttr(reqAttr);
 			
-			putClientAndRequestMDC(reqAttr.getClientId(), reqAttr.getRequestId(), reqAttr.getAppCode(), null, null, reqAttr.getSessionId(), reqAttr.getToken());
+			putMDC(mdcAttr);
 
 			chain.doFilter(req, resp);
 		}
 		finally
 		{
-			removeClientAndRequestMDC();
+			clearMDC();
 		}
 	}
 
 	private void initMdc()
 	{
+		initMdcMap.put(MDC_APP_ID_KEY, ServerHelper.getAppId());
+		initMdcMap.put(MDC_APP_NAME_KEY, ServerHelper.getAppName());
 		initMdcMap.put(MDC_SERVICE_ID_KEY, ServerHelper.getAppId());
 		initMdcMap.put(MDC_SERVICE_NAME_KEY, ServerHelper.getAppName());
+		initMdcMap.put(MDC_SERVICE_ADDR_KEY, SystemUtil.getAddress());
 		
+	}
+	
+	private MdcAttr createMdcAttr(RequestAttribute reqAttr)
+	{
+		MdcAttr mdcAttr = MdcAttr.from(initMdcMap);
+		
+		mdcAttr.setClientId(reqAttr.getClientId());
+		mdcAttr.setRequestId(reqAttr.getRequestId());
+		mdcAttr.setSessionId(reqAttr.getSessionId());
+		mdcAttr.setAppCode(reqAttr.getAppCode());
+		mdcAttr.setToken(reqAttr.getToken());
+		mdcAttr.setTokenAlias(reqAttr.getTokenAlias());
+		
+		return mdcAttr;
 	}
 
 }

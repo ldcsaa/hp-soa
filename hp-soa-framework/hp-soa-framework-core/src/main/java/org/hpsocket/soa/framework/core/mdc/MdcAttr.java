@@ -18,8 +18,6 @@ public class MdcAttr
 	public static final String MDC_SERVICE_ID_KEY	= "serviceId";
 	public static final String MDC_SERVICE_NAME_KEY	= "serviceName";
 	public static final String MDC_SERVICE_ADDR_KEY	= "serviceAddr";
-	public static final String MDC_ORG_NAME_KEY		= "orgName";
-	public static final String MDC_OWNER_NAME_KEY	= "ownerName";
 	
 	Map<String, String> mdcMap;
 
@@ -35,8 +33,6 @@ public class MdcAttr
 	public String serviceId;
 	public String serviceName;
 	public String serviceAddr;
-	public String orgName;
-	public String ownerName;
 	*/
 	
 	public MdcAttr()
@@ -47,6 +43,11 @@ public class MdcAttr
 	public MdcAttr(Map<String, String> mdcMap)
 	{
 		this.mdcMap = mdcMap;
+	}
+	
+	public static MdcAttr from(Map<String, String> mdcMap)
+	{
+		return new MdcAttr(mdcMap);
 	}
 	
 	public static MdcAttr fromMdc()
@@ -138,6 +139,16 @@ public class MdcAttr
 	public void setToken(String token)
 	{
 		set(MDC_TOKEN_KEY, token);
+	}
+
+	public String getTokenAlias()
+	{
+		return get(MDC_TOKEN_ALIAS_KEY);
+	}
+
+	public void setTokenAlias(String tokenAlias)
+	{
+		set(MDC_TOKEN_ALIAS_KEY, tokenAlias);
 	}
 
 	public String getAppCode()
