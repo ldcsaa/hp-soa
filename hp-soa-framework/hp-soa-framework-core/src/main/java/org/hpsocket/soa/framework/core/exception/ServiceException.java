@@ -6,9 +6,9 @@ import org.slf4j.Logger;
 public class ServiceException extends RuntimeException
 {
 	/** 成功 */
-	public static final int API_OK					= 200;
+	public static final int OK						= 200;
 	/** 部分成功 */
-	public static final int API_PARTIAL_OK			= 206;
+	public static final int PARTIAL_OK				= 206;
 	/** 格式错误 */
 	public static final int BAD_REQUEST				= 400;
 	/** 对象不存在 */

@@ -14,10 +14,7 @@
 	<packaging>pom</packaging>
 
     <properties>
-		<fastjson.version>2.0.34</fastjson.version>
-		<fastjson2.version>2.0.34</fastjson2.version>
 		<nacos-client.version>2.2.4</nacos-client.version>
-
 		<dubbo.version>3.2.3</dubbo.version>
 		<netty.version>4.1.94.Final</netty.version>
 		<zookeeper.version>3.8.1</zookeeper.version>
@@ -46,6 +43,7 @@
 		<mysql-connector-java.version>8.0.33</mysql-connector-java.version>
 		<mybatis-spring.version>3.0.2</mybatis-spring.version>
 		<mybatis.version>3.5.13</mybatis.version>
+		<mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
 		<ehcache.version>3.10.8</ehcache.version>
 
@@ -72,6 +70,8 @@
 		<junit.version>4.13.2</junit.version>
 		<junit5.version>5.9.3</junit5.version>
 
+		<fastjson.version>2.0.34</fastjson.version>
+		<fastjson2.version>2.0.34</fastjson2.version>
 		<cglib.version>3.3.0</cglib.version>
 		<quartz.version>2.3.2</quartz.version>
 		<httpclient.version>4.5.14</httpclient.version>
@@ -90,7 +90,6 @@
 		<guava.version>32.0.1-jre</guava.version>
 		
 		<jsoup.version>1.16.1</jsoup.version>
-		<sipsoup.version>1.7</sipsoup.version>
 		<selenium.version>4.10.0</selenium.version>
 
 		<poi.version>5.2.3</poi.version>
@@ -136,6 +135,53 @@
 			</dependency>
 			
 			<dependency>
+				<groupId>org.apache.dubbo</groupId>
+				<artifactId>dubbo</artifactId>
+				<version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-spring-boot-starter</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-registry-nacos</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-configcenter-nacos</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-metadata-report-nacos</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-registry-zookeeper</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-configcenter-zookeeper</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-metadata-report-zookeeper</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>com.alibaba.nacos</groupId>
+			    <artifactId>nacos-client</artifactId>
+			    <version>${nacos-client.version}</version>
+			</dependency>
+			
+			<dependency>
 				<groupId>org.apache.curator</groupId>
 				<artifactId>curator-recipes</artifactId>
 				<version>${curator.version}</version>
@@ -163,43 +209,11 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.dubbo</groupId>
-				<artifactId>dubbo</artifactId>
-				<version>${dubbo.version}</version>
-				<!--
-				<exclusions>
-					<exclusion>
-						<artifactId>spring-core</artifactId>
-						<groupId>org.springframework</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>spring-context</artifactId>
-						<groupId>org.springframework</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>spring-beans</artifactId>
-						<groupId>org.springframework</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>spring-aop</artifactId>
-						<groupId>org.springframework</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>spring-expression</artifactId>
-						<groupId>org.springframework</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>spring-web</artifactId>
-						<groupId>org.springframework</groupId>
-					</exclusion>
-				</exclusions>
-				-->
-			</dependency>
-			<dependency>
 				<groupId>io.netty</groupId>
 				<artifactId>netty-all</artifactId>
 				<version>${netty.version}</version>
 			</dependency>
+			
 			<dependency>
 				<groupId>javax</groupId>
 				<artifactId>javaee-api</artifactId>
@@ -220,16 +234,19 @@
 				<artifactId>javax.el</artifactId>
 				<version>${javax-el.version}</version>
 			</dependency>
+			
 			<dependency>
 				<groupId>org.hibernate.validator</groupId>
 				<artifactId>hibernate-validator</artifactId>
 				<version>${hibernate-validator.version}</version>
 			</dependency>
+			
 			<dependency>
 				<groupId>com.google.code.gson</groupId>
 				<artifactId>gson</artifactId>
 				<version>${gson.version}</version>
 			</dependency>
+			
 			<dependency>
 				<groupId>org.ehcache</groupId>
 				<artifactId>ehcache</artifactId>
@@ -350,10 +367,20 @@
 				<artifactId>mybatis</artifactId>
 				<version>${mybatis.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis-spring</artifactId>
+				<version>${mybatis-spring.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.mybatis.spring.boot</groupId>
+			    <artifactId>mybatis-spring-boot-starter</artifactId>
+			    <version>${mybatis-spring-boot-starter.version}</version>
+			</dependency>
 
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <artifactId>mybatis-plus-core</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
@@ -368,21 +395,14 @@
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-core</artifactId>
-                <version>${mybatis-plus.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-extension</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-
-			<dependency>
-				<groupId>org.mybatis</groupId>
-				<artifactId>mybatis-spring</artifactId>
-				<version>${mybatis-spring.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
 			
             <dependency>
                 <groupId>org.springframework.security.oauth</groupId>
@@ -598,6 +618,11 @@
 				<artifactId>druid</artifactId>
 				<version>${druid.version}</version>
 			</dependency>
+			<dependency>
+			    <groupId>com.alibaba</groupId>
+			    <artifactId>druid-spring-boot-starter</artifactId>
+			    <version>${druid.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>com.caucho</groupId>
@@ -703,12 +728,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			
-	        <dependency>
-	            <groupId>org.springframework.boot</groupId>
-	            <artifactId>spring-boot-configuration-processor</artifactId>
-	            <version>${spring-boot.version}</version>
-	        </dependency>
 
 			<dependency>
 				<groupId>junit</groupId>
@@ -883,38 +902,6 @@
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
-			<!-- sipsoup -->
-			<dependency>
-				<groupId>com.virjar</groupId>
-				<artifactId>sipsoup</artifactId>
-				<version>${sipsoup.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-classic</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>log4j</groupId>
-						<artifactId>log4j</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
 			<!-- POI -->
 			<dependency>
 			    <groupId>org.apache.poi</groupId>
@@ -1026,7 +1013,7 @@
 			</dependency>
 			<dependency>
 				<groupId>io.seata</groupId>
-				<artifactId>seata-seata-spring-boot-starter</artifactId>
+				<artifactId>seata-spring-boot-starter</artifactId>
 				<version>${seata.version}</version>
 			</dependency>
 

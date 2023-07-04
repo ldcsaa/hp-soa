@@ -15,33 +15,32 @@ public class PageInfo implements Serializable
 {
 	public static final int DEFAULT_PAGE_SIZE = 20;
 
-	private int rowCount	= 0;
-	private int currentPage	= 1;
+	private int pageRows	= 0;
+	private int pageNumber	= 1;
 	private int pageSize	= DEFAULT_PAGE_SIZE;
 	private int pageCount	= 0;
-	private int totalCount	= 0;
-	private String orderBy;
+	private int totalRows	= 0;
 
 	public int calculatePageCount()
 	{
-		pageCount = totalCount / pageSize + ((totalCount % pageSize == 0) ? 0 : 1);
+		pageCount = totalRows / pageSize + ((totalRows % pageSize == 0) ? 0 : 1);
 		
-		if(currentPage < pageCount)
-			rowCount = pageSize;
-		else if(currentPage == pageCount)
-			rowCount = totalCount - (pageCount - 1) * pageSize;
+		if(pageNumber < pageCount)
+			pageRows = pageSize;
+		else if(pageNumber == pageCount)
+			pageRows = totalRows - (pageCount - 1) * pageSize;
 		
 		return pageCount;
 	}
 	
 	public boolean outofBounds()
 	{
-		return currentPage > pageCount || currentPage < 1;
+		return pageNumber > pageCount || pageNumber < 1;
 	}
 	
 	public int limitStart()
 	{
-		return (currentPage - 1) * pageSize;
+		return (pageNumber - 1) * pageSize;
 	}
 
 }

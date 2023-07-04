@@ -11,6 +11,8 @@ public class MdcAttr
 	public static final String MDC_CLIENT_ID_KEY	= "clientId";
 	public static final String MDC_SESSION_ID_KEY	= "sessionId";
 	public static final String MDC_APP_CODE_KEY		= "appCode";
+	public static final String MDC_TOKEN_KEY		= "token";
+	public static final String MDC_TOKEN_ALIAS_KEY	= "tokenAlias";
 	public static final String MDC_APP_ID_KEY		= "appId";
 	public static final String MDC_APP_NAME_KEY		= "appName";
 	public static final String MDC_SERVICE_ID_KEY	= "serviceId";
@@ -18,10 +20,8 @@ public class MdcAttr
 	public static final String MDC_SERVICE_ADDR_KEY	= "serviceAddr";
 	public static final String MDC_ORG_NAME_KEY		= "orgName";
 	public static final String MDC_OWNER_NAME_KEY	= "ownerName";
-	public static final String MDC_TOKEN_KEY		= "token";
-	public static final String MDC_TOKEN_ALIAS_KEY	= "tokenAlias";
 	
-	Map<String, String> ctxMap;
+	Map<String, String> mdcMap;
 
 	/*
 	public String clientId;
@@ -41,12 +41,12 @@ public class MdcAttr
 	
 	public MdcAttr()
 	{
-		ctxMap = MDC.getCopyOfContextMap();
+		mdcMap = MDC.getCopyOfContextMap();
 	}
 	
-	public MdcAttr(Map<String, String> ctxMap)
+	public MdcAttr(Map<String, String> mdcMap)
 	{
-		this.ctxMap = ctxMap;
+		this.mdcMap = mdcMap;
 	}
 	
 	public static MdcAttr fromMdc()
@@ -56,20 +56,20 @@ public class MdcAttr
 
 	public void putMdc()
 	{
-		MDC.setContextMap(ctxMap);
+		MDC.setContextMap(mdcMap);
 	}
 	
 	public void removeMdc()
 	{
-		Set<String> keys = ctxMap.keySet();
+		Set<String> keys = mdcMap.keySet();
 		keys.stream().forEach(key -> MDC.remove(key));
 		
-		ctxMap.clear();
+		mdcMap.clear();
 	}
 	
 	public void clear(boolean clearMdc)
 	{
-		ctxMap.clear();
+		mdcMap.clear();
 		
 		if(clearMdc)
 			MDC.clear();
@@ -77,27 +77,27 @@ public class MdcAttr
 	
 	public void set(String key, String val)
 	{
-		ctxMap.put(key, val);
+		mdcMap.put(key, val);
 	}
 	
 	public String remove(String key)
 	{
-		return ctxMap.remove(key);
+		return mdcMap.remove(key);
 	}
 	
 	public String get(String key)
 	{
-		return ctxMap.get(key);
+		return mdcMap.get(key);
 	}
 	
 	public Map<String, String> getCtxMap()
 	{
-		return ctxMap;
+		return mdcMap;
 	}
 
 	public void setCtxMap(Map<String, String> ctxMap)
 	{
-		this.ctxMap = ctxMap;
+		this.mdcMap = ctxMap;
 	}
 
 	public String getClientId()

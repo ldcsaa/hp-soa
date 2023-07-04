@@ -141,14 +141,24 @@ public class ServerHelper
 		return host;
 	}
 	
+	public static final String getConfigProperty(String key)
+	{
+		String val = System.getProperty(key);
+		
+		if(GeneralHelper.isStrEmpty(val))
+			val = AppConfigHolder.get(key);
+		
+		return val;		
+	}
+	
 	public static final String getAppId()
 	{
-		String appId = System.getProperty(PROP_SERVICE_ID);
-		
-		if(GeneralHelper.isStrEmpty(appId))
-			appId = AppConfigHolder.get(PROP_SERVICE_ID);
-		
-		return appId;
+		return getConfigProperty(PROP_SERVICE_ID);
+	}
+	
+	public static final String getAppName()
+	{
+		return getConfigProperty(PROP_SERVICE_NAME);
 	}
 	
 }
