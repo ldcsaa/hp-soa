@@ -1,16 +1,20 @@
-package org.hpsocket.soa.framework.web.server;
+package org.hpsocket.soa.framework.web.support;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import org.hpsocket.soa.framework.web.server.model.RequestAttribute;
+import org.hpsocket.soa.framework.core.util.GeneralHelper;
+import org.hpsocket.soa.framework.core.util.Result;
+import org.hpsocket.soa.framework.web.model.RequestAttribute;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import static org.hpsocket.soa.framework.web.support.WebServerHelper.*;
 import static org.springframework.web.context.request.ServletRequestAttributes.*;
 
 public class RequestContext
@@ -22,12 +26,12 @@ public class RequestContext
 	
 	public static final HttpServletRequest getServletRequest()
 	{
-		return (HttpServletRequest)getServletRequestAttributes().getRequest();
+		return getServletRequestAttributes().getRequest();
 	}
 
 	public static final HttpServletResponse getServletResponse()
 	{
-		return (HttpServletResponse)getServletRequestAttributes().getResponse();
+		return getServletRequestAttributes().getResponse();
 	}
 
 	public static final RequestAttribute getRequestAttribute()
@@ -66,9 +70,14 @@ public class RequestContext
 		return getRequestAttribute().getAppCode();
 	}
 
-	public static final String getAppId()
+	public static final String getSrcAppCode()
 	{
-		return getRequestAttribute().getAppId();
+		return getRequestAttribute().getSrcAppCode();
+	}
+
+	public static final String getToken()
+	{
+		return getRequestAttribute().getToken();
 	}
 
 	public static final String getTokenAlias()
@@ -84,11 +93,6 @@ public class RequestContext
 	public static final String getExtra()
 	{
 		return getRequestAttribute().getExtra();
-	}
-
-	public static final String getToken()
-	{
-		return getRequestAttribute().getToken();
 	}
 
 	public static final String getRequestId()
@@ -121,14 +125,9 @@ public class RequestContext
 		return getRequestAttribute().getRequestPath();
 	}
 	
-	public static final Integer getGroupId()
+	public static final Long getGroupId()
 	{
 		return getRequestAttribute().getGroupId();
-	}
-
-	public static final Integer getGroupType()
-	{
-		return getRequestAttribute().getGroupType();
 	}
 
 	public static final Long getUserId()
@@ -161,10 +160,9 @@ public class RequestContext
 		getServletResponse().setStatus(sc);
 	}
 	
-	@SuppressWarnings("deprecation")
-	public static final void setServletResponseStatus(int sc, String sm)
+	public static final void sendServletResponseError(int sc, String sm) throws IOException
 	{
-		getServletResponse().setStatus(sc, sm);
+		getServletResponse().sendError(sc, sm);
 	}
 	
 	public static final RequestAttribute parseRequestAttribute()
@@ -173,21 +171,20 @@ public class RequestContext
 		HttpServletResponse response = getServletResponse();
 		Map<String, String> reqInfos = parseRequestInfo(request);
 		
-		String appCode		= parseRequestField(request, reqInfos, LCB_CLIENT_APP_CODE, false);
-		String appId		= parseRequestField(request, reqInfos, LCB_CLIENT_APP_ID, false);
-		String version		= parseRequestField(request, reqInfos, LCB_CLIENT_VERSION, false);
-		String extra		= parseRequestField(request, reqInfos, LCB_CLIENT_EXTRA, false);
-		String token		= parseRequestField(request, reqInfos, LCB_TOKEN, true);
-		String tokenAlias	= parseRequestField(request, reqInfos, LCB_TOKEN_ALIAS, true);
-		String groupId		= parseRequestField(request, reqInfos, LCB_GROUP_ID, false);
-		String groupType	= parseRequestField(request, reqInfos, LCB_GROUP_TYPE, false);
-		String sessionId	= parseRequestField(request, reqInfos, SESSION_ID, true);
-		String requestId	= parseRequestField(request, reqInfos, REQUEST_ID, false);
+		String appCode		= parseRequestField(request, reqInfos, HEADER_APP_CODE, false);
+		String srcAppCode	= parseRequestField(request, reqInfos, HEADER_SRC_APP_CODE, false);
+		String version		= parseRequestField(request, reqInfos, HEADER_VERSION, false);
+		String extra		= parseRequestField(request, reqInfos, HEADER_EXTRA, false);
+		String token		= parseRequestField(request, reqInfos, HEADER_TOKEN, true);
+		String tokenAlias	= parseRequestField(request, reqInfos, HEADER_TOKEN_ALIAS, true);
+		String groupId		= parseRequestField(request, reqInfos, HEADER_GROUP_ID, false);
+		String sessionId	= parseRequestField(request, reqInfos, HEADER_SESSION_ID, true);
+		String requestId	= parseRequestField(request, reqInfos, HEADER_REQUEST_ID, false);
 		String clientId 	= null;
 		
 		if(checkUserAgent(getUserAgent(request)))
 		{
-			clientId = reqInfos.get(CLIENT_ID);
+			clientId = reqInfos.get(HEADER_CLIENT_ID);
 			
 			if(GeneralHelper.isStrEmpty(clientId))
 			{
@@ -208,10 +205,9 @@ public class RequestContext
 		String requestPath	= WebServerHelper.getRequestPath(request);
 		String requestUri	= WebServerHelper.getRequestUri(request);
 		
-		RequestAttribute reqAttr = new RequestAttribute(appCode, appId, token,
+		RequestAttribute reqAttr = new RequestAttribute(appCode, srcAppCode, token,
 														clientId, requestId, sessionId,
-														GeneralHelper.str2Int(groupId),
-														GeneralHelper.str2Int(groupType));
+														GeneralHelper.str2Long(groupId));
 		reqAttr.setTokenAlias(tokenAlias);
 		reqAttr.setVersion(version);
 		reqAttr.setExtra(extra);

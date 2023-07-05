@@ -1,4 +1,4 @@
-package org.hpsocket.soa.framework.web.server.spring.advice;
+package org.hpsocket.soa.framework.web.advice;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -13,8 +13,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.hpsocket.soa.framework.web.server.RequestContext;
-import org.hpsocket.soa.framework.web.server.model.RequestAttribute;
+import org.hpsocket.soa.framework.web.model.RequestAttribute;
+import org.hpsocket.soa.framework.web.support.RequestContext;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;

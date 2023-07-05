@@ -1,4 +1,4 @@
-package org.hpsocket.soa.framework.web.server.spring.advice;
+package org.hpsocket.soa.framework.web.advice;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.core.config.Order;
-import org.hpsocket.soa.framework.web.server.RequestContext;
-import org.hpsocket.soa.framework.web.server.model.RequestAttribute;
-import org.hpsocket.soa.framework.web.server.model.Response;
+import org.hpsocket.soa.framework.web.model.RequestAttribute;
+import org.hpsocket.soa.framework.web.model.Response;
+import org.hpsocket.soa.framework.web.support.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

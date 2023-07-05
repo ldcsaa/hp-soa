@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.hpsocket.soa.framework.web.util.YamlPropertiesLoader;
+import org.hpsocket.soa.framework.web.support.YamlPropertiesLoader;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AppConfigHolder
 {
-	private static final String[] CONFIG_FILES = {"config.properties", "application.properties", "config.yml", "application.yml"};
+	public static final String[] CONFIG_FILES		= {"config.properties", "application.properties", "config.yml", "application.yml"};
+	public static final String PROP_SERVICE_ID		= "app.id";
+	public static final String PROP_SERVICE_NAME	= "app.name";
+	public static final String PROP_ORG_NAME		= "app.organization";
+	public static final String PROP_OWNER_NAME		= "app.owner";
 
 	private static final Properties PROPS = init();
 
@@ -79,6 +83,26 @@ public abstract class AppConfigHolder
 	public static final Properties getAll()
 	{
 		return PROPS;
+	}
+
+	public static final String getServiceId()
+	{
+		return get(PROP_SERVICE_ID);
+	}
+
+	public static final String getServiceName()
+	{
+		return get(PROP_SERVICE_NAME);
+	}
+
+	public static final String getOrganization()
+	{
+		return get(PROP_ORG_NAME);
+	}
+
+	public static final String getOwner()
+	{
+		return get(PROP_OWNER_NAME);
 	}
 
 }

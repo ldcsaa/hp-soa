@@ -2,13 +2,15 @@ package org.hpsocket.soa.framework.core.mdc;
 
 import java.util.concurrent.Callable;
 
-abstract public class MdcCallable<T> extends MdcAttr implements Callable<T>
+abstract public class MdcCallable<T> implements Callable<T>
 {
+	private MdcAttr mdcAttr;
+	
 	abstract protected T doCall();
 
 	public MdcCallable()
 	{
-
+		mdcAttr = MdcAttr.fromMdc();
 	}
 
 	@Override
@@ -16,12 +18,13 @@ abstract public class MdcCallable<T> extends MdcAttr implements Callable<T>
 	{
 		try
 		{
-			putMdc();
+			mdcAttr.putMdc();
+			
 			return doCall();
 		}
 		finally
 		{
-			removeMdc();
+			mdcAttr.removeMdc();
 		}
 	}
 

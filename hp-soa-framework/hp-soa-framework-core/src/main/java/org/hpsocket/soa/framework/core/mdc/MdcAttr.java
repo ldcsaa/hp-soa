@@ -1,23 +1,26 @@
 package org.hpsocket.soa.framework.core.mdc;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.MDC;
 
 public class MdcAttr
 {
-	public static final String MDC_REQUEST_ID_KEY	= "requestId";
-	public static final String MDC_CLIENT_ID_KEY	= "clientId";
-	public static final String MDC_SESSION_ID_KEY	= "sessionId";
-	public static final String MDC_APP_CODE_KEY		= "appCode";
-	public static final String MDC_TOKEN_KEY		= "token";
-	public static final String MDC_TOKEN_ALIAS_KEY	= "tokenAlias";
-	public static final String MDC_APP_ID_KEY		= "appId";
-	public static final String MDC_APP_NAME_KEY		= "appName";
-	public static final String MDC_SERVICE_ID_KEY	= "serviceId";
-	public static final String MDC_SERVICE_NAME_KEY	= "serviceName";
-	public static final String MDC_SERVICE_ADDR_KEY	= "serviceAddr";
+	public static final String MDC_REQUEST_ID_KEY	= "__mdc_requestId";
+	public static final String MDC_CLIENT_ID_KEY	= "__mdc_clientId";
+	public static final String MDC_SESSION_ID_KEY	= "__mdc_sessionId";
+	public static final String MDC_APP_CODE_KEY		= "__mdc_appCode";
+	public static final String MDC_SRC_APP_CODE_KEY	= "__mdc_srcAppCode";
+	public static final String MDC_TOKEN_KEY		= "__mdc_token";
+	public static final String MDC_TOKEN_ALIAS_KEY	= "__mdc_tokenAlias";
+	public static final String MDC_APP_ID_KEY		= "__mdc_appId";
+	public static final String MDC_APP_NAME_KEY		= "__mdc_appName";
+	public static final String MDC_SERVICE_ID_KEY	= "__mdc_serviceId";
+	public static final String MDC_SERVICE_NAME_KEY	= "__mdc_serviceName";
+	public static final String MDC_SERVICE_ADDR_KEY	= "__mdc_serviceAddr";
+	public static final String MDC_ORG_KEY			= "__mdc_organization";
+	public static final String MDC_OWNER_KEY		= "__mdc_owner";
 	
 	Map<String, String> mdcMap;
 
@@ -26,18 +29,22 @@ public class MdcAttr
 	public String requestId;
 	public String sessionId;
 	public String token;
+	public String tokenAlias;
 	public String appCode;
-	public String appName;
-	public String appId;
+	public String srcAppCode;
 	
+	public String appId;
+	public String appName;
 	public String serviceId;
 	public String serviceName;
 	public String serviceAddr;
+	public String organization;
+	public String owner;
 	*/
 	
 	public MdcAttr()
 	{
-		mdcMap = MDC.getCopyOfContextMap();
+		mdcMap = new HashMap<>();
 	}
 	
 	public MdcAttr(Map<String, String> mdcMap)
@@ -52,28 +59,25 @@ public class MdcAttr
 	
 	public static MdcAttr fromMdc()
 	{
-		return new MdcAttr();
+		return new MdcAttr(MDC.getCopyOfContextMap());
 	}
 
 	public void putMdc()
 	{
-		MDC.setContextMap(mdcMap);
+		mdcMap.forEach((k, v) -> MDC.put(k, v));
 	}
 	
 	public void removeMdc()
 	{
-		Set<String> keys = mdcMap.keySet();
-		keys.stream().forEach(key -> MDC.remove(key));
-		
-		mdcMap.clear();
+		removeMdc(true);
 	}
 	
-	public void clear(boolean clearMdc)
+	public void removeMdc(boolean clearMdcMap)
 	{
-		mdcMap.clear();
+		mdcMap.forEach((k, v) -> MDC.remove(k));	
 		
-		if(clearMdc)
-			MDC.clear();
+		if(clearMdcMap)
+			mdcMap.clear();
 	}
 	
 	public void set(String key, String val)
@@ -161,6 +165,11 @@ public class MdcAttr
 		set(MDC_APP_CODE_KEY, appCode);
 	}
 
+	public void setSrcAppCode(String srcAppCode)
+	{
+		set(MDC_SRC_APP_CODE_KEY, srcAppCode);
+	}
+
 	public String getAppName()
 	{
 		return get(MDC_APP_NAME_KEY);
@@ -211,26 +220,25 @@ public class MdcAttr
 		set(MDC_SERVICE_ADDR_KEY, serviceAddr);
 	}
 
-	public String getOrgName()
+	public String getOrganization()
 	{
-		return get(MDC_ORG_NAME_KEY);
+		return get(MDC_ORG_KEY);
 	}
 
-	public void setOrgName(String orgName)
+	public void setOrganization(String orgName)
 	{
-		set(MDC_ORG_NAME_KEY, orgName);
+		set(MDC_ORG_KEY, orgName);
 	}
 
-	public String getOwnerName()
+	public String getOwner()
 	{
-		return get(MDC_OWNER_NAME_KEY);
+		return get(MDC_OWNER_KEY);
 	}
 
-	public void setOwnerName(String ownerName)
+	public void setOwner(String ownerName)
 	{
-		set(MDC_OWNER_NAME_KEY, ownerName);
+		set(MDC_OWNER_KEY, ownerName);
 	}
-
 
 }
 

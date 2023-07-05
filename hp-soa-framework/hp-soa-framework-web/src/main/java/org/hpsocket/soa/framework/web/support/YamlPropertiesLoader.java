@@ -1,4 +1,4 @@
-package org.hpsocket.soa.framework.web.util;
+package org.hpsocket.soa.framework.web.support;
 
 import java.io.IOException;
 import java.io.InputStream;

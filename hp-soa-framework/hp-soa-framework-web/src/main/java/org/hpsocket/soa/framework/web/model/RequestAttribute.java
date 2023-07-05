@@ -1,4 +1,4 @@
-package org.hpsocket.soa.framework.web.server.model;
+package org.hpsocket.soa.framework.web.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +10,12 @@ import lombok.Setter;
 public class RequestAttribute
 {
 	private String appCode;
-	private String appId;
+	private String srcAppCode;
 	private String token;
 	private String clientId;
 	private String requestId;
 	private String sessionId;
-	private Long organizationId;
+	private Long groupId;
 	
 	private String remoteIp;
 	private String requestUri;
@@ -31,20 +31,20 @@ public class RequestAttribute
 	
 	private Object body;
 
-	public RequestAttribute(String appCode, String appId, String token, String clientId, String requestId, String sessionId)
+	public RequestAttribute(String appCode, String srcAppCode, String token, String clientId, String requestId, String sessionId)
 	{
-		this(appCode, appId, token, clientId, requestId, sessionId, null);
+		this(appCode, srcAppCode, token, clientId, requestId, sessionId, null);
 	}
 	
-	public RequestAttribute(String appCode, String appId, String token, String clientId, String requestId, String sessionId, Long organizationId)
+	public RequestAttribute(String appCode, String srcAppCode, String token, String clientId, String requestId, String sessionId, Long groupId)
 	{
 		this.appCode = appCode;
-		this.appId = appId;
+		this.srcAppCode = srcAppCode;
 		this.token = token;
 		this.clientId = clientId;
 		this.requestId = requestId;
 		this.sessionId = sessionId;
-		this.organizationId = organizationId;
+		this.groupId = groupId;
 	}
 		
 }
