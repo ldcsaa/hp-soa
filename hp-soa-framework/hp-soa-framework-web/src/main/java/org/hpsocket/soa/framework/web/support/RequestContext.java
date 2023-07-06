@@ -150,7 +150,7 @@ public class RequestContext
 		return getRequestAttribute().getBody();
 	}
 	
-	static final void setBody(Object body)
+	public static final void setBody(Object body)
 	{
 		getRequestAttribute().setBody(body);
 	}

@@ -14,6 +14,9 @@ import org.hpsocket.soa.framework.core.util.CryptHelper;
 import org.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.hpsocket.soa.framework.core.util.Result;
 
+import com.alibaba.fastjson2.JSONWriter;
+import com.lcb.soa.misc.server.SerializerFeature;
+
 public class WebServerHelper
 {
 	public static final String REQUEST_ATTRIBUTE_JSON_BODY	= "__request.attribute.json.body__";
@@ -55,6 +58,13 @@ public class WebServerHelper
 	public static final String RESPONSE_CONTENT_TYPE	= "application/json;charset=" + DEFAULT_REQUEST_CHARSET.toLowerCase();
 	public static final Pattern DOMAIN_PATTERN	= Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
 	public static final Pattern SPIDER_PATTERN	= Pattern.compile(".*(Googlebot|Baiduspider|Yahoo\\!\\ Slurp|iaskspider|YodaoBot|msnbot|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
+	
+	public static final String MONITOR_LOGGER_NAME		= "SOA-MONITOR";
+	public static final String BFF_MONITOR_LOG_TYPE		= "BFF-REQUEST";
+	public static final String MONITOR_LOG_TYPE			= "HTTP-CLIENT";
+
+	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT		= {JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNonStringKeyAsString};
+	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL	= {JSONWriter.Feature.WriteNonStringKeyAsString};
 	
 	public static final boolean checkUserAgent(String ua)
 	{

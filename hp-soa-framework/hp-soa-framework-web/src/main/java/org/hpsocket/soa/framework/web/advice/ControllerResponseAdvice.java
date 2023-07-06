@@ -56,11 +56,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.beans.BeanMap;
 
 @Slf4j
-@Order(-1)
+@Order(-10)
 @RestControllerAdvice
 public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 {
-	private static final String MONITOR_LOG_TYPE = "HAPI-REQUEST";
 	private static final Logger monitorLog = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
 	private static final MdcTracingThreadPoolExecutor LOG_EXECUTOR = ControllerRequestAdvice.LOG_EXECUTOR;
 		

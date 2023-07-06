@@ -13,41 +13,36 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.hpsocket.soa.framework.web.model.RequestAttribute;
+import org.hpsocket.soa.framework.core.mdc.MdcRunnable;
 import org.hpsocket.soa.framework.web.support.RequestContext;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.lcb.soa.misc.common.thread.MdcTracingThreadPoolExecutor;
-
-import static com.lcb.soa.misc.server.ServerHelper.*;
+import static org.hpsocket.soa.framework.web.support.WebServerHelper.*;
 
 @Slf4j
 @Aspect
-@Order(-2)
-@Component
+@Order(-10)
 @RestControllerAdvice
 public class ControllerRequestAdvice implements RequestBodyAdvice
 {
-	public static final String POINTCUT_PATTERN = "execution (public com.lcb.soa.misc.server.spring.model.Response com.lcb.hapi..controller..*.*(..))";
+	public static final String POINTCUT_PATTERN = "execution (public org.hpsocket.soa.framework.web.model.Response *.*(..)) && @within(org.springframework.web.bind.annotation.RestController)";
 	
-	public static final MdcTracingThreadPoolExecutor LOG_EXECUTOR = new MdcTracingThreadPoolExecutor(	true,
-																										5,
-																										30,
-																										60,
-																										TimeUnit.SECONDS,
-																										new LinkedBlockingDeque<>(5000),
-																										new ThreadPoolExecutor.CallerRunsPolicy());																		 
+	public static final ThreadPoolExecutor LOG_EXECUTOR = new ThreadPoolExecutor(	5,
+																					20,
+																					60,
+																					TimeUnit.SECONDS,
+																					new LinkedBlockingDeque<>(5000),
+																					new ThreadPoolExecutor.CallerRunsPolicy());																		 
 
 	@PreDestroy
 	public void preDestroy()
@@ -101,16 +96,14 @@ public class ControllerRequestAdvice implements RequestBodyAdvice
 		if(!log.isInfoEnabled())
 			return;
 		
-		final RequestAttribute requestAttribute = RequestContext.getRequestAttribute();
-		
 		try
 		{
-			LOG_EXECUTOR.execute(new Runnable()
+			LOG_EXECUTOR.execute(new MdcRunnable()
 			{	
 				@Override
-				public void run()
+				public void doRun()
 				{
-					log.info("[ REQUEST: {} ] -> {}", requestAttribute.getRequestPath(), JSONObject.toJSONString(requestAttribute, JSON_SERIAL_FEATURES_NO_NULL_VAL));
+					log.info("[ REQUEST: {} ] -> {}", RequestContext.getRequestPath(), JSONObject.toJSONString(RequestContext.getRequestAttribute(), JSON_SERIAL_FEATURES_NO_NULL_VAL));
 				}
 			});
 		}
@@ -118,7 +111,6 @@ public class ControllerRequestAdvice implements RequestBodyAdvice
 		{
 			log.error("async write request log fail", e);
 		}
-
 	}
 
 }

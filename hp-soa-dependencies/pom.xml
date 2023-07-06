@@ -77,6 +77,7 @@
 		<quartz.version>2.3.2</quartz.version>
 		<httpclient.version>4.5.14</httpclient.version>
 		<httpclient5.version>5.2.1</httpclient5.version>
+		<browscap-java.version>1.4.0</browscap-java.version>
 		<xstream.version>1.4.20</xstream.version>
 		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 		<velocity.version>2.3</velocity.version>
@@ -619,6 +620,12 @@
 			    <groupId>org.apache.httpcomponents.client5</groupId>
 			    <artifactId>httpclient5</artifactId>
 			    <version>${httpclient5.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>com.blueconic</groupId>
+			    <artifactId>browscap-java</artifactId>
+			    <version>${browscap-java.version}</version>
 			</dependency>
 			
 			<dependency>
