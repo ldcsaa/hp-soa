@@ -128,11 +128,6 @@
 			</dependency>
 			<dependency>
 				<groupId>org.hpsocket</groupId>
-				<artifactId>hp-soa-framework-dubbo</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hpsocket</groupId>
 				<artifactId>hp-soa-starter-web</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
@@ -310,15 +305,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.velocity</groupId>
-				<artifactId>velocity-engine-core</artifactId>
+			    <groupId>org.apache.velocity</groupId>
+			    <artifactId>velocity-engine-core</artifactId>
 				<version>${velocity.version}</version>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-lang</artifactId>
-						<groupId>commons-lang</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			
 			<dependency>
@@ -466,6 +455,12 @@
 			</dependency>
 			
 			<dependency>
+			    <groupId>org.apache.logging.log4j</groupId>
+			    <artifactId>log4j-layout-template-json</artifactId>
+			    <version>${log4j.version}</version>
+			</dependency>
+			
+			<dependency>
 			    <groupId>org.apache.skywalking</groupId>
 			    <artifactId>apm-toolkit-log4j-2.x</artifactId>
 			    <version>${apm-toolkit-log4j.version}</version>
@@ -499,6 +494,12 @@
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
 				<version>${commons-lang.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.apache.commons</groupId>
+			    <artifactId>commons-lang3</artifactId>
+			    <version>${commons-lang3.version}</version>
 			</dependency>
 
 			<dependency>

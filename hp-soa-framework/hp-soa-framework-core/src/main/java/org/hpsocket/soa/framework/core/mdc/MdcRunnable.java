@@ -1,5 +1,8 @@
 package org.hpsocket.soa.framework.core.mdc;
 
+import lombok.Getter;
+
+@Getter
 abstract public class MdcRunnable implements Runnable
 {
 	private MdcAttr mdcAttr;

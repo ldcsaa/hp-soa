@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.hpsocket.soa.framework.core.mdc.MdcAttr;
 import org.hpsocket.soa.framework.core.util.GeneralHelper;
+import org.hpsocket.soa.framework.web.advice.RequestContext;
 import org.hpsocket.soa.framework.web.model.RequestAttribute;
-import org.hpsocket.soa.framework.web.support.RequestContext;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -55,11 +55,10 @@ public class MdcFilter implements Filter
 		HttpServletResponse resp = (HttpServletResponse)response;
 		
 		MdcAttr mdcAttr = new MdcAttr();
+		RequestAttribute reqAttr = RequestContext.parseRequestAttribute();
 		
 		try
-		{
-			RequestAttribute reqAttr = RequestContext.parseRequestAttribute();
-			
+		{			
 			setMdcAttr(mdcAttr, reqAttr);
 			mdcAttr.putMdc();
 

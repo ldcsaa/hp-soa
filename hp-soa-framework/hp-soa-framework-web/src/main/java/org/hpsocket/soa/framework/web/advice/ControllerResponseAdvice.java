@@ -1,24 +1,28 @@
 package org.hpsocket.soa.framework.web.advice;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.dubbo.rpc.RpcException;
 import org.apache.logging.log4j.core.config.Order;
+import org.hpsocket.soa.framework.core.exception.ServiceException;
+import org.hpsocket.soa.framework.core.mdc.MdcAttr;
+import org.hpsocket.soa.framework.core.mdc.MdcRunnable;
+import org.hpsocket.soa.framework.core.util.GeneralHelper;
+import org.hpsocket.soa.framework.core.util.Pair;
 import org.hpsocket.soa.framework.web.model.RequestAttribute;
 import org.hpsocket.soa.framework.web.model.Response;
-import org.hpsocket.soa.framework.web.support.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -36,35 +40,38 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import com.alibaba.dubbo.rpc.RpcException;
-import com.alibaba.fastjson.JSONObject;
-import com.lcb.soa.misc.common.exception.ServiceException;
-import com.lcb.soa.misc.common.thread.MdcTracingThreadPoolExecutor;
-import com.lcb.soa.misc.common.util.GeneralHelper;
-import com.lcb.soa.misc.common.util.Pair;
-import com.lcb.soa.misc.common.util.SystemUtil;
-import com.lcb.soa.misc.common.util.Utilities;
-import com.lcb.soa.misc.resp.NormalReturn;
-import com.lcb.soa.misc.server.MyApplicationContext;
+import com.alibaba.fastjson2.JSONObject;
+import com.blueconic.browscap.Capabilities;
+import com.blueconic.browscap.ParseException;
+import com.blueconic.browscap.UserAgentParser;
+import com.blueconic.browscap.UserAgentService;
 
-import static com.lcb.soa.misc.common.exception.ServiceException.*;
-import static com.lcb.soa.misc.server.ServerHelper.*;
-import static com.lcb.soa.misc.server.WebServerHelper.*;
-
-import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.beans.BeanMap;
+
+import static org.hpsocket.soa.framework.core.exception.ServiceException.*;
+import static org.hpsocket.soa.framework.web.support.WebServerHelper.*;
 
 @Slf4j
 @Order(-10)
 @RestControllerAdvice
 public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 {
-	private static final Logger monitorLog = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
-	private static final MdcTracingThreadPoolExecutor LOG_EXECUTOR = ControllerRequestAdvice.LOG_EXECUTOR;
-		
-	@Value("${web.config.advice.controller.retainResultCode:true}")
-	private boolean retainResultCode;
+	private static final ThreadPoolExecutor LOG_EXECUTOR = ControllerRequestAdvice.LOG_EXECUTOR;
+	private static final Logger monitorLogger = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
+	private static final UserAgentParser uaParser;
+	
+	static
+	{
+		try
+		{
+			uaParser = new UserAgentService().loadParser();
+		}
+		catch(IOException | ParseException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 	
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType)
@@ -83,21 +90,12 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 		{
 			Response<?> respBody = (Response<?>)body;
 			
-			if(retainResultCode)
-			{
-				if(GeneralHelper.isStrEmpty(respBody.getResultCode()))
-					respBody.setResultCode(respBody.getStatusCode());
-			}
-			else
-			{
-				respBody.setResultCode(null);
-			}
-			
-			respBody.calcCostTime(RequestContext.getTimestamp());
+			if(respBody.getResultCode() == null)
+				respBody.setResultCode(respBody.getStatusCode());
 			
 			checkToken(respBody, req, resp);
-			
-			req.setAttribute(REQUEST_ATTRIBUTE_RESP_BODY, respBody);
+
+			respBody.calcCostTime(RequestContext.getTimestamp());
 		}
 		
 		logResponse(body, returnType, req);
@@ -112,15 +110,15 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 	{
 		Pair<Integer, String> tokenCookieAttr = null;
 		
-		String statusCode = respBody.getStatusCode();
+		Integer statusCode = respBody.getStatusCode();
 		
-		if(ServiceException.API_OK.equals(statusCode))
+		if(GeneralHelper.equals(statusCode, ServiceException.OK))
 		{
-			Integer rt = respBody.getReturnType();
+			Integer rt = respBody.getRespType();
 			
 			if(rt != null)
 			{
-				if(Response.RT_LOGIN.equals(rt))
+				if(rt == Response.RT_LOGIN)
 				{
 					Object result = respBody.getResult();
 					
@@ -129,27 +127,27 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 						String token = null;
 						
 						if(result instanceof Map<?, ?>)
-							token = ((Map<String, String>)result).get(LCB_TOKEN);
+							token = ((Map<String, String>)result).get(HEADER_TOKEN);
 						else
 						{
 							BeanMap map = BeanMap.create(result);
-							token = (String)map.get(LCB_TOKEN);
+							token = (String)map.get(HEADER_TOKEN);
 						}
 						
 						if(GeneralHelper.isStrNotEmpty(token))
-							tokenCookieAttr = new Pair<Integer, String>(COOKIE_MAX_AGE, token);
+							tokenCookieAttr = new Pair<Integer, String>(DEFAULT_COOKIE_MAX_AGE, token);
 					}
 				}
-				else if(NormalReturn.RT_LOGOUT.equals(rt))
+				else if(rt == Response.RT_LOGOUT)
 					tokenCookieAttr = new Pair<Integer, String>(0, "");						
 			}
 		}
-		else if(ServiceException.LOGIN_INVALID.equals(statusCode))
+		else if(GeneralHelper.equals(statusCode, ServiceException.LOGIN_INVALID))
 			tokenCookieAttr = new Pair<Integer, String>(0, "");
 		
 		if(tokenCookieAttr != null)
 		{
-			Cookie cookie = createCookie(request, LCB_TOKEN, tokenCookieAttr.getSecond(), tokenCookieAttr.getFirst());
+			Cookie cookie = createCookie(request, HEADER_TOKEN, tokenCookieAttr.getSecond(), tokenCookieAttr.getFirst());
 			response.addCookie(cookie);
 		}		
 	}
@@ -239,10 +237,10 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 		
 		try
 		{
-			LOG_EXECUTOR.execute(new Runnable()
+			LOG_EXECUTOR.execute(new MdcRunnable()
 			{
 				@Override
-				public void run()
+				public void doRun()
 				{
 					log.info("[ RESPONSE: {} ] -> {}", requestAttribute.getRequestPath(), JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_DEFAULT));
 				}
@@ -258,44 +256,41 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 	
 	private void asyncWriteMonitorLog(final Object body, final MethodParameter rt, final HttpServletRequest req, final RequestAttribute requestAttribute)
 	{
-		final String ua		 = getUserAgent(req);
-		final String appId	 = MDC.get(MDC_APP_ID_KEY);
-		final String appName = MDC.get(MDC_APP_NAME_KEY);
+		final String ua = getUserAgent(req);
 		
-		Runnable task = new Runnable()
-		{	
+		Runnable task = new MdcRunnable()
+		{
 			@Override
-			public void run()
+			protected void doRun()
 			{
-				JSONObject json		= (JSONObject)JSONObject.toJSON(requestAttribute.getBody());
+				JSONObject json		= JSONObject.from(requestAttribute.getBody());
 				JSONObject jsonLog	= new JSONObject();
 				
 				if(json == null)
 					json = new JSONObject();
+			
+				MdcAttr mdcAttr = getMdcAttr();
 
-				jsonLog.put(MDC_APP_CODE_KEY, requestAttribute.getAppCode());
-				jsonLog.put(MDC_APP_ID_KEY, appId);
-				jsonLog.put(MDC_APP_NAME_KEY, appName);
-				jsonLog.put(MDC_SERVICE_ID_KEY, MyApplicationContext.currentApplicationId());
-				jsonLog.put(MDC_SERVICE_NAME_KEY, MyApplicationContext.currentApplicationName());
-				jsonLog.put(MDC_SERVICE_ADDR_KEY, SystemUtil.getAddress());
-				jsonLog.put(MDC_ORG_NAME_KEY, MyApplicationContext.currentApplicationOrganization());
-				jsonLog.put(MDC_OWNER_NAME_KEY, MyApplicationContext.currentApplicationOwner());
-				jsonLog.put(MDC_CLIENT_ID_KEY, requestAttribute.getClientId());
-				jsonLog.put(MDC_REQUEST_ID_KEY, requestAttribute.getRequestId());
-				jsonLog.put(MDC_SESSION_ID_KEY, requestAttribute.getSessionId());
-				jsonLog.put(MDC_TOKEN_KEY, requestAttribute.getToken());
-				jsonLog.put(MDC_TOKEN_ALIAS_KEY, requestAttribute.getTokenAlias());
-				jsonLog.put("logType", MONITOR_LOG_TYPE);
-				jsonLog.put("clientAppId", requestAttribute.getAppId());
-				jsonLog.put("url", requestAttribute.getRequestUri());
-				jsonLog.put("apiName", rt.getMethod().getName());
-				jsonLog.put("ip", requestAttribute.getRemoteIp());
-				jsonLog.put("userId", requestAttribute.getUserId());
-				jsonLog.put("mobile", json.getString("mobile"));
+				jsonLog.put("logType", BFF_MONITOR_LOG_TYPE);
+				jsonLog.put("appId", mdcAttr.getAppId());
+				jsonLog.put("appName", mdcAttr.getAppName());
+				jsonLog.put("serviceId", mdcAttr.getServiceId());
+				jsonLog.put("serviceName", mdcAttr.getServiceName());
+				jsonLog.put("serviceAddr", mdcAttr.getServiceAddr());
+				jsonLog.put("organization", mdcAttr.getOrganization());
+				jsonLog.put("owner", mdcAttr.getOwner());
+				
+				@SuppressWarnings("unchecked")
+				Map<String, Object> reqAttr = (Map<String, Object>)BeanMap.create(requestAttribute);
+				
+				reqAttr.forEach((k, v) -> {
+					if(v != null && !k.equals("body"))
+						jsonLog.put((String)k, (String)v);
+				});
+				
+				jsonLog.put("apiName", rt.getDeclaringClass().getSimpleName().concat("#").concat(rt.getMethod().getName()));
 				jsonLog.put("request", json.toString());
-				jsonLog.put("result", JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_DEFAULT));
-				jsonLog.put("currentTime", requestAttribute.getTimestamp());
+				jsonLog.put("response", JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_DEFAULT));
 				
 				if(body instanceof Response<?>)
 				{
@@ -304,39 +299,18 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 					jsonLog.put("resultCode", respBody.getResultCode());
 					jsonLog.put("statusCode", respBody.getStatusCode());
 					jsonLog.put("costTime", respBody.getCostTime());
-					jsonLog.put("msg", VALIDATE_ERROR.equals(respBody.getStatusCode()) ? respBody.getMsg() + ": " + JSONObject.toJSONString(respBody.getValidationErrors()) : respBody.getMsg());
+					jsonLog.put("msg", GeneralHelper.equals(respBody.getStatusCode(), PARAM_VERIFY_ERROR) ? respBody.getMsg() + ": " + JSONObject.toJSONString(respBody.getValidationErrors()) : respBody.getMsg());
 				}
 
-				try
+				if(GeneralHelper.isStrNotEmpty(ua))
 				{
-					if(StringUtils.isNotBlank(ua))
-					{
-						jsonLog.put("ua", ua);
-						jsonLog.put("nativeVersion", Utilities.getNativeAppVersion(ua));
-						jsonLog.put("application", StringUtils.substringAfterLast(ua, " "));
-
-						UserAgent userAgent = new UserAgent(ua);
-						
-						if(userAgent != null)
-						{
-							jsonLog.put("browser", userAgent.getBrowser().getName());
-							jsonLog.put("browserVersion", userAgent.getBrowserVersion() != null ? userAgent.getBrowserVersion().toString() : "");
-							
-							String os = userAgent.getOperatingSystem().getGroup().getName();
-							jsonLog.put("os", os);
-							
-							if("Android".equals(os))
-								jsonLog.put("osVersion", Utilities.getAndroidVersion(ua));
-							else if("iOS".equals(os))
-								jsonLog.put("osVersion", Utilities.getIOSVersion(ua));
-
-							jsonLog.put("device", userAgent.getOperatingSystem().getDeviceType().getName());
-							jsonLog.put("manufacturer", userAgent.getOperatingSystem().getManufacturer().name());
-						}
-					}
-				}
-				catch(Exception e)
-				{
+					final Capabilities caps = uaParser.parse(ua);
+					
+					jsonLog.put("ua", ua);
+					jsonLog.put("ua.browser", caps.getBrowser().concat(GeneralHelper.isStrNotEmpty(caps.getBrowserMajorVersion()) ? " " + caps.getBrowserMajorVersion() : ""));
+					jsonLog.put("ua.browserType", caps.getBrowserType());
+					jsonLog.put("ua.deviceType", caps.getDeviceType());
+					jsonLog.put("ua.platform", caps.getPlatform().concat(GeneralHelper.isStrNotEmpty(caps.getPlatformVersion()) ? " " + caps.getPlatformVersion() : ""));
 				}
 
 				String msg = jsonLog.toJSONString();
@@ -344,18 +318,18 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 				if(body instanceof Response<?>)
 				{
 					Response<?> respBody = (Response<?>)body;
-					String statusCode	 = respBody.getStatusCode();
+					Integer statusCode	 = respBody.getStatusCode();
 					
-					if(API_OK.equals(statusCode))
-						monitorLog.info(msg);
-					else if(GENERAL_ERROR.equals(statusCode))
-						monitorLog.error(msg);
+					if(GeneralHelper.equals(statusCode, OK))
+						monitorLogger.info(msg);
+					else if(GeneralHelper.equals(statusCode, GENERAL_ERROR))
+						monitorLogger.error(msg);
 					else
-						monitorLog.warn(msg);
+						monitorLogger.warn(msg);
 				}
 				else
 				{
-					monitorLog.info(msg);
+					monitorLogger.info(msg);
 				}
 			}
 		};

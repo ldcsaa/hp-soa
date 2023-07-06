@@ -2,6 +2,9 @@ package org.hpsocket.soa.framework.core.mdc;
 
 import java.util.concurrent.RecursiveTask;
 
+import lombok.Getter;
+
+@Getter
 @SuppressWarnings("serial")
 abstract public class MdcRecursiveTask<T> extends RecursiveTask<T>
 {

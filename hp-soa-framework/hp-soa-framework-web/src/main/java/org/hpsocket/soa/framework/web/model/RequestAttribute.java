@@ -12,6 +12,7 @@ public class RequestAttribute
 	private String appCode;
 	private String srcAppCode;
 	private String token;
+	private String tokenAlias;
 	private String clientId;
 	private String requestId;
 	private String sessionId;
@@ -21,7 +22,6 @@ public class RequestAttribute
 	private String requestUri;
 	private String requestPath;
 	
-	private String tokenAlias;
 	private String version;
 	private String extra;
 	

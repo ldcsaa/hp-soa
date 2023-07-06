@@ -2,6 +2,9 @@ package org.hpsocket.soa.framework.core.mdc;
 
 import java.util.concurrent.RecursiveAction;
 
+import lombok.Getter;
+
+@Getter
 @SuppressWarnings("serial")
 abstract public class MdcRecursiveAction extends RecursiveAction
 {

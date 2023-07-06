@@ -35,7 +35,7 @@ public class WebServerHelper
 	public static final String HEADER_VERSION				= "version";
 	public static final String HEADER_EXTRA					= "extra";
 
-	public static final int COOKIE_MAX_AGE			= 10 * 365 * 24 * 60 * 60;
+	public static final int DEFAULT_COOKIE_MAX_AGE	= 10 * 365 * 24 * 60 * 60;
 	public static final String DEFAULT_CHARSET		= GeneralHelper.DEFAULT_ENCODING;
 	
 	public static final boolean HTTP_ONLY_COOKIE	= false;
@@ -58,9 +58,9 @@ public class WebServerHelper
 	public static final Pattern DOMAIN_PATTERN	= Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
 	public static final Pattern SPIDER_PATTERN	= Pattern.compile(".*(Googlebot|Baiduspider|Yahoo\\!\\ Slurp|iaskspider|YodaoBot|msnbot|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
 	
-	public static final String MONITOR_LOGGER_NAME		= "SOA-MONITOR";
-	public static final String BFF_MONITOR_LOG_TYPE		= "BFF-REQUEST";
-	public static final String MONITOR_LOG_TYPE			= "HTTP-CLIENT";
+	public static final String MONITOR_LOGGER_NAME			= "SOA-MONITOR";
+	public static final String BFF_MONITOR_LOG_TYPE			= "BFF-REQUEST";
+	public static final String HTTP_CLIENT_MONITOR_LOG_TYPE	= "HTTP-CLIENT";
 
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT		= {JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNonStringKeyAsString};
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL	= {JSONWriter.Feature.WriteNonStringKeyAsString};
@@ -117,7 +117,7 @@ public class WebServerHelper
 			exists = true;
 
 		if(!exists)
-			clientCookie = createCookie(req, HEADER_CLIENT_ID, UUID.randomUUID().toString(), COOKIE_MAX_AGE);
+			clientCookie = createCookie(req, HEADER_CLIENT_ID, UUID.randomUUID().toString(), DEFAULT_COOKIE_MAX_AGE);
 
 		return new Result<>(exists, clientCookie);
 	}

@@ -22,7 +22,7 @@ public class MdcAttr
 	public static final String MDC_ORG_KEY			= "__mdc_organization";
 	public static final String MDC_OWNER_KEY		= "__mdc_owner";
 	
-	Map<String, String> mdcMap;
+	Map<String, String> ctxMap;
 
 	/*
 	public String clientId;
@@ -44,12 +44,12 @@ public class MdcAttr
 	
 	public MdcAttr()
 	{
-		mdcMap = new HashMap<>();
+		ctxMap = new HashMap<>();
 	}
 	
 	public MdcAttr(Map<String, String> mdcMap)
 	{
-		this.mdcMap = mdcMap;
+		this.ctxMap = mdcMap;
 	}
 	
 	public static MdcAttr from(Map<String, String> mdcMap)
@@ -64,7 +64,7 @@ public class MdcAttr
 
 	public void putMdc()
 	{
-		mdcMap.forEach((k, v) -> MDC.put(k, v));
+		ctxMap.forEach((k, v) -> MDC.put(k, v));
 	}
 	
 	public void removeMdc()
@@ -74,35 +74,35 @@ public class MdcAttr
 	
 	public void removeMdc(boolean clearMdcMap)
 	{
-		mdcMap.forEach((k, v) -> MDC.remove(k));	
+		ctxMap.forEach((k, v) -> MDC.remove(k));	
 		
 		if(clearMdcMap)
-			mdcMap.clear();
+			ctxMap.clear();
 	}
 	
 	public void set(String key, String val)
 	{
-		mdcMap.put(key, val);
+		ctxMap.put(key, val);
 	}
 	
 	public String remove(String key)
 	{
-		return mdcMap.remove(key);
+		return ctxMap.remove(key);
 	}
 	
 	public String get(String key)
 	{
-		return mdcMap.get(key);
+		return ctxMap.get(key);
 	}
 	
 	public Map<String, String> getCtxMap()
 	{
-		return mdcMap;
+		return ctxMap;
 	}
 
 	public void setCtxMap(Map<String, String> ctxMap)
 	{
-		this.mdcMap = ctxMap;
+		this.ctxMap = ctxMap;
 	}
 
 	public String getClientId()

@@ -18,7 +18,6 @@
 	<modules>
 		<module>hp-soa-framework-core</module>
 		<module>hp-soa-framework-web</module>
-		<module>hp-soa-framework-dubbo</module>
 	</modules>
 
 	<dependencyManagement>

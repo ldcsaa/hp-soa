@@ -14,7 +14,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.hpsocket.soa.framework.core.mdc.MdcRunnable;
-import org.hpsocket.soa.framework.web.support.RequestContext;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -101,7 +100,7 @@ public class ControllerRequestAdvice implements RequestBodyAdvice
 			LOG_EXECUTOR.execute(new MdcRunnable()
 			{	
 				@Override
-				public void doRun()
+				protected void doRun()
 				{
 					log.info("[ REQUEST: {} ] -> {}", RequestContext.getRequestPath(), JSONObject.toJSONString(RequestContext.getRequestAttribute(), JSON_SERIAL_FEATURES_NO_NULL_VAL));
 				}

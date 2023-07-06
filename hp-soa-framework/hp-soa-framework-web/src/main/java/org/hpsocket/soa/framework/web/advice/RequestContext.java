@@ -1,4 +1,4 @@
-package org.hpsocket.soa.framework.web.support;
+package org.hpsocket.soa.framework.web.advice;
 
 import java.io.IOException;
 import java.util.Map;
@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.hpsocket.soa.framework.core.util.Result;
 import org.hpsocket.soa.framework.web.model.RequestAttribute;
+import org.hpsocket.soa.framework.web.support.WebServerHelper;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -55,7 +56,7 @@ public class RequestContext
 		return (T)getServletRequestAttributes().getAttribute(name, SCOPE_REQUEST);
 	}
 	
-	public static final <T> void setAttribute(String name, T value)
+	static final <T> void setAttribute(String name, T value)
 	{
 		getServletRequestAttributes().setAttribute(name, value, SCOPE_REQUEST);
 	}
@@ -150,7 +151,7 @@ public class RequestContext
 		return getRequestAttribute().getBody();
 	}
 	
-	public static final void setBody(Object body)
+	static final void setBody(Object body)
 	{
 		getRequestAttribute().setBody(body);
 	}

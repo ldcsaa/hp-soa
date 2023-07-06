@@ -2,6 +2,9 @@ package org.hpsocket.soa.framework.core.mdc;
 
 import java.util.concurrent.Callable;
 
+import lombok.Getter;
+
+@Getter
 abstract public class MdcCallable<T> implements Callable<T>
 {
 	private MdcAttr mdcAttr;

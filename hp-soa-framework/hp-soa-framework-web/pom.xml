@@ -23,6 +23,27 @@
 		</dependency>
 		
 		<dependency>
+		    <groupId>org.apache.dubbo</groupId>
+		    <artifactId>dubbo-spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.dubbo</groupId>
+		    <artifactId>dubbo-registry-nacos</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.dubbo</groupId>
+		    <artifactId>dubbo-configcenter-nacos</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.dubbo</groupId>
+		    <artifactId>dubbo-metadata-report-nacos</artifactId>
+		</dependency>
+			<dependency>
+			    <groupId>com.alibaba.nacos</groupId>
+			    <artifactId>nacos-client</artifactId>
+			</dependency>
+
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
@@ -167,20 +188,10 @@
 		    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 		</dependency>
 
-		<!--
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
+		    <groupId>com.blueconic</groupId>
+		    <artifactId>browscap-java</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>io.springfox</groupId>
-		    <artifactId>springfox-spring-webmvc</artifactId>
-		</dependency>
-		-->
-		
+
 	</dependencies>
 </project>
