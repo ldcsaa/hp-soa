@@ -18,8 +18,14 @@ public class ServerInitializer
 	
 	public static final boolean setSystemProperties(String key, Object value, boolean override)
 	{
+		if(value == null)
+		{
+			System.getProperties().remove(key);
+			return true;
+		}
+		
 		boolean rs = true;
-		String realVal = value == null ? "" : value.toString();
+		String realVal = value.toString();
 		
 		if(override)
 			System.setProperty(key, realVal);
