@@ -1,6 +1,7 @@
 package org.hpsocket.soa.framework.web.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
@@ -12,7 +13,9 @@ import lombok.Setter;
 @ConfigurationProperties(prefix = "hp.soa.web")
 public class WebProperties
 {
+	@NestedConfigurationProperty
 	private AppProperties app = new AppProperties();
+	@NestedConfigurationProperty
 	private CorsProperties cors = new CorsProperties();	
 	
 	@Getter
