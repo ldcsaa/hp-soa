@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.hpsocket.soa.starter.web.config.ControllerAdviceConfig,\
+org.hpsocket.soa.starter.web.config.SpringContextHolderConfig,\
+org.hpsocket.soa.starter.web.config.SwaggerConfig,\
+org.hpsocket.soa.starter.web.config.WebConfig,\
+org.hpsocket.soa.starter.web.properties.SwaggerProperties,\
+org.hpsocket.soa.starter.web.properties.WebProperties

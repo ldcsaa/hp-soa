@@ -1,9 +1,9 @@
 
-package org.hpsocket.soa.framework.web.config;
+package org.hpsocket.soa.starter.web.config;
 
 import org.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.hpsocket.soa.framework.web.filter.MdcFilter;
-import org.hpsocket.soa.framework.web.properties.WebProperties;
+import org.hpsocket.soa.starter.web.properties.WebProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +12,11 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer
+public class WebConfig implements WebMvcConfigurer
 {
 	private final WebProperties webProperties;
 	
-	public WebConfiguration(WebProperties webProperties)
+	public WebConfig(WebProperties webProperties)
 	{
 		this.webProperties = webProperties;
 	}

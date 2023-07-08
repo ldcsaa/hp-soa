@@ -17,6 +17,9 @@
 	</properties>
 	
 	<dependencies>
-
+		<dependency>
+			<groupId>org.hpsocket</groupId>
+			<artifactId>hp-soa-framework-web</artifactId>
+		</dependency>
 	</dependencies>
 </project>

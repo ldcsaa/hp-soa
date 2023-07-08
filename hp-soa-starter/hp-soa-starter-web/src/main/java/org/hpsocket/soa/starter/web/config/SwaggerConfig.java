@@ -1,7 +1,7 @@
 
-package org.hpsocket.soa.framework.web.config;
+package org.hpsocket.soa.starter.web.config;
 
-import org.hpsocket.soa.framework.web.properties.SwaggerProperties;
+import org.hpsocket.soa.starter.web.properties.SwaggerProperties;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -20,11 +20,11 @@ import io.swagger.v3.oas.models.parameters.HeaderParameter;
 
 @Configuration
 @ConditionalOnProperty(name="springdoc.api-docs.enabled", havingValue="true", matchIfMissing = false)
-public class SwaggerConfiguration implements WebMvcConfigurer
+public class SwaggerConfig implements WebMvcConfigurer
 {
 	private final SwaggerProperties swaggerProperties;
 
-	public SwaggerConfiguration(SwaggerProperties swaggerProperties)
+	public SwaggerConfig(SwaggerProperties swaggerProperties)
 	{
 		this.swaggerProperties = swaggerProperties;
 	}

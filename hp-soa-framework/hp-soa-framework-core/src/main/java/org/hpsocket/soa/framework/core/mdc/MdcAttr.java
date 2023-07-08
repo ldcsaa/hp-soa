@@ -13,7 +13,6 @@ public class MdcAttr
 	public static final String MDC_APP_CODE_KEY		= "__mdc_appCode";
 	public static final String MDC_SRC_APP_CODE_KEY	= "__mdc_srcAppCode";
 	public static final String MDC_TOKEN_KEY		= "__mdc_token";
-	public static final String MDC_TOKEN_ALIAS_KEY	= "__mdc_tokenAlias";
 	public static final String MDC_APP_ID_KEY		= "__mdc_appId";
 	public static final String MDC_APP_NAME_KEY		= "__mdc_appName";
 	public static final String MDC_SERVICE_ID_KEY	= "__mdc_serviceId";
@@ -29,7 +28,6 @@ public class MdcAttr
 	public String requestId;
 	public String sessionId;
 	public String token;
-	public String tokenAlias;
 	public String appCode;
 	public String srcAppCode;
 	
@@ -143,16 +141,6 @@ public class MdcAttr
 	public void setToken(String token)
 	{
 		set(MDC_TOKEN_KEY, token);
-	}
-
-	public String getTokenAlias()
-	{
-		return get(MDC_TOKEN_ALIAS_KEY);
-	}
-
-	public void setTokenAlias(String tokenAlias)
-	{
-		set(MDC_TOKEN_ALIAS_KEY, tokenAlias);
 	}
 
 	public String getAppCode()

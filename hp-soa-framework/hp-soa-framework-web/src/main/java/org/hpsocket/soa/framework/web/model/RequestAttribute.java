@@ -12,7 +12,6 @@ public class RequestAttribute
 	private String appCode;
 	private String srcAppCode;
 	private String token;
-	private String tokenAlias;
 	private String clientId;
 	private String requestId;
 	private String sessionId;
@@ -26,7 +25,6 @@ public class RequestAttribute
 	private String extra;
 	
 	private transient Long userId;
-	private transient Long internalUserId;
 	private transient long timestamp;
 	
 	private Object body;

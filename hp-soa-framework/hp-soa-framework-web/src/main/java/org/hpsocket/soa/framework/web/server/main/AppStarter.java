@@ -4,6 +4,7 @@ package org.hpsocket.soa.framework.web.server.main;
 import org.hpsocket.soa.framework.web.server.init.ServerInitializer;
 import org.hpsocket.soa.framework.web.support.YamlPropertySourceFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
@@ -13,8 +14,10 @@ import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 
+@EnableAutoConfiguration
 @SpringBootApplication(exclude = {	SecurityAutoConfiguration.class,
 									DataSourceAutoConfiguration.class,
 									RedisAutoConfiguration.class,
@@ -22,6 +25,7 @@ import org.springframework.context.annotation.PropertySource;
 									MongoAutoConfiguration.class,
 									KafkaAutoConfiguration.class,
 									RabbitAutoConfiguration.class	})
+@ImportResource(locations = {"classpath:application.xml"})
 @PropertySource(value = {"classpath:config.properties"}, ignoreResourceNotFound=true)
 @PropertySource(value = {"classpath:config.yml"}, factory = YamlPropertySourceFactory.class, ignoreResourceNotFound=true)
 @ComponentScan(basePackages = {"org.hpsocket.soa"})

@@ -81,11 +81,6 @@ public class RequestContext
 		return getRequestAttribute().getToken();
 	}
 
-	public static final String getTokenAlias()
-	{
-		return getRequestAttribute().getTokenAlias();
-	}
-
 	public static final String getVersion()
 	{
 		return getRequestAttribute().getVersion();
@@ -136,11 +131,6 @@ public class RequestContext
 		return getRequestAttribute().getUserId();
 	}
 	
-	public static final Long getInternalUserId()
-	{
-		return getRequestAttribute().getInternalUserId();
-	}
-	
 	public static final long getTimestamp()
 	{
 		return getRequestAttribute().getTimestamp();
@@ -177,7 +167,6 @@ public class RequestContext
 		String version		= parseRequestField(request, reqInfos, HEADER_VERSION, false);
 		String extra		= parseRequestField(request, reqInfos, HEADER_EXTRA, false);
 		String token		= parseRequestField(request, reqInfos, HEADER_TOKEN, true);
-		String tokenAlias	= parseRequestField(request, reqInfos, HEADER_TOKEN_ALIAS, true);
 		String groupId		= parseRequestField(request, reqInfos, HEADER_GROUP_ID, false);
 		String sessionId	= parseRequestField(request, reqInfos, HEADER_SESSION_ID, true);
 		String requestId	= parseRequestField(request, reqInfos, HEADER_REQUEST_ID, false);
@@ -209,7 +198,6 @@ public class RequestContext
 		RequestAttribute reqAttr = new RequestAttribute(appCode, srcAppCode, token,
 														clientId, requestId, sessionId,
 														GeneralHelper.str2Long(groupId));
-		reqAttr.setTokenAlias(tokenAlias);
 		reqAttr.setVersion(version);
 		reqAttr.setExtra(extra);
 		reqAttr.setRemoteIp(WebServerHelper.getIpAddr(request));

@@ -1,18 +1,9 @@
 package org.hpsocket.soa.framework.web.advice;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import org.apache.dubbo.rpc.RpcException;
 import org.apache.logging.log4j.core.config.Order;
 import org.hpsocket.soa.framework.core.exception.ServiceException;
 import org.hpsocket.soa.framework.core.mdc.MdcAttr;
@@ -30,14 +21,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -46,11 +30,14 @@ import com.blueconic.browscap.ParseException;
 import com.blueconic.browscap.UserAgentParser;
 import com.blueconic.browscap.UserAgentService;
 
-import lombok.extern.slf4j.Slf4j;
-import net.sf.cglib.beans.BeanMap;
-
 import static org.hpsocket.soa.framework.core.exception.ServiceException.*;
 import static org.hpsocket.soa.framework.web.support.WebServerHelper.*;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import net.sf.cglib.beans.BeanMap;
 
 @Slf4j
 @Order(-10)
@@ -135,7 +122,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 						}
 						
 						if(GeneralHelper.isStrNotEmpty(token))
-							tokenCookieAttr = new Pair<Integer, String>(DEFAULT_COOKIE_MAX_AGE, token);
+							tokenCookieAttr = new Pair<Integer, String>(getCookieMaxAge(), token);
 					}
 				}
 				else if(rt == Response.RT_LOGOUT)
@@ -150,82 +137,6 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 			Cookie cookie = createCookie(request, HEADER_TOKEN, tokenCookieAttr.getSecond(), tokenCookieAttr.getFirst());
 			response.addCookie(cookie);
 		}		
-	}
-
-	@ExceptionHandler({MethodArgumentNotValidException.class})
-	public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e)
-	{
-		BindingResult rs = e.getBindingResult();
-		
-		Map<String, List<String>> validationErrors = new LinkedHashMap<>();
-		
-		for(ObjectError obj : rs.getAllErrors())
-		{
-			if(obj instanceof FieldError)
-			{
-				FieldError field = (FieldError)obj;
-				String name = field.getField();
-				
-				List<String> errs = validationErrors.get(name);
-				
-				if(errs == null)
-				{
-					errs = new LinkedList<>();
-					validationErrors.put(name, errs);
-				}
-				
-				errs.add(field.getDefaultMessage());
-			}
-		}
-		
-		if(validationErrors.isEmpty())
-			validationErrors.put(rs.getObjectName(), Arrays.asList(rs.toString()));
-		
-		ServiceException se = wrapServiceException(PARAM_VERIFY_EXCEPTION, e);
-		
-		logServiceException(log, se.getMessage(), se);
-		
-		return new Response<>(se, validationErrors);
-	}
-
-	@ExceptionHandler({RpcException.class})
-	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RpcException e)
-	{
-		Throwable real	= e;
-		Throwable cause	= null;
-		
-		do
-		{
-			cause = real.getCause();
-			
-			if(cause == null)
-				break;
-			
-			real = cause;
-		} while(cause instanceof RpcException);
-		
-		ServiceException se = wrapServiceException(GENERAL_EXCEPTION, real);
-
-		logServiceException(log, se.getMessage(), se);
-		
-		return new Response<>(se);
-	}
-
-	@ExceptionHandler({Exception.class})
-	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
-	{
-		ServiceException se = null;
-		
-		if(e instanceof NoHandlerFoundException)
-			se = wrapServiceException(e.getMessage(), NOT_EXIST, e);
-		else if(e instanceof HttpRequestMethodNotSupportedException)
-			se = wrapServiceException(e.getMessage(), NOT_IMPLEMENTED, e);
-		else
-			se = wrapServiceException(GENERAL_EXCEPTION, e);
-
-		logServiceException(log, se.getMessage(), se);
-		
-		return new Response<>(se);
 	}
 
 	private void logResponse(Object body, MethodParameter rt, HttpServletRequest req)

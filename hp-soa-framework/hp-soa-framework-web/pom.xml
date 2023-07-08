@@ -28,6 +28,10 @@
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.dubbo</groupId>
+		    <artifactId>dubbo-spring-boot-actuator</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.dubbo</groupId>
 		    <artifactId>dubbo-registry-nacos</artifactId>
 		</dependency>
 		<dependency>
@@ -192,6 +196,21 @@
 		    <groupId>com.blueconic</groupId>
 		    <artifactId>browscap-java</artifactId>
 		</dependency>
-
 	</dependencies>
+	
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.yml</include>
+					<include>**/*.yaml</include>
+					<include>**/*.properties</include>
+					<include>**/*.conf</include>
+		    		<include>**/*.Filter</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
 </project>

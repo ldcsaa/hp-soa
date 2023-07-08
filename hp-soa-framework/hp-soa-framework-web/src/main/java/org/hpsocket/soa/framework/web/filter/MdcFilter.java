@@ -95,8 +95,6 @@ public class MdcFilter implements Filter
 			mdcAttr.setSrcAppCode(reqAttr.getSrcAppCode());
 		if(GeneralHelper.isStrNotEmpty(reqAttr.getToken()))
 			mdcAttr.setToken(reqAttr.getToken());
-		if(GeneralHelper.isStrNotEmpty(reqAttr.getTokenAlias()))
-			mdcAttr.setTokenAlias(reqAttr.getTokenAlias());
 
 		return mdcAttr;
 	}

@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.hpsocket.soa.framework.core.util.CryptHelper;
 import org.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.hpsocket.soa.framework.core.util.Result;
+import org.hpsocket.soa.framework.web.holder.SpringContextHolder;
+import org.hpsocket.soa.framework.web.propertries.ICookiePropertries;
 
 import com.alibaba.fastjson2.JSONWriter;
 
@@ -28,7 +30,6 @@ public class WebServerHelper
 	public static final String HEADER_CLIENT_ID				= "clientId";
 	public static final String HEADER_SESSION_ID			= "sessionId";
 	public static final String HEADER_TOKEN					= "token";
-	public static final String HEADER_TOKEN_ALIAS			= "tokenAlias";
 	public static final String HEADER_APP_CODE				= "appCode";
 	public static final String HEADER_SRC_APP_CODE			= "srcAppCode";
 	public static final String HEADER_GROUP_ID				= "groupId";
@@ -64,6 +65,8 @@ public class WebServerHelper
 
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT		= {JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNonStringKeyAsString};
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL	= {JSONWriter.Feature.WriteNonStringKeyAsString};
+	
+	private static int cookieMaxAge = 0;
 	
 	public static final boolean checkUserAgent(String ua)
 	{
@@ -107,7 +110,6 @@ public class WebServerHelper
 		return host;
 	}
 	
-
 	public static final Result<Boolean, Cookie> checkClientCookie(HttpServletRequest req)
 	{
 		boolean exists		= false;
@@ -117,7 +119,7 @@ public class WebServerHelper
 			exists = true;
 
 		if(!exists)
-			clientCookie = createCookie(req, HEADER_CLIENT_ID, UUID.randomUUID().toString(), DEFAULT_COOKIE_MAX_AGE);
+			clientCookie = createCookie(req, HEADER_CLIENT_ID, UUID.randomUUID().toString(), getCookieMaxAge());
 
 		return new Result<>(exists, clientCookie);
 	}
@@ -268,4 +270,20 @@ public class WebServerHelper
 		return infos;
 	}
 
+	public static final int getCookieMaxAge()
+	{
+		if(cookieMaxAge == 0)
+		{
+			synchronized(WebServerHelper.class)
+			{
+				if(cookieMaxAge == 0)
+				{
+					ICookiePropertries props = SpringContextHolder.getBean(ICookiePropertries.class, false);
+					cookieMaxAge = (props != null) ? props.getMaxAge() : DEFAULT_COOKIE_MAX_AGE;
+				}
+			}
+		}
+		
+		return cookieMaxAge;
+	}
 }

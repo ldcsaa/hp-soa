@@ -144,6 +144,11 @@
 			</dependency>
 			<dependency>
 			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-spring-boot-actuator</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
 			    <artifactId>dubbo-registry-nacos</artifactId>
 			    <version>${dubbo.version}</version>
 			</dependency>
