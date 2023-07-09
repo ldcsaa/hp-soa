@@ -8,6 +8,7 @@ import org.hpsocket.soa.starter.web.properties.WebProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -75,8 +76,8 @@ public class WebConfig implements WebMvcConfigurer
 			.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
 				.requestMatchers(managementBasePath).authenticated()
 				.requestMatchers(SecurityProperties.ANY_PATH_PATTERN).permitAll())
-			.formLogin((f) -> {})
-			.httpBasic((b) -> {});
+			.formLogin(Customizer.withDefaults())
+			.httpBasic(Customizer.withDefaults());
 		}
 		
 		http.csrf((csrf) -> csrf.disable());
