@@ -19,12 +19,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import static org.hpsocket.soa.framework.core.exception.ServiceException.GENERAL_EXCEPTION;
-import static org.hpsocket.soa.framework.core.exception.ServiceException.NOT_EXIST;
-import static org.hpsocket.soa.framework.core.exception.ServiceException.NOT_IMPLEMENTED;
-import static org.hpsocket.soa.framework.core.exception.ServiceException.PARAM_VERIFY_EXCEPTION;
-import static org.hpsocket.soa.framework.core.exception.ServiceException.logServiceException;
-import static org.hpsocket.soa.framework.core.exception.ServiceException.wrapServiceException;
+import static org.hpsocket.soa.framework.core.exception.ServiceException.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

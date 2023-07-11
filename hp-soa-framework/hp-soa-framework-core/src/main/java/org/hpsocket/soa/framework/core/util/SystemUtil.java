@@ -139,10 +139,8 @@ public class SystemUtil
 		}
 		catch(UnknownHostException e)
 		{
-
+			throw new RuntimeException(e);
 		}
-		
-		return false;
 	}
 
 }
