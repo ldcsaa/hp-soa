@@ -38,6 +38,7 @@
 		<maven-install-plugin.version>3.1.1</maven-install-plugin.version>
 		<maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
 		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+		<maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
 		<docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
 
 		<maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
@@ -318,6 +319,20 @@
 					</executions>
 				</plugin>
 				
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>${maven-gpg-plugin.version}</version>
+					<executions>
+						<execution>
+							<phase>verify</phase>
+							<goals>
+								<goal>sign</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
 	           <plugin>
 	                <groupId>org.springframework.boot</groupId>
 	                <artifactId>spring-boot-maven-plugin</artifactId>
@@ -338,7 +353,7 @@
 		            <groupId>io.fabric8</groupId>
 		            <artifactId>docker-maven-plugin</artifactId>
 		            <version>${docker-maven-plugin.version}</version>
-		            <!--
+					<!--
 					<configuration>
 					    # Docker 推送镜像仓库地址
 					    <pushRegistry>http://hub.myserver.com:5000</pushRegistry>

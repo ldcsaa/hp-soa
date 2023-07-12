@@ -1,0 +1,46 @@
+logging.config: classpath:log4j2.xml
+management.endpoint:
+  health.show-details: when-authorized
+  shutdown.enabled: false
+management.endpoints:
+  enabled-by-default: true
+  jmx.exposure.include: '*'
+  web.base-path: /__admin
+  web.exposure.include: '*'
+management.metrics:
+  export.influx.enabled: false
+  tags.application: ${app.name}
+server:
+  connection-timeout: 30000
+  servlet.context-path: /
+  tomcat.max-connections: 10000
+  tomcat.max-threads: 1000
+  undertow.buffer-size: 1024
+  undertow.direct-buffers: true
+  undertow.eager-filter-init: true
+  undertow.io-threads: 8
+  undertow.max-http-post-size: 10MB
+  undertow.worker-threads: 300
+spring:
+  application.name: ${app.name}
+  mvc.servlet.load-on-startup: 1
+  mvc.servlet.path: ${api.servlet.path:/api}
+  mvc.throw-exception-if-no-handler-found: true
+  resources.add-mappings: false
+  security:
+    user:
+      name: admin
+      password: '123456'
+      roles: ADMIN
+  servlet:
+    multipart.enabled: false
+    multipart.max-file-size: 10MB
+    multipart.max-request-size: 10MB
+swagger:
+  config:
+    apiDesc: Spring Boot Project >> ${app.name} (v${app.version})
+    apiTitle: ${app.name}
+    apiVersion: ${app.version}
+    basePackage: com.lcb.hapi
+    groupName: ${app.name}
+  enable: false
