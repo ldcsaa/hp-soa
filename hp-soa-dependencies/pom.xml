@@ -23,6 +23,7 @@
 		<fst.version>3.0.3</fst.version>
 		<xxl-job.version>2.4.0</xxl-job.version>
 		<leaf-core.version>1.0.1a</leaf-core.version>
+		<sentinel.version>1.8.6</sentinel.version>
 
 		<spring.version>6.0.10</spring.version>
 		<spring-boot.version>3.1.1</spring-boot.version>
@@ -285,7 +286,48 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
+			
+			<dependency>
+			    <groupId>com.alibaba.csp</groupId>
+			    <artifactId>sentinel-core</artifactId>
+			    <version>${sentinel.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.alibaba.csp</groupId>
+			    <artifactId>sentinel-datasource-nacos</artifactId>
+			    <version>${sentinel.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.alibaba.csp</groupId>
+			    <artifactId>sentinel-transport-simple-http</artifactId>
+			    <version>${sentinel.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.alibaba.csp</groupId>
+			    <artifactId>sentinel-datasource-extension</artifactId>
+			    <version>${sentinel.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.alibaba.csp</groupId>
+			    <artifactId>sentinel-parameter-flow-control</artifactId>
+			    <version>${sentinel.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.alibaba.csp</groupId>
+			    <artifactId>sentinel-apache-dubbo3-adapter</artifactId>
+			    <version>${sentinel.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.alibaba.csp</groupId>
+			    <artifactId>sentinel-spring-webmvc-adapter</artifactId>
+			    <version>${sentinel.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.alibaba.csp</groupId>
+			    <artifactId>sentinel-web-servlet</artifactId>
+			    <version>${sentinel.version}</version>
+			</dependency>
+			
 			<dependency>
 				<groupId>javax.mail</groupId>
 				<artifactId>mail</artifactId>

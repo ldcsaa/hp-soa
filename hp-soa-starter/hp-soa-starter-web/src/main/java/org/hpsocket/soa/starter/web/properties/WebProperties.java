@@ -1,5 +1,9 @@
 package org.hpsocket.soa.starter.web.properties;
 
+import org.hpsocket.soa.framework.core.util.GeneralHelper;
+import org.hpsocket.soa.framework.web.annotation.AccessVerification;
+import org.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
+import org.hpsocket.soa.framework.web.propertries.IAccessVerificationProperties;
 import org.hpsocket.soa.framework.web.propertries.ICookiePropertries;
 import org.hpsocket.soa.framework.web.support.WebServerHelper;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,7 +17,7 @@ import lombok.Setter;
 @Setter
 @Component
 @ConfigurationProperties(prefix = "hp.soa.web")
-public class WebProperties implements ICookiePropertries
+public class WebProperties implements ICookiePropertries, IAccessVerificationProperties
 {
 	@NestedConfigurationProperty
 	private AppProperties app = new AppProperties();
@@ -21,6 +25,8 @@ public class WebProperties implements ICookiePropertries
 	private CookieProperties cookie = new CookieProperties();
 	@NestedConfigurationProperty
 	private CorsProperties cors = new CorsProperties();	
+	@NestedConfigurationProperty
+	private AccessVerificationProperties accessVerification = new AccessVerificationProperties();	
 	
 	@Getter
 	@Setter
@@ -52,9 +58,36 @@ public class WebProperties implements ICookiePropertries
 		private int maxAge = 3600;
 	}
 
+	public static class AccessVerificationProperties implements IAccessVerificationProperties
+	{
+		@Getter
+		@Setter
+		private boolean enabled = true;
+		
+		@Getter
+		private AccessVerification.Type defaultAccessPolicyEnum = AccessVerification.Type.MAYBE_LOGIN;
+
+		public void setDefaultAccessPolicy(String defaultAccessPolicy)
+		{
+			if(GeneralHelper.isStrNotEmpty(defaultAccessPolicy))
+			{
+				defaultAccessPolicyEnum = GeneralHelper.enumLookup(AccessVerification.Type.class, defaultAccessPolicy, true);
+				
+				if(defaultAccessPolicyEnum == null)
+					throw new RuntimeException(String.format("invalid config value for property 'hp.soa.web.access.default-accessVerification-policy' -> '%s'", defaultAccessPolicy));
+			}
+		}
+	}
+	
 	@Override
 	public int getMaxAge()
 	{
 		return cookie.getMaxAge();
+	}
+	
+	@Override
+	public Type getDefaultAccessPolicyEnum()
+	{
+		return accessVerification.getDefaultAccessPolicyEnum();
 	}
 }

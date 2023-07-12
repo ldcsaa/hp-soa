@@ -27,7 +27,7 @@ public class SiteLocalInspector
 		String ip = RequestContext.getRemoteIp();
 		
 		if(!SystemUtil.isLocalNetwork(ip))
-			throwServiceException("拒绝访问", FORBID_ERROR);
+			throw FORBID_EXCEPTION;
 	}
 
 }

@@ -158,6 +158,7 @@ public class RequestContext
 	
 	public static final RequestAttribute parseRequestAttribute()
 	{
+		long timestamp				 = System.currentTimeMillis();
 		HttpServletRequest request	 = getServletRequest();
 		HttpServletResponse response = getServletResponse();
 		Map<String, String> reqInfos = parseRequestInfo(request);
@@ -203,7 +204,7 @@ public class RequestContext
 		reqAttr.setRemoteIp(WebServerHelper.getIpAddr(request));
 		reqAttr.setRequestPath(requestPath);
 		reqAttr.setRequestUri(requestUri);
-		reqAttr.setTimestamp(System.currentTimeMillis());
+		reqAttr.setTimestamp(timestamp);
 		
 		setRequestAttribute(reqAttr);
 		

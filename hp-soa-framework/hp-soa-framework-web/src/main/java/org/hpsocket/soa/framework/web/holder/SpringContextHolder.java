@@ -22,29 +22,29 @@ public class SpringContextHolder implements ApplicationContextAware
 	public static ApplicationContext getApplicationContext(boolean throwExceptionIfNull)
 	{
 		if(applicationContext == null && throwExceptionIfNull)
-			throw new RuntimeException("SpringContextHolder applicationContext have NOT been injected !");
+			throw new RuntimeException("SpringContextHolder applicationContext has NOT been injected !");
 
 		return applicationContext;
 	}
 
-	public static <T> T getService(String serviceName)
+	public static <T> T getBean(String beanId)
 	{
-		return getBean(getApplicationContext(), serviceName);
+		return getBean(getApplicationContext(), beanId, true);
 	}
 
-	public static <T> T getService(String serviceName, boolean valid)
+	public static <T> T getBean(String beanId, boolean valid)
 	{
-		return getBean(getApplicationContext(), serviceName, valid);
+		return getBean(getApplicationContext(), beanId, valid);
 	}
 
-	public static <T> T getBean(String beanName)
+	public static <T> T getBean(String beanId, Object ... args)
 	{
-		return getBean(getApplicationContext(), beanName, true);
+		return getBean(getApplicationContext(), beanId, true, args);
 	}
 
-	public static <T> T getBean(String beanName, boolean valid)
+	public static <T> T getBean(String beanId, boolean valid, Object ... args)
 	{
-		return getBean(getApplicationContext(), beanName, valid);
+		return getBean(getApplicationContext(), beanId, valid, args);
 	}
 
 	public static <T> T getBean(String beanId, Class<T> clazz)
@@ -67,29 +67,52 @@ public class SpringContextHolder implements ApplicationContextAware
 		return getBean(getApplicationContext(), clazz, valid);
 	}
 
-	public static <T> T getService(ApplicationContext ctx, String serviceName)
+	public static <T> T getBean(Class<T> clazz, Object ... args)
 	{
-		return getBean(ctx, serviceName);
+		return getBean(getApplicationContext(), clazz, true, args);
 	}
 
-	public static <T> T getService(ApplicationContext ctx, String serviceName, boolean valid)
+	public static <T> T getBean(Class<T> clazz, boolean valid, Object ... args)
 	{
-		return getBean(ctx, serviceName, valid);
+		return getBean(getApplicationContext(), clazz, valid, args);
 	}
 
-	public static <T> T getBean(ApplicationContext ctx, String beanName)
+	public static <T> T getBean(ApplicationContext ctx, String beanId)
 	{
-		return getBean(ctx, beanName, true);
+		return getBean(ctx, beanId, true);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T getBean(ApplicationContext ctx, String beanName, boolean valid)
+	public static <T> T getBean(ApplicationContext ctx, String beanId, boolean valid)
 	{
 		T obj = null;
 
 		try
 		{
-			obj = (T)ctx.getBean(beanName);
+			obj = (T)ctx.getBean(beanId);
+		}
+		catch(RuntimeException e)
+		{
+			if(valid)
+				throw e;
+		}
+
+		return obj;
+	}
+
+	public static <T> T getBean(ApplicationContext ctx, String beanId, Object ... args)
+	{
+		return getBean(ctx, beanId, true, args);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getBean(ApplicationContext ctx, String beanId, boolean valid, Object ... args)
+	{
+		T obj = null;
+
+		try
+		{
+			obj = (T)ctx.getBean(beanId, args);
 		}
 		catch(RuntimeException e)
 		{
@@ -134,6 +157,28 @@ public class SpringContextHolder implements ApplicationContextAware
 		try
 		{
 			obj = ctx.getBean(clazz);
+		}
+		catch(RuntimeException e)
+		{
+			if(valid)
+				throw e;
+		}
+
+		return obj;
+	}
+
+	public static <T> T getBean(ApplicationContext ctx, Class<T> clazz, Object ... args)
+	{
+		return getBean(ctx, clazz, true, args);
+	}
+
+	public static <T> T getBean(ApplicationContext ctx, Class<T> clazz, boolean valid, Object ... args)
+	{
+		T obj = null;
+
+		try
+		{
+			obj = ctx.getBean(clazz, args);
 		}
 		catch(RuntimeException e)
 		{

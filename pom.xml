@@ -89,7 +89,7 @@
 			<name>aliyun maven</name>
 			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
 		</repository>
-<!--
+
 		<repository>
 			<snapshots>
 				<enabled>false</enabled>
@@ -108,7 +108,6 @@
 			<id>JBoss repository public</id>
 			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
--->
 	</repositories>
 
 	<distributionManagement>

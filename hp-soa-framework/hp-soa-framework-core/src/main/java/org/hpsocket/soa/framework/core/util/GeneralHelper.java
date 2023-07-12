@@ -14,6 +14,7 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
@@ -31,6 +32,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /** 通用方法帮助类 */
 public class GeneralHelper
@@ -1683,6 +1685,66 @@ public class GeneralHelper
 		return compare(n, v) == 0;
 	}
 	
+	public static final boolean isNullOrZero(Byte n)
+	{
+		return n == null || n.byteValue() == (byte)0;
+	}
+	
+	public static final boolean isNullOrZero(Short n)
+	{
+		return n == null || n.shortValue() == (short)0;
+	}
+	
+	public static final boolean isNullOrZero(Integer n)
+	{
+		return n == null || n.intValue() == 0;
+	}
+	
+	public static final boolean isNullOrZero(Long n)
+	{
+		return n == null || n.longValue() == 0L;
+	}
+	
+	public static final boolean isNotNullAndZero(Byte n)
+	{
+		return !isNullOrZero(n);
+	}
+	
+	public static final boolean isNotNullAndZero(Short n)
+	{
+		return !isNullOrZero(n);
+	}
+	
+	public static final boolean isNotNullAndZero(Integer n)
+	{
+		return !isNullOrZero(n);
+	}
+	
+	public static final boolean isNotNullAndZero(Long n)
+	{
+		return !isNullOrZero(n);
+	}
+	
+	public static final boolean isNullOrNan(Float n)
+	{
+		return n == null || n.equals(Float.NaN);
+	}
+	
+	public static final boolean isNullOrNan(Double n)
+	{
+		return n == null || n.equals(Float.NaN);
+	}
+	
+	public static final boolean isNotNullAndNan(Float n)
+	{
+		return !isNullOrNan(n);
+	}
+	
+	public static final boolean isNotNullAndNan(Double n)
+	{
+		return !isNullOrNan(n);
+	}
+	
 	public static final String formatNumber(Number n)
 	{
 		if(n == null)
@@ -1729,4 +1791,12 @@ public class GeneralHelper
 		return sb.toString();
 	}
 	
+	public static final <T extends Enum<T>> T enumLookup(Class<T> enumClass, String name, boolean ignoreCase)
+	{
+		Stream<T> stream = Arrays.stream(enumClass.getEnumConstants());
+		
+		return (ignoreCase)
+			? stream.filter((e) -> e.name().equalsIgnoreCase(name)).findFirst().orElse(null)
+			: stream.filter((e) -> e.name().equals(name)).findFirst().orElse(null);
+	}
 }

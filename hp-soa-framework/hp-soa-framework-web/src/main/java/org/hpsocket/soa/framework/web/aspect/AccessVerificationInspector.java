@@ -1,14 +1,8 @@
 package org.hpsocket.soa.framework.web.aspect;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -16,231 +10,169 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.hpsocket.soa.framework.core.util.Pair;
 import org.hpsocket.soa.framework.web.advice.ControllerRequestAdvice;
+import org.hpsocket.soa.framework.web.advice.RequestContext;
 import org.hpsocket.soa.framework.web.annotation.AccessVerification;
 import org.hpsocket.soa.framework.web.model.RequestAttribute;
 import org.hpsocket.soa.framework.web.model.Response;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
+import org.hpsocket.soa.framework.web.service.AccessVerificationService;
+import org.springframework.util.Assert;
 
 import static org.hpsocket.soa.framework.core.exception.ServiceException.*;
 import static org.hpsocket.soa.framework.web.annotation.AccessVerification.Type.*;
 
 @Aspect
 @Order(0)
-public class AccessVerificationInspector implements ApplicationContextAware
+public class AccessVerificationInspector
 {
-	private static final Set<AccessVerification.Type> INSPECTED_ANNOTATIOS = new HashSet<>(Arrays.asList(NO_CHECK, NO_LOGIN, MAYBE_LOGIN, REQUIRE_LOGIN, REQUIRE_AUTHORIZED));
 	private static final String POINTCUT_PATTERN = ControllerRequestAdvice.POINTCUT_PATTERN;
 
 	@Pointcut(POINTCUT_PATTERN)
 	protected void inspectMethod() {}
 	
-	@Value("${hapi.config.inspect.appAndUser.defaultPolicy:NoLogin}")
-	private String defaultPolicy;
-	@Value("${hapi.config.inspect.appAndUser.tokenAliasSupported:true}")
-	private boolean tokenAliasSupported;
-	
-	private Class<? extends Annotation> clsDefaultPolicy;
-	
-	private IApplicationService applicationService;
-	private IRoleAuthService roleAuthService;
+	private AccessVerification.Type defaultAccessPolicy;
+	private AccessVerificationService accessVerificationService;
 
-	private Map<Method, Class<? extends Annotation>> annotations = new ConcurrentHashMap<>();
+	private Map<Method, AccessVerification.Type> annotations = new ConcurrentHashMap<>();
 	
-	@PostConstruct
-	public void postConstruct()
+	public AccessVerificationInspector(AccessVerification.Type defaultAccessPolicy, AccessVerificationService accessVerificationService)
 	{
-		for(Class<? extends Annotation> clazz : INSPECTED_ANNOTATIOS)
-		{
-			if(clazz.getSimpleName().equalsIgnoreCase(defaultPolicy))
-			{
-				clsDefaultPolicy = clazz;
-				break;
-			}
-		}
+		Assert.notNull(accessVerificationService, String.format("'%s' bean not found", AccessVerificationService.class.getSimpleName()));
 		
-		if(clsDefaultPolicy == null)
-			clsDefaultPolicy = NoLogin.class;
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
-	{
-		applicationService = applicationContext.getBean(IApplicationService.class);
-		roleAuthService = applicationContext.getBean(IRoleAuthService.class);
+		this.defaultAccessPolicy = defaultAccessPolicy;
+		this.accessVerificationService = accessVerificationService;
 	}
 
 	@Around("inspectMethod()")
 	public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
 	{
 		MethodSignature signature = (MethodSignature)joinPoint.getSignature();
-		Class<? extends Annotation> clazz = getInspectAnnotationClass(signature.getMethod());
+		AccessVerification.Type type = getInspectVerificationType(signature.getMethod());
 		
-		if(NoCheck.class.equals(clazz))
-			return joinPoint.proceed();
-		
-		RequestAttribute reqAttr = RequestContext.getRequestAttribute();
-		
-		if(reqAttr == null)
-			return new Response<Boolean>(BAD_REQUEST_EXCEPTION);
-		
-		Response<?> resp = inspectApp(reqAttr);
-		
-		if(resp.getResult() == null)
-			return resp;
-		
-		if(NoLogin.class.equals(clazz))
-			return joinPoint.proceed();
-		
-		resp = inspectUser(reqAttr, clazz);
-		
-		if(resp.getResult() == null)
-			return resp;
-		
-		if(!RequireAuthorized.class.equals(clazz))
-			return joinPoint.proceed();
-
-		resp = inspectRole(reqAttr);
-		
-		if(resp.getResult() == null)
-			return resp;	
+		if(type != NO_CHECK)
+		{
+			RequestAttribute reqAttr = RequestContext.getRequestAttribute();
+			
+			if(reqAttr == null)
+				return new Response<Boolean>(BAD_REQUEST_EXCEPTION);
+			
+			Response<?> resp = inspectApp(reqAttr);
+			
+			if(resp.getResult() == null)
+				return resp;
+			
+			if(type != NO_LOGIN)
+			{
+				resp = inspectUser(reqAttr, type);
+				
+				if(resp.getResult() == null)
+					return resp;
+				
+				if(type == REQUIRE_AUTHORIZED)
+				{
+					resp = inspectRole(reqAttr);
+					
+					if(resp.getResult() == null)
+						return resp;
+				}
+			}
+		}
 		
 		return joinPoint.proceed();
 	}
 
-	private Class<? extends Annotation> getInspectAnnotationClass(Method method)
+	private AccessVerification.Type getInspectVerificationType(Method method)
 	{
-		Class<? extends Annotation> clazz = annotations.get(method);
+		AccessVerification.Type type = annotations.get(method);
 		
-		if(clazz == null)
+		if(type == null)
 		{
-			clazz = getMethodAnnotation(method);
-			annotations.putIfAbsent(method, clazz);
+			type = getVerificationType(method);
+			annotations.putIfAbsent(method, type);
 		}
 		
-		return clazz;
+		return type;
 	}
 
-	private Class<? extends Annotation> getMethodAnnotation(Method method)
+	private AccessVerification.Type getVerificationType(Method method)
 	{
-		Annotation[] annotations = method.getAnnotations();
-		Annotation annotation = checkAnnotations(annotations);
+		AccessVerification annotation = method.getAnnotation(AccessVerification.class);
 		
 		if(annotation == null)
-		{
-			annotations = method.getDeclaringClass().getAnnotations();
-			annotation = checkAnnotations(annotations);
-		}
+			annotation = method.getDeclaringClass().getAnnotation(AccessVerification.class);
 		
 		if(annotation == null)
-			return clsDefaultPolicy;
+			return defaultAccessPolicy;
 
-		return annotation.annotationType();
+		return annotation.value();
 	}
 
-	private Annotation checkAnnotations(Annotation[] annotations)
-	{
-		Annotation annotation = null;
-		
-		for(int i = 0; i < annotations.length; i++)
-		{
-			if(INSPECTED_ANNOTATIOS.contains(annotations[i].annotationType()))
-			{
-				annotation = annotations[i];
-				break;
-			}
-		}
-		
-		return annotation;
-	}
-
-	private Response<Integer> inspectApp(RequestAttribute reqAttr)
+	private Response<Boolean> inspectApp(RequestAttribute reqAttr)
 	{
 		String appCode = reqAttr.getAppCode();
 		
 		if(GeneralHelper.isStrEmpty(appCode))
-			return new Response<>("appCode is null or empty", APPCODE_ERROR);
+			return new Response<>("缺少参数：appCode", VALIDATE_ERROR);
 		
-		Application app = applicationService.getByAppCode(appCode);
+		if(!accessVerificationService.verifyAppCode(appCode))
+			return new Response<>(APPCODE_NOT_EXIST_EXCEPTION);
 		
-		if(app == null)
-			return new Response<>("invalid appCode", APPCODE_ERROR);
-		
-		return new Response<>(app.getId());
+		return new Response<>(Boolean.TRUE);
 	}
 
-	private Response<Long> inspectUser(RequestAttribute reqAttr, Class<? extends Annotation> clazz)
+	private Response<Long> inspectUser(RequestAttribute reqAttr, AccessVerification.Type type)
 	{
-		String token = null;
-		String internalToken = null;
-		
-		if(!tokenAliasSupported || GeneralHelper.isStrEmpty(reqAttr.getTokenAlias()))
-		{
-			token = reqAttr.getToken();
-			internalToken = token;
-		}
-		else
-		{
-			token = reqAttr.getTokenAlias();
-			internalToken = reqAttr.getToken();
-		}
+		String token = reqAttr.getToken();
 		
 		if(GeneralHelper.isStrEmpty(token))
 		{
-			if(clazz.equals(MaybeLogin.class))
+			if(type == MAYBE_LOGIN)
 				return new Response<>(0L);
 			else
 				return new Response<>(NOT_LOGGED_IN_EXCEPTION);
 		}
 		
-		Pair<Long, Long> userIdPair = parseUser(token, internalToken);
+		Pair<Long, String> rs = accessVerificationService.verifyUserByTokenAndGroupId(token, reqAttr.getGroupId());
+		Long userId = rs.getFirst();
 		
-		if(userIdPair == null || userIdPair.getFirst() == null)
+		if(GeneralHelper.isNullOrZero(userId))
 		{
-			if(clazz.equals(MaybeLogin.class))
+			if(type == MAYBE_LOGIN)
 				return new Response<>(0L);
 			else
-				return new Response<>(LOGIN_INVALID_EXCEPTION);
+			{
+				String msg = rs.getSecond();
+				
+				if(GeneralHelper.isStrEmpty(msg))
+					msg = AUTHEN_EXCEPTION.getMessage();
+				
+				return new Response<>(msg, AUTHEN_ERROR);
+			}
 		}
 		
-		reqAttr.setUserId(userIdPair.getFirst());
-		reqAttr.setInternalUserId(userIdPair.getSecond());
+		reqAttr.setUserId(userId);
 		
-		return verifyUser(reqAttr);
+		return new Response<>(userId);
 	}
-	
-	private Pair<Long, Long> parseUser(String token, String internalToken)
-	{
-		return null;
-	}
-	
-	private Response<Long> verifyUser(RequestAttribute reqAttr)
-	{
-		return null;
-	}
-	
-
 
 	private Response<Boolean> inspectRole(RequestAttribute reqAttr)
 	{
-		if(reqAttr.getGroupId() == null || reqAttr.getGroupType() == null)
-			return new Response<>("组织类型或组织ID为空", AUTHOR_ERROR);
+		if(reqAttr.getGroupId() == null)
+			return new Response<>("组织ID为空", AUTHOR_ERROR);
 		
-		UserRoleCheckByGroupRequest roleReq = new UserRoleCheckByGroupRequest();
+		Pair<Boolean, String> rs = accessVerificationService.verifyRouteAuthorized(reqAttr.getRequestUri(), reqAttr.getAppCode(), reqAttr.getGroupId(), reqAttr.getUserId());
 		
-		roleReq.setRoute(reqAttr.getRequestUri());
-		roleReq.setUserId(reqAttr.getInternalUserId());
-		roleReq.setGroupId(reqAttr.getGroupId());
-		roleReq.setGroupType(reqAttr.getGroupType());
-		
-		if(!roleAuthService.checkByGroup(roleReq, reqAttr.getAppCode()))
-			return new Response<>(AUTHOR_EXCEPTION);
+		if(!Boolean.TRUE.equals(rs.getFirst()))
+		{
+			String msg = rs.getSecond();
+			
+			if(GeneralHelper.isStrEmpty(msg))
+				msg = AUTHOR_EXCEPTION.getMessage();
+			
+			return new Response<>(msg, AUTHOR_ERROR);
+		}
 
 		return new Response<>(Boolean.TRUE);
 	}

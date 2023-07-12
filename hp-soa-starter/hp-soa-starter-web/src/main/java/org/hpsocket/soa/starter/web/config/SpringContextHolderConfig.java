@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringContextHolderConfig
 {
-    @Bean
+    @Bean(name="springContextHolder")
     public SpringContextHolder springContextHolder()
     {
         return new SpringContextHolder();

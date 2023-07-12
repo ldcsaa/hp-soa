@@ -23,7 +23,7 @@ public class ServiceException extends RuntimeException
 	public static final int NOT_IMPLEMENTED			= 502;
 	/** 频次超限 */
 	public static final int FREQUENCY_LIMIT_ERROR	= 503;
-	/** 访问被禁 */
+	/** 访问被禁止 */
 	public static final int FORBID_ERROR 			= 504;
 	/** 请求参数非法 */
 	public static final int PARAMS_ERROR			= 505;
@@ -32,7 +32,9 @@ public class ServiceException extends RuntimeException
 	/** 访问被限流 */
 	public static final int TRAFFIC_LIMIT_ERROR		= 507;
 	/** APP CODE 不存在 */
-	public static final int APPCODE_ERROR			= 600;
+	public static final int APPCODE_NOT_EXIST_ERROR	= 601;
+	/** APP CODE 已存在 */
+	public static final int APPCODE_EXIST_ERROR		= 602;
 	/** 用户验证错误 */
 	public static final int AUTHEN_ERROR			= 701;
 	/** 用户授权错误 */
@@ -56,12 +58,13 @@ public class ServiceException extends RuntimeException
 	public static final ServiceException GENERAL_EXCEPTION			= new ServiceException("服务器内部错误", GENERAL_ERROR);
 	public static final ServiceException VALIDATE_EXCEPTION			= new ServiceException("参数验证错误", VALIDATE_ERROR);
 	public static final ServiceException NOT_IMPLEMENTED_EXCEPTION	= new ServiceException("接口未实现", NOT_IMPLEMENTED);
-	public static final ServiceException APPCODE_EXCEPTION			= new ServiceException("应用程序编号已存在", APPCODE_ERROR);
+	public static final ServiceException APPCODE_NOT_EXIST_EXCEPTION= new ServiceException("应用程序编号不存在", APPCODE_NOT_EXIST_ERROR);
+	public static final ServiceException APPCODE_EXIST_EXCEPTION	= new ServiceException("应用程序编号已存在", APPCODE_EXIST_ERROR);
 	public static final ServiceException AUTHEN_EXCEPTION			= new ServiceException("用户认证失败", AUTHEN_ERROR);
 	public static final ServiceException AUTHOR_EXCEPTION			= new ServiceException("授权验证失败", AUTHOR_ERROR);
 	public static final ServiceException NETWORK_EXCEPTION			= new ServiceException("网络错误", NETWORK_ERROR);
 	public static final ServiceException FREQUENCY_LIMIT_EXCEPTION	= new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
-	public static final ServiceException FORBID_EXCEPTION 			= new UnimportantException("系统繁忙", FORBID_ERROR);
+	public static final ServiceException FORBID_EXCEPTION 			= new UnimportantException("拒绝访问", FORBID_ERROR);
 	public static final ServiceException PARAMS_EXCEPTION			= new ServiceException("请求参数非法", PARAMS_ERROR);
 	public static final ServiceException REPEATED_REQ_EXCEPTION		= new ServiceException("请勿重复请求", REPEATED_REQ_ERROR);
 	public static final ServiceException TRAFFIC_LIMIT_EXCEPTION	= new UnimportantException("系统繁忙", TRAFFIC_LIMIT_ERROR);
