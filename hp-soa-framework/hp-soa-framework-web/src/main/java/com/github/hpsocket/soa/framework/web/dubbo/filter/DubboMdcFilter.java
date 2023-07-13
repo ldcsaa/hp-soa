@@ -26,7 +26,6 @@ public class DubboMdcFilter implements Filter
 	{
 		RpcContext ctx		= RpcContext.getServiceContext();
 		boolean isConsumer	= ctx.isConsumerSide();
-		
 		boolean genAppId	= false;
 	
 		try
