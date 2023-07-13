@@ -17,7 +17,7 @@ public class SecurityProperties
 	private String servletContextPath;
 	@Value("${spring.mvc.servlet.path:}")
 	private String mvcServletPath;
-	@Value("${management.endpoints.web.base-path:/__manage_admin}")
+	@Value("${management.endpoints.web.base-path:/__admin}")
 	private String endpointsWebBasePath;
 
 }
