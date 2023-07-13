@@ -22,10 +22,8 @@
     <!-- - - - - - - - - - - 应用程序私有配置 - - - - - - - - - - -->
 
     <!-- App Import Beans -->
+
     <import resource="classpath:spring-dubbo.xml"/>
-    <!--
-    <import resource="classpath:spring-redis.xml"/>
-    -->
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
 </beans>

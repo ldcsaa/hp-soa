@@ -21,9 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Setter
-public class MdcFilter implements Filter
+public class HttpMdcFilter implements Filter
 {
-	public static final int ORDER = Integer.MIN_VALUE + 100;
+	public static final int ORDER = -100;
 	public static final String DISPLAY_NAME	  = "Mdc-Filter";
 	public static final String URL_PATTERNS	  = "/*";
 	

@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>hp-soa-framework</artifactId>
-	<name>hp-soa-framework</name>
+	<name>${artifactId}</name>
 	<packaging>pom</packaging>
 
 	<properties>

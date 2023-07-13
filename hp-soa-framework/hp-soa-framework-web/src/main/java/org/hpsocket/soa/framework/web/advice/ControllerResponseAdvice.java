@@ -10,6 +10,7 @@ import org.hpsocket.soa.framework.core.mdc.MdcAttr;
 import org.hpsocket.soa.framework.core.mdc.MdcRunnable;
 import org.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.hpsocket.soa.framework.core.util.Pair;
+import org.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import org.hpsocket.soa.framework.web.model.RequestAttribute;
 import org.hpsocket.soa.framework.web.model.Response;
 import org.slf4j.Logger;
@@ -122,7 +123,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 						}
 						
 						if(GeneralHelper.isStrNotEmpty(token))
-							tokenCookieAttr = new Pair<Integer, String>(getCookieMaxAge(), token);
+							tokenCookieAttr = new Pair<Integer, String>(AppConfigHolder.getCookieMaxAge(), token);
 					}
 				}
 				else if(rt == Response.RT_LOGOUT)

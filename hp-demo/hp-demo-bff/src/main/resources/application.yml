@@ -1,46 +1,84 @@
-logging.config: classpath:log4j2.xml
-management.endpoint:
-  health.show-details: when-authorized
-  shutdown.enabled: false
-management.endpoints:
-  enabled-by-default: true
-  jmx.exposure.include: '*'
-  web.base-path: /__admin
-  web.exposure.include: '*'
-management.metrics:
-  export.influx.enabled: false
-  tags.application: ${app.name}
+hp.soa.web:
+  app:
+    code: "0010100001"
+    name: ${artifactId}
+    version: ${version}
+    organization: HP-Socket
+    owner: Kingfisher
+  cookie: 
+    max-age: 315360000
+  cors:
+    mapping: "/**"
+    allowed-origins: ["*"]
+    allowed-headers: ["*"]
+    allowed-methods: ["*"]
+    exposed-headers: []
+    allow-credentials: true
+    maxAge: 3600
+  access-verification:
+    enabled: true
+    DefaultAccessPolicy: maybe_login
+    
 server:
+  port: 10001
   connection-timeout: 30000
-  servlet.context-path: /
-  tomcat.max-connections: 10000
-  tomcat.max-threads: 1000
-  undertow.buffer-size: 1024
-  undertow.direct-buffers: true
-  undertow.eager-filter-init: true
-  undertow.io-threads: 8
-  undertow.max-http-post-size: 10MB
-  undertow.worker-threads: 300
+  servlet:
+    context-path: /
+  tomcat:
+    max-connections: 10000
+    max-threads: 1000
+  undertow:
+    buffer-size: 1024
+    direct-buffers: true
+    eager-filter-init: true
+    io-threads: 8
+    max-http-post-size: 10MB
+    worker-threads: 300
+  
 spring:
-  application.name: ${app.name}
-  mvc.servlet.load-on-startup: 1
-  mvc.servlet.path: ${api.servlet.path:/api}
-  mvc.throw-exception-if-no-handler-found: true
-  resources.add-mappings: false
+  application.name: ${hp.soa.web.app.name}
+  mvc:
+    servlet:
+      load-on-startup: 1
+      path: /
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
   security:
     user:
       name: admin
-      password: '123456'
+      password: "123456"
       roles: ADMIN
   servlet:
-    multipart.enabled: false
-    multipart.max-file-size: 10MB
-    multipart.max-request-size: 10MB
-swagger:
-  config:
-    apiDesc: Spring Boot Project >> ${app.name} (v${app.version})
-    apiTitle: ${app.name}
-    apiVersion: ${app.version}
-    basePackage: com.lcb.hapi
-    groupName: ${app.name}
-  enable: false
+    multipart:
+      enabled: false
+      max-file-size: 10MB
+      max-request-size: 10MB
+logging.config: classpath:log4j2.xml
+
+management:
+  endpoint:
+    health.show-details: when-authorized
+    shutdown.enabled: false
+  endpoints:
+    enabled-by-default: true
+    jmx.exposure.include: "*"
+    web.base-path: /__admin
+    web.exposure.include: "*"
+  metrics:
+    export.influx.enabled: false
+    tags.application: ${hp.soa.web.app.name}
+    
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs endpoint
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  packagesToScan: org.hpsocket.soa,org.hpsocket.demo
+  api-infos:
+    group-name: ${hp.soa.web.app.name}
+    title: ${hp.soa.web.app.name}
+    version: ${hp.soa.web.app.version}
+    description: "Spring Boot Project >> ${hp.soa.web.app.name} (v${hp.soa.web.app.version})"

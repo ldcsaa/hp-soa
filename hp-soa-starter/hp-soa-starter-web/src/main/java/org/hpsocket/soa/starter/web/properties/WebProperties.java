@@ -4,6 +4,7 @@ import org.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.hpsocket.soa.framework.web.annotation.AccessVerification;
 import org.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
 import org.hpsocket.soa.framework.web.propertries.IAccessVerificationProperties;
+import org.hpsocket.soa.framework.web.propertries.IAppProperties;
 import org.hpsocket.soa.framework.web.propertries.ICookiePropertries;
 import org.hpsocket.soa.framework.web.support.WebServerHelper;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @Setter
 @Component
 @ConfigurationProperties(prefix = "hp.soa.web")
-public class WebProperties implements ICookiePropertries, IAccessVerificationProperties
+public class WebProperties implements IAppProperties, ICookiePropertries, IAccessVerificationProperties
 {
 	@NestedConfigurationProperty
 	private AppProperties app = new AppProperties();
@@ -34,13 +35,14 @@ public class WebProperties implements ICookiePropertries, IAccessVerificationPro
 	{
 		private String id;
 		private String name;
+		private String version;
 		private String organization;
 		private String owner;
 	}
 	
 	@Getter
 	@Setter
-	public static class CookieProperties implements ICookiePropertries
+	public static class CookieProperties
 	{
 		private int maxAge = WebServerHelper.DEFAULT_COOKIE_MAX_AGE;
 	}
@@ -58,7 +60,7 @@ public class WebProperties implements ICookiePropertries, IAccessVerificationPro
 		private int maxAge = 3600;
 	}
 
-	public static class AccessVerificationProperties implements IAccessVerificationProperties
+	public static class AccessVerificationProperties
 	{
 		@Getter
 		@Setter
@@ -89,5 +91,35 @@ public class WebProperties implements ICookiePropertries, IAccessVerificationPro
 	public Type getDefaultAccessPolicyEnum()
 	{
 		return accessVerification.getDefaultAccessPolicyEnum();
+	}
+
+	@Override
+	public String getId()
+	{
+		return app.getId();
+	}
+
+	@Override
+	public String getName()
+	{
+		return app.getName();
+	}
+
+	@Override
+	public String getVersion()
+	{
+		return app.getVersion();
+	}
+
+	@Override
+	public String getOrganization()
+	{
+		return app.getOrganization();
+	}
+
+	@Override
+	public String getOwner()
+	{
+		return app.getOwner();
 	}
 }

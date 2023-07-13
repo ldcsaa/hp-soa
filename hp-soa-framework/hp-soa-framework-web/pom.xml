@@ -10,7 +10,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>hp-soa-framework-web</artifactId>
-	<name>hp-soa-framework-web</name>
+	<name>${artifactId}</name>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -42,11 +42,28 @@
 		    <groupId>org.apache.dubbo</groupId>
 		    <artifactId>dubbo-metadata-report-nacos</artifactId>
 		</dependency>
-			<dependency>
-			    <groupId>com.alibaba.nacos</groupId>
-			    <artifactId>nacos-client</artifactId>
-			</dependency>
+		<dependency>
+		    <groupId>com.alibaba.nacos</groupId>
+		    <artifactId>nacos-client</artifactId>
+		</dependency>
+		
+		<!--
+		<dependency>
+		    <groupId>jakarta.validation</groupId>
+		    <artifactId>jakarta.validation-api</artifactId>
+		</dependency>
 
+		<dependency>
+		    <groupId>jakarta.servlet</groupId>
+		    <artifactId>jakarta.servlet-api</artifactId>
+		</dependency>
+
+		<dependency>
+		    <groupId>jakarta.el</groupId>
+		    <artifactId>jakarta.el-api</artifactId>
+		</dependency>
+		-->
+		<!--
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -63,6 +80,7 @@
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 		</dependency>
+		-->
 
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>

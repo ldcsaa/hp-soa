@@ -8,8 +8,8 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>hp-demo</artifactId>
+	<name>${artifactId}</name>
 	<packaging>pom</packaging>
-	<name>hp-demo</name>
 
 	<properties>
 	</properties>

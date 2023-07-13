@@ -10,7 +10,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>hp-soa-dependencies</artifactId>
-	<name>hp-soa-dependencies</name>
+	<name>${artifactId}</name>
 	<packaging>pom</packaging>
 
     <properties>
@@ -58,13 +58,20 @@
 		<commons-codec.version>1.16.0</commons-codec.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
 
+        <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
+        <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+        <jakarta.el-api.version>5.0.1</jakarta.el-api.version>
+        <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
+        <jakarta.activation-api.version>2.1.2</jakarta.activation-api.version>
+        <jakarta.xml.bind-api.version>4.0.0</jakarta.xml.bind-api.version>
+        <jakarta.persistence-api.version>3.1.0</jakarta.persistence-api.version>
+
 		<javax-javaee-api.version>8.0.1</javax-javaee-api.version>
 		<javax.servlet-api.version>4.0.1</javax.servlet-api.version>
 		<javax-el-api.version>3.0.1-b06</javax-el-api.version>
 		<javax-el.version>3.0.1-b12</javax-el.version>
-		<javax-mail.version>1.6.2</javax-mail.version>
 		<javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
-        <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+		<javax-mail.version>1.6.2</javax-mail.version>
 
 		<slf4j.version>2.0.7</slf4j.version>
 		<log4j.version>2.20.0</log4j.version>
@@ -145,6 +152,16 @@
 			</dependency>
 			<dependency>
 			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-spring-boot-observability-starter</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
+			    <artifactId>dubbo-spring-boot-tracing-otel-zipkin-starter</artifactId>
+			    <version>${dubbo.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.dubbo</groupId>
 			    <artifactId>dubbo-spring-boot-actuator</artifactId>
 			    <version>${dubbo.version}</version>
 			</dependency>
@@ -219,6 +236,48 @@
 			</dependency>
 			
 			<dependency>
+			    <groupId>jakarta.validation</groupId>
+			    <artifactId>jakarta.validation-api</artifactId>
+			    <version>${jakarta.validation-api.version}</version>
+			</dependency>
+
+			<dependency>
+			    <groupId>jakarta.servlet</groupId>
+			    <artifactId>jakarta.servlet-api</artifactId>
+			    <version>${jakarta.servlet-api.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>jakarta.el</groupId>
+			    <artifactId>jakarta.el-api</artifactId>
+			    <version>${jakarta.el-api.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>jakarta.annotation</groupId>
+			    <artifactId>jakarta.annotation-api</artifactId>
+			    <version>${jakarta.annotation-api.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>jakarta.activation</groupId>
+			    <artifactId>jakarta.activation-api</artifactId>
+			    <version>${jakarta.activation-api.version}</version>
+			</dependency>
+
+			<dependency>
+			    <groupId>jakarta.persistence</groupId>
+			    <artifactId>jakarta.persistence-api</artifactId>
+			    <version>${jakarta.persistence-api.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>jakarta.xml.bind</groupId>
+			    <artifactId>jakarta.xml.bind-api</artifactId>
+			    <version>${jakarta.xml.bind-api.version}</version>
+			</dependency>
+			
+			<dependency>
 				<groupId>javax</groupId>
 				<artifactId>javaee-api</artifactId>
 				<version>${javax-javaee-api.version}</version>
@@ -239,6 +298,18 @@
 				<version>${javax-el.version}</version>
 			</dependency>
 			
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>${javax-validation-api.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>${javax-mail.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.hibernate.validator</groupId>
 				<artifactId>hibernate-validator</artifactId>
@@ -328,12 +399,6 @@
 			    <version>${sentinel.version}</version>
 			</dependency>
 			
-			<dependency>
-				<groupId>javax.mail</groupId>
-				<artifactId>mail</artifactId>
-				<version>${javax-mail.version}</version>
-			</dependency>
-
 			<dependency>
 				<groupId>com.google.zxing</groupId>
 				<artifactId>javase</artifactId>
@@ -639,18 +704,6 @@
 				<groupId>com.alibaba.fastjson2</groupId>
 				<artifactId>fastjson2</artifactId>
 				<version>${fastjson2.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>javax.validation</groupId>
-				<artifactId>validation-api</artifactId>
-				<version>${javax-validation-api.version}</version>
-			</dependency>
-			
-			<dependency>
-			    <groupId>jakarta.validation</groupId>
-			    <artifactId>jakarta.validation-api</artifactId>
-			    <version>${jakarta.validation-api.version}</version>
 			</dependency>
 
 			<dependency>

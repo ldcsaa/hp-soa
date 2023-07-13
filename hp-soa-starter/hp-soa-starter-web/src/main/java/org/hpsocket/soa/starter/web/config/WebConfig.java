@@ -2,7 +2,8 @@
 package org.hpsocket.soa.starter.web.config;
 
 import org.hpsocket.soa.framework.core.util.GeneralHelper;
-import org.hpsocket.soa.framework.web.filter.MdcFilter;
+import org.hpsocket.soa.framework.web.filter.HttpMdcFilter;
+import org.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import org.hpsocket.soa.starter.web.properties.SecurityProperties;
 import org.hpsocket.soa.starter.web.properties.WebProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -26,24 +27,26 @@ public class WebConfig implements WebMvcConfigurer
 	{
 		this.webProperties = webProperties;
 		this.securityProperties = securityProperties;
+		
+		AppConfigHolder.init(webProperties, webProperties);
 	}
 
 	@Bean
-	public FilterRegistrationBean<MdcFilter> mdcTracingFilterRegistration()
+	public FilterRegistrationBean<HttpMdcFilter> mdcTracingFilterRegistration()
 	{
 		WebProperties.AppProperties appProperties = webProperties.getApp();
 		
-		MdcFilter mdcFilter = new MdcFilter();
-		mdcFilter.setServiceId(appProperties.getId());
-		mdcFilter.setServiceName(appProperties.getName());
-		mdcFilter.setOrganization(appProperties.getOrganization());
-		mdcFilter.setOwner(appProperties.getOwner());
+		HttpMdcFilter httpMdcFilter = new HttpMdcFilter();
+		httpMdcFilter.setServiceId(appProperties.getId());
+		httpMdcFilter.setServiceName(appProperties.getName());
+		httpMdcFilter.setOrganization(appProperties.getOrganization());
+		httpMdcFilter.setOwner(appProperties.getOwner());
 		
-		FilterRegistrationBean<MdcFilter> registration = new FilterRegistrationBean<>();
-		registration.setFilter(mdcFilter);
-		registration.setName(MdcFilter.DISPLAY_NAME);
-		registration.addUrlPatterns(MdcFilter.URL_PATTERNS);
-		registration.setOrder(MdcFilter.ORDER);
+		FilterRegistrationBean<HttpMdcFilter> registration = new FilterRegistrationBean<>();
+		registration.setFilter(httpMdcFilter);
+		registration.setName(HttpMdcFilter.DISPLAY_NAME);
+		registration.addUrlPatterns(HttpMdcFilter.URL_PATTERNS);
+		registration.setOrder(HttpMdcFilter.ORDER);
 		registration.setEnabled(true);
 		
 		return registration;
