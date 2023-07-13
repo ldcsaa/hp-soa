@@ -11,7 +11,7 @@
 
     <!-- scan packages -->
     <context:component-scan base-package="	
-											org.hpsocket.demo
+											com.github.hpsocket.demo
 										"/>
 
     <aop:aspectj-autoproxy expose-proxy="true" proxy-target-class="true"/>

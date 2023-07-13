@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.hpsocket</groupId>
+		<groupId>com.github.hpsocket</groupId>
 		<artifactId>hp-soa-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -23,7 +23,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.hpsocket</groupId>
+				<groupId>com.github.hpsocket</groupId>
 				<artifactId>hp-soa-dependencies</artifactId>
 				<version>${project.parent.version}</version>
 				<type>pom</type>

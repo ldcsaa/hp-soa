@@ -76,7 +76,7 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
-  packagesToScan: org.hpsocket.soa,org.hpsocket.demo
+  packagesToScan: com.github.hpsocket.soa,com.github.hpsocket.demo
   api-infos:
     group-name: ${hp.soa.web.app.name}
     title: ${hp.soa.web.app.name}
