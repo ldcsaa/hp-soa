@@ -13,6 +13,9 @@ public class MdcAttr
 	public static final String MDC_APP_CODE_KEY		= "__mdc_appCode";
 	public static final String MDC_SRC_APP_CODE_KEY	= "__mdc_srcAppCode";
 	public static final String MDC_TOKEN_KEY		= "__mdc_token";
+	public static final String MDC_USER_ID_KEY		= "__mdc_userId";
+	public static final String MDC_GROUP_ID_KEY		= "__mdc_groupId";
+	public static final String MDC_EXTRA_KEY		= "__mdc_extra";
 	public static final String MDC_APP_ID_KEY		= "__mdc_appId";
 	public static final String MDC_APP_NAME_KEY		= "__mdc_appName";
 	public static final String MDC_SERVICE_ID_KEY	= "__mdc_serviceId";
@@ -20,6 +23,21 @@ public class MdcAttr
 	public static final String MDC_SERVICE_ADDR_KEY	= "__mdc_serviceAddr";
 	public static final String MDC_ORG_KEY			= "__mdc_organization";
 	public static final String MDC_OWNER_KEY		= "__mdc_owner";
+	
+	public static final String TRANSFER_MDC_KEYS[] = {
+					MDC_REQUEST_ID_KEY,
+					MDC_CLIENT_ID_KEY,
+					MDC_SESSION_ID_KEY,
+					MDC_APP_CODE_KEY,
+					MDC_SRC_APP_CODE_KEY,
+					MDC_TOKEN_KEY,
+					MDC_USER_ID_KEY,
+					MDC_GROUP_ID_KEY,
+					MDC_EXTRA_KEY,
+					MDC_APP_ID_KEY,
+					MDC_APP_NAME_KEY
+	};
+
 	
 	Map<String, String> ctxMap;
 
@@ -141,6 +159,36 @@ public class MdcAttr
 	public void setToken(String token)
 	{
 		set(MDC_TOKEN_KEY, token);
+	}
+
+	public String getUserId()
+	{
+		return get(MDC_USER_ID_KEY);
+	}
+
+	public void setUserId(String userId)
+	{
+		set(MDC_USER_ID_KEY, userId);
+	}
+
+	public String getGroupId()
+	{
+		return get(MDC_GROUP_ID_KEY);
+	}
+
+	public void setGroupId(String groupId)
+	{
+		set(MDC_GROUP_ID_KEY, groupId);
+	}
+
+	public String getExtra()
+	{
+		return get(MDC_EXTRA_KEY);
+	}
+
+	public void setExtra(String extra)
+	{
+		set(MDC_EXTRA_KEY, extra);
 	}
 
 	public String getAppCode()

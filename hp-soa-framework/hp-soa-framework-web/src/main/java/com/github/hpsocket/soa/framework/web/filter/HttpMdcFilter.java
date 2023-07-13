@@ -87,6 +87,12 @@ public class HttpMdcFilter implements Filter
 			mdcAttr.setSrcAppCode(reqAttr.getSrcAppCode());
 		if(GeneralHelper.isStrNotEmpty(reqAttr.getToken()))
 			mdcAttr.setToken(reqAttr.getToken());
+		if(reqAttr.getUserId() != null)
+			mdcAttr.setUserId(reqAttr.getUserId().toString());
+		if(reqAttr.getGroupId() != null)
+			mdcAttr.setGroupId(reqAttr.getGroupId().toString());
+		if(GeneralHelper.isStrNotEmpty(reqAttr.getExtra()))
+			mdcAttr.setExtra(reqAttr.getExtra());
 
 		return mdcAttr;
 	}

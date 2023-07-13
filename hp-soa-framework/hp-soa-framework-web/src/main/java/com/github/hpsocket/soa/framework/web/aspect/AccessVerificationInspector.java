@@ -10,6 +10,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.jboss.logging.MDC;
+
+import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.core.util.Pair;
 import com.github.hpsocket.soa.framework.web.advice.ControllerRequestAdvice;
@@ -153,6 +156,7 @@ public class AccessVerificationInspector
 		}
 		
 		reqAttr.setUserId(userId);
+		MDC.put(MdcAttr.MDC_USER_ID_KEY, userId.toString());
 		
 		return new Response<>(userId);
 	}
