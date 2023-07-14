@@ -9,10 +9,10 @@ hp.soa.web:
     max-age: 315360000
   cors:
     mapping: "/**"
-    allowed-origins: ["*"]
-    allowed-headers: ["*"]
-    allowed-methods: ["*"]
-    exposed-headers: []
+    allowed-origins: "*"
+    allowed-headers: "*"
+    allowed-methods: "*"
+    exposed-headers: 
     allow-credentials: true
     maxAge: 3600
   access-verification:
