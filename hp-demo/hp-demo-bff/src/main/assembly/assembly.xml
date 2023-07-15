@@ -6,7 +6,7 @@
         <format>tar.gz</format>
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
-    <baseDirectory>${artifactId}-${version}-${git.commit.id.abbrev}-${git.commit.time}</baseDirectory>
+    <baseDirectory>${project.artifactId}-${project.version}-${git.commit.id.abbrev}-${git.commit.time}</baseDirectory>
     <fileSets>
         <fileSet>
             <directory>/opt/deploy/scripts</directory>
@@ -18,19 +18,13 @@
     </fileSets>
     <files>
         <file>
-            <source>target/classes/application.properties</source>
-            <outputDirectory>bin</outputDirectory>
-            <fileMode>0644</fileMode>
-            <lineEnding>unix</lineEnding>
-        </file>
-        <file>
             <source>target/classes/git.properties</source>
             <outputDirectory>deploy</outputDirectory>
             <fileMode>0644</fileMode>
             <lineEnding>unix</lineEnding>
         </file>
         <file>
-            <source>target/${artifactId}-${version}.jar</source>
+            <source>target/${project.artifactId}-${project.version}.jar</source>
             <outputDirectory>deploy</outputDirectory>
             <fileMode>0644</fileMode>
         </file>

@@ -46,7 +46,7 @@ import net.sf.cglib.beans.BeanMap;
 public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 {
 	private static final ThreadPoolExecutor LOG_EXECUTOR = ControllerRequestAdvice.LOG_EXECUTOR;
-	private static final Logger monitorLogger = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
+	private static final Logger MONITOR_LOGGER = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
 	private static final UserAgentParser uaParser;
 	
 	static
@@ -183,7 +183,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 			
 				MdcAttr mdcAttr = getMdcAttr();
 
-				jsonLog.put("logType", BFF_MONITOR_LOG_TYPE);
+				jsonLog.put("logType", MONITOR_INGRESS_LOG_TYPE);
 				jsonLog.put("appId", mdcAttr.getAppId());
 				jsonLog.put("appName", mdcAttr.getAppName());
 				jsonLog.put("serviceId", mdcAttr.getServiceId());
@@ -233,15 +233,15 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 					Integer statusCode	 = respBody.getStatusCode();
 					
 					if(GeneralHelper.equals(statusCode, OK))
-						monitorLogger.info(msg);
+						MONITOR_LOGGER.info(msg);
 					else if(GeneralHelper.equals(statusCode, GENERAL_ERROR))
-						monitorLogger.error(msg);
+						MONITOR_LOGGER.error(msg);
 					else
-						monitorLogger.warn(msg);
+						MONITOR_LOGGER.warn(msg);
 				}
 				else
 				{
-					monitorLogger.info(msg);
+					MONITOR_LOGGER.info(msg);
 				}
 			}
 		};

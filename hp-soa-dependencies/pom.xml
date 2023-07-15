@@ -10,7 +10,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>hp-soa-dependencies</artifactId>
-	<name>${artifactId}</name>
+	<name>${project.artifactId}</name>
 	<packaging>pom</packaging>
 
     <properties>
@@ -35,7 +35,7 @@
 		<spring-amqp.version>3.0.5</spring-amqp.version>
 		<spring-rabbit.version>3.0.5</spring-rabbit.version>
 		<spring-kafka.version>3.0.8</spring-kafka.version>
-		<kafka-clients.version>3.0.5</kafka-clients.version>
+		<kafka-clients.version>3.5.0</kafka-clients.version>
 		<druid.version>1.2.18</druid.version>
 		<jedis.version>4.4.3</jedis.version>
 		<redisson.version>3.22.1</redisson.version>
@@ -434,17 +434,6 @@
 			</dependency>
 			
 			<dependency>
-			    <groupId>org.springframework.kafka</groupId>
-			    <artifactId>spring-kafka</artifactId>
-			    <version>${spring-kafka.version}</version>
-			</dependency>
-			<dependency>
-			    <groupId>org.apache.kafka</groupId>
-			    <artifactId>kafka-clients</artifactId>
-			    <version>${kafka-clients.version}</version>
-			</dependency>
-			
-			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-commons</artifactId>
 				<version>${spring-data.version}</version>
@@ -465,6 +454,22 @@
 				<artifactId>spring-data-mongodb</artifactId>
 				<version>${spring-data-mongodb.version}</version>
 			</dependency>
+
+			<dependency>
+			    <groupId>org.springframework.kafka</groupId>
+			    <artifactId>spring-kafka</artifactId>
+			    <version>${spring-kafka.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.kafka</groupId>
+			    <artifactId>kafka-clients</artifactId>
+			    <version>${kafka-clients.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.kafka</groupId>
+			    <artifactId>kafka-log4j-appender</artifactId>
+			    <version>${kafka-clients.version}</version>
+			</dependency>			
 
 			<dependency>
 				<groupId>org.mybatis</groupId>

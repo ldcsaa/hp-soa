@@ -1,8 +1,9 @@
 package com.github.hpsocket.demo.bff.contract.resp;
 
-import com.alibaba.fastjson.JSON;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.alibaba.fastjson2.JSON;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,22 +15,22 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@ApiModel(description = "响应对象示例")
+@Schema(description = "响应对象示例")
 public class DemoResponse {
     /**
      * Swagger Model Property 注解
      */
-    @ApiModelProperty(value = "ID", example = "123", required = true, allowEmptyValue = false)
+	@Schema(name = "ID", example = "123", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private Long id;
     /**
      * Swagger Model Property 注解
      */
-    @ApiModelProperty(value = "姓名", example = "my name", required = true, allowEmptyValue = false)
+	@Schema(name = "姓名", example = "my name", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private String name;
     /**
      * Swagger Model Property 注解
      */
-    @ApiModelProperty(value = "年龄", example = "23", required = false, allowEmptyValue = false)
+	@Schema(name = "年龄", example = "23", requiredMode = RequiredMode.NOT_REQUIRED, nullable = false)
     private Integer age;
 
     private String token;

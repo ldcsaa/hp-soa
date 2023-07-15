@@ -3,20 +3,16 @@ package com.github.hpsocket.demo.bff.controller.impl;
 import com.github.hpsocket.demo.bff.contract.req.DemoReuqest;
 import com.github.hpsocket.demo.bff.contract.resp.DemoResponse;
 import com.github.hpsocket.demo.bff.controller.IDemoController;
-import com.lcb.soa.demo.service.IDemoService;
-import com.lcb.soa.misc.aspect.frequency.FrequencyLimit;
-import com.lcb.soa.misc.aspect.frequency.FrequencyLimit.Type;
-import com.lcb.soa.misc.biz.hapi.annotation.NoLogin;
-import com.lcb.soa.misc.biz.hapi.annotation.RequireLogin;
-import com.lcb.soa.misc.server.spring.advice.RequestContext;
-import com.lcb.soa.misc.server.spring.model.Response;
+import com.github.hpsocket.soa.framework.web.advice.RequestContext;
+import com.github.hpsocket.soa.framework.web.annotation.AccessVerification;
+import com.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
+import com.github.hpsocket.soa.framework.web.model.Response;
+
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 
 /**
@@ -26,11 +22,12 @@ import javax.validation.Valid;
  * <p>@RestController  Spring MVC Rest Controller 注解 </p>
  */
 @Slf4j
-@NoLogin
+@AccessVerification(Type.NO_LOGIN)
 @RestController
-public class DemoController implements IDemoController {
-    @Autowired
-    IDemoService demoService;
+public class DemoController implements IDemoController
+{
+    //@Autowired
+    //IDemoService demoService;
 
     /**
      * <p>@RequireLogin  LCB 登录检查注解</p>
@@ -39,8 +36,8 @@ public class DemoController implements IDemoController {
      * @return
      */
     @Override
-    @RequireLogin
-    @FrequencyLimit(forbid = 3, type = Type.IP, value = 5)
+    @AccessVerification(Type.REQUIRE_LOGIN)
+   // @FrequencyLimit(forbid = 3, type = Type.IP, value = 5)
     public Response<DemoResponse> queryUser(@RequestBody @Valid DemoReuqest request) {
         /** 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
         System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
@@ -53,7 +50,7 @@ public class DemoController implements IDemoController {
 
         log.debug(resp.toString());
 
-        log.debug(demoService.sayHello(request.getName()));
+        //log.debug(demoService.sayHello(request.getName()));
 
         Response<DemoResponse> response = new Response<>(resp);
         //response.setReturnType(Response.RT_LOGIN);

@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>hp-soa-framework</artifactId>
-	<name>${artifactId}</name>
+	<name>${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -46,18 +46,6 @@
 	</dependencies>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/*.xml</include>
-					<include>**/*.yml</include>
-					<include>**/*.yaml</include>
-					<include>**/*.properties</include>
-					<include>**/*.conf</include>
-				</includes>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

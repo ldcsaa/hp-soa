@@ -10,7 +10,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>hp-soa-framework-web</artifactId>
-	<name>${artifactId}</name>
+	<name>${project.artifactId}</name>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -46,7 +46,11 @@
 		    <groupId>com.alibaba.nacos</groupId>
 		    <artifactId>nacos-client</artifactId>
 		</dependency>
-		
+		<dependency>
+		    <groupId>org.apache.kafka</groupId>
+		    <artifactId>kafka-log4j-appender</artifactId>
+		</dependency>
+
 		<!--
 		<dependency>
 		    <groupId>jakarta.validation</groupId>
@@ -215,20 +219,4 @@
 		    <artifactId>browscap-java</artifactId>
 		</dependency>
 	</dependencies>
-	
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/*.xml</include>
-					<include>**/*.yml</include>
-					<include>**/*.yaml</include>
-					<include>**/*.properties</include>
-					<include>**/*.conf</include>
-		    		<include>**/*.Filter</include>
-				</includes>
-			</resource>
-		</resources>
-	</build>
 </project>

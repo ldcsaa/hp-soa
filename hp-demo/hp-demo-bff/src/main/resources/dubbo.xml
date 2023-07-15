@@ -16,15 +16,10 @@
     <!-- 注册中心：配置注册中心缓存文件路径 -->
     <dubbo:registry file="/data/dubbo/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"/>
 
-    <!-- Zipkin监控：Dubbo 服务调用链 HTTP 上报者（如果用 RabbitMQ 上报则引入 zipkin-mq-reporter.xml） -->
-    <!--
-    <import resource="classpath:com/lcb/soa/misc/dubbo/resource/zipkin-http-reporter.xml"/>
- 	-->
-    
     <!-- - - - - - - - - - - 应用程序私有配置 - - - - - - - - - - -->
 
     <!-- Dubbo 服务自动扫描包路径 -->
-    <dubbo:annotation package="com.lcb.hapi"/>
+    <dubbo:annotation package="${hp.soa.web.component-scan.dubbo}"/>
 
     <!-- 导入 dubbo 接口文件-->
 

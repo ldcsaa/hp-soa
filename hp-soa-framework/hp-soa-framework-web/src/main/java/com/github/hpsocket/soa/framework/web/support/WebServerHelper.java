@@ -59,8 +59,8 @@ public class WebServerHelper
 	public static final Pattern SPIDER_PATTERN	= Pattern.compile(".*(Googlebot|Baiduspider|Yahoo\\!\\ Slurp|iaskspider|YodaoBot|msnbot|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
 	
 	public static final String MONITOR_LOGGER_NAME			= "SOA-MONITOR";
-	public static final String BFF_MONITOR_LOG_TYPE			= "BFF-REQUEST";
-	public static final String HTTP_CLIENT_MONITOR_LOG_TYPE	= "HTTP-CLIENT";
+	public static final String MONITOR_INGRESS_LOG_TYPE		= "MONITOR-INGRESS";
+	public static final String MONITOR_EGRESS_LOG_TYPE		= "MONITOR-EGRESS";
 
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT		= {JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNonStringKeyAsString};
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL	= {JSONWriter.Feature.WriteNonStringKeyAsString};

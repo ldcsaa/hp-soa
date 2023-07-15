@@ -10,7 +10,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>hp-soa-starter-web</artifactId>
-	<name>${artifactId}</name>
+	<name>${project.artifactId}</name>
 	<packaging>jar</packaging>
 	
 	<properties>

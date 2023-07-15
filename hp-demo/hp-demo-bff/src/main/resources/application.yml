@@ -1,10 +1,13 @@
 hp.soa.web:
   app:
-    code: "0010100001"
-    name: ${artifactId}
-    version: ${version}
+    id: "0010100001"
+    name: ${project.artifactId}
+    version: ${project.version}
     organization: HP-Socket
     owner: Kingfisher
+  component-scan:
+    spring: com.github.hpsocket.demo
+    dubbo: com.github.hpsocket.demo
   cookie: 
     max-age: 315360000
   cors:
@@ -18,22 +21,27 @@ hp.soa.web:
   access-verification:
     enabled: true
     DefaultAccessPolicy: maybe_login
-    
+
+logging.config: classpath:log4j2.xml
+
 server:
-  port: 10001
-  connection-timeout: 30000
+  port: 8888
   servlet:
     context-path: /
   tomcat:
     max-connections: 10000
-    max-threads: 1000
+    connection-timeout: 30000
+    threads:
+      max: 200
+      min-spare: 5
   undertow:
     buffer-size: 1024
     direct-buffers: true
     eager-filter-init: true
-    io-threads: 8
     max-http-post-size: 10MB
-    worker-threads: 300
+    threads:
+      worker: 64
+      io: 4
   
 spring:
   application.name: ${hp.soa.web.app.name}
@@ -42,8 +50,9 @@ spring:
       load-on-startup: 1
       path: /
     throw-exception-if-no-handler-found: true
-  resources:
-    add-mappings: false
+  web:
+    resources:
+      add-mappings: false
   security:
     user:
       name: admin
@@ -54,7 +63,6 @@ spring:
       enabled: false
       max-file-size: 10MB
       max-request-size: 10MB
-logging.config: classpath:log4j2.xml
 
 management:
   endpoint:

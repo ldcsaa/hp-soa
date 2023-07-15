@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>hp-demo</artifactId>
-	<name>${artifactId}</name>
+	<name>${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<properties>

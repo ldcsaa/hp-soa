@@ -25,10 +25,10 @@ import org.springframework.context.annotation.PropertySource;
 									MongoAutoConfiguration.class,
 									KafkaAutoConfiguration.class,
 									RabbitAutoConfiguration.class	})
-@ImportResource(locations = {"classpath:application.xml"})
+@ComponentScan(basePackages = {"com.github.hpsocket.soa"})
+@ImportResource(locations = {"classpath:applicationContext.xml"})
 @PropertySource(value = {"classpath:config.properties"}, ignoreResourceNotFound=true)
 @PropertySource(value = {"classpath:config.yml"}, factory = YamlPropertySourceFactory.class, ignoreResourceNotFound=true)
-@ComponentScan(basePackages = {"com.github.hpsocket.soa"})
 public class AppStarter
 {
 	static
