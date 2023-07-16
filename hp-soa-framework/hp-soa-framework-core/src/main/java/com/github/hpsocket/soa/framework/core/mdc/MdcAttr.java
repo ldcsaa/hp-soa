@@ -7,22 +7,22 @@ import org.slf4j.MDC;
 
 public class MdcAttr
 {
-	public static final String MDC_REQUEST_ID_KEY	= "__mdc_requestId";
-	public static final String MDC_CLIENT_ID_KEY	= "__mdc_clientId";
-	public static final String MDC_SESSION_ID_KEY	= "__mdc_sessionId";
-	public static final String MDC_APP_CODE_KEY		= "__mdc_appCode";
-	public static final String MDC_SRC_APP_CODE_KEY	= "__mdc_srcAppCode";
-	public static final String MDC_TOKEN_KEY		= "__mdc_token";
-	public static final String MDC_USER_ID_KEY		= "__mdc_userId";
-	public static final String MDC_GROUP_ID_KEY		= "__mdc_groupId";
-	public static final String MDC_EXTRA_KEY		= "__mdc_extra";
-	public static final String MDC_APP_ID_KEY		= "__mdc_appId";
-	public static final String MDC_APP_NAME_KEY		= "__mdc_appName";
-	public static final String MDC_SERVICE_ID_KEY	= "__mdc_serviceId";
-	public static final String MDC_SERVICE_NAME_KEY	= "__mdc_serviceName";
-	public static final String MDC_SERVICE_ADDR_KEY	= "__mdc_serviceAddr";
-	public static final String MDC_ORG_KEY			= "__mdc_organization";
-	public static final String MDC_OWNER_KEY		= "__mdc_owner";
+	public static final String MDC_REQUEST_ID_KEY	= "__requestId";
+	public static final String MDC_CLIENT_ID_KEY	= "__clientId";
+	public static final String MDC_SESSION_ID_KEY	= "__sessionId";
+	public static final String MDC_APP_CODE_KEY		= "__appCode";
+	public static final String MDC_SRC_APP_CODE_KEY	= "__srcAppCode";
+	public static final String MDC_TOKEN_KEY		= "__token";
+	public static final String MDC_USER_ID_KEY		= "__userId";
+	public static final String MDC_GROUP_ID_KEY		= "__groupId";
+	public static final String MDC_EXTRA_KEY		= "__extra";
+	public static final String MDC_APP_ID_KEY		= "__appId";
+	public static final String MDC_APP_NAME_KEY		= "__appName";
+	public static final String MDC_SERVICE_ID_KEY	= "__serviceId";
+	public static final String MDC_SERVICE_NAME_KEY	= "__serviceName";
+	public static final String MDC_SERVICE_ADDR_KEY	= "__serviceAddr";
+	public static final String MDC_ORG_KEY			= "__organization";
+	public static final String MDC_OWNER_KEY		= "__owner";
 	
 	public static final String TRANSFER_MDC_KEYS[] = {
 					MDC_REQUEST_ID_KEY,

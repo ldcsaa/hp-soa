@@ -48,7 +48,7 @@
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.kafka</groupId>
-		    <artifactId>kafka-log4j-appender</artifactId>
+		    <artifactId>kafka-clients</artifactId>
 		</dependency>
 
 		<!--

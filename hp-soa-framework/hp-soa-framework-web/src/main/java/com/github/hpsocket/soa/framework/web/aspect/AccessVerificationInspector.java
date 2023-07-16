@@ -15,7 +15,6 @@ import org.jboss.logging.MDC;
 import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.core.util.Pair;
-import com.github.hpsocket.soa.framework.web.advice.ControllerRequestAdvice;
 import com.github.hpsocket.soa.framework.web.advice.RequestContext;
 import com.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import com.github.hpsocket.soa.framework.web.model.RequestAttribute;
@@ -30,7 +29,7 @@ import static com.github.hpsocket.soa.framework.web.annotation.AccessVerificatio
 @Order(0)
 public class AccessVerificationInspector
 {
-	private static final String POINTCUT_PATTERN = ControllerRequestAdvice.POINTCUT_PATTERN;
+	static final String POINTCUT_PATTERN = "execution (public com.github.hpsocket.soa.framework.web.model.Response *.*(..)) && @within(org.springframework.web.bind.annotation.RestController)";
 
 	@Pointcut(POINTCUT_PATTERN)
 	protected void inspectMethod() {}
@@ -140,7 +139,7 @@ public class AccessVerificationInspector
 		Pair<Long, String> rs = accessVerificationService.verifyUserByTokenAndGroupId(token, reqAttr.getGroupId());
 		Long userId = rs.getFirst();
 		
-		if(GeneralHelper.isNullOrZero(userId))
+		if(userId == null)
 		{
 			if(type == MAYBE_LOGIN)
 				return new Response<>(0L);

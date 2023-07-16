@@ -1,6 +1,5 @@
 package com.github.hpsocket.soa.framework.web.advice;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -9,10 +8,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PreDestroy;
 
 import org.apache.logging.log4j.core.config.Order;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import com.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
@@ -20,11 +16,13 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
 
 import com.alibaba.fastjson2.JSONObject;
 
 import lombok.extern.slf4j.Slf4j;
+
+import com.github.hpsocket.soa.framework.web.model.RequestAttribute;
 
 import static com.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 
@@ -32,10 +30,8 @@ import static com.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 @Aspect
 @Order(-10)
 @RestControllerAdvice
-public class ControllerRequestAdvice implements RequestBodyAdvice
+public class ControllerRequestAdvice extends RequestBodyAdviceAdapter
 {
-	public static final String POINTCUT_PATTERN = "execution (public com.github.hpsocket.soa.framework.web.model.Response *.*(..)) && @within(org.springframework.web.bind.annotation.RestController)";
-	
 	public static final ThreadPoolExecutor LOG_EXECUTOR = new ThreadPoolExecutor(	5,
 																					20,
 																					60,
@@ -49,15 +45,6 @@ public class ControllerRequestAdvice implements RequestBodyAdvice
 		LOG_EXECUTOR.shutdown();
 	}
 	
-	@Pointcut(POINTCUT_PATTERN)
-	private void beforeMethod() {}
-	
-	@Before("beforeMethod()")
-	public void before(JoinPoint joinPoint)
-	{
-		logRequest();
-	}
-
 	@InitBinder
 	public void initBinder(WebDataBinder binder)
 	{
@@ -71,21 +58,11 @@ public class ControllerRequestAdvice implements RequestBodyAdvice
 	}
 
 	@Override
-	public Object handleEmptyBody(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType)
-	{
-		return body;
-	}
-
-	@Override
-	public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) throws IOException
-	{
-		return inputMessage;
-	}
-
-	@Override
 	public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType)
 	{
 		RequestContext.setBody(body);
+		
+		logRequest();
 		
 		return body;
 	}
@@ -97,12 +74,14 @@ public class ControllerRequestAdvice implements RequestBodyAdvice
 		
 		try
 		{
+			final RequestAttribute requestAttribute = RequestContext.getRequestAttribute();
+			
 			LOG_EXECUTOR.execute(new MdcRunnable()
 			{	
 				@Override
 				protected void doRun()
 				{
-					log.info("[ REQUEST: {} ] -> {}", RequestContext.getRequestPath(), JSONObject.toJSONString(RequestContext.getRequestAttribute(), JSON_SERIAL_FEATURES_NO_NULL_VAL));
+					log.info("[ REQUEST: {} ] -> {}", requestAttribute.getRequestPath(), JSONObject.toJSONString(requestAttribute, JSON_SERIAL_FEATURES_NO_NULL_VAL));
 				}
 			});
 		}

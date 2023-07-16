@@ -73,12 +73,11 @@
 
 		<dependency>
 			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct-processor</artifactId>
+			<artifactId>mapstruct</artifactId>
 		</dependency>
-		
 		<dependency>
-		    <groupId>cglib</groupId>
-		    <artifactId>cglib-nodep</artifactId>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
 		</dependency>
 	</dependencies>
 </project>

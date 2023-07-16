@@ -11,6 +11,7 @@ import com.github.hpsocket.soa.framework.web.model.Response;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,13 @@ public class DemoController implements IDemoController
 {
     //@Autowired
     //IDemoService demoService;
+	
+	@Value("${aaa.bbb}")
+	Integer a;
+	
+	@Value("${xxx.yyy}")
+	Integer b;
+	
 
     /**
      * <p>@RequireLogin  LCB 登录检查注解</p>
@@ -41,6 +49,9 @@ public class DemoController implements IDemoController
     public Response<DemoResponse> queryUser(@RequestBody @Valid DemoReuqest request) {
         /** 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
         System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
+        
+        System.out.println("aaa.bbb: " + a);
+        System.out.println("xxx.yyy: " + b);
 
         DemoResponse resp = new DemoResponse();
         resp.setId(1001L);
@@ -56,5 +67,12 @@ public class DemoController implements IDemoController
         //response.setReturnType(Response.RT_LOGIN);
 
         return response;
+    }
+    
+    @Override
+    public Object test(@Valid DemoReuqest request)
+    {
+    	// TODO Auto-generated method stub
+    	return "test";
     }
 }

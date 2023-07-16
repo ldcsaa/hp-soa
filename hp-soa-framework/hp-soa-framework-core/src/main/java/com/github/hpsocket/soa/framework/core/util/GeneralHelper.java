@@ -1745,6 +1745,16 @@ public class GeneralHelper
 		return !isNullOrNan(n);
 	}
 	
+	public static final boolean isNull(Object o)
+	{
+		return (o == null);
+	}	
+	
+	public static final boolean isNotNull(Object o)
+	{
+		return !isNull(o);
+	}	
+	
 	public static final String formatNumber(Number n)
 	{
 		if(n == null)

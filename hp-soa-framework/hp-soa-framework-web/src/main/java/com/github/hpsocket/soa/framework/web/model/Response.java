@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.github.hpsocket.soa.framework.core.exception.ServiceException;
 
 import lombok.Getter;
@@ -28,9 +31,9 @@ public class Response<T> implements Serializable
 	@Schema(title="状态码", example="200", requiredMode=RequiredMode.REQUIRED, nullable=false)
 	private Integer statusCode = OK;
 	
-	//@JsonIgnore
+	@JsonIgnore
 	@Schema(title="业务处理代码", example="1000", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
-	private transient Integer resultCode = OK;
+	private Integer resultCode = OK;
 	
 	@Schema(title="状态描述", example=MSG_OK, requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
 	private String msg = MSG_OK;
@@ -38,16 +41,16 @@ public class Response<T> implements Serializable
 	@Schema(title="耗时（毫秒）", example="456", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
 	private long costTime;
 	
-	//@JsonInclude(Include.NON_NULL)
+	@JsonInclude(value=Include.NON_NULL)
 	@Schema(title="参数校验错误列表", example="name is empty", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
 	private Map<String, List<String>> validationErrors;
 	
 	@Schema(title="业务模型对象", example="Any Object", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
 	private T result;
 	
-	//@JsonIgnore
+	@JsonIgnore
 	@Schema(title="响应类型（目前仅用于登录登出操作，1 - 登录 - 2：登出）", example="null", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
-	private transient Integer respType;
+	private Integer respType;
 
 	public Response()
 	{

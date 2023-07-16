@@ -32,4 +32,6 @@ public interface IDemoController {
     @Operation(summary = "查询用户", description = "通过姓名查询用户")
     Response<DemoResponse> queryUser(@RequestBody @Valid DemoReuqest request);
 
+    @PostMapping(value = "/test")
+    Object test(@RequestBody @Valid DemoReuqest request);
 }

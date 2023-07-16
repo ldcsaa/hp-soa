@@ -15,6 +15,7 @@ import com.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import com.github.hpsocket.soa.framework.web.model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -38,7 +39,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.cglib.beans.BeanMap;
 
 @Slf4j
 @Order(-10)
@@ -64,8 +64,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType)
 	{
-		return	RequestContext.getRequestAttribute() != null &&
-				Response.class.isAssignableFrom(returnType.getNestedParameterType());
+		return	RequestContext.getRequestAttribute() != null ;//&&
+				//Response.class.isAssignableFrom(returnType.getNestedParameterType());
 	}
 
 	@Override
@@ -167,9 +167,9 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 	}
 	
 	private void asyncWriteMonitorLog(final Object body, final MethodParameter rt, final HttpServletRequest req, final RequestAttribute requestAttribute)
-	{
+	{		
 		final String ua = getUserAgent(req);
-		
+
 		Runnable task = new MdcRunnable()
 		{
 			@Override
@@ -193,11 +193,11 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 				jsonLog.put("owner", mdcAttr.getOwner());
 				
 				@SuppressWarnings("unchecked")
-				Map<String, Object> reqAttr = (Map<String, Object>)BeanMap.create(requestAttribute);
-				
+				final Map<String, ?> reqAttr = BeanMap.create(requestAttribute);;
+
 				reqAttr.forEach((k, v) -> {
 					if(v != null && !k.equals("body"))
-						jsonLog.put((String)k, (String)v);
+						jsonLog.put(k, v.toString());
 				});
 				
 				jsonLog.put("apiName", rt.getDeclaringClass().getSimpleName().concat("#").concat(rt.getMethod().getName()));
@@ -213,7 +213,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 					jsonLog.put("costTime", respBody.getCostTime());
 					jsonLog.put("msg", GeneralHelper.equals(respBody.getStatusCode(), PARAM_VERIFY_ERROR) ? respBody.getMsg() + ": " + JSONObject.toJSONString(respBody.getValidationErrors()) : respBody.getMsg());
 				}
-
+				
 				if(GeneralHelper.isStrNotEmpty(ua))
 				{
 					final Capabilities caps = uaParser.parse(ua);

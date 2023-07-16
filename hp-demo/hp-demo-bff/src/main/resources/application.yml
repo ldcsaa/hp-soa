@@ -16,7 +16,7 @@ hp.soa.web:
     allowed-headers: "*"
     allowed-methods: "*"
     exposed-headers: 
-    allow-credentials: true
+    allow-credentials: false
     maxAge: 3600
   access-verification:
     enabled: true
@@ -25,7 +25,7 @@ hp.soa.web:
 logging.config: classpath:log4j2.xml
 
 server:
-  port: 8888
+  port: 10001
   servlet:
     context-path: /
   tomcat:

@@ -28,7 +28,7 @@ public class RequestAttribute
 	private transient long timestamp;
 	
 	private Object body;
-
+	
 	public RequestAttribute(String appCode, String srcAppCode, String token, String clientId, String requestId, String sessionId)
 	{
 		this(appCode, srcAppCode, token, clientId, requestId, sessionId, null);
@@ -44,5 +44,4 @@ public class RequestAttribute
 		this.sessionId = sessionId;
 		this.groupId = groupId;
 	}
-		
 }

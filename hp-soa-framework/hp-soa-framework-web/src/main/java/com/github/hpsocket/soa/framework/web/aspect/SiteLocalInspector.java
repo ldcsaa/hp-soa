@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import com.github.hpsocket.soa.framework.core.util.SystemUtil;
-import com.github.hpsocket.soa.framework.web.advice.ControllerRequestAdvice;
 import com.github.hpsocket.soa.framework.web.advice.RequestContext;
 
 import static com.github.hpsocket.soa.framework.core.exception.ServiceException.*;
@@ -15,7 +14,7 @@ import static com.github.hpsocket.soa.framework.core.exception.ServiceException.
 @Order(Integer.MIN_VALUE)
 public class SiteLocalInspector
 {
-	private static final String POINTCUT_PATTERN = ControllerRequestAdvice.POINTCUT_PATTERN
+	private static final String POINTCUT_PATTERN = AccessVerificationInspector.POINTCUT_PATTERN
 					+ "&& (@annotation(com.github.hpsocket.soa.framework.web.annotation.SiteLocal) || @within(com.github.hpsocket.soa.framework.web.annotation.SiteLocal))";
 
 	@Pointcut(POINTCUT_PATTERN)

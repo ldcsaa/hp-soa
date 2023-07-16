@@ -26,7 +26,7 @@ import org.springframework.context.annotation.PropertySource;
 									KafkaAutoConfiguration.class,
 									RabbitAutoConfiguration.class	})
 @ComponentScan(basePackages = {"com.github.hpsocket.soa"})
-@ImportResource(locations = {"classpath:applicationContext.xml"})
+@ImportResource(locations = {"classpath:config.xml"})
 @PropertySource(value = {"classpath:config.properties"}, ignoreResourceNotFound=true)
 @PropertySource(value = {"classpath:config.yml"}, factory = YamlPropertySourceFactory.class, ignoreResourceNotFound=true)
 public class AppStarter
