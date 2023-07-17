@@ -34,7 +34,7 @@ public class DemoController implements IDemoController
 	Integer a;
 	
 	@Value("${xxx.yyy}")
-	Integer b;
+	Integer x;
 	
 
     /**
@@ -50,8 +50,7 @@ public class DemoController implements IDemoController
         /** 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
         System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
         
-        System.out.println("aaa.bbb: " + a);
-        System.out.println("xxx.yyy: " + b);
+        System.out.printf("aaa.bbb: %d, xxx.yyy: %d\n", a, x);
 
         DemoResponse resp = new DemoResponse();
         resp.setId(1001L);

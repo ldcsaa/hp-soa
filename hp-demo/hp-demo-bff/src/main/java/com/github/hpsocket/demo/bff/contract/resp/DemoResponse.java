@@ -20,17 +20,17 @@ public class DemoResponse {
     /**
      * Swagger Model Property 注解
      */
-	@Schema(name = "ID", example = "123", requiredMode = RequiredMode.REQUIRED, nullable = false)
+	@Schema(description = "ID", example = "123", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private Long id;
     /**
      * Swagger Model Property 注解
      */
-	@Schema(name = "姓名", example = "my name", requiredMode = RequiredMode.REQUIRED, nullable = false)
+	@Schema(description = "姓名", example = "my name", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private String name;
     /**
      * Swagger Model Property 注解
      */
-	@Schema(name = "年龄", example = "23", requiredMode = RequiredMode.NOT_REQUIRED, nullable = false)
+	@Schema(description = "年龄", example = "23", requiredMode = RequiredMode.NOT_REQUIRED, nullable = false)
     private Integer age;
 
     private String token;

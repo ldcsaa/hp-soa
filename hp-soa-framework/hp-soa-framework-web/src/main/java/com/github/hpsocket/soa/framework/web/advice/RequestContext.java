@@ -171,13 +171,11 @@ public class RequestContext
 		String groupId		= parseRequestField(request, reqInfos, HEADER_GROUP_ID, false);
 		String sessionId	= parseRequestField(request, reqInfos, HEADER_SESSION_ID, true);
 		String requestId	= parseRequestField(request, reqInfos, HEADER_REQUEST_ID, false);
-		String clientId 	= null;
+		String clientId 	= parseRequestField(request, reqInfos, HEADER_CLIENT_ID, false);
 		
-		if(checkUserAgent(getUserAgent(request)))
+		if(GeneralHelper.isStrEmpty(clientId))
 		{
-			clientId = reqInfos.get(HEADER_CLIENT_ID);
-			
-			if(GeneralHelper.isStrEmpty(clientId))
+			if(checkUserAgent(getUserAgent(request)))
 			{
 				Result<Boolean, Cookie> clientCookieRS = checkClientCookie(request);
 				Cookie cookie = clientCookieRS.getValue();
@@ -186,9 +184,9 @@ public class RequestContext
 				clientId = cookieValue;
 				
 				if(!clientCookieRS.getFlag())
-					response.addCookie(cookie);
+					response.addCookie(cookie);			
 			}
-		}		
+		}
 		
 		if(GeneralHelper.isStrEmpty(requestId))
 			requestId = UUID.randomUUID().toString();

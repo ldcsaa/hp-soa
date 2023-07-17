@@ -21,11 +21,11 @@ public class DemoReuqest {
      * <p>@ApiModelProperty Swagger Model Property 注解</p>
      */
     @NotBlank(message = "name is empty")
-    @Schema(name = "姓名", example = "my name", requiredMode = RequiredMode.REQUIRED, minLength = 1, nullable = false)
+    @Schema(description = "姓名", example = "my name", requiredMode = RequiredMode.REQUIRED, minLength = 1, nullable = false)
     private String name;
     /**
      * <p>@ApiModelProperty Swagger Model Property 注解</p>
      */
-    @Schema(name = "年龄", example = "23", requiredMode = RequiredMode.NOT_REQUIRED, nullable = false)
+    @Schema(description = "年龄", example = "23", requiredMode = RequiredMode.NOT_REQUIRED, nullable = false)
     private Integer age;
 }
