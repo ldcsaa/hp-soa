@@ -20,6 +20,7 @@ public class RequestAttribute
 	private String remoteIp;
 	private String requestUri;
 	private String requestPath;
+	private String requestMethod;
 	
 	private String version;
 	private String extra;

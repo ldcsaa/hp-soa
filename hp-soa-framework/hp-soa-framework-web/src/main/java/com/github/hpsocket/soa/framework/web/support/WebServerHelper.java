@@ -50,6 +50,7 @@ public class WebServerHelper
 	public static final String TRACE	= "TRACE";
 	public static final String CONNECT	= "CONNECT";
 
+	public static final String REQUEST_PATH_SEPARATOR	= "/";
 	public static final String REQUEST_FORMAT_JSON		= "json";
 	public static final String REQUEST_FORMAT_FORM		= "form";
 	public static final String DEFAULT_REQUEST_CHARSET	= DEFAULT_CHARSET;
@@ -200,11 +201,11 @@ public class WebServerHelper
 	
 	public static final String getRequestUri(HttpServletRequest request)
 	{
-		String requestUri = request.getHeader("X-DOCUMENT-URI");
+		String requestUri = request.getRequestURI();
 		
 		if(GeneralHelper.isStrEmpty(requestUri))
 		{
-			requestUri = getRequestPath(request);
+			requestUri = REQUEST_PATH_SEPARATOR;
 		}
 		
 		return requestUri;
@@ -212,14 +213,32 @@ public class WebServerHelper
 	
 	public static final String getRequestPath(HttpServletRequest request)
 	{
-		String requestPath = request.getRequestURI();
-			
+		String requestUri	= getRequestUri(request);
+		String contextPath	= request.getContextPath();
+		String servletPath	= request.getServletPath();
+		String prefixPath	= "";
+		String requestPath	= null;
+		
+		if(GeneralHelper.isStrNotEmpty(contextPath) & !contextPath.equals(REQUEST_PATH_SEPARATOR))
+			prefixPath = contextPath;
+		
+		if(GeneralHelper.isStrNotEmpty(servletPath) && !servletPath.equals(REQUEST_PATH_SEPARATOR))
+			prefixPath += servletPath;
+		
+		if(GeneralHelper.isStrEmpty(prefixPath) || prefixPath.equals(REQUEST_PATH_SEPARATOR))
+			requestPath = requestUri;
+		else
+			requestPath = requestUri.substring(prefixPath.length());
+		
 		if(GeneralHelper.isStrEmpty(requestPath))
-		{
-			requestPath = request.getServletPath();
-		}
+			requestPath = REQUEST_PATH_SEPARATOR;
 		
 		return requestPath;
+	}
+	
+	public static final String getRequestMethod(HttpServletRequest request)
+	{
+		return request.getMethod();
 	}
 	
 	@SuppressWarnings("unchecked")

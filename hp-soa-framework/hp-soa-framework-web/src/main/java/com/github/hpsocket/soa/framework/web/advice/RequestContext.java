@@ -121,6 +121,11 @@ public class RequestContext
 		return getRequestAttribute().getRequestPath();
 	}
 	
+	public static final String getRequestMethod()
+	{
+		return getRequestAttribute().getRequestMethod();
+	}
+	
 	public static final Long getGroupId()
 	{
 		return getRequestAttribute().getGroupId();
@@ -191,8 +196,9 @@ public class RequestContext
 		if(GeneralHelper.isStrEmpty(requestId))
 			requestId = UUID.randomUUID().toString();
 
-		String requestPath	= WebServerHelper.getRequestPath(request);
-		String requestUri	= WebServerHelper.getRequestUri(request);
+		String requestUri	 = WebServerHelper.getRequestUri(request);
+		String requestPath	 = WebServerHelper.getRequestPath(request);
+		String requestMethod = WebServerHelper.getRequestMethod(request);
 		
 		RequestAttribute reqAttr = new RequestAttribute(appCode, srcAppCode, token,
 														clientId, requestId, sessionId,
@@ -200,8 +206,9 @@ public class RequestContext
 		reqAttr.setVersion(version);
 		reqAttr.setExtra(extra);
 		reqAttr.setRemoteIp(WebServerHelper.getIpAddr(request));
-		reqAttr.setRequestPath(requestPath);
 		reqAttr.setRequestUri(requestUri);
+		reqAttr.setRequestPath(requestPath);
+		reqAttr.setRequestMethod(requestMethod);
 		reqAttr.setTimestamp(timestamp);
 		
 		setRequestAttribute(reqAttr);

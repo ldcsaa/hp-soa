@@ -15,6 +15,7 @@ import com.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import com.github.hpsocket.soa.framework.web.model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -49,6 +50,9 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 	private static final Logger MONITOR_LOGGER = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
 	private static final UserAgentParser uaParser;
 	
+	@Value("${:/actuator}")
+	String mgrEndpointsBasePath;
+	
 	static
 	{
 		try
@@ -64,8 +68,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType)
 	{
-		return	RequestContext.getRequestAttribute() != null ;//&&
-				//Response.class.isAssignableFrom(returnType.getNestedParameterType());
+		RequestAttribute attr = RequestContext.getRequestAttribute();
+		return	attr != null && !attr.getRequestPath().startsWith(mgrEndpointsBasePath);
 	}
 
 	@Override
