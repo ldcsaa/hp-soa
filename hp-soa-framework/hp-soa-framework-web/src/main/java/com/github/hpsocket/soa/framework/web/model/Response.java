@@ -28,11 +28,11 @@ public class Response<T> implements Serializable
 	public static final Integer RT_LOGIN	= Integer.valueOf(1);
 	public static final Integer RT_LOGOUT	= Integer.valueOf(2);
 
-	@Schema(title="状态码", example="200", requiredMode=RequiredMode.REQUIRED, nullable=false)
+	@Schema(title="状态码", example="0", requiredMode=RequiredMode.REQUIRED, nullable=false)
 	private Integer statusCode = OK;
 	
 	@JsonIgnore
-	@Schema(title="业务处理代码", example="1000", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
+	@Schema(title="业务处理代码", example="0", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
 	private Integer resultCode = OK;
 	
 	@Schema(title="状态描述", example=MSG_OK, requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
