@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,9 +16,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.github.hpsocket.soa.framework.core.util.CryptHelper;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.core.util.Result;
-import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 
 import com.alibaba.fastjson2.JSONWriter;
+
+import static com.github.hpsocket.soa.framework.web.holder.AppConfigHolder.*;
 
 public class WebServerHelper
 {
@@ -50,7 +54,6 @@ public class WebServerHelper
 	public static final String TRACE	= "TRACE";
 	public static final String CONNECT	= "CONNECT";
 
-	public static final String REQUEST_PATH_SEPARATOR	= "/";
 	public static final String REQUEST_FORMAT_JSON		= "json";
 	public static final String REQUEST_FORMAT_FORM		= "form";
 	public static final String DEFAULT_REQUEST_CHARSET	= DEFAULT_CHARSET;
@@ -66,6 +69,13 @@ public class WebServerHelper
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT		= {JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNonStringKeyAsString};
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL	= {JSONWriter.Feature.WriteNonStringKeyAsString};
 	
+	public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor(	5,
+																						20,
+																						60,
+																						TimeUnit.SECONDS,
+																						new LinkedBlockingDeque<>(5000),
+																						new ThreadPoolExecutor.CallerRunsPolicy());																		 
+
 	public static final boolean checkUserAgent(String ua)
 	{
 		return (GeneralHelper.isStrNotEmpty(ua) && !SPIDER_PATTERN.matcher(ua).matches());
@@ -117,7 +127,7 @@ public class WebServerHelper
 			exists = true;
 
 		if(!exists)
-			clientCookie = createCookie(req, HEADER_CLIENT_ID, UUID.randomUUID().toString(), AppConfigHolder.getCookieMaxAge());
+			clientCookie = createCookie(req, HEADER_CLIENT_ID, UUID.randomUUID().toString(), getCookieMaxAge());
 
 		return new Result<>(exists, clientCookie);
 	}
@@ -214,24 +224,7 @@ public class WebServerHelper
 	public static final String getRequestPath(HttpServletRequest request)
 	{
 		String requestUri	= getRequestUri(request);
-		String contextPath	= request.getContextPath();
-		String servletPath	= request.getServletPath();
-		String prefixPath	= "";
-		String requestPath	= null;
-		
-		if(GeneralHelper.isStrNotEmpty(contextPath) & !contextPath.equals(REQUEST_PATH_SEPARATOR))
-			prefixPath = contextPath;
-		
-		if(GeneralHelper.isStrNotEmpty(servletPath) && !servletPath.equals(REQUEST_PATH_SEPARATOR))
-			prefixPath += servletPath;
-		
-		if(GeneralHelper.isStrEmpty(prefixPath) || prefixPath.equals(REQUEST_PATH_SEPARATOR))
-			requestPath = requestUri;
-		else
-			requestPath = requestUri.substring(prefixPath.length());
-		
-		if(GeneralHelper.isStrEmpty(requestPath))
-			requestPath = REQUEST_PATH_SEPARATOR;
+		String requestPath	= requestUri.substring(getServletUriPrefix().length());
 		
 		return requestPath;
 	}

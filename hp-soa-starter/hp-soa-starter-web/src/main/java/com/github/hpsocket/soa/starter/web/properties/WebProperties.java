@@ -5,8 +5,10 @@ import com.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import com.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
 import com.github.hpsocket.soa.framework.web.propertries.IAccessVerificationProperties;
 import com.github.hpsocket.soa.framework.web.propertries.IAppProperties;
-import com.github.hpsocket.soa.framework.web.propertries.ICookiePropertries;
+import com.github.hpsocket.soa.framework.web.propertries.IServletPropertries;
 import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
@@ -18,7 +20,7 @@ import lombok.Setter;
 @Setter
 @Component
 @ConfigurationProperties(prefix = "hp.soa.web")
-public class WebProperties implements IAppProperties, ICookiePropertries, IAccessVerificationProperties
+public class WebProperties implements IAppProperties, IServletPropertries, IAccessVerificationProperties
 {
 	@NestedConfigurationProperty
 	private AppProperties app = new AppProperties();
@@ -27,7 +29,14 @@ public class WebProperties implements IAppProperties, ICookiePropertries, IAcces
 	@NestedConfigurationProperty
 	private CorsProperties cors = new CorsProperties();	
 	@NestedConfigurationProperty
-	private AccessVerificationProperties accessVerification = new AccessVerificationProperties();	
+	private AccessVerificationProperties accessVerification = new AccessVerificationProperties();
+	
+	@Value("${server.servlet.context-path:/}")
+	private String servletContextPath;
+	@Value("${spring.mvc.servlet.path:/}")
+	private String springMvcServletPath;
+	@Value("${management.endpoints.web.base-path:/actuator}")
+	private String managementEndpointsBasePath;
 	
 	@Getter
 	@Setter
@@ -82,7 +91,7 @@ public class WebProperties implements IAppProperties, ICookiePropertries, IAcces
 	}
 	
 	@Override
-	public int getMaxAge()
+	public int getCookieMaxAge()
 	{
 		return cookie.getMaxAge();
 	}

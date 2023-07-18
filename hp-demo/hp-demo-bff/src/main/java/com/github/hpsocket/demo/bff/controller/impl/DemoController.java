@@ -48,9 +48,8 @@ public class DemoController implements IDemoController
    // @FrequencyLimit(forbid = 3, type = Type.IP, value = 5)
     public Response<DemoResponse> queryUser(@RequestBody @Valid DemoReuqest request) {
         /** 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
-        System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
         
-        System.out.printf("aaa.bbb: %d, xxx.yyy: %d\n", a, x);
+    	System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
 
         DemoResponse resp = new DemoResponse();
         resp.setId(1001L);

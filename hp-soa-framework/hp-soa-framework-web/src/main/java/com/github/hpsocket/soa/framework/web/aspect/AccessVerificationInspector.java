@@ -163,7 +163,7 @@ public class AccessVerificationInspector
 	private Response<Boolean> inspectRole(RequestAttribute reqAttr)
 	{
 		if(reqAttr.getGroupId() == null)
-			return new Response<>("组织ID为空", AUTHOR_ERROR);
+			return new Response<>("缺少参数：groupId", AUTHOR_ERROR);
 		
 		Pair<Boolean, String> rs = accessVerificationService.verifyRouteAuthorized(reqAttr.getRequestUri(), reqAttr.getAppCode(), reqAttr.getGroupId(), reqAttr.getUserId());
 		

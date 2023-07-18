@@ -2,7 +2,6 @@ package com.github.hpsocket.soa.framework.web.advice;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.core.config.Order;
 import com.github.hpsocket.soa.framework.core.exception.ServiceException;
@@ -13,9 +12,10 @@ import com.github.hpsocket.soa.framework.core.util.Pair;
 import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import com.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import com.github.hpsocket.soa.framework.web.model.Response;
+import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -46,12 +46,8 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 {
-	private static final ThreadPoolExecutor LOG_EXECUTOR = ControllerRequestAdvice.LOG_EXECUTOR;
 	private static final Logger MONITOR_LOGGER = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
 	private static final UserAgentParser uaParser;
-	
-	@Value("${:/actuator}")
-	String mgrEndpointsBasePath;
 	
 	static
 	{
@@ -69,7 +65,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType)
 	{
 		RequestAttribute attr = RequestContext.getRequestAttribute();
-		return	attr != null && !attr.getRequestPath().startsWith(mgrEndpointsBasePath);
+		
+		return (attr != null && !attr.getRequestUri().startsWith(AppConfigHolder.getManagementEndpointsBaseFullPath()));
 	}
 
 	@Override
@@ -153,7 +150,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 		
 		try
 		{
-			LOG_EXECUTOR.execute(new MdcRunnable()
+			WebServerHelper.ASYNC_LOG_EXECUTOR.execute(new MdcRunnable()
 			{
 				@Override
 				public void doRun()
@@ -252,7 +249,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 				
 		try
 		{
-			LOG_EXECUTOR.execute(task);
+			WebServerHelper.ASYNC_LOG_EXECUTOR.execute(task);
 		}
 		catch(Exception e)
 		{

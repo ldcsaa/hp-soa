@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 public class ServiceException extends RuntimeException
 {
 	/** 成功 */
-	public static final int OK						= 200;
+	public static final int OK						= 0;
 	/** 部分成功 */
 	public static final int PARTIAL_OK				= 206;
 	/** 格式错误 */

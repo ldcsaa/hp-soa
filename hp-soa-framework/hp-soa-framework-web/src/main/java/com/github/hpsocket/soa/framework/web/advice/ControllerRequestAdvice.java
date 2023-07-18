@@ -1,11 +1,6 @@
 package com.github.hpsocket.soa.framework.web.advice;
 
 import java.lang.reflect.Type;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PreDestroy;
 
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.annotation.Aspect;
@@ -32,19 +27,6 @@ import static com.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 @RestControllerAdvice
 public class ControllerRequestAdvice extends RequestBodyAdviceAdapter
 {
-	public static final ThreadPoolExecutor LOG_EXECUTOR = new ThreadPoolExecutor(	5,
-																					20,
-																					60,
-																					TimeUnit.SECONDS,
-																					new LinkedBlockingDeque<>(5000),
-																					new ThreadPoolExecutor.CallerRunsPolicy());																		 
-
-	@PreDestroy
-	public void preDestroy()
-	{
-		LOG_EXECUTOR.shutdown();
-	}
-	
 	@InitBinder
 	public void initBinder(WebDataBinder binder)
 	{
@@ -76,7 +58,7 @@ public class ControllerRequestAdvice extends RequestBodyAdviceAdapter
 		{
 			final RequestAttribute requestAttribute = RequestContext.getRequestAttribute();
 			
-			LOG_EXECUTOR.execute(new MdcRunnable()
+			ASYNC_LOG_EXECUTOR.execute(new MdcRunnable()
 			{	
 				@Override
 				protected void doRun()

@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +45,7 @@ public class SwaggerConfig implements WebMvcConfigurer
 	}
 	
     @Bean
+    @ConditionalOnMissingBean(OpenAPI.class)
     public OpenAPI springDocOpenAPI()
     {
         return new OpenAPI()
@@ -62,6 +64,7 @@ public class SwaggerConfig implements WebMvcConfigurer
     }
 
     @Bean
+    @ConditionalOnMissingBean(OpenApiCustomizer.class)
     public OpenApiCustomizer customerGlobalHeaderOpenApiCustomiser()
     {
         return openApi -> openApi.getPaths().values().stream().flatMap(pathItem -> pathItem.readOperations().stream())
