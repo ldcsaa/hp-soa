@@ -51,9 +51,6 @@ public class ControllerRequestAdvice extends RequestBodyAdviceAdapter
 
 	private void logRequest()
 	{
-		if(!log.isInfoEnabled())
-			return;
-		
 		try
 		{
 			final RequestAttribute requestAttribute = RequestContext.getRequestAttribute();

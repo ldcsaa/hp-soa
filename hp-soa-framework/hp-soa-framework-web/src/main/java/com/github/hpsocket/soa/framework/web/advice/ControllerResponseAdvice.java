@@ -12,7 +12,6 @@ import com.github.hpsocket.soa.framework.core.util.Pair;
 import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import com.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import com.github.hpsocket.soa.framework.web.model.Response;
-import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,14 +142,11 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 
 	private void logResponse(Object body, MethodParameter rt, HttpServletRequest req)
 	{
-		if(!log.isInfoEnabled())
-			return;
-		
 		final RequestAttribute requestAttribute = RequestContext.getRequestAttribute();
 		
 		try
 		{
-			WebServerHelper.ASYNC_LOG_EXECUTOR.execute(new MdcRunnable()
+			ASYNC_LOG_EXECUTOR.execute(new MdcRunnable()
 			{
 				@Override
 				public void doRun()
@@ -249,7 +245,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 				
 		try
 		{
-			WebServerHelper.ASYNC_LOG_EXECUTOR.execute(task);
+			ASYNC_LOG_EXECUTOR.execute(task);
 		}
 		catch(Exception e)
 		{
