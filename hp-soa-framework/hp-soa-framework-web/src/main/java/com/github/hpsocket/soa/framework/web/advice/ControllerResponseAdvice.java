@@ -180,7 +180,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 			
 				MdcAttr mdcAttr = getMdcAttr();
 
-				jsonLog.put("logType", MONITOR_INGRESS_LOG_TYPE);
+				jsonLog.put("monitorLogType", MONITOR_INGRESS_LOG_TYPE);
 				jsonLog.put("appId", mdcAttr.getAppId());
 				jsonLog.put("appName", mdcAttr.getAppName());
 				jsonLog.put("serviceId", mdcAttr.getServiceId());
@@ -213,13 +213,16 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 				
 				if(GeneralHelper.isStrNotEmpty(ua))
 				{
+					JSONObject jsonUa = new JSONObject();
 					final Capabilities caps = uaParser.parse(ua);
 					
-					jsonLog.put("ua", ua);
-					jsonLog.put("ua.browser", caps.getBrowser().concat(GeneralHelper.isStrNotEmpty(caps.getBrowserMajorVersion()) ? " " + caps.getBrowserMajorVersion() : ""));
-					jsonLog.put("ua.browserType", caps.getBrowserType());
-					jsonLog.put("ua.deviceType", caps.getDeviceType());
-					jsonLog.put("ua.platform", caps.getPlatform().concat(GeneralHelper.isStrNotEmpty(caps.getPlatformVersion()) ? " " + caps.getPlatformVersion() : ""));
+					jsonUa.put("name", ua);
+					jsonUa.put("browser", caps.getBrowser().concat(GeneralHelper.isStrNotEmpty(caps.getBrowserMajorVersion()) ? " " + caps.getBrowserMajorVersion() : ""));
+					jsonUa.put("browserType", caps.getBrowserType());
+					jsonUa.put("deviceType", caps.getDeviceType());
+					jsonUa.put("platform", caps.getPlatform().concat(GeneralHelper.isStrNotEmpty(caps.getPlatformVersion()) ? " " + caps.getPlatformVersion() : ""));
+					
+					jsonLog.put("ua", jsonUa);
 				}
 
 				String msg = jsonLog.toJSONString();

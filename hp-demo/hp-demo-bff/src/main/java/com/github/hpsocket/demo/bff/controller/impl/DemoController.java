@@ -63,6 +63,9 @@ public class DemoController implements IDemoController
 
         Response<DemoResponse> response = new Response<>(resp);
         //response.setReturnType(Response.RT_LOGIN);
+        
+        if(a != null)
+        	throw new RuntimeException("just for test");
 
         return response;
     }

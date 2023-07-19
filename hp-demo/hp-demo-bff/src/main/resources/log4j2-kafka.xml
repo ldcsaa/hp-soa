@@ -8,16 +8,17 @@
         <Property name="kafka.bootstrap.servers">${sys:log4j.kafka.bootstrap.servers:-192.168.56.23:9092}</Property>
         <Property name="kafka.sasl.jaas.config">${sys:log4j.kafka.sasl.jaas.config:-}</Property>
         <Property name="kafka.topic">${sys:log4j.kafka.topic:-hp-soa}</Property>
+        <Property name="kafka.logType">${sys:log4j.kafka.logType:-hp-soa}</Property>
         <Property name="kafka.ignoreExceptions">true</Property>
         <Property name="kafka.syncSend">true</Property>
         <Property name="logfile.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}</Property>
-        <Property name="logfile.pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{1.1.1.*}#%M\(L:%L\) -&gt; %m%n</Property>
         <Property name="logfile.max.size">100 MB</Property>
         <Property name="logfile.max.count">10</Property>
         <Property name="logfile.archive.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}/${date:yyyy-MM}</Property>
         <Property name="logfile.archive.suffix">%d{yyyy-MM-dd}-%i.log.gz</Property>
-        <Property name="json.template.layout">classpath:LogstashJsonEventLayoutV1.json</Property>
-        <Property name="timestamp.pattern">%d{yyyy-MM-dd HH:mm:ss.SSS}{GMT+0}</Property>
+        <Property name="logfile.stacktrace.filters">org.springframework.security.web.ObservationFilterChainDecorator,org.apache.catalina,org.apache.coyote,org.apache.tomcat,org.hibernate,org.apache.el,org.apache.cxf,org.junit,junit.framework,org.jboss,org.h2,org.eclipse,org.richfaces,java.lang.reflect.Method,java.base/java.lang.reflect.Method,com.sun,javax.servlet,jakarta.servlet</Property>
+        <Property name="logfile.pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{1.1.1.*}#%M\(L:%L\) -&gt; %m%xEx{filters(${logfile.stacktrace.filters})}%n</Property>
+        <Property name="json.template.layout">classpath:log4j2-default-template.json</Property>
     </Properties>
 
     <Appenders>
@@ -52,6 +53,7 @@
 			<Property name="bootstrap.servers">${kafka.bootstrap.servers}</Property>
 			<Property name="sasl.jaas.config">${kafka.sasl.jaas.config}</Property>
 			<JsonTemplateLayout eventTemplateUri="${json.template.layout}">
+				<EventTemplateAdditionalField key="log_type" value="${kafka.logType}"/>
 				<EventTemplateAdditionalField key="facility" value="SOA-MONITOR"/>
 				<EventTemplateAdditionalField key="@version" value="${project.version}"/>
 			</JsonTemplateLayout>
@@ -62,6 +64,7 @@
 			<Property name="bootstrap.servers">${kafka.bootstrap.servers}</Property>
 			<Property name="sasl.jaas.config">${kafka.sasl.jaas.config}</Property>
 			<JsonTemplateLayout eventTemplateUri="${json.template.layout}">
+				<EventTemplateAdditionalField key="log_type" value="${kafka.logType}"/>
 				<EventTemplateAdditionalField key="facility" value="SOA-SERVICE"/>
 				<EventTemplateAdditionalField key="@version" value="${project.version}"/>
 			</JsonTemplateLayout>

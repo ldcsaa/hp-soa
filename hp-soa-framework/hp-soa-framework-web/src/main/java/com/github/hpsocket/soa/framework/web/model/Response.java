@@ -62,7 +62,7 @@ public class Response<T> implements Serializable
 		this.result = result;
 	}
 
-	public Response(String msg, int statusCode)
+	public Response(String msg, Integer statusCode)
 	{
 		this.msg = msg;
 		this.statusCode = statusCode;
@@ -84,7 +84,7 @@ public class Response<T> implements Serializable
 		this.validationErrors = validationErrors;
 	}
 
-	public Response(String msg, int statusCode, int resultCode)
+	public Response(String msg, Integer statusCode, Integer resultCode)
 	{
 		this.msg = msg;
 		this.statusCode = statusCode;

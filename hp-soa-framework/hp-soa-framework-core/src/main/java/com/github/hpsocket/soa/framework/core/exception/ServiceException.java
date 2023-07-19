@@ -74,8 +74,8 @@ public class ServiceException extends RuntimeException
 	public static final ServiceException LOGIN_INVALID_EXCEPTION	= new UnimportantException("登录已失效", LOGIN_INVALID);
 	public static final ServiceException NOT_LOGGED_IN_EXCEPTION	= new UnimportantException("未登录", NOT_LOGGED_IN);
 	
-	private int statusCode;
-	private transient int resultCode;	
+	private Integer statusCode;
+	private transient Integer resultCode;	
 	
 	public ServiceException()
 	{
@@ -86,12 +86,12 @@ public class ServiceException extends RuntimeException
 		this(message, GENERAL_ERROR);
 	}
 
-	public ServiceException(String message, int statusCode)
+	public ServiceException(String message, Integer statusCode)
 	{
 		this(message, statusCode, statusCode);
 	}
 
-	public ServiceException(String message, int statusCode, int resultCode)
+	public ServiceException(String message, Integer statusCode, Integer resultCode)
 	{
 		super(message);
 		setStatusCode(statusCode);
@@ -108,28 +108,28 @@ public class ServiceException extends RuntimeException
 		}
 	}
 
-	public ServiceException(String message, int statusCode, Throwable cause)
+	public ServiceException(String message, Integer statusCode, Throwable cause)
 	{
 		super(message, cause);
 		setStatusCode(statusCode);
 	}
 
-	public int getResultCode()
+	public Integer getResultCode()
 	{
 		return resultCode;
 	}
 
-	public void setResultCode(int resultCode)
+	public void setResultCode(Integer resultCode)
 	{
 		this.resultCode = resultCode;
 	}
 
-	public int getStatusCode()
+	public Integer getStatusCode()
 	{
 		return statusCode;
 	}
 
-	public void setStatusCode(int statusCode)
+	public void setStatusCode(Integer statusCode)
 	{
 		this.statusCode = statusCode;
 	}
@@ -144,7 +144,7 @@ public class ServiceException extends RuntimeException
 		return wrapServiceException(se.getMessage(), se.getStatusCode(), e);
 	}
 
-	public static final ServiceException wrapServiceException(String message, int statusCode, Throwable e)
+	public static final ServiceException wrapServiceException(String message, Integer statusCode, Throwable e)
 	{
 		if(!(e instanceof ServiceException))
 			e = new ServiceException(message, statusCode, e);
@@ -168,12 +168,12 @@ public class ServiceException extends RuntimeException
 		throw wrapServiceException(message, GENERAL_ERROR, e);
 	}
 
-	public static final void throwServiceException(String message, int statusCode)
+	public static final void throwServiceException(String message, Integer statusCode)
 	{
 		throw new ServiceException(message, statusCode);
 	}
 
-	public static final void throwServiceException(String message, int statusCode, Throwable e)
+	public static final void throwServiceException(String message, Integer statusCode, Throwable e)
 	{
 		throw new ServiceException(message, statusCode, e);
 	}
@@ -183,12 +183,12 @@ public class ServiceException extends RuntimeException
 		throwFormattedServiceException(e, e.getMessage(), args);
 	}
 
-	public static final void throwFormattedServiceException(int statusCode, String format, Object... args)
+	public static final void throwFormattedServiceException(Integer statusCode, String format, Object... args)
 	{
 		throw wrapFormattedServiceException(statusCode, format, args);
 	}
 
-	public static final ServiceException wrapFormattedServiceException(int statusCode, String format, Object... args)
+	public static final ServiceException wrapFormattedServiceException(Integer statusCode, String format, Object... args)
 	{
 		String message = String.format(format, args);
 		return new ServiceException(message, statusCode);
@@ -233,7 +233,7 @@ public class ServiceException extends RuntimeException
 			logException(logger, GENERAL_ERROR, e.getMessage(), e);
 	}
 
-	public static void logException(Logger logger, int code, String msg, Throwable e)
+	public static void logException(Logger logger, Integer code, String msg, Throwable e)
 	{
 		logServiceException(logger, new ServiceException(msg, code, e));
 	}
@@ -246,8 +246,8 @@ public class ServiceException extends RuntimeException
 	public static void logServiceException(Logger logger, String msg, ServiceException e)
 	{
 		final String FORMAT = "(SERVICE EXCEPTION - SC: {}, RC: {}) -> {}";
-		final int statusCode = e.getStatusCode();
-		final int resultCode = e.getResultCode();
+		final Integer statusCode = e.getStatusCode();
+		final Integer resultCode = e.getResultCode();
 
 		if(GENERAL_ERROR == statusCode)
 			logger.error(FORMAT, statusCode, resultCode, msg, e);

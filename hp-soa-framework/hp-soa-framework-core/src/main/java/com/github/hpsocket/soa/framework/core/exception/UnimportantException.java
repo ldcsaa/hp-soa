@@ -14,7 +14,7 @@ public class UnimportantException extends ServiceException
 		setResultCode(OK);
 	}
 
-	public UnimportantException(String message, int statusCode)
+	public UnimportantException(String message, Integer statusCode)
 	{
 		super(message, statusCode);
 		setResultCode(OK);
@@ -26,7 +26,7 @@ public class UnimportantException extends ServiceException
 		setResultCode(OK);
 	}
 
-	public UnimportantException(String message, int statusCode, Throwable cause)
+	public UnimportantException(String message, Integer statusCode, Throwable cause)
 	{
 		super(message, statusCode, cause);
 		setResultCode(OK);

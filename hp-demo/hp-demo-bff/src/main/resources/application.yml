@@ -27,11 +27,11 @@ hp.soa.web:
 dubbo.protocol.port: 6001
 
 # logging
-logging.config: classpath:log4j2.xml
+logging.config: classpath:log4j2-kafka.xml
 
 # server
 server:
-  port: 10001
+  port: 9001
   servlet:
     context-path: /
   tomcat:
