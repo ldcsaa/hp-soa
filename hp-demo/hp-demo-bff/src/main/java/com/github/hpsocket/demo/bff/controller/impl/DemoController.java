@@ -11,7 +11,6 @@ import com.github.hpsocket.soa.framework.web.model.Response;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,14 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoController implements IDemoController
 {
     //@Autowired
-    //IDemoService demoService;
-	
-	@Value("${aaa.bbb}")
-	Integer a;
-	
-	@Value("${xxx.yyy}")
-	Integer x;
-	
+    //IDemoService demoService;	
 
     /**
      * <p>@RequireLogin  LCB 登录检查注解</p>
@@ -63,9 +55,6 @@ public class DemoController implements IDemoController
 
         Response<DemoResponse> response = new Response<>(resp);
         //response.setReturnType(Response.RT_LOGIN);
-        
-        if(a != null)
-        	throw new RuntimeException("just for test");
 
         return response;
     }

@@ -16,8 +16,12 @@ import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.RpcContextAttachment;
 import org.apache.dubbo.rpc.RpcException;
 
+import static org.apache.dubbo.common.constants.CommonConstants.CONSUMER;
+import static org.apache.dubbo.common.constants.CommonConstants.PROVIDER;
+
 import static com.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 
+@Activate(group = {CONSUMER, PROVIDER}, value = "mdc", order = (Integer.MIN_VALUE - 100))
 public class DubboMdcFilter implements Filter
 {
 	@Override

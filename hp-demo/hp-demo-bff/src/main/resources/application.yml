@@ -24,7 +24,9 @@ hp.soa.web:
     DefaultAccessPolicy: maybe_login
 
 # dubbo
-dubbo.protocol.port: 6001
+dubbo:
+  protocol.port: 6001
+  dubbo.consumer.validation: true
 
 # logging
 logging.config: classpath:log4j2-kafka.xml

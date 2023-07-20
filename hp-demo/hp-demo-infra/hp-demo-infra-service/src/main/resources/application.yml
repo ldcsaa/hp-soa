@@ -20,11 +20,13 @@ hp.soa.web:
     allow-credentials: false
     maxAge: 3600
   access-verification:
-    enabled: true
+    enabled: false
     DefaultAccessPolicy: maybe_login
 
 # dubbo
-dubbo.protocol.port: 6002
+dubbo:
+  protocol.port: 6002
+  dubbo.consumer.validation: true
 
 # logging
 logging.config: classpath:log4j2-kafka.xml
