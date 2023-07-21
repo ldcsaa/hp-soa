@@ -27,6 +27,7 @@ dubbo:
   scan.base-packages: ${hp.soa.web.component-scan.base-package}
   protocol:
     port: 6001
+    prefer-serialization: fastjson2
     serialization: fastjson2
   registry:
     address: "nacos://nacos:123456@192.168.56.23:8848?namespace=DEV&register=false&register-consumer-url=true"
@@ -53,6 +54,8 @@ dubbo:
   provider:
     validation: false  # jvalidationNew
     delay: -1
+  #  prefer-serialization: fastjson2
+  #  serialization: fastjson2
 
 # logging
 logging.config: classpath:log4j2-kafka.xml
