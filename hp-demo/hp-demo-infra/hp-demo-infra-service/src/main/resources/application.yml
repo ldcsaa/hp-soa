@@ -7,8 +7,7 @@ hp.soa.web:
     organization: HP-Socket
     owner: Kingfisher
   component-scan:
-    spring: com.github.hpsocket.demo
-    dubbo: com.github.hpsocket.demo
+    base-package: com.github.hpsocket.demo
   cookie: 
     max-age: 315360000
   cors:
@@ -26,7 +25,8 @@ hp.soa.web:
 # dubbo
 dubbo:
   protocol.port: 6002
-  dubbo.consumer.validation: true
+  consumer.validation: true
+  provider.validation: true
 
 # logging
 logging.config: classpath:log4j2-kafka.xml

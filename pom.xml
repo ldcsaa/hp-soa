@@ -102,11 +102,6 @@
 		</repository>
 
 		<repository>
-			<id>JBoss repository</id>
-			<url>http://repository.jboss.com/maven2/</url>
-		</repository>
-
-		<repository>
 			<id>JBoss repository public</id>
 			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>

@@ -21,6 +21,10 @@
 			<artifactId>hp-demo-infra-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-web</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
