@@ -21,36 +21,36 @@ import static org.apache.dubbo.common.constants.CommonConstants.PROVIDER;
 
 import static com.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 
-@Activate(group = {CONSUMER, PROVIDER}, value = "mdc", order = (Integer.MIN_VALUE - 100))
+@Activate(group = {CONSUMER, PROVIDER}, order = (Integer.MIN_VALUE - 1000))
 public class DubboMdcFilter implements Filter
 {
 	@Override
-	@Activate
 	public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException
 	{
 		RpcContext ctx		= RpcContext.getServiceContext();
 		boolean isConsumer	= ctx.isConsumerSide();
+		final RpcContextAttachment ctxAttach = isConsumer
+											 ? RpcContext.getClientAttachment()
+											 : RpcContext.getServerAttachment();
 		boolean genAppId	= false;
 	
 		try
 		{
 			if(isConsumer)
-			{				
+			{
 				for(int i = 0; i < TRANSFER_MDC_KEYS.length; i++)
 				{
 					String key = TRANSFER_MDC_KEYS[i];
 					String val = MDC.get(key);
 					
 					if(GeneralHelper.isStrNotEmpty(val))
-						ctx.setAttachment(key, val);
+						ctxAttach.setAttachment(key, val);
 					else if(key.equals(MDC_APP_ID_KEY))
 						genAppId = true;
 				}
 			}
 			else
 			{
-				RpcContextAttachment ctxAttach = RpcContext.getClientAttachment();
-				
 				for(int i = 0; i < TRANSFER_MDC_KEYS.length; i++)
 				{
 					String key = TRANSFER_MDC_KEYS[i];
@@ -79,8 +79,8 @@ public class DubboMdcFilter implements Filter
 				
 				MDC.put(MDC_APP_ID_KEY, appId);
 				MDC.put(MDC_APP_NAME_KEY, appName);
-				ctx.setAttachment(MDC_APP_ID_KEY, appId);
-				ctx.setAttachment(MDC_APP_NAME_KEY, appName);
+				ctxAttach.setAttachment(MDC_APP_ID_KEY, appId);
+				ctxAttach.setAttachment(MDC_APP_NAME_KEY, appName);
 			}
 			
 			return invoker.invoke(invocation);
@@ -89,7 +89,7 @@ public class DubboMdcFilter implements Filter
 		{
 			if(isConsumer)
 			{
-				Arrays.stream(TRANSFER_MDC_KEYS).forEach((key) -> ctx.removeAttachment(key));
+				Arrays.stream(TRANSFER_MDC_KEYS).forEach((key) -> ctxAttach.removeAttachment(key));
 
 				if(genAppId)
 				{
@@ -103,8 +103,8 @@ public class DubboMdcFilter implements Filter
 				
 				if(genAppId)
 				{
-					ctx.removeAttachment(MDC_APP_ID_KEY);
-					ctx.removeAttachment(MDC_APP_NAME_KEY);
+					ctxAttach.removeAttachment(MDC_APP_ID_KEY);
+					ctxAttach.removeAttachment(MDC_APP_NAME_KEY);
 				}
 			}
 		}

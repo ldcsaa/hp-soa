@@ -3,6 +3,7 @@ package com.github.hpsocket.demo.bff.controller.impl;
 import com.github.hpsocket.demo.bff.contract.req.DemoReuqest;
 import com.github.hpsocket.demo.bff.contract.resp.DemoResponse;
 import com.github.hpsocket.demo.bff.controller.IDemoController;
+import com.github.hpsocket.demo.infra.service.DemoService;
 import com.github.hpsocket.soa.framework.web.advice.RequestContext;
 import com.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import com.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
@@ -11,6 +12,7 @@ import com.github.hpsocket.soa.framework.web.model.Response;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +30,9 @@ public class DemoController implements IDemoController
 {
     //@Autowired
     //IDemoService demoService;	
+	
+	@DubboReference
+	DemoService demoService;
 
     /**
      * <p>@RequireLogin  LCB 登录检查注解</p>
@@ -42,6 +47,9 @@ public class DemoController implements IDemoController
         /** 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
         
     	System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
+    	
+    	String rs1 = demoService.sayHello("Kingfisher");
+    	String rs2 = demoService.sayHello("");
 
         DemoResponse resp = new DemoResponse();
         resp.setId(1001L);

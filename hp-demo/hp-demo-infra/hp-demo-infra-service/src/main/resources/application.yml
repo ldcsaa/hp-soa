@@ -1,7 +1,7 @@
 # app
 hp.soa.web:
   app:
-    id: "0010100001"
+    id: "0010100002"
     name: ${project.artifactId}
     version: ${project.version}
     organization: HP-Socket
@@ -24,9 +24,35 @@ hp.soa.web:
 
 # dubbo
 dubbo:
-  protocol.port: 6002
-  consumer.validation: true
-  provider.validation: true
+  scan.base-packages: ${hp.soa.web.component-scan.base-package}
+  protocol:
+    port: 6002
+    serialization: fastjson2
+  registry:
+    address: "nacos://nacos:123456@192.168.56.23:8848?namespace=DEV&register=false&register-consumer-url=true"
+    file: "/data/dubbo/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
+    register-mode: all
+    simplified: true
+  metadata-report:
+    address: nacos://nacos:123456@192.168.56.23:8848?namespace=DEV
+  config-center:
+    address: nacos://nacos:123456@192.168.56.23:8848?namespace=DEV
+  monitor:
+  #  protocol: registry
+  application:
+    name: ${hp.soa.web.app.name}
+    version: ${hp.soa.web.app.version}
+    owner: ${hp.soa.web.app.owner:}
+    organization: ${hp.soa.web.app.organization:}
+    qos-enable: false
+  consumer:
+    check: false
+    validation: false  # jvalidationNew
+    filter: "mdc"
+    retries: 1
+  provider:
+    validation: false  # jvalidationNew
+    delay: -1
 
 # logging
 logging.config: classpath:log4j2-kafka.xml
