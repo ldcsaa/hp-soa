@@ -15,6 +15,7 @@ import org.apache.dubbo.rpc.Result;
 import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.RpcContextAttachment;
 import org.apache.dubbo.rpc.RpcException;
+import org.apache.dubbo.rpc.RpcServiceContext;
 
 import static org.apache.dubbo.common.constants.CommonConstants.CONSUMER;
 import static org.apache.dubbo.common.constants.CommonConstants.PROVIDER;
@@ -27,8 +28,8 @@ public class DubboMdcFilter implements Filter
 	@Override
 	public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException
 	{
-		RpcContext ctx		= RpcContext.getServiceContext();
-		boolean isConsumer	= ctx.isConsumerSide();
+		RpcServiceContext ctx = RpcContext.getServiceContext();
+		boolean isConsumer	  = ctx.isConsumerSide();
 		final RpcContextAttachment ctxAttach = isConsumer
 											 ? RpcContext.getClientAttachment()
 											 : RpcContext.getServerAttachment();
