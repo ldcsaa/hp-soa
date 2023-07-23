@@ -8,9 +8,9 @@ import com.github.hpsocket.soa.starter.web.properties.SecurityProperties;
 import com.github.hpsocket.soa.starter.web.properties.WebProperties;
 import com.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
+@AutoConfiguration
 public class WebConfig implements WebMvcConfigurer
 {
 	private final WebProperties webProperties;

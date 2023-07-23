@@ -141,7 +141,7 @@
 				<filtering>false</filtering>
 				<includes>
 					<include>**/*.json</include>
-		    		<include>**/*.factories</include>
+		    		<include>**/*.imports</include>
 		    		<include>**/*.Filter</include>
 				</includes>
 			</resource>

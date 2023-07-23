@@ -31,10 +31,11 @@ dubbo:
   protocol:
     name: dubbo
     port: 6001
-  #registry:
-  #  file: "/data/dubbo/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
+  registry:
+    file: "/data/dubbo/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
   application:
     qos-port: 7001
+    qos-enable: false
     name: ${hp.soa.web.app.name}
     version: ${hp.soa.web.app.version}
     owner: ${hp.soa.web.app.owner:}
