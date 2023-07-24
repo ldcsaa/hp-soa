@@ -22,13 +22,17 @@ import static org.apache.dubbo.common.constants.CommonConstants.PROVIDER;
 
 import static com.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 
-@Activate(group = {CONSUMER, PROVIDER}, order = (Integer.MIN_VALUE - 1000))
+@Activate(group = {CONSUMER, PROVIDER}, order = (Integer.MIN_VALUE + 1000))
 public class DubboMdcFilter implements Filter
 {
 	@Override
 	public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException
 	{
 		RpcServiceContext ctx = RpcContext.getServiceContext();
+		
+		if(ctx.getUrl() == null)
+			return invoker.invoke(invocation);
+		
 		boolean isConsumer	  = ctx.isConsumerSide();
 		final RpcContextAttachment ctxAttach = isConsumer
 											 ? RpcContext.getClientAttachment()
