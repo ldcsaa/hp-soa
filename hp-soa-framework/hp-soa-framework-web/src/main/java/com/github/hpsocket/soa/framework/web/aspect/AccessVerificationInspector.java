@@ -116,7 +116,7 @@ public class AccessVerificationInspector
 		String appCode = reqAttr.getAppCode();
 		
 		if(GeneralHelper.isStrEmpty(appCode))
-			return new Response<>("缺少参数：appCode", VALIDATE_ERROR);
+			return new Response<>("缺少参数：appCode", PARAM_VALIDATION_ERROR);
 		
 		if(!accessVerificationService.verifyAppCode(appCode))
 			return new Response<>(APPCODE_NOT_EXIST_EXCEPTION);

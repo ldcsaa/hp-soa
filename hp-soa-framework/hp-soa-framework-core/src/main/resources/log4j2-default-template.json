@@ -32,8 +32,10 @@
                                         "at org.h2",
                                         "at org.eclipse",
                                         "at org.richfaces",
-                                        "at java.lang.reflect.Method",
-                                        "at java.base/java.lang.reflect.Method",
+                                        "at java.lang.reflect",
+                                        "at java.base/java.lang.reflect",
+                                        "at jdk.internal.reflect",
+                                        "at java.base/jdk.internal.reflect",
                                         "at com.sun",
                                         "at javax.servlet",
                                         "at jakarta.servlet"

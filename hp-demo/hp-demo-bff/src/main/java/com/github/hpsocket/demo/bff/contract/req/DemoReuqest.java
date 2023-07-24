@@ -20,7 +20,7 @@ public class DemoReuqest {
      * <p>@NotBlank Validation 校验注解</p>
      * <p>@ApiModelProperty Swagger Model Property 注解</p>
      */
-    @NotBlank(message = "name is empty")
+    //@NotBlank(message = "name is empty")
     @Schema(description = "姓名", example = "my name", requiredMode = RequiredMode.REQUIRED, minLength = 1, nullable = false)
     private String name;
     /**

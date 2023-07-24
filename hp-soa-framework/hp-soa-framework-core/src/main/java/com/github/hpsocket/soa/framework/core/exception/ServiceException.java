@@ -18,7 +18,7 @@ public class ServiceException extends RuntimeException
 	/** 服务器内部错误 */
 	public static final int GENERAL_ERROR			= 500;
 	/** 参数验证错误 */
-	public static final int VALIDATE_ERROR			= 501;
+	public static final int PARAM_VALIDATION_ERROR	= 501;
 	/** 接口已关闭 */
 	public static final int NOT_IMPLEMENTED			= 502;
 	/** 频次超限 */
@@ -56,7 +56,7 @@ public class ServiceException extends RuntimeException
 	public static final ServiceException NOT_EXIST_EXCEPTION		= new ServiceException("对象不存在", NOT_EXIST);
 	public static final ServiceException PARAM_VERIFY_EXCEPTION		= new ServiceException("参数校验失败", PARAM_VERIFY_ERROR);
 	public static final ServiceException GENERAL_EXCEPTION			= new ServiceException("服务器内部错误", GENERAL_ERROR);
-	public static final ServiceException VALIDATE_EXCEPTION			= new ServiceException("参数验证错误", VALIDATE_ERROR);
+	public static final ServiceException PARAM_VALIDATION_EXCEPTION	= new ServiceException("参数验证错误", PARAM_VALIDATION_ERROR);
 	public static final ServiceException NOT_IMPLEMENTED_EXCEPTION	= new ServiceException("接口未实现", NOT_IMPLEMENTED);
 	public static final ServiceException APPCODE_NOT_EXIST_EXCEPTION= new ServiceException("应用程序编号不存在", APPCODE_NOT_EXIST_ERROR);
 	public static final ServiceException APPCODE_EXIST_EXCEPTION	= new ServiceException("应用程序编号已存在", APPCODE_EXIST_ERROR);
@@ -212,17 +212,17 @@ public class ServiceException extends RuntimeException
 
 	public static final ServiceException wrapValidateException(String message)
 	{
-		return new ServiceException(message, VALIDATE_ERROR);
+		return new ServiceException(message, PARAM_VALIDATION_ERROR);
 	}
 
 	public static final void throwValidateException(String format, Object... args)
 	{
-		throwFormattedServiceException(VALIDATE_EXCEPTION, format, args);
+		throwFormattedServiceException(PARAM_VALIDATION_EXCEPTION, format, args);
 	}
 
 	public static final ServiceException wrapValidateException(String format, Object... args)
 	{
-		return wrapFormattedServiceException(VALIDATE_EXCEPTION, format, args);
+		return wrapFormattedServiceException(PARAM_VALIDATION_EXCEPTION, format, args);
 	}
 
 	public static void logException(Logger logger, Throwable e)

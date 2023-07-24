@@ -4,6 +4,7 @@ package com.github.hpsocket.soa.framework.web.server.main;
 import com.github.hpsocket.soa.framework.web.server.init.ServerInitializer;
 import com.github.hpsocket.soa.framework.web.support.YamlPropertySourceFactory;
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 
+@EnableDubbo
 @EnableAutoConfiguration
 @SpringBootApplication(exclude = {	SecurityAutoConfiguration.class,
 									DataSourceAutoConfiguration.class,

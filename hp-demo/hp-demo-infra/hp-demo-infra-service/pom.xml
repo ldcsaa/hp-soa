@@ -25,11 +25,6 @@
 			<groupId>com.github.hpsocket</groupId>
 			<artifactId>hp-soa-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
-		</dependency>
-
 	</dependencies>
 
 	<build>

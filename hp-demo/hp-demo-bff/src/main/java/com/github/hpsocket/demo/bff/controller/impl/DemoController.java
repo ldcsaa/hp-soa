@@ -48,12 +48,11 @@ public class DemoController implements IDemoController
         
     	System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
     	
-    	String rs1 = demoService.sayHello("Kingfisher");
-    	String rs2 = demoService.sayHello("");
+    	String name = demoService.sayHello(request.getName());
 
         DemoResponse resp = new DemoResponse();
         resp.setId(1001L);
-        resp.setName(request.getName());
+        resp.setName(name);
         resp.setAge(request.getAge());
         resp.setToken("41784a5039322bbe55a8bf8ce29b9280");
 
