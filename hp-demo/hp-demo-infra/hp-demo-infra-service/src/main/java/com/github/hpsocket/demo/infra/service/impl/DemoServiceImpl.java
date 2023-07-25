@@ -17,7 +17,23 @@ public class DemoServiceImpl implements DemoService
 		MdcAttr mdc = MdcAttr.fromMdc();
 		log.info("MDC: {}", mdc.getCtxMap());
 		
+		if(name.length() < 4)
+			throw new DemoException("Just test exception: name length < 4");
+		
 		return "Hello Mr. " + name; 
 	}
 
+	@SuppressWarnings("serial")
+	public static class DemoException extends RuntimeException
+	{
+		public DemoException()
+		{
+			super();
+		}
+		
+		public DemoException(String msg)
+		{
+			super(msg);
+		}
+	}
 }

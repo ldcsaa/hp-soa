@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.github.hpsocket</groupId>
 		<artifactId>hp-soa-framework</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 	<artifactId>hp-soa-framework-core</artifactId>
 	<name>${project.artifactId}</name>

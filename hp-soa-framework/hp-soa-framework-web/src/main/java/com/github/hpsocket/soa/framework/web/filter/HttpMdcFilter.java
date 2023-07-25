@@ -70,6 +70,10 @@ public class HttpMdcFilter implements Filter
 		mdcAttr.setServiceName(AppConfigHolder.getAppName());
 		mdcAttr.setServiceAddr(AppConfigHolder.getAppAddress());
 		
+		mdcAttr.setFromServiceId(AppConfigHolder.getAppId());
+		mdcAttr.setFromServiceName(AppConfigHolder.getAppName());
+		mdcAttr.setFromServiceAddr(AppConfigHolder.getAppAddress());
+		
 		if(GeneralHelper.isStrNotEmpty(AppConfigHolder.getAppOrganization()))
 			mdcAttr.setOrganization(AppConfigHolder.getAppOrganization());
 		if(GeneralHelper.isStrNotEmpty(AppConfigHolder.getAppOwner()))

@@ -23,8 +23,10 @@ import static org.apache.dubbo.common.constants.CommonConstants.PROVIDER;
 import static com.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 
 @Activate(group = {CONSUMER, PROVIDER}, order = (Integer.MIN_VALUE + 1000))
-public class DubboMdcFilter implements Filter
+public class DubboMdcFilter implements Filter, Filter.Listener
 {
+	private static final ThreadLocal<Boolean> GEN_APP_ID = new ThreadLocal<>();
+	
 	@Override
 	public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException
 	{
@@ -33,11 +35,11 @@ public class DubboMdcFilter implements Filter
 		if(ctx.getUrl() == null)
 			return invoker.invoke(invocation);
 		
-		boolean isConsumer	  = ctx.isConsumerSide();
+		boolean isConsumer = ctx.isConsumerSide();
 		final RpcContextAttachment ctxAttach = isConsumer
 											 ? RpcContext.getClientAttachment()
 											 : RpcContext.getServerAttachment();
-		boolean genAppId	= false;
+		GEN_APP_ID.set(Boolean.FALSE);
 	
 		try
 		{
@@ -51,8 +53,12 @@ public class DubboMdcFilter implements Filter
 					if(GeneralHelper.isStrNotEmpty(val))
 						ctxAttach.setAttachment(key, val);
 					else if(key.equals(MDC_APP_ID_KEY))
-						genAppId = true;
+						GEN_APP_ID.set(Boolean.TRUE);
 				}
+				
+				ctxAttach.setAttachment(MDC_FROM_SERVICE_ID_KEY, AppConfigHolder.getAppId());
+				ctxAttach.setAttachment(MDC_FROM_SERVICE_NAME_KEY, AppConfigHolder.getAppName());
+				ctxAttach.setAttachment(MDC_FROM_SERVICE_ADDR_KEY, AppConfigHolder.getAppAddress());
 			}
 			else
 			{
@@ -64,7 +70,7 @@ public class DubboMdcFilter implements Filter
 					if(GeneralHelper.isStrNotEmpty(val))
 						MDC.put(key, val);
 					else if(key.equals(MDC_APP_ID_KEY))
-						genAppId = true;
+						GEN_APP_ID.set(Boolean.TRUE);
 				}
 				
 				MDC.put(MDC_SERVICE_ID_KEY, AppConfigHolder.getAppId());
@@ -75,9 +81,13 @@ public class DubboMdcFilter implements Filter
 					MDC.put(MDC_ORG_KEY, AppConfigHolder.getAppOrganization());
 				if(GeneralHelper.isStrNotEmpty(AppConfigHolder.getAppOwner()))
 					MDC.put(MDC_OWNER_KEY, AppConfigHolder.getAppOwner());
+				
+				MDC.put(MDC_FROM_SERVICE_ID_KEY, ctxAttach.getAttachment(MDC_FROM_SERVICE_ID_KEY));
+				MDC.put(MDC_FROM_SERVICE_NAME_KEY, ctxAttach.getAttachment(MDC_FROM_SERVICE_NAME_KEY));
+				MDC.put(MDC_FROM_SERVICE_ADDR_KEY, ctxAttach.getAttachment(MDC_FROM_SERVICE_ADDR_KEY));
 			}
 			
-			if(genAppId)
+			if(GEN_APP_ID.get())
 			{
 				String appId	= AppConfigHolder.getAppId();
 				String appName	= AppConfigHolder.getAppName();
@@ -92,25 +102,51 @@ public class DubboMdcFilter implements Filter
 		}
 		finally
 		{
-			if(isConsumer)
-			{
-				Arrays.stream(TRANSFER_MDC_KEYS).forEach((key) -> ctxAttach.removeAttachment(key));
 
-				if(genAppId)
-				{
-					MDC.remove(MDC_APP_ID_KEY);
-					MDC.remove(MDC_APP_NAME_KEY);
-				}
-			}
-			else
+		}
+	}
+
+	@Override
+	public void onResponse(Result appResponse, Invoker<?> invoker, Invocation invocation)
+	{
+		afterInvoke();
+	}
+
+	@Override
+	public void onError(Throwable t, Invoker<?> invoker, Invocation invocation)
+	{
+		afterInvoke();
+	}
+	
+	private void afterInvoke()
+	{
+		RpcServiceContext ctx = RpcContext.getServiceContext();
+		
+		if(ctx.getUrl() == null)
+			return;
+		
+		boolean isConsumer = ctx.isConsumerSide();
+		final RpcContextAttachment ctxAttach = isConsumer
+											 ? RpcContext.getClientAttachment()
+											 : RpcContext.getServerAttachment();
+		if(isConsumer)
+		{
+			Arrays.stream(TRANSFER_MDC_ALL_KEYS).forEach((key) -> ctxAttach.removeAttachment(key));
+			
+			if(GEN_APP_ID.get())
 			{
-				Arrays.stream(TRANSFER_MDC_KEYS).forEach((key) -> MDC.remove(key));
-				
-				if(genAppId)
-				{
-					ctxAttach.removeAttachment(MDC_APP_ID_KEY);
-					ctxAttach.removeAttachment(MDC_APP_NAME_KEY);
-				}
+				MDC.remove(MDC_APP_ID_KEY);
+				MDC.remove(MDC_APP_NAME_KEY);
+			}
+		}
+		else
+		{
+			Arrays.stream(TRANSFER_MDC_ALL_KEYS).forEach((key) -> MDC.remove(key));
+			
+			if(GEN_APP_ID.get())
+			{
+				ctxAttach.removeAttachment(MDC_APP_ID_KEY);
+				ctxAttach.removeAttachment(MDC_APP_NAME_KEY);
 			}
 		}
 	}

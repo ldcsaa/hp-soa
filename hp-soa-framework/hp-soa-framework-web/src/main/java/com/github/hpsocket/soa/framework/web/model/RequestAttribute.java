@@ -17,7 +17,7 @@ public class RequestAttribute
 	private String sessionId;
 	private Long groupId;
 	
-	private String remoteIp;
+	private String clientAddr;
 	private String requestUri;
 	private String requestPath;
 	private String requestMethod;

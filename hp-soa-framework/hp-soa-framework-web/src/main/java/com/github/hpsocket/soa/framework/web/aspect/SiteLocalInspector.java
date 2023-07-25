@@ -23,7 +23,7 @@ public class SiteLocalInspector
 	@Before(value = "beforeMethod()")
 	public void verifyRequestIP(JoinPoint point)
 	{
-		String ip = RequestContext.getRemoteIp();
+		String ip = RequestContext.getClientAddr();
 		
 		if(!SystemUtil.isLocalNetwork(ip))
 			throw FORBID_EXCEPTION;

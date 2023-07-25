@@ -106,9 +106,9 @@ public class RequestContext
 		return getRequestAttribute().getClientId();
 	}
 
-	public static final String getRemoteIp()
+	public static final String getClientAddr()
 	{
-		return getRequestAttribute().getRemoteIp();
+		return getRequestAttribute().getClientAddr();
 	}
 
 	public static final String getRequestUri()
@@ -205,7 +205,7 @@ public class RequestContext
 														GeneralHelper.str2Long(groupId));
 		reqAttr.setVersion(version);
 		reqAttr.setExtra(extra);
-		reqAttr.setRemoteIp(WebServerHelper.getIpAddr(request));
+		reqAttr.setClientAddr(WebServerHelper.getIpAddr(request));
 		reqAttr.setRequestUri(requestUri);
 		reqAttr.setRequestPath(requestPath);
 		reqAttr.setRequestMethod(requestMethod);

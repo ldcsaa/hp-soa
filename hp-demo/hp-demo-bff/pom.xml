@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.hpsocket</groupId>
         <artifactId>hp-demo</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>hp-demo-bff</artifactId>
     <name>${project.artifactId}</name>

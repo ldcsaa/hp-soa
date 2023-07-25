@@ -1,0 +1,12 @@
+
+PUT _ingest/pipeline/hp-soa-geoip-pipeline
+{
+  "description" : "process hp-soa geoip info",
+  "processors" : [
+    {
+      "geoip" : {
+        "field" : "clientAddr"
+      }
+    }
+  ]
+}

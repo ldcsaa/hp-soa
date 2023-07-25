@@ -6,13 +6,14 @@
 	<groupId>com.github.hpsocket</groupId>
 	<artifactId>hp-soa-parent</artifactId>
 	<name>${project.artifactId}</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${revision}</version>
 	<packaging>pom</packaging>
 
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<hp-soa.version>0.0.1-SNAPSHOT</hp-soa.version>
+		<revision>0.0.1-SNAPSHOT</revision>
+		<hp-soa.version>${revision}</hp-soa.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>17</maven.compiler.source>       
@@ -40,6 +41,7 @@
 		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
 		<maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
 		<spring-boot-maven-plugin.version>3.1.1</spring-boot-maven-plugin.version>
+		<flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
 		<docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
 
 		<maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
@@ -376,6 +378,37 @@
 	                    </execution>
 	                </executions>
 	            </plugin>
+	            
+	            <plugin>
+	                <groupId>org.codehaus.mojo</groupId>
+	                <artifactId>flatten-maven-plugin</artifactId>
+	                <version>${flatten-maven-plugin.version}</version>
+	                <executions>
+	                    <execution>
+	                        <id>flatten</id>
+	                        <phase>process-resources</phase>
+	                        <goals>
+	                            <goal>flatten</goal>
+	                        </goals>
+	                        <configuration>
+	                            <updatePomFile>true</updatePomFile>
+	                            <flattenMode>resolveCiFriendliesOnly</flattenMode>
+	                        </configuration>
+	                    </execution>
+	                    <execution>
+	                        <id>flatten.clean</id>
+	                        <phase>clean</phase>
+	                        <goals>
+	                            <goal>clean</goal>
+	                        </goals>
+	                    </execution>
+	                </executions>
+	                <inherited>true</inherited>
+	                <configuration>
+	                    <updatePomFile>true</updatePomFile>
+	                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+	                </configuration>
+	            </plugin>
 
 		        <plugin>
 		            <groupId>io.fabric8</groupId>
@@ -419,6 +452,14 @@
 		        </plugin>
 			</plugins>
 		</pluginManagement>
+		
+		<plugins>
+			<plugin>
+	        	<groupId>org.codehaus.mojo</groupId>
+	        	<artifactId>flatten-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+		
 	</build>
 
 </project>

@@ -24,6 +24,10 @@ public class MdcAttr
 	public static final String MDC_ORG_KEY			= "__organization";
 	public static final String MDC_OWNER_KEY		= "__owner";
 	
+	public static final String MDC_FROM_SERVICE_ID_KEY		= "__fromServiceId";
+	public static final String MDC_FROM_SERVICE_NAME_KEY	= "__fromServiceName";
+	public static final String MDC_FROM_SERVICE_ADDR_KEY	= "__fromServiceAddr";
+	
 	public static final String TRANSFER_MDC_KEYS[] = {
 					MDC_REQUEST_ID_KEY,
 					MDC_CLIENT_ID_KEY,
@@ -37,26 +41,25 @@ public class MdcAttr
 					MDC_APP_ID_KEY,
 					MDC_APP_NAME_KEY
 	};
-
+	
+	public static final String TRANSFER_MDC_ALL_KEYS[] = {
+					MDC_REQUEST_ID_KEY,
+					MDC_CLIENT_ID_KEY,
+					MDC_SESSION_ID_KEY,
+					MDC_APP_CODE_KEY,
+					MDC_SRC_APP_CODE_KEY,
+					MDC_TOKEN_KEY,
+					MDC_USER_ID_KEY,
+					MDC_GROUP_ID_KEY,
+					MDC_EXTRA_KEY,
+					MDC_APP_ID_KEY,
+					MDC_APP_NAME_KEY,
+					MDC_FROM_SERVICE_ID_KEY,
+					MDC_FROM_SERVICE_NAME_KEY,
+					MDC_FROM_SERVICE_ADDR_KEY
+	};
 	
 	Map<String, String> ctxMap;
-
-	/*
-	public String clientId;
-	public String requestId;
-	public String sessionId;
-	public String token;
-	public String appCode;
-	public String srcAppCode;
-	
-	public String appId;
-	public String appName;
-	public String serviceId;
-	public String serviceName;
-	public String serviceAddr;
-	public String organization;
-	public String owner;
-	*/
 	
 	public MdcAttr()
 	{
@@ -254,6 +257,36 @@ public class MdcAttr
 	public void setServiceAddr(String serviceAddr)
 	{
 		set(MDC_SERVICE_ADDR_KEY, serviceAddr);
+	}
+
+	public String getFromServiceId()
+	{
+		return get(MDC_FROM_SERVICE_ID_KEY);
+	}
+
+	public void setFromServiceId(String fromServiceId)
+	{
+		set(MDC_FROM_SERVICE_ID_KEY, fromServiceId);
+	}
+
+	public String getFromServiceName()
+	{
+		return get(MDC_FROM_SERVICE_NAME_KEY);
+	}
+
+	public void setFromServiceName(String fromServiceName)
+	{
+		set(MDC_FROM_SERVICE_NAME_KEY, fromServiceName);
+	}
+
+	public String getFromServiceAddr()
+	{
+		return get(MDC_FROM_SERVICE_ADDR_KEY);
+	}
+
+	public void setFromServiceAddr(String fromServiceAddr)
+	{
+		set(MDC_FROM_SERVICE_ADDR_KEY, fromServiceAddr);
 	}
 
 	public String getOrganization()

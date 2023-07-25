@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.logging.log4j.core.config.Order;
 import com.github.hpsocket.soa.framework.core.exception.ServiceException;
-import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import com.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.core.util.Pair;
@@ -178,9 +177,10 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 				if(json == null)
 					json = new JSONObject();
 			
-				MdcAttr mdcAttr = getMdcAttr();
-
 				jsonLog.put("monitorLogType", MONITOR_INGRESS_LOG_TYPE);
+
+				/*
+				MdcAttr mdcAttr = getMdcAttr();
 				jsonLog.put("appId", mdcAttr.getAppId());
 				jsonLog.put("appName", mdcAttr.getAppName());
 				jsonLog.put("serviceId", mdcAttr.getServiceId());
@@ -188,6 +188,10 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 				jsonLog.put("serviceAddr", mdcAttr.getServiceAddr());
 				jsonLog.put("organization", mdcAttr.getOrganization());
 				jsonLog.put("owner", mdcAttr.getOwner());
+				jsonLog.put("fromServiceId", mdcAttr.getFromServiceId());
+				jsonLog.put("fromServiceName", mdcAttr.getFromServiceName());
+				jsonLog.put("fromServiceAddr", mdcAttr.getFromServiceAddr());
+				*/
 				
 				@SuppressWarnings("unchecked")
 				final Map<String, ?> reqAttr = BeanMap.create(requestAttribute);;
