@@ -8,11 +8,9 @@ import com.github.hpsocket.soa.framework.web.service.AccessVerificationService;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 
 @AutoConfiguration
-@EnableAspectJAutoProxy(proxyTargetClass = true)
 @Import({
 			SiteLocalInspector.class
         })
@@ -23,5 +21,5 @@ public class AspectAopConfig
 	AccessVerificationInspector accessVerificationInspector(IAccessVerificationProperties accessVerificationProperties, AccessVerificationService accessVerificationService)
 	{
 		return new AccessVerificationInspector(accessVerificationProperties.getDefaultAccessPolicyEnum(), accessVerificationService);
-	}
+	}	
 }

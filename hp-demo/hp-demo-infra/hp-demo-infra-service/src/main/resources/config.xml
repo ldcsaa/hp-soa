@@ -10,8 +10,10 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <!-- scan packages -->
+    <!--
     <context:component-scan base-package="${hp.soa.web.component-scan.base-package}"/>
     <aop:aspectj-autoproxy expose-proxy="true" proxy-target-class="true"/>
+    -->
 
     <task:annotation-driven executor="asyncExecutor"/>
     <task:executor id="asyncExecutor" pool-size="2-10" queue-capacity="1000" keep-alive="60" rejection-policy="CALLER_RUNS"/>
@@ -19,8 +21,10 @@
     <!-- - - - - - - - - - - 应用程序私有配置 - - - - - - - - - - -->
 
     <!-- App Import Beans -->
+    
 	<!--
     <import resource="classpath:dubbo.xml"/>
     -->
+    
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
 </beans>
