@@ -232,7 +232,7 @@ PUT _index_template/hp-soa-template
                 "method": {
                     "type": "text"
                 },
-                "monitorLogType": {
+                "monitor_type": {
                     "type": "keyword"
                 },
                 "msg": {

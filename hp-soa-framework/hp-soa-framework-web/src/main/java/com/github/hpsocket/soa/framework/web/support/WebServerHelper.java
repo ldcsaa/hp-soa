@@ -62,18 +62,18 @@ public class WebServerHelper
 	public static final Pattern DOMAIN_PATTERN	= Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
 	public static final Pattern SPIDER_PATTERN	= Pattern.compile(".*(Googlebot|Baiduspider|Yahoo\\!\\ Slurp|iaskspider|YodaoBot|msnbot|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
 	
-	public static final String MONITOR_LOGGER_NAME			= "SOA-MONITOR";
-	public static final String MONITOR_INGRESS_LOG_TYPE		= "MONITOR-INGRESS";
-	public static final String MONITOR_EGRESS_LOG_TYPE		= "MONITOR-EGRESS";
+	public static final String MONITOR_LOGGER_NAME	= "SOA-MONITOR";
+	public static final String MONITOR_INGRESS		= "MONITOR-INGRESS";
+	public static final String MONITOR_EGRESS		= "MONITOR-EGRESS";
 
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT		= {JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNonStringKeyAsString};
 	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL	= {JSONWriter.Feature.WriteNonStringKeyAsString};
 	
-	public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor(	5,
-																						20,
+	public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor(	4,
+																						16,
 																						60,
 																						TimeUnit.SECONDS,
-																						new LinkedBlockingDeque<>(5000),
+																						new LinkedBlockingDeque<>(6000),
 																						new ThreadPoolExecutor.CallerRunsPolicy());																		 
 
 	public static final boolean checkUserAgent(String ua)

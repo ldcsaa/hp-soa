@@ -177,7 +177,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 				if(json == null)
 					json = new JSONObject();
 			
-				jsonLog.put("monitorLogType", MONITOR_INGRESS_LOG_TYPE);
+				jsonLog.put("monitor_type", MONITOR_INGRESS);
 
 				/*
 				MdcAttr mdcAttr = getMdcAttr();
