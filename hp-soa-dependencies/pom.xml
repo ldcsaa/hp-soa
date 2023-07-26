@@ -79,8 +79,9 @@
 		<junit.version>4.13.2</junit.version>
 		<junit5.version>5.9.3</junit5.version>
 
-		<fastjson.version>2.0.36</fastjson.version>
-		<fastjson2.version>2.0.34</fastjson2.version>
+		<fastjson.version>2.0.37</fastjson.version>
+		<fastjson2.version>2.0.37</fastjson2.version>
+		<protobuf-java.version>3.23.4</protobuf-java.version>
 		<cglib.version>3.3.0</cglib.version>
 		<quartz.version>2.3.2</quartz.version>
 		<httpclient.version>4.5.14</httpclient.version>
@@ -714,6 +715,12 @@
 				<groupId>com.alibaba.fastjson2</groupId>
 				<artifactId>fastjson2</artifactId>
 				<version>${fastjson2.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>com.google.protobuf</groupId>
+			    <artifactId>protobuf-java</artifactId>
+			    <version>${protobuf-java.version}</version>
 			</dependency>
 
 			<dependency>

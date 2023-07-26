@@ -28,9 +28,13 @@ logging.config: classpath:log4j2-kafka.xml
 # dubbo
 dubbo:
   scan.base-packages: ${hp.soa.web.component-scan.base-package}
-  protocol:
-    name: dubbo
-    port: 6002
+  protocols:
+    #dubbo:
+    #  name: dubbo
+    #  port: 5002
+    tri:
+      name: tri
+      port: 6002
   registry:
     file: "/data/dubbo/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
   application:

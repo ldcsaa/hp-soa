@@ -47,15 +47,26 @@
 		    <artifactId>dubbo-qos</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>com.alibaba.nacos</groupId>
-		    <artifactId>nacos-client</artifactId>
-		</dependency>
-		<dependency>
 		    <groupId>org.apache.kafka</groupId>
 		    <artifactId>kafka-clients</artifactId>
 		</dependency>
-			
-		<!--
+		
+		<dependency>
+			<groupId>com.alibaba.fastjson2</groupId>
+			<artifactId>fastjson2</artifactId>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.google.protobuf</groupId>
+		    <artifactId>protobuf-java</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.blueconic</groupId>
+		    <artifactId>browscap-java</artifactId>
+		</dependency>
+
+			<!--
 		<dependency>
 		    <groupId>jakarta.validation</groupId>
 		    <artifactId>jakarta.validation-api</artifactId>
@@ -69,24 +80,6 @@
 		<dependency>
 		    <groupId>jakarta.el</groupId>
 		    <artifactId>jakarta.el-api</artifactId>
-		</dependency>
-		-->
-		<!--
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.el</groupId>
-			<artifactId>javax.el-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
 		</dependency>
 		-->
 
@@ -216,11 +209,6 @@
 		<dependency>
 		    <groupId>org.springdoc</groupId>
 		    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-		</dependency>
-
-		<dependency>
-		    <groupId>com.blueconic</groupId>
-		    <artifactId>browscap-java</artifactId>
 		</dependency>
 	</dependencies>
 </project>

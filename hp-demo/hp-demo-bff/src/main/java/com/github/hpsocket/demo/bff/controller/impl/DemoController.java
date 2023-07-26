@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
  * <p>@RestController  Spring MVC Rest Controller 注解 </p>
  */
 @Slf4j
-@AccessVerification(Type.NO_LOGIN)
 @RestController
+@AccessVerification(Type.NO_LOGIN)
 public class DemoController implements IDemoController
 {
     //@Autowired
