@@ -1732,7 +1732,7 @@ public class GeneralHelper
 	
 	public static final boolean isNullOrNan(Double n)
 	{
-		return n == null || n.equals(Float.NaN);
+		return n == null || n.equals(Double.NaN);
 	}
 	
 	public static final boolean isNotNullAndNan(Float n)

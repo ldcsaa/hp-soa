@@ -22,9 +22,7 @@
 
     <!-- App Import Beans -->
     
-	<!--
     <import resource="classpath:dubbo.xml"/>
-    -->
     
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
 </beans>
