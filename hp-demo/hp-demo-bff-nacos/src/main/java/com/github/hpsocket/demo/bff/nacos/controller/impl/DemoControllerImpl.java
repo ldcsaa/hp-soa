@@ -1,9 +1,9 @@
-package com.github.hpsocket.demo.bff.controller.impl;
+package com.github.hpsocket.demo.bff.nacos.controller.impl;
 
-import com.github.hpsocket.demo.bff.contract.req.DemoReuqest;
-import com.github.hpsocket.demo.bff.contract.resp.DemoResponse;
-import com.github.hpsocket.demo.bff.controller.IDemoController;
-import com.github.hpsocket.demo.infra.service.DemoService;
+import com.github.hpsocket.demo.bff.nacos.contract.req.DemoReuqest;
+import com.github.hpsocket.demo.bff.nacos.contract.resp.DemoResponse;
+import com.github.hpsocket.demo.bff.nacos.controller.DemoController;
+import com.github.hpsocket.demo.infra.nacos.service.DemoService;
 import com.github.hpsocket.soa.framework.web.advice.RequestContext;
 import com.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import com.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
@@ -26,11 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @AccessVerification(Type.NO_LOGIN)
-public class DemoController implements IDemoController
+public class DemoControllerImpl implements DemoController
 {
-    //@Autowired
-    //IDemoService demoService;	
-	
 	@DubboReference
 	DemoService demoService;
 
@@ -42,7 +39,6 @@ public class DemoController implements IDemoController
      */
     @Override
     @AccessVerification(Type.REQUIRE_LOGIN)
-   // @FrequencyLimit(forbid = 3, type = Type.IP, value = 5)
     public Response<DemoResponse> queryUser(@RequestBody @Valid DemoReuqest request) {
         /** 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
         
@@ -58,18 +54,13 @@ public class DemoController implements IDemoController
 
         log.debug(resp.toString());
 
-        //log.debug(demoService.sayHello(request.getName()));
-
         Response<DemoResponse> response = new Response<>(resp);
-        //response.setReturnType(Response.RT_LOGIN);
-
         return response;
     }
     
     @Override
     public Object test(@Valid DemoReuqest request)
     {
-    	// TODO Auto-generated method stub
     	return "test";
     }
 }

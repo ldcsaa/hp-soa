@@ -16,7 +16,9 @@
 	
 	<modules>
 		<module>hp-demo-bff</module>
+		<module>hp-demo-bff-nacos</module>
 		<module>hp-demo-infra</module>
+		<module>hp-demo-infra-nacos</module>
 	</modules>
 
 	<dependencyManagement>

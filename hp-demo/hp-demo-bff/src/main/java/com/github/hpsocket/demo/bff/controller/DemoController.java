@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @RequestMapping(value = "/demo", method = {RequestMethod.POST})
 @Tag(name = "示例Demo接口")
-public interface IDemoController {
+public interface DemoController {
     /**
      * <p>@PostMapping Spring MVC Post Mapping 注解</p>
      * <p>@ApiOperation Swagger API 接口方法注解 </p>

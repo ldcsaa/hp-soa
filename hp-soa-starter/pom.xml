@@ -18,6 +18,7 @@
 	
 	<modules>
 		<module>hp-soa-starter-web</module>
+		<module>hp-soa-starter-nacos</module>
 	</modules>
 	
 	<dependencyManagement>
