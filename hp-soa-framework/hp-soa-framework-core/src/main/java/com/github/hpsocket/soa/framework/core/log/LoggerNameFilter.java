@@ -56,7 +56,7 @@ public class LoggerNameFilter extends AbstractFilter
 
 	private Result filter(String name, final Level level)
 	{
-		if(this.name.matcher(name).matches() && level.isLessSpecificThan(this.level))
+		if(level.isLessSpecificThan(this.level) && this.name.matcher(name).matches())
 			return onMismatch;
 
 		return onMatch;

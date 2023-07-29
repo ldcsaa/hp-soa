@@ -36,7 +36,13 @@ spring.cloud.nacos.config:
       refresh: true
 
 # dubbo
-dubbo.protocols.tri.port: 6004
+dubbo.protocols:
+  #dubbo:
+  #  name: dubbo
+  #  port: 5004
+  tri:
+    name: tri
+    port: 6004
 
 # server
 server.port: 9004
