@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConditionalOnProperty(name = "spring.cloud.nacos.config.enabled", matchIfMissing = true)
-public class NacosProperties
+public class SoaNacosProperties
 {
 
 }

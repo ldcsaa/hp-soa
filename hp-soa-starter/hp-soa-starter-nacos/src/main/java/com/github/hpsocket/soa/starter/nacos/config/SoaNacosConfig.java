@@ -8,7 +8,7 @@ import com.alibaba.cloud.nacos.NacosConfigAutoConfiguration;
 
 @AutoConfiguration
 @ConditionalOnBean(NacosConfigAutoConfiguration.class)
-public class NacosConfig
+public class SoaNacosConfig
 {
 	
 }
