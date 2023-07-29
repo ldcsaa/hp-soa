@@ -1,1 +1,0 @@
-org.springframework.boot.env.EnvironmentPostProcessor=com.github.hpsocket.soa.starter.nacos.processor.NacosExternalPropertiesFilePostProcessor

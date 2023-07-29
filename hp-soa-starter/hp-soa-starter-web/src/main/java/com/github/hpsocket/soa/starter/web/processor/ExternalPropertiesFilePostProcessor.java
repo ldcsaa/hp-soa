@@ -1,12 +1,11 @@
-package com.github.hpsocket.soa.starter.nacos.processor;
+package com.github.hpsocket.soa.starter.web.processor;
 
 import java.io.IOException;
 
+import org.apache.dubbo.config.spring.context.event.DubboConfigInitEvent;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.boot.logging.DeferredLog;
-import org.springframework.boot.logging.DeferredLogFactory;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -18,42 +17,47 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.DefaultPropertySourceFactory;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
+import org.springframework.stereotype.Component;
 
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 
-public class NacosExternalPropertiesFilePostProcessor implements EnvironmentPostProcessor, Ordered, ApplicationListener<ApplicationEvent>
+@Component
+public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProcessor, Ordered, ApplicationListener<DubboConfigInitEvent>
 {
-	public  static final String NACOS_PROPERTIES_FILE_KEY = "nacos.properties.file";
+	public  static final String EXTERNAL_PROPERTIES_FILE_KEY = "hp.soa.config.file";
 	
-	private final DeferredLog logger;
-	
-	public NacosExternalPropertiesFilePostProcessor(DeferredLogFactory logFactory)
-	{
-		logger = (DeferredLog)logFactory.getLog(getClass());
-	}
+	private static final DeferredLog logger	= new DeferredLog();
+	private static boolean processed		= false;
 	
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application)
 	{
-        String filePath = environment.getProperty(NACOS_PROPERTIES_FILE_KEY);
+		if(processed)
+			return;
+
+		processed = true;
+		
+        String filePath = environment.getProperty(EXTERNAL_PROPERTIES_FILE_KEY);
         
         if(GeneralHelper.isStrEmpty(filePath))
         {
-        	logger.info("nacos not uses external properties file");
+        	logger.info("hp-soa not uses external properties file");
             return;
         }
-       
-        String resolvedLocation = environment.resolveRequiredPlaceholders(filePath);
-        resolvedLocation = "file:"+resolvedLocation;
+
+    	logger.info("hp-soa uses external properties file -> " + filePath);
+
+        String resolvedLocation = "file:" + environment.resolveRequiredPlaceholders(filePath);
         PropertySourceFactory factory = new DefaultPropertySourceFactory();
         Resource resource = new DefaultResourceLoader().getResource(resolvedLocation);
         
-        try {
+        try
+        {
             addPropertySource(factory.createPropertySource(filePath, new EncodedResource(resource)),environment);
         }
-        catch (IOException e)
+        catch(IOException e)
         {
-        	logger.error("load nacos external properties file fail [" + filePath + "] -> " + e.getMessage(), e);
+        	logger.error("hp-soa load external properties file fail [" + filePath + "] -> " + e.getMessage(), e);
             throw new RuntimeException(e);
         }
 	}
@@ -65,7 +69,7 @@ public class NacosExternalPropertiesFilePostProcessor implements EnvironmentPost
     }
 
 	@Override
-	public void onApplicationEvent(ApplicationEvent event)
+	public void onApplicationEvent(DubboConfigInitEvent event)
 	{
 		logger.replayTo(getClass());
 	}
