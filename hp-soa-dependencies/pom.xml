@@ -383,6 +383,11 @@
 			    <artifactId>sentinel-core</artifactId>
 			    <version>${sentinel.version}</version>
 			</dependency>
+	        <dependency>
+	            <groupId>com.alibaba.csp</groupId>
+	            <artifactId>sentinel-annotation-aspectj</artifactId>
+	            <version>${sentinel.version}</version>
+	        </dependency>
 			<dependency>
 			    <groupId>com.alibaba.csp</groupId>
 			    <artifactId>sentinel-datasource-nacos</artifactId>
