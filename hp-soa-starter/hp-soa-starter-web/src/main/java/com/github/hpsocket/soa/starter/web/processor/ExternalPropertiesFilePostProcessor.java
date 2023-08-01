@@ -24,7 +24,7 @@ import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 @Component
 public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProcessor, Ordered, ApplicationListener<DubboConfigInitEvent>
 {
-	public  static final String EXTERNAL_PROPERTIES_FILE_KEY = "hp.soa.config.file";
+	public  static final String EXTERNAL_PROPERTIES_FILE_KEY = "hp.soa.external.properties.file";
 	
 	private static final DeferredLog logger	= new DeferredLog();
 	private static boolean processed		= false;

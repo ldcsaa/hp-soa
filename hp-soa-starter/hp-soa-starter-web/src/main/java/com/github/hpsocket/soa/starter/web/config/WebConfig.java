@@ -42,7 +42,7 @@ public class WebConfig implements WebMvcConfigurer
 	public FilterRegistrationBean<HttpMdcFilter> mdcTracingFilterRegistration()
 	{
 		FilterRegistrationBean<HttpMdcFilter> registration = new FilterRegistrationBean<>();
-		registration.setFilter( new HttpMdcFilter());
+		registration.setFilter(new HttpMdcFilter());
 		registration.setName(HttpMdcFilter.DISPLAY_NAME);
 		registration.addUrlPatterns(HttpMdcFilter.URL_PATTERNS);
 		registration.setOrder(HttpMdcFilter.ORDER);

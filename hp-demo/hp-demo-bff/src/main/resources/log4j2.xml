@@ -4,6 +4,7 @@
     <Properties>
         <Property name="base.package">com.github.hpsocket.demo</Property>
         <Property name="logger.dao.pattern">com\.github\.hpsocket\.demo\..*\.dao\..+</Property>
+        <Property name="log.include.location">${sys:log4j.include.location:-true}</Property>
         <Property name="log.level">${sys:log4j.log.level:-DEBUG}</Property>
         <Property name="logfile.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}</Property>
         <Property name="logfile.max.size">100 MB</Property>
@@ -44,48 +45,48 @@
 
     <Loggers>
         <!-- Root Logger -->
-        <Root level="INFO">
+        <Root level="INFO" includeLocation="${log.include.location}">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Root>
         <!-- SOA-MONITOR Logger -->
-        <Logger name="SOA-MONITOR" level="${log.level}" additivity="false">
+        <Logger name="SOA-MONITOR" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="MONITOR_LOG_FILE"/>
         </Logger>
         <!-- Service Logger -->
-        <Logger name="${base.package}" level="${log.level}" additivity="false">
+        <Logger name="${base.package}" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
             <LoggerNameFilter name="${logger.dao.pattern}" level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Logger>
         <!-- Dubbo Logger -->
-        <Logger name="org.apache.dubbo" level="INFO" additivity="false">
+        <Logger name="org.apache.dubbo" level="INFO" includeLocation="${log.include.location}" additivity="false">
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Logger>
         <!-- XXL-JOB Logger -->
-        <Logger name="com.xxl.job" level="INFO" additivity="false">
+        <Logger name="com.xxl.job" level="INFO" includeLocation="${log.include.location}" additivity="false">
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Logger>
         <!-- MyBatis Logger -->
-        <Logger name="org.apache.ibatis" level="WARN" additivity="false">
+        <Logger name="org.apache.ibatis" level="WARN" includeLocation="${log.include.location}" additivity="false">
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Logger>
         <!-- JDBC Logger -->
-        <Logger name="java.sql" level="WARN" additivity="false">
+        <Logger name="java.sql" level="WARN" includeLocation="${log.include.location}" additivity="false">
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Logger>
         <!-- Spring JDBC Logger -->
-        <Logger name="org.springframework.jdbc" level="WARN" additivity="false">
+        <Logger name="org.springframework.jdbc" level="WARN" includeLocation="${log.include.location}" additivity="false">
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Logger>
         <!-- MongoDB -->
-        <Logger name="com.mongodb" level="WARN" additivity="false">
+        <Logger name="com.mongodb" level="WARN" includeLocation="${log.include.location}" additivity="false">
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Logger>
