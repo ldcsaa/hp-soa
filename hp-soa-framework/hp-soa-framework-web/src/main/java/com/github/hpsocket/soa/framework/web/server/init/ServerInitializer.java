@@ -1,9 +1,15 @@
 package com.github.hpsocket.soa.framework.web.server.init;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.IOException;
 import java.util.Properties;
+
+import org.springframework.core.env.PropertySource;
+import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.DefaultPropertySourceFactory;
+import org.springframework.core.io.support.EncodedResource;
+import org.springframework.core.io.support.PropertySourceFactory;
 
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.core.util.SystemUtil;
@@ -11,7 +17,6 @@ import com.github.hpsocket.soa.framework.core.util.SystemUtil;
 public class ServerInitializer
 {
 	private static final String SYSTEM_PROPERTIES_FILE_KEY							= "hp.soa.system.properties.file";
-	private static final String DEFAULT_SYSTEM_PROPERTIES_FILE						= "/data/hp-soa/config/system-config.properties";
 	private static final String LOCAL_IP_ADDRESS									= "local.ip.address";
 	private static final String LOG4J2_CONTEXT_SELECTOR								= "log4j2.contextSelector";
 	private static final String LOG4J2_CONTEXT_SELECTOR_VALUE						= "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector";
@@ -32,32 +37,37 @@ public class ServerInitializer
 	
 	private static void loadExternalSystemProperties()
 	{
-		String filePath = System.getProperty(SYSTEM_PROPERTIES_FILE_KEY);
-		
-		if(GeneralHelper.isStrEmpty(filePath))
-		{
-			filePath = System.getenv(SYSTEM_PROPERTIES_FILE_KEY);
-			
-			if(GeneralHelper.isStrEmpty(filePath))
-				filePath = DEFAULT_SYSTEM_PROPERTIES_FILE;
-		}
-		
-		File file = new File(filePath);
-		
-		if(!file.isFile())
-			return;
-		
-		Properties props = new Properties();
-		
-		try (BufferedReader rd = new BufferedReader(new FileReader(file)))
-		{
-			props.load(rd);
-			props.forEach((k, v) -> setSystemProperties((String)k, (String)v));
-		}
-		catch(Throwable e)
-		{
-			throw new RuntimeException(e);
-		}
+		StandardEnvironment environment = new StandardEnvironment();
+        String filePath = environment.getProperty(SYSTEM_PROPERTIES_FILE_KEY);
+        
+        if(GeneralHelper.isStrEmpty(filePath))
+        {
+        	System.out.println("hp-soa not uses system properties file");
+            return;
+        }
+
+        System.out.println("load hp-soa system properties file -> " + filePath);
+
+        String resolvedLocation = "file:" + environment.resolveRequiredPlaceholders(filePath);
+        PropertySourceFactory factory = new DefaultPropertySourceFactory();
+        Resource resource = new DefaultResourceLoader().getResource(resolvedLocation);
+        
+        try
+        {
+        	PropertySource<?> propertySource = factory.createPropertySource(filePath, new EncodedResource(resource));
+        	Properties props = (Properties)propertySource.getSource();
+        	
+        	props.forEach((k, v) -> setSystemProperties((String)k, (String)v));
+        }
+        catch(IOException e)
+        {
+        	String msg = String.format("load hp-soa system properties file fail -> [%s] %s", filePath, e.getMessage());
+        	
+        	System.err.println(msg);
+        	e.printStackTrace();
+        	
+        	System.exit(1);
+        }
 	}
 
 	public static final boolean setSystemProperties(String key, Object value)

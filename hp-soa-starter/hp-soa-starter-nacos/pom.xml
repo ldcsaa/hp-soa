@@ -22,18 +22,6 @@
 			<artifactId>hp-soa-framework-web</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.dubbo</groupId>
-		    <artifactId>dubbo-registry-nacos</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.dubbo</groupId>
-		    <artifactId>dubbo-configcenter-nacos</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.dubbo</groupId>
-		    <artifactId>dubbo-metadata-report-nacos</artifactId>
-		</dependency>
-		<dependency>
 		    <groupId>com.alibaba.cloud</groupId>
 		    <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
 		</dependency>
@@ -41,13 +29,5 @@
 		    <groupId>org.springframework.cloud</groupId>
 		    <artifactId>spring-cloud-starter-bootstrap</artifactId>
 		</dependency>
-		
-		<!--
-		<dependency>
-		    <groupId>com.alibaba.boot</groupId>
-		    <artifactId>nacos-config-spring-boot-starter</artifactId>
-		</dependency>
-		-->
-		
 	</dependencies>
 </project>

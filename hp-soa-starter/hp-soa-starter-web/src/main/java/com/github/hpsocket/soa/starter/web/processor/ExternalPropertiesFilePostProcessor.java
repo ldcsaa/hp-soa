@@ -24,7 +24,7 @@ import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 @Component
 public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProcessor, Ordered, ApplicationListener<DubboConfigInitEvent>
 {
-	public  static final String EXTERNAL_PROPERTIES_FILE_KEY = "hp.soa.external.properties.file";
+	public static final String EXTERNAL_PROPERTIES_FILE_KEY = "hp.soa.external.properties.file";
 	
 	private static final DeferredLog logger	= new DeferredLog();
 	private static boolean processed		= false;
@@ -45,7 +45,7 @@ public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProce
             return;
         }
 
-    	logger.info("hp-soa uses external properties file -> " + filePath);
+    	logger.info("load hp-soa external properties file -> " + filePath);
 
         String resolvedLocation = "file:" + environment.resolveRequiredPlaceholders(filePath);
         PropertySourceFactory factory = new DefaultPropertySourceFactory();
@@ -53,20 +53,18 @@ public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProce
         
         try
         {
-            addPropertySource(factory.createPropertySource(filePath, new EncodedResource(resource)),environment);
+        	PropertySource<?> propertySource = factory.createPropertySource(filePath, new EncodedResource(resource));
+            MutablePropertySources propertySources = environment.getPropertySources();
+            propertySources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, propertySource);
         }
         catch(IOException e)
         {
-        	logger.error("hp-soa load external properties file fail [" + filePath + "] -> " + e.getMessage(), e);
-            throw new RuntimeException(e);
+        	String msg = String.format("load hp-soa external properties file fail -> [%s] %s", filePath, e.getMessage());
+        	
+        	logger.error(msg, e);
+            throw new RuntimeException(msg, e);
         }
 	}
-	
-    private void addPropertySource(PropertySource<?> propertySource,ConfigurableEnvironment environment)
-    {
-        MutablePropertySources propertySources = environment.getPropertySources();
-        propertySources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, propertySource);
-    }
 
 	@Override
 	public void onApplicationEvent(DubboConfigInitEvent event)

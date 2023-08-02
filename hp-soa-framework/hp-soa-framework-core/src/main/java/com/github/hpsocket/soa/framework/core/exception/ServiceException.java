@@ -112,6 +112,7 @@ public class ServiceException extends RuntimeException
 	{
 		super(message, cause);
 		setStatusCode(statusCode);
+		setResultCode(statusCode);
 	}
 
 	public Integer getResultCode()
