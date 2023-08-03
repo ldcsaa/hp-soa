@@ -1,23 +1,25 @@
 package com.github.hpsocket.soa.starter.web.properties;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import com.github.hpsocket.soa.framework.web.propertries.IServletPropertries;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Component
-public class SecurityProperties
+@ConfigurationProperties
+public class SecurityProperties implements IServletPropertries
 {
 	public static final String ANY_PATH_PATTERN = "/**";
 
-	@Value("${server.servlet.context-path:}")
+	@Value("${server.servlet.context-path:/}")
 	private String servletContextPath;
-	@Value("${spring.mvc.servlet.path:}")
-	private String mvcServletPath;
-	@Value("${management.endpoints.web.base-path:/__admin}")
-	private String endpointsWebBasePath;
+	@Value("${spring.mvc.servlet.path:/}")
+	private String springMvcServletPath;
+	@Value("${management.endpoints.web.base-path:/actuator}")
+	private String managementEndpointsBasePath;
 
 }

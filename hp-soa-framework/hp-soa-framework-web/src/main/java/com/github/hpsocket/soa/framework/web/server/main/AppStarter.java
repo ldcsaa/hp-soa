@@ -28,7 +28,7 @@ import org.springframework.context.annotation.PropertySource;
 									RabbitAutoConfiguration.class	})
 @EnableAutoConfiguration
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
-@ComponentScan(basePackages = {"com.github.hpsocket.soa, ${hp.soa.web.component-scan.base-package:}"})
+@ComponentScan(basePackages = {"${hp.soa.web.component-scan.base-package:}"})
 @ImportResource(locations = {"classpath:config.xml"})
 @PropertySource(value = {"classpath:config.properties"}, ignoreResourceNotFound=true)
 @PropertySource(value = {"classpath:config.yml"}, factory = YamlPropertySourceFactory.class, ignoreResourceNotFound=true)

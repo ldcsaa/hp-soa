@@ -7,20 +7,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 
 import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
 import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.UrlCleaner;
-import com.alibaba.csp.sentinel.annotation.aspectj.SentinelResourceAspect;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.github.hpsocket.soa.framework.core.exception.ServiceException;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.web.model.Response;
-import com.github.hpsocket.soa.starter.sentinel.properties.SoaSentinelProperties;
+import com.github.hpsocket.soa.starter.sentinel.advice.SentinelExceptionAdvice;
 
 import static com.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 
@@ -30,15 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @AutoConfiguration
-@ConditionalOnBean(SoaSentinelProperties.class)
+@Import(SentinelExceptionAdvice.class)
+@ConditionalOnProperty(name = "spring.cloud.sentinel.enabled", matchIfMissing = true)
 public class SoaSentinelConfig
 {
-	@Bean
-	public SentinelResourceAspect sentinelResourceAspect()
-	{
-		return new SentinelResourceAspect();
-	}
-	
 	@Bean
 	@ConditionalOnMissingBean(UrlCleaner.class)
 	@ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)

@@ -7,4 +7,6 @@ public interface IAppProperties
 	String getVersion();
 	String getOrganization();
 	String getOwner();
+	
+	int getCookieMaxAge();
 }

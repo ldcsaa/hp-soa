@@ -4,11 +4,16 @@ package com.github.hpsocket.soa.starter.web.config;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
 import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import com.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
+import com.github.hpsocket.soa.framework.web.service.AsyncService;
+import com.github.hpsocket.soa.framework.web.service.impl.AsyncServiceImpl;
 import com.github.hpsocket.soa.starter.web.properties.SecurityProperties;
 import com.github.hpsocket.soa.starter.web.properties.WebProperties;
 import com.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
@@ -20,6 +25,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @AutoConfiguration
+@EnableConfigurationProperties({WebProperties.class, SecurityProperties.class})
 public class WebConfig implements WebMvcConfigurer
 {
 	private final WebProperties webProperties;
@@ -35,7 +41,7 @@ public class WebConfig implements WebMvcConfigurer
 		this.webProperties = webProperties;
 		this.securityProperties = securityProperties;
 		
-		AppConfigHolder.init(webProperties, webProperties);
+		AppConfigHolder.init(webProperties, securityProperties);
 	}
 
 	@Bean
@@ -54,14 +60,14 @@ public class WebConfig implements WebMvcConfigurer
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception
 	{
-		String endpointsWebBasePath = securityProperties.getEndpointsWebBasePath();
+		String endpointsWebBasePath = securityProperties.getManagementEndpointsBasePath();
 		
 		if(GeneralHelper.isStrEmpty(endpointsWebBasePath) || endpointsWebBasePath.equals("/"))
 			http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.anyRequest().permitAll());
 		else
 		{
 			String servletContextPath = securityProperties.getServletContextPath();
-			String mvcServletPath = securityProperties.getMvcServletPath();
+			String mvcServletPath = securityProperties.getSpringMvcServletPath();
 			
 			StringBuilder sb = new StringBuilder();
 			
@@ -91,6 +97,21 @@ public class WebConfig implements WebMvcConfigurer
     public WebSecurityCustomizer webSecurityCustomizer()
     {
        return ((web) -> {});
+    }
+    
+    @Bean
+    @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
+    public AsyncService asyncService(IAsyncProperties asyncProperties)
+    {
+    	AsyncServiceImpl service = new AsyncServiceImpl();
+    	service.setCorePoolSize(asyncProperties.getCorePoolSize());
+    	service.setMaxPoolSize(asyncProperties.getMaxPoolSize());
+    	service.setKeepAliveSeconds(asyncProperties.getKeepAliveSeconds());
+    	service.setQueueCapacity(asyncProperties.getQueueCapacity());
+    	service.setRejectionPolicy(asyncProperties.getRejectionPolicy());
+    	service.setAllowCoreThreadTimeOut(asyncProperties.isAllowCoreThreadTimeOut());
+    	
+    	return service;
     }
 
 	@Override

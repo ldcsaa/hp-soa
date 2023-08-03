@@ -1,6 +1,7 @@
 package com.github.hpsocket.soa.starter.web.processor;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.dubbo.config.spring.context.event.DubboConfigInitEvent;
 import org.springframework.boot.SpringApplication;
@@ -27,15 +28,13 @@ public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProce
 	public static final String EXTERNAL_PROPERTIES_FILE_KEY = "hp.soa.external.properties.file";
 	
 	private static final DeferredLog logger	= new DeferredLog();
-	private static boolean processed		= false;
+	private static AtomicBoolean processed	= new AtomicBoolean();
 	
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application)
 	{
-		if(processed)
+		if(!processed.compareAndSet(false, true))
 			return;
-
-		processed = true;
 		
         String filePath = environment.getProperty(EXTERNAL_PROPERTIES_FILE_KEY);
         

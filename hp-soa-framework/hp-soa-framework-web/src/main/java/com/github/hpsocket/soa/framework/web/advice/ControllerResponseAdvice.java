@@ -3,7 +3,6 @@ package com.github.hpsocket.soa.framework.web.advice;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.logging.log4j.core.config.Order;
 import com.github.hpsocket.soa.framework.core.exception.ServiceException;
 import com.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
@@ -16,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -40,9 +40,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Order(-10)
 @RestControllerAdvice
-public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
+public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ordered
 {
 	private static final Logger MONITOR_LOGGER = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
 	private static final UserAgentParser uaParser;
@@ -59,6 +58,12 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>
 		}
 	}
 	
+	@Override
+	public int getOrder()
+	{
+		return -10;
+	}
+
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType)
 	{

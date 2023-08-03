@@ -5,38 +5,30 @@ import com.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import com.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
 import com.github.hpsocket.soa.framework.web.propertries.IAccessVerificationProperties;
 import com.github.hpsocket.soa.framework.web.propertries.IAppProperties;
-import com.github.hpsocket.soa.framework.web.propertries.IServletPropertries;
+import com.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
 import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.stereotype.Component;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Component
 @ConfigurationProperties(prefix = "hp.soa.web")
-public class WebProperties implements IAppProperties, IServletPropertries, IAccessVerificationProperties
+public class WebProperties implements IAppProperties, IAsyncProperties, IAccessVerificationProperties
 {
 	@NestedConfigurationProperty
 	private AppProperties app = new AppProperties();
+	@NestedConfigurationProperty
+	private AsyncProperties async = new AsyncProperties();
 	@NestedConfigurationProperty
 	private CookieProperties cookie = new CookieProperties();
 	@NestedConfigurationProperty
 	private CorsProperties cors = new CorsProperties();	
 	@NestedConfigurationProperty
 	private AccessVerificationProperties accessVerification = new AccessVerificationProperties();
-	
-	@Value("${server.servlet.context-path:/}")
-	private String servletContextPath;
-	@Value("${spring.mvc.servlet.path:/}")
-	private String springMvcServletPath;
-	@Value("${management.endpoints.web.base-path:/actuator}")
-	private String managementEndpointsBasePath;
 	
 	@Getter
 	@Setter
@@ -47,6 +39,19 @@ public class WebProperties implements IAppProperties, IServletPropertries, IAcce
 		private String version;
 		private String organization;
 		private String owner;
+	}
+	
+	@Getter
+	@Setter
+	public static class AsyncProperties
+	{
+		private boolean enabled = true;
+		private int corePoolSize = 4;
+		private int maxPoolSize = 20;
+		private int keepAliveSeconds = 60;
+		private int queueCapacity = 3000;
+		private String rejectionPolicy = "CALLER_RUNS";
+		private boolean allowCoreThreadTimeOut = true;
 	}
 	
 	@Getter
@@ -91,12 +96,6 @@ public class WebProperties implements IAppProperties, IServletPropertries, IAcce
 	}
 	
 	@Override
-	public int getCookieMaxAge()
-	{
-		return cookie.getMaxAge();
-	}
-	
-	@Override
 	public Type getDefaultAccessPolicyEnum()
 	{
 		return accessVerification.getDefaultAccessPolicyEnum();
@@ -130,5 +129,47 @@ public class WebProperties implements IAppProperties, IServletPropertries, IAcce
 	public String getOwner()
 	{
 		return app.getOwner();
+	}
+	
+	@Override
+	public int getCookieMaxAge()
+	{
+		return cookie.getMaxAge();
+	}
+
+	@Override
+	public int getCorePoolSize()
+	{
+		return async.getCorePoolSize();
+	}
+
+	@Override
+	public int getMaxPoolSize()
+	{
+		return async.getMaxPoolSize();
+	}
+
+	@Override
+	public int getKeepAliveSeconds()
+	{
+		return async.getKeepAliveSeconds();
+	}
+
+	@Override
+	public int getQueueCapacity()
+	{
+		return async.getQueueCapacity();
+	}
+
+	@Override
+	public String getRejectionPolicy()
+	{
+		return async.getRejectionPolicy();
+	}
+
+	@Override
+	public boolean isAllowCoreThreadTimeOut()
+	{
+		return async.isAllowCoreThreadTimeOut();
 	}
 }

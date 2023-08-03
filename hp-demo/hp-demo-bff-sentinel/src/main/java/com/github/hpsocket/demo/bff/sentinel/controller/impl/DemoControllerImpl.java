@@ -1,5 +1,6 @@
 package com.github.hpsocket.demo.bff.sentinel.controller.impl;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.github.hpsocket.demo.bff.sentinel.contract.req.DemoReuqest;
 import com.github.hpsocket.demo.bff.sentinel.contract.resp.DemoResponse;
 import com.github.hpsocket.demo.bff.sentinel.controller.DemoController;
@@ -59,6 +60,7 @@ public class DemoControllerImpl implements DemoController
     }
     
     @Override
+    @SentinelResource(value = "test")
     public Object test(@Valid DemoReuqest request)
     {
     	return "test";

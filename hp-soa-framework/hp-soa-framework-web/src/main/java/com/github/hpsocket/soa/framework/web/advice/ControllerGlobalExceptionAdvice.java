@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.dubbo.rpc.RpcException;
-import org.apache.logging.log4j.core.config.Order;
 import com.github.hpsocket.soa.framework.core.exception.ServiceException;
-import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.web.model.Response;
+
+import org.springframework.core.Ordered;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -27,12 +27,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Order(-10)
 @RestControllerAdvice
-public class ControllerGlobalExceptionAdvice
+public class ControllerGlobalExceptionAdvice implements Ordered
 {
-	private static final String BLOCK_EXCEPTION_MESSAGE_PREFIX = "SentinelBlockException:";
-	
+	@Override
+	public int getOrder()
+	{
+		return 0;
+	}
+
 	@ExceptionHandler({MethodArgumentNotValidException.class})
 	public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e)
 	{
@@ -96,17 +99,11 @@ public class ControllerGlobalExceptionAdvice
 	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
 	{
 		ServiceException se = null;
-		String message = e.getMessage();
 		
 		if(e instanceof NoHandlerFoundException)
 			se = wrapServiceException(e.getMessage(), NOT_EXIST, e);
 		else if(e instanceof HttpRequestMethodNotSupportedException)
 			se = wrapServiceException(e.getMessage(), NOT_IMPLEMENTED, e);
-		else if(GeneralHelper.isStrNotEmpty(message))
-		{
-			if(message.startsWith(BLOCK_EXCEPTION_MESSAGE_PREFIX))
-				se = wrapServiceException(FORBID_EXCEPTION, e);
-		}
 		
 		if(se == null)
 			se = wrapServiceException(GENERAL_EXCEPTION, e);

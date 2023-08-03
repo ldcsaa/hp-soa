@@ -39,12 +39,12 @@ public class AppConfigHolder
 					appVersion		= appProperties.getVersion();
 					appOrganization	= appProperties.getOrganization();
 					appOwner		= appProperties.getOwner();
+					cookieMaxAge	= appProperties.getCookieMaxAge();
 					appAddress		= SystemUtil.getAddress();
 					
 					servletContextPath			= servletProperties.getServletContextPath();
 					springMvcServletPath		= servletProperties.getSpringMvcServletPath();
 					managementEndpointsBasePath	= servletProperties.getManagementEndpointsBasePath();
-					cookieMaxAge				= servletProperties.getCookieMaxAge();
 					
 					StringBuilder sb = new StringBuilder();;
 					

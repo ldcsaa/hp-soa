@@ -2,10 +2,10 @@ package com.github.hpsocket.soa.framework.web.advice;
 
 import java.lang.reflect.Type;
 
-import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.annotation.Aspect;
 import com.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.WebDataBinder;
@@ -23,10 +23,15 @@ import static com.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 
 @Slf4j
 @Aspect
-@Order(-10)
 @RestControllerAdvice
-public class ControllerRequestAdvice extends RequestBodyAdviceAdapter
+public class ControllerRequestAdvice extends RequestBodyAdviceAdapter implements Ordered
 {
+	@Override
+	public int getOrder()
+	{
+		return -10;
+	}
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder)
 	{

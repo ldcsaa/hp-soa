@@ -18,21 +18,14 @@ import com.github.hpsocket.soa.framework.core.thread.MdcThreadPoolExecutor;
 import com.github.hpsocket.soa.framework.core.thread.SynchronousRejectedExecutionHandler;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.web.service.AsyncService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AsyncServiceImpl implements AsyncService
 {
-	@Value("${soa.misc.asyncService.tracingSupported:true}")
-	private boolean tracingSupported;
-	
 	private int corePoolSize;
 	private int maxPoolSize;
 	private int keepAliveSeconds;
@@ -45,11 +38,7 @@ public class AsyncServiceImpl implements AsyncService
 	@PostConstruct
 	public void postConstruct()
 	{
-		if(executor != null)
-			return;
-		
-		RejectedExecutionHandler rjh = null;
-		
+		RejectedExecutionHandler rjh  = null;
 		BlockingQueue<Runnable> queue = queueCapacity == 0 ? new SynchronousQueue<>() : new LinkedBlockingDeque<>(queueCapacity);
 		
 		if(GeneralHelper.isStrEmpty(rejectionPolicy))
