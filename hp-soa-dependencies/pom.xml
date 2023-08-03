@@ -79,7 +79,7 @@
 		<slf4j.version>2.0.7</slf4j.version>
 		<log4j.version>2.20.0</log4j.version>
 		<disruptor.version>3.4.4</disruptor.version>
-		<apm-toolkit-log4j.version>8.16.0</apm-toolkit-log4j.version>
+		<skywalking.apm-toolkit.version>8.16.0</skywalking.apm-toolkit.version>
 		<junit.version>4.13.2</junit.version>
 		<junit5.version>5.9.3</junit5.version>
 
@@ -617,7 +617,17 @@
 			<dependency>
 			    <groupId>org.apache.skywalking</groupId>
 			    <artifactId>apm-toolkit-log4j-2.x</artifactId>
-			    <version>${apm-toolkit-log4j.version}</version>
+			    <version>${skywalking.apm-toolkit.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.skywalking</groupId>
+			    <artifactId>apm-toolkit-trace</artifactId>
+			    <version>${skywalking.apm-toolkit.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.skywalking</groupId>
+			    <artifactId>apm-toolkit-micrometer-registry</artifactId>
+			    <version>${skywalking.apm-toolkit.version}</version>
 			</dependency>
 
 			<dependency>

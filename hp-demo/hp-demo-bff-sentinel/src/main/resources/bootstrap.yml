@@ -13,7 +13,7 @@ hp.soa.web:
     DefaultAccessPolicy: maybe_login
 
 # logging
-logging.config: classpath:log4j2.xml
+logging.config: classpath:log4j2-kafka.xml
 
 spring.cloud.nacos.config:
   #server-addr: 192.168.56.23:8848
@@ -42,7 +42,7 @@ spring.cloud.nacos.config:
 dubbo.protocols:
   #dubbo:
   #  name: dubbo
-  #  port: 5003
+  #  port: 5005
   tri:
     name: tri
     port: 6005

@@ -13,7 +13,7 @@ hp.soa.web:
     DefaultAccessPolicy: maybe_login
 
 # logging
-logging.config: classpath:log4j2.xml
+logging.config: classpath:log4j2-kafka.xml
 
 spring.cloud.nacos.config:
   #server-addr: 192.168.56.23:8848
