@@ -1,4 +1,4 @@
-package com.github.hpsocket.demo.infra.sentinel.service;
+package com.github.hpsocket.demo.infra.skywalking.service;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -1,7 +1,7 @@
-package com.github.hpsocket.demo.bff.sentinel.controller;
+package com.github.hpsocket.demo.bff.skywalking.controller;
 
-import com.github.hpsocket.demo.bff.sentinel.contract.req.DemoReuqest;
-import com.github.hpsocket.demo.bff.sentinel.contract.resp.DemoResponse;
+import com.github.hpsocket.demo.bff.skywalking.contract.req.DemoReuqest;
+import com.github.hpsocket.demo.bff.skywalking.contract.resp.DemoResponse;
 import com.github.hpsocket.soa.framework.web.model.Response;
 
 import io.swagger.v3.oas.annotations.Operation;

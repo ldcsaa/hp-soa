@@ -1,4 +1,4 @@
-package com.github.hpsocket.demo.bff.sentinel.contract.resp;
+package com.github.hpsocket.demo.bff.skywalking.contract.resp;
 
 import com.alibaba.fastjson2.JSON;
 

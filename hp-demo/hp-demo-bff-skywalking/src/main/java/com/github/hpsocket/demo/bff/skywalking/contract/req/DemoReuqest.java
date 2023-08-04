@@ -1,4 +1,4 @@
-package com.github.hpsocket.demo.bff.sentinel.contract.req;
+package com.github.hpsocket.demo.bff.skywalking.contract.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;

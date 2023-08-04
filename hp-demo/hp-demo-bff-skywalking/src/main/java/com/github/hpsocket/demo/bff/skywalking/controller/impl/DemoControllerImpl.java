@@ -1,10 +1,10 @@
-package com.github.hpsocket.demo.bff.sentinel.controller.impl;
+package com.github.hpsocket.demo.bff.skywalking.controller.impl;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.github.hpsocket.demo.bff.sentinel.contract.req.DemoReuqest;
-import com.github.hpsocket.demo.bff.sentinel.contract.resp.DemoResponse;
-import com.github.hpsocket.demo.bff.sentinel.controller.DemoController;
-import com.github.hpsocket.demo.infra.sentinel.service.DemoService;
+import com.github.hpsocket.demo.bff.skywalking.contract.req.DemoReuqest;
+import com.github.hpsocket.demo.bff.skywalking.contract.resp.DemoResponse;
+import com.github.hpsocket.demo.bff.skywalking.controller.DemoController;
+import com.github.hpsocket.demo.infra.skywalking.service.DemoService;
 import com.github.hpsocket.soa.framework.web.advice.RequestContext;
 import com.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import com.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;

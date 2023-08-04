@@ -1,4 +1,4 @@
-package com.github.hpsocket.demo.bff.sentinel.config;
+package com.github.hpsocket.demo.bff.skywalking.config;
 
 import org.springframework.context.annotation.Configuration;
 

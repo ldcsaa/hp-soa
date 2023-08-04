@@ -1,4 +1,4 @@
-package com.github.hpsocket.demo.infra.sentinel.service.impl;
+package com.github.hpsocket.demo.infra.skywalking.service.impl;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -7,7 +7,7 @@ import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
-import com.github.hpsocket.demo.infra.sentinel.service.DemoService;
+import com.github.hpsocket.demo.infra.skywalking.service.DemoService;
 import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.starter.skywalking.async.TracingSupplierWrapper;

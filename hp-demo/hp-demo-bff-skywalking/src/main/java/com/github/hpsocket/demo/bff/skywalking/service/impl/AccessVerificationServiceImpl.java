@@ -1,4 +1,4 @@
-package com.github.hpsocket.demo.bff.sentinel.service.impl;
+package com.github.hpsocket.demo.bff.skywalking.service.impl;
 
 import org.springframework.stereotype.Service;
 
