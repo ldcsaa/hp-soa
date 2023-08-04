@@ -33,7 +33,7 @@ public class DemoServiceImpl implements DemoService
 			throw new DemoException("Just test exception: name length < 4");
 		
 		CompletableFuture.supplyAsync(TracingSupplierWrapper.of(() -> {
-			GeneralHelper.waitFor(1000);
+			GeneralHelper.waitFor(500);
 			log.info("Async MDC: {}", mdc.getCtxMap());
 			log.info("Async Trace: {}, {}, {}", TraceContext.traceId(), TraceContext.segmentId(), TraceContext.spanId());			
 			return "OK";
