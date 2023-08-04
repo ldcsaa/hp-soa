@@ -4,14 +4,18 @@ package com.github.hpsocket.soa.framework.web.holder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.github.hpsocket.soa.framework.web.service.TracingContext;
+
 public class SpringContextHolder implements ApplicationContextAware
 {
 	private static ApplicationContext applicationContext;
+	private static TracingContext tracingContext;
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 	{
 		SpringContextHolder.applicationContext = applicationContext;
+		SpringContextHolder.tracingContext = getBean(TracingContext.class, false);
 	}
 
 	public static ApplicationContext getApplicationContext()
@@ -25,6 +29,11 @@ public class SpringContextHolder implements ApplicationContextAware
 			throw new RuntimeException("SpringContextHolder applicationContext has NOT been injected !");
 
 		return applicationContext;
+	}
+
+	public static final TracingContext getTracingContext()
+	{
+		return tracingContext;
 	}
 
 	public static <T> T getBean(String beanId)

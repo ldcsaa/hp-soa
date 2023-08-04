@@ -9,7 +9,7 @@ abstract public class MdcCallable<T> implements Callable<T>
 {
 	private MdcAttr mdcAttr;
 	
-	abstract protected T doCall();
+	abstract protected T doCall() throws Exception;
 
 	public MdcCallable()
 	{

@@ -8,7 +8,7 @@ import lombok.Getter;
 @SuppressWarnings("serial")
 abstract public class MdcRecursiveAction extends RecursiveAction
 {
-	private MdcAttr mdcAttr;
+	private final MdcAttr mdcAttr;
 	
 	abstract protected void doCompute();
 

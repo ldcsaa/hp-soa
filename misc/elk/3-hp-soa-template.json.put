@@ -209,6 +209,9 @@ PUT _index_template/hp-soa-template
                         "__requestId": {
                             "type": "keyword"
                         },
+                        "__traceId": {
+                            "type": "keyword"
+                        },
                         "__serviceAddr": {
                             "type": "keyword"
                         },

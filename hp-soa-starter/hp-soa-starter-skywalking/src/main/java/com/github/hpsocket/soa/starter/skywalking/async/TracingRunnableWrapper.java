@@ -1,0 +1,39 @@
+package com.github.hpsocket.soa.starter.skywalking.async;
+
+import org.apache.skywalking.apm.toolkit.trace.RunnableWrapper;
+import org.apache.skywalking.apm.toolkit.trace.TraceCrossThread;
+
+import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+
+@TraceCrossThread
+public class TracingRunnableWrapper extends RunnableWrapper
+{
+	private final MdcAttr mdcAttr;
+	
+	public TracingRunnableWrapper(Runnable r)
+	{
+		super(r);
+		
+		mdcAttr = MdcAttr.fromMdc();
+	}
+	
+    @Override
+    public void run()
+    {
+		try
+		{
+			mdcAttr.putMdc();
+			
+			super.run();
+		}
+		finally
+		{
+			mdcAttr.removeMdc();
+		}
+    }
+
+    public static TracingRunnableWrapper of(Runnable r)
+    {
+        return new TracingRunnableWrapper(r);
+    }
+}

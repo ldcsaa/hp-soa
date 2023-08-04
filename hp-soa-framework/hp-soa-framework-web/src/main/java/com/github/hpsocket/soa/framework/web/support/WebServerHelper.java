@@ -13,11 +13,15 @@ import java.util.regex.Pattern;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
+import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import com.github.hpsocket.soa.framework.core.util.CryptHelper;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.core.util.Result;
 
 import com.alibaba.fastjson2.JSONWriter;
+import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import com.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
+import com.github.hpsocket.soa.framework.web.service.TracingContext;
 
 import static com.github.hpsocket.soa.framework.web.holder.AppConfigHolder.*;
 
@@ -277,6 +281,46 @@ public class WebServerHelper
 		request.setAttribute(REQUEST_ATTRIBUTE_INFO, infos);
 		
 		return infos;
+	}
+
+	public static final MdcAttr createMdcAddr()
+	{
+		return createMdcAddr(false);
+	}
+	
+	public static final MdcAttr createMdcAddr(boolean generateRequestId)
+	{
+		MdcAttr mdcAttr = new MdcAttr();
+		
+		mdcAttr.setAppId(AppConfigHolder.getAppId());
+		mdcAttr.setAppName(AppConfigHolder.getAppName());
+		mdcAttr.setServiceId(AppConfigHolder.getAppId());
+		mdcAttr.setServiceName(AppConfigHolder.getAppName());
+		mdcAttr.setServiceAddr(AppConfigHolder.getAppAddress());
+		
+		mdcAttr.setFromServiceId(AppConfigHolder.getAppId());
+		mdcAttr.setFromServiceName(AppConfigHolder.getAppName());
+		mdcAttr.setFromServiceAddr(AppConfigHolder.getAppAddress());
+		
+		if(GeneralHelper.isStrNotEmpty(AppConfigHolder.getAppOrganization()))
+			mdcAttr.setOrganization(AppConfigHolder.getAppOrganization());
+		if(GeneralHelper.isStrNotEmpty(AppConfigHolder.getAppOwner()))
+			mdcAttr.setOwner(AppConfigHolder.getAppOwner());
+		
+		if(generateRequestId)
+			mdcAttr.setRequestId(UUID.randomUUID().toString());
+		
+		TracingContext tracingContext = SpringContextHolder.getTracingContext();
+		
+		if(tracingContext != null)
+		{
+			String traceId = tracingContext.getTraceId();
+			
+			if(GeneralHelper.isStrNotEmpty(traceId))
+				mdcAttr.setTraceId(tracingContext.getTraceId());
+		}
+		
+		return mdcAttr;
 	}
 
 }

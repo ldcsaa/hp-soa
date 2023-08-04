@@ -1,0 +1,41 @@
+package com.github.hpsocket.soa.starter.skywalking.async;
+
+import java.util.function.Supplier;
+
+import org.apache.skywalking.apm.toolkit.trace.SupplierWrapper;
+import org.apache.skywalking.apm.toolkit.trace.TraceCrossThread;
+
+import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+
+@TraceCrossThread
+public class TracingSupplierWrapper<V> extends SupplierWrapper<V>
+{
+	private final MdcAttr mdcAttr;
+	
+	public TracingSupplierWrapper(Supplier<V> s)
+	{
+		super(s);
+		
+		mdcAttr = MdcAttr.fromMdc();
+	}
+
+    @Override
+    public V get()
+    {
+		try
+		{
+			mdcAttr.putMdc();
+			
+			return super.get();
+		}
+		finally
+		{
+			mdcAttr.removeMdc();
+		}
+    }
+
+    public static <V> TracingSupplierWrapper<V> of(Supplier<V> s)
+    {
+        return new TracingSupplierWrapper<>(s);
+    }
+}

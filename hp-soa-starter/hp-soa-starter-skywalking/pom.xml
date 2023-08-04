@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.github.hpsocket</groupId>
+		<artifactId>hp-soa-starter</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<artifactId>hp-soa-starter-skywalking</artifactId>
+	<name>${project.artifactId}</name>
+	<packaging>jar</packaging>
+	
+	<properties>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.github.hpsocket</groupId>
+			<artifactId>hp-soa-framework-web</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+        </dependency>
+		<dependency>
+		    <groupId>org.apache.skywalking</groupId>
+		    <artifactId>apm-toolkit-micrometer-registry</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.skywalking</groupId>
+		    <artifactId>apm-toolkit-micrometer-1.10</artifactId>
+		</dependency>
+		<!--
+		<dependency>
+		    <groupId>org.apache.skywalking</groupId>
+		    <artifactId>apm-toolkit-log4j-2.x</artifactId>
+		</dependency>
+		-->
+	</dependencies>
+</project>

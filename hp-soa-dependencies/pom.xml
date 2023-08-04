@@ -154,6 +154,11 @@
 				<artifactId>hp-soa-starter-sentinel</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.github.hpsocket</groupId>
+				<artifactId>hp-soa-starter-skywalking</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
 			
 			<dependency>
 				<groupId>org.apache.dubbo</groupId>
@@ -627,6 +632,11 @@
 			<dependency>
 			    <groupId>org.apache.skywalking</groupId>
 			    <artifactId>apm-toolkit-micrometer-registry</artifactId>
+			    <version>${skywalking.apm-toolkit.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.skywalking</groupId>
+			    <artifactId>apm-toolkit-micrometer-1.10</artifactId>
 			    <version>${skywalking.apm-toolkit.version}</version>
 			</dependency>
 

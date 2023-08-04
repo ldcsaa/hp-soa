@@ -7,6 +7,7 @@ import org.slf4j.MDC;
 
 public class MdcAttr
 {
+	public static final String MDC_TRACE_ID_KEY	=	 "__traceId";
 	public static final String MDC_REQUEST_ID_KEY	= "__requestId";
 	public static final String MDC_CLIENT_ID_KEY	= "__clientId";
 	public static final String MDC_SESSION_ID_KEY	= "__sessionId";
@@ -29,6 +30,7 @@ public class MdcAttr
 	public static final String MDC_FROM_SERVICE_ADDR_KEY	= "__fromServiceAddr";
 	
 	public static final String TRANSFER_MDC_KEYS[] = {
+					MDC_TRACE_ID_KEY,
 					MDC_REQUEST_ID_KEY,
 					MDC_CLIENT_ID_KEY,
 					MDC_SESSION_ID_KEY,
@@ -43,6 +45,7 @@ public class MdcAttr
 	};
 	
 	public static final String TRANSFER_MDC_ALL_KEYS[] = {
+					MDC_TRACE_ID_KEY,
 					MDC_REQUEST_ID_KEY,
 					MDC_CLIENT_ID_KEY,
 					MDC_SESSION_ID_KEY,
@@ -122,6 +125,16 @@ public class MdcAttr
 	public void setCtxMap(Map<String, String> ctxMap)
 	{
 		this.ctxMap = ctxMap;
+	}
+
+	public String getTraceId()
+	{
+		return get(MDC_TRACE_ID_KEY);
+	}
+
+	public void setTraceId(String traceId)
+	{
+		set(MDC_TRACE_ID_KEY, traceId);
 	}
 
 	public String getClientId()

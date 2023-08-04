@@ -161,11 +161,9 @@ public class RequestContext
 		getServletResponse().sendError(sc, sm);
 	}
 	
-	public static final RequestAttribute parseRequestAttribute()
+	public static final RequestAttribute parseRequestAttribute(HttpServletRequest request, HttpServletResponse response)
 	{
 		long timestamp				 = System.currentTimeMillis();
-		HttpServletRequest request	 = getServletRequest();
-		HttpServletResponse response = getServletResponse();
 		Map<String, String> reqInfos = parseRequestInfo(request);
 		
 		String appCode		= parseRequestField(request, reqInfos, HEADER_APP_CODE, false);

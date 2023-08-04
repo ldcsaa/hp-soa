@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 abstract public class MdcRunnable implements Runnable
 {
-	private MdcAttr mdcAttr;
+	private final MdcAttr mdcAttr;
 
 	abstract protected void doRun();
 
