@@ -41,7 +41,8 @@
 		<kafka-clients.version>3.5.0</kafka-clients.version>
 		<druid.version>1.2.18</druid.version>
 		<jedis.version>4.4.3</jedis.version>
-		<redisson.version>3.22.1</redisson.version>
+		<lettuce.version>6.2.5.RELEASE</lettuce.version>
+		<redisson.version>3.23.2</redisson.version>
 		<amqp-client.version>5.18.0</amqp-client.version>
 		<mongo-java-driver.version>3.12.14</mongo-java-driver.version>
 		<mysql-connector-java.version>8.0.33</mysql-connector-java.version>
@@ -59,6 +60,8 @@
 		<commons-collections.version>3.2.2</commons-collections.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<commons-codec.version>1.16.0</commons-codec.version>
+		<commons-pool.version>1.5.4.0</commons-pool.version>
+		<commons-pool2.version>2.11.1</commons-pool2.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
 
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
@@ -159,6 +162,11 @@
 			<dependency>
 				<groupId>com.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-skywalking</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.hpsocket</groupId>
+				<artifactId>hp-soa-starter-data-redis</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			
@@ -590,9 +598,19 @@
 				<version>${jedis.version}</version>
 			</dependency>
 			<dependency>
+			    <groupId>io.lettuce</groupId>
+			    <artifactId>lettuce-core</artifactId>
+			    <version>${lettuce.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.redisson</groupId>
 				<artifactId>redisson</artifactId>
 				<version>${redisson.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.redisson</groupId>
+			    <artifactId>redisson-spring-boot-starter</artifactId>
+			    <version>${redisson.version}</version>
 			</dependency>
 
 			<dependency>
@@ -710,6 +728,18 @@
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
 				<version>${commons-codec.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.apache.commons</groupId>
+			    <artifactId>commons-pool</artifactId>
+			    <version>${commons-pool.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.apache.commons</groupId>
+			    <artifactId>commons-pool2</artifactId>
+			    <version>${commons-pool2.version}</version>
 			</dependency>
 
 			<dependency>

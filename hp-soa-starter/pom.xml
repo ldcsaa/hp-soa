@@ -21,6 +21,7 @@
 		<module>hp-soa-starter-nacos</module>
 		<module>hp-soa-starter-sentinel</module>
 		<module>hp-soa-starter-skywalking</module>
+		<module>hp-soa-starter-data-redis</module>
 	</modules>
 	
 	<dependencyManagement>
