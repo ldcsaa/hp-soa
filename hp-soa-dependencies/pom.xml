@@ -94,6 +94,8 @@
 		<xstream.version>1.4.20</xstream.version>
 		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 		<velocity.version>2.3</velocity.version>
+		<freemarker.version>2.3.32</freemarker.version>
+		<beetl.version>3.15.7.RELEASE</beetl.version>
 
 		<geoip2.version>4.0.1</geoip2.version>
 		<gson.version>2.10.1</gson.version>
@@ -456,6 +458,16 @@
 			    <groupId>org.apache.velocity</groupId>
 			    <artifactId>velocity-engine-core</artifactId>
 				<version>${velocity.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.freemarker</groupId>
+			    <artifactId>freemarker</artifactId>
+			    <version>${freemarker.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.ibeetl</groupId>
+			    <artifactId>beetl</artifactId>
+			    <version>${beetl.version}</version>
 			</dependency>
 			
 			<dependency>
