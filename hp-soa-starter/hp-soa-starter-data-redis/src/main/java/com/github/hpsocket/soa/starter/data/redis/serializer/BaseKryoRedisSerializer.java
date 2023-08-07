@@ -1,9 +1,6 @@
 
 package com.github.hpsocket.soa.starter.data.redis.serializer;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
@@ -14,7 +11,7 @@ import com.esotericsoftware.kryo.util.Pool;
 
 public abstract class BaseKryoRedisSerializer<T> implements RedisSerializer<T>
 {
-	private static Pool<Kryo> kryoPool = new Pool<Kryo>(false, true, 3000)
+	private static Pool<Kryo> kryoPool = new Pool<Kryo>(true, true, 1000)
 	{
 		@Override
 		protected Kryo create()
@@ -28,23 +25,29 @@ public abstract class BaseKryoRedisSerializer<T> implements RedisSerializer<T>
 		}
 	};
 	
-	protected abstract boolean checkDdeserializeContent(byte[] bytes);
+	protected abstract boolean checkSerializeParam(T t);
+	protected abstract boolean checkDeserializeParam(byte[] bytes);
 
 	@Override
 	public byte[] serialize(T t) throws SerializationException
 	{
+		if(!checkSerializeParam(t))
+		{
+			return null;
+		}
+		
 		Kryo kryo = null;
 		
-		try(ByteArrayOutputStream bos = new ByteArrayOutputStream(); Output output = new Output(bos);)
+		try(Output output = new Output(4096, -1))
 		{
 			kryo = kryoPool.obtain();
 			kryo.writeClassAndObject(output, t);
-			
-			return bos.toByteArray();
+
+			return output.getBuffer();
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException(e);
+			throw new SerializationException(e.getMessage(), e);
 		}
 		finally
 		{
@@ -59,21 +62,21 @@ public abstract class BaseKryoRedisSerializer<T> implements RedisSerializer<T>
 	@SuppressWarnings("unchecked")
 	public T deserialize(byte[] bytes) throws SerializationException
 	{
-		Kryo kryo = null;
-		
-		if(!checkDdeserializeContent(bytes))
+		if(!checkDeserializeParam(bytes))
 		{
 			return null;
 		}
 
-		try(ByteArrayInputStream bis = new ByteArrayInputStream(bytes); Input input = new Input(bis);)
+		Kryo kryo = null;
+		
+		try(Input input = new Input(bytes);)
 		{
 			kryo = kryoPool.obtain();
 			return (T)kryo.readClassAndObject(input);
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException(e);
+			throw new SerializationException(e.getMessage(), e);
 		}
 		finally
 		{
