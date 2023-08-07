@@ -134,16 +134,16 @@ public class SoaRedisConfig
 		cfgs.put("30s", createRedisCacheConfiguration(30));
 		cfgs.put("1m", createRedisCacheConfiguration(60));
 		cfgs.put("5m", createRedisCacheConfiguration(300));
+		cfgs.put("15m", createRedisCacheConfiguration(900));
 		cfgs.put("30m", createRedisCacheConfiguration(1800));
 		cfgs.put("1h", createRedisCacheConfiguration(3600));
 		cfgs.put("3h", createRedisCacheConfiguration(10800));
 		cfgs.put("6h", createRedisCacheConfiguration(21600));
 		cfgs.put("12h", createRedisCacheConfiguration(43200));
 		cfgs.put("1d", createRedisCacheConfiguration(86400));
+		cfgs.put("7d", createRedisCacheConfiguration(604800));
+		cfgs.put("15d", createRedisCacheConfiguration(1296000));
 		cfgs.put("30d", createRedisCacheConfiguration(2592000));
-		cfgs.put("60d", createRedisCacheConfiguration(5184000));
-		cfgs.put("180d", createRedisCacheConfiguration(15552000));
-		cfgs.put("1y", createRedisCacheConfiguration(31536000));
 
 		return cfgs;
 	}
