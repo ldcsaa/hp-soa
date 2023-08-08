@@ -7,23 +7,31 @@ import org.springframework.data.redis.serializer.SerializationException;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.util.Pool;
 
 public abstract class BaseKryoRedisSerializer<T> implements RedisSerializer<T>
 {
+	private static final ThreadLocal<Kryo> kryos = ThreadLocal.withInitial(BaseKryoRedisSerializer::createKryo);
+	
+	/*
 	private static Pool<Kryo> kryoPool = new Pool<Kryo>(true, true, 1000)
 	{
 		@Override
 		protected Kryo create()
 		{
-			Kryo kryo = new Kryo();
-			
-			kryo.setRegistrationRequired(false);
-			kryo.setReferences(false);
-			
-			return kryo;
+			return createKryo();
 		}
 	};
+	*/
+	
+	private static Kryo createKryo()
+	{
+		Kryo kryo = new Kryo();
+		
+		kryo.setRegistrationRequired(false);
+		kryo.setReferences(false);
+		
+		return kryo;
+	}
 	
 	protected abstract boolean checkSerializeParam(T t);
 	protected abstract boolean checkDeserializeParam(byte[] bytes);
@@ -40,7 +48,7 @@ public abstract class BaseKryoRedisSerializer<T> implements RedisSerializer<T>
 		
 		try(Output output = new Output(4096, -1))
 		{
-			kryo = kryoPool.obtain();
+			kryo = kryos.get();
 			kryo.writeClassAndObject(output, t);
 
 			return output.getBuffer();
@@ -48,13 +56,6 @@ public abstract class BaseKryoRedisSerializer<T> implements RedisSerializer<T>
 		catch(Exception e)
 		{
 			throw new SerializationException(e.getMessage(), e);
-		}
-		finally
-		{
-			if(kryo != null)
-			{
-				kryoPool.free(kryo);
-			}
 		}
 	}
 
@@ -71,19 +72,12 @@ public abstract class BaseKryoRedisSerializer<T> implements RedisSerializer<T>
 		
 		try(Input input = new Input(bytes);)
 		{
-			kryo = kryoPool.obtain();
+			kryo = kryos.get();
 			return (T)kryo.readClassAndObject(input);
 		}
 		catch(Exception e)
 		{
 			throw new SerializationException(e.getMessage(), e);
-		}
-		finally
-		{
-			if(kryo != null)
-			{
-				kryoPool.free(kryo);
-			}
 		}
 	}
 }

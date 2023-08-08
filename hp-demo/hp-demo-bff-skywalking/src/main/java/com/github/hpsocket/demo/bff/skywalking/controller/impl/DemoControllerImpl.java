@@ -13,8 +13,11 @@ import com.github.hpsocket.soa.framework.web.model.Response;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,5 +70,22 @@ public class DemoControllerImpl implements DemoController
     public Object test(@Valid DemoReuqest request)
     {
     	return "test";
+    }
+    
+    @Scheduled(timeUnit = TimeUnit.SECONDS, fixedDelay = 5)
+    void jobHandler()
+    {
+    	/* generate a new traceId before jobHandler() execute */
+    	// ...
+    	
+    	// get current traceId
+    	String traceId = TraceContext.traceId();
+    	
+    	log.info("{} JOB start ...", traceId);
+    	
+    	// other codes ...
+    	// traceId transfer to other service ...
+    	
+    	log.info("{} JOB end !", traceId);
     }
 }

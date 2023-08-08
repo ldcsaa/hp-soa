@@ -12,9 +12,14 @@ public class TracingRunnableWrapper extends RunnableWrapper
 	
 	public TracingRunnableWrapper(Runnable r)
 	{
+		this(r, MdcAttr.fromMdc());
+	}
+	
+	public TracingRunnableWrapper(Runnable r, MdcAttr mdcAttr)
+	{
 		super(r);
 		
-		mdcAttr = MdcAttr.fromMdc();
+		this.mdcAttr = mdcAttr;
 	}
 	
     @Override

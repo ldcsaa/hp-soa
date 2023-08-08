@@ -11,7 +11,12 @@ abstract public class MdcRunnable implements Runnable
 
 	public MdcRunnable()
 	{
-		this.mdcAttr = MdcAttr.fromMdc();
+		this(MdcAttr.fromMdc());
+	}
+
+	public MdcRunnable(MdcAttr mdcAttr)
+	{
+		this.mdcAttr = mdcAttr;
 	}
 
 	@Override

@@ -14,9 +14,14 @@ public class TracingConsumerWrapper<V> extends ConsumerWrapper<V>
 	
 	public TracingConsumerWrapper(Consumer<V> c)
 	{
+		this(c, MdcAttr.fromMdc());
+	}
+	
+	public TracingConsumerWrapper(Consumer<V> c, MdcAttr mdcAttr)
+	{
 		super(c);
 		
-		mdcAttr = MdcAttr.fromMdc();
+		this.mdcAttr = mdcAttr;
 	}
 	
 	@Override

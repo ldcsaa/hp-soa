@@ -14,9 +14,14 @@ public class TracingSupplierWrapper<V> extends SupplierWrapper<V>
 	
 	public TracingSupplierWrapper(Supplier<V> s)
 	{
+		this(s, MdcAttr.fromMdc());
+	}
+
+	public TracingSupplierWrapper(Supplier<V> s, MdcAttr mdcAttr)
+	{
 		super(s);
 		
-		mdcAttr = MdcAttr.fromMdc();
+		this.mdcAttr = mdcAttr;
 	}
 
     @Override

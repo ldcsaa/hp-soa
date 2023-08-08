@@ -14,9 +14,14 @@ public class TracingFunctionWrapper<T, R> extends FunctionWrapper<T, R>
 	
 	public TracingFunctionWrapper(Function<T, R> f)
 	{
+		this(f, MdcAttr.fromMdc());
+	}
+	
+	public TracingFunctionWrapper(Function<T, R> f, MdcAttr mdcAttr)
+	{
 		super(f);
 		
-		mdcAttr = MdcAttr.fromMdc();
+		this.mdcAttr = mdcAttr;
 	}
 	
     @Override

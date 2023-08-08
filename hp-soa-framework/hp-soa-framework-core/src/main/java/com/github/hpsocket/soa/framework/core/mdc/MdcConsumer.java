@@ -13,7 +13,12 @@ abstract public class MdcConsumer<T> implements Consumer<T>
 
 	public MdcConsumer()
 	{
-		this.mdcAttr = MdcAttr.fromMdc();
+		this(MdcAttr.fromMdc());
+	}
+
+	public MdcConsumer(MdcAttr mdcAttr)
+	{
+		this.mdcAttr = mdcAttr;
 	}
 	
 	@Override

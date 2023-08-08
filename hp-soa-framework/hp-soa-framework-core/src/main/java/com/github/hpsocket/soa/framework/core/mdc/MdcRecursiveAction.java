@@ -14,7 +14,12 @@ abstract public class MdcRecursiveAction extends RecursiveAction
 
 	public MdcRecursiveAction()
 	{
-		mdcAttr = MdcAttr.fromMdc();
+		this(MdcAttr.fromMdc());
+	}
+
+	public MdcRecursiveAction(MdcAttr mdcAttr)
+	{
+		this.mdcAttr = mdcAttr;
 	}
 	
 	@Override

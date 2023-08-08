@@ -13,7 +13,12 @@ abstract public class MdcCallable<T> implements Callable<T>
 
 	public MdcCallable()
 	{
-		mdcAttr = MdcAttr.fromMdc();
+		this(MdcAttr.fromMdc());
+	}
+
+	public MdcCallable(MdcAttr mdcAttr)
+	{
+		this.mdcAttr = mdcAttr;
 	}
 
 	@Override

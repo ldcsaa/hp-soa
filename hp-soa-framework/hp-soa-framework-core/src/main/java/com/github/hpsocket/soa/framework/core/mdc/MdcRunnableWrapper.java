@@ -12,6 +12,12 @@ public class MdcRunnableWrapper extends MdcRunnable
 		this.r = r;
 	}
 
+	public MdcRunnableWrapper(Runnable r, MdcAttr mdcAttr)
+	{
+		super(mdcAttr);
+		this.r = r;
+	}
+
 	@Override
 	public void doRun()
 	{

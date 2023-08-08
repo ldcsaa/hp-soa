@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.redisson.Redisson;
 import org.redisson.spring.starter.RedissonAutoConfiguration;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.MapFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -15,6 +17,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.MapPropertySource;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -51,13 +55,14 @@ public class SoaRedisConfig
 		fastJsonRedisSerializer.setFastJsonConfig(config);
 	}
 
+	@Primary
 	@Bean("redisTemplate")
 	public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
 		return genericJsonRedisTemplate(redisConnectionFactory);
 	}
 
-	@Bean("jsonRedisTemplate")
+	@Bean("redisJsonTemplate")
 	public RedisTemplate<String, Object> jsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
 		RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
@@ -71,7 +76,7 @@ public class SoaRedisConfig
 		return template;
 	}
 
-	@Bean("genericJsonRedisTemplate")
+	@Bean("redisGenericJsonTemplate")
 	public <T> RedisTemplate<String, T> genericJsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
 		RedisTemplate<String, T> template = new RedisTemplate<String, T>();
@@ -85,7 +90,7 @@ public class SoaRedisConfig
 		return template;
 	}
 
-	@Bean("kryoRedisTemplate")
+	@Bean("redisKryoTemplate")
 	public <T> RedisTemplate<String, T> kryoRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
 		RedisTemplate<String, T> template = new RedisTemplate<String, T>();
@@ -99,7 +104,7 @@ public class SoaRedisConfig
 		return template;
 	}
 
-	@Bean("kryoNotNullRedisTemplate")
+	@Bean("redisKryoNotNullTemplate")
 	public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
 		RedisTemplate<String, T> template = new RedisTemplate<String, T>();
@@ -114,19 +119,32 @@ public class SoaRedisConfig
 	}
 
 	@Bean("redisCacheManager")
-	@ConditionalOnMissingBean(RedisCacheManager.class)
-	public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory)
+	@SuppressWarnings("unchecked")
+	@ConditionalOnMissingBean(name = "redisCacheManager")
+	public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory,
+		@Qualifier("rediseDfaultCacheConfiguration") RedisCacheConfiguration rediseDfaultCacheConfiguration,
+		@Qualifier("redisInitialCacheConfigurations") MapPropertySource redisInitialCacheConfigurations)
 	{
 		RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(redisConnectionFactory)
-			.cacheDefaults(createRedisCacheConfiguration(3600))
-			.withInitialCacheConfigurations(initialCacheConfigurations())
+			.cacheDefaults(rediseDfaultCacheConfiguration)
+			.withInitialCacheConfigurations((Map<String, RedisCacheConfiguration>)(Map<?, ?>)redisInitialCacheConfigurations.getSource())
 			.allowCreateOnMissingCache(false);
 
 		return builder.build();
 
 	}
-
-	private Map<String, RedisCacheConfiguration> initialCacheConfigurations()
+	
+	@Bean("rediseDfaultCacheConfiguration")
+	@ConditionalOnMissingBean(name = "rediseDfaultCacheConfiguration")
+	public RedisCacheConfiguration rediseDfaultCacheConfiguration()
+	{
+		return createRedisCacheConfiguration(3600);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Bean("redisInitialCacheConfigurations")
+	@ConditionalOnMissingBean(name = "redisInitialCacheConfigurations")
+	public MapPropertySource redisInitialCacheConfigurations()
 	{
 		Map<String, RedisCacheConfiguration> cfgs = new LinkedHashMap<>();
 
@@ -144,8 +162,11 @@ public class SoaRedisConfig
 		cfgs.put("7d", createRedisCacheConfiguration(604800));
 		cfgs.put("15d", createRedisCacheConfiguration(1296000));
 		cfgs.put("30d", createRedisCacheConfiguration(2592000));
+		
+		MapFactoryBean bean = new MapFactoryBean();
+		bean.setSourceMap(cfgs);
 
-		return cfgs;
+		return new MapPropertySource("redisInitialCacheConfigurations", (Map<String, Object>)(Map<?, ?>)cfgs);
 	}
 
 	private RedisCacheConfiguration createRedisCacheConfiguration(long ttlSeconds)
@@ -157,8 +178,8 @@ public class SoaRedisConfig
 			.serializeValuesWith(SerializationPair.fromSerializer(genericFastJsonRedisSerializer));
 	}
 
-	@Bean("stringKeyGenerator")
-	@ConditionalOnMissingBean(KeyGenerator.class)
+	@Bean("redisStringKeyGenerator")
+	@ConditionalOnMissingBean(name = "redisStringKeyGenerator")
 	public KeyGenerator keyGenerator()
 	{
 		return new KeyGenerator()

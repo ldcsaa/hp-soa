@@ -14,6 +14,12 @@ public class MdcFunctionWrapper<T, R> extends MdcFunction<T, R>
 		this.f = f;
 	}
 	
+	public MdcFunctionWrapper(Function<T, R> f, MdcAttr mdcAttr)
+	{
+		super(mdcAttr);
+		this.f = f;
+	}
+	
 	@Override
 	public R doApply(T t)
 	{

@@ -14,6 +14,12 @@ public class MdcConsumerWrapper<T> extends MdcConsumer<T>
 		this.c = c;
 	}
 	
+	public MdcConsumerWrapper(Consumer<T> c, MdcAttr mdcAttr)
+	{
+		super(mdcAttr);
+		this.c = c;
+	}
+	
 	@Override
 	public void doAccept(T t)
 	{

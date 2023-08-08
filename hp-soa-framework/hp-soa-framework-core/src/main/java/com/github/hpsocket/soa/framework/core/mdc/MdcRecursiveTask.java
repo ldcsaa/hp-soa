@@ -14,7 +14,12 @@ abstract public class MdcRecursiveTask<T> extends RecursiveTask<T>
 
 	public MdcRecursiveTask()
 	{
-		this.mdcAttr = MdcAttr.fromMdc();
+		this(MdcAttr.fromMdc());
+	}
+
+	public MdcRecursiveTask(MdcAttr mdcAttr)
+	{
+		this.mdcAttr = mdcAttr;
 	}
 	
 	@Override

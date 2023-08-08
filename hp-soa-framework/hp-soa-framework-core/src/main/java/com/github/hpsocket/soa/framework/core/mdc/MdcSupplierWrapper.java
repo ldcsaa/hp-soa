@@ -14,6 +14,12 @@ public class MdcSupplierWrapper<T> extends MdcSupplier<T>
 		this.s = s;
 	}
 	
+	public MdcSupplierWrapper(Supplier<T> s, MdcAttr mdcAttr)
+	{
+		super(mdcAttr);
+		this.s = s;
+	}
+	
 	@Override
 	public T doGet()
 	{

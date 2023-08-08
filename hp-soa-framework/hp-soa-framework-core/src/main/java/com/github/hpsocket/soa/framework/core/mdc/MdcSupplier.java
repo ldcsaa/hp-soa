@@ -13,7 +13,12 @@ abstract public class MdcSupplier<T> implements Supplier<T>
 
 	public MdcSupplier()
 	{
-		this.mdcAttr = MdcAttr.fromMdc();
+		this(MdcAttr.fromMdc());
+	}
+
+	public MdcSupplier(MdcAttr mdcAttr)
+	{
+		this.mdcAttr = mdcAttr;
 	}
 	
 	@Override

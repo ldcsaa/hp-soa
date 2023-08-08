@@ -13,7 +13,12 @@ abstract public class MdcFunction<T, R> implements Function<T, R>
 
 	public MdcFunction()
 	{
-		this.mdcAttr = MdcAttr.fromMdc();
+		this(MdcAttr.fromMdc());
+	}
+
+	public MdcFunction(MdcAttr mdcAttr)
+	{
+		this.mdcAttr = mdcAttr;
 	}
 	
 	@Override

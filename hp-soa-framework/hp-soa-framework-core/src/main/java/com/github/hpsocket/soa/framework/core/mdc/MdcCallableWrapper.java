@@ -14,6 +14,12 @@ public class MdcCallableWrapper<T> extends MdcCallable<T>
 		this.c = c;
 	}
 
+	public MdcCallableWrapper(Callable<T> c, MdcAttr mdcAttr)
+	{
+		super(mdcAttr);
+		this.c = c;
+	}
+
 	@Override
 	public T doCall() throws Exception
 	{

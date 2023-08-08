@@ -14,12 +14,17 @@ public class TracingCallableWrapper<V> extends CallableWrapper<V>
 	
 	public TracingCallableWrapper(Callable<V> c)
 	{
-		super(c);
-		
-		mdcAttr = MdcAttr.fromMdc();
+		this(c, MdcAttr.fromMdc());
 	}
 	
-    @Override
+ 	public TracingCallableWrapper(Callable<V> c, MdcAttr mdcAttr)
+	{
+		super(c);
+		
+		this.mdcAttr = mdcAttr;
+	}
+	
+   @Override
     public V call() throws Exception
     {
 		try
