@@ -15,12 +15,11 @@
     <context:component-scan base-package="${hp.soa.web.component-scan.base-package}"/>
     <aop:aspectj-autoproxy expose-proxy="true" proxy-target-class="true"/>
     -->
-	<!--
+
     <task:annotation-driven executor="asyncExecutor" scheduler="asyncScheduler"/>
     <task:executor id="asyncExecutor" pool-size="2-10" queue-capacity="1000" keep-alive="60" rejection-policy="CALLER_RUNS"/>
     <task:scheduler id="asyncScheduler" pool-size="4"/>
-	-->
-	  
+
     <!-- - - - - - - - - - - 应用程序私有配置 - - - - - - - - - - -->
 
     <!-- Import Bean Definitions -->
