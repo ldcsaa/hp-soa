@@ -14,6 +14,7 @@ import lombok.Setter;
 public class SoaTaskProperties
 {
 	private boolean enabled = true;
+	
 	@NestedConfigurationProperty
 	Execution execution = new Execution();
 	@NestedConfigurationProperty
@@ -56,11 +57,15 @@ public class SoaTaskProperties
 	{
 		private String threadNamePrefix = "scheduling-";
 		
+		private Pool pool = new Pool();
+		private Shutdown shutdown = new Shutdown();
+
 		@Getter
 		@Setter
 		public static class Pool
 		{
 			private int size = 1;
+		    private String rejectionPolicy = "ABORT";
 		}
 		
 		@Getter

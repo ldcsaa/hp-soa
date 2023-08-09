@@ -2,21 +2,12 @@ package com.github.hpsocket.soa.framework.web.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import com.github.hpsocket.soa.framework.core.thread.MdcThreadPoolExecutor;
-import com.github.hpsocket.soa.framework.core.thread.SynchronousRejectedExecutionHandler;
-import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.web.service.AsyncService;
 
 import lombok.Getter;
@@ -26,44 +17,11 @@ import lombok.Setter;
 @Setter
 public class AsyncServiceImpl implements AsyncService
 {
-	private int corePoolSize;
-	private int maxPoolSize;
-	private int keepAliveSeconds;
-	private int queueCapacity;
-	private String rejectionPolicy;
-	private boolean allowCoreThreadTimeOut;
-	
 	private MdcThreadPoolExecutor executor;
 	
-	@PostConstruct
-	public void postConstruct()
+	public AsyncServiceImpl(MdcThreadPoolExecutor executor)
 	{
-		RejectedExecutionHandler rjh  = null;
-		BlockingQueue<Runnable> queue = queueCapacity == 0 ? new SynchronousQueue<>() : new LinkedBlockingDeque<>(queueCapacity);
-		
-		if(GeneralHelper.isStrEmpty(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.CallerRunsPolicy();
-		else if("CALLER_RUNS".equalsIgnoreCase(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.CallerRunsPolicy();
-		else if("ABORT".equalsIgnoreCase(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.AbortPolicy();
-		else if("DISCARD".equalsIgnoreCase(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.DiscardPolicy();
-		else if("DISCARD_OLDEST".equalsIgnoreCase(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.DiscardOldestPolicy();
-		else if("SYNC".equalsIgnoreCase(rejectionPolicy))
-			rjh = new SynchronousRejectedExecutionHandler();
-		else
-			throw new RuntimeException(String.format("invalid rejectionPolicy '%s'", rejectionPolicy));
-		
-		executor = new MdcThreadPoolExecutor(	corePoolSize,
-												maxPoolSize,
-												keepAliveSeconds,
-												TimeUnit.SECONDS,
-												queue,
-												rjh);
-		
-		executor.allowCoreThreadTimeOut(allowCoreThreadTimeOut);
+		this.executor = executor;
 	}
 	
 	@PreDestroy

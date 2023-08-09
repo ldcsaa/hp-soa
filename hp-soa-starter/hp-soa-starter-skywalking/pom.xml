@@ -21,6 +21,17 @@
 			<groupId>com.github.hpsocket</groupId>
 			<artifactId>hp-soa-framework-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-web</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-task</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
         <dependency>
             <groupId>org.apache.skywalking</groupId>
             <artifactId>apm-toolkit-trace</artifactId>

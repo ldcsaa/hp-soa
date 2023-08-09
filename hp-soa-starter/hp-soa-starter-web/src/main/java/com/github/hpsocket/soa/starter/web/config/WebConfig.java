@@ -1,17 +1,14 @@
 
 package com.github.hpsocket.soa.starter.web.config;
 
-import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import com.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
-import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
-import com.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
-import com.github.hpsocket.soa.framework.web.service.AsyncService;
-import com.github.hpsocket.soa.framework.web.service.impl.AsyncServiceImpl;
-import com.github.hpsocket.soa.starter.web.properties.SecurityProperties;
-import com.github.hpsocket.soa.starter.web.properties.WebProperties;
-import com.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -23,6 +20,18 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.github.hpsocket.soa.framework.core.thread.MdcThreadPoolExecutor;
+import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import com.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
+import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import com.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
+import com.github.hpsocket.soa.framework.web.service.AsyncService;
+import com.github.hpsocket.soa.framework.web.service.impl.AsyncServiceImpl;
+import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import com.github.hpsocket.soa.starter.web.properties.SecurityProperties;
+import com.github.hpsocket.soa.starter.web.properties.WebProperties;
+import com.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
 
 @AutoConfiguration
 @EnableConfigurationProperties({WebProperties.class, SecurityProperties.class})
@@ -99,19 +108,34 @@ public class WebConfig implements WebMvcConfigurer
        return ((web) -> {});
     }
     
+    @Bean("mdcThreadPoolExecutor")
+    @ConditionalOnMissingBean(name = "mdcThreadPoolExecutor")
+    @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
+    public MdcThreadPoolExecutor mdcThreadPoolExecutor(IAsyncProperties asyncProperties)
+    {
+		RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
+		BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 
+										? new SynchronousQueue<>() 
+										: new LinkedBlockingDeque<>(asyncProperties.getQueueCapacity());
+		
+		MdcThreadPoolExecutor executor = new MdcThreadPoolExecutor(
+											asyncProperties.getCorePoolSize(),
+											asyncProperties.getMaxPoolSize(),
+											asyncProperties.getKeepAliveSeconds(),
+											TimeUnit.SECONDS,
+											queue,
+											rjh);
+		
+		executor.allowCoreThreadTimeOut(asyncProperties.isAllowCoreThreadTimeOut());
+    	
+		return executor;
+    }
+    
     @Bean
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
-    public AsyncService asyncService(IAsyncProperties asyncProperties)
+    public AsyncService asyncService(MdcThreadPoolExecutor mdcThreadPoolExecutor)
     {
-    	AsyncServiceImpl service = new AsyncServiceImpl();
-    	service.setCorePoolSize(asyncProperties.getCorePoolSize());
-    	service.setMaxPoolSize(asyncProperties.getMaxPoolSize());
-    	service.setKeepAliveSeconds(asyncProperties.getKeepAliveSeconds());
-    	service.setQueueCapacity(asyncProperties.getQueueCapacity());
-    	service.setRejectionPolicy(asyncProperties.getRejectionPolicy());
-    	service.setAllowCoreThreadTimeOut(asyncProperties.isAllowCoreThreadTimeOut());
-    	
-    	return service;
+    	return new AsyncServiceImpl(mdcThreadPoolExecutor);
     }
 
 	@Override

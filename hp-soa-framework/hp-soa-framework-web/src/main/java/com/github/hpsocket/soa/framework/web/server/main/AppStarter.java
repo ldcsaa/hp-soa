@@ -16,7 +16,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication(exclude = {	SecurityAutoConfiguration.class,
@@ -29,7 +28,6 @@ import org.springframework.context.annotation.PropertySource;
 @EnableAutoConfiguration
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 @ComponentScan(basePackages = {"${hp.soa.web.component-scan.base-package:}"})
-@ImportResource(locations = {"classpath:config.xml"})
 @PropertySource(value = {"classpath:config.properties"}, ignoreResourceNotFound=true)
 @PropertySource(value = {"classpath:config.yml"}, factory = YamlPropertySourceFactory.class, ignoreResourceNotFound=true)
 public class AppStarter

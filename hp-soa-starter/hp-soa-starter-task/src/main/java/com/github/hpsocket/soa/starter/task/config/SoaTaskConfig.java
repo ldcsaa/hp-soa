@@ -1,88 +1,64 @@
 
 package com.github.hpsocket.soa.starter.task.config;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.task.TaskExecutorCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.task.TaskDecorator;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import com.github.hpsocket.soa.framework.core.thread.SynchronousRejectedExecutionHandler;
-import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import com.github.hpsocket.soa.starter.task.aspect.ScheduledTraceIdInspector;
 import com.github.hpsocket.soa.starter.task.properties.SoaTaskProperties;
-import com.github.hpsocket.soa.starter.task.properties.SoaTaskProperties.Execution;
+import com.github.hpsocket.soa.starter.task.properties.SoaTaskProperties.Scheduling;
 
 @EnableAsync
 @EnableScheduling
 @AutoConfiguration
+@Import(ScheduledTraceIdInspector.class)
 @EnableConfigurationProperties({SoaTaskProperties.class})
 @ConditionalOnProperty(name = "spring.task.enabled", matchIfMissing = true)
 public class SoaTaskConfig
 {
 	private SoaTaskProperties soaTaskProperties;
-
+	
 	public SoaTaskConfig(SoaTaskProperties soaTaskProperties)
 	{
 		this.soaTaskProperties = soaTaskProperties;
 	}
 	
-	@Bean("taskExecutor")
-	AsyncTaskExecutor taskExecutor()
+	@Bean("mdcTaskDecorator")
+	@ConditionalOnMissingBean(name = "mdcTaskDecorator")
+	TaskDecorator taskDecorator()
 	{
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		
-		Execution execution = soaTaskProperties.getExecution();
-		
-		executor.setThreadNamePrefix(execution.getThreadNamePrefix());
-		executor.setCorePoolSize(execution.getPool().getCoreSize());
-		executor.setMaxPoolSize(execution.getPool().getMaxSize());
-		executor.setQueueCapacity(execution.getPool().getQueueCapacity());
-		executor.setKeepAliveSeconds(execution.getPool().getKeepAlive());
-		executor.setAllowCoreThreadTimeOut(execution.getPool().isAllowCoreThreadTimeout());
-		executor.setWaitForTasksToCompleteOnShutdown(execution.getShutdown().isAwaitTermination());
-		executor.setAwaitTerminationSeconds(execution.getShutdown().getAwaitTerminationPeriod());
-		
-		String rejectionPolicy = execution.getPool().getRejectionPolicy();
-		RejectedExecutionHandler rjh = null;
-		
-		if(GeneralHelper.isStrEmpty(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.CallerRunsPolicy();
-		else if("CALLER_RUNS".equalsIgnoreCase(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.CallerRunsPolicy();
-		else if("ABORT".equalsIgnoreCase(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.AbortPolicy();
-		else if("DISCARD".equalsIgnoreCase(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.DiscardPolicy();
-		else if("DISCARD_OLDEST".equalsIgnoreCase(rejectionPolicy))
-			rjh = new ThreadPoolExecutor.DiscardOldestPolicy();
-		else if("SYNC".equalsIgnoreCase(rejectionPolicy))
-			rjh = new SynchronousRejectedExecutionHandler();
-		else
-			throw new RuntimeException(String.format("invalid rejectionPolicy '%s'", rejectionPolicy));
-		
-		executor.setRejectedExecutionHandler(rjh);
-		
-		executor.setTaskDecorator(new TaskDecorator()
+		return new TaskDecorator()
 		{	
 			@Override
 			public Runnable decorate(Runnable runnable)
 			{
+				MdcAttr mdcAttr = MdcAttr.fromMdc();
+				
 				return new Runnable()
 				{
 					@Override
 					public void run()
 					{
-						MdcAttr mdcAttr = WebServerHelper.createMdcAddr(true);
-						
 						try
 						{
 							mdcAttr.putMdc();
@@ -93,11 +69,120 @@ public class SoaTaskConfig
 							mdcAttr.removeMdc();
 						}
 					}
-	
 				};
 			}
-		});
-
-		return executor;
+		};
 	}
+	
+	@Bean
+	TaskExecutorCustomizer taskExecutorCustomizer()
+	{
+		return new TaskExecutorCustomizer()
+		{
+			@Override
+			public void customize(ThreadPoolTaskExecutor taskExecutor)
+			{
+				String executionRejectionPolicy = soaTaskProperties.getExecution().getPool().getRejectionPolicy();
+				RejectedExecutionHandler rjh = WebServerHelper.parseRejectedExecutionHandler(executionRejectionPolicy, "CALLER_RUNS");				
+				taskExecutor.setRejectedExecutionHandler(rjh);
+			}
+		};
+	}
+	
+	@Bean
+	@SuppressWarnings("serial")
+	ThreadPoolTaskScheduler taskScheduler()
+	{
+		ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler()
+		{
+			@Override
+			protected ScheduledExecutorService createExecutor(int poolSize, ThreadFactory threadFactory, RejectedExecutionHandler rejectedExecutionHandler)
+			{
+				return new ScheduledThreadPoolExecutor(poolSize, threadFactory, rejectedExecutionHandler)
+				{
+					@Override
+					public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit)
+					{
+						return super.schedule(wrapCommand(command), delay, unit);
+					}
+					
+					@Override
+					public <V> ScheduledFuture<V> schedule(Callable<V> callable, long delay, TimeUnit unit)
+					{
+						return super.schedule(wrapCommand(callable), delay, unit);
+					}
+					
+					@Override
+					public ScheduledFuture<?> scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit)
+					{
+						return super.scheduleAtFixedRate(wrapCommand(command), initialDelay, period, unit);
+					}
+					
+					@Override
+					public ScheduledFuture<?> scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit)
+					{
+						return super.scheduleWithFixedDelay(wrapCommand(command), initialDelay, delay, unit);
+					}
+					
+					private Runnable wrapCommand(Runnable r)
+					{
+						return new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								MdcAttr mdcAttr = WebServerHelper.createMdcAddr(true);
+								
+								try
+								{
+									mdcAttr.putMdc();
+									r.run();
+								}
+								finally
+								{
+									mdcAttr.removeMdc();
+								}
+							}
+						};
+					}
+					
+					private <T> Callable<T> wrapCommand(Callable<T> t)
+					{
+						return new Callable<>()
+						{
+							@Override
+							public T call()  throws Exception
+							{
+								MdcAttr mdcAttr = WebServerHelper.createMdcAddr(true);
+								
+								try
+								{
+									mdcAttr.putMdc();
+									return t.call();
+								}
+								finally
+								{
+									mdcAttr.removeMdc();
+								}
+							}
+						};
+					}
+				};
+			}
+		};
+		
+		Scheduling scheduling = soaTaskProperties.getScheduling();
+		
+		scheduler.setThreadNamePrefix(scheduling.getThreadNamePrefix());
+		scheduler.setPoolSize(scheduling.getPool().getSize());
+		scheduler.setWaitForTasksToCompleteOnShutdown(scheduling.getShutdown().isAwaitTermination());
+		scheduler.setAwaitTerminationMillis(scheduling.getShutdown().getAwaitTerminationPeriod());
+
+		String schedulingRejectionPolicy = scheduling.getPool().getRejectionPolicy();
+		RejectedExecutionHandler rjh = WebServerHelper.parseRejectedExecutionHandler(schedulingRejectionPolicy, "ABORT");
+		scheduler.setRejectedExecutionHandler(rjh);
+
+		return scheduler;
+	}
+
 }

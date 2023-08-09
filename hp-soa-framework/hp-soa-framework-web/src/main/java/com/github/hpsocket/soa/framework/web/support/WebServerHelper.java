@@ -5,15 +5,19 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.MDC;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import com.github.hpsocket.soa.framework.core.thread.SynchronousRejectedExecutionHandler;
 import com.github.hpsocket.soa.framework.core.util.CryptHelper;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.core.util.Result;
@@ -310,17 +314,59 @@ public class WebServerHelper
 		if(generateRequestId)
 			mdcAttr.setRequestId(UUID.randomUUID().toString());
 		
-		TracingContext tracingContext = SpringContextHolder.getTracingContext();
-		
-		if(tracingContext != null)
-		{
-			String traceId = tracingContext.getTraceId();
+		String traceId = getTraceId();
 			
-			if(GeneralHelper.isStrNotEmpty(traceId))
-				mdcAttr.setTraceId(tracingContext.getTraceId());
-		}
+		if(GeneralHelper.isStrNotEmpty(traceId))
+			mdcAttr.setTraceId(traceId);
 		
 		return mdcAttr;
 	}
+	
+	public static final void putMdcTraceId()
+	{
+		String traceId = getTraceId();
+			
+		if(GeneralHelper.isStrNotEmpty(traceId))
+			MDC.put(MdcAttr.MDC_TRACE_ID_KEY, traceId);
+	}
 
+	public static final void removeMdcTraceId()
+	{
+		MDC.remove(MdcAttr.MDC_TRACE_ID_KEY);	
+	}
+
+	public static final String getTraceId()
+	{
+		String traceId = null;
+		TracingContext tracingContext = SpringContextHolder.getTracingContext();
+		
+		if(tracingContext != null)
+			traceId = tracingContext.getTraceId();
+
+		return traceId;
+	}
+
+	public static final RejectedExecutionHandler parseRejectedExecutionHandler(String rejectionPolicy, String defaultRejectionPolicy)
+	{
+		RejectedExecutionHandler rjh = null;
+		
+		if(GeneralHelper.isStrEmpty(rejectionPolicy))
+			rejectionPolicy = defaultRejectionPolicy;
+		
+		if("CALLER_RUNS".equalsIgnoreCase(rejectionPolicy))
+			rjh = new ThreadPoolExecutor.CallerRunsPolicy();
+		else if("ABORT".equalsIgnoreCase(rejectionPolicy))
+			rjh = new ThreadPoolExecutor.AbortPolicy();
+		else if("DISCARD".equalsIgnoreCase(rejectionPolicy))
+			rjh = new ThreadPoolExecutor.DiscardPolicy();
+		else if("DISCARD_OLDEST".equalsIgnoreCase(rejectionPolicy))
+			rjh = new ThreadPoolExecutor.DiscardOldestPolicy();
+		else if("SYNC".equalsIgnoreCase(rejectionPolicy))
+			rjh = new SynchronousRejectedExecutionHandler();
+		else
+			throw new RuntimeException(String.format("invalid rejection execution handler '%s'", rejectionPolicy));
+		
+		return rjh;
+	}
+	
 }

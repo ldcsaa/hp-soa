@@ -48,7 +48,7 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
 		private boolean enabled = true;
 		private int corePoolSize = 4;
 		private int maxPoolSize = 20;
-		private int keepAliveSeconds = 60;
+		private int keepAliveSeconds = 30;
 		private int queueCapacity = 3000;
 		private String rejectionPolicy = "CALLER_RUNS";
 		private boolean allowCoreThreadTimeOut = true;
