@@ -1,7 +1,7 @@
 # app
 hp.soa.web:
   app:
-    id: "0010100004"
+    id: "0010100006"
     name: ${project.artifactId}
     version: ${project.version}
     organization: HP-Socket

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.github.hpsocket</groupId>
+		<artifactId>hp-soa-starter</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<artifactId>hp-soa-starter-job-exclusive</artifactId>
+	<name>${project.artifactId}</name>
+	<packaging>jar</packaging>
+	
+	<properties>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.github.hpsocket</groupId>
+			<artifactId>hp-soa-framework-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-task</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-data-redis</artifactId>
+		</dependency>
+	</dependencies>
+</project>

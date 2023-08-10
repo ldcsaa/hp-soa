@@ -25,6 +25,7 @@ import com.github.hpsocket.soa.framework.core.util.Result;
 import com.alibaba.fastjson2.JSONWriter;
 import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import com.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
+import com.github.hpsocket.soa.framework.web.propertries.IAppProperties;
 import com.github.hpsocket.soa.framework.web.service.TracingContext;
 
 import static com.github.hpsocket.soa.framework.web.holder.AppConfigHolder.*;
@@ -367,6 +368,11 @@ public class WebServerHelper
 			throw new RuntimeException(String.format("invalid rejection execution handler '%s'", rejectionPolicy));
 		
 		return rjh;
+	}
+	
+	public static final boolean isAppReadOnly()
+	{
+		return SpringContextHolder.getBean(IAppProperties.class).isReadOnly();
 	}
 	
 }

@@ -9,4 +9,6 @@ public interface IAppProperties
 	String getOwner();
 	
 	int getCookieMaxAge();
+	
+	boolean isReadOnly();
 }

@@ -39,6 +39,7 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
 		private String version;
 		private String organization;
 		private String owner;
+		private boolean readOnly;
 	}
 	
 	@Getter
@@ -132,11 +133,17 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
 	}
 	
 	@Override
+	public boolean isReadOnly()
+	{
+		return app.isReadOnly();
+	}
+
+	@Override
 	public int getCookieMaxAge()
 	{
 		return cookie.getMaxAge();
 	}
-
+	
 	@Override
 	public int getCorePoolSize()
 	{

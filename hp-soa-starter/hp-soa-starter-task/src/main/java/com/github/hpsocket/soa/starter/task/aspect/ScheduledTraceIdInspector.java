@@ -6,8 +6,12 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
+import com.github.hpsocket.soa.framework.web.support.AspectHelper;
 import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Aspect
 @Order(Integer.MIN_VALUE)
 public class ScheduledTraceIdInspector
@@ -22,6 +26,16 @@ public class ScheduledTraceIdInspector
 	public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
 	{
 		WebServerHelper.putMdcTraceId();
+		
+		if(WebServerHelper.isAppReadOnly())
+		{
+			String methodName = AspectHelper.getMethod(joinPoint).getName();
+			String msg = String.format("current application is read only, skip scheduled task '%s'", methodName);
+			
+			log.debug(msg);
+			
+			return null;
+		}
 		
 		try
 		{
