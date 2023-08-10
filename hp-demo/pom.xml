@@ -7,6 +7,7 @@
 		<artifactId>hp-soa-parent</artifactId>
 		<version>${revision}</version>
 	</parent>
+	<groupId>com.github.hpsocket.demo</groupId>
 	<artifactId>hp-demo</artifactId>
 	<name>${project.artifactId}</name>
 	<packaging>pom</packaging>

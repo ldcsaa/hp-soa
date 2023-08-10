@@ -2,7 +2,7 @@
 <Configuration  packages="com.github.hpsocket.soa.framework.core.log" shutdownHook="disable" strict="true">
 
     <Properties>
-        <Property name="base.package">com.github.hpsocket.demo</Property>
+        <Property name="base.package">${project.groupId}</Property>
         <Property name="logger.dao.pattern">com\.github\.hpsocket\.demo\..*\.dao\..+</Property>
         <Property name="log.include.location">${sys:log4j.include.location:-true}</Property>
         <Property name="log.level">${sys:log4j.log.level:-DEBUG}</Property>
@@ -49,16 +49,22 @@
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Root>
-        <!-- SOA-MONITOR Logger -->
-        <Logger name="SOA-MONITOR" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
-            <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="MONITOR_LOG_FILE"/>
-        </Logger>
         <!-- Service Logger -->
         <Logger name="${base.package}" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
             <LoggerNameFilter name="${logger.dao.pattern}" level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
+        </Logger>
+        <!-- SOA-MONITOR Logger -->
+        <Logger name="SOA-MONITOR" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="MONITOR_LOG_FILE"/>
+        </Logger>
+        <!-- HP-SOA Logger -->
+        <Logger name="com.github.hpsocket" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="MONITOR_LOG_FILE"/>
+            <AppenderRef ref="KAFKA_MONITOR"/>
         </Logger>
         <!-- Dubbo Logger -->
         <Logger name="org.apache.dubbo" level="INFO" includeLocation="${log.include.location}" additivity="false">
