@@ -347,6 +347,17 @@ public class WebServerHelper
 		return traceId;
 	}
 
+	public static final String getSpanId()
+	{
+		String spanId = null;
+		TracingContext tracingContext = SpringContextHolder.getTracingContext();
+		
+		if(tracingContext != null)
+			spanId = tracingContext.getSpanId();
+
+		return spanId;
+	}
+
 	public static final RejectedExecutionHandler parseRejectedExecutionHandler(String rejectionPolicy, String defaultRejectionPolicy)
 	{
 		RejectedExecutionHandler rjh = null;
