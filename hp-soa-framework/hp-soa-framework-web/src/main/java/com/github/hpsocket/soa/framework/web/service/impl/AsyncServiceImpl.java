@@ -7,7 +7,7 @@ import java.util.concurrent.Future;
 
 import javax.annotation.PreDestroy;
 
-import com.github.hpsocket.soa.framework.core.thread.MdcThreadPoolExecutor;
+import com.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 import com.github.hpsocket.soa.framework.web.service.AsyncService;
 
 import lombok.Getter;
@@ -17,9 +17,9 @@ import lombok.Setter;
 @Setter
 public class AsyncServiceImpl implements AsyncService
 {
-	private MdcThreadPoolExecutor executor;
+	private AsyncThreadPoolExecutor executor;
 	
-	public AsyncServiceImpl(MdcThreadPoolExecutor executor)
+	public AsyncServiceImpl(AsyncThreadPoolExecutor executor)
 	{
 		this.executor = executor;
 	}

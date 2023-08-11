@@ -184,20 +184,6 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
 			
 				jsonLog.put("monitor_type", MONITOR_INGRESS);
 
-				/*
-				MdcAttr mdcAttr = getMdcAttr();
-				jsonLog.put("appId", mdcAttr.getAppId());
-				jsonLog.put("appName", mdcAttr.getAppName());
-				jsonLog.put("serviceId", mdcAttr.getServiceId());
-				jsonLog.put("serviceName", mdcAttr.getServiceName());
-				jsonLog.put("serviceAddr", mdcAttr.getServiceAddr());
-				jsonLog.put("organization", mdcAttr.getOrganization());
-				jsonLog.put("owner", mdcAttr.getOwner());
-				jsonLog.put("fromServiceId", mdcAttr.getFromServiceId());
-				jsonLog.put("fromServiceName", mdcAttr.getFromServiceName());
-				jsonLog.put("fromServiceAddr", mdcAttr.getFromServiceAddr());
-				*/
-				
 				@SuppressWarnings("unchecked")
 				final Map<String, ?> reqAttr = BeanMap.create(requestAttribute);;
 

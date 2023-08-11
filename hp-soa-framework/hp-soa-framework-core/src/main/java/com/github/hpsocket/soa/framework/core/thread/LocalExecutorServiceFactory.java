@@ -71,7 +71,7 @@ public class LocalExecutorServiceFactory
 	
 	private ThreadPoolExecutor createExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> synchronousQueue, RejectedExecutionHandler rejectHandler)
 	{
-		return new MdcThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, synchronousQueue, rejectHandler);
+		return new AsyncThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, synchronousQueue, rejectHandler);
 	}
 
 }

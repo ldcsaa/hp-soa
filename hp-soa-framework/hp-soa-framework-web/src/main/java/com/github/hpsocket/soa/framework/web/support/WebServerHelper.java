@@ -28,6 +28,8 @@ import com.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import com.github.hpsocket.soa.framework.web.propertries.IAppProperties;
 import com.github.hpsocket.soa.framework.web.service.TracingContext;
 
+import static com.alibaba.fastjson2.JSONWriter.Feature.*;
+
 import static com.github.hpsocket.soa.framework.web.holder.AppConfigHolder.*;
 
 public class WebServerHelper
@@ -75,14 +77,14 @@ public class WebServerHelper
 	public static final String MONITOR_INGRESS		= "MONITOR-INGRESS";
 	public static final String MONITOR_EGRESS		= "MONITOR-EGRESS";
 
-	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT		= {JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNonStringKeyAsString};
-	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL	= {JSONWriter.Feature.WriteNonStringKeyAsString};
+	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT		= {WriteByteArrayAsBase64, WriteNonStringKeyAsString, WriteMapNullValue};
+	public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL	= {WriteByteArrayAsBase64, WriteNonStringKeyAsString};
 	
 	public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor(	4,
 																						16,
 																						60,
 																						TimeUnit.SECONDS,
-																						new LinkedBlockingDeque<>(6000),
+																						new LinkedBlockingDeque<>(2000),
 																						new ThreadPoolExecutor.CallerRunsPolicy());																		 
 
 	public static final boolean checkUserAgent(String ua)

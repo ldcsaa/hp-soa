@@ -16,24 +16,24 @@ import org.springframework.context.annotation.Bean;
 
 import com.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
 import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import com.github.hpsocket.soa.starter.skywalking.async.TracingThreadPoolExecutor;
+import com.github.hpsocket.soa.starter.skywalking.async.TracingAsyncThreadPoolExecutor;
 import com.github.hpsocket.soa.starter.web.config.WebConfig;
 
 @AutoConfiguration
 @ConditionalOnClass({TraceContext.class, WebConfig.class})
 @AutoConfigureBefore(WebConfig.class)
-public class SoaSkyWalkingMdcConfig
+public class SoaSkyWalkingAsyncConfig
 {
-    @Bean("mdcThreadPoolExecutor")
+    @Bean("asyncThreadPoolExecutor")
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
-    public TracingThreadPoolExecutor mdcThreadPoolExecutor(IAsyncProperties asyncProperties)
+    public TracingAsyncThreadPoolExecutor mdcThreadPoolExecutor(IAsyncProperties asyncProperties)
     {
 		RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
 		BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 
 										? new SynchronousQueue<>() 
 										: new LinkedBlockingDeque<>(asyncProperties.getQueueCapacity());
 		
-		TracingThreadPoolExecutor executor = new TracingThreadPoolExecutor(
+		TracingAsyncThreadPoolExecutor executor = new TracingAsyncThreadPoolExecutor(
 											asyncProperties.getCorePoolSize(),
 											asyncProperties.getMaxPoolSize(),
 											asyncProperties.getKeepAliveSeconds(),

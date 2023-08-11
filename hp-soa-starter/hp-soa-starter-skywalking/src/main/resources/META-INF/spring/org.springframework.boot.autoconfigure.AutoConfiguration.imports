@@ -1,3 +1,3 @@
 com.github.hpsocket.soa.starter.skywalking.config.SoaSkyWalkingConfig
-com.github.hpsocket.soa.starter.skywalking.config.SoaSkyWalkingMdcConfig
+com.github.hpsocket.soa.starter.skywalking.config.SoaSkyWalkingAsyncConfig
 com.github.hpsocket.soa.starter.skywalking.config.SoaSkyWalkingTaskConfig

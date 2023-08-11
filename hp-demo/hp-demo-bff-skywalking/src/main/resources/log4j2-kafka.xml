@@ -88,49 +88,49 @@
         </Logger>
         <!-- SOA-MONITOR Logger -->
         <Logger name="SOA-MONITOR" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
-            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="STDERR"/>
             <AppenderRef ref="MONITOR_LOG_FILE"/>
             <AppenderRef ref="KAFKA_MONITOR"/>
         </Logger>
         <!-- HP-SOA Logger -->
         <Logger name="com.github.hpsocket" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
             <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="MONITOR_LOG_FILE"/>
-            <AppenderRef ref="KAFKA_MONITOR"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- Dubbo Logger -->
         <Logger name="org.apache.dubbo" level="INFO" includeLocation="${log.include.location}" additivity="false">
-            <AppenderRef ref="STDERR"/>
+            <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- XXL-JOB Logger -->
         <Logger name="com.xxl.job" level="INFO" includeLocation="${log.include.location}" additivity="false">
-            <AppenderRef ref="STDERR"/>
+            <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- MyBatis Logger -->
         <Logger name="org.apache.ibatis" level="WARN" includeLocation="${log.include.location}" additivity="false">
-            <AppenderRef ref="STDERR"/>
+            <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- JDBC Logger -->
         <Logger name="java.sql" level="WARN" includeLocation="${log.include.location}" additivity="false">
-            <AppenderRef ref="STDERR"/>
+            <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- Spring JDBC Logger -->
         <Logger name="org.springframework.jdbc" level="WARN" includeLocation="${log.include.location}" additivity="false">
-            <AppenderRef ref="STDERR"/>
+            <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- MongoDB -->
         <Logger name="com.mongodb" level="WARN" includeLocation="${log.include.location}" additivity="false">
-            <AppenderRef ref="STDERR"/>
+            <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>

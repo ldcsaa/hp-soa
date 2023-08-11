@@ -1,6 +1,8 @@
 
 package com.github.hpsocket.soa.starter.web.config;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -13,6 +15,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -21,10 +26,13 @@ import org.springframework.web.servlet.config.annotation.CorsRegistration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.github.hpsocket.soa.framework.core.thread.MdcThreadPoolExecutor;
+import com.alibaba.fastjson2.support.config.FastJsonConfig;
+import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
+import com.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
 import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import com.github.hpsocket.soa.framework.web.json.FastJsonExcludePropertyFilter;
 import com.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
 import com.github.hpsocket.soa.framework.web.service.AsyncService;
 import com.github.hpsocket.soa.framework.web.service.impl.AsyncServiceImpl;
@@ -108,17 +116,17 @@ public class WebConfig implements WebMvcConfigurer
        return ((web) -> {});
     }
     
-    @Bean("mdcThreadPoolExecutor")
-    @ConditionalOnMissingBean(name = "mdcThreadPoolExecutor")
+    @Bean("asyncThreadPoolExecutor")
+    @ConditionalOnMissingBean(name = "asyncThreadPoolExecutor")
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
-    public MdcThreadPoolExecutor mdcThreadPoolExecutor(IAsyncProperties asyncProperties)
+    public AsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
     {
 		RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
 		BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 
 										? new SynchronousQueue<>() 
 										: new LinkedBlockingDeque<>(asyncProperties.getQueueCapacity());
 		
-		MdcThreadPoolExecutor executor = new MdcThreadPoolExecutor(
+		AsyncThreadPoolExecutor executor = new AsyncThreadPoolExecutor(
 											asyncProperties.getCorePoolSize(),
 											asyncProperties.getMaxPoolSize(),
 											asyncProperties.getKeepAliveSeconds(),
@@ -133,9 +141,40 @@ public class WebConfig implements WebMvcConfigurer
     
     @Bean
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
-    public AsyncService asyncService(MdcThreadPoolExecutor mdcThreadPoolExecutor)
+    public AsyncService asyncService(AsyncThreadPoolExecutor asyncThreadPoolExecutor)
     {
-    	return new AsyncServiceImpl(mdcThreadPoolExecutor);
+    	return new AsyncServiceImpl(asyncThreadPoolExecutor);
+    }
+    
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters)
+    {
+    	int i = 0;
+    	List<MediaType> mediaTypes = null;
+    	
+    	for(; i < converters.size(); i++)
+    	{
+    		if(converters.get(i) instanceof MappingJackson2HttpMessageConverter jackson2Converter)
+    		{
+    			mediaTypes = jackson2Converter.getSupportedMediaTypes();
+    			break;
+    		}
+    	}
+    	
+    	if(mediaTypes == null)
+    		mediaTypes = Arrays.asList(MediaType.APPLICATION_JSON, new MediaType("application", "*+json"));
+    	
+    	FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+    	converter.setSupportedMediaTypes(mediaTypes);
+
+    	FastJsonConfig config = converter.getFastJsonConfig();
+    	config.setWriterFeatures(WebServerHelper.JSON_SERIAL_FEATURES_DEFAULT);
+    	config.setWriterFilters(new FastJsonExcludePropertyFilter());
+    	config.setJSONB(true);
+    	
+    	converters.add(i, converter);
+    	
+    	WebMvcConfigurer.super.extendMessageConverters(converters);
     }
 
 	@Override

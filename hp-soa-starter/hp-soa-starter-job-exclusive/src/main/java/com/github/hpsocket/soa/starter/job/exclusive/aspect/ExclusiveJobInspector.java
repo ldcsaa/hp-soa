@@ -16,9 +16,11 @@ import org.springframework.util.StopWatch;
 import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import com.github.hpsocket.soa.framework.web.service.AsyncService;
 import com.github.hpsocket.soa.framework.web.support.AspectHelper;
 import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import com.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob;
+import com.github.hpsocket.soa.starter.job.exclusive.exception.ExclusiveJobExceptionHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +35,11 @@ public class ExclusiveJobInspector
 	
 	private static final AtomicBoolean running = new AtomicBoolean(false);
 	
+	@Autowired(required = false)
+	ExclusiveJobExceptionHandler exceptionHandler;
+	
+	@Autowired(required = false)
+	AsyncService asyncService;
 	@Autowired
 	private RedissonClient redissonClient;
 
@@ -46,6 +53,16 @@ public class ExclusiveJobInspector
 	{	
 		MdcAttr mdcAttr = WebServerHelper.createMdcAddr(true);		
 
+		ExclusiveJob job = AspectHelper.getMethodAnnotation(joinPoint, ExclusiveJob.class);
+		String prefix = job.prefix();
+		String jobName = job.jobName();
+		
+		if(GeneralHelper.isStrEmpty(prefix))
+			prefix = AppConfigHolder.getAppName();
+		
+		String fullJobName = prefix + ':' + jobName;
+		boolean needThrow  = true;
+
 		try
 		{
 			if(!running.compareAndSet(false, true))
@@ -53,15 +70,6 @@ public class ExclusiveJobInspector
 			
 			mdcAttr.putMdc();
 			
-			ExclusiveJob job = AspectHelper.getMethodAnnotation(joinPoint, ExclusiveJob.class);
-			String prefix = job.prefix();
-			String jobName = job.jobName();
-			
-			if(GeneralHelper.isStrEmpty(prefix))
-				prefix = AppConfigHolder.getAppName();
-			
-			String fullJobName = prefix + ':' + jobName;
-
 			if(WebServerHelper.isAppReadOnly())
 			{
 				String msg = String.format("current application is read only, skip exclusive job '%s'", fullJobName);
@@ -89,6 +97,9 @@ public class ExclusiveJobInspector
 				catch(Exception e)
 				{
 					log.error("execute exclusive job -> {} exception : {}", fullJobName, e.getMessage(), e);
+					
+					needThrow = false;
+					throw e;
 				}
 				finally
 				{
@@ -99,6 +110,13 @@ public class ExclusiveJobInspector
 				}
 			}
 		}
+		catch(Exception e)
+		{
+			invokeExceptionHandler(prefix, jobName, e);
+			
+			if(needThrow)
+				throw e;
+		}
 		finally
 		{
 			running.compareAndSet(true, false);
@@ -106,5 +124,18 @@ public class ExclusiveJobInspector
 		}
 		
 		return null;
+	}
+
+	private void invokeExceptionHandler(String prefix, String jobName, Exception e)
+	{
+		if(exceptionHandler == null)
+			return;
+		
+		if(asyncService == null)
+			exceptionHandler.handleException(prefix, jobName, e);
+		else
+		{
+			asyncService.execute(() -> exceptionHandler.handleException(prefix, jobName, e));
+		}
 	}
 }

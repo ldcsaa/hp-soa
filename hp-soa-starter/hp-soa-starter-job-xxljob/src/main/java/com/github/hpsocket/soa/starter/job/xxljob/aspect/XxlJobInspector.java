@@ -8,11 +8,14 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
 
 import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import com.github.hpsocket.soa.framework.web.service.AsyncService;
 import com.github.hpsocket.soa.framework.web.support.AspectHelper;
 import com.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import com.github.hpsocket.soa.starter.job.xxljob.exception.XxlJobExceptionHandler;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 
@@ -26,6 +29,11 @@ public class XxlJobInspector
 	private static final int SKIP_RESULT_CODE	 = 202;
 	private static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
 												 + "@annotation(com.xxl.job.core.handler.annotation.XxlJob)";
+	
+	@Autowired(required = false)
+	AsyncService asyncService;
+	@Autowired(required = false)
+	private XxlJobExceptionHandler exceptionHandler;
 
 	@Pointcut(POINTCUT_PATTERN)
 	protected void aroundMethod()
@@ -37,13 +45,15 @@ public class XxlJobInspector
 	{
 		MdcAttr mdcAttr = WebServerHelper.createMdcAddr(true);		
 
+		XxlJob job		= AspectHelper.getMethodAnnotation(joinPoint, XxlJob.class);
+		String jobName	= job.value();
+		long jobId		= XxlJobHelper.getJobId();
+		String param	= XxlJobHelper.getJobParam();
+			
 		try
 		{
 			mdcAttr.putMdc();
 			
-			XxlJob job = AspectHelper.getMethodAnnotation(joinPoint, XxlJob.class);
-			String jobName = job.value();
-
 			if(WebServerHelper.isAppReadOnly())
 			{
 				String msg = String.format("current application is read only, skip xxl-job '%s'", jobName);
@@ -55,8 +65,6 @@ public class XxlJobInspector
 			}
 			
 			StopWatch sw = new StopWatch(jobName);
-			long jobId	 = XxlJobHelper.getJobId();
-			String param = XxlJobHelper.getJobParam();
 			
 			try
 			{
@@ -86,9 +94,28 @@ public class XxlJobInspector
 				log.debug("end xxl-job -> {} (id: {}, costTime: {})", jobName, jobId, sw.getLastTaskTimeMillis());				
 			}
 		}
+		catch(Exception e)
+		{
+			invokeExceptionHandler(jobName, jobId, param, e);
+			
+			throw e;
+		}
 		finally
 		{
 			mdcAttr.removeMdc();
+		}
+	}
+
+	private void invokeExceptionHandler(String jobName, long jobId, String param, Exception e)
+	{
+		if(exceptionHandler == null)
+			return;
+		
+		if(asyncService == null)
+			exceptionHandler.handleException(jobName, jobId, param, e);
+		else
+		{
+			asyncService.execute(() -> exceptionHandler.handleException(jobName, jobId, param, e));
 		}
 	}
 }
