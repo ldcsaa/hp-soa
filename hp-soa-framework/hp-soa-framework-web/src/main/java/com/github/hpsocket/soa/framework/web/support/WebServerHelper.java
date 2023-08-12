@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -138,7 +139,7 @@ public class WebServerHelper
 			exists = true;
 
 		if(!exists)
-			clientCookie = createCookie(req, HEADER_CLIENT_ID, UUID.randomUUID().toString(), getCookieMaxAge());
+			clientCookie = createCookie(req, HEADER_CLIENT_ID, randomUUID(), getCookieMaxAge());
 
 		return new Result<>(exists, clientCookie);
 	}
@@ -290,12 +291,12 @@ public class WebServerHelper
 		return infos;
 	}
 
-	public static final MdcAttr createMdcAddr()
+	public static final MdcAttr createMdcAttr()
 	{
-		return createMdcAddr(false);
+		return createMdcAttr(true);
 	}
 	
-	public static final MdcAttr createMdcAddr(boolean generateRequestId)
+	public static final MdcAttr createMdcAttr(boolean generateRequestId)
 	{
 		MdcAttr mdcAttr = new MdcAttr();
 		
@@ -315,7 +316,7 @@ public class WebServerHelper
 			mdcAttr.setOwner(AppConfigHolder.getAppOwner());
 		
 		if(generateRequestId)
-			mdcAttr.setRequestId(UUID.randomUUID().toString());
+			mdcAttr.setRequestId(randomUUID());
 		
 		String traceId = getTraceId();
 			
@@ -388,4 +389,9 @@ public class WebServerHelper
 		return SpringContextHolder.getBean(IAppProperties.class).isReadOnly();
 	}
 	
+	public static final String randomUUID()
+	{
+		ThreadLocalRandom random = ThreadLocalRandom.current();
+		return new UUID(random.nextLong(), random.nextLong()).toString();
+	}
 }

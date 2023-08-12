@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
 import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
@@ -43,9 +44,11 @@ public class XxlJobInspector
 	@Around(value = "aroundMethod()")
 	public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
 	{
-		MdcAttr mdcAttr = WebServerHelper.createMdcAddr(true);		
+		MdcAttr mdcAttr = WebServerHelper.createMdcAttr();		
 
-		XxlJob job		= AspectHelper.getMethodAnnotation(joinPoint, XxlJob.class);
+		XxlJob job = AspectHelper.getMethodAnnotation(joinPoint, XxlJob.class);
+		Assert.notNull(job, "XxlJob annotation not found");
+		
 		String jobName	= job.value();
 		long jobId		= XxlJobHelper.getJobId();
 		String param	= XxlJobHelper.getJobParam();

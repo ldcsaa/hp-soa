@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
 import com.github.hpsocket.soa.framework.core.mdc.MdcAttr;
@@ -51,11 +52,13 @@ public class ExclusiveJobInspector
 	@Around(value = "aroundMethod()")
 	public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
 	{	
-		MdcAttr mdcAttr = WebServerHelper.createMdcAddr(true);		
+		MdcAttr mdcAttr = WebServerHelper.createMdcAttr();		
 
 		ExclusiveJob job = AspectHelper.getMethodAnnotation(joinPoint, ExclusiveJob.class);
-		String prefix = job.prefix();
-		String jobName = job.jobName();
+		Assert.notNull(job, "ExclusiveJob annotation not found");
+		
+		String prefix	= job.prefix();
+		String jobName	= job.jobName();
 		
 		if(GeneralHelper.isStrEmpty(prefix))
 			prefix = AppConfigHolder.getAppName();

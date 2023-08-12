@@ -192,7 +192,7 @@ public class RequestContext
 		}
 		
 		if(GeneralHelper.isStrEmpty(requestId))
-			requestId = UUID.randomUUID().toString();
+			requestId = WebServerHelper.randomUUID();
 
 		String requestUri	 = WebServerHelper.getRequestUri(request);
 		String requestPath	 = WebServerHelper.getRequestPath(request);

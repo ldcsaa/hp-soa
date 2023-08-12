@@ -131,7 +131,7 @@ public class SoaTaskConfig
 							@Override
 							public void run()
 							{
-								MdcAttr mdcAttr = WebServerHelper.createMdcAddr(true);
+								MdcAttr mdcAttr = WebServerHelper.createMdcAttr();
 								
 								try
 								{
@@ -153,7 +153,7 @@ public class SoaTaskConfig
 							@Override
 							public T call()  throws Exception
 							{
-								MdcAttr mdcAttr = WebServerHelper.createMdcAddr(true);
+								MdcAttr mdcAttr = WebServerHelper.createMdcAttr();
 								
 								try
 								{

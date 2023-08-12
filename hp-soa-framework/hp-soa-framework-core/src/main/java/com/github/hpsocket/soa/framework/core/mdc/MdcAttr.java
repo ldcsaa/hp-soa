@@ -11,6 +11,7 @@ public class MdcAttr
 	public static final String MDC_REQUEST_ID_KEY	= "__requestId";
 	public static final String MDC_CLIENT_ID_KEY	= "__clientId";
 	public static final String MDC_SESSION_ID_KEY	= "__sessionId";
+	public static final String MDC_MESSAGE_ID_KEY	= "__messageId";
 	public static final String MDC_APP_CODE_KEY		= "__appCode";
 	public static final String MDC_SRC_APP_CODE_KEY	= "__srcAppCode";
 	public static final String MDC_TOKEN_KEY		= "__token";
@@ -34,6 +35,7 @@ public class MdcAttr
 					MDC_REQUEST_ID_KEY,
 					MDC_CLIENT_ID_KEY,
 					MDC_SESSION_ID_KEY,
+					MDC_MESSAGE_ID_KEY,
 					MDC_APP_CODE_KEY,
 					MDC_SRC_APP_CODE_KEY,
 					MDC_TOKEN_KEY,
@@ -49,6 +51,7 @@ public class MdcAttr
 					MDC_REQUEST_ID_KEY,
 					MDC_CLIENT_ID_KEY,
 					MDC_SESSION_ID_KEY,
+					MDC_MESSAGE_ID_KEY,
 					MDC_APP_CODE_KEY,
 					MDC_SRC_APP_CODE_KEY,
 					MDC_TOKEN_KEY,
