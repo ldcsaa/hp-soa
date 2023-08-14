@@ -15,7 +15,7 @@
 
     <dependencies>
 		<dependency>
-			<groupId>com.github.hpsocket</groupId>
+			<groupId>com.github.hpsocket.demo</groupId>
 			<artifactId>hp-demo-infra-sentinel-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -1,4 +1,4 @@
-package com.github.hpsocket.test;
+package com.github.hpsocket.test.data.redis;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;

@@ -51,6 +51,8 @@
 		<mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.1.3</dynamic-datasource-spring-boot3-starter.version>
+        <shardingsphere-jdbc-core.version>5.4.0</shardingsphere-jdbc-core.version>
+        <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
 		<ehcache.version>3.10.8</ehcache.version>
 
 		<commons-io.version>2.13.0</commons-io.version>
@@ -173,6 +175,11 @@
 			<dependency>
 				<groupId>com.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-data-redis</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.hpsocket</groupId>
+				<artifactId>hp-soa-starter-data-mysql</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
@@ -590,6 +597,18 @@
 			    <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
 			    <version>${dynamic-datasource-spring-boot3-starter.version}</version>
 			</dependency>
+			
+<dependency>
+    <groupId>org.apache.shardingsphere</groupId>
+    <artifactId>shardingsphere-jdbc-core</artifactId>
+    <version>${shardingsphere-jdbc-core.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.shardingsphere</groupId>
+    <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+    <version>${shardingsphere-jdbc-core-spring-boot-starter.version}</version>
+</dependency>
+
 			
             <dependency>
                 <groupId>org.springframework.security.oauth</groupId>
