@@ -2,7 +2,6 @@ package com.github.hpsocket.soa.framework.web.advice;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

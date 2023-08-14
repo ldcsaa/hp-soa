@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.alibaba.druid.spring.boot.autoconfigure.stat.DruidStatViewServletConfiguration;
-import com.alibaba.druid.spring.boot.autoconfigure.stat.DruidWebStatFilterConfiguration;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
@@ -29,9 +27,7 @@ public class SoaMySqlConfig
 	public MybatisPlusInterceptor mybatisPlusInterceptor()
 	{
 		MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-		//DruidDataSourceCreator
-		//DruidStatViewServletConfiguration
-		//DruidWebStatFilterConfiguration
+
 		interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
 		interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
 		
