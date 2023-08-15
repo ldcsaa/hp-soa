@@ -56,9 +56,9 @@ public class DemoControllerImpl implements DemoController
     		userBo = userService.getMasterUser();
     	else if(name.equalsIgnoreCase("slave"))
     		userBo = userService.getSlaveUser();
-    	else if(name.equalsIgnoreCase("slave1"))
+    	else if(name.equalsIgnoreCase("slave-1"))
     		userBo = userService.getSlave1User();
-    	else if(name.equalsIgnoreCase("slave2"))
+    	else if(name.equalsIgnoreCase("slave-2"))
     		userBo = userService.getSlave2User();
     	else
     		userBo = userService.getDefaultUser();
