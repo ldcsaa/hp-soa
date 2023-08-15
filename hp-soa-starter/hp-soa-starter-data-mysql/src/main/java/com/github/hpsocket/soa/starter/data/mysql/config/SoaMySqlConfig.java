@@ -21,8 +21,8 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 @ConditionalOnProperty(name = "spring.datasource.dynamic.enabled", matchIfMissing = true)
 public class SoaMySqlConfig
 {
-	private static final String CREATE_TIME_FIELD_NAME = "createTime";
-	private static final String UPDATE_TIME_FIELD_NAME = "updateTime";
+	public static final String CREATE_TIME_FIELD_NAME = "createTime";
+	public static final String UPDATE_TIME_FIELD_NAME = "updateTime";
 
 	@Bean
 	@ConditionalOnMissingBean(MybatisPlusInterceptor.class)
