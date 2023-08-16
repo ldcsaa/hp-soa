@@ -10,5 +10,5 @@ public interface UserService
 	UserBo getSlave1User();
 	UserBo getSlave2User();
 	
-	boolean addUser(UserBo userBo);
+	boolean saveUser(UserBo userBo);
 }

@@ -6,8 +6,12 @@ hp.soa.web:
     version: ${project.version}
     organization: HP-Socket
     owner: Kingfisher
+  # spring bean scan packages
   component-scan:
-    base-package: com.github.hpsocket.demo
+    base-package: ${project.groupId}
+  # mybatis mapper scan packages
+  mapper-scan:
+    base-package: ${project.groupId}.infra.mysql.mapper
   access-verification:
     enabled: false
     DefaultAccessPolicy: maybe_login

@@ -22,6 +22,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -99,8 +100,8 @@ public class WebConfig implements WebMvcConfigurer
 			
 			http
 			.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-				.requestMatchers(managementBasePath).authenticated()
-				.requestMatchers(SecurityProperties.ANY_PATH_PATTERN).permitAll())
+				.requestMatchers(AntPathRequestMatcher.antMatcher(managementBasePath)).authenticated()
+				.requestMatchers(AntPathRequestMatcher.antMatcher(SecurityProperties.ANY_PATH_PATTERN)).permitAll())
 			.formLogin(Customizer.withDefaults())
 			.httpBasic(Customizer.withDefaults());
 		}

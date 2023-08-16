@@ -14,7 +14,3 @@ spring.datasource.dynamic.datasource:
     username: soa
     password: "Vt4ZT5CSHb9wpO4b0fx7uSX8UxGkyTEc3ycZZhWZcz++Ehkg0Dtzhi7s2XB8fLFAcjgKilUv0iN5Fasb4dNQ1w=="
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

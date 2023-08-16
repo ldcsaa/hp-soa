@@ -16,16 +16,11 @@ import lombok.Setter;
 @Setter
 @Schema(description = "请求对象示例")
 public class DemoReuqest {
-    /**
-     * <p>@NotBlank Validation 校验注解</p>
-     * <p>@ApiModelProperty Swagger Model Property 注解</p>
-     */
+    @Schema(description = "id", example = "123", requiredMode = RequiredMode.NOT_REQUIRED, nullable = true)
+    private Long id;
     @NotBlank(message = "name is empty")
     @Schema(description = "姓名", example = "my name", requiredMode = RequiredMode.REQUIRED, minLength = 1, nullable = false)
     private String name;
-    /**
-     * <p>@ApiModelProperty Swagger Model Property 注解</p>
-     */
     @Schema(description = "年龄", example = "23", requiredMode = RequiredMode.NOT_REQUIRED, nullable = false)
     private Integer age;
 }

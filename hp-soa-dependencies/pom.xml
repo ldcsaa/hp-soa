@@ -895,6 +895,11 @@
 			    <artifactId>druid-spring-boot-starter</artifactId>
 			    <version>${druid.version}</version>
 			</dependency>
+			<dependency>
+			    <groupId>com.alibaba</groupId>
+			    <artifactId>druid-spring-boot-3-starter</artifactId>
+			    <version>${druid.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>com.caucho</groupId>

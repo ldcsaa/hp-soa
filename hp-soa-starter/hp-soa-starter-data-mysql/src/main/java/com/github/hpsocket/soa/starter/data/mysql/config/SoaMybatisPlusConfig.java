@@ -4,7 +4,6 @@ package com.github.hpsocket.soa.starter.data.mysql.config;
 import java.time.LocalDateTime;
 
 import org.apache.ibatis.reflection.MetaObject;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,9 +16,8 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 
 @AutoConfiguration
-@MapperScan("${hp.soa.web.component-scan.base-package:}")
 @ConditionalOnProperty(name = "spring.datasource.dynamic.enabled", matchIfMissing = true)
-public class SoaMySqlConfig
+public class SoaMybatisPlusConfig
 {
 	public static final String CREATE_TIME_FIELD_NAME = "createTime";
 	public static final String UPDATE_TIME_FIELD_NAME = "updateTime";
@@ -45,13 +43,15 @@ public class SoaMySqlConfig
 			@Override
 			public void insertFill(MetaObject metaObject)
 			{
-				strictFillStrategy(metaObject, CREATE_TIME_FIELD_NAME, LocalDateTime::now);
+				LocalDateTime now = LocalDateTime.now();
+				fillStrategy(metaObject, CREATE_TIME_FIELD_NAME, now);
+				fillStrategy(metaObject, UPDATE_TIME_FIELD_NAME, now);
 			}
 
 			@Override
 			public void updateFill(MetaObject metaObject)
 			{
-				strictFillStrategy(metaObject, UPDATE_TIME_FIELD_NAME, LocalDateTime::now);
+				fillStrategy(metaObject, UPDATE_TIME_FIELD_NAME, LocalDateTime.now());
 			}
 		};
 	}

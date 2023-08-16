@@ -82,6 +82,12 @@ public class DemoControllerImpl implements DemoController
     @Override
     public Object test(@Valid DemoReuqest request)
     {
-    	return "test";
+    	UserBo userBo = new UserBo();
+    	
+    	userBo.setId(request.getId());
+    	userBo.setName(request.getName());
+    	userBo.setAge(request.getAge());
+    	
+    	return "save user: " + userService.saveUser(userBo);
     }
 }

@@ -7,7 +7,7 @@ hp.soa.web:
     organization: HP-Socket
     owner: Kingfisher
   component-scan:
-    base-package: com.github.hpsocket.demo
+    base-package: ${project.groupId}
   access-verification:
     enabled: true
     DefaultAccessPolicy: maybe_login

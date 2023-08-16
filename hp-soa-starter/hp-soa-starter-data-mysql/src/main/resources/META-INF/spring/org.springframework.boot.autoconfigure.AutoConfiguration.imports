@@ -1,1 +1,3 @@
-com.github.hpsocket.soa.starter.data.mysql.config.SoaMySqlConfig
+com.github.hpsocket.soa.starter.data.mysql.config.SoaDruidConfig
+com.github.hpsocket.soa.starter.data.mysql.config.SoaMybatisPlusConfig
+com.github.hpsocket.soa.starter.data.mysql.config.SoaMapperScanConfig

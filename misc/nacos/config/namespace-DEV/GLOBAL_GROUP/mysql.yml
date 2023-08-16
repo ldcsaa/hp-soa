@@ -1,3 +1,31 @@
+spring.datasource:
+  druid:
+    web-stat-filter:
+      enabled: true
+      session-stat-enable: true
+      url-pattern: /*
+      exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/__druid/*"
+    stat-view-servlet:
+      enabled: true
+      url-pattern: "/__druid/*"
+      login-username: admin
+      login-password: 123456
+      allow: 127.0.0.1,192.168.0.0/16
+      reset-enable: true
+    aop-patterns:
+      - ${hp.soa.web.component-scan.base-package:}
+    filter:
+      stat:
+        enabled: true
+        log-slow-sql: true
+        slow-sql-millis: 500
+      wall:
+        enabled: true
+      slf4j:
+        enabled: true
+      config:
+        enabled: true
+        
 spring.datasource.dynamic:
   primary: master
   strict: true
@@ -16,18 +44,6 @@ spring.datasource.dynamic:
     filters: stat,wall,slf4j
     connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
     public-key: "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJRhKGNr3IAJcs4+0ys/4zmwUJoBYqAdx6EcyiWIBt7cIFS5QdruakTmGk8XOVPMVz9jOLOvhPfjLzgPgwaKo6UCAwEAAQ=="
-    web-stat-filter:
-      enabled: true
-      session-stat-enable: true
-      url-pattern: /*
-      exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/__druid/*"
-    stat-view-servlet:
-      enabled: true
-      url-pattern: "/__druid/*"
-      login-username: admin
-      login-password: 123456
-      allow: localhost,127.0.0.1,192.168.*
-      reset-enable: false
 
 mybatis-plus:
   mapper-locations:
@@ -35,6 +51,8 @@ mybatis-plus:
   check-config-location: false
   executor-type: reuse
   configuration:
+    # prod env: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     map-underscore-to-camel-case: true
     lazy-loading-enabled: true
     aggressive-lazy-loading: false
