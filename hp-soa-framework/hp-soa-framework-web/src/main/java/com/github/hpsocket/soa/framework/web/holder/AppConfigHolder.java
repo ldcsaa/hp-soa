@@ -1,6 +1,9 @@
 
 package com.github.hpsocket.soa.framework.web.holder;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import com.github.hpsocket.soa.framework.core.util.SystemUtil;
 import com.github.hpsocket.soa.framework.web.propertries.IAppProperties;
@@ -9,6 +12,7 @@ import com.github.hpsocket.soa.framework.web.propertries.IServletPropertries;
 public class AppConfigHolder
 {
 	public static final String REQUEST_PATH_SEPARATOR	= "/";
+	public static final String FAVICON_PATH				= "/favicon.ico";
 
 	private static String appId;
 	private static String appName;
@@ -22,7 +26,13 @@ public class AppConfigHolder
 	private static String springMvcServletPath;
 	private static String servletUriPrefix;
 	private static String managementEndpointsBasePath;
+	private static String springdocApiDocsPath;
+	private static String springdocSwaggerUiPath;
 	private static String managementEndpointsBaseFullPath;
+	private static String springdocApiDocsFullPath;
+	private static String springdocSwaggerUiFullPath;
+	
+	private static Set<String> ignoreLogPaths = new HashSet<>(); 
 	
 	private static boolean initialized;
 	
@@ -45,6 +55,8 @@ public class AppConfigHolder
 					servletContextPath			= servletProperties.getServletContextPath();
 					springMvcServletPath		= servletProperties.getSpringMvcServletPath();
 					managementEndpointsBasePath	= servletProperties.getManagementEndpointsBasePath();
+					springdocApiDocsPath		= servletProperties.getSpringdocApiDocsPath();
+					springdocSwaggerUiPath		= servletProperties.getSpringdocSwaggerUiPath();
 					
 					StringBuilder sb = new StringBuilder();;
 					
@@ -54,7 +66,15 @@ public class AppConfigHolder
 						sb.append(springMvcServletPath);
 					
 					servletUriPrefix = sb.toString();
-					managementEndpointsBaseFullPath = sb.append(managementEndpointsBasePath).toString();
+					managementEndpointsBaseFullPath	= servletUriPrefix + managementEndpointsBasePath;
+					springdocApiDocsFullPath		= servletUriPrefix + springdocApiDocsPath;
+					springdocSwaggerUiFullPath		= servletUriPrefix + springdocSwaggerUiPath;
+					
+					
+					ignoreLogPaths.add(managementEndpointsBaseFullPath);
+					ignoreLogPaths.add(springdocApiDocsFullPath);
+					ignoreLogPaths.add(springdocSwaggerUiFullPath);
+					ignoreLogPaths.add(FAVICON_PATH);
 					
 					initialized = true;
 				}
@@ -63,67 +83,92 @@ public class AppConfigHolder
 		}
 	}
 
-	public static final String getAppId()
+	public static String getAppId()
 	{
 		return appId;
 	}
 
-	public static final String getAppName()
+	public static String getAppName()
 	{
 		return appName;
 	}
 
-	public static final String getAppVersion()
+	public static String getAppVersion()
 	{
 		return appVersion;
 	}
 
-	public static final String getAppOrganization()
+	public static String getAppOrganization()
 	{
 		return appOrganization;
 	}
 
-	public static final String getAppOwner()
+	public static String getAppOwner()
 	{
 		return appOwner;
 	}
 
-	public static final String getAppAddress()
+	public static String getAppAddress()
 	{
 		return appAddress;
 	}
 
-	public static final int getCookieMaxAge()
+	public static int getCookieMaxAge()
 	{
 		return cookieMaxAge;
 	}
 
-	public static final String getServletContextPath()
+	public static String getServletContextPath()
 	{
 		return servletContextPath;
 	}
 
-	public static final String getSpringMvcServletPath()
+	public static String getSpringMvcServletPath()
 	{
 		return springMvcServletPath;
 	}
 
-	public static final String getServletUriPrefix()
+	public static String getServletUriPrefix()
 	{
 		return servletUriPrefix;
 	}
 
-	public static final String getManagementEndpointsBasePath()
+	public static String getManagementEndpointsBasePath()
 	{
 		return managementEndpointsBasePath;
 	}
 
-	public static final String getManagementEndpointsBaseFullPath()
+	public static String getSpringdocApiDocsPath()
+	{
+		return springdocApiDocsPath;
+	}
+
+	public static String getSpringdocSwaggerUiPath()
+	{
+		return springdocSwaggerUiPath;
+	}
+
+	public static String getManagementEndpointsBaseFullPath()
 	{
 		return managementEndpointsBaseFullPath;
 	}
 
-	public static final boolean isInitialized()
+	public static String getSpringdocApiDocsFullPath()
+	{
+		return springdocApiDocsFullPath;
+	}
+
+	public static String getSpringdocSwaggerUiFullPath()
+	{
+		return springdocSwaggerUiFullPath;
+	}
+
+	public static Set<String> getIgnoreLogPaths()
+	{
+		return ignoreLogPaths;
+	}
+
+	public static boolean isInitialized()
 	{
 		return initialized;
 	}

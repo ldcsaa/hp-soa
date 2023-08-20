@@ -200,6 +200,9 @@
 					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
 						<encoding>${project.build.sourceEncoding}</encoding>
+				        <compilerArgs>
+				            <arg>-parameters</arg>
+				        </compilerArgs>
 	                    <annotationProcessorPaths>
 	                        <path>
 	                            <groupId>org.projectlombok</groupId>

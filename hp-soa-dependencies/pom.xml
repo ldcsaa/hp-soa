@@ -683,6 +683,12 @@
 			</dependency>
 			
 			<dependency>
+			    <groupId>org.apache.logging.log4j</groupId>
+			    <artifactId>log4j-spring-boot</artifactId>
+			    <version>${log4j.version}</version>
+			</dependency>
+			
+			<dependency>
 			    <groupId>com.lmax</groupId>
 			    <artifactId>disruptor</artifactId>
 			    <version>${disruptor.version}</version>

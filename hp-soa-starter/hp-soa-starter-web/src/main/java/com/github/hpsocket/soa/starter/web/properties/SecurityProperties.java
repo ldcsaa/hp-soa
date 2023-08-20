@@ -21,5 +21,9 @@ public class SecurityProperties implements IServletPropertries
 	private String springMvcServletPath;
 	@Value("${management.endpoints.web.base-path:/actuator}")
 	private String managementEndpointsBasePath;
+	@Value ("${springdoc.api-docs.path:/v3/api-docs}")
+	private String springdocApiDocsPath;
+	@Value ("${springdoc.swagger-ui.path:/swagger-ui}")
+	private String springdocSwaggerUiPath;
 
 }

@@ -69,7 +69,18 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
 	{
 		RequestAttribute attr = RequestContext.getRequestAttribute();
 		
-		return (attr != null && !attr.getRequestUri().startsWith(AppConfigHolder.getManagementEndpointsBaseFullPath()));
+		if(attr == null)
+			return false;
+		
+		String requestUri = attr.getRequestUri();
+		
+		for(String ignoreLogPath : AppConfigHolder.getIgnoreLogPaths())
+		{
+			if(requestUri.startsWith(ignoreLogPath))
+				return false;
+		}
+		
+		return true;
 	}
 
 	@Override
