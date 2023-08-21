@@ -1,1 +1,1 @@
-org.springframework.boot.env.EnvironmentPostProcessor=com.github.hpsocket.soa.starter.web.processor.ExternalPropertiesFilePostProcessor
+org.springframework.boot.env.EnvironmentPostProcessor=io.github.hpsocket.soa.starter.web.processor.ExternalPropertiesFilePostProcessor

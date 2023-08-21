@@ -1,1 +1,1 @@
-com.github.hpsocket.soa.starter.data.redis.config.SoaRedisConfig
+io.github.hpsocket.soa.starter.data.redis.config.SoaRedisConfig

@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github.hpsocket.demo</groupId>
+        <groupId>io.github.hpsocket.demo</groupId>
         <artifactId>hp-demo</artifactId>
         <version>${revision}</version>
     </parent>
@@ -15,20 +15,20 @@
 
     <dependencies>
 		<dependency>
-			<groupId>com.github.hpsocket.demo</groupId>
+			<groupId>io.github.hpsocket.demo</groupId>
 			<artifactId>hp-demo-infra-sentinel-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.hpsocket</groupId>
+			<groupId>io.github.hpsocket</groupId>
 			<artifactId>hp-soa-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.hpsocket</groupId>
+			<groupId>io.github.hpsocket</groupId>
 			<artifactId>hp-soa-starter-nacos</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.hpsocket</groupId>
+			<groupId>io.github.hpsocket</groupId>
 			<artifactId>hp-soa-starter-sentinel</artifactId>
 		</dependency>
     </dependencies>

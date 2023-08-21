@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.hpsocket.demo</groupId>
+		<groupId>io.github.hpsocket.demo</groupId>
 		<artifactId>hp-demo-infra-nacos</artifactId>
 		<version>${revision}</version>
 	</parent>
@@ -17,16 +17,16 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>com.github.hpsocket.demo</groupId>
+			<groupId>io.github.hpsocket.demo</groupId>
 			<artifactId>hp-demo-infra-nacos-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.hpsocket</groupId>
+			<groupId>io.github.hpsocket</groupId>
 			<artifactId>hp-soa-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.hpsocket</groupId>
+			<groupId>io.github.hpsocket</groupId>
 			<artifactId>hp-soa-starter-nacos</artifactId>
 		</dependency>
 	</dependencies>

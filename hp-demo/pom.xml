@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.hpsocket</groupId>
+		<groupId>io.github.hpsocket</groupId>
 		<artifactId>hp-soa-parent</artifactId>
 		<version>${revision}</version>
 	</parent>
-	<groupId>com.github.hpsocket.demo</groupId>
+	<groupId>io.github.hpsocket.demo</groupId>
 	<artifactId>hp-demo</artifactId>
 	<name>${project.artifactId}</name>
 	<packaging>pom</packaging>
@@ -16,23 +16,23 @@
 	</properties>
 	
 	<modules>
-		<module>hp-demo-bff-basic</module>
-		<module>hp-demo-bff-nacos</module>
-		<module>hp-demo-bff-mysql</module>
-		<module>hp-demo-bff-sentinel</module>
-		<module>hp-demo-bff-skywalking</module>
 		<module>hp-demo-infra-basic</module>
 		<module>hp-demo-infra-nacos</module>
 		<module>hp-demo-infra-mysql</module>
 		<module>hp-demo-infra-sentinel</module>
 		<module>hp-demo-infra-skywalking</module>
+		<module>hp-demo-bff-basic</module>
+		<module>hp-demo-bff-nacos</module>
+		<module>hp-demo-bff-mysql</module>
+		<module>hp-demo-bff-sentinel</module>
+		<module>hp-demo-bff-skywalking</module>
 		<module>hp-demo-job</module>
 	</modules>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-dependencies</artifactId>
 				<version>${project.parent.version}</version>
 				<type>pom</type>

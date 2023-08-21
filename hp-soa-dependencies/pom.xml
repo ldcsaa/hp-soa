@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.hpsocket</groupId>
+		<groupId>io.github.hpsocket</groupId>
 		<artifactId>hp-soa-parent</artifactId>
 		<version>${revision}</version>
 	</parent>
@@ -137,57 +137,57 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-framework-core</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-framework-web</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-web</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-task</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-nacos</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-sentinel</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-skywalking</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-data-redis</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-data-mysql</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-job-xxljob</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hpsocket</groupId>
+				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-job-exclusive</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
