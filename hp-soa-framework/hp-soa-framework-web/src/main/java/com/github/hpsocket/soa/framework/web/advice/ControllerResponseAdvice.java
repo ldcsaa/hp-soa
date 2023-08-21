@@ -74,7 +74,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
 		
 		String requestUri = attr.getRequestUri();
 		
-		for(String ignoreLogPath : AppConfigHolder.getIgnoreLogPaths())
+		for(String ignoreLogPath : AppConfigHolder.getExcludedLogPaths())
 		{
 			if(requestUri.startsWith(ignoreLogPath))
 				return false;

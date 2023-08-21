@@ -32,7 +32,7 @@ public class AppConfigHolder
 	private static String springdocApiDocsFullPath;
 	private static String springdocSwaggerUiFullPath;
 	
-	private static Set<String> ignoreLogPaths = new HashSet<>(); 
+	private static Set<String> excludedLogPaths = new HashSet<>(); 
 	
 	private static boolean initialized;
 	
@@ -71,14 +71,15 @@ public class AppConfigHolder
 					springdocSwaggerUiFullPath		= servletUriPrefix + springdocSwaggerUiPath;
 					
 					
-					ignoreLogPaths.add(managementEndpointsBaseFullPath);
-					ignoreLogPaths.add(springdocApiDocsFullPath);
-					ignoreLogPaths.add(springdocSwaggerUiFullPath);
-					ignoreLogPaths.add(FAVICON_PATH);
+					excludedLogPaths.add(managementEndpointsBaseFullPath);
+					/*
+					excludedLogPaths.add(springdocApiDocsFullPath);
+					excludedLogPaths.add(springdocSwaggerUiFullPath);
+					excludedLogPaths.add(FAVICON_PATH);
+					*/
 					
 					initialized = true;
 				}
-				
 			}
 		}
 	}
@@ -163,9 +164,9 @@ public class AppConfigHolder
 		return springdocSwaggerUiFullPath;
 	}
 
-	public static Set<String> getIgnoreLogPaths()
+	public static Set<String> getExcludedLogPaths()
 	{
-		return ignoreLogPaths;
+		return excludedLogPaths;
 	}
 
 	public static boolean isInitialized()
