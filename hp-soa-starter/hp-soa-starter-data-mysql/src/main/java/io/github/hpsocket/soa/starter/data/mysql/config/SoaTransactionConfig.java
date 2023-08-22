@@ -32,10 +32,10 @@ public class SoaTransactionConfig
 {
 	@Value("${global-transaction-management.timeout:3000}")
 	private int timeout;
-	@Value("${global-transaction-management.isolation:2}")
-	private int isolation;
-	@Value("${global-transaction-management.propagation:0}")
-	private int propagation;
+	@Value("${global-transaction-management.isolation:ISOLATION_READ_COMMITTED}")
+	private String isolation;
+	@Value("${global-transaction-management.propagation:PROPAGATION_REQUIRED}")
+	private String propagation;
 	@Value("${global-transaction-management.rollback-for:java.lang.Exception}")
 	Class<Throwable>[] rollbackFor;
 
@@ -77,8 +77,8 @@ public class SoaTransactionConfig
 		
 		RuleBasedTransactionAttribute required = new RuleBasedTransactionAttribute();
 		required.setRollbackRules(ruleAttrs);
-		required.setPropagationBehavior(propagation);
-		required.setIsolationLevel(isolation);
+		required.setPropagationBehaviorName(propagation);
+		required.setIsolationLevelName(isolation);
 		required.setTimeout(timeout);
 		
 		return required;
