@@ -73,6 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 	}
 
 	@Override
+	//@Transactional(rollbackFor = Exception.class)
 	public boolean saveUser(UserBo userBo)
 	{
 		User user = userConverter.fromBo(userBo);

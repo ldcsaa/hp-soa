@@ -3,10 +3,8 @@ package io.github.hpsocket.soa.framework.web.support;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.UUID;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -16,7 +14,7 @@ import org.slf4j.MDC;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-
+import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.thread.SynchronousRejectedExecutionHandler;
 import io.github.hpsocket.soa.framework.core.util.CryptHelper;
@@ -391,7 +389,6 @@ public class WebServerHelper
 	
 	public static final String randomUUID()
 	{
-		ThreadLocalRandom random = ThreadLocalRandom.current();
-		return new UUID(random.nextLong(), random.nextLong()).toString();
+		return IdGenerator.nextCompactUUID();
 	}
 }
