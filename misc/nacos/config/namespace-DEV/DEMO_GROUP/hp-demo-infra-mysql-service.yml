@@ -14,3 +14,14 @@ spring.datasource.dynamic.datasource:
     username: soa
     password: "Vt4ZT5CSHb9wpO4b0fx7uSX8UxGkyTEc3ycZZhWZcz++Ehkg0Dtzhi7s2XB8fLFAcjgKilUv0iN5Fasb4dNQ1w=="
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+global-transaction-management:
+  enabled: true
+  #timeout: 3000
+  #isolation: ISOLATION_READ_COMMITTED
+  #propagation: PROPAGATION_REQUIRED
+  #rollback-for: java.lang.Exception
+  #read-only-timeout: 3000
+  #read-only-isolation: ISOLATION_READ_COMMITTED
+  #read-only-propagation: PROPAGATION_REQUIRED
+  #pointcut-expression: "execution(* ${hp.soa.web.component-scan.base-package}..service..*.*(..))"

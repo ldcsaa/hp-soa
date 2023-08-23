@@ -31,6 +31,8 @@ public class ServiceException extends RuntimeException
 	public static final int REPEATED_REQ_ERROR		= 506;
 	/** 访问被限流 */
 	public static final int TRAFFIC_LIMIT_ERROR		= 507;
+	/** 调用超时 */
+	public static final int TIMEOUT_ERROR			= 511;
 	/** APP CODE 不存在 */
 	public static final int APPCODE_NOT_EXIST_ERROR	= 601;
 	/** APP CODE 已存在 */
@@ -41,10 +43,10 @@ public class ServiceException extends RuntimeException
 	public static final int AUTHOR_ERROR			= 702;
 	/** 网络错误 */
 	public static final int NETWORK_ERROR			= 801;
-	/** 外部API调用失败 */
-	public static final int OUTER_API_INVOKE_FAIL	= 802;
-	/** 内部API调用失败 */
-	public static final int INNER_API_INVOKE_FAIL	= 803;
+	/** 外部服务调用失败 */
+	public static final int OUTER_API_CALL_FAIL		= 802;
+	/** 内部服务调用失败 */
+	public static final int INNER_API_CALL_FAIL		= 803;
 	/** 签名验证失败 */
 	public static final int SIGN_VERIFY_ERROR		= 901;
 	/** 登录已失效 */
@@ -63,14 +65,16 @@ public class ServiceException extends RuntimeException
 	public static final ServiceException AUTHEN_EXCEPTION			= new ServiceException("用户认证失败", AUTHEN_ERROR);
 	public static final ServiceException AUTHOR_EXCEPTION			= new ServiceException("授权验证失败", AUTHOR_ERROR);
 	public static final ServiceException NETWORK_EXCEPTION			= new ServiceException("网络错误", NETWORK_ERROR);
-	public static final ServiceException FREQUENCY_LIMIT_EXCEPTION	= new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
-	public static final ServiceException FORBID_EXCEPTION 			= new UnimportantException("拒绝访问", FORBID_ERROR);
 	public static final ServiceException PARAMS_EXCEPTION			= new ServiceException("请求参数非法", PARAMS_ERROR);
 	public static final ServiceException REPEATED_REQ_EXCEPTION		= new ServiceException("请勿重复请求", REPEATED_REQ_ERROR);
-	public static final ServiceException TRAFFIC_LIMIT_EXCEPTION	= new UnimportantException("系统繁忙", TRAFFIC_LIMIT_ERROR);
-	public static final ServiceException OUTER_API_INVOKE_EXCEPTION	= new ServiceException("外部API调用失败", OUTER_API_INVOKE_FAIL);
-	public static final ServiceException INNER_API_INVOKE_EXCEPTION	= new ServiceException("内部API调用失败", INNER_API_INVOKE_FAIL);
+	public static final ServiceException TIMEOUT_EXCEPTION			= new ServiceException("调用超时", TIMEOUT_ERROR);
+	public static final ServiceException OUTER_API_CALL_EXCEPTION	= new ServiceException("外部服务调用失败", OUTER_API_CALL_FAIL);
+	public static final ServiceException INNER_API_CALL_EXCEPTION	= new ServiceException("内部服务调用失败", INNER_API_CALL_FAIL);
 	public static final ServiceException SIGN_VERIFY_EXCEPTION		= new ServiceException("签名验证失败", SIGN_VERIFY_ERROR);
+
+	public static final ServiceException FREQUENCY_LIMIT_EXCEPTION	= new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
+	public static final ServiceException FORBID_EXCEPTION 			= new UnimportantException("拒绝访问", FORBID_ERROR);
+	public static final ServiceException TRAFFIC_LIMIT_EXCEPTION	= new UnimportantException("系统繁忙", TRAFFIC_LIMIT_ERROR);
 	public static final ServiceException LOGIN_INVALID_EXCEPTION	= new UnimportantException("登录已失效", LOGIN_INVALID);
 	public static final ServiceException NOT_LOGGED_IN_EXCEPTION	= new UnimportantException("未登录", NOT_LOGGED_IN);
 	

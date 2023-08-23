@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.dubbo.rpc.RpcException;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
@@ -88,8 +90,17 @@ public class ControllerGlobalExceptionAdvice implements Ordered
 			real = cause;
 		} while(cause instanceof RpcException);
 		
-		ServiceException se = wrapServiceException(GENERAL_EXCEPTION, real);
-
+		
+		ServiceException se = null;
+		
+		if(real instanceof TimeoutException)
+			se = wrapServiceException(TIMEOUT_EXCEPTION, real);
+		else if(real instanceof ExecutionException)
+			se = wrapServiceException(INNER_API_CALL_EXCEPTION, real);
+		
+		if(se == null)
+			se = wrapServiceException(GENERAL_EXCEPTION, real);
+		
 		logServiceException(log, se.getMessage(), se);
 		
 		return new Response<>(se);

@@ -3,6 +3,8 @@ package io.github.hpsocket.demo.infra.mysql.service.impl;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -73,7 +75,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 	}
 
 	@Override
-	//@Transactional(rollbackFor = Exception.class)
+	@Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 	public boolean saveUser(UserBo userBo)
 	{
 		User user = userConverter.fromBo(userBo);

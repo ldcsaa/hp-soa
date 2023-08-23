@@ -1,5 +1,5 @@
 # logging
-#logging.config: classpath:log4j2-kafka.xml
+logging.config: classpath:log4j2-kafka.xml
 
 # server
 server:
@@ -23,10 +23,15 @@ server:
 # spring
 spring:
   application.name: ${hp.soa.web.app.name}
-  spring.cloud.config:
-    allow-override: false
-    override-system-properties: false
-    override-none: false
+  cloud.config:
+    # dev env -> enable override
+    allow-override: true
+    override-system-properties: true
+    override-none: true
+    # prod env -> enable override
+    #allow-override: false
+    #override-system-properties: false
+    #override-none: false
   mvc:
     servlet:
       load-on-startup: 1
@@ -68,7 +73,7 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui
-  packagesToScan: io.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}
+  packagesToScan: com.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}
   api-infos:
     group-name: ${hp.soa.web.app.name}
     title: ${hp.soa.web.app.name}

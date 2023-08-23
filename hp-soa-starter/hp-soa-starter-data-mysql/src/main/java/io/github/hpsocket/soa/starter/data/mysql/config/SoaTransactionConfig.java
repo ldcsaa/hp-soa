@@ -16,7 +16,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
@@ -38,6 +37,14 @@ public class SoaTransactionConfig
 	private String propagation;
 	@Value("${global-transaction-management.rollback-for:java.lang.Exception}")
 	Class<Throwable>[] rollbackFor;
+	
+	@Value("${global-transaction-management.read-only-timeout:3000}")
+	private int readOnlyTimeout;
+	@Value("${global-transaction-management.read-only-isolation:ISOLATION_READ_COMMITTED}")
+	private String readOnlyIsolation;
+	@Value("${global-transaction-management.read-only-propagation:PROPAGATION_REQUIRED}")
+	private String readOnlyPropagation;
+
 
 	@Value("${global-transaction-management.pointcut-expression:}")
 	private String pointcutExpression;
@@ -55,17 +62,6 @@ public class SoaTransactionConfig
 		return new TransactionInterceptor(transactionManager, source);
 	}
 	
-	@Bean("readOnlyRuleBasedTransactionAttribute")
-	@ConditionalOnMissingBean(name = "readOnlyRuleBasedTransactionAttribute")
-	RuleBasedTransactionAttribute readOnlyRuleBasedTransactionAttribute()
-	{
-		RuleBasedTransactionAttribute readOnly = new RuleBasedTransactionAttribute();
-		readOnly.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
-		readOnly.setReadOnly(true);
-		
-		return readOnly;
-	}
-	
 	@Bean("requiredRuleBasedTransactionAttribute")
 	@ConditionalOnMissingBean(name = "requiredRuleBasedTransactionAttribute")
 	RuleBasedTransactionAttribute requiredRuleBasedTransactionAttribute()
@@ -76,70 +72,32 @@ public class SoaTransactionConfig
 			ruleAttrs.add(new RollbackRuleAttribute(e));
 		
 		RuleBasedTransactionAttribute required = new RuleBasedTransactionAttribute();
-		required.setRollbackRules(ruleAttrs);
 		required.setPropagationBehaviorName(propagation);
 		required.setIsolationLevelName(isolation);
 		required.setTimeout(timeout);
+		required.setRollbackRules(ruleAttrs);
 		
 		return required;
 	}
 	
-	@Bean
-	@ConditionalOnMissingBean(SoaTransactionAttributeSourceNameMapProvider.class)
-	SoaTransactionAttributeSourceNameMapProvider soaTransactionAttributeSourceNameMapProvider()
+	@Bean("readOnlyRuleBasedTransactionAttribute")
+	@ConditionalOnMissingBean(name = "readOnlyRuleBasedTransactionAttribute")
+	RuleBasedTransactionAttribute readOnlyRuleBasedTransactionAttribute()
 	{
-		return new SoaTransactionAttributeSourceNameMapProvider()
-		{
-			@Override
-			public Map<String, TransactionAttribute> getNameMap(RuleBasedTransactionAttribute required, RuleBasedTransactionAttribute readOnly)
-			{
-				Map<String, TransactionAttribute> attributesMap = new HashMap<>();
-
-				attributesMap.put("save*", required);
-				attributesMap.put("remove*", required);
-				attributesMap.put("update*", required);
-				attributesMap.put("batch*", required);
-				attributesMap.put("clear*", required);
-				attributesMap.put("add*", required);
-				attributesMap.put("append*", required);
-				attributesMap.put("modify*", required);
-				attributesMap.put("edit*", required);
-				attributesMap.put("insert*", required);
-				attributesMap.put("del*", required);
-				attributesMap.put("delete*", required);
-				attributesMap.put("do*", required);
-				attributesMap.put("erase*", required);
-				attributesMap.put("erase*", required);
-				attributesMap.put("change*", required);
-				attributesMap.put("create*", required);
-				attributesMap.put("import*", required);
-				attributesMap.put("increase*", required);
-				attributesMap.put("reduce*", required);
-				attributesMap.put("refund*", required);
-				attributesMap.put("confirm*", required);
-				attributesMap.put("consume*", required);
-				attributesMap.put("cancel*", required);
-				attributesMap.put("use*", required);
-				attributesMap.put("bind*", required);
-				attributesMap.put("apply*", required);
-				attributesMap.put("submit*", required);
-				attributesMap.put("lock*", required);
-				attributesMap.put("unLock*", required);
-				attributesMap.put("open*", required);
-				attributesMap.put("close*", required);
-
-				attributesMap.put("select*", readOnly);
-				attributesMap.put("get*", readOnly);
-				attributesMap.put("valid*", readOnly);
-				attributesMap.put("list*", readOnly);
-				attributesMap.put("count*", readOnly);
-				attributesMap.put("find*", readOnly);
-				attributesMap.put("load*", readOnly);
-				attributesMap.put("search*", readOnly);
-				
-				return attributesMap;
-			}
-		};
+		RuleBasedTransactionAttribute readOnly = new RuleBasedTransactionAttribute();
+		readOnly.setPropagationBehaviorName(readOnlyPropagation);
+		readOnly.setIsolationLevelName(readOnlyIsolation);
+		readOnly.setTimeout(readOnlyTimeout);
+		readOnly.setReadOnly(true);
+		
+		return readOnly;
+	}
+	
+	@Bean("defaultSoaTransactionAttributeSourceNameMapProvider")
+	@ConditionalOnMissingBean(name = "defaultSoaTransactionAttributeSourceNameMapProvider")
+	SoaTransactionAttributeSourceNameMapProvider defaultSoaTransactionAttributeSourceNameMapProvider()
+	{
+		return new SoaTransactionAttributeSourceNameMapProvider() {};
 	}
 
 	@Bean("txAdviceAdvisor")
@@ -151,4 +109,57 @@ public class SoaTransactionConfig
 		pointcut.setExpression(pointcutExpression);
 		return new DefaultPointcutAdvisor(pointcut, txAdvice);
 	}
+	
+	public static interface SoaTransactionAttributeSourceNameMapProvider
+	{
+		default Map<String, TransactionAttribute> getNameMap(RuleBasedTransactionAttribute required, RuleBasedTransactionAttribute readOnly)
+		{
+			Map<String, TransactionAttribute> attributesMap = new HashMap<>();
+
+			attributesMap.put("save*", required);
+			attributesMap.put("remove*", required);
+			attributesMap.put("update*", required);
+			attributesMap.put("batch*", required);
+			attributesMap.put("clear*", required);
+			attributesMap.put("add*", required);
+			attributesMap.put("append*", required);
+			attributesMap.put("modify*", required);
+			attributesMap.put("edit*", required);
+			attributesMap.put("insert*", required);
+			attributesMap.put("del*", required);
+			attributesMap.put("delete*", required);
+			attributesMap.put("do*", required);
+			attributesMap.put("erase*", required);
+			attributesMap.put("erase*", required);
+			attributesMap.put("change*", required);
+			attributesMap.put("create*", required);
+			attributesMap.put("import*", required);
+			attributesMap.put("increase*", required);
+			attributesMap.put("reduce*", required);
+			attributesMap.put("refund*", required);
+			attributesMap.put("confirm*", required);
+			attributesMap.put("consume*", required);
+			attributesMap.put("cancel*", required);
+			attributesMap.put("use*", required);
+			attributesMap.put("bind*", required);
+			attributesMap.put("apply*", required);
+			attributesMap.put("submit*", required);
+			attributesMap.put("lock*", required);
+			attributesMap.put("unLock*", required);
+			attributesMap.put("open*", required);
+			attributesMap.put("close*", required);
+
+			attributesMap.put("select*", readOnly);
+			attributesMap.put("get*", readOnly);
+			attributesMap.put("valid*", readOnly);
+			attributesMap.put("list*", readOnly);
+			attributesMap.put("count*", readOnly);
+			attributesMap.put("find*", readOnly);
+			attributesMap.put("load*", readOnly);
+			attributesMap.put("search*", readOnly);
+			
+			return attributesMap;
+		}
+	}
+
 }

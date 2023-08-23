@@ -1,9 +1,1 @@
 ## ---------------------------- Environment-independent application private configurations ---------------------------- ##
-
-global-transaction-management:
-  enabled: true
-  timeout: 3000
-  isolation: ISOLATION_READ_COMMITTED
-  propagation: PROPAGATION_REQUIRED
-  rollback-for: java.lang.Exception
-  pointcut-expression: "execution(* ${hp.soa.web.component-scan.base-package}..service..*.*(..))"
