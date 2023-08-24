@@ -37,7 +37,7 @@
 		<spring-data-mongodb.version>4.1.2</spring-data-mongodb.version>
 		<spring-amqp.version>3.0.7</spring-amqp.version>
 		<spring-rabbit.version>3.0.7</spring-rabbit.version>
-		<spring-kafka.version>3.0.9</spring-kafka.version>
+		<spring-kafka.version>3.0.10</spring-kafka.version>
 		<kafka-clients.version>3.5.1</kafka-clients.version>
 		<druid.version>1.2.18</druid.version>
 		<jedis.version>4.4.3</jedis.version>
