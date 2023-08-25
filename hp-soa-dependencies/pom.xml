@@ -34,6 +34,8 @@
         <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
 		<spring-data.version>3.1.2</spring-data.version>
 		<spring-data-redis.version>3.1.2</spring-data-redis.version>
+		<spring-boot-starter-data-redis.version>3.1.2</spring-boot-starter-data-redis.version>
+		<spring-boot-starter-data-mongodb.version>3.1.2</spring-boot-starter-data-mongodb.version>
 		<spring-data-mongodb.version>4.1.2</spring-data-mongodb.version>
 		<spring-amqp.version>3.0.7</spring-amqp.version>
 		<spring-rabbit.version>3.0.7</spring-rabbit.version>
@@ -526,11 +528,23 @@
 				<artifactId>spring-data-redis</artifactId>
 				<version>${spring-data-redis.version}</version>
 			</dependency>
+			
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-data-redis</artifactId>
+			    <version>${spring-boot-starter-data-redis.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-mongodb</artifactId>
 				<version>${spring-data-mongodb.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+			    <version>${spring-boot-starter-data-mongodb.version}</version>
 			</dependency>
 
 			<dependency>
