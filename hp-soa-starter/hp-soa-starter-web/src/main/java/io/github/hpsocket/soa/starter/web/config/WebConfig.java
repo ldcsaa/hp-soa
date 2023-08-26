@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -33,7 +34,9 @@ import io.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.json.FastJsonExcludePropertyFilter;
+import io.github.hpsocket.soa.framework.web.listener.ReadOnlyEventListener;
 import io.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
 import io.github.hpsocket.soa.framework.web.service.AsyncService;
 import io.github.hpsocket.soa.framework.web.service.impl.AsyncServiceImpl;
@@ -61,6 +64,19 @@ public class WebConfig implements WebMvcConfigurer
 		
 		AppConfigHolder.init(webProperties, securityProperties);
 	}
+	
+    @Bean("springContextHolder")
+    public SpringContextHolder springContextHolder()
+    {
+        return new SpringContextHolder();
+    }
+
+    @Bean
+    @DependsOn("springContextHolder")
+    public ReadOnlyEventListener readOnlyEventListener()
+    {
+        return new ReadOnlyEventListener();
+    }
 
 	@Bean
 	public FilterRegistrationBean<HttpMdcFilter> mdcTracingFilterRegistration()
