@@ -148,6 +148,9 @@ public class SoaTransactionConfig
 			attributesMap.put("unLock*", required);
 			attributesMap.put("open*", required);
 			attributesMap.put("close*", required);
+			attributesMap.put("mark*", required);
+			attributesMap.put("set*", required);
+			attributesMap.put("reset*", required);
 
 			attributesMap.put("select*", readOnly);
 			attributesMap.put("get*", readOnly);

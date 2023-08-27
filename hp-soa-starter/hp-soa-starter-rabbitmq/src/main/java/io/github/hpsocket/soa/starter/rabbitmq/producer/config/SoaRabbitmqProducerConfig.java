@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 @AutoConfiguration
-@ConditionalOnProperty(name = "spring.cloud.nacos.config.enabled", matchIfMissing = true)
+//@ConditionalOnProperty(name = "spring.cloud.nacos.config.enabled", matchIfMissing = true)
 public class SoaRabbitmqProducerConfig
 {
 	

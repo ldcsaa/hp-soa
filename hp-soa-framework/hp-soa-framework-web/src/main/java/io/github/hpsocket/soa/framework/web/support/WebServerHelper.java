@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.framework.web.support;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -24,7 +25,6 @@ import io.github.hpsocket.soa.framework.core.util.Result;
 import com.alibaba.fastjson2.JSONWriter;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
-import io.github.hpsocket.soa.framework.web.propertries.IAppProperties;
 import io.github.hpsocket.soa.framework.web.service.TracingContext;
 
 import static com.alibaba.fastjson2.JSONWriter.Feature.*;
@@ -51,6 +51,7 @@ public class WebServerHelper
 
 	public static final int DEFAULT_COOKIE_MAX_AGE	= 10 * 365 * 24 * 60 * 60;
 	public static final String DEFAULT_CHARSET		= GeneralHelper.DEFAULT_ENCODING;
+	public static final Charset DEFAULT_CHARSET_OBJ	= Charset.forName(DEFAULT_CHARSET);
 	
 	public static final boolean HTTP_ONLY_COOKIE	= false;
 	
@@ -84,7 +85,7 @@ public class WebServerHelper
 																						60,
 																						TimeUnit.SECONDS,
 																						new LinkedBlockingDeque<>(2000),
-																						new ThreadPoolExecutor.CallerRunsPolicy());																		 
+																						new ThreadPoolExecutor.CallerRunsPolicy());
 
 	public static final boolean checkUserAgent(String ua)
 	{
@@ -384,7 +385,7 @@ public class WebServerHelper
 	
 	public static final boolean isAppReadOnly()
 	{
-		return SpringContextHolder.getBean(IAppProperties.class).isReadOnly();
+		return AppConfigHolder.isReadOnly();
 	}
 	
 	public static final String randomUUID()

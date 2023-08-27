@@ -71,7 +71,7 @@ public class WebConfig implements WebMvcConfigurer
         return new SpringContextHolder();
     }
 
-    @Bean
+    @Bean("readOnlyEventListener")
     @DependsOn("springContextHolder")
     public ReadOnlyEventListener readOnlyEventListener()
     {

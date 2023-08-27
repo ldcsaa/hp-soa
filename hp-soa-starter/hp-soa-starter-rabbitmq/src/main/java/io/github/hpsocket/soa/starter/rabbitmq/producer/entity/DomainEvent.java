@@ -4,20 +4,36 @@ package io.github.hpsocket.soa.starter.rabbitmq.producer.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import org.slf4j.MDC;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 
+import io.github.hpsocket.soa.framework.core.id.IdGenerator;
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @SuppressWarnings("serial")
 public class DomainEvent implements Serializable
 {
+	public static final String HEADER_DOMAIN_NAME		= "x-domain-name";
+	public static final String HEADER_EVENT_NAME		= "x-event-name";
+	public static final String HEADER_MSG_ID			= "x-msg-id";
+	public static final String HEADER_SOURCE_REQUEST_ID	= "x-source-request-id";
+	
+	public static final int SF_NOT_SEND		= 0;
+	public static final int SF_SENDING		= 1;
+	public static final int SF_SEND_SUCC	= 2;
+	public static final int SF_SEND_FAIL	= 3;
+
 	/**
 	 * 主键ID
 	 */
@@ -51,14 +67,14 @@ public class DomainEvent implements Serializable
 	private String msgId;
 
 	/**
-	 * 关联请求Id
-	 */
-	private String requestId;
-
-	/**
 	 * 消息体
 	 */
 	private String msg;
+
+	/**
+	 * 关联请求Id
+	 */
+	private String sourceRequestId;
 
 	/**
 	 * 发送标记（0 - 未发送，1 - 正在发送，2 - 发送成功，3 - 发送失败）
@@ -92,4 +108,34 @@ public class DomainEvent implements Serializable
 	 */
 	@TableField(fill = FieldFill.UPDATE)
 	private LocalDateTime updateTime;
+	
+	public DomainEvent()
+	{
+		msgId = IdGenerator.nextIdStr();
+		sourceRequestId = MDC.get(MdcAttr.MDC_REQUEST_ID_KEY);
+	}
+	
+	public Message toMessage()
+	{
+		return toMessage(null);
+	}
+	
+	public Message toMessage(MessageProperties messageProperties)
+	{
+		MessageBuilder builder = MessageBuilder.withBody(msg.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
+		
+		if(messageProperties != null)
+			builder.copyProperties(messageProperties);
+		
+		return builder
+			.setContentEncoding(WebServerHelper.DEFAULT_CHARSET)
+			.setContentType(MessageProperties.CONTENT_TYPE_JSON)
+			.setMessageId(msgId)
+			.setHeader(HEADER_DOMAIN_NAME, domainName)
+			.setHeader(HEADER_EVENT_NAME, eventName)
+			.setHeader(HEADER_MSG_ID, msgId)
+			.setHeader(HEADER_SOURCE_REQUEST_ID, sourceRequestId)
+			.build();
+	}
+	
 }

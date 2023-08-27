@@ -3,12 +3,13 @@ package io.github.hpsocket.soa.starter.rabbitmq.consumer.listener;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.Ordered;
 
 import io.github.hpsocket.soa.framework.web.event.ReadOnlyEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RabbitListenerSwitchApplicationListener implements ApplicationListener<ReadOnlyEvent>
+public class RabbitListenerSwitchReadOnlyListener implements ApplicationListener<ReadOnlyEvent>, Ordered
 {
 	@Autowired
 	private RabbitListenerEndpointRegistry registry;
@@ -24,6 +25,12 @@ public class RabbitListenerSwitchApplicationListener implements ApplicationListe
 			registry.stop();
 		else
 			registry.start();
+	}
+
+	@Override
+	public int getOrder()
+	{
+		return Ordered.HIGHEST_PRECEDENCE;
 	}
 
 }

@@ -13,6 +13,8 @@ public class AppConfigHolder
 {
 	public static final String REQUEST_PATH_SEPARATOR	= "/";
 	public static final String FAVICON_PATH				= "/favicon.ico";
+	
+	private static boolean readOnly;
 
 	private static String appId;
 	private static String appName;
@@ -44,6 +46,7 @@ public class AppConfigHolder
 			{
 				if(!initialized)
 				{
+					readOnly		= appProperties.isReadOnly();
 					appId			= appProperties.getId();
 					appName			= appProperties.getName();
 					appVersion		= appProperties.getVersion();
@@ -82,6 +85,16 @@ public class AppConfigHolder
 				}
 			}
 		}
+	}
+
+	public static boolean isReadOnly()
+	{
+		return readOnly;
+	}
+
+	public static void setReadOnly(boolean readOnly)
+	{
+		AppConfigHolder.readOnly = readOnly;
 	}
 
 	public static String getAppId()
