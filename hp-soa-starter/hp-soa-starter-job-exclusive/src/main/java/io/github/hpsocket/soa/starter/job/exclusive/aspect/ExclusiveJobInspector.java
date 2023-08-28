@@ -45,9 +45,7 @@ public class ExclusiveJobInspector
 	private RedissonClient redissonClient;
 
 	@Pointcut(POINTCUT_PATTERN)
-	protected void aroundMethod()
-	{
-	}
+	protected void aroundMethod() {}
 
 	@Around(value = "aroundMethod()")
 	public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable

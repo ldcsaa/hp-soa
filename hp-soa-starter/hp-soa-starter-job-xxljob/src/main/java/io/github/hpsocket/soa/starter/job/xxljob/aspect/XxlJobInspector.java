@@ -37,9 +37,7 @@ public class XxlJobInspector
 	private XxlJobExceptionHandler exceptionHandler;
 
 	@Pointcut(POINTCUT_PATTERN)
-	protected void aroundMethod()
-	{
-	}
+	protected void aroundMethod() {}
 
 	@Around(value = "aroundMethod()")
 	public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable

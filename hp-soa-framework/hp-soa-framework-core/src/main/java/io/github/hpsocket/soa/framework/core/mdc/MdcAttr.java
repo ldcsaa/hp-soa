@@ -170,6 +170,16 @@ public class MdcAttr
 		set(MDC_SESSION_ID_KEY, sessionId);
 	}
 
+	public String getMessageId()
+	{
+		return get(MDC_MESSAGE_ID_KEY);
+	}
+
+	public void setMessageId(String messageId)
+	{
+		set(MDC_MESSAGE_ID_KEY, messageId);
+	}
+
 	public String getToken()
 	{
 		return get(MDC_TOKEN_KEY);

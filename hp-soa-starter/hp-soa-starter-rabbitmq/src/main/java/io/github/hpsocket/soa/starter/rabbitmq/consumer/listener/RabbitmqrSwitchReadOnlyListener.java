@@ -9,7 +9,7 @@ import io.github.hpsocket.soa.framework.web.event.ReadOnlyEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RabbitListenerSwitchReadOnlyListener implements ApplicationListener<ReadOnlyEvent>, Ordered
+public class RabbitmqrSwitchReadOnlyListener implements ApplicationListener<ReadOnlyEvent>, Ordered
 {
 	@Autowired
 	private RabbitListenerEndpointRegistry registry;

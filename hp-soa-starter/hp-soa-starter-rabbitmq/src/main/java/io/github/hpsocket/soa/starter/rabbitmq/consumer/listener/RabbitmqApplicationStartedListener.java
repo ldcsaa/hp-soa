@@ -10,7 +10,7 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RabbitListenerApplicationStartedListener implements ApplicationListener<ApplicationStartedEvent>, Ordered
+public class RabbitmqApplicationStartedListener implements ApplicationListener<ApplicationStartedEvent>, Ordered
 {
 	@Autowired
 	private RabbitListenerEndpointRegistry registry;

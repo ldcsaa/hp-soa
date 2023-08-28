@@ -19,21 +19,13 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.Getter;
 import lombok.Setter;
 
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
+
 @Getter
 @Setter
 @SuppressWarnings("serial")
 public class DomainEvent implements Serializable
 {
-	public static final String HEADER_DOMAIN_NAME		= "x-domain-name";
-	public static final String HEADER_EVENT_NAME		= "x-event-name";
-	public static final String HEADER_MSG_ID			= "x-msg-id";
-	public static final String HEADER_SOURCE_REQUEST_ID	= "x-source-request-id";
-	
-	public static final int SF_NOT_SEND		= 0;
-	public static final int SF_SENDING		= 1;
-	public static final int SF_SEND_SUCC	= 2;
-	public static final int SF_SEND_FAIL	= 3;
-
 	/**
 	 * 主键ID
 	 */
@@ -111,8 +103,18 @@ public class DomainEvent implements Serializable
 	
 	public DomainEvent()
 	{
-		msgId = IdGenerator.nextIdStr();
-		sourceRequestId = MDC.get(MdcAttr.MDC_REQUEST_ID_KEY);
+		this(IdGenerator.nextIdStr());
+	}
+	
+	public DomainEvent(String msgId)
+	{
+		this(msgId, MDC.get(MdcAttr.MDC_REQUEST_ID_KEY));
+	}
+	
+	public DomainEvent(String msgId, String sourceRequestId)
+	{
+		this.msgId = msgId;
+		this.sourceRequestId = sourceRequestId;
 	}
 	
 	public Message toMessage()

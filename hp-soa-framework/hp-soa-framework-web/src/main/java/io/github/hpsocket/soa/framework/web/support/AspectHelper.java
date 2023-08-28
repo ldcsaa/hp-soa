@@ -129,4 +129,25 @@ public class AspectHelper
 		return paramMap;
 	}
 
+	public static final Object[] getArgs(ProceedingJoinPoint point)
+	{
+		return point.getArgs();
+	}
+
+	public static final Object getFindFirstArgByType(ProceedingJoinPoint point, Class<?> clazz)
+	{
+		Object[] args = getArgs(point);
+		
+		for(Object arg : args)
+		{
+			if(clazz.isInstance(arg))
+				return arg;
+			{
+				
+			}
+		}
+		
+		return null;
+	}
+
 }

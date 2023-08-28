@@ -2,28 +2,29 @@
 package io.github.hpsocket.soa.starter.rabbitmq.consumer.config;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Import;
 
-import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitListenerApplicationStartedListener;
-import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitListenerSwitchReadOnlyListener;
+import io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect.RabbitmqListenerInspector;
+import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitmqApplicationStartedListener;
+import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitmqrSwitchReadOnlyListener;
 
 @AutoConfiguration
-//@ConditionalOnProperty(name = "spring.cloud.nacos.config.enabled", matchIfMissing = true)
+@Import(RabbitmqListenerInspector.class)
 public class SoaRabbitmqConsumerConfig
 {
 	@Bean
 	@DependsOn("springContextHolder")
-	RabbitListenerApplicationStartedListener rabbitListenerApplicationStartedListener()
+	RabbitmqApplicationStartedListener rabbitmqApplicationStartedListener()
 	{
-		return new RabbitListenerApplicationStartedListener();
+		return new RabbitmqApplicationStartedListener();
 	}
 	
 	@Bean
-	RabbitListenerSwitchReadOnlyListener RabbitListenerSwitchReadOnlyListener()
+	RabbitmqrSwitchReadOnlyListener RabbitmqrSwitchReadOnlyListener()
 	{
-		return new RabbitListenerSwitchReadOnlyListener();
+		return new RabbitmqrSwitchReadOnlyListener();
 	}
 	
 }

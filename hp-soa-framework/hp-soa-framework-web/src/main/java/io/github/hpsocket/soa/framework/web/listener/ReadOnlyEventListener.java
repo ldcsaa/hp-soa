@@ -3,6 +3,7 @@ package io.github.hpsocket.soa.framework.web.listener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.endpoint.event.RefreshEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.Ordered;
 
 import io.github.hpsocket.soa.framework.web.event.ReadOnlyEvent;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
@@ -12,7 +13,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ReadOnlyEventListener implements ApplicationListener<RefreshEvent>
+public class ReadOnlyEventListener implements ApplicationListener<RefreshEvent>, Ordered
 {
 	@Autowired
 	IAppProperties appProperties;
@@ -37,5 +38,11 @@ public class ReadOnlyEventListener implements ApplicationListener<RefreshEvent>
 			
 			log.info("application state switch -> (read-only: {})", curVal);
 		}
+	}
+
+	@Override
+	public int getOrder()
+	{
+		return Ordered.LOWEST_PRECEDENCE;
 	}
 }

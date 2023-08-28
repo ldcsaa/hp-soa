@@ -1,7 +1,11 @@
 package io.github.hpsocket.soa.starter.rabbitmq.producer.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.util.Assert;
 
@@ -11,7 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 import io.github.hpsocket.soa.starter.rabbitmq.producer.service.DomainEventService;
 
-import static io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent.*;
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
 
 public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEvent> extends ServiceImpl<M, T> implements DomainEventService<T>
 {
@@ -114,6 +118,9 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 
 	protected boolean updateEventSendFlag(List<Long> ids, int sendFlag)
 	{
+		if(ids.isEmpty())
+			return false;
+		
 		return lambdaUpdate().in(T::getId, ids)
 			.set(T::getSendFlag, sendFlag)
 			.update();
@@ -121,14 +128,37 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 
 	protected boolean updateEventSendFlag(List<Long> ids, List<Integer> sendFlags)
 	{
-		boolean isOK = false;
 		int size = ids.size();
 		
 		Assert.isTrue(size == sendFlags.size(), "size of ids not equals size of sendFlags");
 		
+		Map<Integer, List<Long>> map = new HashMap<>();
+		
 		for(int i = 0; i < size; i++)
 		{
-			if(updateEventSendFlag(ids.get(i), sendFlags.get(i)) && !isOK)
+			Integer key = sendFlags.get(i);
+			
+			List<Long> list = map.get(key);
+			
+			if(list == null)
+			{
+				list = new ArrayList<>();
+				map.put(key, list);
+			}
+			
+			list.add(ids.get(i));
+		}
+		
+		return updateEventSendFlag(map);
+	}
+
+	protected boolean updateEventSendFlag(Map<Integer, List<Long>> map)
+	{
+		boolean isOK = false;
+		
+		for(Entry<Integer, List<Long>> entry : map.entrySet())
+		{
+			if(updateEventSendFlag(entry.getValue(), entry.getKey()) && !isOK)
 				isOK = true;
 		}
 		

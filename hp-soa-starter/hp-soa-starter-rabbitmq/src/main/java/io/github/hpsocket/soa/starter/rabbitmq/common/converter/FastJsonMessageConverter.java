@@ -1,6 +1,7 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.common.converter;
 
+import org.slf4j.MDC;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.AbstractMessageConverter;
@@ -8,8 +9,12 @@ import org.springframework.amqp.support.converter.MessageConversionException;
 
 import com.alibaba.fastjson2.JSON;
 
+import io.github.hpsocket.soa.framework.core.id.IdGenerator;
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
+
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
 
 public class FastJsonMessageConverter extends AbstractMessageConverter
 {
@@ -27,9 +32,15 @@ public class FastJsonMessageConverter extends AbstractMessageConverter
 			return event.toMessage(messageProperties);
 		
 		byte[] bytes = JSON.toJSONBytes(object);
+		String msgId = IdGenerator.nextIdStr();
+		String sourceRequestId = MDC.get(MdcAttr.MDC_REQUEST_ID_KEY);
+		
+		messageProperties.setMessageId(msgId);
 		messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
 		messageProperties.setContentEncoding(WebServerHelper.DEFAULT_CHARSET);
 		messageProperties.setContentLength(bytes.length);
+		messageProperties.setHeader(HEADER_MSG_ID, msgId);
+		messageProperties.setHeader(HEADER_SOURCE_REQUEST_ID, sourceRequestId);
 		
 		return new Message(bytes, messageProperties);
 	}
