@@ -18,7 +18,6 @@ import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConsta
 
 public class FastJsonMessageConverter extends AbstractMessageConverter
 {
-
 	@Override
 	public Object fromMessage(Message message) throws MessageConversionException
 	{

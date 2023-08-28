@@ -37,8 +37,9 @@
 		<spring-boot-starter-data-redis.version>3.1.2</spring-boot-starter-data-redis.version>
 		<spring-boot-starter-data-mongodb.version>3.1.2</spring-boot-starter-data-mongodb.version>
 		<spring-data-mongodb.version>4.1.2</spring-data-mongodb.version>
-		<spring-amqp.version>3.0.7</spring-amqp.version>
-		<spring-rabbit.version>3.0.7</spring-rabbit.version>
+		<spring-amqp.version>3.0.8</spring-amqp.version>
+		<spring-rabbit.version>3.0.8</spring-rabbit.version>
+		<spring-rabbit-stream.version>3.0.8</spring-rabbit-stream.version>
 		<spring-kafka.version>3.0.10</spring-kafka.version>
 		<kafka-clients.version>3.5.1</kafka-clients.version>
 		<druid.version>1.2.18</druid.version>
@@ -46,6 +47,7 @@
 		<lettuce.version>6.2.6.RELEASE</lettuce.version>
 		<redisson.version>3.23.3</redisson.version>
 		<amqp-client.version>5.18.0</amqp-client.version>
+		<stream-client.version>0.12.0</stream-client.version>
 		<mongo-java-driver.version>3.12.14</mongo-java-driver.version>
 		<mysql-connector-j.version>8.1.0</mysql-connector-j.version>
 		<mybatis-spring.version>3.0.2</mybatis-spring.version>
@@ -512,6 +514,17 @@
 				<artifactId>spring-rabbit</artifactId>
 				<version>${spring-rabbit.version}</version>
 			</dependency>
+			<dependency>
+			    <groupId>com.rabbitmq</groupId>
+			    <artifactId>stream-client</artifactId>
+			    <version>${stream-client.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.springframework.amqp</groupId>
+			    <artifactId>spring-rabbit-stream</artifactId>
+			    <version>${spring-rabbit-stream.version}</version>
+			</dependency>
+
 			
 			<dependency>
 				<groupId>org.springframework.data</groupId>
