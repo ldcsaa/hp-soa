@@ -11,7 +11,17 @@ import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitmqApplica
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitmqrSwitchReadOnlyListener;
 
 @AutoConfiguration
-@Import(RabbitmqListenerInspector.class)
+@Import({
+			SoaDefaultRabbitAnnotationDrivenConfiguration.class,
+			SoaFirstRabbitAnnotationDrivenConfiguration.class,
+			SoaSecondRabbitAnnotationDrivenConfiguration.class,
+			SoaThirdRabbitAnnotationDrivenConfiguration.class,
+			
+			SoaDefaultRabbitStreamConfiguration.class,
+			SoaFirstRabbitStreamConfiguration.class,
+			SoaSecondRabbitStreamConfiguration.class,
+			SoaThirdRabbitStreamConfiguration.class,
+		})
 public class SoaRabbitmqConsumerConfig
 {
 	@Bean
@@ -22,9 +32,15 @@ public class SoaRabbitmqConsumerConfig
 	}
 	
 	@Bean
-	RabbitmqrSwitchReadOnlyListener RabbitmqrSwitchReadOnlyListener()
+	RabbitmqrSwitchReadOnlyListener rabbitmqrSwitchReadOnlyListener()
 	{
 		return new RabbitmqrSwitchReadOnlyListener();
+	}
+	
+	@Bean
+	RabbitmqListenerInspector rabbitmqListenerInspector()
+	{
+		return new RabbitmqListenerInspector();
 	}
 	
 }

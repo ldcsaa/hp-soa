@@ -1,0 +1,3 @@
+io.github.hpsocket.soa.starter.rabbitmq.common.config.SoaCommonRabbitmqConfig
+io.github.hpsocket.soa.starter.rabbitmq.consumer.config.SoaRabbitmqConsumerConfig
+io.github.hpsocket.soa.starter.rabbitmq.producer.config.SoaRabbitmqProducerConfig

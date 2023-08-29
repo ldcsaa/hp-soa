@@ -22,14 +22,20 @@ import com.rabbitmq.stream.EnvironmentBuilder;
 
 public class SoaAbstractRabbitStreamConfiguration
 {
+	protected final RabbitProperties properties;
+	
+	public SoaAbstractRabbitStreamConfiguration(RabbitProperties properties)
+	{
+		this.properties = properties;
+	}
+	
 	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
 		Environment rabbitStreamEnvironment,
-		RabbitProperties properties,
 		ObjectProvider<ConsumerCustomizer> consumerCustomizer,
 		ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
 	{
 		StreamRabbitListenerContainerFactory factory = new StreamRabbitListenerContainerFactory(rabbitStreamEnvironment);
-		factory.setNativeListener(properties.getListener().getStream().isNativeListener());
+		factory.setNativeListener(this.properties.getListener().getStream().isNativeListener());
 		consumerCustomizer.ifUnique(factory::setConsumerCustomizer);
 		containerCustomizer.ifUnique(factory::setContainerCustomizer);
 		
@@ -37,17 +43,15 @@ public class SoaAbstractRabbitStreamConfiguration
 	}
 
 	public Environment rabbitStreamEnvironment(
-		RabbitProperties properties,
 		ObjectProvider<EnvironmentBuilderCustomizer> customizers)
 	{
-		EnvironmentBuilder builder = configure(Environment.builder(), properties);
+		EnvironmentBuilder builder = configure(Environment.builder(), this.properties);
 		customizers.orderedStream().forEach((customizer) -> customizer.customize(builder));
 		
 		return builder.build();
 	}
 
 	public RabbitStreamTemplateConfigurer rabbitStreamTemplateConfigurer(
-		RabbitProperties properties,
 		ObjectProvider<MessageConverter> messageConverter,
 		ObjectProvider<StreamMessageConverter> streamMessageConverter,
 		ObjectProvider<ProducerCustomizer> producerCustomizer)
@@ -61,16 +65,16 @@ public class SoaAbstractRabbitStreamConfiguration
 	}
 
 	public RabbitStreamTemplate rabbitStreamTemplate(
-		Environment rabbitStreamEnvironment, RabbitProperties properties,
+		Environment rabbitStreamEnvironment,
 		RabbitStreamTemplateConfigurer configurer)
 	{
-		RabbitStreamTemplate template = new RabbitStreamTemplate(rabbitStreamEnvironment, properties.getStream().getName());
+		RabbitStreamTemplate template = new RabbitStreamTemplate(rabbitStreamEnvironment, this.properties.getStream().getName());
 		configurer.configure(template);
 		
 		return template;
 	}
 
-	static EnvironmentBuilder configure(EnvironmentBuilder builder, RabbitProperties properties)
+	protected static EnvironmentBuilder configure(EnvironmentBuilder builder, RabbitProperties properties)
 	{
 		builder.lazyInitialization(true);
 		RabbitProperties.Stream stream = properties.getStream();

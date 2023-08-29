@@ -1,0 +1,73 @@
+package io.github.hpsocket.soa.starter.rabbitmq.consumer.config;
+
+import org.springframework.amqp.rabbit.config.ContainerCustomizer;
+import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.listener.DirectMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.retry.MessageRecoverer;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.amqp.DirectRabbitListenerContainerFactoryConfigurer;
+import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
+import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+
+import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaSecondRabbitmqProperties;
+
+@AutoConfiguration
+@ConditionalOnBean(SoaSecondRabbitmqProperties.class)
+@EnableConfigurationProperties(SoaSecondRabbitmqProperties.class)
+public class SoaSecondRabbitAnnotationDrivenConfiguration extends SoaAbstractRabbitAnnotationDrivenConfiguration
+{
+	public SoaSecondRabbitAnnotationDrivenConfiguration(
+		ObjectProvider<MessageConverter> messageConverter,
+		ObjectProvider<MessageRecoverer> messageRecoverer,
+		ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers,
+		SoaSecondRabbitmqProperties properties)
+	{
+		super(messageConverter, messageRecoverer, retryTemplateCustomizers, properties);
+	}
+	
+	@Override
+	@Bean("secondSimpleRabbitListenerContainerFactoryConfigurer")
+	public SimpleRabbitListenerContainerFactoryConfigurer simpleRabbitListenerContainerFactoryConfigurer()
+	{
+		return super.simpleRabbitListenerContainerFactoryConfigurer();
+	}
+	
+	@Override
+	@Bean("secondSimpleRabbitListenerContainerFactory")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.listener", name = "type", havingValue = "simple", matchIfMissing = true)
+	public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
+		@Qualifier("secondSimpleRabbitListenerContainerFactoryConfigurer") SimpleRabbitListenerContainerFactoryConfigurer configurer,
+		@Qualifier("secondRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
+		ObjectProvider<ContainerCustomizer<SimpleMessageListenerContainer>> simpleContainerCustomizer)
+	{
+		return super.simpleRabbitListenerContainerFactory(configurer, connectionFactory, simpleContainerCustomizer);
+	}
+	
+	@Override
+	@Bean("secondDirectRabbitListenerContainerFactoryConfigurer")
+	public DirectRabbitListenerContainerFactoryConfigurer directRabbitListenerContainerFactoryConfigurer()
+	{
+		return super.directRabbitListenerContainerFactoryConfigurer();
+	}
+
+	@Override
+	@Bean("secondDirectRabbitListenerContainerFactory")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.listener", name = "type", havingValue = "direct")
+	public DirectRabbitListenerContainerFactory directRabbitListenerContainerFactory(
+		@Qualifier("secondDirectRabbitListenerContainerFactoryConfigurer") DirectRabbitListenerContainerFactoryConfigurer configurer,
+		@Qualifier("secondRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
+		ObjectProvider<ContainerCustomizer<DirectMessageListenerContainer>> directContainerCustomizer)
+	{
+		return super.directRabbitListenerContainerFactory(configurer, connectionFactory, directContainerCustomizer);
+	}
+}

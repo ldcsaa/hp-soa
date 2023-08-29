@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaFirstRabbitmqProperties;
 
@@ -36,7 +35,6 @@ public class SoaFirstRabbitAnnotationDrivenConfiguration extends SoaAbstractRabb
 		super(messageConverter, messageRecoverer, retryTemplateCustomizers, properties);
 	}
 	
-	@Primary
 	@Override
 	@Bean("firstSimpleRabbitListenerContainerFactoryConfigurer")
 	public SimpleRabbitListenerContainerFactoryConfigurer simpleRabbitListenerContainerFactoryConfigurer()
@@ -44,7 +42,6 @@ public class SoaFirstRabbitAnnotationDrivenConfiguration extends SoaAbstractRabb
 		return super.simpleRabbitListenerContainerFactoryConfigurer();
 	}
 	
-	@Primary
 	@Override
 	@Bean("firstSimpleRabbitListenerContainerFactory")
 	@ConditionalOnProperty(prefix = "spring.rabbitmq.first.listener", name = "type", havingValue = "simple", matchIfMissing = true)
@@ -56,7 +53,6 @@ public class SoaFirstRabbitAnnotationDrivenConfiguration extends SoaAbstractRabb
 		return super.simpleRabbitListenerContainerFactory(configurer, connectionFactory, simpleContainerCustomizer);
 	}
 	
-	@Primary
 	@Override
 	@Bean("firstDirectRabbitListenerContainerFactoryConfigurer")
 	public DirectRabbitListenerContainerFactoryConfigurer directRabbitListenerContainerFactoryConfigurer()
@@ -64,7 +60,6 @@ public class SoaFirstRabbitAnnotationDrivenConfiguration extends SoaAbstractRabb
 		return super.directRabbitListenerContainerFactoryConfigurer();
 	}
 
-	@Primary
 	@Override
 	@Bean("firstDirectRabbitListenerContainerFactory")
 	@ConditionalOnProperty(prefix = "spring.rabbitmq.first.listener", name = "type", havingValue = "direct")
