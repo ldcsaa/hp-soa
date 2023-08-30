@@ -8,6 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@SuppressWarnings("serial")
 public class User extends BaseLogicDeleteVersioningEntity
 {
 	private String name;
