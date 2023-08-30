@@ -1,4 +1,4 @@
-package io.github.hpsocket.soa.starter.rabbitmq.consumer.config;
+package io.github.hpsocket.soa.starter.rabbitmq.stream.config;
 
 import org.springframework.amqp.rabbit.config.ContainerCustomizer;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
 import org.springframework.rabbit.stream.listener.StreamListenerContainer;
@@ -22,43 +21,40 @@ import org.springframework.rabbit.stream.support.converter.StreamMessageConverte
 
 import com.rabbitmq.stream.Environment;
 
-import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbitmqProperties;
+import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaSecondRabbitmqProperties;
 
 @AutoConfiguration
-@ConditionalOnBean(SoaDefaultRabbitmqProperties.class)
+@ConditionalOnBean(SoaSecondRabbitmqProperties.class)
 @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-@EnableConfigurationProperties(SoaDefaultRabbitmqProperties.class)
-public class SoaDefaultRabbitStreamConfiguration extends SoaAbstractRabbitStreamConfiguration
+@EnableConfigurationProperties(SoaSecondRabbitmqProperties.class)
+public class SoaSecondRabbitmqStreamConfig extends SoaAbstractRabbitmqStreamConfig
 {
-	public SoaDefaultRabbitStreamConfiguration(SoaDefaultRabbitmqProperties properties)
+	public SoaSecondRabbitmqStreamConfig(SoaSecondRabbitmqProperties properties)
 	{
 		super(properties);
 	}
 
-	@Primary
 	@Override
-	@Bean(name = "defaultStreamRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.listener", name = "type", havingValue = "stream")
+	@Bean(name = "secondStreamRabbitListenerContainerFactory")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.listener", name = "type", havingValue = "stream")
 	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
-		@Qualifier("defaultRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
+		@Qualifier("secondRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
 		ObjectProvider<ConsumerCustomizer> consumerCustomizer,
 		ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
 	{
 		return super.streamRabbitListenerContainerFactory(rabbitStreamEnvironment, consumerCustomizer, containerCustomizer);
 	}
 
-	@Primary
 	@Override
-	@Bean(name = "defaultRabbitStreamEnvironment")
+	@Bean(name = "secondRabbitStreamEnvironment")
 	public Environment rabbitStreamEnvironment(
 		ObjectProvider<EnvironmentBuilderCustomizer> customizers)
 	{
 		return super.rabbitStreamEnvironment(customizers);
 	}
 
-	@Primary
 	@Override
-	@Bean("defaultRabbitStreamTemplateConfigurer")
+	@Bean("secondRabbitStreamTemplateConfigurer")
 	public RabbitStreamTemplateConfigurer rabbitStreamTemplateConfigurer(
 		ObjectProvider<MessageConverter> messageConverter,
 		ObjectProvider<StreamMessageConverter> streamMessageConverter,
@@ -67,13 +63,12 @@ public class SoaDefaultRabbitStreamConfiguration extends SoaAbstractRabbitStream
 		return super.rabbitStreamTemplateConfigurer(messageConverter, streamMessageConverter, producerCustomizer);
 	}
 
-	@Primary
 	@Override
-	@Bean("defaultRabbitStreamTemplate")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.stream", name = "name")
+	@Bean("secondRabbitStreamTemplate")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.stream", name = "name")
 	public RabbitStreamTemplate rabbitStreamTemplate(
-		@Qualifier("defaultRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
-		@Qualifier("defaultRabbitStreamTemplateConfigurer") RabbitStreamTemplateConfigurer configurer)
+		@Qualifier("secondRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
+		@Qualifier("secondRabbitStreamTemplateConfigurer") RabbitStreamTemplateConfigurer configurer)
 	{
 		return super.rabbitStreamTemplate(rabbitStreamEnvironment, configurer);
 	}

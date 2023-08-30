@@ -9,6 +9,8 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -61,7 +63,7 @@ public class DomainEvent implements Serializable
 	/**
 	 * 消息体
 	 */
-	private String msg;
+	private JSONObject msg;
 
 	/**
 	 * 关联请求Id
@@ -124,7 +126,7 @@ public class DomainEvent implements Serializable
 	
 	public Message toMessage(MessageProperties messageProperties)
 	{
-		MessageBuilder builder = MessageBuilder.withBody(msg.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
+		MessageBuilder builder = MessageBuilder.withBody(JSON.toJSONBytes(msg));
 		
 		if(messageProperties != null)
 			builder.copyProperties(messageProperties);

@@ -24,9 +24,9 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaThirdRabbitm
 @AutoConfiguration
 @ConditionalOnBean(SoaThirdRabbitmqProperties.class)
 @EnableConfigurationProperties(SoaThirdRabbitmqProperties.class)
-public class SoaThirdRabbitAnnotationDrivenConfiguration extends SoaAbstractRabbitAnnotationDrivenConfiguration
+public class SoaThirdRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerConfig
 {
-	public SoaThirdRabbitAnnotationDrivenConfiguration(
+	public SoaThirdRabbitmqConsumerConfig(
 		ObjectProvider<MessageConverter> messageConverter,
 		ObjectProvider<MessageRecoverer> messageRecoverer,
 		ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers,

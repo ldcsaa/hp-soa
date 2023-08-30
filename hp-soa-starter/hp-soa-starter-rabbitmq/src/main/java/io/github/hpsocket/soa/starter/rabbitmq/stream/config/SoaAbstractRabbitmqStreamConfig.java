@@ -1,4 +1,4 @@
-package io.github.hpsocket.soa.starter.rabbitmq.consumer.config;
+package io.github.hpsocket.soa.starter.rabbitmq.stream.config;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -20,11 +20,11 @@ import org.springframework.rabbit.stream.support.converter.StreamMessageConverte
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.EnvironmentBuilder;
 
-public class SoaAbstractRabbitStreamConfiguration
+public class SoaAbstractRabbitmqStreamConfig
 {
 	protected final RabbitProperties properties;
 	
-	public SoaAbstractRabbitStreamConfiguration(RabbitProperties properties)
+	public SoaAbstractRabbitmqStreamConfig(RabbitProperties properties)
 	{
 		this.properties = properties;
 	}

@@ -5,10 +5,14 @@ import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageCo
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.FastJsonMessageConverter;
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConverter;
+import io.github.hpsocket.soa.starter.rabbitmq.common.listener.RabbitmqApplicationStartedListener;
+import io.github.hpsocket.soa.starter.rabbitmq.common.listener.RabbitmqrSwitchReadOnlyListener;
+import io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect.RabbitmqListenerInspector;
 
 @AutoConfiguration
 @Import({
@@ -17,8 +21,27 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConve
 			SoaSecondRabbitmqConfig.class,
 			SoaThirdRabbitmqConfig.class
 		})
-public class SoaCommonRabbitmqConfig
+public class SoaRabbitmqCommonConfig
 {
+	@Bean
+	@DependsOn("springContextHolder")
+	RabbitmqApplicationStartedListener rabbitmqApplicationStartedListener()
+	{
+		return new RabbitmqApplicationStartedListener();
+	}
+	
+	@Bean
+	RabbitmqrSwitchReadOnlyListener rabbitmqrSwitchReadOnlyListener()
+	{
+		return new RabbitmqrSwitchReadOnlyListener();
+	}
+	
+	@Bean
+	RabbitmqListenerInspector rabbitmqListenerInspector()
+	{
+		return new RabbitmqListenerInspector();
+	}
+	
 	@Bean
 	MessageConverter fastJsonMessageConverter()
 	{

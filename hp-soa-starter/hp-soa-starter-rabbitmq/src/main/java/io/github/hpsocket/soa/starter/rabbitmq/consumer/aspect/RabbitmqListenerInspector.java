@@ -25,7 +25,13 @@ import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConsta
 public class RabbitmqListenerInspector
 {
 	private static final String POINTCUT_PATTERN 	= "execution (public void *.*(..)) && "
-													+ "@annotation(org.springframework.amqp.rabbit.annotation.RabbitListener)";
+													+ "("
+													+ "		@annotation(org.springframework.amqp.rabbit.annotation.RabbitListener) || "
+													+ "		("
+													+ "			@target(org.springframework.amqp.rabbit.annotation.RabbitListener) &&"
+													+ "			@annotation(org.springframework.amqp.rabbit.annotation.RabbitHandler)"
+													+ "		)"
+													+ ")";
 
 	@Pointcut(POINTCUT_PATTERN)
 	protected void aroundMethod() {}
@@ -35,7 +41,7 @@ public class RabbitmqListenerInspector
 	{
 		MdcAttr mdcAttr = WebServerHelper.createMdcAttr();		
 
-		RabbitListener listener = AspectHelper.getMethodAnnotation(joinPoint, RabbitListener.class);
+		RabbitListener listener = AspectHelper.getMethodOrClassAnnotation(joinPoint, RabbitListener.class);
 		Assert.notNull(listener, "RabbitListener annotation not found");
 		
 		String listenerId		= listener.id();

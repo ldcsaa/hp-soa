@@ -19,53 +19,53 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaSecondRabbitmqProperties;
+import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaFirstRabbitmqProperties;
 
 @AutoConfiguration
-@ConditionalOnBean(SoaSecondRabbitmqProperties.class)
-@EnableConfigurationProperties(SoaSecondRabbitmqProperties.class)
-public class SoaSecondRabbitAnnotationDrivenConfiguration extends SoaAbstractRabbitAnnotationDrivenConfiguration
+@ConditionalOnBean(SoaFirstRabbitmqProperties.class)
+@EnableConfigurationProperties(SoaFirstRabbitmqProperties.class)
+public class SoaFirstRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerConfig
 {
-	public SoaSecondRabbitAnnotationDrivenConfiguration(
+	public SoaFirstRabbitmqConsumerConfig(
 		ObjectProvider<MessageConverter> messageConverter,
 		ObjectProvider<MessageRecoverer> messageRecoverer,
 		ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers,
-		SoaSecondRabbitmqProperties properties)
+		SoaFirstRabbitmqProperties properties)
 	{
 		super(messageConverter, messageRecoverer, retryTemplateCustomizers, properties);
 	}
 	
 	@Override
-	@Bean("secondSimpleRabbitListenerContainerFactoryConfigurer")
+	@Bean("firstSimpleRabbitListenerContainerFactoryConfigurer")
 	public SimpleRabbitListenerContainerFactoryConfigurer simpleRabbitListenerContainerFactoryConfigurer()
 	{
 		return super.simpleRabbitListenerContainerFactoryConfigurer();
 	}
 	
 	@Override
-	@Bean("secondSimpleRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.listener", name = "type", havingValue = "simple", matchIfMissing = true)
+	@Bean("firstSimpleRabbitListenerContainerFactory")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq.first.listener", name = "type", havingValue = "simple", matchIfMissing = true)
 	public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
-		@Qualifier("secondSimpleRabbitListenerContainerFactoryConfigurer") SimpleRabbitListenerContainerFactoryConfigurer configurer,
-		@Qualifier("secondRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
+		@Qualifier("firstSimpleRabbitListenerContainerFactoryConfigurer") SimpleRabbitListenerContainerFactoryConfigurer configurer,
+		@Qualifier("firstRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
 		ObjectProvider<ContainerCustomizer<SimpleMessageListenerContainer>> simpleContainerCustomizer)
 	{
 		return super.simpleRabbitListenerContainerFactory(configurer, connectionFactory, simpleContainerCustomizer);
 	}
 	
 	@Override
-	@Bean("secondDirectRabbitListenerContainerFactoryConfigurer")
+	@Bean("firstDirectRabbitListenerContainerFactoryConfigurer")
 	public DirectRabbitListenerContainerFactoryConfigurer directRabbitListenerContainerFactoryConfigurer()
 	{
 		return super.directRabbitListenerContainerFactoryConfigurer();
 	}
 
 	@Override
-	@Bean("secondDirectRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.listener", name = "type", havingValue = "direct")
+	@Bean("firstDirectRabbitListenerContainerFactory")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq.first.listener", name = "type", havingValue = "direct")
 	public DirectRabbitListenerContainerFactory directRabbitListenerContainerFactory(
-		@Qualifier("secondDirectRabbitListenerContainerFactoryConfigurer") DirectRabbitListenerContainerFactoryConfigurer configurer,
-		@Qualifier("secondRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
+		@Qualifier("firstDirectRabbitListenerContainerFactoryConfigurer") DirectRabbitListenerContainerFactoryConfigurer configurer,
+		@Qualifier("firstRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
 		ObjectProvider<ContainerCustomizer<DirectMessageListenerContainer>> directContainerCustomizer)
 	{
 		return super.directRabbitListenerContainerFactory(configurer, connectionFactory, directContainerCustomizer);

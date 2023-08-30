@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.starter.rabbitmq.producer.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
@@ -13,10 +14,10 @@ public interface DomainEventService<T extends DomainEvent>
 	List<T> markEventToSend(int count);
 	
 	boolean markEventSendSuccess(long id);
-	boolean markEventSendSuccess(List<Long> ids);
+	boolean markEventSendSuccess(Collection<Long> ids);
 
 	boolean markEventSendFail(long id);
-	boolean markEventSendFail(List<Long> ids);
+	boolean markEventSendFail(Collection<Long> ids);
 
 	boolean resetSendingEventToSendFail();
 	boolean resetSendingEventToSendFail(int sendTimeout);

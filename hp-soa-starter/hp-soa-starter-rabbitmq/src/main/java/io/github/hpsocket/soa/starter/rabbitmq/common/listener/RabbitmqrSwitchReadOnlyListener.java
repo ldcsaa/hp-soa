@@ -1,4 +1,4 @@
-package io.github.hpsocket.soa.starter.rabbitmq.consumer.listener;
+package io.github.hpsocket.soa.starter.rabbitmq.common.listener;
 
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;

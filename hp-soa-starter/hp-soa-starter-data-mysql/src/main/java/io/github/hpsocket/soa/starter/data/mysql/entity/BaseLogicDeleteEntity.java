@@ -7,6 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@SuppressWarnings("serial")
 public class BaseLogicDeleteEntity extends BaseEntity
 {
 	@TableLogic

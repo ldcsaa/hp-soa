@@ -1,17 +1,17 @@
 package io.github.hpsocket.soa.starter.rabbitmq.producer.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.springframework.util.Assert;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import io.github.hpsocket.soa.framework.core.util.Pair;
 import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 import io.github.hpsocket.soa.starter.rabbitmq.producer.service.DomainEventService;
 
@@ -63,7 +63,7 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 	}
 
 	@Override
-	public boolean markEventSendSuccess(List<Long> ids)
+	public boolean markEventSendSuccess(Collection<Long> ids)
 	{
 		return updateEventSendFlag(ids, SF_SEND_SUCC);
 	}
@@ -75,7 +75,7 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 	}
 
 	@Override
-	public boolean markEventSendFail(List<Long> ids)
+	public boolean markEventSendFail(Collection<Long> ids)
 	{
 		return updateEventSendFlag(ids, SF_SEND_FAIL);
 	}
@@ -116,7 +116,7 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 			.update();
 	}
 
-	protected boolean updateEventSendFlag(List<Long> ids, int sendFlag)
+	protected boolean updateEventSendFlag(Collection<Long> ids, int sendFlag)
 	{
 		if(ids.isEmpty())
 			return false;
@@ -126,37 +126,24 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 			.update();
 	}
 
-	protected boolean updateEventSendFlag(List<Long> ids, List<Integer> sendFlags)
+	protected boolean updateEventSendFlag(Collection<Pair<Long, Integer>> idSendFlags)
 	{
-		int size = ids.size();
+		Map<Integer, Collection<Long>> sendFlagIds = idSendFlags.stream()
+												.collect(
+													Collectors.groupingBy(
+														Pair::getSecond,
+														Collectors.mapping(
+															Pair::getFirst,
+															Collectors.toCollection(HashSet::new))));
 		
-		Assert.isTrue(size == sendFlags.size(), "size of ids not equals size of sendFlags");
-		
-		Map<Integer, List<Long>> map = new HashMap<>();
-		
-		for(int i = 0; i < size; i++)
-		{
-			Integer key = sendFlags.get(i);
-			
-			List<Long> list = map.get(key);
-			
-			if(list == null)
-			{
-				list = new ArrayList<>();
-				map.put(key, list);
-			}
-			
-			list.add(ids.get(i));
-		}
-		
-		return updateEventSendFlag(map);
+		return updateEventSendFlag(sendFlagIds);
 	}
 
-	protected boolean updateEventSendFlag(Map<Integer, List<Long>> map)
+	protected boolean updateEventSendFlag(Map<Integer, Collection<Long>> sendFlagIds)
 	{
 		boolean isOK = false;
 		
-		for(Entry<Integer, List<Long>> entry : map.entrySet())
+		for(Entry<Integer, Collection<Long>> entry : sendFlagIds.entrySet())
 		{
 			if(updateEventSendFlag(entry.getValue(), entry.getKey()) && !isOK)
 				isOK = true;

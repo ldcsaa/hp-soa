@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.starter.data.mysql.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -11,7 +12,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BaseEntity
+@SuppressWarnings("serial")
+public class BaseEntity implements Serializable
 {
 	@TableId
 	private Long id;

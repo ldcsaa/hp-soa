@@ -27,7 +27,7 @@ import org.springframework.retry.support.RetryTemplate;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 
-public class SoaAbstractRabbitAnnotationDrivenConfiguration
+public class SoaAbstractRabbitmqConsumerConfig
 {
 	protected final ObjectProvider<MessageConverter> messageConverter;
 	protected final ObjectProvider<MessageRecoverer> messageRecoverer;
@@ -35,7 +35,7 @@ public class SoaAbstractRabbitAnnotationDrivenConfiguration
 
 	protected final RabbitProperties properties;
 
-	public SoaAbstractRabbitAnnotationDrivenConfiguration(
+	public SoaAbstractRabbitmqConsumerConfig(
 		ObjectProvider<MessageConverter> messageConverter,
 		ObjectProvider<MessageRecoverer> messageRecoverer,
 		ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers,

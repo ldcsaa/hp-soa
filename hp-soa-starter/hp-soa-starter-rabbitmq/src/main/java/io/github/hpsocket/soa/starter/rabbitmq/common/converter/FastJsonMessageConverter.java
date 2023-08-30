@@ -21,7 +21,7 @@ public class FastJsonMessageConverter extends AbstractMessageConverter
 	@Override
 	public Object fromMessage(Message message) throws MessageConversionException
 	{
-		return new String(message.getBody(), WebServerHelper.DEFAULT_CHARSET_OBJ);
+		return JSON.parse(message.getBody());
 	}
 
 	@Override
