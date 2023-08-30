@@ -11,7 +11,7 @@
  Target Server Version : 80033 (8.0.33)
  File Encoding         : 65001
 
- Date: 30/08/2023 18:59:21
+ Date: 30/08/2023 20:00:27
 */
 
 SET NAMES utf8mb4;
@@ -23,7 +23,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `t_demo_event`;
 CREATE TABLE `t_demo_event`  (
   `id` bigint NOT NULL,
-  `biz_id` bigint NULL DEFAULT NULL,
+  `biz_id` bigint NOT NULL,
   `domain_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `event_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `exchange` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
