@@ -34,7 +34,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 		
 		event.setDomainName(AppConfig.DOMAIN_NAME);
 		event.setEventName(AppConfig.CREATE_ORDER_EVENT_NAME);
-		event.setExchange(AppConfig.REGION_0_EXCHANGES[event.getRegionId()]);
+		event.setExchange(AppConfig.REGION_EXCHANGES[event.getRegionId()]);
 		event.setRoutingKey(AppConfig.CREATE_ORDER_ROUTING_KEY);
 		event.setMsg(JSONObject.from(order));
 		

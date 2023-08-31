@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -47,11 +48,38 @@ public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProduce
 		@Qualifier("defaultRabbitTemplateConfigurer") RabbitTemplateConfigurer configurer,
 		@Qualifier("defaultRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
 		ObjectProvider<RabbitTemplateCustomizer> customizers,
-		@Qualifier("defaultRabbitReturnsCallback") ObjectProvider<ReturnsCallback> returnCallback,
+		@Qualifier("defaultRabbitReturnsCallback") ObjectProvider<ReturnsCallback> returnsCallback,
 		@Qualifier("defaultRabbitConfirmCallback") ObjectProvider<ConfirmCallback> confirmCallback,
 		@Qualifier("defaultRabbitRecoveryCallback") ObjectProvider<RecoveryCallback<?>> recoveryCallback)
 	{
-		return super.rabbitTemplate(configurer, connectionFactory, customizers, returnCallback, confirmCallback, recoveryCallback);
+		return super.rabbitTemplate(configurer, connectionFactory, customizers, returnsCallback, confirmCallback, recoveryCallback);
+	}
+	
+	@Primary
+	@Override
+	@Bean("defaultRabbitReturnsCallback")
+	@ConditionalOnMissingBean(name = "defaultRabbitReturnsCallback")
+	public ReturnsCallback returnsCallback()
+	{
+		return super.returnsCallback();
+	}
+	
+	@Primary
+	@Override
+	@Bean("defaultRabbitConfirmCallback")
+	@ConditionalOnMissingBean(name = "defaultRabbitConfirmCallback")
+	public ConfirmCallback confirmCallback()
+	{
+		return super.confirmCallback();
+	}
+	
+	@Primary
+	@Override
+	@Bean("defaultRabbitRecoveryCallback")
+	@ConditionalOnMissingBean(name = "defaultRabbitRecoveryCallback")
+	public <T> RecoveryCallback<T> recoveryCallback()
+	{
+		return super.recoveryCallback();
 	}
 	
 	@Primary

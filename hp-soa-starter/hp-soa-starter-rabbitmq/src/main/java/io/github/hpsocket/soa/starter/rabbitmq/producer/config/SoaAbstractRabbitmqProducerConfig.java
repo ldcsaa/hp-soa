@@ -1,7 +1,9 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.producer.config;
 
+import org.springframework.amqp.core.ReturnedMessage;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate.ConfirmCallback;
@@ -13,6 +15,7 @@ import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateCustomizer;
 import org.springframework.retry.RecoveryCallback;
+import org.springframework.retry.RetryContext;
 
 public class SoaAbstractRabbitmqProducerConfig
 {
@@ -38,7 +41,7 @@ public class SoaAbstractRabbitmqProducerConfig
 					RabbitTemplateConfigurer configurer, 
 					ConnectionFactory connectionFactory, 
 					ObjectProvider<RabbitTemplateCustomizer> customizers,
-					ObjectProvider<ReturnsCallback> returnCallback,
+					ObjectProvider<ReturnsCallback> returnsCallback,
 					ObjectProvider<ConfirmCallback> confirmCallback,
 					ObjectProvider<RecoveryCallback<?>> recoveryCallback)
 	{
@@ -46,7 +49,7 @@ public class SoaAbstractRabbitmqProducerConfig
 		configurer.configure(template, connectionFactory);
 		customizers.orderedStream().forEach((customizer) -> customizer.customize(template));
 		
-		template.setReturnsCallback(returnCallback.getIfUnique());
+		template.setReturnsCallback(returnsCallback.getIfUnique());
 		template.setConfirmCallback(confirmCallback.getIfUnique());
 		template.setRecoveryCallback(recoveryCallback.getIfUnique());
 		
@@ -58,4 +61,39 @@ public class SoaAbstractRabbitmqProducerConfig
 		return new RabbitMessagingTemplate(rabbitTemplate);
 	}
 
+	public ReturnsCallback returnsCallback()
+	{
+		return new ReturnsCallback()
+		{	
+			@Override
+			public void returnedMessage(ReturnedMessage returned)
+			{
+				
+			}
+		};
+	}
+	
+	public ConfirmCallback confirmCallback()
+	{
+		return new ConfirmCallback()
+		{	
+			@Override
+			public void confirm(CorrelationData correlationData, boolean ack, String cause)
+			{
+				
+			}
+		};
+	}
+	
+	public <T> RecoveryCallback<T> recoveryCallback()
+	{
+		return new RecoveryCallback<T>()
+		{
+			@Override
+			public T recover(RetryContext context) throws Exception
+			{
+				return null;
+			}
+		};
+	}
 }

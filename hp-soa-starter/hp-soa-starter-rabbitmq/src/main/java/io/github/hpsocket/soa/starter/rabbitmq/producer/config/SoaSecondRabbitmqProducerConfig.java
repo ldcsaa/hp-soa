@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.retry.RecoveryCallback;
@@ -44,11 +45,35 @@ public class SoaSecondRabbitmqProducerConfig extends SoaAbstractRabbitmqProducer
 		@Qualifier("secondRabbitTemplateConfigurer") RabbitTemplateConfigurer configurer,
 		@Qualifier("secondRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
 		ObjectProvider<RabbitTemplateCustomizer> customizers,
-		@Qualifier("secondRabbitReturnsCallback") ObjectProvider<ReturnsCallback> returnCallback,
+		@Qualifier("secondRabbitReturnsCallback") ObjectProvider<ReturnsCallback> returnsCallback,
 		@Qualifier("secondRabbitConfirmCallback") ObjectProvider<ConfirmCallback> confirmCallback,
 		@Qualifier("secondRabbitRecoveryCallback") ObjectProvider<RecoveryCallback<?>> recoveryCallback)
 	{
-		return super.rabbitTemplate(configurer, connectionFactory, customizers, returnCallback, confirmCallback, recoveryCallback);
+		return super.rabbitTemplate(configurer, connectionFactory, customizers, returnsCallback, confirmCallback, recoveryCallback);
+	}
+	
+	@Override
+	@Bean("secondRabbitReturnsCallback")
+	@ConditionalOnMissingBean(name = "secondRabbitReturnsCallback")
+	public ReturnsCallback returnsCallback()
+	{
+		return super.returnsCallback();
+	}
+	
+	@Override
+	@Bean("secondRabbitConfirmCallback")
+	@ConditionalOnMissingBean(name = "secondRabbitConfirmCallback")
+	public ConfirmCallback confirmCallback()
+	{
+		return super.confirmCallback();
+	}
+	
+	@Override
+	@Bean("secondRabbitRecoveryCallback")
+	@ConditionalOnMissingBean(name = "secondRabbitRecoveryCallback")
+	public <T> RecoveryCallback<T> recoveryCallback()
+	{
+		return super.recoveryCallback();
 	}
 	
 	@Override
