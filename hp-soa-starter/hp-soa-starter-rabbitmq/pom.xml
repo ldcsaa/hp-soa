@@ -22,6 +22,11 @@
 			<artifactId>hp-soa-framework-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>io.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-data-mysql</artifactId>
+            <optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
@@ -30,12 +35,5 @@
 		    <artifactId>spring-rabbit-stream</artifactId>
             <optional>true</optional>
 		</dependency>
-
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-extension</artifactId>
-            <optional>true</optional>
-        </dependency>
-
 	</dependencies>
 </project>

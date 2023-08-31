@@ -43,7 +43,7 @@ public class SoaRabbitmqCommonConfig
 	}
 	
 	@Bean
-	MessageConverter fastJsonMessageConverter()
+	MessageConverter messageConverter()
 	{
 		MessageConverter textConverter = new TextMessageConverter();
 		MessageConverter fastJsonConverter = new FastJsonMessageConverter();

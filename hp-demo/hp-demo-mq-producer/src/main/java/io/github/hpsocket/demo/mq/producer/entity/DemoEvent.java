@@ -12,9 +12,16 @@ import lombok.Setter;
 public class DemoEvent extends DomainEvent
 {
 	private Long bizId;
+	private Integer regionId;
 	
 	public DemoEvent(Long bizId)
 	{
+		this(bizId, 0);
+	}
+	
+	public DemoEvent(Long bizId, Integer regionId)
+	{
 		this.bizId = bizId;
+		this.regionId = regionId;
 	}
 }

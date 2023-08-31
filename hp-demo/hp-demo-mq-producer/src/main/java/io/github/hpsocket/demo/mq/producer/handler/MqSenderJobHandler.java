@@ -13,13 +13,9 @@ public class MqSenderJobHandler
 {
 	int i = 0;
 	
-	//@Scheduled(cron = "*/5 * * * * ?")
-	@ExclusiveJob(jobName = "mqSender", cron = "*/5 * * * * ?")
+	//@ExclusiveJob(jobName = "mqSender", cron = "*/5 * * * * ?")
 	public void job1()
 	{
-		if((++i) % 5 == 0)
-			throw new RuntimeException("test thow exceptions");
-		
-		log.info("traceId: {}", WebServerHelper.getTraceId());
+
 	}
 }

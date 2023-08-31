@@ -1,7 +1,7 @@
 # app
 hp.soa.web:
   app:
-    id: "0010100101"
+    id: "0010100011"
     name: ${project.artifactId}
     version: ${project.version}
     organization: HP-Socket
@@ -35,10 +35,13 @@ spring.cloud.nacos.config:
       data-id: spring-task.yml
       refresh: true
     - group: GLOBAL_GROUP
-      data-id: xxl-job.yml
+      data-id: rabbitmq.yml
       refresh: true
     - group: GLOBAL_GROUP
       data-id: dubbo.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: mysql.yml
       refresh: true
     - group: GLOBAL_GROUP
       data-id: redis.yml
@@ -48,13 +51,11 @@ spring.cloud.nacos.config:
 dubbo.protocols:
   #dubbo:
   #  name: dubbo
-  #  port: 5003
+  #  port: 5011
   tri:
     name: tri
-    port: 6101
+    port: 6011
 
 # server
-server.port: 9101
+server.port: 9011
 
-# xxl-job
-xxl.job.executor.port: 7101

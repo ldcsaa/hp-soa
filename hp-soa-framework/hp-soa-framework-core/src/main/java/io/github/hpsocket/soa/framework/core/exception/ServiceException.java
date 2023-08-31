@@ -9,9 +9,9 @@ public class ServiceException extends RuntimeException
 	public static final int OK						= 0;
 	/** 部分成功 */
 	public static final int PARTIAL_OK				= 206;
-	/** 格式错误 */
+	/** 非法请求 */
 	public static final int BAD_REQUEST				= 400;
-	/** 对象不存在 */
+	/** 目标不存在 */
 	public static final int NOT_EXIST				= 404;
 	/** 参数校验失败 */
 	public static final int PARAM_VERIFY_ERROR		= 409;
@@ -19,11 +19,11 @@ public class ServiceException extends RuntimeException
 	public static final int GENERAL_ERROR			= 500;
 	/** 参数验证错误 */
 	public static final int PARAM_VALIDATION_ERROR	= 501;
-	/** 接口已关闭 */
+	/** 接口未实现 */
 	public static final int NOT_IMPLEMENTED			= 502;
 	/** 频次超限 */
 	public static final int FREQUENCY_LIMIT_ERROR	= 503;
-	/** 访问被禁止 */
+	/** 拒绝访问 */
 	public static final int FORBID_ERROR 			= 504;
 	/** 请求参数非法 */
 	public static final int PARAMS_ERROR			= 505;
@@ -31,6 +31,10 @@ public class ServiceException extends RuntimeException
 	public static final int REPEATED_REQ_ERROR		= 506;
 	/** 访问被限流 */
 	public static final int TRAFFIC_LIMIT_ERROR		= 507;
+	/** 接口不支持 */
+	public static final int NOT_SUPPORTED			= 508;
+	/** 禁止更新 */
+	public static final int FORBID_UPDATE_ERROR 	= 509;
 	/** 调用超时 */
 	public static final int TIMEOUT_ERROR			= 511;
 	/** APP CODE 不存在 */
@@ -54,12 +58,14 @@ public class ServiceException extends RuntimeException
 	/** 未登录 */
 	public static final int NOT_LOGGED_IN			= 907;
 	
-	public static final ServiceException BAD_REQUEST_EXCEPTION		= new ServiceException("格式错误", BAD_REQUEST);
-	public static final ServiceException NOT_EXIST_EXCEPTION		= new ServiceException("对象不存在", NOT_EXIST);
+	public static final ServiceException BAD_REQUEST_EXCEPTION		= new ServiceException("非法请求", BAD_REQUEST);
+	public static final ServiceException NOT_EXIST_EXCEPTION		= new ServiceException("目标不存在", NOT_EXIST);
 	public static final ServiceException PARAM_VERIFY_EXCEPTION		= new ServiceException("参数校验失败", PARAM_VERIFY_ERROR);
 	public static final ServiceException GENERAL_EXCEPTION			= new ServiceException("服务器内部错误", GENERAL_ERROR);
 	public static final ServiceException PARAM_VALIDATION_EXCEPTION	= new ServiceException("参数验证错误", PARAM_VALIDATION_ERROR);
 	public static final ServiceException NOT_IMPLEMENTED_EXCEPTION	= new ServiceException("接口未实现", NOT_IMPLEMENTED);
+	public static final ServiceException NOT_SUPPORTED_EXCEPTION	= new ServiceException("接口不支持", NOT_SUPPORTED);
+	public static final ServiceException FORBID_SERVICE_EXCEPTION	= new ServiceException("禁止更新", FORBID_UPDATE_ERROR);
 	public static final ServiceException APPCODE_NOT_EXIST_EXCEPTION= new ServiceException("应用程序编号不存在", APPCODE_NOT_EXIST_ERROR);
 	public static final ServiceException APPCODE_EXIST_EXCEPTION	= new ServiceException("应用程序编号已存在", APPCODE_EXIST_ERROR);
 	public static final ServiceException AUTHEN_EXCEPTION			= new ServiceException("用户认证失败", AUTHEN_ERROR);
@@ -261,7 +267,7 @@ public class ServiceException extends RuntimeException
 			if(e instanceof UnimportantException)
 				logger.info(FORMAT, statusCode, resultCode, msg);
 			else
-				logger.warn(FORMAT, statusCode, resultCode, msg);
+				logger.warn(FORMAT, statusCode, resultCode, msg, e);
 		}
 	}
 

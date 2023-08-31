@@ -16,6 +16,8 @@ import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerIntercep
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 
+import io.github.hpsocket.soa.starter.data.mysql.interceptor.ReadOnlyInterceptor;
+
 @AutoConfiguration
 @ConditionalOnProperty(name = "spring.datasource.dynamic.enabled", matchIfMissing = true)
 public class SoaMybatisPlusConfig
@@ -29,6 +31,7 @@ public class SoaMybatisPlusConfig
 	{
 		MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
 
+		interceptor.addInnerInterceptor(new ReadOnlyInterceptor());
 		interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
 		interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
 		interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());

@@ -3,9 +3,11 @@ package io.github.hpsocket.soa.starter.rabbitmq.producer.service;
 import java.util.Collection;
 import java.util.List;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+
 import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 
-public interface DomainEventService<T extends DomainEvent>
+public interface DomainEventService<T extends DomainEvent> extends IService<T>
 {
 	int DEFAULT_RESET_BATCH_SIZE = 200;
 	int DEFAULT_SEND_TIMEOUT	 = 30;

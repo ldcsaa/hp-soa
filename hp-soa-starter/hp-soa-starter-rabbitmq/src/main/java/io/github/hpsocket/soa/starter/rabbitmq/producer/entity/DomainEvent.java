@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.data.mysql.handler.FastJson2TypeHandler;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -63,6 +64,7 @@ public class DomainEvent implements Serializable
 	/**
 	 * 消息体
 	 */
+	@TableField(typeHandler = FastJson2TypeHandler.class)
 	private JSONObject msg;
 
 	/**
@@ -91,7 +93,7 @@ public class DomainEvent implements Serializable
 	@TableLogic
 	private Byte deleted;
 
-	/**
+	/**s
 	 * 创建时间
 	 */
 	@TableField(fill = FieldFill.INSERT)
@@ -100,7 +102,7 @@ public class DomainEvent implements Serializable
 	/**
 	 * 修改时间
 	 */
-	@TableField(fill = FieldFill.UPDATE)
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private LocalDateTime updateTime;
 	
 	public DomainEvent()

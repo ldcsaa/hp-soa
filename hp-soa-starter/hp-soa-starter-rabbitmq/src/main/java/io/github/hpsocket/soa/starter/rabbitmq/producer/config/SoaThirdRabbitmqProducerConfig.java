@@ -47,7 +47,6 @@ public class SoaThirdRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerC
 		@Qualifier("thirdRabbitReturnsCallback") ObjectProvider<ReturnsCallback> returnCallback,
 		@Qualifier("thirdRabbitConfirmCallback") ObjectProvider<ConfirmCallback> confirmCallback,
 		@Qualifier("thirdRabbitRecoveryCallback") ObjectProvider<RecoveryCallback<?>> recoveryCallback)
-
 	{
 		return super.rabbitTemplate(configurer, connectionFactory, customizers, returnCallback, confirmCallback, recoveryCallback);
 	}

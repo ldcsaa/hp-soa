@@ -13,9 +13,11 @@ import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.web.model.Response;
 
 import org.springframework.core.Ordered;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -112,9 +114,13 @@ public class ControllerGlobalExceptionAdvice implements Ordered
 		ServiceException se = null;
 		
 		if(e instanceof NoHandlerFoundException)
-			se = wrapServiceException(e.getMessage(), NOT_EXIST, e);
+			se = wrapServiceException(NOT_EXIST_EXCEPTION, e);
 		else if(e instanceof HttpRequestMethodNotSupportedException)
-			se = wrapServiceException(e.getMessage(), NOT_IMPLEMENTED, e);
+			se = wrapServiceException(NOT_IMPLEMENTED_EXCEPTION, e);
+		else if(e instanceof HttpMediaTypeException)
+			se = wrapServiceException(NOT_SUPPORTED_EXCEPTION, e);
+		else if(e instanceof HttpMessageConversionException)
+			se = wrapServiceException(BAD_REQUEST_EXCEPTION, e);
 		
 		if(se == null)
 			se = wrapServiceException(GENERAL_EXCEPTION, e);
