@@ -11,7 +11,7 @@
  Target Server Version : 80033 (8.0.33)
  File Encoding         : 65001
 
- Date: 30/08/2023 20:00:27
+ Date: 31/08/2023 15:05:17
 */
 
 SET NAMES utf8mb4;
@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `t_demo_event`;
 CREATE TABLE `t_demo_event`  (
   `id` bigint NOT NULL,
   `biz_id` bigint NOT NULL,
+  `region_id` int NOT NULL,
   `domain_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `event_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `exchange` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -33,16 +34,12 @@ CREATE TABLE `t_demo_event`  (
   `source_request_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `send_flag` int NOT NULL DEFAULT 0,
   `retries` int NOT NULL DEFAULT 0,
-  `last_send_time` timestamp(3) NOT NULL,
+  `last_send_time` timestamp(3) NULL DEFAULT NULL,
   `deleted` tinyint NOT NULL DEFAULT 0,
   `create_time` timestamp(3) NOT NULL,
   `update_time` timestamp(3) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `ux_msg_id`(`msg_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of t_demo_event
--- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

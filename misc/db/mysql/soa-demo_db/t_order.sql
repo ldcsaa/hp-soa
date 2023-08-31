@@ -11,7 +11,7 @@
  Target Server Version : 80033 (8.0.33)
  File Encoding         : 65001
 
- Date: 30/08/2023 18:59:34
+ Date: 31/08/2023 15:05:24
 */
 
 SET NAMES utf8mb4;
@@ -23,6 +23,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `t_order`;
 CREATE TABLE `t_order`  (
   `id` bigint NOT NULL,
+  `region_id` int NOT NULL,
   `order_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `price` bigint NOT NULL,
   `deleted` tinyint NOT NULL DEFAULT 0,
@@ -31,9 +32,5 @@ CREATE TABLE `t_order`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `ux_order_number`(`order_number` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of t_order
--- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
