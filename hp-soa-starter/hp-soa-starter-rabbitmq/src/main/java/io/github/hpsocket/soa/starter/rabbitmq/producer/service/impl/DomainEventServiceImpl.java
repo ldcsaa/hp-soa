@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import io.github.hpsocket.soa.framework.core.util.Pair;
@@ -95,25 +96,25 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 	@Override
 	public boolean markOneEventSendSuccess(Long id)
 	{
-		return updateEventSendFlag(id, SF_SEND_SUCC);
+		return updateEventSendFlag(id, SF_SEND_SUCC, SF_SENDING);
 	}
 
 	@Override
 	public boolean markMultiEventSendSuccess(Collection<Long> ids)
 	{
-		return updateEventSendFlag(ids, SF_SEND_SUCC);
+		return updateEventSendFlag(ids, SF_SEND_SUCC, SF_SENDING);
 	}
 
 	@Override
 	public boolean markOneEventSendFail(Long id)
 	{
-		return updateEventSendFlag(id, SF_SEND_FAIL);
+		return updateEventSendFlag(id, SF_SEND_FAIL, SF_SENDING);
 	}
 
 	@Override
 	public boolean markMultiEventSendFail(Collection<Long> ids)
 	{
-		return updateEventSendFlag(ids, SF_SEND_FAIL);
+		return updateEventSendFlag(ids, SF_SEND_FAIL, SF_SENDING);
 	}
 
 	@Override
@@ -147,21 +148,29 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 					.update();
 	}
 
-	protected boolean updateEventSendFlag(Long id, int sendFlag)
+	protected boolean updateEventSendFlag(Long id, int sendFlag, int curSendFlag)
 	{
-		return lambdaUpdate()
-				.eq(T::getId, id)
+		LambdaUpdateChainWrapper<T> query = lambdaUpdate().eq(T::getId, id);
+		
+		if(curSendFlag >= 0)
+			query.eq(T::getSendFlag, curSendFlag);
+		
+		return query
 				.set(T::getSendFlag, sendFlag)
 				.update();
 	}
 
-	protected boolean updateEventSendFlag(Collection<Long> ids, int sendFlag)
+	protected boolean updateEventSendFlag(Collection<Long> ids, int sendFlag, int curSendFlag)
 	{
 		if(ids.isEmpty())
 			return false;
 		
-		return lambdaUpdate()
-				.in(T::getId, ids)
+		LambdaUpdateChainWrapper<T> query = lambdaUpdate().in(T::getId, ids);
+		
+		if(curSendFlag >= 0)
+			query.eq(T::getSendFlag, curSendFlag);
+		
+		return query
 				.set(T::getSendFlag, sendFlag)
 				.update();
 	}
@@ -185,7 +194,7 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 		
 		for(Entry<Integer, Collection<Long>> entry : sendFlagIds.entrySet())
 		{
-			if(updateEventSendFlag(entry.getValue(), entry.getKey()) && !isOK)
+			if(updateEventSendFlag(entry.getValue(), entry.getKey(), -1) && !isOK)
 				isOK = true;
 		}
 		

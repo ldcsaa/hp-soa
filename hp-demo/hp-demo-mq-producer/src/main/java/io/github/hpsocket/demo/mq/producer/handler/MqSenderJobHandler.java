@@ -104,9 +104,11 @@ public class MqSenderJobHandler
 	@ExclusiveJob(jobName = "compensateMqEvent", cron = "15 */1 * * * ?")
 	public void compensateMqEvent()
 	{
+		final int TIMEOUT = DomainEventService.DEFAULT_SEND_TIMEOUT;
+		
 		while(true)
 		{
-			if(!demoEventService.resetSendingEventToSendFail())
+			if(!demoEventService.resetSendingEventToSendFail(TIMEOUT))
 				break;
 		}
 	}
