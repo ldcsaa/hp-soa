@@ -11,7 +11,7 @@
  Target Server Version : 80033 (8.0.33)
  File Encoding         : 65001
 
- Date: 31/08/2023 15:05:17
+ Date: 01/09/2023 18:48:00
 */
 
 SET NAMES utf8mb4;
@@ -39,7 +39,9 @@ CREATE TABLE `t_demo_event`  (
   `create_time` timestamp(3) NOT NULL,
   `update_time` timestamp(3) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `ux_msg_id`(`msg_id` ASC) USING BTREE
+  UNIQUE INDEX `ux_msg_id`(`msg_id` ASC) USING BTREE,
+  INDEX `ix_id_send_flag`(`id` ASC, `send_flag` ASC) USING BTREE,
+  INDEX `ix_last_send_time`(`last_send_time` ASC, `send_flag` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

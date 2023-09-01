@@ -1,0 +1,31 @@
+spring.rabbitmq:
+  addresses: 192.168.56.23:5672
+  username: rabbit
+  password: 123456
+  virtual-host: "/"
+  publisher-confirm-type: correlated
+  publisher-returns: true
+
+spring.rabbitmq-first:
+  addresses: 192.168.56.23:5672
+  username: rabbit
+  password: 123456
+  virtual-host: "first"
+  publisher-confirm-type: correlated
+  publisher-returns: true
+
+spring.rabbitmq-second:
+  addresses: 192.168.56.23:5672
+  username: rabbit
+  password: 123456
+  virtual-host: "second"
+  publisher-confirm-type: correlated
+  publisher-returns: true
+
+spring.rabbitmq-third:
+  addresses: 192.168.56.23:5672
+  username: rabbit
+  password: 123456
+  virtual-host: "third"
+  publisher-confirm-type: correlated
+  publisher-returns: true
