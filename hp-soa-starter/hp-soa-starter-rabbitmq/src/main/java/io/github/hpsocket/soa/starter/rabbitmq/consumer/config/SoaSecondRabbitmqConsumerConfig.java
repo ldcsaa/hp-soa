@@ -16,14 +16,12 @@ import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaSecondRabbitmqProperties;
 
 @AutoConfiguration
-@ConditionalOnBean(SoaSecondRabbitmqProperties.class)
-@EnableConfigurationProperties(SoaSecondRabbitmqProperties.class)
+@ConditionalOnBean({SoaRabbitmqConsumerConfig.class, SoaSecondRabbitmqProperties.class})
 public class SoaSecondRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerConfig
 {
 	public SoaSecondRabbitmqConsumerConfig(
@@ -44,7 +42,7 @@ public class SoaSecondRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumer
 	
 	@Override
 	@Bean("secondSimpleRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.listener", name = "type", havingValue = "simple", matchIfMissing = true)
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-second.listener", name = "type", havingValue = "simple", matchIfMissing = true)
 	public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
 		@Qualifier("secondSimpleRabbitListenerContainerFactoryConfigurer") SimpleRabbitListenerContainerFactoryConfigurer configurer,
 		@Qualifier("secondRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
@@ -62,7 +60,7 @@ public class SoaSecondRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumer
 
 	@Override
 	@Bean("secondDirectRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.listener", name = "type", havingValue = "direct")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-second.listener", name = "type", havingValue = "direct")
 	public DirectRabbitListenerContainerFactory directRabbitListenerContainerFactory(
 		@Qualifier("secondDirectRabbitListenerContainerFactoryConfigurer") DirectRabbitListenerContainerFactoryConfigurer configurer,
 		@Qualifier("secondRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,

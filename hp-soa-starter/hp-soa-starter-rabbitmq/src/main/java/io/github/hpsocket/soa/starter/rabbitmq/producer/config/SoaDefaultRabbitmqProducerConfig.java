@@ -14,7 +14,6 @@ import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.retry.RecoveryCallback;
@@ -22,8 +21,7 @@ import org.springframework.retry.RecoveryCallback;
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbitmqProperties;
 
 @AutoConfiguration
-@ConditionalOnBean(SoaDefaultRabbitmqProperties.class)
-@EnableConfigurationProperties(SoaDefaultRabbitmqProperties.class)
+@ConditionalOnBean({SoaRabbitmqProducerConfig.class, SoaDefaultRabbitmqProperties.class})
 public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerConfig
 {
 	public SoaDefaultRabbitmqProducerConfig(SoaDefaultRabbitmqProperties properties)

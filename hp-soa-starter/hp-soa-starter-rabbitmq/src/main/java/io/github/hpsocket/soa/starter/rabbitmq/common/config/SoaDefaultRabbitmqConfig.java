@@ -7,12 +7,11 @@ import org.springframework.amqp.rabbit.connection.ConnectionNameStrategy;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.amqp.CachingConnectionFactoryConfigurer;
 import org.springframework.boot.autoconfigure.amqp.ConnectionFactoryCustomizer;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionFactoryBeanConfigurer;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ResourceLoader;
@@ -23,8 +22,7 @@ import com.rabbitmq.client.impl.CredentialsRefreshService;
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbitmqProperties;
 
 @AutoConfiguration
-@AutoConfigureAfter(SoaDefaultRabbitmqProperties.class)
-@EnableConfigurationProperties(SoaDefaultRabbitmqProperties.class)
+@ConditionalOnBean({SoaDefaultRabbitmqProperties.class})
 public class SoaDefaultRabbitmqConfig extends SoaAbstractRabbitmqConfig
 {
 	public SoaDefaultRabbitmqConfig(SoaDefaultRabbitmqProperties properties)

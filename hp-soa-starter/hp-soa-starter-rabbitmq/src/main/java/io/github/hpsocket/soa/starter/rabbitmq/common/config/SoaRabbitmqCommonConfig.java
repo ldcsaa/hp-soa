@@ -5,8 +5,8 @@ import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageCo
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Import;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.FastJsonMessageConverter;
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConverter;
@@ -15,12 +15,7 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.listener.RabbitmqrSwitchRe
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect.RabbitmqListenerInspector;
 
 @AutoConfiguration
-@Import({
-			SoaDefaultRabbitmqConfig.class,
-			SoaFirstRabbitmqConfig.class,
-			SoaSecondRabbitmqConfig.class,
-			SoaThirdRabbitmqConfig.class
-		})
+@ComponentScan(basePackages = "io.github.hpsocket.soa.starter.rabbitmq.common.properties")
 public class SoaRabbitmqCommonConfig
 {
 	@Bean

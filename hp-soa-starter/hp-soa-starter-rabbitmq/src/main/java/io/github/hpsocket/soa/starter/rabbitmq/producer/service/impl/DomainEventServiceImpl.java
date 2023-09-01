@@ -19,63 +19,99 @@ import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConsta
 
 public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEvent> extends ServiceImpl<M, T> implements DomainEventService<T>
 {
-	private static final String SQL_SET_RETRIES					= String.format("retries = IIF(send_flag = %d, 0, retries + 1)", SF_NOT_SEND);
+	private static final String SQL_SET_RETRIES					= String.format("retries = IF(send_flag = %d, 0, retries + 1)", SF_NOT_SEND);
 	private static final String SQL_PATTERN_LAST_SEND_TIME_LE	= "DATE_ADD(NOW(), INTERVAL -%d SECOND)";
 	
 	@Override
-	public T markEventToSend()
+	public T markOneEventToSend()
 	{
-		T event = lambdaQuery().in(T::getSendFlag, SF_NOT_SEND, SF_SEND_FAIL).orderByAsc(T::getId).last("LIMIT 1").one();
+		return markOneEventToSend(0L);
+	}
+	
+	@Override
+	public T markOneEventToSend(Long preId)
+	{
+		T event = lambdaQuery()
+					.gt(T::getId, preId)
+					.in(T::getSendFlag, SF_NOT_SEND, SF_SEND_FAIL)
+					.orderByAsc(T::getId)
+					.last("LIMIT 1")
+					.one();
 		
 		if(event != null)
 		{
-			lambdaUpdate().eq(T::getId, event.getId())
-			.set(T::getSendFlag, SF_SENDING)
-			.set(T::getLastSendTime, LocalDateTime.now())
-			.setSql(SQL_SET_RETRIES)
-			.update();
+			lambdaUpdate()
+				.eq(T::getId, event.getId())
+				.setSql(SQL_SET_RETRIES)
+				.set(T::getSendFlag, SF_SENDING)
+				.set(T::getLastSendTime, LocalDateTime.now())
+				.update();
 		}
 		
 		return event;
 	}
 
 	@Override
-	public List<T> markEventToSend(int count)
+	public List<T> markMultiEventToSend()
 	{
-		List<T> events = lambdaQuery().in(T::getSendFlag, SF_NOT_SEND, SF_SEND_FAIL).orderByAsc(T::getId).last("LIMIT " + count).list();
-		
+		return markMultiEventToSend(DEFAULT_MARK_BATCH_SIZE, 0L);
+	}
+
+	@Override
+	public List<T> markMultiEventToSend(Long preId)
+	{
+		return markMultiEventToSend(DEFAULT_MARK_BATCH_SIZE, preId);
+	}
+
+	@Override
+	public List<T> markMultiEventToSend(int batchSize)
+	{
+		return markMultiEventToSend(batchSize, 0L);
+	}
+
+	@Override
+	public List<T> markMultiEventToSend(int batchSize, Long preId)
+	{
+		List<T> events = lambdaQuery()
+							.gt(T::getId, preId)
+							.in(T::getSendFlag, SF_NOT_SEND, SF_SEND_FAIL)
+							.orderByAsc(T::getId)
+							.last("LIMIT " + batchSize)
+							.list();
+
 		if(!events.isEmpty())
 		{
-			lambdaUpdate().in(T::getId, events.stream().map(T::getId))
-			.set(T::getSendFlag, SF_SENDING)
-			.set(T::getLastSendTime, LocalDateTime.now())
-			.setSql(SQL_SET_RETRIES)
-			.update();
+			lambdaUpdate()
+				.in(T::getId, events.stream().map(T::getId).toList())
+				.setSql(SQL_SET_RETRIES)
+				.set(T::getSendFlag, SF_SENDING)
+				.set(T::getLastSendTime, LocalDateTime.now())
+				.update();
 		}
 		
 		return events;
 	}
 
 	@Override
-	public boolean markEventSendSuccess(long id)
+	public boolean markOneEventSendSuccess(Long id)
 	{
 		return updateEventSendFlag(id, SF_SEND_SUCC);
 	}
 
 	@Override
-	public boolean markEventSendSuccess(Collection<Long> ids)
+	public boolean markMultiEventSendSuccess(Collection<Long> ids)
 	{
 		return updateEventSendFlag(ids, SF_SEND_SUCC);
 	}
 
 	@Override
-	public boolean markEventSendFail(long id)
+	public boolean markOneEventSendFail(Long id)
 	{
 		return updateEventSendFlag(id, SF_SEND_FAIL);
 	}
 
 	@Override
-	public boolean markEventSendFail(Collection<Long> ids)
+	public boolean markMultiEventSendFail(Collection<Long> ids)
 	{
 		return updateEventSendFlag(ids, SF_SEND_FAIL);
 	}
@@ -83,37 +119,40 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 	@Override
 	public boolean resetSendingEventToSendFail()
 	{
-		return resetSendingEventToSendFail(DEFAULT_SEND_TIMEOUT, DEFAULT_BATCH_SIZE);
+		return resetSendingEventToSendFail(DEFAULT_SEND_TIMEOUT, DEFAULT_RESET_BATCH_SIZE);
 	}
 
 	@Override
 	public boolean resetSendingEventToSendFail(int sendTimeout)
 	{
-		return resetSendingEventToSendFail(sendTimeout, DEFAULT_BATCH_SIZE);
+		return resetSendingEventToSendFail(sendTimeout, DEFAULT_RESET_BATCH_SIZE);
 	}
 
 	@Override
 	public boolean resetSendingEventToSendFail(int sendTimeout, int batchSize)
 	{
-		List<T> events = lambdaQuery().eq(T::getSendFlag, SF_SENDING)
-							.le(T::getLastSendTime, String.format(SQL_PATTERN_LAST_SEND_TIME_LE, sendTimeout))
-							.orderByDesc(T::getId).last("LIMIT " + batchSize).list();
+		List<T> events = lambdaQuery()
+							.eq(T::getSendFlag, SF_SENDING)
+							.leSql(T::getLastSendTime, String.format(SQL_PATTERN_LAST_SEND_TIME_LE, sendTimeout))
+							.orderByAsc(T::getId)
+							.last("LIMIT " + batchSize)
+							.list();
 		
-		if(!events.isEmpty())
-		{
-			return lambdaUpdate().in(T::getId, events.stream().map(T::getId))
+		if(events.isEmpty())
+			return false;
+		
+		return lambdaUpdate()
+					.in(T::getId, events.stream().map(T::getId).toList())
 					.set(T::getSendFlag, SF_SEND_FAIL)
 					.update();
-		}
-		
-		return true;
 	}
 
-	protected boolean updateEventSendFlag(long id, int sendFlag)
+	protected boolean updateEventSendFlag(Long id, int sendFlag)
 	{
-		return lambdaUpdate().eq(T::getId, id)
-			.set(T::getSendFlag, sendFlag)
-			.update();
+		return lambdaUpdate()
+				.eq(T::getId, id)
+				.set(T::getSendFlag, sendFlag)
+				.update();
 	}
 
 	protected boolean updateEventSendFlag(Collection<Long> ids, int sendFlag)
@@ -121,9 +160,10 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 		if(ids.isEmpty())
 			return false;
 		
-		return lambdaUpdate().in(T::getId, ids)
-			.set(T::getSendFlag, sendFlag)
-			.update();
+		return lambdaUpdate()
+				.in(T::getId, ids)
+				.set(T::getSendFlag, sendFlag)
+				.update();
 	}
 
 	protected boolean updateEventSendFlag(Collection<Pair<Long, Integer>> idSendFlags)

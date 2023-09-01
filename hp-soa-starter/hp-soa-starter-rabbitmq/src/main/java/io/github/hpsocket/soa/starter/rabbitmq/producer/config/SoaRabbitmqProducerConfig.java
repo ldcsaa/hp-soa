@@ -1,16 +1,11 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.producer.config;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.context.annotation.Import;
 
 @AutoConfiguration
-@Import({
-			SoaDefaultRabbitmqProducerConfig.class,
-			SoaFirstRabbitmqProducerConfig.class,
-			SoaSecondRabbitmqProducerConfig.class,
-			SoaThirdRabbitmqProducerConfig.class
-})
+@MapperScan(basePackages = "io.github.hpsocket.soa.starter.rabbitmq.producer.mapper")
 public class SoaRabbitmqProducerConfig
 {
 	

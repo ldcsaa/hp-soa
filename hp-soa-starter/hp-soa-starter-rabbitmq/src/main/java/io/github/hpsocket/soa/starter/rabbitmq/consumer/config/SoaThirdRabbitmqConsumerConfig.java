@@ -16,14 +16,12 @@ import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaThirdRabbitmqProperties;
 
 @AutoConfiguration
-@ConditionalOnBean(SoaThirdRabbitmqProperties.class)
-@EnableConfigurationProperties(SoaThirdRabbitmqProperties.class)
+@ConditionalOnBean({SoaRabbitmqConsumerConfig.class, SoaThirdRabbitmqProperties.class})
 public class SoaThirdRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerConfig
 {
 	public SoaThirdRabbitmqConsumerConfig(
@@ -44,7 +42,7 @@ public class SoaThirdRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
 	
 	@Override
 	@Bean("thirdSimpleRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.third.listener", name = "type", havingValue = "simple", matchIfMissing = true)
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-third.listener", name = "type", havingValue = "simple", matchIfMissing = true)
 	public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
 		@Qualifier("thirdSimpleRabbitListenerContainerFactoryConfigurer") SimpleRabbitListenerContainerFactoryConfigurer configurer,
 		@Qualifier("thirdRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
@@ -62,7 +60,7 @@ public class SoaThirdRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
 
 	@Override
 	@Bean("thirdDirectRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.third.listener", name = "type", havingValue = "direct")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-third.listener", name = "type", havingValue = "direct")
 	public DirectRabbitListenerContainerFactory directRabbitListenerContainerFactory(
 		@Qualifier("thirdDirectRabbitListenerContainerFactoryConfigurer") DirectRabbitListenerContainerFactoryConfigurer configurer,
 		@Qualifier("thirdRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,

@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.amqp.ConnectionFactoryCustomizer;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionFactoryBeanConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ResourceLoader;
 
@@ -22,8 +21,7 @@ import com.rabbitmq.client.impl.CredentialsRefreshService;
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaThirdRabbitmqProperties;
 
 @AutoConfiguration
-@ConditionalOnBean(SoaThirdRabbitmqProperties.class)
-@EnableConfigurationProperties(SoaThirdRabbitmqProperties.class)
+@ConditionalOnBean({SoaThirdRabbitmqProperties.class})
 public class SoaThirdRabbitmqConfig extends SoaAbstractRabbitmqConfig
 {
 	public SoaThirdRabbitmqConfig(SoaThirdRabbitmqProperties properties)

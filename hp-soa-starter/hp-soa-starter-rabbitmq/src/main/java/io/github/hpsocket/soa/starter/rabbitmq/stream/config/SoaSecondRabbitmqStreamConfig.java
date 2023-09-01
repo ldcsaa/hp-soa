@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.amqp.RabbitStreamTemplateConfigure
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
@@ -24,9 +23,8 @@ import com.rabbitmq.stream.Environment;
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaSecondRabbitmqProperties;
 
 @AutoConfiguration
-@ConditionalOnBean(SoaSecondRabbitmqProperties.class)
 @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-@EnableConfigurationProperties(SoaSecondRabbitmqProperties.class)
+@ConditionalOnBean({SoaRabbitmqStreamConfig.class, SoaSecondRabbitmqProperties.class})
 public class SoaSecondRabbitmqStreamConfig extends SoaAbstractRabbitmqStreamConfig
 {
 	public SoaSecondRabbitmqStreamConfig(SoaSecondRabbitmqProperties properties)
@@ -36,7 +34,7 @@ public class SoaSecondRabbitmqStreamConfig extends SoaAbstractRabbitmqStreamConf
 
 	@Override
 	@Bean(name = "secondStreamRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.listener", name = "type", havingValue = "stream")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-second.listener", name = "type", havingValue = "stream")
 	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
 		@Qualifier("secondRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
 		ObjectProvider<ConsumerCustomizer> consumerCustomizer,
@@ -65,7 +63,7 @@ public class SoaSecondRabbitmqStreamConfig extends SoaAbstractRabbitmqStreamConf
 
 	@Override
 	@Bean("secondRabbitStreamTemplate")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.second.stream", name = "name")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-second.stream", name = "name")
 	public RabbitStreamTemplate rabbitStreamTemplate(
 		@Qualifier("secondRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
 		@Qualifier("secondRabbitStreamTemplateConfigurer") RabbitStreamTemplateConfigurer configurer)

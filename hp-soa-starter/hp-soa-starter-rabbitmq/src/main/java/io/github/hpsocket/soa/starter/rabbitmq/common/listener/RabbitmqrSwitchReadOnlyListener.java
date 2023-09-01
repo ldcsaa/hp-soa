@@ -11,12 +11,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RabbitmqrSwitchReadOnlyListener implements ApplicationListener<ReadOnlyEvent>, Ordered
 {
-	@Autowired
+	@Autowired(required = false)
 	private RabbitListenerEndpointRegistry registry;
 
 	@Override
 	public void onApplicationEvent(ReadOnlyEvent event)
 	{
+		if(registry == null)
+			return;
+		
 		boolean readOnly = event.isReadOnly();
 		
 		log.info("receive read-only switch event (read-only: {}), prepare to {} all consumers)", readOnly, readOnly ? "STOP" : "START");

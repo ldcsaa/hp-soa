@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.amqp.RabbitStreamTemplateConfigure
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
@@ -24,9 +23,8 @@ import com.rabbitmq.stream.Environment;
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaThirdRabbitmqProperties;
 
 @AutoConfiguration
-@ConditionalOnBean(SoaThirdRabbitmqProperties.class)
 @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-@EnableConfigurationProperties(SoaThirdRabbitmqProperties.class)
+@ConditionalOnBean({SoaRabbitmqStreamConfig.class, SoaThirdRabbitmqProperties.class})
 public class SoaThirdRabbitmqStreamConfig extends SoaAbstractRabbitmqStreamConfig
 {
 	public SoaThirdRabbitmqStreamConfig(SoaThirdRabbitmqProperties properties)
@@ -36,7 +34,7 @@ public class SoaThirdRabbitmqStreamConfig extends SoaAbstractRabbitmqStreamConfi
 
 	@Override
 	@Bean(name = "thirdStreamRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.third.listener", name = "type", havingValue = "stream")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-third.listener", name = "type", havingValue = "stream")
 	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
 		@Qualifier("thirdRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
 		ObjectProvider<ConsumerCustomizer> consumerCustomizer,
@@ -65,7 +63,7 @@ public class SoaThirdRabbitmqStreamConfig extends SoaAbstractRabbitmqStreamConfi
 
 	@Override
 	@Bean("thirdRabbitStreamTemplate")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq.third.stream", name = "name")
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-third.stream", name = "name")
 	public RabbitStreamTemplate rabbitStreamTemplate(
 		@Qualifier("thirdRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
 		@Qualifier("thirdRabbitStreamTemplateConfigurer") RabbitStreamTemplateConfigurer configurer)

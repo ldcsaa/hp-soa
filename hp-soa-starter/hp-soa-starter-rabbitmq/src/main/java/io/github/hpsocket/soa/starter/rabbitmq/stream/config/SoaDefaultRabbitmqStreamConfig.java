@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.amqp.RabbitStreamTemplateConfigure
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
@@ -25,9 +24,8 @@ import com.rabbitmq.stream.Environment;
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbitmqProperties;
 
 @AutoConfiguration
-@ConditionalOnBean(SoaDefaultRabbitmqProperties.class)
 @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-@EnableConfigurationProperties(SoaDefaultRabbitmqProperties.class)
+@ConditionalOnBean({SoaRabbitmqStreamConfig.class, SoaDefaultRabbitmqProperties.class})
 public class SoaDefaultRabbitmqStreamConfig extends SoaAbstractRabbitmqStreamConfig
 {
 	public SoaDefaultRabbitmqStreamConfig(SoaDefaultRabbitmqProperties properties)

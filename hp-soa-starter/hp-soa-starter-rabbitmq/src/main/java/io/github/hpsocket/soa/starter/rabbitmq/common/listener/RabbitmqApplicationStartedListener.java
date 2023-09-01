@@ -12,12 +12,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RabbitmqApplicationStartedListener implements ApplicationListener<ApplicationStartedEvent>, Ordered
 {
-	@Autowired
+	@Autowired(required = false)
 	private RabbitListenerEndpointRegistry registry;
 
 	@Override
 	public void onApplicationEvent(ApplicationStartedEvent event)
 	{
+		if(registry == null)
+			return;
+		
 		boolean readOnly = WebServerHelper.isAppReadOnly();
 		
 		if(readOnly && registry.isRunning())

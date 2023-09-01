@@ -1,22 +1,15 @@
 package io.github.hpsocket.demo.mq.producer.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.github.hpsocket.soa.starter.rabbitmq.annotation.EnableSoaRabbitmqProducer;
 
 @Configuration
+@EnableSoaRabbitmqProducer
 /* default mybatis mapper scan package -> ${hp.soa.web.mapper-scan.base-package} */
-//@EnableSoaRabbitmqProducer
 @MapperScan("io.github.hpsocket.demo.mq.producer.mapper")
 public class AppConfig
 {
