@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class MqEventJobHandler
+public class MqSenderJobHandler
 {
 	@Autowired
 	private DomainEventService<DemoEvent> demoEventService;
@@ -52,6 +52,7 @@ public class MqEventJobHandler
 		};
 	}
 
+	/** MQ 消息发送 JOB */
 	@ExclusiveJob(jobName = "sendMqEvent", cron = "*/3 * * * * ?")
 	public void sendMqEvent()
 	{
@@ -99,6 +100,7 @@ public class MqEventJobHandler
 		}
 	}
 	
+	/** MQ 消息状态重置补偿 JOB */
 	@ExclusiveJob(jobName = "compensateMqEvent", cron = "15 */1 * * * ?")
 	public void compensateMqEvent()
 	{
