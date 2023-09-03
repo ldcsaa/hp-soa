@@ -18,13 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-/**
- * @author liangdongcheng
- *
- * <p>@NoLogin  LCB 登录检查注解 </p>
- * <p>@RestController  Spring MVC Rest Controller 注解 </p>
- */
 @Slf4j
 @RestController
 @AccessVerification(Type.NO_LOGIN)

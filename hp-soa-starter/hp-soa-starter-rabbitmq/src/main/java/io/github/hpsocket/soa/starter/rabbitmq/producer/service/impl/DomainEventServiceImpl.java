@@ -55,13 +55,13 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 	@Override
 	public List<T> markMultiEventToSend()
 	{
-		return markMultiEventToSend(DEFAULT_MARK_BATCH_SIZE, 0L);
+		return markMultiEventToSend(DEFAULT_SEND_BATCH_SIZE, 0L);
 	}
 
 	@Override
 	public List<T> markMultiEventToSend(Long preId)
 	{
-		return markMultiEventToSend(DEFAULT_MARK_BATCH_SIZE, preId);
+		return markMultiEventToSend(DEFAULT_SEND_BATCH_SIZE, preId);
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 	@Override
 	public boolean resetSendingEventToSendFail()
 	{
-		return resetSendingEventToSendFail(DEFAULT_SEND_TIMEOUT, DEFAULT_RESET_BATCH_SIZE);
+		return resetSendingEventToSendFail(DEFAULT_RESET_TIMEOUT, DEFAULT_RESET_BATCH_SIZE);
 	}
 
 	@Override

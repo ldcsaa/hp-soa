@@ -9,29 +9,17 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 响应对象
- *
- * @author liangdongcheng
- * <p>@ApiModel Swagger Model 注解 </p>
- */
 @Getter
 @Setter
 @Schema(description = "响应对象示例")
-public class DemoCreateOrderResponse {
-    /**
-     * Swagger Model Property 注解
-     */
+public class DemoCreateOrderResponse
+{
 	@Schema(description = "ID", example = "123", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private Long id;
-    /**
-     * Swagger Model Property 注解
-     */
+
     @Schema(description = "订单号", example = "1234567890987654", requiredMode = RequiredMode.REQUIRED, minLength = 16, nullable = false)
     private String orderNumber;
-    /**
-     * Swagger Model Property 注解
-     */
+
 	@Schema(description = "创建时间", example = "2023-11-22 12:34:56.789", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private LocalDateTime createTime;
 

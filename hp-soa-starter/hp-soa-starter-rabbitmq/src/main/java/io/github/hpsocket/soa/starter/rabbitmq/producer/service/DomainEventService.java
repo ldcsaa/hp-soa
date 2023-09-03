@@ -9,9 +9,9 @@ import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 
 public interface DomainEventService<T extends DomainEvent> extends IService<T>
 {
-	int DEFAULT_MARK_BATCH_SIZE	 = 100;
+	int DEFAULT_SEND_BATCH_SIZE	 = 100;
 	int DEFAULT_RESET_BATCH_SIZE = 200;
-	int DEFAULT_SEND_TIMEOUT	 = 30;
+	int DEFAULT_RESET_TIMEOUT	 = 30;
 	
 	T markOneEventToSend();
 	T markOneEventToSend(Long preId);

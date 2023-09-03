@@ -6,12 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 请求 Model
- *
- * @author liangdongcheng
- * <p>@ApiModel Swagger Model 注解 </p>
- */
 @Getter
 @Setter
 @Schema(description = "请求对象示例")
