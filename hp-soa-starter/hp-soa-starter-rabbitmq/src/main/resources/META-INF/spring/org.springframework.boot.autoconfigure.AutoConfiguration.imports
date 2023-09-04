@@ -13,8 +13,3 @@ io.github.hpsocket.soa.starter.rabbitmq.consumer.config.SoaDefaultRabbitmqConsum
 io.github.hpsocket.soa.starter.rabbitmq.consumer.config.SoaFirstRabbitmqConsumerConfig
 io.github.hpsocket.soa.starter.rabbitmq.consumer.config.SoaSecondRabbitmqConsumerConfig
 io.github.hpsocket.soa.starter.rabbitmq.consumer.config.SoaThirdRabbitmqConsumerConfig
-
-io.github.hpsocket.soa.starter.rabbitmq.stream.config.SoaDefaultRabbitmqStreamConfig
-io.github.hpsocket.soa.starter.rabbitmq.stream.config.SoaFirstRabbitmqStreamConfig
-io.github.hpsocket.soa.starter.rabbitmq.stream.config.SoaSecondRabbitmqStreamConfig
-io.github.hpsocket.soa.starter.rabbitmq.stream.config.SoaThirdRabbitmqStreamConfig

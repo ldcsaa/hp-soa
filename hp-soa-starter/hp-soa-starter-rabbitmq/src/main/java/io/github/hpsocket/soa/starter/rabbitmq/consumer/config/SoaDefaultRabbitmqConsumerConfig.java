@@ -15,11 +15,18 @@ import org.springframework.boot.autoconfigure.amqp.DirectRabbitListenerContainer
 import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
+import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
+import org.springframework.rabbit.stream.listener.StreamListenerContainer;
+
+import com.rabbitmq.stream.Environment;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbitmqProperties;
+import io.github.hpsocket.soa.starter.rabbitmq.stream.creator.SoaRabbitmqStreamConfigurer;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaRabbitmqConsumerConfig.class, SoaDefaultRabbitmqProperties.class})
@@ -73,4 +80,17 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
 	{
 		return super.directRabbitListenerContainerFactory(configurer, connectionFactory, directContainerCustomizer);
 	}
+	
+	@Primary
+	@Bean(name = "defaultStreamRabbitListenerContainerFactory")
+	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
+	@ConditionalOnProperty(prefix = "spring.rabbitmq.listener", name = "type", havingValue = "stream")
+	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
+		@Qualifier("defaultRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
+		ObjectProvider<ConsumerCustomizer> consumerCustomizer,
+		ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
+	{
+		return SoaRabbitmqStreamConfigurer.streamRabbitListenerContainerFactory(this.properties, rabbitStreamEnvironment, consumerCustomizer, containerCustomizer);
+	}
+
 }

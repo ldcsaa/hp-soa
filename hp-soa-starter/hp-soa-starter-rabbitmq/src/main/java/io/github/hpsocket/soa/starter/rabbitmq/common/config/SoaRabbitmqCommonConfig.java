@@ -6,37 +6,14 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.DependsOn;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.FastJsonMessageConverter;
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConverter;
-import io.github.hpsocket.soa.starter.rabbitmq.common.listener.RabbitmqApplicationStartedListener;
-import io.github.hpsocket.soa.starter.rabbitmq.common.listener.RabbitmqrSwitchReadOnlyListener;
-import io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect.RabbitmqListenerInspector;
 
 @AutoConfiguration
 @ComponentScan(basePackages = "io.github.hpsocket.soa.starter.rabbitmq.common.properties")
 public class SoaRabbitmqCommonConfig
 {
-	@Bean
-	@DependsOn("springContextHolder")
-	RabbitmqApplicationStartedListener rabbitmqApplicationStartedListener()
-	{
-		return new RabbitmqApplicationStartedListener();
-	}
-	
-	@Bean
-	RabbitmqrSwitchReadOnlyListener rabbitmqrSwitchReadOnlyListener()
-	{
-		return new RabbitmqrSwitchReadOnlyListener();
-	}
-	
-	@Bean
-	RabbitmqListenerInspector rabbitmqListenerInspector()
-	{
-		return new RabbitmqListenerInspector();
-	}
-	
 	@Bean
 	MessageConverter messageConverter()
 	{

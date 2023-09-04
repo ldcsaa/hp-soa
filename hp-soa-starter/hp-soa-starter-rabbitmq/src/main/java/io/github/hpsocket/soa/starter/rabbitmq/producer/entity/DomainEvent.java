@@ -1,6 +1,11 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.producer.entity;
 
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_DOMAIN_NAME;
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_EVENT_NAME;
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_MSG_ID;
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_SOURCE_REQUEST_ID;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -9,8 +14,6 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -18,11 +21,8 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.data.mysql.handler.FastJson2TypeHandler;
 import lombok.Getter;
 import lombok.Setter;
-
-import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
 
 @Getter
 @Setter
@@ -64,8 +64,7 @@ public class DomainEvent implements Serializable
 	/**
 	 * 消息体
 	 */
-	@TableField(typeHandler = FastJson2TypeHandler.class)
-	private JSONObject msg;
+	private String msg;
 
 	/**
 	 * 关联请求Id
@@ -128,7 +127,7 @@ public class DomainEvent implements Serializable
 	
 	public Message toMessage(MessageProperties messageProperties)
 	{
-		MessageBuilder builder = MessageBuilder.withBody(JSON.toJSONBytes(msg));
+		MessageBuilder builder = MessageBuilder.withBody(msg.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
 		
 		if(messageProperties != null)
 			builder.copyProperties(messageProperties);

@@ -209,6 +209,12 @@ PUT _index_template/hp-soa-template
                         "__requestId": {
                             "type": "keyword"
                         },
+                        "__messageId": {
+                            "type": "keyword"
+                        },
+                        "__sourceRequestId": {
+                            "type": "keyword"
+                        },
                         "__traceId": {
                             "type": "keyword"
                         },

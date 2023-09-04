@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
@@ -22,9 +23,9 @@ import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConsta
 @Slf4j
 @Aspect
 @Order(0)
-public class RabbitmqListenerInspector
+public class RabbitmqListenerMdcInspector
 {
-	private static final String POINTCUT_PATTERN 	= "execution (public void *.*(..)) && "
+	static final String INSPECTOR_POINTCUT_PATTERN 	= "execution (public void *.*(..)) && "
 													+ "("
 													+ "		@annotation(org.springframework.amqp.rabbit.annotation.RabbitListener) || "
 													+ "		("
@@ -33,7 +34,7 @@ public class RabbitmqListenerInspector
 													+ "		)"
 													+ ")";
 
-	@Pointcut(POINTCUT_PATTERN)
+	@Pointcut(INSPECTOR_POINTCUT_PATTERN)
 	protected void aroundMethod() {}
 	
 	@Around(value = "aroundMethod()")
@@ -45,6 +46,7 @@ public class RabbitmqListenerInspector
 		Assert.notNull(listener, "RabbitListener annotation not found");
 		
 		String listenerId		= listener.id();
+		String correlationId	= null;
 		String messageId		= null;
 		String sourceRequestId	= null;
 		String domainName		= null;
@@ -56,13 +58,30 @@ public class RabbitmqListenerInspector
 		{
 			MessageProperties properties = msg.getMessageProperties();
 			messageId 		= properties.getMessageId();
+			correlationId	= properties.getHeader(HEADER_CORRELA_DATA_ID);
 			sourceRequestId	= properties.getHeader(HEADER_SOURCE_REQUEST_ID);
 			domainName		= properties.getHeader(HEADER_DOMAIN_NAME);
 			eventName		= properties.getHeader(HEADER_EVENT_NAME);
-			
-			if(GeneralHelper.isStrNotEmpty(messageId))
-				mdcAttr.setMessageId(messageId);
 		}
+		else
+		{
+			org.springframework.messaging.Message<?> msg2 = (org.springframework.messaging.Message<?>)AspectHelper.getFindFirstArgByType(joinPoint, org.springframework.messaging.Message.class);
+			
+			if(msg2 != null)
+			{
+				MessageHeaders headers = msg2.getHeaders();
+				messageId 		= (String)headers.get(HEADER_MSG_ID);
+				correlationId	= (String)headers.get(HEADER_CORRELA_DATA_ID);
+				sourceRequestId	= (String)headers.get(HEADER_SOURCE_REQUEST_ID);
+				domainName		= (String)headers.get(HEADER_DOMAIN_NAME);
+				eventName		= (String)headers.get(HEADER_EVENT_NAME);
+			}
+		}
+		
+		if(GeneralHelper.isStrNotEmpty(messageId))
+			mdcAttr.setMessageId(messageId);
+		if(GeneralHelper.isStrNotEmpty(sourceRequestId))
+			mdcAttr.setSourceRequestId(sourceRequestId);
 		
 		mdcAttr.putMdc();
 		
@@ -70,19 +89,21 @@ public class RabbitmqListenerInspector
 		
 		try
 		{
-			log.debug("rabbit listener start consume message -> (listenerId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
-					, listenerId, messageId, sourceRequestId, domainName, eventName);
+			if(log.isTraceEnabled())
+				log.trace("rabbit listener start consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
+					, listenerId, correlationId, messageId, sourceRequestId, domainName, eventName);
 			
 			sw.start();
 			
-			return joinPoint.proceed();	
+			return joinPoint.proceed();
 		}
 		finally
 		{
 			sw.stop();
 			
-			log.debug("rabbit listener end consume message -> (listenerId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
-					, listenerId, messageId, sourceRequestId, domainName, eventName, sw.getLastTaskTimeMillis());				
+			if(log.isTraceEnabled())
+				log.trace("rabbit listener end consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
+					, listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getLastTaskTimeMillis());				
 
 			mdcAttr.removeMdc();
 		}

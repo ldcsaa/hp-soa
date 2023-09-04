@@ -1,4 +1,4 @@
-package io.github.hpsocket.soa.starter.rabbitmq.stream.config;
+package io.github.hpsocket.soa.starter.rabbitmq.stream.creator;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -20,38 +20,33 @@ import org.springframework.rabbit.stream.support.converter.StreamMessageConverte
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.EnvironmentBuilder;
 
-public class SoaAbstractRabbitmqStreamConfig
+public class SoaRabbitmqStreamConfigurer
 {
-	protected final RabbitProperties properties;
-	
-	public SoaAbstractRabbitmqStreamConfig(RabbitProperties properties)
-	{
-		this.properties = properties;
-	}
-	
-	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
+	public static final StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
+		RabbitProperties properties,
 		Environment rabbitStreamEnvironment,
 		ObjectProvider<ConsumerCustomizer> consumerCustomizer,
 		ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
 	{
 		StreamRabbitListenerContainerFactory factory = new StreamRabbitListenerContainerFactory(rabbitStreamEnvironment);
-		factory.setNativeListener(this.properties.getListener().getStream().isNativeListener());
+		factory.setNativeListener(properties.getListener().getStream().isNativeListener());
 		consumerCustomizer.ifUnique(factory::setConsumerCustomizer);
 		containerCustomizer.ifUnique(factory::setContainerCustomizer);
 		
 		return factory;
 	}
 
-	public Environment rabbitStreamEnvironment(
+	public static final Environment rabbitStreamEnvironment(
+		RabbitProperties properties,
 		ObjectProvider<EnvironmentBuilderCustomizer> customizers)
 	{
-		EnvironmentBuilder builder = configure(Environment.builder(), this.properties);
+		EnvironmentBuilder builder = configure(Environment.builder(), properties);
 		customizers.orderedStream().forEach((customizer) -> customizer.customize(builder));
 		
 		return builder.build();
 	}
 
-	public RabbitStreamTemplateConfigurer rabbitStreamTemplateConfigurer(
+	public static final RabbitStreamTemplateConfigurer rabbitStreamTemplateConfigurer(
 		ObjectProvider<MessageConverter> messageConverter,
 		ObjectProvider<StreamMessageConverter> streamMessageConverter,
 		ObjectProvider<ProducerCustomizer> producerCustomizer)
@@ -64,11 +59,12 @@ public class SoaAbstractRabbitmqStreamConfig
 		return configurer;
 	}
 
-	public RabbitStreamTemplate rabbitStreamTemplate(
+	public static final RabbitStreamTemplate rabbitStreamTemplate(
+		RabbitProperties properties,
 		Environment rabbitStreamEnvironment,
 		RabbitStreamTemplateConfigurer configurer)
 	{
-		RabbitStreamTemplate template = new RabbitStreamTemplate(rabbitStreamEnvironment, this.properties.getStream().getName());
+		RabbitStreamTemplate template = new RabbitStreamTemplate(rabbitStreamEnvironment, properties.getStream().getName());
 		configurer.configure(template);
 		
 		return template;

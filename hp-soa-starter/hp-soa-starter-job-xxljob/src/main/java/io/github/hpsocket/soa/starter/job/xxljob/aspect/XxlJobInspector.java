@@ -58,8 +58,10 @@ public class XxlJobInspector
 			if(WebServerHelper.isAppReadOnly())
 			{
 				String msg = String.format("current application is read only, skip xxl-job '%s'", jobName);
+
+				if(log.isTraceEnabled())
+					log.trace(msg);	
 				
-				log.debug(msg);
 				XxlJobHelper.handleResult(SKIP_RESULT_CODE, msg);
 				
 				return null;
@@ -69,7 +71,8 @@ public class XxlJobInspector
 			
 			try
 			{
-				log.debug("start xxl-job -> {} (id: {}, param: '{}')", jobName, jobId, param);
+				if(log.isTraceEnabled())
+					log.trace("start xxl-job -> {} (id: {}, param: '{}')", jobName, jobId, param);
 				
 				sw.start();
 				
@@ -92,7 +95,8 @@ public class XxlJobInspector
 			{
 				sw.stop();
 				
-				log.debug("end xxl-job -> {} (id: {}, costTime: {})", jobName, jobId, sw.getLastTaskTimeMillis());				
+				if(log.isTraceEnabled())
+					log.trace("end xxl-job -> {} (id: {}, costTime: {})", jobName, jobId, sw.getLastTaskTimeMillis());				
 			}
 		}
 		catch(Exception e)

@@ -1,4 +1,4 @@
-package io.github.hpsocket.soa.starter.rabbitmq.common.listener;
+package io.github.hpsocket.soa.starter.rabbitmq.consumer.listener;
 
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RabbitmqApplicationStartedListener implements ApplicationListener<ApplicationStartedEvent>, Ordered
 {
-	@Autowired(required = false)
+	@Autowired
 	private RabbitListenerEndpointRegistry registry;
 
 	@Override
 	public void onApplicationEvent(ApplicationStartedEvent event)
 	{
-		if(registry == null)
-			return;
-		
 		boolean readOnly = WebServerHelper.isAppReadOnly();
 		
 		if(readOnly && registry.isRunning())

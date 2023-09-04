@@ -30,7 +30,8 @@ public class FastJsonMessageConverter extends AbstractMessageConverter
 		if(object instanceof DomainEvent event)
 			return event.toMessage(messageProperties);
 		
-		byte[] bytes = JSON.toJSONBytes(object);
+		String json  = JSON.toJSONString(object);
+		byte[] bytes = json.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ);
 		String msgId = IdGenerator.nextIdStr();
 		String sourceRequestId = MDC.get(MdcAttr.MDC_REQUEST_ID_KEY);
 		

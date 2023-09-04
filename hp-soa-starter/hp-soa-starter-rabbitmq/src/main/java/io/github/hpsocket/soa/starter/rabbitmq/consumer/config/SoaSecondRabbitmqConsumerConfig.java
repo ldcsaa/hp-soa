@@ -15,10 +15,17 @@ import org.springframework.boot.autoconfigure.amqp.DirectRabbitListenerContainer
 import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
+import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
+import org.springframework.rabbit.stream.listener.StreamListenerContainer;
+
+import com.rabbitmq.stream.Environment;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaSecondRabbitmqProperties;
+import io.github.hpsocket.soa.starter.rabbitmq.stream.creator.SoaRabbitmqStreamConfigurer;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaRabbitmqConsumerConfig.class, SoaSecondRabbitmqProperties.class})
@@ -68,4 +75,16 @@ public class SoaSecondRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumer
 	{
 		return super.directRabbitListenerContainerFactory(configurer, connectionFactory, directContainerCustomizer);
 	}
+	
+	@Bean(name = "secondStreamRabbitListenerContainerFactory")
+	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-second.listener", name = "type", havingValue = "stream")
+	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
+		@Qualifier("secondRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
+		ObjectProvider<ConsumerCustomizer> consumerCustomizer,
+		ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
+	{
+		return SoaRabbitmqStreamConfigurer.streamRabbitListenerContainerFactory(this.properties, rabbitStreamEnvironment, consumerCustomizer, containerCustomizer);
+	}
+
 }

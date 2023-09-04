@@ -1,4 +1,4 @@
-package io.github.hpsocket.soa.starter.rabbitmq.common.listener;
+package io.github.hpsocket.soa.starter.rabbitmq.consumer.listener;
 
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RabbitmqrSwitchReadOnlyListener implements ApplicationListener<ReadOnlyEvent>, Ordered
 {
-	@Autowired(required = false)
+	@Autowired
 	private RabbitListenerEndpointRegistry registry;
 
 	@Override
 	public void onApplicationEvent(ReadOnlyEvent event)
 	{
-		if(registry == null)
-			return;
-		
 		boolean readOnly = event.isReadOnly();
 		
 		log.info("receive read-only switch event (read-only: {}), prepare to {} all consumers)", readOnly, readOnly ? "STOP" : "START");

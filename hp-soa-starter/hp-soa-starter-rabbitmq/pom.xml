@@ -31,6 +31,11 @@
 			<artifactId>hp-soa-starter-job-exclusive</artifactId>
             <optional>true</optional>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+            <optional>true</optional>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
@@ -38,7 +43,6 @@
 		<dependency>
 		    <groupId>org.springframework.amqp</groupId>
 		    <artifactId>spring-rabbit-stream</artifactId>
-            <optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>

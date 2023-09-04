@@ -73,9 +73,11 @@ public class ExclusiveJobInspector
 			
 			if(WebServerHelper.isAppReadOnly())
 			{
-				String msg = String.format("current application is read only, skip exclusive job '%s'", fullJobName);
-				
-				log.debug(msg);
+				if(log.isTraceEnabled())
+				{
+					String msg = String.format("current application is read only, skip exclusive job '%s'", fullJobName);
+					log.trace(msg);
+				}
 				
 				return null;
 			}
@@ -89,7 +91,8 @@ public class ExclusiveJobInspector
 				
 				try
 				{
-					log.debug("start exclusive job -> {}", fullJobName);
+					if(log.isTraceEnabled())
+						log.trace("start exclusive job -> {}", fullJobName);
 					
 					sw.start();
 
@@ -107,7 +110,9 @@ public class ExclusiveJobInspector
 					sw.stop();
 					
 					try {lock.unlock();} catch(Exception e) {}
-					log.debug("end exclusive job -> {} (costTime: {})", fullJobName, sw.getLastTaskTimeMillis());				
+					
+					if(log.isTraceEnabled())
+						log.trace("end exclusive job -> {} (costTime: {})", fullJobName, sw.getLastTaskTimeMillis());				
 				}
 			}
 		}

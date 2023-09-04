@@ -9,17 +9,22 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.CachingConnectionFactoryConfigurer;
 import org.springframework.boot.autoconfigure.amqp.ConnectionFactoryCustomizer;
+import org.springframework.boot.autoconfigure.amqp.EnvironmentBuilderCustomizer;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionFactoryBeanConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 
 import com.rabbitmq.client.impl.CredentialsProvider;
 import com.rabbitmq.client.impl.CredentialsRefreshService;
+import com.rabbitmq.stream.Environment;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbitmqProperties;
+import io.github.hpsocket.soa.starter.rabbitmq.stream.creator.SoaRabbitmqStreamConfigurer;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaDefaultRabbitmqProperties.class})
@@ -77,4 +82,14 @@ public class SoaDefaultRabbitmqConfig extends SoaAbstractRabbitmqConfig
 	{
 		return super.amqpAdmin(connectionFactory);
 	}
+	
+	@Primary
+	@Bean(name = "defaultRabbitStreamEnvironment")
+	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
+	public Environment rabbitStreamEnvironment(
+		ObjectProvider<EnvironmentBuilderCustomizer> customizers)
+	{
+		return SoaRabbitmqStreamConfigurer.rabbitStreamEnvironment(this.properties, customizers);
+	}
+	
 }

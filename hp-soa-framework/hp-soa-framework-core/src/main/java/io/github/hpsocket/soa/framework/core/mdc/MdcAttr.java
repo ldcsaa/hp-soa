@@ -11,7 +11,6 @@ public class MdcAttr
 	public static final String MDC_REQUEST_ID_KEY	= "__requestId";
 	public static final String MDC_CLIENT_ID_KEY	= "__clientId";
 	public static final String MDC_SESSION_ID_KEY	= "__sessionId";
-	public static final String MDC_MESSAGE_ID_KEY	= "__messageId";
 	public static final String MDC_APP_CODE_KEY		= "__appCode";
 	public static final String MDC_SRC_APP_CODE_KEY	= "__srcAppCode";
 	public static final String MDC_TOKEN_KEY		= "__token";
@@ -25,7 +24,10 @@ public class MdcAttr
 	public static final String MDC_SERVICE_ADDR_KEY	= "__serviceAddr";
 	public static final String MDC_ORG_KEY			= "__organization";
 	public static final String MDC_OWNER_KEY		= "__owner";
-	
+
+	public static final String MDC_MESSAGE_ID_KEY			= "__messageId";
+	public static final String MDC_SOURCE_REQUEST_ID_KEY	= "__sourceRequestId";
+
 	public static final String MDC_FROM_SERVICE_ID_KEY		= "__fromServiceId";
 	public static final String MDC_FROM_SERVICE_NAME_KEY	= "__fromServiceName";
 	public static final String MDC_FROM_SERVICE_ADDR_KEY	= "__fromServiceAddr";
@@ -36,6 +38,7 @@ public class MdcAttr
 					MDC_CLIENT_ID_KEY,
 					MDC_SESSION_ID_KEY,
 					MDC_MESSAGE_ID_KEY,
+					MDC_SOURCE_REQUEST_ID_KEY,
 					MDC_APP_CODE_KEY,
 					MDC_SRC_APP_CODE_KEY,
 					MDC_TOKEN_KEY,
@@ -52,6 +55,7 @@ public class MdcAttr
 					MDC_CLIENT_ID_KEY,
 					MDC_SESSION_ID_KEY,
 					MDC_MESSAGE_ID_KEY,
+					MDC_SOURCE_REQUEST_ID_KEY,
 					MDC_APP_CODE_KEY,
 					MDC_SRC_APP_CODE_KEY,
 					MDC_TOKEN_KEY,
@@ -178,6 +182,16 @@ public class MdcAttr
 	public void setMessageId(String messageId)
 	{
 		set(MDC_MESSAGE_ID_KEY, messageId);
+	}
+
+	public String getSourceRequestId()
+	{
+		return get(MDC_SOURCE_REQUEST_ID_KEY);
+	}
+
+	public void setSourceRequestId(String sourceRequestId)
+	{
+		set(MDC_SOURCE_REQUEST_ID_KEY, sourceRequestId);
 	}
 
 	public String getToken()
