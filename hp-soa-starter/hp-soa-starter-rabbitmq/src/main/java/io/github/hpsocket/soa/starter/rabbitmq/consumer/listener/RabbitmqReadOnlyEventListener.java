@@ -9,7 +9,7 @@ import io.github.hpsocket.soa.framework.web.event.ReadOnlyEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RabbitmqrSwitchReadOnlyListener implements ApplicationListener<ReadOnlyEvent>, Ordered
+public class RabbitmqReadOnlyEventListener implements ApplicationListener<ReadOnlyEvent>, Ordered
 {
 	@Autowired
 	private RabbitListenerEndpointRegistry registry;
@@ -18,13 +18,23 @@ public class RabbitmqrSwitchReadOnlyListener implements ApplicationListener<Read
 	public void onApplicationEvent(ReadOnlyEvent event)
 	{
 		boolean readOnly = event.isReadOnly();
+		boolean initial  =event.isInitial();
 		
-		log.info("receive read-only switch event (read-only: {}), prepare to {} all consumers)", readOnly, readOnly ? "STOP" : "START");
-		
-		if(readOnly)
+		if(!initial)
+		{
+			log.info("receive read-only switch event (read-only: {}), prepare to {} all consumers", readOnly, readOnly ? "STOP" : "START");
+			
+			if(readOnly)
+				registry.stop();
+			else
+				registry.start();			
+		}
+		else if(readOnly && registry.isRunning())
+		{
+			log.info("application is read-only, then STOP RabbitListenerEndpointRegistry");
+
 			registry.stop();
-		else
-			registry.start();
+		}
 	}
 
 	@Override

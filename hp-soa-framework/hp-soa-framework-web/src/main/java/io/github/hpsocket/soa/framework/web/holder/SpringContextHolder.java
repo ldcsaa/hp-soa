@@ -3,6 +3,7 @@ package io.github.hpsocket.soa.framework.web.holder;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
 
 import io.github.hpsocket.soa.framework.web.service.TracingContext;
 
@@ -34,6 +35,16 @@ public class SpringContextHolder implements ApplicationContextAware
 	public static final TracingContext getTracingContext()
 	{
 		return tracingContext;
+	}
+	
+	public static final void publishEvent(ApplicationEvent event)
+	{
+		getApplicationContext().publishEvent(event);
+	}
+
+	public static final void publishEvent(Object event)
+	{
+		getApplicationContext().publishEvent(event);
 	}
 
 	public static <T> T getBean(String beanId)

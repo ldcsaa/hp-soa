@@ -6,28 +6,19 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.DependsOn;
 
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect.RabbitmqListenerMdcInspector;
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect.RabbitmqListenerTracingInspector;
-import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitmqApplicationStartedListener;
-import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitmqrSwitchReadOnlyListener;
+import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitmqReadOnlyEventListener;
 
 @EnableRabbit
 @AutoConfiguration
 public class SoaRabbitmqConsumerConfig
 {
 	@Bean
-	@DependsOn("springContextHolder")
-	RabbitmqApplicationStartedListener rabbitmqApplicationStartedListener()
+	RabbitmqReadOnlyEventListener rabbitmqReadOnlyEventListener()
 	{
-		return new RabbitmqApplicationStartedListener();
-	}
-	
-	@Bean
-	RabbitmqrSwitchReadOnlyListener rabbitmqrSwitchReadOnlyListener()
-	{
-		return new RabbitmqrSwitchReadOnlyListener();
+		return new RabbitmqReadOnlyEventListener();
 	}
 	
 	@Bean

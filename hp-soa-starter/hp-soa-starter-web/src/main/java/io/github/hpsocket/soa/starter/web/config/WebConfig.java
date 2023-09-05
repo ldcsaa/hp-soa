@@ -36,7 +36,8 @@ import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.json.FastJsonExcludePropertyFilter;
-import io.github.hpsocket.soa.framework.web.listener.ReadOnlyEventListener;
+import io.github.hpsocket.soa.framework.web.listener.ReadOnlyContextRefreshedEventListener;
+import io.github.hpsocket.soa.framework.web.listener.ReadOnlyRefreshEventListener;
 import io.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
 import io.github.hpsocket.soa.framework.web.service.AsyncService;
 import io.github.hpsocket.soa.framework.web.service.impl.AsyncServiceImpl;
@@ -71,11 +72,18 @@ public class WebConfig implements WebMvcConfigurer
         return new SpringContextHolder();
     }
 
-    @Bean("readOnlyEventListener")
+    @Bean("readOnlyContextRefreshedEventListener")
     @DependsOn("springContextHolder")
-    public ReadOnlyEventListener readOnlyEventListener()
+    public ReadOnlyContextRefreshedEventListener readOnlyContextRefreshedEventListener()
     {
-        return new ReadOnlyEventListener();
+        return new ReadOnlyContextRefreshedEventListener();
+    }
+
+    @Bean("readOnlyRefreshEventListener")
+    @DependsOn("springContextHolder")
+    public ReadOnlyRefreshEventListener readOnlyRefreshEventListener()
+    {
+        return new ReadOnlyRefreshEventListener();
     }
 
 	@Bean

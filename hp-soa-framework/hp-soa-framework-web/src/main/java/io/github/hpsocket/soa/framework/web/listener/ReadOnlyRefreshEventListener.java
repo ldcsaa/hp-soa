@@ -9,21 +9,13 @@ import io.github.hpsocket.soa.framework.web.event.ReadOnlyEvent;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.propertries.IAppProperties;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ReadOnlyEventListener implements ApplicationListener<RefreshEvent>, Ordered
+public class ReadOnlyRefreshEventListener implements ApplicationListener<RefreshEvent>, Ordered
 {
 	@Autowired
 	IAppProperties appProperties;
-	
-	@PostConstruct
-	public void postConstruct()
-	{
-		if(appProperties.isReadOnly())
-			log.info("application state -> (read-only: true)");
-	}
 
 	@Override
 	public void onApplicationEvent(RefreshEvent event)
@@ -33,10 +25,10 @@ public class ReadOnlyEventListener implements ApplicationListener<RefreshEvent>,
 		
 		if(preVal != curVal)
 		{
-			AppConfigHolder.setReadOnly(curVal);
-			SpringContextHolder.getApplicationContext().publishEvent(new ReadOnlyEvent(event, curVal));
-			
 			log.info("application state switch -> (read-only: {})", curVal);
+			
+			AppConfigHolder.setReadOnly(curVal);
+			SpringContextHolder.publishEvent(new ReadOnlyEvent(event, curVal, false));
 		}
 	}
 
