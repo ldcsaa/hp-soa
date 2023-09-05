@@ -25,7 +25,6 @@ import org.springframework.rabbit.stream.listener.StreamListenerContainer;
 import com.rabbitmq.stream.Environment;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaThirdRabbitmqProperties;
-import io.github.hpsocket.soa.starter.rabbitmq.stream.creator.SoaRabbitmqStreamConfigurer;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaRabbitmqConsumerConfig.class, SoaThirdRabbitmqProperties.class})
@@ -76,6 +75,7 @@ public class SoaThirdRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
 		return super.directRabbitListenerContainerFactory(configurer, connectionFactory, directContainerCustomizer);
 	}
 	
+	@Override
 	@Bean(name = "thirdStreamRabbitListenerContainerFactory")
 	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
 	@ConditionalOnProperty(prefix = "spring.rabbitmq-third.listener", name = "type", havingValue = "stream")
@@ -84,7 +84,7 @@ public class SoaThirdRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
 		ObjectProvider<ConsumerCustomizer> consumerCustomizer,
 		ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
 	{
-		return SoaRabbitmqStreamConfigurer.streamRabbitListenerContainerFactory(this.properties, rabbitStreamEnvironment, consumerCustomizer, containerCustomizer);
+		return super.streamRabbitListenerContainerFactory(rabbitStreamEnvironment, consumerCustomizer, containerCustomizer);
 	}
 
 }

@@ -21,9 +21,14 @@ import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties.ListenerRetry;
 import org.springframework.boot.context.properties.PropertyMapper;
+import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
+import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
+import org.springframework.rabbit.stream.listener.StreamListenerContainer;
 import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
+
+import com.rabbitmq.stream.Environment;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 
@@ -151,5 +156,18 @@ public class SoaAbstractRabbitmqConsumerConfig
 		}
 		
 		return template;
+	}
+	
+	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
+		Environment rabbitStreamEnvironment,
+		ObjectProvider<ConsumerCustomizer> consumerCustomizer,
+		ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
+	{
+		StreamRabbitListenerContainerFactory factory = new StreamRabbitListenerContainerFactory(rabbitStreamEnvironment);
+		factory.setNativeListener(this.properties.getListener().getStream().isNativeListener());
+		consumerCustomizer.ifUnique(factory::setConsumerCustomizer);
+		containerCustomizer.ifUnique(factory::setContainerCustomizer);
+		
+		return factory;
 	}
 }

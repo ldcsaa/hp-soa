@@ -23,7 +23,6 @@ import com.rabbitmq.client.impl.CredentialsRefreshService;
 import com.rabbitmq.stream.Environment;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaFirstRabbitmqProperties;
-import io.github.hpsocket.soa.starter.rabbitmq.stream.creator.SoaRabbitmqStreamConfigurer;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaFirstRabbitmqProperties.class})
@@ -78,12 +77,13 @@ public class SoaFirstRabbitmqConfig extends SoaAbstractRabbitmqConfig
 		return super.amqpAdmin(connectionFactory);
 	}
 	
+	@Override
 	@Bean(name = "firstRabbitStreamEnvironment")
 	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
 	public Environment rabbitStreamEnvironment(
 		ObjectProvider<EnvironmentBuilderCustomizer> customizers)
 	{
-		return SoaRabbitmqStreamConfigurer.rabbitStreamEnvironment(this.properties, customizers);
+		return super.rabbitStreamEnvironment(customizers);
 	}
 
 }

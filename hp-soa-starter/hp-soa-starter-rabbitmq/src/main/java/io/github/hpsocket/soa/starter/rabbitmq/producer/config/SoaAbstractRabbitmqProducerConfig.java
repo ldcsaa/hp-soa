@@ -12,10 +12,16 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
+import org.springframework.boot.autoconfigure.amqp.RabbitStreamTemplateConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateCustomizer;
+import org.springframework.rabbit.stream.producer.ProducerCustomizer;
+import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
+import org.springframework.rabbit.stream.support.converter.StreamMessageConverter;
 import org.springframework.retry.RecoveryCallback;
 import org.springframework.retry.RetryContext;
+
+import com.rabbitmq.stream.Environment;
 
 public class SoaAbstractRabbitmqProducerConfig
 {
@@ -27,8 +33,8 @@ public class SoaAbstractRabbitmqProducerConfig
 	}
 
 	public RabbitTemplateConfigurer rabbitTemplateConfigurer(
-					ObjectProvider<MessageConverter> messageConverter, 
-					ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers)
+		ObjectProvider<MessageConverter> messageConverter, 
+		ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers)
 	{
 		RabbitTemplateConfigurer configurer = new RabbitTemplateConfigurer(properties);
 		configurer.setMessageConverter(messageConverter.getIfUnique());
@@ -38,12 +44,12 @@ public class SoaAbstractRabbitmqProducerConfig
 	}
 
 	public RabbitTemplate rabbitTemplate(
-					RabbitTemplateConfigurer configurer, 
-					ConnectionFactory connectionFactory, 
-					ObjectProvider<RabbitTemplateCustomizer> customizers,
-					ObjectProvider<ReturnsCallback> returnsCallback,
-					ObjectProvider<ConfirmCallback> confirmCallback,
-					ObjectProvider<RecoveryCallback<?>> recoveryCallback)
+		RabbitTemplateConfigurer configurer, 
+		ConnectionFactory connectionFactory, 
+		ObjectProvider<RabbitTemplateCustomizer> customizers,
+		ObjectProvider<ReturnsCallback> returnsCallback,
+		ObjectProvider<ConfirmCallback> confirmCallback,
+		ObjectProvider<RecoveryCallback<?>> recoveryCallback)
 	{
 		RabbitTemplate template = new RabbitTemplate();
 		configurer.configure(template, connectionFactory);
@@ -96,4 +102,28 @@ public class SoaAbstractRabbitmqProducerConfig
 			}
 		};
 	}
+	
+	public RabbitStreamTemplateConfigurer rabbitStreamTemplateConfigurer(
+		ObjectProvider<MessageConverter> messageConverter,
+		ObjectProvider<StreamMessageConverter> streamMessageConverter,
+		ObjectProvider<ProducerCustomizer> producerCustomizer)
+	{
+		RabbitStreamTemplateConfigurer configurer = new RabbitStreamTemplateConfigurer();
+		configurer.setMessageConverter(messageConverter.getIfUnique());
+		configurer.setStreamMessageConverter(streamMessageConverter.getIfUnique());
+		configurer.setProducerCustomizer(producerCustomizer.getIfUnique());
+		
+		return configurer;
+	}
+
+	public RabbitStreamTemplate rabbitStreamTemplate(
+		Environment rabbitStreamEnvironment,
+		RabbitStreamTemplateConfigurer configurer)
+	{
+		RabbitStreamTemplate template = new RabbitStreamTemplate(rabbitStreamEnvironment, this.properties.getStream().getName());
+		configurer.configure(template);
+		
+		return template;
+	}
+
 }

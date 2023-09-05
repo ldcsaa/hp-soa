@@ -28,7 +28,6 @@ import org.springframework.retry.RecoveryCallback;
 import com.rabbitmq.stream.Environment;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbitmqProperties;
-import io.github.hpsocket.soa.starter.rabbitmq.stream.creator.SoaRabbitmqStreamConfigurer;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaRabbitmqProducerConfig.class, SoaDefaultRabbitmqProperties.class})
@@ -99,6 +98,7 @@ public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProduce
 	}
 	
 	@Primary
+	@Override
 	@Bean("defaultRabbitStreamTemplateConfigurer")
 	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
 	@ConditionalOnMissingBean(name = "defaultRabbitStreamTemplateConfigurer")
@@ -107,10 +107,11 @@ public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProduce
 		ObjectProvider<StreamMessageConverter> streamMessageConverter,
 		ObjectProvider<ProducerCustomizer> producerCustomizer)
 	{
-		return SoaRabbitmqStreamConfigurer.rabbitStreamTemplateConfigurer(messageConverter, streamMessageConverter, producerCustomizer);
+		return super.rabbitStreamTemplateConfigurer(messageConverter, streamMessageConverter, producerCustomizer);
 	}
 
 	@Primary
+	@Override
 	@Bean("defaultRabbitStreamTemplate")
 	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
 	@ConditionalOnProperty(prefix = "spring.rabbitmq.stream", name = "name")
@@ -118,7 +119,7 @@ public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProduce
 		@Qualifier("defaultRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
 		@Qualifier("defaultRabbitStreamTemplateConfigurer") RabbitStreamTemplateConfigurer configurer)
 	{
-		return SoaRabbitmqStreamConfigurer.rabbitStreamTemplate(this.properties, rabbitStreamEnvironment, configurer);
+		return super.rabbitStreamTemplate(rabbitStreamEnvironment, configurer);
 	}
 
 }

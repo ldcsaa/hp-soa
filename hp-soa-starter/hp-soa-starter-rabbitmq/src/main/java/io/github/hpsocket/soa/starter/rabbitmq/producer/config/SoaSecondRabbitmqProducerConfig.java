@@ -27,7 +27,6 @@ import org.springframework.retry.RecoveryCallback;
 import com.rabbitmq.stream.Environment;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaSecondRabbitmqProperties;
-import io.github.hpsocket.soa.starter.rabbitmq.stream.creator.SoaRabbitmqStreamConfigurer;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaRabbitmqProducerConfig.class, SoaSecondRabbitmqProperties.class})
@@ -91,6 +90,7 @@ public class SoaSecondRabbitmqProducerConfig extends SoaAbstractRabbitmqProducer
 		return super.rabbitMessagingTemplate(rabbitTemplate);
 	}
 	
+	@Override
 	@Bean("secondRabbitStreamTemplateConfigurer")
 	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
 	@ConditionalOnMissingBean(name = "secondRabbitStreamTemplateConfigurer")
@@ -99,9 +99,10 @@ public class SoaSecondRabbitmqProducerConfig extends SoaAbstractRabbitmqProducer
 		ObjectProvider<StreamMessageConverter> streamMessageConverter,
 		ObjectProvider<ProducerCustomizer> producerCustomizer)
 	{
-		return SoaRabbitmqStreamConfigurer.rabbitStreamTemplateConfigurer(messageConverter, streamMessageConverter, producerCustomizer);
+		return super.rabbitStreamTemplateConfigurer(messageConverter, streamMessageConverter, producerCustomizer);
 	}
 
+	@Override
 	@Bean("secondRabbitStreamTemplate")
 	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
 	@ConditionalOnProperty(prefix = "spring.rabbitmq-second.stream", name = "name")
@@ -109,7 +110,7 @@ public class SoaSecondRabbitmqProducerConfig extends SoaAbstractRabbitmqProducer
 		@Qualifier("secondRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
 		@Qualifier("secondRabbitStreamTemplateConfigurer") RabbitStreamTemplateConfigurer configurer)
 	{
-		return SoaRabbitmqStreamConfigurer.rabbitStreamTemplate(this.properties, rabbitStreamEnvironment, configurer);
+		return super.rabbitStreamTemplate(rabbitStreamEnvironment, configurer);
 	}
 
 }

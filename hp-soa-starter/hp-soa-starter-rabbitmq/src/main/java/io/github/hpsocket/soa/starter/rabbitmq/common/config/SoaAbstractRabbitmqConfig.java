@@ -3,6 +3,8 @@ package io.github.hpsocket.soa.starter.rabbitmq.common.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -13,13 +15,17 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.amqp.CachingConnectionFactoryConfigurer;
 import org.springframework.boot.autoconfigure.amqp.ConnectionFactoryCustomizer;
+import org.springframework.boot.autoconfigure.amqp.EnvironmentBuilderCustomizer;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionFactoryBeanConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.core.io.ResourceLoader;
 
 import com.rabbitmq.client.impl.CredentialsProvider;
 import com.rabbitmq.client.impl.CredentialsRefreshService;
+import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.EnvironmentBuilder;
 
 public class SoaAbstractRabbitmqConfig
 {
@@ -67,10 +73,10 @@ public class SoaAbstractRabbitmqConfig
 	}
 
 	public RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer(
-					ResourceLoader resourceLoader, 
-					RabbitConnectionDetails connectionDetails, 
-					ObjectProvider<CredentialsProvider> credentialsProvider, 
-					ObjectProvider<CredentialsRefreshService> credentialsRefreshService)
+		ResourceLoader resourceLoader, 
+		RabbitConnectionDetails connectionDetails, 
+		ObjectProvider<CredentialsProvider> credentialsProvider, 
+		ObjectProvider<CredentialsRefreshService> credentialsRefreshService)
 	{
 		RabbitConnectionFactoryBeanConfigurer configurer = new RabbitConnectionFactoryBeanConfigurer(resourceLoader, this.properties, connectionDetails);
 		configurer.setCredentialsProvider(credentialsProvider.getIfUnique());
@@ -80,8 +86,8 @@ public class SoaAbstractRabbitmqConfig
 	}
 
 	public CachingConnectionFactoryConfigurer rabbitConnectionFactoryConfigurer(
-					RabbitConnectionDetails connectionDetails, 
-					ObjectProvider<ConnectionNameStrategy> connectionNameStrategy)
+		RabbitConnectionDetails connectionDetails, 
+		ObjectProvider<ConnectionNameStrategy> connectionNameStrategy)
 	{
 		CachingConnectionFactoryConfigurer configurer = new CachingConnectionFactoryConfigurer(this.properties, connectionDetails);
 		configurer.setConnectionNameStrategy(connectionNameStrategy.getIfUnique());
@@ -90,9 +96,9 @@ public class SoaAbstractRabbitmqConfig
 	}
 
 	public CachingConnectionFactory rabbitConnectionFactory(
-					RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer, 
-					CachingConnectionFactoryConfigurer rabbitCachingConnectionFactoryConfigurer, 
-					ObjectProvider<ConnectionFactoryCustomizer> connectionFactoryCustomizers) throws Exception
+		RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer, 
+		CachingConnectionFactoryConfigurer rabbitCachingConnectionFactoryConfigurer, 
+		ObjectProvider<ConnectionFactoryCustomizer> connectionFactoryCustomizers) throws Exception
 	{
 
 		RabbitConnectionFactoryBean connectionFactoryBean = new RabbitConnectionFactoryBean();
@@ -111,5 +117,34 @@ public class SoaAbstractRabbitmqConfig
 	{
 		return new RabbitAdmin(connectionFactory);
 	}
+
+	public Environment rabbitStreamEnvironment(
+		ObjectProvider<EnvironmentBuilderCustomizer> customizers)
+	{
+		EnvironmentBuilder builder = configure(Environment.builder(), this.properties);
+		customizers.orderedStream().forEach((customizer) -> customizer.customize(builder));
+		
+		return builder.build();
+	}
+
+	protected static EnvironmentBuilder configure(EnvironmentBuilder builder, RabbitProperties properties)
+	{
+		builder.lazyInitialization(true);
+		RabbitProperties.Stream stream = properties.getStream();
+		PropertyMapper map = PropertyMapper.get();
+		
+		map.from(stream.getHost()).to(builder::host);
+		map.from(stream.getPort()).to(builder::port);
+		map.from(stream.getUsername()).as(withFallback(properties::getUsername)).whenNonNull().to(builder::username);
+		map.from(stream.getPassword()).as(withFallback(properties::getPassword)).whenNonNull().to(builder::password);
+		
+		return builder;
+	}
+
+	private static Function<String, String> withFallback(Supplier<String> fallback)
+	{
+		return (value) -> (value != null) ? value : fallback.get();
+	}
+
 
 }
