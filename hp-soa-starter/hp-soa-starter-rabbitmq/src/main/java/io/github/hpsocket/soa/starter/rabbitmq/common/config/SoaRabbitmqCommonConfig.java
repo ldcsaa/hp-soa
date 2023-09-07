@@ -4,8 +4,10 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Primary;
 
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.FastJsonMessageConverter;
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConverter;
@@ -14,7 +16,9 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConve
 @ComponentScan(basePackages = "io.github.hpsocket.soa.starter.rabbitmq.common.properties")
 public class SoaRabbitmqCommonConfig
 {
-	@Bean
+	@Primary
+	@Bean("messageConverter")
+	@ConditionalOnMissingBean(name = "messageConverter")
 	MessageConverter messageConverter()
 	{
 		MessageConverter textConverter = new TextMessageConverter();

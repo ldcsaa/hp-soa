@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.connection.CorrelationData.Confirm;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
@@ -53,20 +54,25 @@ abstract public class AbstractRabbitmqSender<T extends DomainEvent>
 			{
 				Long id = event.getId();
 				String msgId = event.getMsgId();
+				String corId = new StringBuilder(msgId).append('#').append(event.getRetries()).toString();
 				
 				try
 				{
-					String corId = new StringBuilder(msgId).append('#').append(event.getRetries()).toString();
 					CorrelationData corData = new CorrelationData(corId);
 					RabbitTemplate template = getRabbitTemplate(event);
 					
 					template.send(event.getExchange(), event.getRoutingKey(), event.toMessage(), corData);
+					Confirm confirm = corData.getFuture().get();
+					
+					if(!confirm.isAck())
+						log.warn("send MQ message un-ack -> (id: {}, msgId: {}, corId: {}) : {}", id, msgId, corId, confirm.getReason());
+					
 					succ.add(id);
 				}
 				catch(Exception e)
 				{
 					fail.add(id);
-					log.warn("send MQ message fail -> (id: {}, msgId: {}) : {}", id, msgId, e.getMessage(), e);
+					log.warn("send MQ message fail -> (id: {}, msgId: {}, corId: {}) : {}", id, msgId, corId, e.getMessage(), e);
 				}
 			}
 			
