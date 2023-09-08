@@ -5,6 +5,7 @@ import io.github.hpsocket.demo.mq.producer.contract.resp.DemoCreateOrderResponse
 import io.github.hpsocket.demo.mq.producer.controller.DemoController;
 import io.github.hpsocket.demo.mq.producer.converter.OrderConverter;
 import io.github.hpsocket.demo.mq.producer.entity.Order;
+import io.github.hpsocket.demo.mq.producer.sender.StreamSender;
 import io.github.hpsocket.demo.mq.producer.service.OrderService;
 import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification;
@@ -27,6 +28,9 @@ public class DemoControllerImpl implements DemoController
     private OrderService orderService;
     
     @Autowired
+    StreamSender streamSender;
+    
+    @Autowired
     private OrderConverter orderConverter;
 	
     @Override
@@ -45,8 +49,14 @@ public class DemoControllerImpl implements DemoController
     }
     
     @Override
-    public Object test(@Valid DemoCreateOrderReuqest request)
+    public Response<DemoCreateOrderResponse> sendStream(@Valid DemoCreateOrderReuqest request)
     {
-    	return "test";
+    	Order order = streamSender.sendOrder(orderConverter.fromRequest(request));
+        DemoCreateOrderResponse resp = orderConverter.toResponse(order);
+        
+        log.debug(resp.toString());
+
+        Response<DemoCreateOrderResponse> response = new Response<>(resp);
+        return response;
     }
 }

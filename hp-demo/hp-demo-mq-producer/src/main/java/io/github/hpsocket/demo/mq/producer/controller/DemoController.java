@@ -21,6 +21,6 @@ public interface DemoController
     @Operation(summary = "创建订单", description = "创建订单")
     Response<DemoCreateOrderResponse> createOrder(@RequestBody @Valid DemoCreateOrderReuqest request);
 
-    @PostMapping(value = "/test")
-    Object test(@RequestBody @Valid DemoCreateOrderReuqest request);
+    @PostMapping(value = "/sendStream")
+    Response<DemoCreateOrderResponse> sendStream(@RequestBody @Valid DemoCreateOrderReuqest request);
 }

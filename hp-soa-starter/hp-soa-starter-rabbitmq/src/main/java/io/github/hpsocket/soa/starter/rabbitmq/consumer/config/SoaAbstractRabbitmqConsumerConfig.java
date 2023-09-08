@@ -29,6 +29,7 @@ import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 
 import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.OffsetSpecification;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 
@@ -156,6 +157,15 @@ public class SoaAbstractRabbitmqConsumerConfig
 		}
 		
 		return template;
+	}
+	
+	public ConsumerCustomizer defaultConsumerCustomizer(String name, OffsetSpecification offset)
+	{
+		return (id, builder) -> {
+			builder.name(name)
+			.offset(offset)
+			.autoTrackingStrategy();
+		};
 	}
 	
 	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(

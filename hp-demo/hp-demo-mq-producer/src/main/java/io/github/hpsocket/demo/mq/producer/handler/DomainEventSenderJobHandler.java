@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 
 import io.github.hpsocket.demo.mq.producer.entity.DemoEvent;
 import io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob;
-import io.github.hpsocket.soa.starter.rabbitmq.producer.sender.AbstractRabbitmqSender;
+import io.github.hpsocket.soa.starter.rabbitmq.producer.sender.AbstractRabbitmqDomainEventSender;
 import io.github.hpsocket.soa.starter.rabbitmq.producer.service.DomainEventService;
 import jakarta.annotation.PostConstruct;
 
 @Component
-public class MqSenderJobHandler extends AbstractRabbitmqSender<DemoEvent>
+public class DomainEventSenderJobHandler extends AbstractRabbitmqDomainEventSender<DemoEvent>
 {
 	@Autowired
 	private DomainEventService<DemoEvent> demoEventService;

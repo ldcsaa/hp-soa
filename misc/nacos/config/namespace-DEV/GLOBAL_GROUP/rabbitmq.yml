@@ -11,7 +11,7 @@ spring.rabbitmq:
     direct:
       missing-queues-fatal: false
     stream:
-      native-listener: false
+      native-listener: true
   template:
     mandatory: true
   stream:
@@ -32,7 +32,7 @@ spring.rabbitmq-first:
     direct:
       missing-queues-fatal: false
     stream:
-      native-listener: false
+      native-listener: true
   template:
     mandatory: true
   stream:
@@ -48,12 +48,15 @@ spring.rabbitmq-second:
   publisher-confirm-type: correlated
   publisher-returns: true
   listener:
+    # stream listener
+    type: stream
     simple:
       missing-queues-fatal: false
     direct:
       missing-queues-fatal: false
     stream:
-      native-listener: false
+      # native listener
+      native-listener: true
   template:
     mandatory: true
   stream:
@@ -69,11 +72,14 @@ spring.rabbitmq-third:
   publisher-confirm-type: correlated
   publisher-returns: true
   listener:
+    # stream listener
+    type: stream
     simple:
       missing-queues-fatal: false
     direct:
       missing-queues-fatal: false
     stream:
+      # no-native listener
       native-listener: false
   template:
     mandatory: true

@@ -2,10 +2,10 @@ package io.github.hpsocket.soa.starter.rabbitmq.producer.sender;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import org.springframework.amqp.rabbit.connection.CorrelationData;
-import org.springframework.amqp.rabbit.connection.CorrelationData.Confirm;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.core.Message;
+import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
 
 import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 import io.github.hpsocket.soa.starter.rabbitmq.producer.service.DomainEventService;
@@ -20,16 +20,16 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-abstract public class AbstractRabbitmqSender<T extends DomainEvent>
+abstract public class AbstractRabbitmqStreamDomainEventSender<T extends DomainEvent>
 {
 	private int sendBatchSize		= DomainEventService.DEFAULT_SEND_BATCH_SIZE;
 	private int compensateBatchSize	= DomainEventService.DEFAULT_RESET_BATCH_SIZE;
 	private int compensateTimeout	= DomainEventService.DEFAULT_RESET_TIMEOUT;
 	
-	abstract protected RabbitTemplate getRabbitTemplate(T event);
+	abstract protected RabbitStreamTemplate getRabbitStreamTemplate(T event);
 	abstract protected DomainEventService<T> getDomainEventService();
 	
-	public AbstractRabbitmqSender(int sendBatchSize)
+	public AbstractRabbitmqStreamDomainEventSender(int sendBatchSize)
 	{
 		this.sendBatchSize = sendBatchSize;
 	}
@@ -58,14 +58,12 @@ abstract public class AbstractRabbitmqSender<T extends DomainEvent>
 				
 				try
 				{
-					CorrelationData corData = new CorrelationData(corId);
-					RabbitTemplate template = getRabbitTemplate(event);
-					
-					template.send(event.getExchange(), event.getRoutingKey(), event.toMessage(), corData);
-					Confirm confirm = corData.getFuture().get();
-					
-					if(!confirm.isAck())
-						log.warn("send MQ message un-ack -> (id: {}, msgId: {}, corId: {}) : {}", id, msgId, corId, confirm.getReason());
+					Message message = event.toStreamMessage(corId);
+					RabbitStreamTemplate template = getRabbitStreamTemplate(event);
+					CompletableFuture<Boolean> future = template.send(message);
+
+					if(!future.get())
+						log.warn("send MQ message un-ack -> (id: {}, msgId: {}, corId: {})", id, msgId, corId);
 					
 					succ.add(id);
 				}

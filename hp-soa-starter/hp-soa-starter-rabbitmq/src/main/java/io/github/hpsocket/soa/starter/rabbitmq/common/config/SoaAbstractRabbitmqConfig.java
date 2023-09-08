@@ -1,6 +1,7 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.common.config;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -21,14 +22,20 @@ import org.springframework.boot.autoconfigure.amqp.RabbitConnectionFactoryBeanCo
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.rabbit.stream.support.StreamAdmin;
 
 import com.rabbitmq.client.impl.CredentialsProvider;
 import com.rabbitmq.client.impl.CredentialsRefreshService;
+import com.rabbitmq.stream.ByteCapacity;
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.EnvironmentBuilder;
 
 public class SoaAbstractRabbitmqConfig
 {
+	public static final ByteCapacity DEFAULT_STREAM_MAX_LENGTH_BYTES		= ByteCapacity.GB(100);
+	public static final ByteCapacity DEFAULT_STREAM_MAX_SEGMENT_SIZE_BYTES	= ByteCapacity.MB(100);
+	public static final Duration DEFAULT_STREAM_MAX_AGE						= Duration.ofHours(72);
+	
 	protected final RabbitProperties properties;
 
 	public SoaAbstractRabbitmqConfig(RabbitProperties properties)
@@ -126,6 +133,19 @@ public class SoaAbstractRabbitmqConfig
 		
 		return builder.build();
 	}
+	
+	StreamAdmin streamAdmin(Environment env)
+	{
+	    return new StreamAdmin(env, sc ->
+	    {
+	    	sc
+	    	.stream(this.properties.getStream().getName())
+	    	.maxAge(DEFAULT_STREAM_MAX_AGE)
+	    	.maxLengthBytes(DEFAULT_STREAM_MAX_LENGTH_BYTES)
+	    	.maxSegmentSizeBytes(DEFAULT_STREAM_MAX_SEGMENT_SIZE_BYTES)
+	    	.create();
+	    });
+	}
 
 	protected static EnvironmentBuilder configure(EnvironmentBuilder builder, RabbitProperties properties)
 	{
@@ -135,6 +155,7 @@ public class SoaAbstractRabbitmqConfig
 		
 		map.from(stream.getHost()).to(builder::host);
 		map.from(stream.getPort()).to(builder::port);
+		map.from(properties::getVirtualHost).to(builder::virtualHost);
 		map.from(stream.getUsername()).as(withFallback(properties::getUsername)).whenNonNull().to(builder::username);
 		map.from(stream.getPassword()).as(withFallback(properties::getPassword)).whenNonNull().to(builder::password);
 		

@@ -13,6 +13,7 @@ import org.slf4j.MDC;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
+import org.springframework.rabbit.stream.support.StreamMessageProperties;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -20,6 +21,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.Getter;
 import lombok.Setter;
@@ -122,15 +124,68 @@ public class DomainEvent implements Serializable
 	
 	public Message toMessage()
 	{
-		return toMessage(null);
+		return toMessage(null, null);
 	}
 	
 	public Message toMessage(MessageProperties messageProperties)
 	{
+		return toMessage(messageProperties, null);
+	}
+	
+	public Message toMessage(String correlationId)
+	{
+		return toMessage(null, correlationId);
+	}
+	
+	public Message toMessage(MessageProperties messageProperties, String correlationId)
+	{
 		MessageBuilder builder = MessageBuilder.withBody(msg.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
 		
 		if(messageProperties != null)
-			builder.copyProperties(messageProperties);
+			builder.andProperties(messageProperties);
+		
+		if(GeneralHelper.isStrNotEmpty(correlationId))
+			builder.setCorrelationId(correlationId);
+		
+		return builder
+			.setContentEncoding(WebServerHelper.DEFAULT_CHARSET)
+			.setContentType(MessageProperties.CONTENT_TYPE_JSON)
+			.setMessageId(msgId)
+			
+			.setHeader(HEADER_DOMAIN_NAME, domainName)
+			.setHeader(HEADER_EVENT_NAME, eventName)
+			.setHeader(HEADER_MSG_ID, msgId)
+			.setHeader(HEADER_SOURCE_REQUEST_ID, sourceRequestId)
+			.build();
+	}
+	
+	public Message toStreamMessage()
+	{
+		return toStreamMessage(null, null);
+	}
+	
+	public Message toStreamMessage(StreamMessageProperties streamMessageProperties)
+	{
+		return toStreamMessage(streamMessageProperties, null);
+	}
+	
+	public Message toStreamMessage(String correlationId)
+	{
+		return toStreamMessage(null, correlationId);			
+	}
+	
+	public Message toStreamMessage(StreamMessageProperties streamMessageProperties, String correlationId)
+	{
+		if(streamMessageProperties == null)
+			streamMessageProperties = new StreamMessageProperties();
+		
+		streamMessageProperties.setGroupId(domainName);
+		
+		MessageBuilder builder = MessageBuilder.withBody(msg.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
+		builder.andProperties(streamMessageProperties);
+		
+		if(GeneralHelper.isStrNotEmpty(correlationId))
+			builder.setCorrelationId(correlationId);
 		
 		return builder
 			.setContentEncoding(WebServerHelper.DEFAULT_CHARSET)

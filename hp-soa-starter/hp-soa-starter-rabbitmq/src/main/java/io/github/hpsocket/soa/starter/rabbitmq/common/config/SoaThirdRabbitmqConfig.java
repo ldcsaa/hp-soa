@@ -14,9 +14,12 @@ import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionFactoryBeanConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
+import org.springframework.rabbit.stream.support.StreamAdmin;
 
 import com.rabbitmq.client.impl.CredentialsProvider;
 import com.rabbitmq.client.impl.CredentialsRefreshService;
@@ -45,8 +48,8 @@ public class SoaThirdRabbitmqConfig extends SoaAbstractRabbitmqConfig
 	public RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer(
 		ResourceLoader resourceLoader,
 		@Qualifier("thirdRabbitConnectionDetails") RabbitConnectionDetails connectionDetails,
-		ObjectProvider<CredentialsProvider> credentialsProvider,
-		ObjectProvider<CredentialsRefreshService> credentialsRefreshService)
+		@Qualifier("thirdRabbitCredentialsProvider") ObjectProvider<CredentialsProvider> credentialsProvider,
+		@Qualifier("thirdRabbitCredentialsRefreshService") ObjectProvider<CredentialsRefreshService> credentialsRefreshService)
 	{
 		return super.rabbitConnectionFactoryBeanConfigurer(resourceLoader, connectionDetails, credentialsProvider, credentialsRefreshService);
 	}
@@ -55,7 +58,7 @@ public class SoaThirdRabbitmqConfig extends SoaAbstractRabbitmqConfig
 	@Bean("thirdRabbitCachingConnectionFactoryConfigurer")
 	public CachingConnectionFactoryConfigurer rabbitConnectionFactoryConfigurer(
 		@Qualifier("thirdRabbitConnectionDetails") RabbitConnectionDetails connectionDetails,
-		ObjectProvider<ConnectionNameStrategy> connectionNameStrategy)
+		@Qualifier("thirdRabbitConnectionNameStrategy") ObjectProvider<ConnectionNameStrategy> connectionNameStrategy)
 	{
 		return super.rabbitConnectionFactoryConfigurer(connectionDetails, connectionNameStrategy);
 	}
@@ -65,7 +68,7 @@ public class SoaThirdRabbitmqConfig extends SoaAbstractRabbitmqConfig
 	public CachingConnectionFactory rabbitConnectionFactory(
 		@Qualifier("thirdRabbitConnectionFactoryBeanConfigurer") RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer,
 		@Qualifier("thirdRabbitCachingConnectionFactoryConfigurer") CachingConnectionFactoryConfigurer rabbitCachingConnectionFactoryConfigurer,
-		ObjectProvider<ConnectionFactoryCustomizer> connectionFactoryCustomizers) throws Exception
+		@Qualifier("thirdRabbitConnectionFactoryCustomizer") ObjectProvider<ConnectionFactoryCustomizer> connectionFactoryCustomizers) throws Exception
 	{
 		return super.rabbitConnectionFactory(rabbitConnectionFactoryBeanConfigurer, rabbitCachingConnectionFactoryConfigurer, connectionFactoryCustomizers);
 	}
@@ -81,9 +84,19 @@ public class SoaThirdRabbitmqConfig extends SoaAbstractRabbitmqConfig
 	@Bean(name = "thirdRabbitStreamEnvironment")
 	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
 	public Environment rabbitStreamEnvironment(
-		ObjectProvider<EnvironmentBuilderCustomizer> customizers)
+		@Qualifier("thirdRabbitStreamEnvironmentBuilderCustomizer") ObjectProvider<EnvironmentBuilderCustomizer> customizers)
 	{
 		return super.rabbitStreamEnvironment(customizers);
+	}
+	
+	@Override
+	@Bean(name = "thirdStreamAdmin")
+	@ConditionalOnMissingBean(name = "thirdStreamAdmin")
+	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
+	@ConditionalOnProperty(prefix = "spring.rabbitmq-third.stream", name = "name")
+	public StreamAdmin streamAdmin(@Qualifier("thirdRabbitStreamEnvironment") Environment env)
+	{
+		return super.streamAdmin(env);
 	}
 
 }

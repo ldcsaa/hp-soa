@@ -51,7 +51,7 @@ public class SoaFirstRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerC
 	public RabbitTemplate rabbitTemplate(
 		@Qualifier("firstRabbitTemplateConfigurer") RabbitTemplateConfigurer configurer,
 		@Qualifier("firstRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
-		ObjectProvider<RabbitTemplateCustomizer> customizers,
+		@Qualifier("firstRabbitTemplateCustomizer") ObjectProvider<RabbitTemplateCustomizer> customizers,
 		@Qualifier("firstRabbitReturnsCallback") ObjectProvider<ReturnsCallback> returnsCallback,
 		@Qualifier("firstRabbitConfirmCallback") ObjectProvider<ConfirmCallback> confirmCallback,
 		@Qualifier("firstRabbitRecoveryCallback") ObjectProvider<RecoveryCallback<?>> recoveryCallback)
@@ -97,7 +97,7 @@ public class SoaFirstRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerC
 	public RabbitStreamTemplateConfigurer rabbitStreamTemplateConfigurer(
 		ObjectProvider<MessageConverter> messageConverter,
 		ObjectProvider<StreamMessageConverter> streamMessageConverter,
-		ObjectProvider<ProducerCustomizer> producerCustomizer)
+		@Qualifier("firstRabbitStreamProducerCustomizer")ObjectProvider<ProducerCustomizer> producerCustomizer)
 	{
 		return super.rabbitStreamTemplateConfigurer(messageConverter, streamMessageConverter, producerCustomizer);
 	}

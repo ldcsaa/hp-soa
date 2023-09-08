@@ -12,6 +12,8 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
+import com.rabbitmq.stream.Properties;
+
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
@@ -19,6 +21,8 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
+
+import java.util.Map;
 
 @Slf4j
 @Aspect
@@ -58,7 +62,7 @@ public class RabbitmqListenerMdcInspector
 		{
 			MessageProperties properties = msg.getMessageProperties();
 			messageId 		= properties.getMessageId();
-			correlationId	= properties.getHeader(HEADER_CORRELA_DATA_ID);
+			correlationId	= properties.getCorrelationId();
 			sourceRequestId	= properties.getHeader(HEADER_SOURCE_REQUEST_ID);
 			domainName		= properties.getHeader(HEADER_DOMAIN_NAME);
 			eventName		= properties.getHeader(HEADER_EVENT_NAME);
@@ -75,6 +79,22 @@ public class RabbitmqListenerMdcInspector
 				sourceRequestId	= (String)headers.get(HEADER_SOURCE_REQUEST_ID);
 				domainName		= (String)headers.get(HEADER_DOMAIN_NAME);
 				eventName		= (String)headers.get(HEADER_EVENT_NAME);
+			}
+			else
+			{
+				com.rabbitmq.stream.Message msg3 = (com.rabbitmq.stream.Message)AspectHelper.getFindFirstArgByType(joinPoint, com.rabbitmq.stream.Message.class);
+				
+				if(msg3 != null)
+				{
+					Properties props = msg3.getProperties();
+					Map<String, Object> appProps = msg3.getApplicationProperties();
+
+					messageId		= props.getMessageIdAsString();
+					correlationId	= props.getCorrelationIdAsString();
+					sourceRequestId	= (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
+					domainName		= (String)appProps.get(HEADER_DOMAIN_NAME);
+					eventName		= (String)appProps.get(HEADER_EVENT_NAME);
+				}
 			}
 		}
 		
