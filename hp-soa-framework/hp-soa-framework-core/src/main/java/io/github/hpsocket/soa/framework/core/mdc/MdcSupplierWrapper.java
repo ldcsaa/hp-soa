@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import lombok.Getter;
 
+/** <b>支持调用链跟踪的 {@linkplain Supplier} 包装类</b> */
 @Getter
 public class MdcSupplierWrapper<T> extends MdcSupplier<T>
 {

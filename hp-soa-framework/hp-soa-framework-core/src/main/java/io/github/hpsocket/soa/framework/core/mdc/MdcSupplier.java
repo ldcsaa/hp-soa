@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import lombok.Getter;
 
+/** <b>支持调用链跟踪的 {@linkplain Supplier} 基类</b> */
 @Getter
 abstract public class MdcSupplier<T> implements Supplier<T>
 {

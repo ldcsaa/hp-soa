@@ -1,6 +1,6 @@
 package io.github.hpsocket.soa.framework.core.util;
 
-/** 数值范围类 */
+/** <b>通用数值范围类</b> */
 public class Range<T extends Number>
 {
 	private T begin;

@@ -15,7 +15,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-/** 编解码、加解密帮助类 */
+/** <b>编解码、加解密帮助类</b> */
 public class CryptHelper
 {
 	/** AES 密匙长度 */

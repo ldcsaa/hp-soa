@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.slf4j.MDC;
 
+/** <b>调用链跟踪 {@linkplain MDC} 属性</b> */
 public class MdcAttr
 {
 	public static final String MDC_TRACE_ID_KEY	=	 "__traceId";

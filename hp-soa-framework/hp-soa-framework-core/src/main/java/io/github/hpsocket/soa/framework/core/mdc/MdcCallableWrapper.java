@@ -4,6 +4,7 @@ import java.util.concurrent.Callable;
 
 import lombok.Getter;
 
+/** <b>支持调用链跟踪的 {@linkplain Callable} 包装类</b> */
 @Getter
 public class MdcCallableWrapper<T> extends MdcCallable<T>
 {

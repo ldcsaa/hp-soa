@@ -34,7 +34,8 @@ public class ExclusiveJobInspector
 	private static final String POINTCUT_PATTERN 	= "execution (public void *.*()) && "
 													+ "@annotation(io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob)";
 	
-	private static final AtomicBoolean running = new AtomicBoolean(false);
+	private static final AtomicBoolean RUNNING = new AtomicBoolean(false);	
+	private static final AspectHelper.AnnotationHolder<ExclusiveJob> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
 	
 	@Autowired(required = false)
 	ExclusiveJobExceptionHandler exceptionHandler;
@@ -52,7 +53,7 @@ public class ExclusiveJobInspector
 	{	
 		MdcAttr mdcAttr = WebServerHelper.createMdcAttr();		
 
-		ExclusiveJob job = AspectHelper.getMethodAnnotation(joinPoint, ExclusiveJob.class);
+		ExclusiveJob job = ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
 		Assert.notNull(job, "ExclusiveJob annotation not found");
 		
 		String prefix	= job.prefix();
@@ -66,7 +67,7 @@ public class ExclusiveJobInspector
 
 		try
 		{
-			if(!running.compareAndSet(false, true))
+			if(!RUNNING.compareAndSet(false, true))
 				return null;
 			
 			mdcAttr.putMdc();
@@ -125,7 +126,7 @@ public class ExclusiveJobInspector
 		}
 		finally
 		{
-			running.compareAndSet(true, false);
+			RUNNING.compareAndSet(true, false);
 			mdcAttr.removeMdc();
 		}
 		

@@ -2,6 +2,7 @@ package io.github.hpsocket.soa.framework.core.mdc;
 
 import lombok.Getter;
 
+/** <b>支持调用链跟踪的 {@linkplain Runnable} 包装类</b> */
 @Getter
 public class MdcRunnableWrapper extends MdcRunnable
 {

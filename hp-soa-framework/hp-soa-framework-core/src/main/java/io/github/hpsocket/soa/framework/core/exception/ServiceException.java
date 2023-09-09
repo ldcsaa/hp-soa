@@ -2,11 +2,16 @@ package io.github.hpsocket.soa.framework.core.exception;
 
 import org.slf4j.Logger;
 
+/** <b>HP-SOA 统一异常</b> */
 @SuppressWarnings("serial")
 public class ServiceException extends RuntimeException
 {
 	/** 成功 */
 	public static final int OK						= 0;
+	/** 已接受 */
+	public static final int ACCEPTED				= 202;
+	/** 空内容 */
+	public static final int NO_CONTENT				= 204;
 	/** 部分成功 */
 	public static final int PARTIAL_OK				= 206;
 	/** 非法请求 */
@@ -84,7 +89,9 @@ public class ServiceException extends RuntimeException
 	public static final ServiceException LOGIN_INVALID_EXCEPTION	= new UnimportantException("登录已失效", LOGIN_INVALID);
 	public static final ServiceException NOT_LOGGED_IN_EXCEPTION	= new UnimportantException("未登录", NOT_LOGGED_IN);
 	
+	/** 状态码：{@linkplain ServiceException#OK OK} - 成功，其它 - 失败 */
 	private Integer statusCode;
+	/** 结果码：用于服务内部监控、统计，不暴露到调用方，{@linkplain ServiceException#OK OK} - 成功，其它 - 失败 */
 	private transient Integer resultCode;	
 	
 	public ServiceException()

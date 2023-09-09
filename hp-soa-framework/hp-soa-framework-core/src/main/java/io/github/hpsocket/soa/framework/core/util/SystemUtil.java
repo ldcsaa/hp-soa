@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/** <b>系统信息帮助类</b> */
 public class SystemUtil
 {
 

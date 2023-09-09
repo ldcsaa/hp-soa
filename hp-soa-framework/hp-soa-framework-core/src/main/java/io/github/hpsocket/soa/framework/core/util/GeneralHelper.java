@@ -34,10 +34,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-/** 通用方法帮助类 */
+/** <b>通用方法帮助类</b> */
 public class GeneralHelper
 {
-	private static final String DELIMITERR_CHAR		= " ,\t\r\n\f";
+	private static final String DELIMITERR_CHARS	= " ,\t\r\n\f";
 	
 
 	private static final Pattern PATTERN_NUMERIC	= Pattern.compile("^0$|^\\-?[1-9]+[0-9]*$");
@@ -1527,7 +1527,7 @@ public class GeneralHelper
 	
 	public static final List<Long> str2LongList(String str)
 	{
-		return str2LongList(str, DELIMITERR_CHAR);
+		return str2LongList(str, DELIMITERR_CHARS);
 	}
 	
 	public static final List<Long> str2LongList(String str, String delim)
@@ -1548,7 +1548,7 @@ public class GeneralHelper
 	
 	public static final List<Integer> str2IntList(String str)
 	{
-		return str2IntList(str, DELIMITERR_CHAR);
+		return str2IntList(str, DELIMITERR_CHARS);
 	}
 	
 	public static final List<Integer> str2IntList(String str, String delim)
@@ -1569,7 +1569,7 @@ public class GeneralHelper
 	
 	public static final List<String> str2StrList(String str)
 	{
-		return str2StrList(str, DELIMITERR_CHAR);
+		return str2StrList(str, DELIMITERR_CHARS);
 	}
 	
 	public static final List<String> str2StrList(String str, String delim)

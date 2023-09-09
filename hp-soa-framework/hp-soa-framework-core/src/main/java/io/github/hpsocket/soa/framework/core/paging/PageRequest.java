@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** <b>通用分页请求</b> */
 @Getter
 @Setter
 @NoArgsConstructor

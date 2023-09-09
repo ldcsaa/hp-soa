@@ -38,6 +38,8 @@ public class RabbitmqListenerMdcInspector
 													+ "		)"
 													+ ")";
 
+	private static final AspectHelper.AnnotationHolder<RabbitListener> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
+
 	@Pointcut(INSPECTOR_POINTCUT_PATTERN)
 	protected void aroundMethod() {}
 	
@@ -46,7 +48,7 @@ public class RabbitmqListenerMdcInspector
 	{
 		MdcAttr mdcAttr = WebServerHelper.createMdcAttr();		
 
-		RabbitListener listener = AspectHelper.getMethodOrClassAnnotation(joinPoint, RabbitListener.class);
+		RabbitListener listener = ANNOTATION_HOLDER.findAnnotationByMethodOrClass(joinPoint);
 		Assert.notNull(listener, "RabbitListener annotation not found");
 		
 		String listenerId		= listener.id();
@@ -56,52 +58,47 @@ public class RabbitmqListenerMdcInspector
 		String domainName		= null;
 		String eventName		= null;
 		
-		Message msg = (Message)AspectHelper.getFindFirstArgByType(joinPoint, Message.class);
+		Object obj = AspectHelper.findFirstArgByTypes(joinPoint, Message.class
+													, org.springframework.messaging.Message.class
+													, com.rabbitmq.stream.Message.class);
 		
-		if(msg != null)
+		if(obj != null)
 		{
-			MessageProperties properties = msg.getMessageProperties();
-			messageId 		= properties.getMessageId();
-			correlationId	= properties.getCorrelationId();
-			sourceRequestId	= properties.getHeader(HEADER_SOURCE_REQUEST_ID);
-			domainName		= properties.getHeader(HEADER_DOMAIN_NAME);
-			eventName		= properties.getHeader(HEADER_EVENT_NAME);
-		}
-		else
-		{
-			org.springframework.messaging.Message<?> msg2 = (org.springframework.messaging.Message<?>)AspectHelper.getFindFirstArgByType(joinPoint, org.springframework.messaging.Message.class);
-			
-			if(msg2 != null)
+			if(obj instanceof Message msg)
 			{
-				MessageHeaders headers = msg2.getHeaders();
+				MessageProperties properties = msg.getMessageProperties();
+				messageId 		= properties.getMessageId();
+				correlationId	= properties.getCorrelationId();
+				sourceRequestId	= properties.getHeader(HEADER_SOURCE_REQUEST_ID);
+				domainName		= properties.getHeader(HEADER_DOMAIN_NAME);
+				eventName		= properties.getHeader(HEADER_EVENT_NAME);				
+			}
+			else if(obj instanceof org.springframework.messaging.Message msg)
+			{
+				MessageHeaders headers = msg.getHeaders();
 				messageId 		= (String)headers.get(HEADER_MSG_ID);
 				correlationId	= (String)headers.get(HEADER_CORRELA_DATA_ID);
 				sourceRequestId	= (String)headers.get(HEADER_SOURCE_REQUEST_ID);
 				domainName		= (String)headers.get(HEADER_DOMAIN_NAME);
 				eventName		= (String)headers.get(HEADER_EVENT_NAME);
 			}
-			else
+			else if(obj instanceof com.rabbitmq.stream.Message msg)
 			{
-				com.rabbitmq.stream.Message msg3 = (com.rabbitmq.stream.Message)AspectHelper.getFindFirstArgByType(joinPoint, com.rabbitmq.stream.Message.class);
-				
-				if(msg3 != null)
-				{
-					Properties props = msg3.getProperties();
-					Map<String, Object> appProps = msg3.getApplicationProperties();
+				Properties props = msg.getProperties();
+				Map<String, Object> appProps = msg.getApplicationProperties();
 
-					messageId		= props.getMessageIdAsString();
-					correlationId	= props.getCorrelationIdAsString();
-					sourceRequestId	= (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
-					domainName		= (String)appProps.get(HEADER_DOMAIN_NAME);
-					eventName		= (String)appProps.get(HEADER_EVENT_NAME);
-				}
+				messageId		= props.getMessageIdAsString();
+				correlationId	= props.getCorrelationIdAsString();
+				sourceRequestId	= (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
+				domainName		= (String)appProps.get(HEADER_DOMAIN_NAME);
+				eventName		= (String)appProps.get(HEADER_EVENT_NAME);				
 			}
+			
+			if(GeneralHelper.isStrNotEmpty(messageId))
+				mdcAttr.setMessageId(messageId);
+			if(GeneralHelper.isStrNotEmpty(sourceRequestId))
+				mdcAttr.setSourceRequestId(sourceRequestId);
 		}
-		
-		if(GeneralHelper.isStrNotEmpty(messageId))
-			mdcAttr.setMessageId(messageId);
-		if(GeneralHelper.isStrNotEmpty(sourceRequestId))
-			mdcAttr.setSourceRequestId(sourceRequestId);
 		
 		mdcAttr.putMdc();
 		

@@ -7,6 +7,10 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+/** <b>线程局部线程池工厂</b>：每个线程拥有独立线程池<br><br>
+ * （支持 {@linkplain org.slf4j.MDC MDC} 调用链跟踪）
+ */
+
 public class LocalExecutorServiceFactory
 {
 	public static final LocalExecutorServiceFactory DEFAULT_FACTORY	= new LocalExecutorServiceFactory();

@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import lombok.Getter;
 
+/** <b>支持调用链跟踪的 {@linkplain Function} 包装类</b> */
 @Getter
 public class MdcFunctionWrapper<T, R> extends MdcFunction<T, R>
 {

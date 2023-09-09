@@ -9,6 +9,7 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 import java.util.concurrent.ThreadLocalRandom;
 
+/** <b>雪花 ID 生成器</b> */
 @Slf4j
 public class Sequence
 {
@@ -64,7 +65,7 @@ public class Sequence
 
 	public Sequence()
 	{
-		this.datacenterId = getDatacenterId();
+		this.datacenterId = calcDatacenterId();
 		this.workerId = getMaxWorkerId(datacenterId);
 	}
 
@@ -96,7 +97,7 @@ public class Sequence
 	 * <p>
 	 * 可自定扩展
 	 */
-	protected long getDatacenterId()
+	protected long calcDatacenterId()
 	{
 		long id = 0L;
 		
@@ -121,7 +122,7 @@ public class Sequence
 		}
 		catch(Exception e)
 		{
-			log.warn(" getDatacenterId: " + e.getMessage());
+			log.warn(" calcDatacenterId: " + e.getMessage());
 		}
 
 		return id;
@@ -151,8 +152,6 @@ public class Sequence
 
 	/**
 	 * 获取下一个 ID
-	 *
-	 * @return next id
 	 */
 	public synchronized long nextId()
 	{

@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.framework.core.util;
 
+/** <b>通用常量</b> */
 public class Constant implements Comparable<Constant>
 {
 	/** 代码 */
@@ -33,22 +34,22 @@ public class Constant implements Comparable<Constant>
 		this(code.intValue(), desc);
 	}
 
-	public final int INTVAL()
+	public final int INT_VAL()
 	{
 		return CODE;
 	}
 
-	public final short SHORTVAL()
+	public final short SHORT_VAL()
 	{
 		return (short)CODE;
 	}
 
-	public final byte BYTEVAL()
+	public final byte BYTE_VAL()
 	{
 		return (byte)CODE;
 	}
 
-	public final String STRVAL()
+	public final String STR_VAL()
 	{
 		return Integer.toString(CODE);
 	}
@@ -102,7 +103,7 @@ public class Constant implements Comparable<Constant>
     /* *********************************************************************************************************************************** */
 
     /**
-     * 激活标识
+     * 通用激活标识
      */
     public static class ActivatedFlag
     {
@@ -111,7 +112,7 @@ public class Constant implements Comparable<Constant>
     }
 
     /**
-     * 允许标识
+     * 通用允许标识
      */
     public static class PermitFlag
     {
@@ -120,7 +121,7 @@ public class Constant implements Comparable<Constant>
     }
 
     /**
-     * 成功标识
+     * 通用成功标识
      */
     public static class SuccessFlag
     {
@@ -130,7 +131,7 @@ public class Constant implements Comparable<Constant>
     }
 
     /**
-     * 存在标识
+     * 通用存在标识
      */
     public static class ExistFlag
     {
@@ -139,7 +140,7 @@ public class Constant implements Comparable<Constant>
     }
 
     /**
-     * 是否标识
+     * 通用是否标识
      */
     public static class YesNoFlag
     {
@@ -148,7 +149,7 @@ public class Constant implements Comparable<Constant>
     }
 
     /**
-     * 删除标识
+     * 通用删除标识
      */
     public static class DeleteFlag
     {
@@ -157,7 +158,7 @@ public class Constant implements Comparable<Constant>
     }
 
     /**
-     * 状态标识
+     * 通用状态标识
      */
     public static class StatusFlag
     {

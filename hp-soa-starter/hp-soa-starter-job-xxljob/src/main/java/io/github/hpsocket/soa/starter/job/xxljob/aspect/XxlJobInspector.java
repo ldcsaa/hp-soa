@@ -31,6 +31,8 @@ public class XxlJobInspector
 	private static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
 												 + "@annotation(com.xxl.job.core.handler.annotation.XxlJob)";
 	
+	private static final AspectHelper.AnnotationHolder<XxlJob> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
+	
 	@Autowired(required = false)
 	AsyncService asyncService;
 	@Autowired(required = false)
@@ -44,7 +46,7 @@ public class XxlJobInspector
 	{
 		MdcAttr mdcAttr = WebServerHelper.createMdcAttr();		
 
-		XxlJob job = AspectHelper.getMethodAnnotation(joinPoint, XxlJob.class);
+		XxlJob job = ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
 		Assert.notNull(job, "XxlJob annotation not found");
 		
 		String jobName	= job.value();

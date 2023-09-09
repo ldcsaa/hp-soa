@@ -2,7 +2,7 @@ package io.github.hpsocket.soa.framework.core.util;
 
 import java.util.Date;
 
-/** 操作结果公共类：<br>
+/** <b>通用操作结果</b><br>
  * 
  * {@link Result#flag} - 结果状态标志 <br>
  * {@link Result#value} - 结果值

@@ -1,6 +1,6 @@
 package io.github.hpsocket.soa.framework.core.util;
 
-/** 两个元素组成的 Map/Set Key 包装类 */
+/** <b>两个元素组成的 {@linkplain java.util.Map Map}/{@linkplain java.util.Set Set} 通用 Key</b> */
 public class CoupleKey<K1, K2>
 {
 	private K1 key1;

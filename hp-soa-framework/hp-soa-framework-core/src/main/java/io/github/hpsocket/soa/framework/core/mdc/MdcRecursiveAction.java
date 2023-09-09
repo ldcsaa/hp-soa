@@ -4,6 +4,7 @@ import java.util.concurrent.RecursiveAction;
 
 import lombok.Getter;
 
+/** <b>支持调用链跟踪的 {@linkplain RecursiveAction} 基类</b> */
 @Getter
 @SuppressWarnings("serial")
 abstract public class MdcRecursiveAction extends RecursiveAction

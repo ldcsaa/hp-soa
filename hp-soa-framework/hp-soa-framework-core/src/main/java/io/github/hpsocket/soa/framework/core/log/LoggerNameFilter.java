@@ -17,6 +17,9 @@ import org.apache.logging.log4j.message.Message;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 
+/** <b>log4j2 logger 日志过滤器</b><br>
+ * 用于调整 logger 名称匹配特定正则表达式的 logger 的日志级别
+ */
 @Plugin(name = "LoggerNameFilter", category = Node.CATEGORY, elementType = Filter.ELEMENT_TYPE, printObject = true)
 public class LoggerNameFilter extends AbstractFilter
 {

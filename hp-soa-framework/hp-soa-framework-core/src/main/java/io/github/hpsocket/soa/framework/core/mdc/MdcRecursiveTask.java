@@ -4,6 +4,7 @@ import java.util.concurrent.RecursiveTask;
 
 import lombok.Getter;
 
+/** <b>支持调用链跟踪的 {@linkplain RecursiveTask} 基类</b> */
 @Getter
 @SuppressWarnings("serial")
 abstract public class MdcRecursiveTask<T> extends RecursiveTask<T>

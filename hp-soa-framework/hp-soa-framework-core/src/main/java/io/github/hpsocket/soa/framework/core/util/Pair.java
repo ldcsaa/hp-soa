@@ -2,7 +2,7 @@ package io.github.hpsocket.soa.framework.core.util;
 
 import java.io.Serializable;
 
-/** 值对公共类：<br>
+/** <b>通用值对</b><br>
  * 
  * {@link Pair#first} - 第一个值 <br>
  * {@link Pair#second} - 第二个值

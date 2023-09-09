@@ -10,6 +10,7 @@ import io.github.hpsocket.soa.framework.core.mdc.MdcRunnableWrapper;
 
 import lombok.Getter;
 
+/** <b>支持 {@linkplain org.slf4j.MDC MDC} 调用链跟踪的线程池</b> */
 @Getter
 public class AsyncThreadPoolExecutor extends ThreadPoolExecutor
 {
