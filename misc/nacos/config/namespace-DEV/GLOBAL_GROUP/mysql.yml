@@ -46,7 +46,8 @@ spring.datasource.dynamic:
     #transaction-query-timeout: (seconds, 0: infinite)
     default-transaction-isolation: 2
     connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=3000
-    public-key: "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJRhKGNr3IAJcs4+0ys/4zmwUJoBYqAdx6EcyiWIBt7cIFS5QdruakTmGk8XOVPMVz9jOLOvhPfjLzgPgwaKo6UCAwEAAQ=="
+    # public-key uses to encrypt database access password
+    #public-key: "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJRhKGNr3IAJcs4+0ys/4zmwUJoBYqAdx6EcyiWIBt7cIFS5QdruakTmGk8XOVPMVz9jOLOvhPfjLzgPgwaKo6UCAwEAAQ=="
 
 mybatis-plus:
   mapper-locations:
