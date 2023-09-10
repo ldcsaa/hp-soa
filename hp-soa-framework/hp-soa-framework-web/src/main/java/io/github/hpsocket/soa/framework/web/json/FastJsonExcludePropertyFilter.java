@@ -10,6 +10,9 @@ import java.util.Optional;
 import com.alibaba.fastjson2.filter.PropertyFilter;
 import io.github.hpsocket.soa.framework.web.json.JSONFieldExclude.Exclude;
 
+/** <b>FastJson 属性排除过滤器</b><br>
+ * 处理 {@linkplain JSONFieldExclude} 注解，序列化时排除特定属性
+ */
 public class FastJsonExcludePropertyFilter implements PropertyFilter
 {
 	@Override

@@ -11,6 +11,9 @@ import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.propertries.IAppProperties;
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>{@linkplain ReadOnlyEvent} 事件动态更新触发器</b><br>
+ * 触发时机：动态修改应用程序的 <i>${hp.soa.web.app.read-only}</i> 配置时，（此时 {@linkplain ReadOnlyEvent#isInitial()} 为 faise）
+ */
 @Slf4j
 public class ReadOnlyRefreshEventListener implements ApplicationListener<RefreshEvent>, Ordered
 {

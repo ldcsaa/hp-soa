@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** <b>HTTP 请求属性</b> */
 @Getter
 @Setter
 @NoArgsConstructor

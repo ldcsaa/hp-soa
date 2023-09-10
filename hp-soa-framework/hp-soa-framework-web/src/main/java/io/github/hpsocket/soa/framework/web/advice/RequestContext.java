@@ -17,6 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 import static org.springframework.web.context.request.ServletRequestAttributes.*;
 
+/** <b>HTTP 请求上下文</b> */
 public class RequestContext
 {
 	public static final ServletRequestAttributes getServletRequestAttributes()

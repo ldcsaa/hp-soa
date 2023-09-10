@@ -12,6 +12,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 
+/** <b>YAML 属性加载器</b> */
 public class YamlPropertiesLoader
 {
 	public static final Properties loadAllProperties(String resourceName) throws IOException

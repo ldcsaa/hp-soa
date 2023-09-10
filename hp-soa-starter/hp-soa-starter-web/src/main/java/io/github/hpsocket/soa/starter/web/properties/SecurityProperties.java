@@ -3,7 +3,7 @@ package io.github.hpsocket.soa.starter.web.properties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import io.github.hpsocket.soa.framework.web.propertries.IServletPropertries;
+import io.github.hpsocket.soa.framework.web.propertries.IServletPathsPropertries;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ConfigurationProperties
-public class SecurityProperties implements IServletPropertries
+public class SecurityProperties implements IServletPathsPropertries
 {
 	public static final String ANY_PATH_PATTERN = "/**";
 

@@ -12,6 +12,7 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
 import org.springframework.lang.Nullable;
 
+/** <b>YAML {@linkplain PropertySourceFactory}</b> */
 public class YamlPropertySourceFactory implements PropertySourceFactory
 {
 	@Override

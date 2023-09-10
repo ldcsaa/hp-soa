@@ -13,6 +13,9 @@ import io.github.hpsocket.soa.framework.web.service.AsyncService;
 import lombok.Getter;
 import lombok.Setter;
 
+/** <b>异步服务实现</b><br>
+ * 实现 {@linkplain AsyncService} 接口，支持调用链跟踪
+ */
 @Getter
 @Setter
 public class AsyncServiceImpl implements AsyncService

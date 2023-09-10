@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEvent;
 
 import io.github.hpsocket.soa.framework.web.service.TracingContext;
 
+/** <b>Spring 上下文持有者</b> */
 public class SpringContextHolder implements ApplicationContextAware
 {
 	private static ApplicationContext applicationContext;

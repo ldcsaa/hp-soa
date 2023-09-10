@@ -39,6 +39,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>HTTP 响应拦截器</b> */
 @Slf4j
 @RestControllerAdvice
 public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ordered

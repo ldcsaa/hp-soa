@@ -22,6 +22,9 @@ import static org.apache.dubbo.common.constants.CommonConstants.PROVIDER;
 
 import static io.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 
+/** <b>Dubbo MDC 过滤器</b><br>
+ * 为 Dubbo 服务调用注入调用链跟踪信息
+ */
 @Activate(group = {CONSUMER, PROVIDER}, order = (Integer.MIN_VALUE + 1000))
 public class DubboMdcFilter implements Filter, Filter.Listener
 {

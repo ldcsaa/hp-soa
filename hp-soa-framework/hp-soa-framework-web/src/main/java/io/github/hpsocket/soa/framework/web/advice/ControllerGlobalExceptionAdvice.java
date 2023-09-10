@@ -30,6 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>全局异常拦截器</b> */
 @Slf4j
 @RestControllerAdvice
 public class ControllerGlobalExceptionAdvice implements Ordered
@@ -40,6 +41,7 @@ public class ControllerGlobalExceptionAdvice implements Ordered
 		return 0;
 	}
 
+	/** {@linkplain MethodArgumentNotValidException} 异常处理器 */
 	@ExceptionHandler({MethodArgumentNotValidException.class})
 	public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e)
 	{
@@ -76,6 +78,7 @@ public class ControllerGlobalExceptionAdvice implements Ordered
 		return new Response<>(se, validationErrors);
 	}
 
+	/** {@linkplain RpcException} 异常处理器 */
 	@ExceptionHandler({RpcException.class})
 	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RpcException e)
 	{
@@ -108,6 +111,7 @@ public class ControllerGlobalExceptionAdvice implements Ordered
 		return new Response<>(se);
 	}
 
+	/** {@linkplain Exception} 异常处理器 */
 	@ExceptionHandler({Exception.class})
 	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
 	{

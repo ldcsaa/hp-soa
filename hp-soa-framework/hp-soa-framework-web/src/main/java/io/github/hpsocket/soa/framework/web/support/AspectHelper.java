@@ -22,6 +22,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import com.google.common.collect.Maps;
 
+/** <b>Aspect 拦截信息检索辅助类</b> */
 public class AspectHelper
 {
 	private static ExpressionParser expressionParser = new SpelExpressionParser();
@@ -169,6 +170,7 @@ public class AspectHelper
 		return null;
 	}
 	
+	/** <b>注解信息持有者</b> */
 	abstract public static class AnnotationHolder<T extends Annotation>
 	{
 		private Map<Object, SoftReference<T>> map = new ConcurrentHashMap<>();

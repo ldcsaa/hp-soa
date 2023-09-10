@@ -21,6 +21,7 @@ import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 
 import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 
+/** <b>HTTP 请求拦截器</b> */
 @Slf4j
 @Aspect
 @RestControllerAdvice

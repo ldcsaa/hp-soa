@@ -7,9 +7,13 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 import io.github.hpsocket.soa.framework.web.advice.RequestContext;
+import io.github.hpsocket.soa.framework.web.annotation.SiteLocal;
 
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 
+/** <b>内网 HTTP 请求校验拦截器</b><br>
+ * 处理 {@linkplain SiteLocal} 注解
+ */
 @Aspect
 @Order(Integer.MIN_VALUE)
 public class SiteLocalInspector

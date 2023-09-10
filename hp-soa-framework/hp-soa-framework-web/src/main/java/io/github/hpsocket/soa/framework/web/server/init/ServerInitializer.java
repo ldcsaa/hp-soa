@@ -14,6 +14,9 @@ import org.springframework.core.io.support.PropertySourceFactory;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 
+/** <b>应用程序初始化器</b><br>
+ * 设置和加载应用程序默认系统属性
+ */
 public class ServerInitializer
 {
 	private static final String SYSTEM_PROPERTIES_FILE_KEY							= "hp.soa.system.properties.file";

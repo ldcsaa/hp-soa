@@ -7,12 +7,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/** <b>HTTP 请求校验注解</b> */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
 public @interface AccessVerification
 {
+	/** <b>HTTP 请求校验类型</b> */
 	public static enum Type
 	{
 		/** 不作任何校验 */

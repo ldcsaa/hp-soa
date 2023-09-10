@@ -31,6 +31,7 @@ import static com.alibaba.fastjson2.JSONWriter.Feature.*;
 
 import static io.github.hpsocket.soa.framework.web.holder.AppConfigHolder.*;
 
+/** <b>通用 Web 功能辅助类</b> */
 public class WebServerHelper
 {
 	public static final String REQUEST_ATTRIBUTE_JSON_BODY	= "__request.attribute.json.body__";
@@ -87,17 +88,20 @@ public class WebServerHelper
 																						new LinkedBlockingDeque<>(2000),
 																						new ThreadPoolExecutor.CallerRunsPolicy());
 
+	/** 检测 HTTP 请求的 User-Agent 是否合法 */
 	public static final boolean checkUserAgent(String ua)
 	{
 		return (GeneralHelper.isStrNotEmpty(ua) && !SPIDER_PATTERN.matcher(ua).matches());
 	}
-		
+	
+	/** 检测 HTTP 请求是否包含 Body */
 	public static final boolean isHasBodyRequest(String method)
 	{
 		return	GeneralHelper.isStrNotEmpty(method)
 				&& (POST.equalsIgnoreCase(method) || PUT.equalsIgnoreCase(method) || PATCH.equals(method));	
 	}
 
+	/** 检测 HTTP Content-Type 是否为 JSON 类型 */
 	public static final boolean isJsonContentType(String ct)
 	{
 		if(GeneralHelper.isStrNotEmpty(ct))
@@ -111,6 +115,7 @@ public class WebServerHelper
 		return ct.regionMatches(true, 0, REQUEST_FORMAT_JSON, index + 1, REQUEST_FORMAT_JSON.length());
 	}
 
+	/** 解析 HTTP 响应 Cookie 的 Domain */
 	public static final String retriveHostDomain(String host)
 	{
 		int index = host.indexOf(':');
@@ -129,6 +134,7 @@ public class WebServerHelper
 		return host;
 	}
 	
+	/** 检测 HTTP 请求 Cookie */
 	public static final Result<Boolean, Cookie> checkClientCookie(HttpServletRequest req)
 	{
 		boolean exists		= false;
@@ -143,6 +149,7 @@ public class WebServerHelper
 		return new Result<>(exists, clientCookie);
 	}
 	
+	/** 创建 HTTP 响应 Cookie */
 	public static final Cookie createCookie(HttpServletRequest req, String name, String value, int maxAge)
 	{
 		Cookie cookie = new Cookie(name, value);
@@ -162,11 +169,13 @@ public class WebServerHelper
 		return cookie;
 	}
 
+	/** 获取 HTTP 请求 Cookie */
 	public static final Cookie getCookie(HttpServletRequest req, String name)
 	{
 		return getCookie(req, name, false);
 	}
 
+	/** 获取 HTTP 请求 Cookie */
 	public static final Cookie getCookie(HttpServletRequest req, String name, boolean includeEmptyValue)
 	{
 		Cookie cookie	 = null;
@@ -187,16 +196,19 @@ public class WebServerHelper
 		return cookie;
 	}
 	
+	/** 检查是否为 JSON 类型 HTTP 请求 */
 	public static final boolean isJsonRequest(HttpServletRequest req)
 	{
 		return isHasBodyRequest(req.getMethod()) && isJsonContentType(req.getContentType());
 	}
 	
+	/** 获取 HTTP 请求 User-Agent */
 	public static final String getUserAgent(HttpServletRequest req)
 	{
 		return req.getHeader("User-Agent");
 	}
 	
+	/** 获取 HTTP 请求客户端 IP */
 	public static final String getIpAddr(HttpServletRequest request)
 	{
 		String ip = request.getHeader("X-Real-IP");
@@ -220,6 +232,7 @@ public class WebServerHelper
 		return ip;
 	}
 	
+	/** 获取 HTTP 请求 Url */
 	public static final String getRequestUri(HttpServletRequest request)
 	{
 		String requestUri = request.getRequestURI();
@@ -232,6 +245,7 @@ public class WebServerHelper
 		return requestUri;
 	}
 	
+	/** 获取 HTTP 请求 Path */
 	public static final String getRequestPath(HttpServletRequest request)
 	{
 		String requestUri	= getRequestUri(request);
@@ -240,11 +254,13 @@ public class WebServerHelper
 		return requestPath;
 	}
 	
+	/** 获取 HTTP 请求 Method */
 	public static final String getRequestMethod(HttpServletRequest request)
 	{
 		return request.getMethod();
 	}
 	
+	/** 解析 HTTP 请求信息 */
 	@SuppressWarnings("unchecked")
 	public static final Map<String, String> parseRequestInfo(HttpServletRequest request)
 	{
@@ -290,11 +306,13 @@ public class WebServerHelper
 		return infos;
 	}
 
+	/** 创建调用链 MDC 相关属性 */
 	public static final MdcAttr createMdcAttr()
 	{
 		return createMdcAttr(true);
 	}
 	
+	/** 创建调用链 MDC 相关属性 */
 	public static final MdcAttr createMdcAttr(boolean generateRequestId)
 	{
 		MdcAttr mdcAttr = new MdcAttr();
@@ -325,6 +343,7 @@ public class WebServerHelper
 		return mdcAttr;
 	}
 	
+	/** 调用链的 traceId 注入到 MDC */
 	public static final void putMdcTraceId()
 	{
 		String traceId = getTraceId();
@@ -333,11 +352,13 @@ public class WebServerHelper
 			MDC.put(MdcAttr.MDC_TRACE_ID_KEY, traceId);
 	}
 
+	/** 调用链的 traceId 从 MDC 中删除 */
 	public static final void removeMdcTraceId()
 	{
 		MDC.remove(MdcAttr.MDC_TRACE_ID_KEY);	
 	}
 
+	/** 获取调用链的 traceId */
 	public static final String getTraceId()
 	{
 		String traceId = null;
@@ -349,6 +370,7 @@ public class WebServerHelper
 		return traceId;
 	}
 
+	/** 获取调用链的当前 spanId */
 	public static final String getSpanId()
 	{
 		String spanId = null;
@@ -360,6 +382,7 @@ public class WebServerHelper
 		return spanId;
 	}
 
+	/** 字符串转换为 {@linkplain RejectedExecutionHandler} 对象 */
 	public static final RejectedExecutionHandler parseRejectedExecutionHandler(String rejectionPolicy, String defaultRejectionPolicy)
 	{
 		RejectedExecutionHandler rjh = null;
@@ -383,11 +406,13 @@ public class WebServerHelper
 		return rjh;
 	}
 	
+	/** 检查应用程序是否只读 */
 	public static final boolean isAppReadOnly()
 	{
 		return AppConfigHolder.isReadOnly();
 	}
 	
+	/** 创建随机 UUID */
 	public static final String randomUUID()
 	{
 		return IdGenerator.nextCompactUUID();

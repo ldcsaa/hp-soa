@@ -7,8 +7,9 @@ import java.util.Set;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 import io.github.hpsocket.soa.framework.web.propertries.IAppProperties;
-import io.github.hpsocket.soa.framework.web.propertries.IServletPropertries;
+import io.github.hpsocket.soa.framework.web.propertries.IServletPathsPropertries;
 
+/** <b>应用程序 Web 基本配置持有者</b> */
 public class AppConfigHolder
 {
 	public static final String REQUEST_PATH_SEPARATOR	= "/";
@@ -38,7 +39,7 @@ public class AppConfigHolder
 	
 	private static boolean initialized;
 	
-	public static final void init(IAppProperties appProperties, IServletPropertries servletProperties)
+	public static final void init(IAppProperties appProperties, IServletPathsPropertries servletProperties)
 	{
 		if(!initialized)
 		{

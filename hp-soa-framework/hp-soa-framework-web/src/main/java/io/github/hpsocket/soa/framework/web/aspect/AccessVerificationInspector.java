@@ -25,6 +25,9 @@ import org.springframework.util.Assert;
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 import static io.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type.*;
 
+/** <b>HTTP 请求校验拦截器</b><br>
+ * 处理 {@linkplain AccessVerification} 注解
+ */
 @Aspect
 @Order(0)
 public class AccessVerificationInspector

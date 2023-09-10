@@ -20,6 +20,13 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>HTTP 请求 MDC 过滤器</b><br>
+ * 主要功能：
+ * <ol>
+ * <li>为 HTTP 请求注入调用链跟踪信息</li>
+ * <li>创建HTTP 请求上下文 {@linkplain RequestContext}
+ * </ol>
+ */
 @Slf4j
 @Setter
 public class HttpMdcFilter implements Filter
