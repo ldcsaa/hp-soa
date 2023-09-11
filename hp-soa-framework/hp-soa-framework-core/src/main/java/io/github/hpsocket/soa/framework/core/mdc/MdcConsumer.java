@@ -3,7 +3,7 @@ package io.github.hpsocket.soa.framework.core.mdc;
 import java.util.function.Consumer;
 
 import lombok.Getter;
-/** <b>支持调用链跟踪的 {@linkplain Consumer} 基类</b> */
+/** <b>{@linkplain Consumer} 基类（支持 {@linkplain org.slf4j.MDC MDC} 调用链跟踪）</b> */
 @Getter
 abstract public class MdcConsumer<T> implements Consumer<T>
 {

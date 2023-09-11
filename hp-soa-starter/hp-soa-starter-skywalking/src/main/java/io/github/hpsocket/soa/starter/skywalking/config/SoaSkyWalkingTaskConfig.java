@@ -11,11 +11,13 @@ import org.springframework.core.task.TaskDecorator;
 import io.github.hpsocket.soa.starter.skywalking.async.TracingRunnableWrapper;
 import io.github.hpsocket.soa.starter.task.config.SoaTaskConfig;
 
+/** <b>HP-SOA Skywalking Task 配置</b> */
 @AutoConfiguration
 @ConditionalOnClass({TraceContext.class, SoaTaskConfig.class})
 @AutoConfigureBefore(SoaTaskConfig.class)
 public class SoaSkyWalkingTaskConfig
 {
+	/** Task 任务装饰器（注入 {@linkplain org.slf4j.MDC MDC} 和 traceId 调用链跟踪信息）*/
 	@Bean("mdcTaskDecorator")
 	TaskDecorator taskDecorator()
 	{

@@ -12,10 +12,12 @@ import org.springframework.context.annotation.Primary;
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.FastJsonMessageConverter;
 import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConverter;
 
+/** <b>HP-SOA Rabbitmq 通用配置</b> */
 @AutoConfiguration
 @ComponentScan(basePackages = "io.github.hpsocket.soa.starter.rabbitmq.common.properties")
 public class SoaRabbitmqCommonConfig
 {
+	/** 默认消息转换器 */
 	@Primary
 	@Bean("messageConverter")
 	@ConditionalOnMissingBean(name = "messageConverter")

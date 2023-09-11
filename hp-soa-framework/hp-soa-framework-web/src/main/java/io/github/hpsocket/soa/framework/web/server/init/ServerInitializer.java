@@ -15,7 +15,10 @@ import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 
 /** <b>应用程序初始化器</b><br>
- * 设置和加载应用程序默认系统属性
+ * <ol>
+ * <li>加载由 {@linkplain #SYSTEM_PROPERTIES_FILE_KEY} JVM 启动参数指定的系统属性配置文件</li>
+ * <li>设置其它系统属性</li>
+ * </ol>
  */
 public class ServerInitializer
 {

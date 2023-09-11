@@ -16,6 +16,7 @@ import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 
 import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
 
+/** <b>Fastjson 消息转换器</b> */
 public class FastJsonMessageConverter extends AbstractMessageConverter
 {
 	@Override

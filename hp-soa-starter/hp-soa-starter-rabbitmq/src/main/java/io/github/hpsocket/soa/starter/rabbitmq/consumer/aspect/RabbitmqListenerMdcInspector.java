@@ -24,6 +24,9 @@ import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConsta
 
 import java.util.Map;
 
+/** <b>Rabbitmq Listener MDC 拦截器</b><br>
+ * 用于注入 MDC 调用链跟踪信息
+ */
 @Slf4j
 @Aspect
 @Order(0)

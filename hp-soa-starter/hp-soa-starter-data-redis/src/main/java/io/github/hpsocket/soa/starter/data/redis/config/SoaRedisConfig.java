@@ -109,7 +109,7 @@ public class SoaRedisConfig
 		return template;
 	}
 
-	/** 基于 Kryo 序列化的 {@linkplain RedisTemplate} （支持存储 null 值）*/
+	/** 基于 Kryo 序列化的 {@linkplain RedisTemplate} （不支持存储 null 值）*/
 	@Bean("redisKryoNotNullTemplate")
 	public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{

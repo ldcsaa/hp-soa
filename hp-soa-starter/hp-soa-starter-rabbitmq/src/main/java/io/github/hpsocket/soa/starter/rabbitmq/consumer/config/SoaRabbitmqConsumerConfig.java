@@ -11,6 +11,7 @@ import io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect.RabbitmqListenerM
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect.RabbitmqListenerTracingInspector;
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitmqReadOnlyEventListener;
 
+/** <b>HP-SOA Rabbitmq Consumer 配置</b> */
 @EnableRabbit
 @AutoConfiguration
 public class SoaRabbitmqConsumerConfig

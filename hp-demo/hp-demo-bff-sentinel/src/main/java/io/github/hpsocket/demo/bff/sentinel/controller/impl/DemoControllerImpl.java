@@ -29,7 +29,7 @@ public class DemoControllerImpl implements DemoController
     @AccessVerification(Type.REQUIRE_LOGIN)
     public Response<DemoResponse> queryUser(@RequestBody @Valid DemoReuqest request)
     {
-        /** 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
+        /* 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
     	System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
     	
     	String name = demoService.sayHello(request.getName());

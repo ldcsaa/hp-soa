@@ -18,6 +18,9 @@ import io.github.hpsocket.soa.starter.rabbitmq.producer.service.DomainEventServi
 
 import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
 
+/** <b>领域事件服务实现</b><br>
+ * 继承 {@linkplain ServiceImpl} 并实现 {@linkplain DomainEventService} 接口
+ */
 public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEvent> extends ServiceImpl<M, T> implements DomainEventService<T>
 {
 	private static final String SQL_SET_RETRIES					= String.format("retries = IF(send_flag = %d, 0, retries + 1)", SF_NOT_SEND);
@@ -120,13 +123,13 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
 	@Override
 	public boolean resetSendingEventToSendFail()
 	{
-		return resetSendingEventToSendFail(DEFAULT_RESET_TIMEOUT, DEFAULT_RESET_BATCH_SIZE);
+		return resetSendingEventToSendFail(DEFAULT_COMPENSATE_TIMEOUT, DEFAULT_COMPENSATE_BATCH_SIZE);
 	}
 
 	@Override
 	public boolean resetSendingEventToSendFail(int sendTimeout)
 	{
-		return resetSendingEventToSendFail(sendTimeout, DEFAULT_RESET_BATCH_SIZE);
+		return resetSendingEventToSendFail(sendTimeout, DEFAULT_COMPENSATE_BATCH_SIZE);
 	}
 
 	@Override

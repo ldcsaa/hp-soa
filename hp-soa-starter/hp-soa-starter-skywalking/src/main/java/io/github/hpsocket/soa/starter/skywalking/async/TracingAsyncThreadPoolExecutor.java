@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 
+/** <b>异步线程池（注入 {@linkplain org.slf4j.MDC MDC} 和 traceId 调用链跟踪信息）</b> */
 public class TracingAsyncThreadPoolExecutor extends AsyncThreadPoolExecutor
 {
 	public TracingAsyncThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue)

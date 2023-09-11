@@ -21,10 +21,12 @@ import io.micrometer.core.instrument.observation.MeterObservationHandler;
 import io.micrometer.observation.ObservationHandler;
 import io.micrometer.observation.ObservationRegistry;
 
+/** <b>HP-SOA Skywalking 基本配置</b> */
 @AutoConfiguration
 @ConditionalOnClass(TraceContext.class)
 public class SoaSkyWalkingConfig
 {
+	/** 调用链上下文服务 */
 	@Bean
 	public TracingContext tracingContext()
 	{

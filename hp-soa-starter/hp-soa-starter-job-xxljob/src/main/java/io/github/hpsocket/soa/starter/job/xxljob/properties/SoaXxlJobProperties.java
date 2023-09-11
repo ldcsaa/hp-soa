@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Getter;
 import lombok.Setter;
 
+/** <b>HP-SOA XxlJob 属性</b> */
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "xxl.job")

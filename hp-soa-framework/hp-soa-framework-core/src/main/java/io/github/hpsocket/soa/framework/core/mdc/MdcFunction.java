@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import lombok.Getter;
 
-/** <b>支持调用链跟踪的 {@linkplain Function} 基类</b> */
+/** <b>{@linkplain Function} 基类（支持 {@linkplain org.slf4j.MDC MDC} 调用链跟踪）</b> */
 @Getter
 abstract public class MdcFunction<T, R> implements Function<T, R>
 {

@@ -30,7 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
-/** <b>全局异常拦截器</b> */
+/** <b>HTTP 请求全局异常拦截器</b> */
 @Slf4j
 @RestControllerAdvice
 public class ControllerGlobalExceptionAdvice implements Ordered

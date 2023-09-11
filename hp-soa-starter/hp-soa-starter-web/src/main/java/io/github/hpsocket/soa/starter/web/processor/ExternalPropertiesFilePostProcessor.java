@@ -22,6 +22,11 @@ import org.springframework.stereotype.Component;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 
+/** <b>HP-SOA 外部属性文件加载器</b><br>
+ * <ul>
+ * <li>加载由 {@linkplain #EXTERNAL_PROPERTIES_FILE_KEY} JVM 启动参数指定的外部属性配置文件</li>
+ * </ul>
+ */
 @Component
 public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProcessor, Ordered, ApplicationListener<DubboConfigInitEvent>
 {

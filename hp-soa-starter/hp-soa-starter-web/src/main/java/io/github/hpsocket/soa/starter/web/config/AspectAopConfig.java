@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
+/** <b>HP-SOA Web Aspect 配置</b> */
 @AutoConfiguration
 @Import({
 			SiteLocalInspector.class

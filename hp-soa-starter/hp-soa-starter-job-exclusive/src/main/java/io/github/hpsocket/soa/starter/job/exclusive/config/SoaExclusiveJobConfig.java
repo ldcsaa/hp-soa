@@ -11,6 +11,7 @@ import org.springframework.scheduling.SchedulingTaskExecutor;
 
 import io.github.hpsocket.soa.starter.job.exclusive.aspect.ExclusiveJobInspector;
 
+/** <b>HP-SOA 分布式独占 Job 配置</b> */
 @AutoConfiguration
 @Import(ExclusiveJobInspector.class)
 @AutoConfigureAfter(RedissonAutoConfiguration.class)

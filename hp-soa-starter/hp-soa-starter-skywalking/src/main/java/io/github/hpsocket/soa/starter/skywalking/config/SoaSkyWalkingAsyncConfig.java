@@ -19,11 +19,13 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.skywalking.async.TracingAsyncThreadPoolExecutor;
 import io.github.hpsocket.soa.starter.web.config.WebConfig;
 
+/** <b>HP-SOA Skywalking Async 配置</b> */
 @AutoConfiguration
 @ConditionalOnClass({TraceContext.class, WebConfig.class})
 @AutoConfigureBefore(WebConfig.class)
 public class SoaSkyWalkingAsyncConfig
 {
+	/** 异步线程池（注入 traceId） */
     @Bean("asyncThreadPoolExecutor")
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
     public TracingAsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)

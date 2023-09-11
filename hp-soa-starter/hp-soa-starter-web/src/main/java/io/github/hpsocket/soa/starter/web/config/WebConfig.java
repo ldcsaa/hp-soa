@@ -46,6 +46,7 @@ import io.github.hpsocket.soa.starter.web.properties.SecurityProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
 
+/** <b>HP-SOA Web 基础配置</b> */
 @AutoConfiguration
 @EnableConfigurationProperties({WebProperties.class, SecurityProperties.class})
 public class WebConfig implements WebMvcConfigurer
@@ -66,12 +67,14 @@ public class WebConfig implements WebMvcConfigurer
 		AppConfigHolder.init(webProperties, securityProperties);
 	}
 	
+	/** {@linkplain SpringContextHolder} Spring 上下文持有者配置 */
     @Bean("springContextHolder")
     public SpringContextHolder springContextHolder()
     {
         return new SpringContextHolder();
     }
 
+    /** {@linkplain ReadOnlyContextRefreshedEventListener} 应用程序监听器配置 */
     @Bean("readOnlyContextRefreshedEventListener")
     @DependsOn("springContextHolder")
     public ReadOnlyContextRefreshedEventListener readOnlyContextRefreshedEventListener()
@@ -79,6 +82,7 @@ public class WebConfig implements WebMvcConfigurer
         return new ReadOnlyContextRefreshedEventListener();
     }
 
+    /** {@linkplain ReadOnlyRefreshEventListener} 应用程序监听器配置 */
     @Bean("readOnlyRefreshEventListener")
     @DependsOn("springContextHolder")
     public ReadOnlyRefreshEventListener readOnlyRefreshEventListener()
@@ -86,6 +90,7 @@ public class WebConfig implements WebMvcConfigurer
         return new ReadOnlyRefreshEventListener();
     }
 
+    /** {@linkplain HttpMdcFilter} 过滤器配置 */
 	@Bean
 	public FilterRegistrationBean<HttpMdcFilter> mdcTracingFilterRegistration()
 	{
@@ -99,6 +104,7 @@ public class WebConfig implements WebMvcConfigurer
 		return registration;
 	}
 	
+	/** {@linkplain SecurityFilterChain} 安全过滤器链配置 */
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception
 	{
@@ -135,12 +141,14 @@ public class WebConfig implements WebMvcConfigurer
 		return http.build();
 	}
 	
+	/** {@linkplain WebSecurityCustomizer} Web 安全定制器配置 */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer()
     {
        return ((web) -> {});
     }
     
+    /** {@linkplain AsyncThreadPoolExecutor} 异步线程池配置 */
     @Bean("asyncThreadPoolExecutor")
     @ConditionalOnMissingBean(name = "asyncThreadPoolExecutor")
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
@@ -164,6 +172,7 @@ public class WebConfig implements WebMvcConfigurer
 		return executor;
     }
     
+    /** {@linkplain AsyncService} 异步服务配置 */
     @Bean
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
     public AsyncService asyncService(AsyncThreadPoolExecutor asyncThreadPoolExecutor)
@@ -171,6 +180,7 @@ public class WebConfig implements WebMvcConfigurer
     	return new AsyncServiceImpl(asyncThreadPoolExecutor);
     }
     
+    /** HTTP 请求报文转换器配置 */
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters)
     {
@@ -202,6 +212,7 @@ public class WebConfig implements WebMvcConfigurer
     	WebMvcConfigurer.super.extendMessageConverters(converters);
     }
 
+    /** 跨域配置 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry)
 	{

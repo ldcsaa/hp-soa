@@ -27,12 +27,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>HP-SOA Sentinel 配置</b> */
 @Slf4j
 @AutoConfiguration
 @Import(SentinelExceptionAdvice.class)
 @ConditionalOnProperty(name = "spring.cloud.sentinel.enabled", matchIfMissing = true)
 public class SoaSentinelConfig
 {
+	/** 资源变换器 */
 	@Bean
 	@ConditionalOnMissingBean(UrlCleaner.class)
 	@ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
@@ -63,6 +65,7 @@ public class SoaSentinelConfig
 		};
 	}
 	
+	/** 限流处理器 */
 	@Bean
 	@ConditionalOnMissingBean(BlockExceptionHandler.class)
 	@ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)

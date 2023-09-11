@@ -7,6 +7,7 @@ import org.apache.skywalking.apm.toolkit.trace.TraceCrossThread;
 
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 
+/** <b>{@linkplain Supplier} 包装类（注入 {@linkplain org.slf4j.MDC MDC} 和 traceId 调用链跟踪信息）</b> */
 @TraceCrossThread
 public class TracingSupplierWrapper<V> extends SupplierWrapper<V>
 {

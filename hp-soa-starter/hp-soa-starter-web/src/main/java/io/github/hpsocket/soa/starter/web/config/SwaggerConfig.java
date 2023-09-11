@@ -27,6 +27,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.parameters.HeaderParameter;
 
+/** <b>HP-SOA Web Swagger 配置</b> */
 @AutoConfiguration
 @EnableConfigurationProperties(SwaggerProperties.class)
 @ConditionalOnProperty(name="springdoc.api-docs.enabled", havingValue="true", matchIfMissing = false)

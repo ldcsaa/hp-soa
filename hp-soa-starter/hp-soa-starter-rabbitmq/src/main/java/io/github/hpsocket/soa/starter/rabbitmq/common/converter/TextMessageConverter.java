@@ -13,6 +13,7 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
 
+/** <b>普通文本消息转换器</b> */
 public class TextMessageConverter extends AbstractMessageConverter
 {
 	@Override

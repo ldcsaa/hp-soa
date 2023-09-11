@@ -12,6 +12,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.config.SoaRabbitmqConsumerConfig;
 
+/** <b>HP-SOA Rabbitmq Consumer 启用注解</b><br>
+ * 只启用 Consumer
+ */
 @Inherited
 @Documented
 @Target(TYPE)

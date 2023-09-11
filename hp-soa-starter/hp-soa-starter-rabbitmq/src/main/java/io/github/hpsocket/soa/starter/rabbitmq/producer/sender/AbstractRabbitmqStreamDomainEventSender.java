@@ -15,6 +15,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>领域事件消息发送器基类（Stream 消息）</b><br>
+ * 使用步骤：<br>
+ * <ol>
+ * <li>应用程序 Bean 继承该类，并实现 {@linkplain #getRabbitStreamTemplate(T)} 和 {@linkplain #getDomainEventService()} 抽象方法</li>
+ * <li>应用程序 Bean 通过 ExclusiveJob 或 XxlJob 定时调用 {@linkplain #sendMqEvent()} 发送领域事件</li>
+ * <li>应用程序 Bean 通过 ExclusiveJob 或 XxlJob 定时调用 {@linkplain #compensateMqEvent()} 补偿领域事件</li>
+ * </ol>
+ */
 @Slf4j
 @Getter
 @Setter
@@ -23,10 +31,15 @@ import lombok.extern.slf4j.Slf4j;
 abstract public class AbstractRabbitmqStreamDomainEventSender<T extends DomainEvent>
 {
 	private int sendBatchSize		= DomainEventService.DEFAULT_SEND_BATCH_SIZE;
-	private int compensateBatchSize	= DomainEventService.DEFAULT_RESET_BATCH_SIZE;
-	private int compensateTimeout	= DomainEventService.DEFAULT_RESET_TIMEOUT;
+	private int compensateBatchSize	= DomainEventService.DEFAULT_COMPENSATE_BATCH_SIZE;
+	private int compensateTimeout	= DomainEventService.DEFAULT_COMPENSATE_TIMEOUT;
 	
+	/** 获取消息发送模版 {@linkplain RabbitStreamTemplate}
+	 * @param event 待发送的领域事件
+	 */
 	abstract protected RabbitStreamTemplate getRabbitStreamTemplate(T event);
+	
+	/** 获取领域事件服务 {@linkplain DomainEventService} */
 	abstract protected DomainEventService<T> getDomainEventService();
 	
 	public AbstractRabbitmqStreamDomainEventSender(int sendBatchSize)
@@ -34,6 +47,7 @@ abstract public class AbstractRabbitmqStreamDomainEventSender<T extends DomainEv
 		this.sendBatchSize = sendBatchSize;
 	}
 
+	/** （分批）发送领域事件 */
 	public void sendMqEvent()
 	{
 		Long preId = 0L;
@@ -86,6 +100,7 @@ abstract public class AbstractRabbitmqStreamDomainEventSender<T extends DomainEv
 		}
 	}
 	
+	/** （分批）补偿领域事件 */
 	public void compensateMqEvent()
 	{
 		DomainEventService<T> domainEventService = getDomainEventService();

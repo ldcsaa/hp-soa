@@ -28,6 +28,7 @@ import io.github.hpsocket.soa.starter.task.aspect.ScheduledTraceIdInspector;
 import io.github.hpsocket.soa.starter.task.properties.SoaTaskProperties;
 import io.github.hpsocket.soa.starter.task.properties.SoaTaskProperties.Scheduling;
 
+/** <b>HP-SOA Task 配置</b> */
 @EnableAsync
 @EnableScheduling
 @AutoConfiguration
@@ -43,6 +44,7 @@ public class SoaTaskConfig
 		this.soaTaskProperties = soaTaskProperties;
 	}
 	
+	/** Task 任务装饰器（注入 {@linkplain org.slf4j.MDC MDC} 调用链跟踪信息）*/
 	@Bean("mdcTaskDecorator")
 	@ConditionalOnMissingBean(name = "mdcTaskDecorator")
 	TaskDecorator taskDecorator()

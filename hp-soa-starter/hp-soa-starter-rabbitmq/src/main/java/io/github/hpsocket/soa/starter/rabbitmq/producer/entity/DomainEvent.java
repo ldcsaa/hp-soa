@@ -1,11 +1,6 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.producer.entity;
 
-import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_DOMAIN_NAME;
-import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_EVENT_NAME;
-import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_MSG_ID;
-import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_SOURCE_REQUEST_ID;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,36 +10,32 @@ import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.rabbit.stream.support.StreamMessageProperties;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.data.mysql.entity.BaseLogicDeleteEntity;
+import io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant;
 import lombok.Getter;
 import lombok.Setter;
 
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
+
+/** <b>领域事件实体</b><br>
+ * 对应领域事件数据库表，应用程序可以继承该实体，扩展自定义字段
+ */
 @Getter
 @Setter
 @SuppressWarnings("serial")
-public class DomainEvent implements Serializable
+public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
 {
 	/**
-	 * 主键ID
-	 */
-	private Long id;
-
-	/**
 	 * 领域名称
-	 * eg: dms.sales.order
 	 */
 	private String domainName;
 
 	/**
 	 * 事件名称
-	 * eg: order.paid
 	 */
 	private String eventName;
 
@@ -74,7 +65,7 @@ public class DomainEvent implements Serializable
 	private String sourceRequestId;
 
 	/**
-	 * 发送标记（0 - 未发送，1 - 正在发送，2 - 发送成功，3 - 发送失败）
+	 * 发送标记（{@linkplain RabbitmqConstant#SF_NOT_SEND SF_NOT_SEND} - 未发送，{@linkplain RabbitmqConstant#SF_SENDING SF_SENDING} - 正在发送，{@linkplain RabbitmqConstant#SF_SEND_SUCC SF_SEND_SUCC} - 发送成功，{@linkplain RabbitmqConstant#SF_SEND_FAIL SF_SEND_FAIL} - 发送失败）
 	 */
 	private Integer sendFlag;
 
@@ -88,24 +79,6 @@ public class DomainEvent implements Serializable
 	 */
 	private LocalDateTime lastSendTime;
 
-	/**
-	 * 逻辑删除标记
-	 */
-	@TableLogic
-	private Byte deleted;
-
-	/**s
-	 * 创建时间
-	 */
-	@TableField(fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
-
-	/**
-	 * 修改时间
-	 */
-	@TableField(fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime updateTime;
-	
 	public DomainEvent()
 	{
 		this(IdGenerator.nextIdStr());

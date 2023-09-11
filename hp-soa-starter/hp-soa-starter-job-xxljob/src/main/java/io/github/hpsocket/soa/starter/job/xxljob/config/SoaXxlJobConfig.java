@@ -12,6 +12,7 @@ import io.github.hpsocket.soa.starter.job.xxljob.aspect.XxlJobInspector;
 import io.github.hpsocket.soa.starter.job.xxljob.properties.SoaXxlJobProperties;
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 
+/** <b>HP-SOA XxlJob 配置</b> */
 @AutoConfiguration
 @Import(XxlJobInspector.class)
 @ConditionalOnClass(XxlJobSpringExecutor.class)

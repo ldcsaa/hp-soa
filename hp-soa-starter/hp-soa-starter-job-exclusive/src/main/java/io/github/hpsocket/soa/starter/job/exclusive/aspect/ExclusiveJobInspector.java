@@ -25,6 +25,9 @@ import io.github.hpsocket.soa.starter.job.exclusive.exception.ExclusiveJobExcept
 
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>分布式独占 Job 拦截器</b><br>
+ * （注：当应用程序为只读时，不执行任何 Job 业务逻辑）
+ */
 @Slf4j
 @Aspect
 @Order(0)

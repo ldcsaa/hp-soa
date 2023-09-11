@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>SHTTP 请求 Sentinel 异常拦截器</b> */
 @Slf4j
 @RestControllerAdvice
 public class SentinelExceptionAdvice implements Ordered
@@ -34,6 +35,7 @@ public class SentinelExceptionAdvice implements Ordered
 		return -100;
 	}
 
+	/** {@linkplain BlockException} 异常处理器 */
 	@ExceptionHandler({BlockException.class})
 	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, BlockException e)
 	{
@@ -43,6 +45,7 @@ public class SentinelExceptionAdvice implements Ordered
 		return new Response<>(se);			
 	}
 
+	/** {@linkplain UndeclaredThrowableException} 异常处理器 */
 	@ExceptionHandler({UndeclaredThrowableException.class})
 	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, UndeclaredThrowableException e)
 	{
@@ -54,6 +57,7 @@ public class SentinelExceptionAdvice implements Ordered
 		return globalExceptionAdvice.handleException(request, response, e);
 	}
 	
+	/** {@linkplain RuntimeException} 异常处理器 */
 	@ExceptionHandler({RuntimeException.class})
 	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RuntimeException e)
 	{
