@@ -8,6 +8,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+/** <b>Kryo 序列化器基类</b> */
 public abstract class BaseKryoRedisSerializer<T> implements RedisSerializer<T>
 {
 	private static final ThreadLocal<Kryo> kryos = ThreadLocal.withInitial(BaseKryoRedisSerializer::createKryo);

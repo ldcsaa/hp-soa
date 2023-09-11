@@ -34,6 +34,7 @@ import io.github.hpsocket.soa.framework.core.util.CryptHelper;
 import io.github.hpsocket.soa.starter.data.redis.serializer.KryoNotNullRedisSerializer;
 import io.github.hpsocket.soa.starter.data.redis.serializer.KryoRedisSerializer;
 
+/** <b>HP-SOA Redis 配置</b> */
 @AutoConfiguration
 @EnableCaching(order = 0)
 @AutoConfigureBefore(RedissonAutoConfiguration.class)
@@ -55,6 +56,7 @@ public class SoaRedisConfig
 		fastJsonRedisSerializer.setFastJsonConfig(config);
 	}
 
+	/** 默认 {@linkplain RedisTemplate} */
 	@Primary
 	@Bean("redisTemplate")
 	public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory redisConnectionFactory)
@@ -62,6 +64,7 @@ public class SoaRedisConfig
 		return genericJsonRedisTemplate(redisConnectionFactory);
 	}
 
+	/** 基于 FastJson 序列化的 {@linkplain RedisTemplate} */
 	@Bean("redisJsonTemplate")
 	public RedisTemplate<String, Object> jsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
@@ -76,6 +79,7 @@ public class SoaRedisConfig
 		return template;
 	}
 
+	/** 基于通用 FastJson 序列化的 {@linkplain RedisTemplate} */
 	@Bean("redisGenericJsonTemplate")
 	public <T> RedisTemplate<String, T> genericJsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
@@ -90,6 +94,7 @@ public class SoaRedisConfig
 		return template;
 	}
 
+	/** 基于 Kryo 序列化的 {@linkplain RedisTemplate} */
 	@Bean("redisKryoTemplate")
 	public <T> RedisTemplate<String, T> kryoRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
@@ -104,6 +109,7 @@ public class SoaRedisConfig
 		return template;
 	}
 
+	/** 基于 Kryo 序列化的 {@linkplain RedisTemplate} （支持存储 null 值）*/
 	@Bean("redisKryoNotNullTemplate")
 	public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
@@ -118,6 +124,7 @@ public class SoaRedisConfig
 		return template;
 	}
 
+	/** 默认 {@linkplain RedisCacheManager} */
 	@Bean("redisCacheManager")
 	@SuppressWarnings("unchecked")
 	@ConditionalOnMissingBean(name = "redisCacheManager")
@@ -134,6 +141,7 @@ public class SoaRedisConfig
 
 	}
 	
+	/** 默认 {@linkplain RedisCacheConfiguration} */
 	@Bean("rediseDfaultCacheConfiguration")
 	@ConditionalOnMissingBean(name = "rediseDfaultCacheConfiguration")
 	public RedisCacheConfiguration rediseDfaultCacheConfiguration()
@@ -141,6 +149,7 @@ public class SoaRedisConfig
 		return createRedisCacheConfiguration(3600);
 	}
 	
+	/** 初始 {@linkplain RedisCacheConfiguration} {@linkplain Map} */
 	@SuppressWarnings("unchecked")
 	@Bean("redisInitialCacheConfigurations")
 	@ConditionalOnMissingBean(name = "redisInitialCacheConfigurations")
@@ -178,6 +187,7 @@ public class SoaRedisConfig
 			.serializeValuesWith(SerializationPair.fromSerializer(genericFastJsonRedisSerializer));
 	}
 
+	/** 默认 Redis {@linkplain KeyGenerator} */
 	@Bean("redisStringKeyGenerator")
 	@ConditionalOnMissingBean(name = "redisStringKeyGenerator")
 	public KeyGenerator keyGenerator()

@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 
 import io.github.hpsocket.soa.starter.data.mysql.interceptor.ReadOnlyInterceptor;
 
+/** <b>HP-SOA mybatis-plus 配置</b> */
 @AutoConfiguration
 @ConditionalOnProperty(name = "spring.datasource.dynamic.enabled", matchIfMissing = true)
 public class SoaMybatisPlusConfig
@@ -25,6 +26,7 @@ public class SoaMybatisPlusConfig
 	public static final String CREATE_TIME_FIELD_NAME = "createTime";
 	public static final String UPDATE_TIME_FIELD_NAME = "updateTime";
 
+	/** mybatis-plus 默认加载的 {@linkplain MybatisPlusInterceptor} */
 	@Bean
 	@ConditionalOnMissingBean(MybatisPlusInterceptor.class)
 	public MybatisPlusInterceptor mybatisPlusInterceptor()
@@ -39,6 +41,7 @@ public class SoaMybatisPlusConfig
 		return interceptor;
 	}
 	
+	/** mybatis-plus 默认 {@linkplain MetaObjectHandler} */
 	@Bean
 	@ConditionalOnMissingBean(MetaObjectHandler.class)
 	MetaObjectHandler metaObjectHandler()

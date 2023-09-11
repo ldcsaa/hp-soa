@@ -10,6 +10,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.baomidou.mybatisplus.extension.handlers.AbstractJsonTypeHandler;
 
+/** <b>mybatis-plus FastJson2 类型转换器</b> */
 @MappedTypes({Object.class})
 @MappedJdbcTypes(JdbcType.VARCHAR)
 public class FastJson2TypeHandler extends AbstractJsonTypeHandler<Object>

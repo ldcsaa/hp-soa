@@ -11,6 +11,11 @@ import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
+import static org.apache.ibatis.mapping.SqlCommandType.*;
+
+/** <b>mybatis-plus 应用程序只读拦截器</b><br>
+ * 当应用程序为只读时，不能执行 {@linkplain SqlCommandType#INSERT INSERT}、{@linkplain SqlCommandType#UPDATE UPDATE}、{@linkplain SqlCommandType#DELETE DELETE} 等数据库更新操作
+ */
 public class ReadOnlyInterceptor implements InnerInterceptor
 {
 	@Override
@@ -18,7 +23,7 @@ public class ReadOnlyInterceptor implements InnerInterceptor
 	{
 		SqlCommandType type = ms.getSqlCommandType();
 		
-		if(type == SqlCommandType.INSERT || type == SqlCommandType.UPDATE || type == SqlCommandType.DELETE)
+		if(type == INSERT || type == UPDATE || type == DELETE)
 			Assert.isFalse(WebServerHelper.isAppReadOnly(), "application is read-only, can NOT execute update");;
 	}
 }

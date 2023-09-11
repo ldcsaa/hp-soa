@@ -23,6 +23,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>HP-SOA Druid 数据库连接池配置</b> */
 @Slf4j
 @AutoConfiguration
 @ConditionalOnWebApplication
@@ -31,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SoaDruidConfig
 {
 
+	/** <b>Druid 监控页面广告屏蔽 {@linkplain Filter} */
 	@Bean
 	public FilterRegistrationBean<Filter> druidAdFilterRegistrationBean(DruidStatProperties properties)
 	{

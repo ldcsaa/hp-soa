@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
+/** <b>HP-SOA Mybatis 默认 {@linkplain MapperScan#basePackages()} 配置</b> */
 @AutoConfiguration
 @MapperScan("${hp.soa.web.mapper-scan.base-package}")
 @ConditionalOnExpression("'${hp.soa.web.mapper-scan.base-package:}' != ''")

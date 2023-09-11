@@ -1,6 +1,9 @@
 
 package io.github.hpsocket.soa.starter.data.redis.serializer;
 
+/** <b>Kryo 序列化器</b><br>
+ * 该序列化器不支持存储 null 值
+ */
 public class KryoRedisSerializer<T> extends BaseKryoRedisSerializer<T>
 {
 	@Override

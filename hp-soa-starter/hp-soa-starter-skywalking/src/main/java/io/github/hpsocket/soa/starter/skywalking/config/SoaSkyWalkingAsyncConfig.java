@@ -26,7 +26,7 @@ public class SoaSkyWalkingAsyncConfig
 {
     @Bean("asyncThreadPoolExecutor")
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
-    public TracingAsyncThreadPoolExecutor mdcThreadPoolExecutor(IAsyncProperties asyncProperties)
+    public TracingAsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
     {
 		RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
 		BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 

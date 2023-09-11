@@ -24,6 +24,9 @@ import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute
 import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
+/** <b>HP-SOA 全局事务配置</b><br>
+ * 当 <i>${global-transaction-management.enabled}</i> 为 true 时，启用全局事务配置
+ */
 @AutoConfiguration
 @EnableTransactionManagement
 @ConditionalOnProperty(name = "global-transaction-management.enabled", matchIfMissing = false)
@@ -49,6 +52,7 @@ public class SoaTransactionConfig
 	@Value("${global-transaction-management.pointcut-expression:}")
 	private String pointcutExpression;
 
+	/** 全局事务的默认 Advice */
 	@Bean("txAdvice")
 	@ConditionalOnMissingBean(name = "txAdvice")
 	public TransactionInterceptor txAdvice(	TransactionManager transactionManager,
@@ -62,6 +66,7 @@ public class SoaTransactionConfig
 		return new TransactionInterceptor(transactionManager, source);
 	}
 	
+	/** 全局事务的默认普通事务属性 */
 	@Bean("requiredRuleBasedTransactionAttribute")
 	@ConditionalOnMissingBean(name = "requiredRuleBasedTransactionAttribute")
 	RuleBasedTransactionAttribute requiredRuleBasedTransactionAttribute()
@@ -80,6 +85,7 @@ public class SoaTransactionConfig
 		return required;
 	}
 	
+	/** 全局事务的默认只读事务属性 */
 	@Bean("readOnlyRuleBasedTransactionAttribute")
 	@ConditionalOnMissingBean(name = "readOnlyRuleBasedTransactionAttribute")
 	RuleBasedTransactionAttribute readOnlyRuleBasedTransactionAttribute()
@@ -93,6 +99,7 @@ public class SoaTransactionConfig
 		return readOnly;
 	}
 	
+	/** 全局事务的默认事务拦截匹配参数提供者 */
 	@Bean("defaultSoaTransactionAttributeSourceNameMapProvider")
 	@ConditionalOnMissingBean(name = "defaultSoaTransactionAttributeSourceNameMapProvider")
 	SoaTransactionAttributeSourceNameMapProvider defaultSoaTransactionAttributeSourceNameMapProvider()
@@ -100,6 +107,7 @@ public class SoaTransactionConfig
 		return new SoaTransactionAttributeSourceNameMapProvider() {};
 	}
 
+	/** 全局事务的默认 Advisor */
 	@Bean("txAdviceAdvisor")
 	@ConditionalOnMissingBean(name = "txAdviceAdvisor")
 	@ConditionalOnExpression("'${global-transaction-management.pointcut-expression:}' != ''")
@@ -110,7 +118,7 @@ public class SoaTransactionConfig
 		return new DefaultPointcutAdvisor(pointcut, txAdvice);
 	}
 	
-	public static interface SoaTransactionAttributeSourceNameMapProvider
+	static interface SoaTransactionAttributeSourceNameMapProvider
 	{
 		default Map<String, TransactionAttribute> getNameMap(RuleBasedTransactionAttribute required, RuleBasedTransactionAttribute readOnly)
 		{
