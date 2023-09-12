@@ -1,4 +1,0 @@
-io.github.hpsocket.soa.starter.data.mysql.config.SoaDruidConfig
-io.github.hpsocket.soa.starter.data.mysql.config.SoaMybatisPlusConfig
-io.github.hpsocket.soa.starter.data.mysql.config.SoaMapperScanConfig
-io.github.hpsocket.soa.starter.data.mysql.config.SoaTransactionConfig

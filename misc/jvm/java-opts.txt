@@ -1,3 +1,0 @@
-Example:
-
--Dhp.soa.system.properties.file=/data/hp-soa/config/system-config.properties -Dhp.soa.external.properties.file=/data/hp-soa/config/soa-config.properties -Ddubbo.resolve.file=/data/hp-soa/config/dubbo-resolve.properties -DskipTests=true -Djava.security.egd=file:/dev/./urandom --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.math=ALL-UNNAMED --add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens java.base/javax.net.ssl=ALL-UNNAMED
