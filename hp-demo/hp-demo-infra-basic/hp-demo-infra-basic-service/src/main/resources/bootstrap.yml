@@ -1,0 +1,117 @@
+# app
+hp.soa.web:
+  app:
+    id: "0010100002"
+    name: ${project.artifactId}
+    version: ${project.version}
+    organization: HP-Socket
+    owner: Kingfisher
+  component-scan:
+    base-package: ${project.groupId}
+  cookie: 
+    max-age: 315360000
+  cors:
+    mapping: "/**"
+    allowed-origins: "*"
+    allowed-headers: "*"
+    allowed-methods: "*"
+    exposed-headers: 
+    allow-credentials: false
+    maxAge: 3600
+  access-verification:
+    enabled: false
+    DefaultAccessPolicy: maybe_login
+
+# logging
+logging.config: classpath:log4j2-kafka.xml
+
+# dubbo
+dubbo:
+  scan.base-packages: ${hp.soa.web.component-scan.base-package}
+  protocols:
+    #dubbo:
+    #  name: dubbo
+    #  port: 5002
+    tri:
+      name: tri
+      port: 6002
+  registry:
+    file: "/data/dubbo/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
+  application:
+    qos-port: 7002
+    qos-enable: false
+    name: ${hp.soa.web.app.name}
+    version: ${hp.soa.web.app.version}
+    owner: ${hp.soa.web.app.owner:}
+    organization: ${hp.soa.web.app.organization:}
+
+# server
+server:
+  port: 9002
+  servlet:
+    context-path: /
+  tomcat:
+    max-connections: 10000
+    connection-timeout: 30000
+    threads:
+      max: 200
+      min-spare: 5
+  undertow:
+    buffer-size: 1024
+    direct-buffers: true
+    eager-filter-init: true
+    max-http-post-size: 10MB
+    threads:
+      worker: 64
+      io: 4
+
+# spring
+spring:
+  application.name: ${hp.soa.web.app.name}
+  mvc:
+    servlet:
+      load-on-startup: 1
+      path: /
+    throw-exception-if-no-hand1ler-found: true
+  web:
+    resources:
+      add-mappings: false
+  security:
+    user:
+      name: admin
+      password: "123456"
+      roles: ADMIN
+  servlet:
+    multipart:
+      enabled: false
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# management
+management:
+  endpoint:
+    health.show-details: when-authorized
+    shutdown.enabled: false
+  endpoints:
+    enabled-by-default: true
+    jmx.exposure.include: "*"
+    web.base-path: /__admin
+    web.exposure.include: "*"
+  metrics:
+    export.influx.enabled: false
+    tags.application: ${hp.soa.web.app.name}
+
+# api doc
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  packagesToScan: io.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}
+  api-infos:
+    group-name: ${hp.soa.web.app.name}
+    title: ${hp.soa.web.app.name}
+    version: ${hp.soa.web.app.version}
+    description: "Spring Boot Project >> ${hp.soa.web.app.name} (v${hp.soa.web.app.version})"

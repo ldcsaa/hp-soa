@@ -1,0 +1,55 @@
+# app
+hp.soa.web:
+  app:
+    id: "0010100010"
+    name: ${project.artifactId}
+    version: ${project.version}
+    organization: HP-Socket
+    owner: Kingfisher
+  # spring bean scan packages
+  component-scan:
+    base-package: ${project.groupId}
+  # mybatis mapper scan packages
+  mapper-scan:
+    base-package: ${project.groupId}.infra.mysql.mapper
+  access-verification:
+    enabled: false
+    DefaultAccessPolicy: maybe_login
+
+# logging
+logging.config: classpath:log4j2-kafka.xml
+
+spring.cloud.nacos.config:
+  #server-addr: 192.168.56.23:8848
+  #username: nacos
+  #password: 123456
+  #namespace: DEV
+  group: DEMO_GROUP
+  name: ${hp.soa.web.app.name}
+  file-extension: yml
+  refresh-enabled: true
+  shared-configs:
+    - group: GLOBAL_GROUP
+      data-id: hp-soa-web.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: spring-boot.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: dubbo.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: mysql.yml
+      refresh: true
+
+# dubbo
+dubbo.protocols:
+  #dubbo:
+  #  name: dubbo
+  #  port: 5010
+  tri:
+    name: tri
+    port: 6010
+
+# server
+server.port: 9010

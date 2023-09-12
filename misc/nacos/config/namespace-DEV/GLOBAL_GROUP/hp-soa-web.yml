@@ -1,0 +1,19 @@
+hp.soa.web:
+  cookie: 
+    max-age: 315360000
+  cors:
+    mapping: "/**"
+    allowed-origins: "*"
+    allowed-headers: "*"
+    allowed-methods: "*"
+    exposed-headers: 
+    allow-credentials: false
+    maxAge: 3600
+  async:
+    enabled: true
+    core-pool-size: 4
+    max-pool-size: 16
+    keep-alive-seconds: 30
+    queue-capacity: 2000
+    rejection-policy: CALLER_RUNS
+    allow-core-thread-time-out: true
