@@ -1,0 +1,93 @@
+spring.datasource:
+  druid:
+    web-stat-filter:
+      enabled: true
+      session-stat-enable: true
+      url-pattern: /*
+      exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/__druid/*"
+    stat-view-servlet:
+      enabled: true
+      url-pattern: "/__druid/*"
+      login-username: admin
+      login-password: 123456
+      allow: 127.0.0.1,192.168.0.0/16
+      reset-enable: true
+    aop-patterns:
+      - ${hp.soa.web.component-scan.base-package:}
+    filter:
+      stat:
+        enabled: true
+        log-slow-sql: true
+        slow-sql-millis: 500
+      wall:
+        enabled: true
+      slf4j:
+        enabled: true
+      config:
+        enabled: true
+        
+spring.datasource.dynamic:
+  primary: master
+  strict: true
+  lazy: false
+  seata: false
+  druid:
+    max-active: 10
+    min-idle: 1
+    max-wait: 3000
+    initial-size: 3
+    keep-alive: true
+    test-while-idle: true
+    time-between-eviction-runs-millis: 60000
+    validation-query: SELECT 1
+    validation-query-timeout: 1
+    filters: stat,wall,slf4j
+    #query-timeout: (seconds, 0: infinite)
+    #transaction-query-timeout: (seconds, 0: infinite)
+    default-transaction-isolation: 2
+    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=3000
+    # public-key uses to encrypt database access password
+    #public-key: "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJRhKGNr3IAJcs4+0ys/4zmwUJoBYqAdx6EcyiWIBt7cIFS5QdruakTmGk8XOVPMVz9jOLOvhPfjLzgPgwaKo6UCAwEAAQ=="
+
+mybatis-plus:
+  mapper-locations:
+  type-aliases-package:
+  check-config-location: false
+  executor-type: reuse
+  configuration:
+    # prod env: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: true
+    default-statement-timeout: 3
+    local-cache-scope: STATEMENT
+    cache-enabled: false
+  global-config:
+    banner: true
+    enable-sql-runner: false
+    db-config:
+      id-type: ASSIGN_ID
+      table-prefix: t_
+      table-underline: true
+      capital-mode: false
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      insert-strategy: not_null
+      update-strategy: not_null
+      select-strategy: not_null
+
+global-transaction-management:
+  enabled: false
+  timeout: 3000
+  isolation: ISOLATION_READ_COMMITTED
+  propagation: PROPAGATION_REQUIRED
+  rollback-for: java.lang.Exception
+  read-only-timeout: 3000
+  read-only-isolation: ISOLATION_READ_COMMITTED
+  read-only-propagation: PROPAGATION_REQUIRED
+  pointcut-expression: "execution(* ${hp.soa.web.component-scan.base-package}..service..*.*(..))"

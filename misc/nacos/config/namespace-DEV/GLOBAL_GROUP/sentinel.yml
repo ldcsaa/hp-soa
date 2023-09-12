@@ -1,0 +1,82 @@
+spring.cloud.sentinel:
+  enabled: true
+  eager: true
+  filter:
+    enabled: true
+  log:
+    dir: /data/logs/sentinel
+    switch-pid: true
+  transport:
+    dashboard: 192.168.56.23:8383
+    heartbeat-interval-ms: 30000
+  datasource:
+    flow:
+      nacos:
+        server-addr: 192.168.56.23:8848
+        username: nacos
+        password: 123456
+        namespace: DEV
+        groupId: SENTINEL_GROUP
+        dataId: ${spring.application.name}-flow-rules
+        data-type: json
+        rule-type: flow
+    degrade:
+      nacos:
+        server-addr: 192.168.56.23:8848
+        username: nacos
+        password: 123456
+        namespace: DEV
+        groupId: SENTINEL_GROUP
+        dataId: ${spring.application.name}-degrade-rules
+        data-type: json
+        rule-type: degrade
+    param-flow:
+      nacos:
+        server-addr: 192.168.56.23:8848
+        username: nacos
+        password: 123456
+        namespace: DEV
+        groupId: SENTINEL_GROUP
+        dataId: ${spring.application.name}-param-rules
+        data-type: json
+        rule-type: param-flow
+    system:
+      nacos:
+        server-addr: 192.168.56.23:8848
+        username: nacos
+        password: 123456
+        namespace: DEV
+        groupId: SENTINEL_GROUP
+        dataId: ${spring.application.name}-system-rules
+        data-type: json
+        rule-type: system
+    authority:
+      nacos:
+        server-addr: 192.168.56.23:8848
+        username: nacos
+        password: 123456
+        namespace: DEV
+        groupId: SENTINEL_GROUP
+        dataId: ${spring.application.name}-authority-rules
+        data-type: json
+        rule-type: authority
+    #gw-flow:
+    #  nacos:
+    #    server-addr: 192.168.56.23:8848
+    #    username: nacos
+    #    password: 123456
+    #    namespace: DEV
+    #    groupId: SENTINEL_GROUP
+    #    dataId: ${spring.application.name}-gw-flow-rules
+    #    data-type: json
+    #    rule-type: gw-flow
+    #gw-api-group:
+    #  nacos:
+    #    server-addr: 192.168.56.23:8848
+    #    username: nacos
+    #    password: 123456
+    #    namespace: DEV
+    #    groupId: SENTINEL_GROUP
+    #    dataId: ${spring.application.name}-gw-api-group-rules
+    #    data-type: json
+    #    rule-type: gw-api-group

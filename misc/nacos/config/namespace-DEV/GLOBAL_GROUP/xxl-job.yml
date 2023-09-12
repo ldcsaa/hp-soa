@@ -1,0 +1,12 @@
+xxl.job:
+  enabled: true
+  access-token: 0123456789abcdef
+  admin.addresses: http://192.168.56.23:8585/xxl-job-admin
+  executor:
+    appname: ${spring.application.name}
+    address:
+    ip:
+    # use static port, which is config by application config file
+    #port: 
+    log-path: /data/logs/xxl-job/${spring.application.name}
+    log-retention-days: 7

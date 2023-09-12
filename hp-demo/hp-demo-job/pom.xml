@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.hpsocket.demo</groupId>
+        <artifactId>hp-demo</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>hp-demo-job</artifactId>
+    <name>${project.artifactId}</name>
+
+    <properties>
+    </properties>
+
+    <dependencies>
+		<dependency>
+			<groupId>io.github.hpsocket.demo</groupId>
+			<artifactId>hp-demo-infra-nacos-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-nacos</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-skywalking</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-job-exclusive</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.hpsocket</groupId>
+			<artifactId>hp-soa-starter-job-xxljob</artifactId>
+		</dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+	</build>
+</project>

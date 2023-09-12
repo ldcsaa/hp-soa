@@ -1,0 +1,27 @@
+spring.task:
+  execution:
+    thread-name-prefix: "task-"
+    pool:
+      core-size: 4
+      max-size: 16
+      queue-capacity: 1000
+      # milliseconds: 60000, seconds: 60s
+      keep-alive: 60000
+      allow-core-thread-timeout: true
+      # CALLER_RUNS, ABORT, DISCARD, DISCARD_OLDEST, SYNC
+      rejection-policy: CALLER_RUNS
+    shutdown:
+      await-termination: false
+      # milliseconds
+      await-termination-period: 5000
+  scheduling:
+    thread-name-prefix: "scheduling-"
+    pool:
+      size: 4
+      # CALLER_RUNS, ABORT, DISCARD, DISCARD_OLDEST, SYNC
+      rejection-policy: CALLER_RUNS
+    shutdown:
+      await-termination: false
+      # milliseconds
+      await-termination-period: 5000
+    

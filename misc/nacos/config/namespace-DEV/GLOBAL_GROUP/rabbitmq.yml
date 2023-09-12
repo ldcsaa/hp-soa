@@ -1,0 +1,89 @@
+spring.rabbitmq:
+  addresses: 192.168.56.23:5672
+  username: rabbit
+  password: 123456
+  virtual-host: "/"
+  publisher-confirm-type: correlated
+  publisher-returns: true
+  listener:
+    simple:
+      missing-queues-fatal: false
+    direct:
+      missing-queues-fatal: false
+    stream:
+      native-listener: true
+  template:
+    mandatory: true
+  stream:
+    host: 192.168.56.23
+    port: 5552
+    name: default-stream
+
+spring.rabbitmq-first:
+  addresses: 192.168.56.23:5672
+  username: rabbit
+  password: 123456
+  virtual-host: "first"
+  publisher-confirm-type: correlated
+  publisher-returns: true
+  listener:
+    simple:
+      missing-queues-fatal: false
+    direct:
+      missing-queues-fatal: false
+    stream:
+      native-listener: true
+  template:
+    mandatory: true
+  stream:
+    host: 192.168.56.23
+    port: 5552
+    name: first-stream
+
+spring.rabbitmq-second:
+  addresses: 192.168.56.23:5672
+  username: rabbit
+  password: 123456
+  virtual-host: "second"
+  publisher-confirm-type: correlated
+  publisher-returns: true
+  listener:
+    # stream listener
+    type: stream
+    simple:
+      missing-queues-fatal: false
+    direct:
+      missing-queues-fatal: false
+    stream:
+      # native listener
+      native-listener: true
+  template:
+    mandatory: true
+  stream:
+    host: 192.168.56.23
+    port: 5552
+    name: second-stream
+
+spring.rabbitmq-third:
+  addresses: 192.168.56.23:5672
+  username: rabbit
+  password: 123456
+  virtual-host: "third"
+  publisher-confirm-type: correlated
+  publisher-returns: true
+  listener:
+    # stream listener
+    type: stream
+    simple:
+      missing-queues-fatal: false
+    direct:
+      missing-queues-fatal: false
+    stream:
+      # no-native listener
+      native-listener: false
+  template:
+    mandatory: true
+  stream:
+    host: 192.168.56.23
+    port: 5552
+    name: third-stream

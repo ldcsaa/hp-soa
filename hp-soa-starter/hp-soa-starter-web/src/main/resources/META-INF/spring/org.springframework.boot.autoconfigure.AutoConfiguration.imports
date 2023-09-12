@@ -1,0 +1,4 @@
+io.github.hpsocket.soa.starter.web.config.WebConfig
+io.github.hpsocket.soa.starter.web.config.SwaggerConfig
+io.github.hpsocket.soa.starter.web.config.ControllerAdviceConfig
+io.github.hpsocket.soa.starter.web.config.AspectAopConfig

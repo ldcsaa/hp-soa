@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.github.hpsocket</groupId>
+		<artifactId>hp-soa-parent</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<artifactId>hp-soa-starter</artifactId>
+	<name>${project.artifactId}</name>
+	<packaging>pom</packaging>
+	<description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
+	<url>https://github.com/ldcsaa/hp-soa</url>
+	
+	<properties>
+	</properties>
+	
+	<modules>
+		<module>hp-soa-starter-web</module>
+		<module>hp-soa-starter-task</module>
+		<module>hp-soa-starter-nacos</module>
+		<module>hp-soa-starter-sentinel</module>
+		<module>hp-soa-starter-skywalking</module>
+		<module>hp-soa-starter-data-redis</module>
+		<module>hp-soa-starter-data-mysql</module>
+		<module>hp-soa-starter-job-exclusive</module>
+		<module>hp-soa-starter-job-xxljob</module>
+		<module>hp-soa-starter-rabbitmq</module>
+	</modules>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.github.hpsocket</groupId>
+				<artifactId>hp-soa-dependencies</artifactId>
+				<version>${project.parent.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-configuration-processor</artifactId>
+	    </dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
