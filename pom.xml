@@ -8,11 +8,11 @@
 	<name>${project.artifactId}</name>
 	<version>${revision}</version>
 	<packaging>pom</packaging>
-
-	<url>http://maven.apache.org</url>
+	<description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
+	<url>https://github.com/ldcsaa/hp-soa</url>
 
 	<properties>
-		<revision>0.0.1-SNAPSHOT</revision>
+		<revision>0.1.0-SNAPSHOT</revision>
 		<hp-soa.version>${revision}</hp-soa.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -47,6 +47,7 @@
 		<maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
 		<maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
 		<maven.surefire.conf.parallel>all</maven.surefire.conf.parallel>
+		<nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
 		<maven.surefire.conf.useSystemClassLoader>true</maven.surefire.conf.useSystemClassLoader>
 		<maven.surefire.conf.argLine>${env.MAVEN_FORK_JVM_ARGS}</maven.surefire.conf.argLine>
 	</properties>
@@ -56,34 +57,78 @@
 		<module>hp-soa-framework</module>
 		<module>hp-soa-starter</module>
 	</modules>
+	
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git@github.com:ldcsaa/hp-soa.git</connection>
+        <developerConnection>scm:git@github.com:ldcsaa/hp-soa.git</developerConnection>
+        <url>https://github.com/ldcsaa/hp-soa</url>
+    </scm>
+    <developers>
+        <developer>
+            <name>ldcsaa</name>
+            <email>17044073@qq.com</email>
+            <organization>https://github.com/ldcsaa</organization>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
 
 	<repositories>
-		<repository>
+		<!-- >> BEGIN >> : Publish Repositories -->
+		<!--
+        <repository>
+            <id>ossrh-snapshots</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
 			<snapshots>
+				<updatePolicy>always</updatePolicy>
 				<enabled>true</enabled>
 			</snapshots>
+        </repository>
+        <repository>
+            <id>ossrh-releases</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+        </repository>
+		-->
+		<!-- << END << : Publish Repositories -->
+
+		<!-- >> BEGIN >> : Develop Repositories -->
+		<repository>
 			<id>local-snapshots</id>
 			<name>Local Snapshots</name>
 			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
+			<snapshots>
+				<updatePolicy>always</updatePolicy>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 
 		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
 			<id>local-thirdparty</id>
 			<name>Local 3rd-party</name>
 			<url>http://192.168.56.23:8081/repository/maven-thirdparty/</url>
-		</repository>
-
-		<repository>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
+		</repository>
+
+		<repository>
 			<id>local-releases</id>
 			<name>Local Releases</name>
 			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
+		<!-- << END << : Develop Repositories -->
 
 		<repository>
 			<snapshots>
@@ -110,16 +155,31 @@
 	</repositories>
 
 	<distributionManagement>
+		<!-- >> BEGIN >> : Publish Repositories -->
+        <!--
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+		-->
+		<!-- << END << : Publish Repositories -->
+
+		<!-- >> BEGIN >> : Develop Repositories -->
 		<repository>
-			<id>local-releases</id>
+			<id>local</id>
 			<name>Local Nexus Releases Repository</name>
 			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
-			<id>local-snapshots</id>
+			<id>local</id>
 			<name>Local Nexus Snapshots Repository</name>
 			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
 		</snapshotRepository>
+		<!--<< END << : Develop Repositories -->
 	</distributionManagement>
 
 	<build>
@@ -298,16 +358,10 @@
 					</configuration>
 					<executions>
 						<execution>
-							<id>attach-javadocs</id>
-							<phase>install</phase>
+							<phase>package</phase>
 							<goals>
 								<goal>jar</goal>
 							</goals>
-							<configuration>
-								<encoding>${project.build.sourceEncoding}</encoding>
-								<charset>${project.build.sourceEncoding}</charset>
-								<doclint>none</doclint>
-							</configuration>
 						</execution>
 					</executions>
 				</plugin>
@@ -352,6 +406,18 @@
 						</execution>
 					</executions>
 				</plugin>
+				
+	            <plugin>
+	                <groupId>org.sonatype.plugins</groupId>
+	                <artifactId>nexus-staging-maven-plugin</artifactId>
+	                <version>${nexus-staging-maven-plugin.version}</version>
+	                <extensions>true</extensions>
+	                <configuration>
+	                    <serverId>ossrh</serverId>
+	                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+	                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+	                </configuration>
+	            </plugin>
 				
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -462,6 +528,23 @@
 	        	<groupId>org.codehaus.mojo</groupId>
 	        	<artifactId>flatten-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- >> BEGIN >> : Publish Plugins -->
+			<!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+			</plugin>
+			-->
+			<!-- << END << : Publish Plugins -->
 		</plugins>
 		
 	</build>

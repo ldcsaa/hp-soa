@@ -12,6 +12,8 @@
 	<artifactId>hp-soa-framework-web</artifactId>
 	<name>${project.artifactId}</name>
 	<packaging>jar</packaging>
+	<description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
+	<url>https://github.com/ldcsaa/hp-soa</url>
 
 	<properties>
 	</properties>
@@ -67,23 +69,6 @@
 		    <groupId>com.blueconic</groupId>
 		    <artifactId>browscap-java</artifactId>
 		</dependency>
-
-			<!--
-		<dependency>
-		    <groupId>jakarta.validation</groupId>
-		    <artifactId>jakarta.validation-api</artifactId>
-		</dependency>
-
-		<dependency>
-		    <groupId>jakarta.servlet</groupId>
-		    <artifactId>jakarta.servlet-api</artifactId>
-		</dependency>
-
-		<dependency>
-		    <groupId>jakarta.el</groupId>
-		    <artifactId>jakarta.el-api</artifactId>
-		</dependency>
-		-->
 
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
