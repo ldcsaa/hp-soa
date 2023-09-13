@@ -103,7 +103,7 @@
 		<!-- >> BEGIN >> : Develop Repositories -->
 		<repository>
 			<id>private-snapshots</id>
-			<name>Local Snapshots</name>
+			<name>Private Snapshots</name>
 			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
 			<snapshots>
 				<updatePolicy>always</updatePolicy>
@@ -113,7 +113,7 @@
 
 		<repository>
 			<id>private-thirdparty</id>
-			<name>Local 3rd-party</name>
+			<name>Private 3rd-party</name>
 			<url>http://192.168.56.23:8081/repository/maven-thirdparty/</url>
 			<snapshots>
 				<enabled>false</enabled>
@@ -122,7 +122,7 @@
 
 		<repository>
 			<id>private-releases</id>
-			<name>Local Releases</name>
+			<name>Private Releases</name>
 			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
 			<snapshots>
 				<enabled>false</enabled>
@@ -171,12 +171,12 @@
 		<!-- >> BEGIN >> : Develop Repositories -->
 		<repository>
 			<id>private</id>
-			<name>Local Nexus Releases Repository</name>
+			<name>Private Nexus Releases Repository</name>
 			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>private</id>
-			<name>Local Nexus Snapshots Repository</name>
+			<name>Private Nexus Snapshots Repository</name>
 			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
 		</snapshotRepository>
 		<!--<< END << : Develop Repositories -->
