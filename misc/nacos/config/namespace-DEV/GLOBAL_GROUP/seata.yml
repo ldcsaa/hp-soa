@@ -1,0 +1,52 @@
+seata:
+  enabled: true
+  applicationId: ${spring.application.name}
+  txServiceGroup: default_tx_group
+  enableAutoDataSourceProxy: true
+  useJdkProxy: false
+  log:
+    exceptionRate: 100
+  client:
+    rm:
+      asyncCommitBufferLimit: 10000
+      lock:
+        retryInterval: 10
+        retryPolicyBranchRollbackOnConflict: true
+        retryTimes: 30
+      reportRetryCount: 5
+      reportSuccessEnable: false
+      sagaBranchRegisterEnable: false
+      tableMetaCheckEnable: true
+    tm:
+      commitRetryCount: 2
+      rollbackRetryCount: 2
+    undo:
+      dataValidation: true
+      logSerialization: jackson
+      logTable: undo_log
+  service:
+    default:
+      grouplist: seata-server:8091
+    disableGlobalTransaction: false
+    enableDegrade: false
+    vgroupMapping:
+      default_tx_group: default
+  transport:
+    compressor: none
+    enableClientBatchSendRequest: true
+    heartbeat: true
+    serialization: seata
+    server: NIO
+    shutdown:
+      wait: 3
+    threadFactory:
+      bossThreadPrefix: NettyBoss
+      bossThreadSize: 1
+      clientSelectorThreadPrefix: NettyClientSelector
+      clientSelectorThreadSize: 1
+      clientWorkerThreadPrefix: NettyClientWorkerThread
+      serverExecutorThreadPrefix: NettyServerBizHandler
+      shareBossWorker: false
+      workerThreadPrefix: NettyServerNIOWorker
+      workerThreadSize: default
+    type: TCP
