@@ -1,52 +1,90 @@
 seata:
   enabled: true
-  applicationId: ${spring.application.name}
-  txServiceGroup: default_tx_group
-  enableAutoDataSourceProxy: true
-  useJdkProxy: false
-  log:
-    exceptionRate: 100
+  application-id: ${spring.application.name}
+  # 事务群组（可以每个应用独立取名，也可以使用相同的名字）
+  tx-service-group: default_tx_group
   client:
+    rm-report-success-enable: true
+    # 自动刷新缓存中的表结构（默认false）
+    rm-table-meta-check-enable: false
+    # 一阶段结果上报TC重试次数（默认5）
+    rm-report-retry-count: 5
+    # 异步提交缓存队列长度（默认10000）
+    rm-async-commit-buffer-limit: 10000
     rm:
-      asyncCommitBufferLimit: 10000
       lock:
-        retryInterval: 10
-        retryPolicyBranchRollbackOnConflict: true
-        retryTimes: 30
-      reportRetryCount: 5
-      reportSuccessEnable: false
-      sagaBranchRegisterEnable: false
-      tableMetaCheckEnable: true
-    tm:
-      commitRetryCount: 2
-      rollbackRetryCount: 2
+        # 校验或占用全局锁重试间隔（默认10ms）
+        lock-retry-internal: 1
+        # 校验或占用全局锁重试次数（默认30）
+        lock-retry-times: 30
+        # 分支事务与其它全局回滚事务冲突时锁策略（优先释放本地锁让回滚成功）
+        lock-retry-policy-branch-rollback-on-conflict: true
+    # 一阶段全局提交结果上报TC重试次数（默认1次，建议大于1）
+    tm-commit-retry-count: 3
+    # 一阶段全局回滚结果上报TC重试次数（默认1次，建议大于1）
+    tm-rollback-retry-count: 3
     undo:
-      dataValidation: true
-      logSerialization: jackson
-      logTable: undo_log
+      # 二阶段回滚镜像校验（默认true开启）
+      undo-data-validation: true
+      # undo序列化方式（默认jackson）
+      undo-log-serialization: fastjson 
+      # 自定义undo表名（默认undo_log）
+      undo-log-table: undo_log
+    log:
+      # 日志异常输出概率（默认100）
+      exceptionRate: 100
+    support:
+      spring:
+        datasource-autoproxy: true
   service:
-    default:
-      grouplist: seata-server:8091
-    disableGlobalTransaction: false
-    enableDegrade: false
-    vgroupMapping:
+    vgroup-mapping:
+      # TC 集群（必须与seata-server保持一致）
       default_tx_group: default
+    # 降级开关
+    enable-degrade: false
+    # 禁用全局事务（默认false）
+    disable-global-transaction: false
+    grouplist:
+      default: 127.0.0.1:8091
   transport:
-    compressor: none
-    enableClientBatchSendRequest: true
-    heartbeat: true
-    serialization: seata
-    server: NIO
     shutdown:
       wait: 3
-    threadFactory:
-      bossThreadPrefix: NettyBoss
-      bossThreadSize: 1
-      clientSelectorThreadPrefix: NettyClientSelector
-      clientSelectorThreadSize: 1
-      clientWorkerThreadPrefix: NettyClientWorkerThread
-      serverExecutorThreadPrefix: NettyServerBizHandler
-      shareBossWorker: false
-      workerThreadPrefix: NettyServerNIOWorker
-      workerThreadSize: default
+    thread-factory:
+      boss-thread-prefix: NettyBoss
+      worker-thread-prefix: NettyServerNIOWorker
+      server-executor-thread-prefix: NettyServerBizHandler
+      share-boss-worker: false
+      client-selector-thread-prefix: NettyClientSelector
+      client-selector-thread-size: 1
+      client-worker-thread-prefix: NettyClientWorkerThread
     type: TCP
+    server: NIO
+    heartbeat: true
+    serialization: seata
+    compressor: none
+    # 客户端事务消息请求是否批量合并发送（默认true）
+    enable-client-batch-send-request: true
+  registry:
+    type: nacos
+    file:
+      name: file.conf
+    nacos:
+      # 默认：seata-server，Server和Client端的值需一致
+      application: seata-server
+      server-addr: 192.168.56.23:8848
+      namespace: DEV
+      cluster: default
+      group: SEATA_GROUP
+      username: nacos
+      password: 123456
+  config:
+    type: nacos
+    file:
+      name: file.conf
+    nacos:
+      server-addr: 192.168.56.23:8848
+      namespace: DEV
+      group: GLOBAL_GROUP
+      username: nacos
+      password: 123456
+      data-id: seata.yml
