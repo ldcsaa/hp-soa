@@ -3,33 +3,37 @@ seata:
   application-id: ${spring.application.name}  
   # 事务群组（可以每个应用独立取名，也可以使用相同的名字）
   tx-service-group: default_tx_group
+  # 当 seata.config.type=nacos 时，以下 client 配置有效
   client:
-    rm-report-success-enable: true
-    # 自动刷新缓存中的表结构（默认false）
-    rm-table-meta-check-enable: false
-    # 一阶段结果上报TC重试次数（默认5）
-    rm-report-retry-count: 5
-    # 异步提交缓存队列长度（默认10000）
-    rm-async-commit-buffer-limit: 10000
     rm:
+      report-success-enable: true
+      # 自动刷新缓存中的表结构（默认false）
+      table-meta-check-enable: false
+      # 一阶段结果上报TC重试次数（默认5）
+      report-retry-count: 5
+      # 异步提交缓存队列长度（默认10000）
+      async-commit-buffer-limit: 10000
       lock:
-        # 校验或占用全局锁重试间隔（默认10ms）
-        lock-retry-internal: 1
-        # 校验或占用全局锁重试次数（默认30）
-        lock-retry-times: 30
-        # 分支事务与其它全局回滚事务冲突时锁策略（优先释放本地锁让回滚成功）
-        lock-retry-policy-branch-rollback-on-conflict: true
-    # 一阶段全局提交结果上报TC重试次数（默认1次，建议大于1）
-    tm-commit-retry-count: 3
-    # 一阶段全局回滚结果上报TC重试次数（默认1次，建议大于1）
-    tm-rollback-retry-count: 3
+          # 校验或占用全局锁重试间隔（默认10ms）
+          retry-internal: 1
+          # 校验或占用全局锁重试次数（默认30）
+          retry-times: 30
+          # 分支事务与其它全局回滚事务冲突时锁策略（优先释放本地锁让回滚成功）
+          retry-policy-branch-rollback-on-conflict: true
+    tm:
+      # 一阶段全局提交结果上报TC重试次数（默认1次，建议大于1）
+      commit-retry-count: 3
+      # 一阶段全局回滚结果上报TC重试次数（默认1次，建议大于1）
+      rollback-retry-count: 3
+      # 默认全局事务超时时间（毫秒，默认：60000）
+      default-global-transaction-timeout: 30000
     undo:
       # 二阶段回滚镜像校验（默认true开启）
-      undo-data-validation: true
+      data-validation: true
       # undo序列化方式（默认jackson）
-      undo-log-serialization: fastjson 
+      log-serialization: fastjson 
       # 自定义undo表名（默认undo_log）
-      undo-log-table: undo_log
+      log-table: undo_log
     log:
       # 日志异常输出概率（默认100）
       exceptionRate: 100

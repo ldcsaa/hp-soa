@@ -15,8 +15,5 @@ import static io.seata.spring.boot.autoconfigure.StarterConstants.SEATA_PREFIX;
 @ConditionalOnProperty(prefix = SEATA_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class SoaSeataConfig
 {
-	public SoaSeataConfig()
-	{
-		System.out.println("~ SoaSeataConfig ~");
-	}
+
 }
