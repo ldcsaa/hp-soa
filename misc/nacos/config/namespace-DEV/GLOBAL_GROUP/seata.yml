@@ -1,6 +1,6 @@
 seata:
   enabled: true
-  application-id: ${spring.application.name}
+  application-id: ${spring.application.name}  
   # 事务群组（可以每个应用独立取名，也可以使用相同的名字）
   tx-service-group: default_tx_group
   client:
@@ -36,7 +36,9 @@ seata:
     support:
       spring:
         datasource-autoproxy: true
+  # 当 seata.registry.type=nacos 时，以下 service 配置有效
   service:
+    #vgroupMapping:
     vgroup-mapping:
       # TC 集群（必须与seata-server保持一致）
       default_tx_group: default
@@ -45,7 +47,9 @@ seata:
     # 禁用全局事务（默认false）
     disable-global-transaction: false
     grouplist:
-      default: 127.0.0.1:8091
+      default: 192.168.56.23:8091
+    #default:
+    #  grouplist: 192.168.56.23:8091
   transport:
     shutdown:
       wait: 3
@@ -65,7 +69,7 @@ seata:
     # 客户端事务消息请求是否批量合并发送（默认true）
     enable-client-batch-send-request: true
   registry:
-    type: nacos
+    type: file
     file:
       name: file.conf
     nacos:
@@ -78,7 +82,7 @@ seata:
       username: nacos
       password: 123456
   config:
-    type: nacos
+    type: file
     file:
       name: file.conf
     nacos:
@@ -88,3 +92,18 @@ seata:
       username: nacos
       password: 123456
       data-id: seata.yml
+
+# 当 seata.registry.type=file 时，以下配置有效
+service:
+  vgroupMapping:
+  #vgroup-mapping:
+    # TC 集群（必须与seata-server保持一致）
+    default_tx_group: default
+  # 降级开关
+  enable-degrade: false
+  # 禁用全局事务（默认false）
+  disable-global-transaction: false
+  #grouplist:
+  #  default: 192.168.56.23:8091
+  default:
+    grouplist: 192.168.56.23:8091
