@@ -200,6 +200,11 @@
 				<artifactId>hp-soa-starter-rabbitmq</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>io.github.hpsocket</groupId>
+				<artifactId>hp-soa-starter-seata</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
 			
 			<dependency>
 				<groupId>org.apache.dubbo</groupId>
@@ -1304,6 +1309,12 @@
 				<groupId>io.seata</groupId>
 				<artifactId>seata-spring-boot-starter</artifactId>
 				<version>${seata.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>io.seata</groupId>
+			    <artifactId>seata-dubbo</artifactId>
+			    <version>${seata.version}</version>
+			    <type>pom</type>
 			</dependency>
 
 			<!-- micrometer -->
