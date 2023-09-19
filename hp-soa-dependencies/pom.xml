@@ -927,6 +927,16 @@
 			    <artifactId>httpclient5</artifactId>
 			    <version>${httpclient5.version}</version>
 			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents.client5</groupId>
+			    <artifactId>httpclient5-cache</artifactId>
+			    <version>${httpclient5.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents.client5</groupId>
+			    <artifactId>httpclient5-fluent</artifactId>
+			    <version>${httpclient5.version}</version>
+			</dependency>
 			
 			<dependency>
 			    <groupId>com.blueconic</groupId>

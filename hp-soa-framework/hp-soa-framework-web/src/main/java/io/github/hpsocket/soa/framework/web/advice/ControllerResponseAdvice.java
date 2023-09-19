@@ -259,7 +259,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
 		}
 		catch(Exception e)
 		{
-			log.error("async write monitor log fail", e);
+			log.error("async write {} log fail", MONITOR_INGRESS, e);
 		}
 	}
 	
