@@ -70,7 +70,7 @@ public class SnowflakeZookeeperHolder
 	{
 		try
 		{
-			CuratorFramework curator = createWithOptions(connectionString, new RetryUntilElapsed(1000, 4), 30000, 45000);
+			CuratorFramework curator = createWithOptions(connectionString, new RetryUntilElapsed(1000, 50), 30000, 60000);
 			curator.start();
 			
 			Stat stat = curator.checkExists().forPath(PATH_FOREVER);
@@ -179,7 +179,7 @@ public class SnowflakeZookeeperHolder
 			{
 				updateNewData(curator, zk_AddressNode);
 			}
-		}, 1L, 3L, TimeUnit.SECONDS);// 每3s上报数据
+		}, 1L, 5L, TimeUnit.SECONDS);// 每5s上报数据
 
 	}
 
@@ -189,7 +189,7 @@ public class SnowflakeZookeeperHolder
 		Endpoint endPoint = deBuildData(new String(bytes));
 		
 		// 该节点的时间不能小于最后一次上报的时间
-		return !(endPoint.getTimestamp() > System.currentTimeMillis());
+		return (System.currentTimeMillis() >= endPoint.getTimestamp());
 	}
 
 	/**

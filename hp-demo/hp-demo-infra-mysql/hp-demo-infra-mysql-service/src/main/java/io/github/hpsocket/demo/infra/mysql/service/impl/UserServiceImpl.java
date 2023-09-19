@@ -14,7 +14,6 @@ import io.github.hpsocket.demo.infra.mysql.converter.UserConverter;
 import io.github.hpsocket.demo.infra.mysql.entity.User;
 import io.github.hpsocket.demo.infra.mysql.mapper.UserMapper;
 import io.github.hpsocket.demo.infra.mysql.service.UserService;
-import io.github.hpsocket.soa.framework.leaf.service.GlobalIdService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,18 +23,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 {
 	@Autowired
 	private UserConverter userConverter;
-	
-	@Autowired
-	private GlobalIdService globalIdService;
-	
+		
 	@Override
 	public UserBo getDefaultUser()
 	{
-		if(globalIdService.getLeafSegmentIDGenerator() != null)
-			System.out.println("获取段号ID：" + globalIdService.getUniqueSegmentID());
-		if(globalIdService.getLeafSnowflakeIDGenerator() != null)
-			System.out.println("获取雪花ID：" + globalIdService.getSnowflakeID());	
-		
 		User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, 1L));
 		log.info("return user: {}", user);
 		

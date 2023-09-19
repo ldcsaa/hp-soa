@@ -46,7 +46,7 @@
 		<druid.version>1.2.19</druid.version>
 		<jedis.version>4.4.4</jedis.version>
 		<lettuce.version>6.2.6.RELEASE</lettuce.version>
-		<redisson.version>3.23.4</redisson.version>
+		<redisson.version>3.23.3</redisson.version>
 		<amqp-client.version>5.18.0</amqp-client.version>
 		<stream-client.version>0.12.0</stream-client.version>
 		<mongo-java-driver.version>3.12.14</mongo-java-driver.version>

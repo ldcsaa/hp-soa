@@ -21,37 +21,42 @@ public interface GlobalIdService
 	final String LEAF_SNOWFLAKE_ID_GENERATOR_BEAN	= "leafSnowflakeIdGenerator";
 	
 	/** 通过 snowflake 方式获取 ID */
-	long getSnowflakeID();
+	long getSnowflakeId();
 	/** 通过 segment 方式获取指定 tag 的 ID */
-	long getSegmentID(String tag);
+	long getSegmentId(String tag);
 	/** 通过 segment 方式获取全局唯一 ID */
-	long getUniqueSegmentID();
+	long getUniqueSegmentId();
 	/** 通过 segment 方式获取指定 tag 的 int 类型 ID */
-	int getIntSegmentID(String tag);
+	int getIntSegmentId(String tag);
 
 	/** 通过 snowflake 方式批量获取 ID */
-	long[] getBatchSnowflakeID(int batchSize);
+	long[] getBatchSnowflakeId(int batchSize);
 	/** 通过 segment 方式批量获取指定 tag 的 ID */
-	long[] getBatchSegmentID(String tag, int batchSize);
+	long[] getBatchSegmentId(String tag, int batchSize);
 	/** 通过 segment 方式批量获取全局唯一 ID */
-	long[] getBatchUniqueSegmentID(int batchSize);
+	long[] getBatchUniqueSegmentId(int batchSize);
 	/** 通过 segment 方式批量获取指定 tag 的 int 类型 ID */
-	int[] getBatchIntSegmentID(String tag, int batchSize);
+	int[] getBatchIntSegmentId(String tag, int batchSize);
 	
 	/** 解码 snowflake ID */
-	SnowflakeID decodeSnowflakeId(long snowflakeId);
+	SnowflakeId decodeSnowflakeId(long snowflakeId);
 	/** 解码 snowflake ID */
-	SnowflakeID decodeSnowflakeId(long snowflakeId, long twepoch);
+	SnowflakeId decodeSnowflakeId(long snowflakeId, long twepoch);
 	
 	/** 获取雪花 ID 生成器 */
-	IdGen getLeafSnowflakeIDGenerator();
+	IdGen getLeafSnowflakeIdGenerator();
 	/** 获取段号 ID 生成器 */
-	IdGen getLeafSegmentIDGenerator();
+	IdGen getLeafSegmentIdGenerator();
+	
+	/** 是否支持生成雪花 ID */
+	boolean isSnowflakeIdSupported();
+	/** 是否支持生成段号 ID */
+	boolean isSegmentIdSupported();
 	
 	@Getter
 	@AllArgsConstructor
 	@SuppressWarnings("serial")
-	public static class SnowflakeID implements Serializable
+	public static class SnowflakeId implements Serializable
 	{
 		private long timestamp;
 		private int workerId;

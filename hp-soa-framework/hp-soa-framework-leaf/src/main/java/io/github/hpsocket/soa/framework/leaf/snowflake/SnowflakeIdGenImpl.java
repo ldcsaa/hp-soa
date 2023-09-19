@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
 
+import com.google.common.base.Preconditions;
+
 /** Snowflake ID 生成器 */
 @Slf4j
 public class SnowflakeIdGenImpl implements IdGen
@@ -52,7 +54,7 @@ public class SnowflakeIdGenImpl implements IdGen
 	{
 		this.twepoch = twepoch;
 		this.maxTimeStamp = ~(-1L << timeStampBits) + twepoch;
-		checkArgument(timeGen() > twepoch, "Snowflake not support twepoch gt currentTime");
+		Preconditions.checkArgument(timeGen() > twepoch, "Snowflake not support twepoch gt currentTime");
 		
 		final String ip = Utils.getIp();
 		SnowflakeZookeeperHolder holder = new SnowflakeZookeeperHolder(ip, String.valueOf(port), zkAddress, leafName);
@@ -66,10 +68,10 @@ public class SnowflakeIdGenImpl implements IdGen
 		}
 		else
 		{
-			checkArgument(initFlag, "Snowflake Id Gen is not init ok");
+			Preconditions.checkArgument(initFlag, "Snowflake Id Gen is not init ok");
 		}
 		
-		checkArgument(workerId >= 0 && workerId <= maxWorkerId, "workerID must gte 0 and lte 1023");
+		Preconditions.checkArgument(workerId >= 0 && workerId <= maxWorkerId, "workerID must gte 0 and lte 1023");
 	}
 
 	@Override
@@ -154,13 +156,5 @@ public class SnowflakeIdGenImpl implements IdGen
 	public long getWorkerId()
 	{
 		return workerId;
-	}
-
-	private static void checkArgument(boolean expression,Object errorMessage)
-	{
-		if(!expression)
-		{
-			throw new IllegalArgumentException(String.valueOf(errorMessage));
-		}
 	}
 }

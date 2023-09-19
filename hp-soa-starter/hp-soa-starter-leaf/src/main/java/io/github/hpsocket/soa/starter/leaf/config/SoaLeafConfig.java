@@ -44,7 +44,6 @@ public class SoaLeafConfig
 	@Value("${hp.soa.gid.leaf.snowflake.server-port:${server.port}}")
 	private int port;
 
-	/*
 	@AutoConfiguration
 	@SuppressWarnings("serial")
 	@ConditionalOnClass(DruidDataSource.class)
@@ -69,7 +68,7 @@ public class SoaLeafConfig
 		
 		@Bean(GlobalIdService.LEAF_SEGMENT_ID_GENERATOR_BEAN)
 		@ConditionalOnBean(name = LEAF_SEGMENT_ID_DATA_SOURCE_BEAN, value = DataSource.class)
-		public IdGen segmentIDGen(@Qualifier(LEAF_SEGMENT_ID_DATA_SOURCE_BEAN) DataSource dataSource)
+		public IdGen segmentIdGen(@Qualifier(LEAF_SEGMENT_ID_DATA_SOURCE_BEAN) DataSource dataSource)
 		{
 			IdAllocDaoImpl dao = new IdAllocDaoImpl(dataSource);
 			SegmentIdGenImpl idGen = new SegmentIdGenImpl();
@@ -81,21 +80,6 @@ public class SoaLeafConfig
 			return idGen;
 		}
 	}
-	*/
-	
-	@Bean(GlobalIdService.LEAF_SEGMENT_ID_GENERATOR_BEAN)
-	@ConditionalOnBean(name = LEAF_SEGMENT_ID_DATA_SOURCE_BEAN, value = DataSource.class)
-	public IdGen segmentIDGen(@Qualifier(LEAF_SEGMENT_ID_DATA_SOURCE_BEAN) DataSource dataSource)
-	{
-		IdAllocDaoImpl dao = new IdAllocDaoImpl(dataSource);
-		SegmentIdGenImpl idGen = new SegmentIdGenImpl();
-		idGen.setDao(dao);
-		
-		if(!idGen.init())
-			throw new BeanCreationException(GlobalIdService.LEAF_SEGMENT_ID_GENERATOR_BEAN, "Segment Service Init Fail");
-		
-		return idGen;
-	}
 	
 	@Bean(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN)
 	@ConditionalOnProperty(name = "hp.soa.gid.leaf.snowflake.enable", havingValue = "true", matchIfMissing = true)
@@ -104,9 +88,9 @@ public class SoaLeafConfig
 		if(GeneralHelper.isStrEmpty(leafName))
 			throw new BeanCreationException(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN, "property 'hp.soa.gid.leaf.snowflake.name' not config");
 		if(GeneralHelper.isStrEmpty(zkAddress))
-			throw new BeanCreationException(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN, "property 'hp.soa.gid.leaf.snowflake.zk.address' not config");
+			throw new BeanCreationException(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN, "property 'hp.soa.gid.leaf.snowflake.zk-address' not config");
 		if(port <= 0)
-			throw new BeanCreationException(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN, "property 'hp.soa.gid.leaf.snowflake.server.port' is illegal");
+			throw new BeanCreationException(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN, "property 'hp.soa.gid.leaf.snowflake.server-port' is illegal");
 		
 		SnowflakeIdGenImpl idGen = new SnowflakeIdGenImpl(zkAddress, port, leafName);
 		

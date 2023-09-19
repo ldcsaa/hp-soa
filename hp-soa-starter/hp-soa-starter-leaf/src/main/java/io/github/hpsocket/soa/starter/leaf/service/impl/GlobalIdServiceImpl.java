@@ -16,69 +16,81 @@ public class GlobalIdServiceImpl implements GlobalIdService
 {
 	@Autowired(required = false)
 	@Qualifier(LEAF_SNOWFLAKE_ID_GENERATOR_BEAN)
-	IdGen leafSnowflakeIDGenerator;
+	IdGen leafSnowflakeIdGenerator;
 
 	@Autowired(required = false)
 	@Qualifier(LEAF_SEGMENT_ID_GENERATOR_BEAN)
-	IdGen leafSegmentIDGenerator;
+	IdGen leafSegmentIdGenerator;
+	
+	@Override
+	public boolean isSnowflakeIdSupported()
+	{
+		return (getLeafSnowflakeIdGenerator() != null);
+	}
+	
+	@Override
+	public boolean isSegmentIdSupported()
+	{
+		return (getLeafSegmentIdGenerator() != null);
+	}
 
 	@Override
-	public long getSnowflakeID()
+	public long getSnowflakeId()
 	{
-		Result rs = leafSnowflakeIDGenerator.get(null);
+		Result rs = leafSnowflakeIdGenerator.get(null);
 		
 		return checkResult(rs);
 	}
 	
 	@Override
-	public long getSegmentID(String tag)
+	public long getSegmentId(String tag)
 	{
-		Result rs = leafSegmentIDGenerator.get(tag);
+		Result rs = leafSegmentIdGenerator.get(tag);
 		
 		return checkResult(rs);
 	}
 
 	@Override
-	public long getUniqueSegmentID()
+	public long getUniqueSegmentId()
 	{
-		return getSegmentID(UNIQUE_SEGMENT_TAG);
+		return getSegmentId(UNIQUE_SEGMENT_TAG);
 	}
 	
 	@Override
-	public int getIntSegmentID(String tag)
+	public int getIntSegmentId(String tag)
 	{
-		long id = getSegmentID(tag);
+		long id = getSegmentId(tag);
 		checkIntId(id);
 		
 		return (int)(id);
 	}
 
 	@Override
-	public long[] getBatchSnowflakeID(int batchSize)
+	public long[] getBatchSnowflakeId(int batchSize)
 	{
-		BatchResult brs = leafSnowflakeIDGenerator.getBatch(null, batchSize);
+		BatchResult brs = leafSnowflakeIdGenerator.getBatch(null, batchSize);
 		
 		return checkBatchResult(brs);
 	}
 	
 	@Override
-	public long[] getBatchSegmentID(String tag, int batchSize)
+	public long[] getBatchSegmentId(String tag, int batchSize)
 	{
-		BatchResult brs = leafSegmentIDGenerator.getBatch(tag, batchSize);
+		BatchResult brs = leafSegmentIdGenerator.getBatch(tag, batchSize);
 		
 		return checkBatchResult(brs);
 	}
 	
 	@Override
-	public long[] getBatchUniqueSegmentID(int batchSize)
+	public long[] getBatchUniqueSegmentId(int batchSize)
 	{
-		return getBatchSegmentID(UNIQUE_SEGMENT_TAG, batchSize);
+		return getBatchSegmentId(UNIQUE_SEGMENT_TAG, batchSize);
 	}
 	
 	@Override
-	public int[] getBatchIntSegmentID(String tag, int batchSize)
+	public int[] getBatchIntSegmentId(String tag, int batchSize)
 	{
-		long[] ids   = getBatchSegmentID(tag, batchSize);
+		long[] ids   = getBatchSegmentId(tag, batchSize);
 		int[] intIds = new int[ids.length];
 		
 		if(ids.length > 0)
@@ -93,19 +105,19 @@ public class GlobalIdServiceImpl implements GlobalIdService
 	}
 	
 	@Override
-	public SnowflakeID decodeSnowflakeId(long snowflakeId)
+	public SnowflakeId decodeSnowflakeId(long snowflakeId)
 	{
 		return decodeSnowflakeId(snowflakeId, IdGen.DEFAULT_SNOWFLAKE_TWEPOCK);
 	}
 	
 	@Override
-	public SnowflakeID decodeSnowflakeId(long snowflakeId, long twepoch)
+	public SnowflakeId decodeSnowflakeId(long snowflakeId, long twepoch)
 	{
 		long originTimestamp = (snowflakeId >> 22) + twepoch;
 		int workerId = (int)((snowflakeId >> 12) ^ (snowflakeId >> 22 << 10));
 		int sequence = (int)(snowflakeId ^ (snowflakeId >> 12 << 12));
 		
-		return new SnowflakeID(originTimestamp, workerId, sequence);
+		return new SnowflakeId(originTimestamp, workerId, sequence);
 	}
 
 	private long checkResult(Result rs)
