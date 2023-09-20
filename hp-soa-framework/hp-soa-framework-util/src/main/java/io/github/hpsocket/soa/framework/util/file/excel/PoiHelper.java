@@ -9,8 +9,13 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -28,6 +33,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.NumberToTextConverter;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
@@ -331,6 +337,10 @@ public class PoiHelper
 			cell.setCellValue(((Boolean)value));
 		else if(value instanceof Date)
 			cell.setCellValue(((Date)value));
+		else if(value instanceof LocalDate)
+			cell.setCellValue(Date.from(((LocalDate)value).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		else if(value instanceof LocalDateTime)
+			cell.setCellValue(GregorianCalendar.from(ZonedDateTime.of(((LocalDateTime)value), ZoneId.systemDefault())));
 		else if(value instanceof Calendar)
 			cell.setCellValue(((Calendar)value));
 		else
@@ -452,16 +462,40 @@ public class PoiHelper
 		return null;
 	}
 	
-	public static final int addCellMergedRegion(Sheet sheet, int firstRow, int lastRow, int firstCol, int lastCol)
+	public static final CellRangeAddress addCellMergedRegion(Sheet sheet, int firstRow, int lastRow, int firstCol, int lastCol)
 	{
 		CellRangeAddress region = new CellRangeAddress(firstRow, lastRow, firstCol, lastCol);
-		return sheet.addMergedRegion(region);
+		sheet.addMergedRegion(region);
+		
+		return region;
 	}
 
-	public static final int addCellMergedRegionUnsafe(Sheet sheet, int firstRow, int lastRow, int firstCol, int lastCol)
+	public static final CellRangeAddress addCellMergedRegionUnsafe(Sheet sheet, int firstRow, int lastRow, int firstCol, int lastCol)
 	{
 		CellRangeAddress region = new CellRangeAddress(firstRow, lastRow, firstCol, lastCol);
-		return sheet.addMergedRegionUnsafe(region);
+		sheet.addMergedRegionUnsafe(region);
+		
+		return region;
+	}
+	
+	public static final void setRegionBorder(Sheet sheet, CellRangeAddress region, BorderStyle border)
+	{
+        RegionUtil.setBorderTop(border, region, sheet);
+        RegionUtil.setBorderLeft(border, region, sheet);
+        RegionUtil.setBorderRight(border, region, sheet);
+        RegionUtil.setBorderBottom(border, region, sheet);
+	}
+	
+	public static final void autoSizeColumns(Sheet sheet, int ... cols)
+	{
+		for(int i = 0; i < cols.length; i++)
+			sheet.autoSizeColumn(cols[i]);
+	}
+
+	public static final void autoSizeColumns(Sheet sheet, boolean useMergedCells, int ... cols)
+	{
+		for(int i = 0; i < cols.length; i++)
+			sheet.autoSizeColumn(cols[i], useMergedCells);
 	}
 
 	public static final XSSFWorkbook openWorkbook(String filePath) throws IOException

@@ -72,7 +72,7 @@ public class HttpHelper
 	/** HTTPS 默认端口 */
 	public static final int HTTPS_DEFAULT_PORT			= 443;
 	/** 默认缓冲区大小 */
-	private static final int DEFAULT_BUFFER_SIZE		= 4096;
+	private static final int DEFAULT_BUFFER_SIZE		= 8192;
 
 	/** 获取 {@link HttpURLConnection} */
 	@SafeVarargs
@@ -480,39 +480,40 @@ public class HttpHelper
 	/** GZip 解压 */
 	public final static byte[] unGZip(byte[] bytes) throws IOException
 	{
-		ByteArrayInputStream bis	= new ByteArrayInputStream(bytes);
-		ByteArrayOutputStream baos	= new ByteArrayOutputStream();
+		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 		
-		unGZip(bis, baos);
+		byte[] rs = unGZip(bis);
 		
-		return baos.toByteArray();
+		bis.close();
+		
+		return rs;
+	}
+
+	/** GZip 解压 */
+	public final static byte[] unGZip(InputStream in) throws IOException
+	{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		
+		unGZip(in, baos);
+		
+		byte[] rs = baos.toByteArray();
+		
+		baos.close();
+		
+		return rs;
 	}
 
 	/** GZip 解压 */
 	public final static void unGZip(InputStream in, OutputStream out) throws IOException
 	{
-		byte[] buffer			= new byte[8192];
+		byte[] buffer			= new byte[DEFAULT_BUFFER_SIZE];
 		GZIPInputStream gzip	= new GZIPInputStream(in);
 
-		try
-		{
-			int r;
-			while((r = gzip.read(buffer, 0, buffer.length)) != -1)
-				out.write(buffer, 0, r);
-		}
-		finally
-		{
-			try
-			{
-				if(out != null)		out.close();
-				if(gzip != null)	gzip.close();
-				if(in != null)		in.close();
-			}
-			catch(IOException e)
-			{
-				
-			}
-		}
+		int r;
+		while((r = gzip.read(buffer, 0, buffer.length)) != -1)
+			out.write(buffer, 0, r);
+		
+		gzip.close();
 	}
 
 }

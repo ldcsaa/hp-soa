@@ -58,12 +58,12 @@ public class SoaGlobalTransactionConfig
 	@ConditionalOnMissingBean(name = "dynamicRoutingTransactionAdvice")
 	public TransactionInterceptor dynamicRoutingTransactionAdvice(
 		@Qualifier("dynamicRoutingTransactionManager") TransactionManager transactionManager,
-		SoaTransactionAttributeSourceNameMapProvider soaTransactionAttributeSourceNameMapProvider,
+		@Qualifier("soaTransactionAttributeSourceNameMapProvider") SoaTransactionAttributeSourceNameMapProvider nameMapProvider,
 		@Qualifier("requiredRuleBasedTransactionAttribute") RuleBasedTransactionAttribute required, 
 		@Qualifier("readOnlyRuleBasedTransactionAttribute") RuleBasedTransactionAttribute readOnly)
 	{
 		NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
-		source.setNameMap(soaTransactionAttributeSourceNameMapProvider.getNameMap(required, readOnly));
+		source.setNameMap(nameMapProvider.getNameMap(required, readOnly));
 		
 		return new TransactionInterceptor(transactionManager, source);
 	}
@@ -105,9 +105,9 @@ public class SoaGlobalTransactionConfig
 	
 	/** 全局事务的默认事务拦截匹配参数提供者 */
 	@Primary
-	@Bean("defaultSoaTransactionAttributeSourceNameMapProvider")
-	@ConditionalOnMissingBean(name = "defaultSoaTransactionAttributeSourceNameMapProvider")
-	SoaTransactionAttributeSourceNameMapProvider defaultSoaTransactionAttributeSourceNameMapProvider()
+	@Bean("soaTransactionAttributeSourceNameMapProvider")
+	@ConditionalOnMissingBean(name = "soaTransactionAttributeSourceNameMapProvider")
+	SoaTransactionAttributeSourceNameMapProvider soaTransactionAttributeSourceNameMapProvider()
 	{
 		return new SoaTransactionAttributeSourceNameMapProvider() {};
 	}
@@ -124,7 +124,7 @@ public class SoaGlobalTransactionConfig
 		return new DefaultPointcutAdvisor(pointcut, txAdvice);
 	}
 	
-	static interface SoaTransactionAttributeSourceNameMapProvider
+	public static interface SoaTransactionAttributeSourceNameMapProvider
 	{
 		default Map<String, TransactionAttribute> getNameMap(RuleBasedTransactionAttribute required, RuleBasedTransactionAttribute readOnly)
 		{
