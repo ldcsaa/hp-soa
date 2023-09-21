@@ -245,10 +245,15 @@ public class WebConfig implements WebMvcConfigurer
 		if(!proxy.isEnabled())
 			return;
 		
+		String lcScheme = GeneralHelper.safeTrimString(proxy.getScheme()).toLowerCase();
+		String host = GeneralHelper.safeTrimString(proxy.getHost());
+		String userName = GeneralHelper.safeTrimString(proxy.getUserName());
+		String password = GeneralHelper.safeTrimString(proxy.getPassword());
+		String nonProxyHosts = GeneralHelper.safeTrimString(proxy.getNonProxyHosts());
+		int port = proxy.getPort();
+		
 		if(GeneralHelper.isStrEmpty(proxy.getHost()) || proxy.getPort() <= 0)
 			throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.proxy.host' or 'hp.soa.web.proxy.port' property is empty or invalid", WebConfig.class.getSimpleName()));
-		
-		String lcScheme = GeneralHelper.safeTrimString(proxy.getScheme()).toLowerCase();
 		
 		if(GeneralHelper.isStrNotEmpty(lcScheme)
 			&& !lcScheme.equalsIgnoreCase("http")
@@ -258,12 +263,6 @@ public class WebConfig implements WebMvcConfigurer
 			&& !lcScheme.equalsIgnoreCase("sock5")
 		)
 			throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.proxy.scheme' property is invalid", WebConfig.class.getSimpleName()));
-		
-		String host = GeneralHelper.safeTrimString(proxy.getHost());
-		String userName = GeneralHelper.safeTrimString(proxy.getUserName());
-		String password = GeneralHelper.safeTrimString(proxy.getPassword());
-		String nonProxyHosts = GeneralHelper.safeTrimString(proxy.getNonProxyHosts());
-		int port = proxy.getPort();
 		
 		if(lcScheme.isEmpty() || lcScheme.startsWith("http"))
 		{

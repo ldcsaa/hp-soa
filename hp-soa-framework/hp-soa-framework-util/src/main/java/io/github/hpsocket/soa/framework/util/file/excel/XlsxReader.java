@@ -25,6 +25,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import lombok.Getter;
 
+/** <b>Excel 文件读取器</b><br>
+ * 逐行、快速处理 Excel 文件，读取事件通知给 {@linkplain XlsxReaderListener} 
+ */
 public class XlsxReader
 {
 	private enum CellDataType {BOOL, ERROR, FORMULA, INLINESTR, SSTINDEX, NUMBER, DATE, NULL};

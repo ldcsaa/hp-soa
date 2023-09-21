@@ -27,6 +27,15 @@
 			<groupId>io.github.hpsocket</groupId>
 			<artifactId>hp-soa-starter-nacos</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.github.hpsocket</groupId>
+			<artifactId>hp-soa-framework-util</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents.client5</groupId>
+		    <artifactId>httpclient5</artifactId>
+		</dependency>
+
     </dependencies>
     
     <build>

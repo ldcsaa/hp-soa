@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+/** <b>CSV 文件写入器</b> */
 public class CsvFileWriter extends BufferedWriter
 {
 	public static final char SEPARATOR			= ',';

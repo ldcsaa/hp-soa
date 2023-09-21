@@ -41,6 +41,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import static io.github.hpsocket.soa.framework.core.util.GeneralHelper.*;
 
+/** <b>POI 辅助器</b><br>
+ * 简化 Excel 文件处理操作
+ */
 public class PoiHelper
 {
 	public static final boolean isExcelFile(File f)

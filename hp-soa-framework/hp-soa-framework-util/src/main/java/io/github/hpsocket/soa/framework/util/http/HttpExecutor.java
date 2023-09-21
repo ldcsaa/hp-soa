@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -20,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 
 import org.apache.hc.client5.http.ClientProtocolException;
 import org.apache.hc.client5.http.ConnectTimeoutException;
@@ -38,9 +41,9 @@ import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.config.TlsConfig;
 import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.client5.http.cookie.Cookie;
-import org.apache.hc.client5.http.cookie.CookieSpec;
 import org.apache.hc.client5.http.cookie.CookieSpecFactory;
 import org.apache.hc.client5.http.cookie.CookieStore;
+import org.apache.hc.client5.http.cookie.StandardCookieSpec;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.entity.mime.ContentBody;
 import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
@@ -57,7 +60,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
 import org.apache.hc.client5.http.impl.cookie.RFC6265CookieSpecFactory;
-import org.apache.hc.client5.http.impl.cookie.RFC6265LaxSpec;
+import org.apache.hc.client5.http.impl.cookie.RFC6265CookieSpecFactory.CompatibilityLevel;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
@@ -81,7 +84,6 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.InputStreamEntity;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
-import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.apache.hc.core5.ssl.TrustStrategy;
 import org.apache.hc.core5.util.Timeout;
@@ -107,17 +109,15 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 public class HttpExecutor
 {
-	public static final int DEFAULT_RETRIES						= 0;
+	public static final int DEFAULT_RETRIES						= 1;
 	public static final int DEFAULT_MAX_REDIRECTS				= 30;
 	public static final int DEFAULT_MAX_CONNECTION_TOTAL		= 100;
-	public static final int DEFAULT_MAX_CONNECTION_PER_ROUTE	= 30;
+	public static final int DEFAULT_MAX_CONNECTION_PER_ROUTE	= 50;
 	public static final int DEFAULT_CONNECTION_REQUEST_TIMEOUT	= 5 * 1000;
 	public static final int DEFAULT_CONNECTION_TIMEOUT			= 10 * 1000;
 	public static final int DEFAULT_RESPONSE_TIMEOUT			= 20 * 1000;
 	public static final int DEFAULT_SOCKET_TIMEOUT				= 30 * 1000;
 	public static final String DEFAULT_ENCODING					= "UTF-8";
-	public static final String DEFAUTL_COOKIE_SPEC				= "default";
-	public static final String RELAXED_COOKIE_SPEC				= "relaxed";
 	
 	private static final int MAX_LOG_CONTENT_LENGTH				= 5 * 1000;
 	private static final String MONITOR_LOGGER_NAME				= "SOA-MONITOR";
@@ -139,6 +139,8 @@ public class HttpExecutor
 	private PoolingHttpClientConnectionManager connManager;
 	
 	private boolean useCookie				= true;
+	private boolean relaxedCookieSpec		= true;
+	private boolean useSystemProperties		= true;
 	private boolean redirectsEnabled		= true;
 	private boolean circularRedirectsAllowed= true;
 	private boolean retainHeaderCookie		= true;
@@ -176,7 +178,8 @@ public class HttpExecutor
 															.setResponseTimeout(Timeout.ofMilliseconds(responseTimeout))
 															.setRedirectsEnabled(redirectsEnabled)
 															.setCircularRedirectsAllowed(circularRedirectsAllowed)
-															.setMaxRedirects(maxRedirects);
+															.setMaxRedirects(maxRedirects)
+															.setCookieSpec(relaxedCookieSpec ? StandardCookieSpec.RELAXED : StandardCookieSpec.STRICT);
 										
 					defaultRequestConfig = requestBuilder.build();
 
@@ -202,6 +205,8 @@ public class HttpExecutor
 														.setConnectionManager(connManager)
 														.setDefaultRequestConfig(defaultRequestConfig);
 					
+					if(useSystemProperties)
+						clientBuilder.useSystemProperties();
 					if(httpProxy != null)
 						clientBuilder.setRoutePlanner(new DefaultProxyRoutePlanner(httpProxy));
 
@@ -210,16 +215,10 @@ public class HttpExecutor
 					if(useCookie)
 					{
 						Registry<CookieSpecFactory> registry = RegistryBuilder.<CookieSpecFactory> create()
-																	.register(DEFAUTL_COOKIE_SPEC, new RFC6265CookieSpecFactory())
-																	.register(RELAXED_COOKIE_SPEC, new RFC6265CookieSpecFactory()
-																	{
-																		@Override
-																		public CookieSpec create(HttpContext context)
-																		{
-																			return new RFC6265LaxSpec();
-																		}
-																	})
+																	.register(StandardCookieSpec.RELAXED, new RFC6265CookieSpecFactory())
+																	.register(StandardCookieSpec.STRICT, new RFC6265CookieSpecFactory(CompatibilityLevel.STRICT, null))
 																	.build();
+						
 						httpContext.setCookieSpecRegistry(registry);
 						httpContext.setCookieStore(new BasicCookieStore());
 					}
@@ -730,6 +729,7 @@ public class HttpExecutor
 		for(; i <= retries; i++)
 		{			
 			final Response rs = new Response();
+			response = rs;
 			
 			try
 			{
@@ -771,14 +771,15 @@ public class HttpExecutor
 					}
 	
 				});
-
-				response = rs;
 				
 				break;
 			}
 			catch(Exception e)
 			{
-				if(i < retries && (e instanceof IOException) && !(e instanceof ClientProtocolException))
+				if(i < retries
+					&& (e instanceof IOException)
+					&& !(e instanceof SSLException)
+					&& !(e instanceof ClientProtocolException))
 					continue;
 				
 				if(e instanceof TimeoutException)
@@ -831,50 +832,66 @@ public class HttpExecutor
 			@Override
 			protected void doRun()
 			{
-				JSONObject jsonLog	= new JSONObject();
+				JSONObject jsonLog = new JSONObject();
 						
 				jsonLog.put("monitor_type", MONITOR_LOG_TYPE);
 				jsonLog.put("retries", i);
 				jsonLog.put("costTime", costTime);
 				
-				jsonLog.put("requestIsDownload", isDownload);
-				jsonLog.put("requestMethod", request.getMethod());
+				JSONObject jsonReq = new JSONObject();
+				jsonLog.put("httpRequest", jsonReq);
 				
-				String uriFull	= request.getRequestUri();
-				String uri		= uriFull;
-				int i			= uriFull.indexOf('?');
+				jsonReq.put("isDownload", isDownload);
+				jsonReq.put("method", request.getMethod());
+				
+				String uri  = null;
+				String path = null;
+
+				try
+				{
+					URI u = request.getUri();
+					uri   = u.toString();
+					path  = u.getPath();
+				}
+				catch(URISyntaxException e)
+				{
+				}
+
+				int i = uri.indexOf('?');
 				
 				if(i != -1)
 				{
-					uri = uriFull.substring(0, i);
-					jsonLog.put("requestUriQuery", uriFull.substring(i + 1));
+					jsonReq.put("param", uri.substring(i + 1));
 				}
 				
-				jsonLog.put("requestUri", uri);
-				jsonLog.put("requestUriFull", uriFull);
+				jsonReq.put("uri", uri);
+				jsonReq.put("path", path);
 				
-				parseHeaders(jsonLog, request.getHeaders(), "requestHeaders");
+				parseHeaders(jsonReq, request.getHeaders(), "headers");
 				
 				ProtocolVersion reqProtocolVersion = request.getVersion();
 				
 				if(reqProtocolVersion != null)
-					jsonLog.put("requestProtocolVersion", reqProtocolVersion.toString());			
+					jsonReq.put("protocolVersion", reqProtocolVersion.toString());			
 				
 					
 				HttpEntity entity = request.getEntity();
 				
 				if(entity != null)
 				{
+					JSONObject jsonEntity = new JSONObject();
+					jsonReq.put("entity", jsonEntity);
+					
 					int contentLength		= (int)entity.getContentLength();
 					String contentType		= entity.getContentType();
 					String contentEncoding	= entity.getContentEncoding();
 					
-					jsonLog.put("requestEntityContentLength", contentLength);
+					jsonEntity.put("contentLength", contentLength);
 					
 					if(GeneralHelper.isStrNotEmpty(contentType))
-						jsonLog.put("requestEntityContentType", contentType);
+						jsonEntity.put("contentType", contentType);
 					if(GeneralHelper.isStrNotEmpty(contentEncoding))
-						jsonLog.put("requestEntityContentEncoding", contentEncoding);
+						jsonEntity.put("contentEncoding", contentEncoding);
 					
 					if(contentLength > 0 && contentLength <= MAX_LOG_CONTENT_LENGTH)
 					{
@@ -886,7 +903,7 @@ public class HttpExecutor
 							is = entity.getContent();
 							is.read(content);
 							
-							jsonLog.put("requestEntityContent", new String(content, Charset.forName(encoding)));
+							jsonEntity.put("content", new String(content, Charset.forName(encoding)));
 						}
 						catch(IOException e)
 						{
@@ -899,34 +916,37 @@ public class HttpExecutor
 					}
 				}
 				
+				JSONObject jsonResp = new JSONObject();
+				jsonLog.put("httpResponse", jsonResp);
+				
 				boolean isSuccess		= response.isSuccess();
 				boolean isNoError		= response.isNoError();
 				boolean isNoExecption	= response.isNoExecption();
 				boolean isRedirect		= response.isRedirect();
 				
-				jsonLog.put("responseIsSuccess", isSuccess);
-				jsonLog.put("responseIsNoError", isNoError);
-				jsonLog.put("responseIsNoExecption", isNoExecption);
-				jsonLog.put("responseIsRedirect", isRedirect);
-				jsonLog.put("responseEncoding", response.getEncoding());
-				jsonLog.put("responseStatusCode", response.getStatusCode());
-				jsonLog.put("responseResultCode", response.getResultCode());
+				jsonResp.put("isSuccess", isSuccess);
+				jsonResp.put("isNoError", isNoError);
+				jsonResp.put("isNoExecption", isNoExecption);
+				jsonResp.put("isRedirect", isRedirect);
+				jsonResp.put("encoding", response.getEncoding());
+				jsonResp.put("statusCode", response.getStatusCode());
+				jsonResp.put("resultCode", response.getResultCode());
 				
-				parseHeaders(jsonLog, response.getHeaders(), "responseHeaders");
+				parseHeaders(jsonResp, response.getHeaders(), "headers");
 				
 				if(!isNoError)
-					jsonLog.put("responseErrorInfo", response.getErrorInfo());
+					jsonResp.put("errorInfo", response.getErrorInfo());
 				
 				if(!isNoExecption)
-					jsonLog.put("responseExceptionCause", response.getCause().toString());
+					jsonResp.put("exceptionCause", response.getCause().toString());
 				else
 				{
-					jsonLog.put("responseReasonPhrase", response.getErrorInfo());
+					jsonResp.put("reasonPhrase", response.getErrorInfo());
 					
 					String respProtocolVersion = response.getVersion();
 					
 					if(GeneralHelper.isStrNotEmpty(respProtocolVersion))
-						jsonLog.put("responseProtocolVersion", respProtocolVersion);
+						jsonResp.put("protocolVersion", respProtocolVersion);
 				}
 				
 				byte[] respContent = response.getContent();
@@ -935,10 +955,10 @@ public class HttpExecutor
 				{
 					int respContentLength = respContent.length;
 					
-					jsonLog.put("responseContentLength", respContentLength);
+					jsonResp.put("contentLength", respContentLength);
 					
 					if(respContentLength > 0 && respContentLength <= MAX_LOG_CONTENT_LENGTH)
-						jsonLog.put("responseContent", response.toString());						
+						jsonResp.put("content", response.toString());						
 				}
 				
 				String msg = jsonLog.toJSONString();
@@ -1195,11 +1215,6 @@ public class HttpExecutor
 	{
 		return RequestConfig.copy(defaultRequestConfig);
 	}
-	
-	public RequestConfig.Builder createLaxCookieRequestConfig()
-	{
-		return copyDefaultRequestConfig().setCookieSpec(RELAXED_COOKIE_SPEC);
-	}
 
 	@Getter
 	@Setter
@@ -1252,6 +1267,14 @@ public class HttpExecutor
 		{
 			return cause == null;
 		}
+		
+		public int getContentLength()
+		{
+			if(content == null)
+				return 0;
+			
+			return content.length;
+		}
 
 		@Override
 		public String toString()
@@ -1263,12 +1286,13 @@ public class HttpExecutor
 		}
 	}
 
-	public <Q, R> R postRequest(String uri, Q request, Class<R> clazz)
+	public <Q, R> R postJsonRequest(String uri, Q request, Class<R> clazz)
 	{
-		return postRequest(uri, request, clazz, null);
+		return postJsonRequest(uri, request, clazz, null);
 	}
 
-	public <Q, R> R postRequest(String uri, Q request, Class<R> clazz, List<NameValuePair> extraHeaders)
+	@SuppressWarnings("unchecked")
+	public <Q, R> R postJsonRequest(String uri, Q request, Class<R> clazz, List<NameValuePair> extraHeaders)
 	{
 		R response					= null;
 		List<NameValuePair> headers	= new ArrayList<NameValuePair>();
@@ -1282,7 +1306,7 @@ public class HttpExecutor
 		headers.add(new BasicNameValuePair("User-Agent"			, "Mozilla/5.0"));
 		headers.add(new BasicNameValuePair("Content-Type"       , "application/json"));
 		
-		if(extraHeaders != null)
+		if(GeneralHelper.isNotNullOrEmpty(extraHeaders))
 			headers.addAll(extraHeaders);
 		
 		try
@@ -1292,8 +1316,17 @@ public class HttpExecutor
 			
 			if(resp.isSuccess())
 			{
-				String result = resp.toString();
-				response = JSON.parseObject(result, clazz);
+				if(clazz.equals(byte[].class))
+					response = (R)resp.getContent();
+				else
+				{
+					String result = resp.toString();
+					
+					if(clazz.equals(String.class))
+						response = (R)result;
+					else
+						response = JSON.parseObject(result, clazz);
+				}
 			}
 			else if(!resp.isNoError()){
 				throw new ServiceException(resp.getErrorInfo(), ServiceException.OUTER_API_CALL_FAIL);
@@ -1310,10 +1343,18 @@ public class HttpExecutor
 		return response;
 	}
 	
-	public <Q, R> R postRequest(List<NameValuePair> headers,  String uri,  Map<String, String> params, Class<R> clazz)
+	public <Q, R> R postFormRequest(String uri, Map<String, String> params, Class<R> clazz)
+	{
+		return postFormRequest(null, uri, params, clazz);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <Q, R> R postFormRequest(List<NameValuePair> headers, String uri, Map<String, String> params, Class<R> clazz)
 	{
 		R response = null;
-		if(headers == null){
+		
+		if(GeneralHelper.isNullOrEmpty(headers))
+		{
 			headers	= new ArrayList<NameValuePair>();
 			headers.add(new BasicNameValuePair("Accept"				, "text/html"));
 			headers.add(new BasicNameValuePair("Accept-Encoding"	, "gzip, deflate"));
@@ -1325,10 +1366,14 @@ public class HttpExecutor
 		}
 		
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-		if (params != null && !params.isEmpty()) {
-			for (Map.Entry<String, String> entry : params.entrySet()) {
+		
+		if(params != null && !params.isEmpty())
+		{
+			for (Map.Entry<String, String> entry : params.entrySet())
+			{
 				String value = entry.getValue();
-				if (value != null) {
+				if (value != null)
+				{
 					pairs.add(new BasicNameValuePair(entry.getKey(), value));
 				}
 			}
@@ -1340,8 +1385,17 @@ public class HttpExecutor
 			
 			if(resp.isSuccess())
 			{
-				String result = resp.toString();
-				response = JSON.parseObject(result, clazz);
+				if(clazz.equals(byte[].class))
+					response = (R)resp.getContent();
+				else
+				{
+					String result = resp.toString();
+					
+					if(clazz.equals(String.class))
+						response = (R)result;
+					else
+						response = JSON.parseObject(result, clazz);
+				}
 			}
 			else if(!resp.isNoError())
 				throw new ServiceException(resp.getErrorInfo(), ServiceException.OUTER_API_CALL_FAIL);
@@ -1357,13 +1411,13 @@ public class HttpExecutor
 		return response;
 	}
 	
-	public <Q, R> R postRequest(String uri, Map<String, String> params, Class<R> clazz)
+	public final <Q, R> R getRequest(String uri, Class<R> clazz)
 	{
-		return postRequest(null, uri, params, clazz);
+		return getRequest(uri, clazz, null);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static final <Q, R> R getRequest(HttpExecutor httpExecutor, String uri, Class<R> clazz)
+	public <Q, R> R getRequest(String uri, Class<R> clazz, List<NameValuePair> extraHeaders)
 	{
 		R response					= null;
 		List<NameValuePair> headers	= new ArrayList<NameValuePair>();
@@ -1376,19 +1430,26 @@ public class HttpExecutor
 		headers.add(new BasicNameValuePair("Pragma"				, "no-cache"));
 		headers.add(new BasicNameValuePair("User-Agent"			, "Mozilla/5.0"));
 		
+		if(GeneralHelper.isNotNullOrEmpty(extraHeaders))
+			headers.addAll(extraHeaders);
+		
 		try
 		{
-			HttpExecutor.Response resp = httpExecutor.executeGet(uri, headers);
+			HttpExecutor.Response resp = executeGet(uri, headers);
 			
 			if(resp.isSuccess())
 			{
-				String result = resp.toString();
-				if(clazz.equals(String.class)){
-					response = (R)result;
-				}else{
-					response = JSON.parseObject(result, clazz);
+				if(clazz.equals(byte[].class))
+					response = (R)resp.getContent();
+				else
+				{
+					String result = resp.toString();
+					
+					if(clazz.equals(String.class))
+						response = (R)result;
+					else
+						response = JSON.parseObject(result, clazz);
 				}
-				
 			}
 			else if(!resp.isNoError())
 				throw new ServiceException(resp.getErrorInfo(), ServiceException.OUTER_API_CALL_FAIL);
@@ -1449,11 +1510,6 @@ public class HttpExecutor
 		return getHttpExecutorInstance(connectionRequestTimeout, connectTimeout, socketTimeout, maxConnectionTotal, maxConnectionPerRoute, useCookie, httpProxy);
 	}
 	
-	public static final HttpExecutor getHttpExecutorInstance(boolean useProxy)
-	{
-		return getHttpExecutorInstance(useProxy, DEFAULT_RETRIES);
-	}
-	
 	public static final HttpExecutor getHttpExecutorInstance(
 		int connectionRequestTimeout, int connectTimeout, int socketTimeout,
 		int maxConnectionTotal, int maxConnectionPerRoute, int retries, boolean useCookie)
@@ -1469,9 +1525,24 @@ public class HttpExecutor
 		return getHttpExecutorInstance(connectionRequestTimeout, connectTimeout, socketTimeout, maxConnectionTotal, maxConnectionPerRoute, retries, useCookie, httpProxy);
 	}
 	
-	public static final HttpExecutor getHttpExecutorInstance(boolean useProxy, int retries)
+	public static final HttpExecutor getHttpExecutorInstance(boolean useCookie)
 	{
-		return getHttpExecutorInstance(DEFAULT_CONNECTION_REQUEST_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT, DEFAULT_SOCKET_TIMEOUT, DEFAULT_MAX_CONNECTION_TOTAL, DEFAULT_MAX_CONNECTION_PER_ROUTE, retries, false, useProxy);
+		return getHttpExecutorInstance(DEFAULT_RETRIES, useCookie);
+	}
+	
+	public static final HttpExecutor getHttpExecutorInstance(int retries, boolean useCookie)
+	{
+		return getHttpExecutorInstance(retries, useCookie, false);
+	}
+	
+	public static final HttpExecutor getHttpExecutorInstance(boolean useCookie, boolean useProxy)
+	{
+		return getHttpExecutorInstance(DEFAULT_RETRIES, useCookie, useProxy);
+	}
+	
+	public static final HttpExecutor getHttpExecutorInstance(int retries, boolean useCookie, boolean useProxy)
+	{
+		return getHttpExecutorInstance(DEFAULT_CONNECTION_REQUEST_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT, DEFAULT_SOCKET_TIMEOUT, DEFAULT_MAX_CONNECTION_TOTAL, DEFAULT_MAX_CONNECTION_PER_ROUTE, retries, useCookie, useProxy);
 	}
 	
 	private static final HttpHost getSystemHttpProxy()
@@ -1479,7 +1550,7 @@ public class HttpExecutor
 		if(!"true".equalsIgnoreCase(System.getProperty("http.proxySet")))
 			return null;
 		
-		return new HttpHost(System.getProperty("http.proxyHost"), GeneralHelper.str2Int(System.getProperty("http.proxyHost"), -1));
+		return new HttpHost(System.getProperty("http.proxyHost"), GeneralHelper.str2Int(System.getProperty("http.proxyPort"), -1));
 	}
 
 }
