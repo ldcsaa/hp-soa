@@ -20,7 +20,7 @@ hp.soa.web:
     maxAge: 3600
   access-verification:
     enabled: false
-    DefaultAccessPolicy: maybe_login
+    default-access-policy: maybe_login
 
 # logging
 logging.config: classpath:log4j2-kafka.xml

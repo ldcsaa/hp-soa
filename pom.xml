@@ -12,7 +12,7 @@
 	<url>https://github.com/ldcsaa/hp-soa</url>
 
 	<properties>
-		<revision>0.1.0-SNAPSHOT</revision>
+		<revision>1.0.0-SNAPSHOT</revision>
 		<hp-soa.version>${revision}</hp-soa.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

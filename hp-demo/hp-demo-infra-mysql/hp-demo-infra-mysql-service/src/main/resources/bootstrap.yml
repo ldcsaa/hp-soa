@@ -14,7 +14,7 @@ hp.soa.web:
     base-package: ${project.groupId}.infra.mysql.mapper
   access-verification:
     enabled: false
-    DefaultAccessPolicy: maybe_login
+    default-access-policy: maybe_login
 
 # logging
 logging.config: classpath:log4j2-kafka.xml
