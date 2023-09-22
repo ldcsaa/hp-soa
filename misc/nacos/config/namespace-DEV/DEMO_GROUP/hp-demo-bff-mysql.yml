@@ -1,1 +1,10 @@
 xxx.yyy: 789
+
+hp.soa.web.proxy:
+  enabled: true
+  scheme: http
+  host: 192.168.56.1
+  port: 8001
+  userName:
+  password:
+  nonProxyHosts: localhost|*.lcbcorp.com|*.lcbint.cn|*.lcbtest.cn|10.*|192.168.*|127.*|[::1]

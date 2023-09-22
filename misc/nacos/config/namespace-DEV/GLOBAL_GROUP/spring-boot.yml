@@ -28,7 +28,7 @@ spring:
     allow-override: true
     override-system-properties: true
     override-none: true
-    # prod env -> enable override
+    # prod env -> disable override
     #allow-override: false
     #override-system-properties: false
     #override-none: false
