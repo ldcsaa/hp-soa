@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
@@ -25,48 +26,50 @@ import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 /** <b>HP-SOA 全局事务配置</b><br>
- * 当 <i>${global-transaction-management.enabled}</i> 为 true 时，启用全局事务配置
+ * 当 <i>${hp.soa.data.global-transaction-management.enabled}</i> 为 true 时，启用全局事务配置
  */
 @AutoConfiguration
 @EnableTransactionManagement
-@ConditionalOnProperty(name = "global-transaction-management.enabled", matchIfMissing = false)
-public class SoaTransactionConfig
+@ConditionalOnProperty(name = "hp.soa.data.global-transaction-management.enabled", matchIfMissing = false)
+public class SoaGlobalTransactionConfig
 {
-	@Value("${global-transaction-management.timeout:3000}")
+	@Value("${hp.soa.data.global-transaction-management.timeout:3000}")
 	private int timeout;
-	@Value("${global-transaction-management.isolation:ISOLATION_READ_COMMITTED}")
+	@Value("${hp.soa.data.global-transaction-management.isolation:ISOLATION_READ_COMMITTED}")
 	private String isolation;
-	@Value("${global-transaction-management.propagation:PROPAGATION_REQUIRED}")
+	@Value("${hp.soa.data.global-transaction-management.propagation:PROPAGATION_REQUIRED}")
 	private String propagation;
-	@Value("${global-transaction-management.rollback-for:java.lang.Exception}")
+	@Value("${hp.soa.data.global-transaction-management.rollback-for:java.lang.Exception}")
 	Class<Throwable>[] rollbackFor;
 	
-	@Value("${global-transaction-management.read-only-timeout:3000}")
+	@Value("${hp.soa.data.global-transaction-management.read-only-timeout:3000}")
 	private int readOnlyTimeout;
-	@Value("${global-transaction-management.read-only-isolation:ISOLATION_READ_COMMITTED}")
+	@Value("${hp.soa.data.global-transaction-management.read-only-isolation:ISOLATION_READ_COMMITTED}")
 	private String readOnlyIsolation;
-	@Value("${global-transaction-management.read-only-propagation:PROPAGATION_REQUIRED}")
+	@Value("${hp.soa.data.global-transaction-management.read-only-propagation:PROPAGATION_REQUIRED}")
 	private String readOnlyPropagation;
 
-
-	@Value("${global-transaction-management.pointcut-expression:}")
+	@Value("${hp.soa.data.global-transaction-management.pointcut-expression:}")
 	private String pointcutExpression;
-
+	
 	/** 全局事务的默认 Advice */
-	@Bean("txAdvice")
-	@ConditionalOnMissingBean(name = "txAdvice")
-	public TransactionInterceptor txAdvice(	TransactionManager transactionManager,
-											SoaTransactionAttributeSourceNameMapProvider soaTransactionAttributeSourceNameMapProvider,
-											@Qualifier("requiredRuleBasedTransactionAttribute") RuleBasedTransactionAttribute required, 
-											@Qualifier("readOnlyRuleBasedTransactionAttribute") RuleBasedTransactionAttribute readOnly)
+	@Primary
+	@Bean("dynamicRoutingTransactionAdvice")
+	@ConditionalOnMissingBean(name = "dynamicRoutingTransactionAdvice")
+	public TransactionInterceptor dynamicRoutingTransactionAdvice(
+		@Qualifier("dynamicRoutingTransactionManager") TransactionManager transactionManager,
+		@Qualifier("soaTransactionAttributeSourceNameMapProvider") SoaTransactionAttributeSourceNameMapProvider nameMapProvider,
+		@Qualifier("requiredRuleBasedTransactionAttribute") RuleBasedTransactionAttribute required, 
+		@Qualifier("readOnlyRuleBasedTransactionAttribute") RuleBasedTransactionAttribute readOnly)
 	{
 		NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
-		source.setNameMap(soaTransactionAttributeSourceNameMapProvider.getNameMap(required, readOnly));
+		source.setNameMap(nameMapProvider.getNameMap(required, readOnly));
 		
 		return new TransactionInterceptor(transactionManager, source);
 	}
 	
 	/** 全局事务的默认普通事务属性 */
+	@Primary
 	@Bean("requiredRuleBasedTransactionAttribute")
 	@ConditionalOnMissingBean(name = "requiredRuleBasedTransactionAttribute")
 	RuleBasedTransactionAttribute requiredRuleBasedTransactionAttribute()
@@ -86,6 +89,7 @@ public class SoaTransactionConfig
 	}
 	
 	/** 全局事务的默认只读事务属性 */
+	@Primary
 	@Bean("readOnlyRuleBasedTransactionAttribute")
 	@ConditionalOnMissingBean(name = "readOnlyRuleBasedTransactionAttribute")
 	RuleBasedTransactionAttribute readOnlyRuleBasedTransactionAttribute()
@@ -100,25 +104,27 @@ public class SoaTransactionConfig
 	}
 	
 	/** 全局事务的默认事务拦截匹配参数提供者 */
-	@Bean("defaultSoaTransactionAttributeSourceNameMapProvider")
-	@ConditionalOnMissingBean(name = "defaultSoaTransactionAttributeSourceNameMapProvider")
-	SoaTransactionAttributeSourceNameMapProvider defaultSoaTransactionAttributeSourceNameMapProvider()
+	@Primary
+	@Bean("soaTransactionAttributeSourceNameMapProvider")
+	@ConditionalOnMissingBean(name = "soaTransactionAttributeSourceNameMapProvider")
+	SoaTransactionAttributeSourceNameMapProvider soaTransactionAttributeSourceNameMapProvider()
 	{
 		return new SoaTransactionAttributeSourceNameMapProvider() {};
 	}
 
 	/** 全局事务的默认 Advisor */
-	@Bean("txAdviceAdvisor")
-	@ConditionalOnMissingBean(name = "txAdviceAdvisor")
-	@ConditionalOnExpression("'${global-transaction-management.pointcut-expression:}' != ''")
-	public Advisor txAdviceAdvisor(@Qualifier("txAdvice") TransactionInterceptor txAdvice)
+	@Primary
+	@Bean("dynamicRoutingTransactionAdvisor")
+	@ConditionalOnMissingBean(name = "dynamicRoutingTransactionAdvisor")
+	@ConditionalOnExpression("'${hp.soa.data.global-transaction-management.pointcut-expression:}' != ''")
+	public Advisor dynamicRoutingTransactionAdvisor(@Qualifier("dynamicRoutingTransactionAdvice") TransactionInterceptor txAdvice)
 	{
 		AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
 		pointcut.setExpression(pointcutExpression);
 		return new DefaultPointcutAdvisor(pointcut, txAdvice);
 	}
 	
-	static interface SoaTransactionAttributeSourceNameMapProvider
+	public static interface SoaTransactionAttributeSourceNameMapProvider
 	{
 		default Map<String, TransactionAttribute> getNameMap(RuleBasedTransactionAttribute required, RuleBasedTransactionAttribute readOnly)
 		{

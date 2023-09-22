@@ -21,7 +21,7 @@ public @interface AccessVerification
 		NO_CHECK,
 		/** 不校验登录（只校验 appCode） */
 		NO_LOGIN,
-		/** 不校验登录（只校验 appCode），如果已登录则加载用户信息 */
+		/** 不强制校验登录（只校验 appCode），如果已登录则加载用户信息 */
 		MAYBE_LOGIN,
 		/** 校验登录 */
 		REQUIRE_LOGIN,
@@ -29,5 +29,6 @@ public @interface AccessVerification
 		REQUIRE_AUTHORIZED
 	}
 	
-	Type value() default Type.NO_LOGIN;
+	/** 校验类型：（默认：{@linkplain Type#MAYBE_LOGIN MAYBE_LOGIN}） */
+	Type value() default Type.MAYBE_LOGIN;
 }

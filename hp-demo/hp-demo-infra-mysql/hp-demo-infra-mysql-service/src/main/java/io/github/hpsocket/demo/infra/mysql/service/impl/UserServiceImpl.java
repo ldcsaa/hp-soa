@@ -14,7 +14,6 @@ import io.github.hpsocket.demo.infra.mysql.converter.UserConverter;
 import io.github.hpsocket.demo.infra.mysql.entity.User;
 import io.github.hpsocket.demo.infra.mysql.mapper.UserMapper;
 import io.github.hpsocket.demo.infra.mysql.service.UserService;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,7 +23,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 {
 	@Autowired
 	private UserConverter userConverter;
-	
+		
 	@Override
 	public UserBo getDefaultUser()
 	{

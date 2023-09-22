@@ -18,7 +18,7 @@
     <properties>
 		<nacos-client.version>2.2.4</nacos-client.version>
 		<nacos-config-spring-boot-starter.version>0.2.12</nacos-config-spring-boot-starter.version>
-		<dubbo.version>3.2.5</dubbo.version>
+		<dubbo.version>3.2.6</dubbo.version>
 		<netty.version>4.1.97.Final</netty.version>
 		<zookeeper.version>3.9.0</zookeeper.version>
 		<zkclient.version>0.11</zkclient.version>
@@ -26,31 +26,22 @@
 		<fst.version>3.0.4-jdk17</fst.version>
 		<xxl-job.version>2.4.0</xxl-job.version>
 		<sentinel.version>1.8.6</sentinel.version>
-
-		<!--
-		<leaf-core.version>1.0.1a</leaf-core.version>
-		-->
 		
-		<spring.version>6.0.11</spring.version>
-		<spring-boot.version>3.1.3</spring-boot.version>
+		<spring.version>6.0.12</spring.version>
+		<spring-boot.version>3.1.4</spring-boot.version>
 		<spring-cloud.version>2022.0.4</spring-cloud.version>
 		<spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <spring-security-oauth.version>2.5.2.RELEASE</spring-security-oauth.version>
         <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
-		<spring-data.version>3.1.3</spring-data.version>
-		<spring-data-redis.version>3.1.3</spring-data-redis.version>
-		<spring-boot-starter-data-redis.version>3.1.3</spring-boot-starter-data-redis.version>
-		<spring-boot-starter-data-mongodb.version>3.1.3</spring-boot-starter-data-mongodb.version>
-		<spring-data-mongodb.version>4.1.3</spring-data-mongodb.version>
-		<spring-amqp.version>3.0.8</spring-amqp.version>
-		<spring-rabbit.version>3.0.8</spring-rabbit.version>
-		<spring-rabbit-stream.version>3.0.8</spring-rabbit-stream.version>
+		<spring-data.version>3.1.4</spring-data.version>
+		<spring-data-mongodb.version>4.1.4</spring-data-mongodb.version>
+		<spring-amqp.version>3.0.9</spring-amqp.version>
 		<spring-kafka.version>3.0.11</spring-kafka.version>
 		<kafka-clients.version>3.5.1</kafka-clients.version>
 		<druid.version>1.2.19</druid.version>
 		<jedis.version>4.4.4</jedis.version>
 		<lettuce.version>6.2.6.RELEASE</lettuce.version>
-		<redisson.version>3.23.4</redisson.version>
+		<redisson.version>3.23.5</redisson.version>
 		<amqp-client.version>5.18.0</amqp-client.version>
 		<stream-client.version>0.12.0</stream-client.version>
 		<mongo-java-driver.version>3.12.14</mongo-java-driver.version>
@@ -81,8 +72,9 @@
         <jakarta.el-api.version>5.0.1</jakarta.el-api.version>
         <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
         <jakarta.activation-api.version>2.1.2</jakarta.activation-api.version>
-        <jakarta.xml.bind-api.version>4.0.0</jakarta.xml.bind-api.version>
+        <jakarta.xml.bind-api.version>4.0.1</jakarta.xml.bind-api.version>
         <jakarta.persistence-api.version>3.1.0</jakarta.persistence-api.version>
+        <jakarta.mail-api.version>2.1.2</jakarta.mail-api.version>
 
 		<javax-javaee-api.version>8.0.1</javax-javaee-api.version>
 		<javax.servlet-api.version>4.0.1</javax.servlet-api.version>
@@ -94,12 +86,11 @@
 		<slf4j.version>2.0.9</slf4j.version>
 		<log4j.version>2.20.0</log4j.version>
 		<disruptor.version>3.4.4</disruptor.version>
-		<skywalking.apm-toolkit.version>8.16.0</skywalking.apm-toolkit.version>
+		<skywalking.apm-toolkit.version>9.0.0</skywalking.apm-toolkit.version>
 		<junit.version>4.13.2</junit.version>
 		<junit5.version>5.10.0</junit5.version>
 
 		<fastjson.version>2.0.40</fastjson.version>
-		<fastjson2.version>2.0.40</fastjson2.version>
 		<protobuf-java.version>3.24.3</protobuf-java.version>
 		<quartz.version>2.3.2</quartz.version>
 		<httpclient.version>4.5.14</httpclient.version>
@@ -109,7 +100,7 @@
 		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 		<velocity.version>2.3</velocity.version>
 		<freemarker.version>2.3.32</freemarker.version>
-		<beetl.version>3.15.8.RELEASE</beetl.version>
+		<beetl.version>3.15.9.RELEASE</beetl.version>
 
 		<geoip2.version>4.1.0</geoip2.version>
 		<gson.version>2.10.1</gson.version>
@@ -130,13 +121,13 @@
 		<springdoc-openapi.version>2.2.0</springdoc-openapi.version>
 		
 		<curator.version>5.5.0</curator.version>
-        <hutool.version>5.8.21</hutool.version>      
+        <hutool.version>5.8.22</hutool.version>      
         <jjwt.version>0.11.5</jjwt.version>
         
 		<seata.version>1.7.1</seata.version>
 		
 		<micrometer-jvm-extras.version>0.2.2</micrometer-jvm-extras.version>
-		<micrometer-core.version>1.11.3</micrometer-core.version>
+		<micrometer-core.version>1.11.4</micrometer-core.version>
 		
 		<zipkin-brave.version>5.16.0</zipkin-brave.version>
 		<zipkin-reporter.version>2.16.4</zipkin-reporter.version>
@@ -152,6 +143,16 @@
 			<dependency>
 				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-framework-web</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.hpsocket</groupId>
+				<artifactId>hp-soa-framework-leaf</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.hpsocket</groupId>
+				<artifactId>hp-soa-framework-util</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
@@ -202,6 +203,16 @@
 			<dependency>
 				<groupId>io.github.hpsocket</groupId>
 				<artifactId>hp-soa-starter-rabbitmq</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.hpsocket</groupId>
+				<artifactId>hp-soa-starter-seata</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.hpsocket</groupId>
+				<artifactId>hp-soa-starter-leaf</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			
@@ -298,6 +309,16 @@
 			    <groupId>org.apache.zookeeper</groupId>
 			    <artifactId>zookeeper</artifactId>
 			    <version>${zookeeper.version}</version>
+			    <exclusions>
+		        	<exclusion>
+					    <groupId>ch.qos.logback</groupId>
+					    <artifactId>logback-core</artifactId>
+		        	</exclusion>
+		        	<exclusion>
+					    <groupId>ch.qos.logback</groupId>
+					    <artifactId>logback-classic</artifactId>
+		        	</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 			    <groupId>com.101tec</groupId>
@@ -316,35 +337,35 @@
 			    <artifactId>jakarta.validation-api</artifactId>
 			    <version>${jakarta.validation-api.version}</version>
 			</dependency>
-
 			<dependency>
 			    <groupId>jakarta.servlet</groupId>
 			    <artifactId>jakarta.servlet-api</artifactId>
 			    <version>${jakarta.servlet-api.version}</version>
 			</dependency>
-			
 			<dependency>
 			    <groupId>jakarta.el</groupId>
 			    <artifactId>jakarta.el-api</artifactId>
 			    <version>${jakarta.el-api.version}</version>
 			</dependency>
-			
 			<dependency>
 			    <groupId>jakarta.annotation</groupId>
 			    <artifactId>jakarta.annotation-api</artifactId>
 			    <version>${jakarta.annotation-api.version}</version>
 			</dependency>
-			
 			<dependency>
 			    <groupId>jakarta.activation</groupId>
 			    <artifactId>jakarta.activation-api</artifactId>
 			    <version>${jakarta.activation-api.version}</version>
 			</dependency>
-
 			<dependency>
 			    <groupId>jakarta.persistence</groupId>
 			    <artifactId>jakarta.persistence-api</artifactId>
 			    <version>${jakarta.persistence-api.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>jakarta.mail</groupId>
+			    <artifactId>jakarta.mail-api</artifactId>
+			    <version>${jakarta.mail-api.version}</version>
 			</dependency>
 			
 			<dependency>
@@ -468,20 +489,6 @@
 			    <version>${sentinel.version}</version>
 			</dependency>
 			
-			<!--
-			<dependency>
-				<groupId>com.sankuai.inf.leaf</groupId>
-				<artifactId>leaf-core</artifactId>
-				<version>${leaf-core.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.curator</groupId>
-						<artifactId>curator-recipes</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			-->
-			
 			<dependency>
 				<groupId>com.google.zxing</groupId>
 				<artifactId>javase</artifactId>
@@ -521,19 +528,9 @@
 				<version>${amqp-client.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.springframework.amqp</groupId>
-				<artifactId>spring-rabbit</artifactId>
-				<version>${spring-rabbit.version}</version>
-			</dependency>
-			<dependency>
 			    <groupId>com.rabbitmq</groupId>
 			    <artifactId>stream-client</artifactId>
 			    <version>${stream-client.version}</version>
-			</dependency>
-			<dependency>
-			    <groupId>org.springframework.amqp</groupId>
-			    <artifactId>spring-rabbit-stream</artifactId>
-			    <version>${spring-rabbit-stream.version}</version>
 			</dependency>
 
 			
@@ -548,15 +545,30 @@
 				<version>${spring-amqp.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework.amqp</groupId>
+				<artifactId>spring-rabbit</artifactId>
+				<version>${spring-amqp.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.springframework.amqp</groupId>
+			    <artifactId>spring-rabbit-stream</artifactId>
+			    <version>${spring-amqp.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-redis</artifactId>
-				<version>${spring-data-redis.version}</version>
+				<version>${spring-data.version}</version>
 			</dependency>
-			
 			<dependency>
 			    <groupId>org.springframework.boot</groupId>
 			    <artifactId>spring-boot-starter-data-redis</artifactId>
-			    <version>${spring-boot-starter-data-redis.version}</version>
+			    <version>${spring-data.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+			    <version>${spring-data.version}</version>
 			</dependency>
 
 			<dependency>
@@ -565,12 +577,6 @@
 				<version>${spring-data-mongodb.version}</version>
 			</dependency>
 			
-			<dependency>
-			    <groupId>org.springframework.boot</groupId>
-			    <artifactId>spring-boot-starter-data-mongodb</artifactId>
-			    <version>${spring-boot-starter-data-mongodb.version}</version>
-			</dependency>
-
 			<dependency>
 			    <groupId>org.springframework.kafka</groupId>
 			    <artifactId>spring-kafka</artifactId>
@@ -890,12 +896,12 @@
 			<dependency>
 				<groupId>com.alibaba.fastjson2</groupId>
 				<artifactId>fastjson2</artifactId>
-				<version>${fastjson2.version}</version>
+				<version>${fastjson.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>com.alibaba.fastjson2</groupId>
 			    <artifactId>fastjson2-extension-spring6</artifactId>
-			    <version>${fastjson2.version}</version>
+			    <version>${fastjson.version}</version>
 			</dependency>
 			
 			<dependency>
@@ -920,6 +926,16 @@
 			    <artifactId>httpclient5</artifactId>
 			    <version>${httpclient5.version}</version>
 			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents.client5</groupId>
+			    <artifactId>httpclient5-cache</artifactId>
+			    <version>${httpclient5.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents.client5</groupId>
+			    <artifactId>httpclient5-fluent</artifactId>
+			    <version>${httpclient5.version}</version>
+			</dependency>
 			
 			<dependency>
 			    <groupId>com.blueconic</groupId>
@@ -931,11 +947,6 @@
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>
 				<version>${druid.version}</version>
-			</dependency>
-			<dependency>
-			    <groupId>com.alibaba</groupId>
-			    <artifactId>druid-spring-boot-starter</artifactId>
-			    <version>${druid.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>com.alibaba</groupId>
@@ -1322,6 +1333,12 @@
 				<groupId>io.seata</groupId>
 				<artifactId>seata-spring-boot-starter</artifactId>
 				<version>${seata.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>io.seata</groupId>
+			    <artifactId>seata-dubbo</artifactId>
+			    <version>${seata.version}</version>
+			    <type>pom</type>
 			</dependency>
 
 			<!-- micrometer -->

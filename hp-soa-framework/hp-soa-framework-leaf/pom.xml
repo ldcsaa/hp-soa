@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.github.hpsocket</groupId>
+		<artifactId>hp-soa-framework</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<artifactId>hp-soa-framework-leaf</artifactId>
+	<name>${project.artifactId}</name>
+	<packaging>jar</packaging>
+	<description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
+	<url>https://github.com/ldcsaa/hp-soa</url>
+
+	<properties>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.github.hpsocket</groupId>
+			<artifactId>hp-soa-framework-core</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <optional>true</optional>
+        </dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+            <optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+            <optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.fastjson2</groupId>
+			<artifactId>fastjson2</artifactId>
+		</dependency>
+	</dependencies>
+</project>

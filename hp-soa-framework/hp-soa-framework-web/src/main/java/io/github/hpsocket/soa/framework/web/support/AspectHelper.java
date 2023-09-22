@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,13 +21,11 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
-import com.google.common.collect.Maps;
-
 /** <b>Aspect 拦截信息检索辅助类</b> */
 public class AspectHelper
 {
 	private static ExpressionParser expressionParser = new SpelExpressionParser();
-	private static ConcurrentMap<String, Expression> expressionMap = Maps.newConcurrentMap();
+	private static ConcurrentMap<String, Expression> expressionMap = new ConcurrentHashMap<>();
 
 	public static final EvaluationContext buildContext(JoinPoint point, Object result)
 	{
@@ -128,7 +127,7 @@ public class AspectHelper
 		String[] parameterNames = ms.getParameterNames();
 		Object[] args = point.getArgs();
 		
-		Map<String, Object> paramMap = Maps.newHashMapWithExpectedSize(parameterNames.length);
+		Map<String, Object> paramMap = new HashMap<>(parameterNames.length);
 		
 		for(int i = 0; i < parameterNames.length; i++)
 			paramMap.put(parameterNames[i], args[i]);

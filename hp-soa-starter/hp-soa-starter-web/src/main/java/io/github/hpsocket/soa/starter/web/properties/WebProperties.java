@@ -28,6 +28,8 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
 	@NestedConfigurationProperty
 	private CorsProperties cors = new CorsProperties();	
 	@NestedConfigurationProperty
+	private ProxyProperties proxy = new ProxyProperties();	
+	@NestedConfigurationProperty
 	private AccessVerificationProperties accessVerification = new AccessVerificationProperties();
 	
 	@Getter
@@ -73,6 +75,19 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
 		private String[] exposedHeaders = {};
 		private boolean allowCredentials = true;
 		private int maxAge = 3600;
+	}
+	
+	@Getter
+	@Setter
+	public static class ProxyProperties
+	{
+		private boolean enabled = false;
+		private String scheme;
+		private String host;
+		private int port;
+		private String userName;
+		private String password;
+		private String nonProxyHosts;
 	}
 
 	public static class AccessVerificationProperties
@@ -179,4 +194,5 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
 	{
 		return async.isAllowCoreThreadTimeOut();
 	}
+
 }

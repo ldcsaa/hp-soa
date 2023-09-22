@@ -1543,7 +1543,7 @@ public class GeneralHelper
 				list.add(Long.parseLong(st.nextToken()));
 		}
 
-		return list != null ? list : new ArrayList<Long>();
+		return list != null ? list : List.of();
 	}
 	
 	public static final List<Integer> str2IntList(String str)
@@ -1564,7 +1564,7 @@ public class GeneralHelper
 				list.add(Integer.parseInt(st.nextToken()));
 		}
 
-		return list != null ? list : new ArrayList<Integer>();
+		return list != null ? list : List.of();
 	}
 	
 	public static final List<String> str2StrList(String str)
@@ -1585,7 +1585,7 @@ public class GeneralHelper
 				list.add(st.nextToken());
 		}
 
-		return list != null ? list : new ArrayList<String>();
+		return list != null ? list : List.of();
 	}
 	
 	public static final Integer str2IntRounding(String str)

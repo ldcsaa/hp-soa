@@ -81,7 +81,9 @@ mybatis-plus:
       update-strategy: not_null
       select-strategy: not_null
 
-global-transaction-management:
+# 全局事务配置
+hp.soa.data.global-transaction-management:
+  # 默认不开启全局事务
   enabled: false
   timeout: 3000
   isolation: ISOLATION_READ_COMMITTED

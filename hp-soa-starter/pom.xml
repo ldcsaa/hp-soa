@@ -29,6 +29,8 @@
 		<module>hp-soa-starter-job-exclusive</module>
 		<module>hp-soa-starter-job-xxljob</module>
 		<module>hp-soa-starter-rabbitmq</module>
+		<module>hp-soa-starter-seata</module>
+		<module>hp-soa-starter-leaf</module>
 	</modules>
 	
 	<dependencyManagement>
@@ -59,10 +61,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

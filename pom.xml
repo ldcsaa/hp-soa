@@ -12,7 +12,7 @@
 	<url>https://github.com/ldcsaa/hp-soa</url>
 
 	<properties>
-		<revision>0.0.1</revision>
+		<revision>0.1.0</revision>
 		<hp-soa.version>${revision}</hp-soa.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -24,7 +24,7 @@
 		
 		<spring-boot.main_class>io.github.hpsocket.soa.framework.web.server.main.AppStarter</spring-boot.main_class>
 
-		<lombok.version>1.18.28</lombok.version>
+		<lombok.version>1.18.30</lombok.version>
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
 
@@ -33,23 +33,23 @@
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-		<maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>
 		<maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
 		<maven-install-plugin.version>3.1.1</maven-install-plugin.version>
 		<maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
 		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
 		<maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-		<spring-boot-maven-plugin.version>3.1.1</spring-boot-maven-plugin.version>
+		<nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
 		<flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
 		<docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
+		<spring-boot-maven-plugin.version>3.1.4</spring-boot-maven-plugin.version>
 
 		<maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
 		<maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
 		<maven.surefire.conf.parallel>all</maven.surefire.conf.parallel>
-		<nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
 		<maven.surefire.conf.useSystemClassLoader>true</maven.surefire.conf.useSystemClassLoader>
-		<maven.surefire.conf.argLine>${env.MAVEN_FORK_JVM_ARGS}</maven.surefire.conf.argLine>
+		<maven.surefire.conf.argLine>${env.MAVEN_FORK_JVM_ARGS} -Dfile.encoding=UTF-8</maven.surefire.conf.argLine>
 	</properties>
 
 	<modules>
@@ -80,6 +80,7 @@
     </developers>
 
 	<repositories>
+		<!-- >> BEGIN >> : Publish Repositories -->
         <repository>
             <id>ossrh-snapshots</id>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
@@ -95,11 +96,13 @@
 				<enabled>false</enabled>
 			</snapshots>
         </repository>
+		<!-- << END << : Publish Repositories -->
 
+		<!-- >> BEGIN >> : Develop Repositories -->
 		<!--
 		<repository>
-			<id>local-snapshots</id>
-			<name>Local Snapshots</name>
+			<id>private-snapshots</id>
+			<name>Private Snapshots</name>
 			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
 			<snapshots>
 				<updatePolicy>always</updatePolicy>
@@ -108,8 +111,8 @@
 		</repository>
 
 		<repository>
-			<id>local-thirdparty</id>
-			<name>Local 3rd-party</name>
+			<id>private-thirdparty</id>
+			<name>Private 3rd-party</name>
 			<url>http://192.168.56.23:8081/repository/maven-thirdparty/</url>
 			<snapshots>
 				<enabled>false</enabled>
@@ -117,14 +120,15 @@
 		</repository>
 
 		<repository>
-			<id>local-releases</id>
-			<name>Local Releases</name>
+			<id>private-releases</id>
+			<name>Private Releases</name>
 			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		-->
+		<!-- << END << : Develop Repositories -->
 
 		<repository>
 			<snapshots>
@@ -151,26 +155,31 @@
 	</repositories>
 
 	<distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
+		<!-- >> BEGIN >> : Publish Repositories -->
         <repository>
             <id>ossrh</id>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+		<!-- << END << : Publish Repositories -->
+
+		<!-- >> BEGIN >> : Develop Repositories -->
         <!--
 		<repository>
-			<id>local-releases</id>
-			<name>Local Nexus Releases Repository</name>
+			<id>private</id>
+			<name>Private Nexus Releases Repository</name>
 			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
-			<id>local-snapshots</id>
-			<name>Local Nexus Snapshots Repository</name>
+			<id>private</id>
+			<name>Private Nexus Snapshots Repository</name>
 			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
 		</snapshotRepository>
 		-->
+		<!--<< END << : Develop Repositories -->
 	</distributionManagement>
 
 	<build>
@@ -519,6 +528,14 @@
 	        	<groupId>org.codehaus.mojo</groupId>
 	        	<artifactId>flatten-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- >> BEGIN >> : Publish Plugins -->
+			<!--
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -527,6 +544,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 			</plugin>
+			<!-- << END << : Publish Plugins -->
 		</plugins>
 		
 	</build>
