@@ -198,8 +198,10 @@ public class SegmentIdGenImpl implements IdGen
 					}
 				}
 			}
+			
 			return getIdFromSegmentBuffer(cache.get(key));
 		}
+		
 		return new Result(EXCEPTION_ID_KEY_NOT_EXISTS, Status.EXCEPTION);
 	}
 

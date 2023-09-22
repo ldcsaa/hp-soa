@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +47,7 @@ public class SoaLeafConfig
 
 	@AutoConfiguration
 	@SuppressWarnings("serial")
-	@ConditionalOnClass(DruidDataSource.class)
+	@ConditionalOnClass({DruidDataSource.class, SqlSessionFactory.class})
 	@ConfigurationProperties(prefix = "hp.soa.gid.leaf.segment")
 	@ConditionalOnProperty(name = "hp.soa.gid.leaf.segment.enable", havingValue = "true", matchIfMissing = false)
 	public static class LeafSegmentIdProperties extends DruidDataSource
@@ -83,7 +84,7 @@ public class SoaLeafConfig
 	
 	@Bean(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN)
 	@ConditionalOnProperty(name = "hp.soa.gid.leaf.snowflake.enable", havingValue = "true", matchIfMissing = true)
-	public IdGen snowflakeIDGen()
+	public IdGen snowflakeIdGen()
 	{
 		if(GeneralHelper.isStrEmpty(leafName))
 			throw new BeanCreationException(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN, "property 'hp.soa.gid.leaf.snowflake.name' not config");

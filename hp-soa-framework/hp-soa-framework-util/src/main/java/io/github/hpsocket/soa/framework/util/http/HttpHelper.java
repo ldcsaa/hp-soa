@@ -14,8 +14,6 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -160,44 +158,10 @@ public class HttpHelper
 	/** 读取页面请求的字节内容 */
 	public final static byte[] readBytes(InputStream is, int length) throws IOException
 	{
-		byte[] array = null;
-		
 		if(length > 0)
-		{
-			array = new byte[length];
+			return is.readNBytes(length);
 		
-			int read	= 0;
-			int total	= 0;
-			
-			while((read = is.read(array, total, array.length - total)) != -1)
-				total += read;
-		}
-		else
-		{
-			List<byte[]> list	= new LinkedList<byte[]>();
-			byte[] buffer		= new byte[DEFAULT_BUFFER_SIZE];
-
-			int read	= 0;
-			int total	= 0;
-			
-			for(; (read = is.read(buffer)) != -1; total += read)
-			{
-				byte[] e = new byte[read];
-				System.arraycopy(buffer, 0, e, 0, read);
-				list.add(e);
-			}
-			
-			array = new byte[total];
-			
-			int write = 0;
-			for(byte[] e : list)
-			{
-				System.arraycopy(e, 0, array, write, e.length);
-				write += e.length;
-			}
-		}
-		
-		return array;
+		return is.readAllBytes();
 	}
 	
 	/** 根据地址和参数生成 URL */

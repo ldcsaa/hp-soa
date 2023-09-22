@@ -44,6 +44,7 @@ import org.apache.hc.client5.http.cookie.Cookie;
 import org.apache.hc.client5.http.cookie.CookieSpecFactory;
 import org.apache.hc.client5.http.cookie.CookieStore;
 import org.apache.hc.client5.http.cookie.StandardCookieSpec;
+import org.apache.hc.client5.http.entity.GzipDecompressingEntity;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.entity.mime.ContentBody;
 import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
@@ -751,7 +752,7 @@ public class HttpExecutor
 							rs.setResultCode(Response.Success);
 							
 							if(isDownload)
-								saveFile(fileName, entity, rs, resp);
+								saveToFile(fileName, entity, rs, resp);
 							else
 								readContent(entity, rs, resp);
 						}
@@ -1059,32 +1060,23 @@ public class HttpExecutor
 		return enc;
 	}
 
-	private void readContent(HttpEntity respEntity, Response response, HttpResponse resp) throws IOException
+	private static final void readContent(HttpEntity respEntity, Response response, HttpResponse resp) throws IOException
 	{
-		InputStream is = respEntity.getContent();
-		byte[] content = null;
-		
-		if(isGZip(respEntity))
-			content = HttpHelper.unGZip(is);
-		else
-			content = HttpHelper.readBytes(is);
-
-		response.setContent(content);
+		HttpEntity entity = toFinalEntity(respEntity);
+		response.setContent(EntityUtils.toByteArray(entity));
 	}
 	
-	private void saveFile(String fileName, HttpEntity respEntity, Response response, HttpResponse resp) throws IOException
+	private static final void saveToFile(String fileName, HttpEntity respEntity, Response response, HttpResponse resp) throws IOException
 	{
 		File file = new File(fileName);
+		HttpEntity entity = toFinalEntity(respEntity);
+		
 		BufferedOutputStream out = null;
 		
 		try
 		{
 			out = new BufferedOutputStream(new FileOutputStream(file));
-
-			if(isGZip(respEntity))
-				HttpHelper.unGZip(respEntity.getContent(), out);
-			else
-				respEntity.writeTo(out);
+			entity.writeTo(out);
 
 			response.setContent(fileName.getBytes(response.getEncoding()));
 		}
@@ -1093,8 +1085,13 @@ public class HttpExecutor
 			if(out != null) try{out.close();} catch(Exception e) {}
 		}
 	}
+	
+	private static final HttpEntity toFinalEntity(HttpEntity respEntity)
+	{
+		return isGZip(respEntity) ? new GzipDecompressingEntity(respEntity) : respEntity;
+	}
 
-	private boolean isGZip(HttpEntity respEntity)
+	private static boolean isGZip(HttpEntity respEntity)
 	{
 		String enc = respEntity.getContentEncoding();
 		return ("gzip".equals(enc));
@@ -1465,11 +1462,6 @@ public class HttpExecutor
 		return response;
 	}
 	
-	public static final HttpExecutor getHttpExecutorInstance()
-	{
-		return getHttpExecutorInstance(false);
-	}
-
 	public static final HttpExecutor getHttpExecutorInstance(
 		int connectionRequestTimeout, int connectTimeout, int socketTimeout,
 		int maxConnectionTotal, int maxConnectionPerRoute, int retries, boolean useCookie, HttpHost httpProxy)
@@ -1523,6 +1515,11 @@ public class HttpExecutor
 	{
 		HttpHost httpProxy = useProxy ? getSystemHttpProxy() : null;
 		return getHttpExecutorInstance(connectionRequestTimeout, connectTimeout, socketTimeout, maxConnectionTotal, maxConnectionPerRoute, retries, useCookie, httpProxy);
+	}
+	
+	public static final HttpExecutor getHttpExecutorInstance()
+	{
+		return getHttpExecutorInstance(false);
 	}
 	
 	public static final HttpExecutor getHttpExecutorInstance(boolean useCookie)

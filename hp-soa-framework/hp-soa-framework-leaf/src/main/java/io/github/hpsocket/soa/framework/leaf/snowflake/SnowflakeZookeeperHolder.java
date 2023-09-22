@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.client.ZKClientConfig;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,7 +71,7 @@ public class SnowflakeZookeeperHolder
 	{
 		try
 		{
-			CuratorFramework curator = createWithOptions(connectionString, new RetryUntilElapsed(1000, 50), 30000, 60000);
+			CuratorFramework curator = createCuratorWithOptions(connectionString, new RetryUntilElapsed(1000, 50), 5000, 15000);			
 			curator.start();
 			
 			Stat stat = curator.checkExists().forPath(PATH_FOREVER);
@@ -301,9 +302,18 @@ public class SnowflakeZookeeperHolder
 		}
 	}
 
-	private CuratorFramework createWithOptions(String connectionString, RetryPolicy retryPolicy, int connectionTimeoutMs, int sessionTimeoutMs)
+	private CuratorFramework createCuratorWithOptions(String connectionString, RetryPolicy retryPolicy, int connectionTimeoutMs, int sessionTimeoutMs)
 	{
-		return CuratorFrameworkFactory.builder().connectString(connectionString).retryPolicy(retryPolicy).connectionTimeoutMs(connectionTimeoutMs).sessionTimeoutMs(sessionTimeoutMs).build();
+		ZKClientConfig zkClientConfig = new ZKClientConfig();
+		zkClientConfig.setProperty(ZKClientConfig.ENABLE_CLIENT_SASL_KEY, Boolean.FALSE.toString());
+		
+		return CuratorFrameworkFactory.builder()
+				.zkClientConfig(zkClientConfig)
+				.connectString(connectionString)
+				.retryPolicy(retryPolicy)
+				.connectionTimeoutMs(connectionTimeoutMs)
+				.sessionTimeoutMs(sessionTimeoutMs)
+				.build();
 	}
 
 	/**
