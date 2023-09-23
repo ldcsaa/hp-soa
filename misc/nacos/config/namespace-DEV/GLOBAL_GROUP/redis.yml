@@ -4,3 +4,17 @@ spring.data.redis:
   #username: 
   #password: 
   clientName: ${spring.application.name}
+
+spring.data.redis-first:
+  host: 192.168.111.222
+  port: 6379
+  #username: 
+  #password: 
+  clientName: ${spring.application.name}
+
+#spring.data.redis-second:
+#  host: 192.168.56.23
+#  port: 6379
+#  #username: 
+#  #password: 
+#  clientName: ${spring.application.name}

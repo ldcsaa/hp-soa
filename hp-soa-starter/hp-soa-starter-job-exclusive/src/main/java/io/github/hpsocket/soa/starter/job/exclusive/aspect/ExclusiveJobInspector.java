@@ -45,6 +45,7 @@ public class ExclusiveJobInspector
 	
 	@Autowired(required = false)
 	AsyncService asyncService;
+	
 	@Autowired
 	private RedissonClient redissonClient;
 
