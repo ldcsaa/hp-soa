@@ -138,7 +138,6 @@ public class SoaRedisConfig
 			.allowCreateOnMissingCache(false);
 
 		return builder.build();
-
 	}
 	
 	/** 默认 {@linkplain RedisCacheConfiguration} */
