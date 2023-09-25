@@ -35,103 +35,103 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class ControllerGlobalExceptionAdvice implements Ordered
 {
-	@Override
-	public int getOrder()
-	{
-		return 0;
-	}
+    @Override
+    public int getOrder()
+    {
+        return 0;
+    }
 
-	/** {@linkplain MethodArgumentNotValidException} 异常处理器 */
-	@ExceptionHandler({MethodArgumentNotValidException.class})
-	public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e)
-	{
-		BindingResult rs = e.getBindingResult();
-		
-		Map<String, List<String>> validationErrors = new LinkedHashMap<>();
-		
-		for(ObjectError obj : rs.getAllErrors())
-		{
-			if(obj instanceof FieldError)
-			{
-				FieldError field = (FieldError)obj;
-				String name = field.getField();
-				
-				List<String> errs = validationErrors.get(name);
-				
-				if(errs == null)
-				{
-					errs = new LinkedList<>();
-					validationErrors.put(name, errs);
-				}
-				
-				errs.add(field.getDefaultMessage());
-			}
-		}
-		
-		if(validationErrors.isEmpty())
-			validationErrors.put(rs.getObjectName(), Arrays.asList(rs.toString()));
-		
-		ServiceException se = wrapServiceException(PARAM_VERIFY_EXCEPTION, e);
-		
-		logServiceException(log, se.getMessage(), se);
-		
-		return new Response<>(se, validationErrors);
-	}
+    /** {@linkplain MethodArgumentNotValidException} 异常处理器 */
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e)
+    {
+        BindingResult rs = e.getBindingResult();
+        
+        Map<String, List<String>> validationErrors = new LinkedHashMap<>();
+        
+        for(ObjectError obj : rs.getAllErrors())
+        {
+            if(obj instanceof FieldError)
+            {
+                FieldError field = (FieldError)obj;
+                String name = field.getField();
+                
+                List<String> errs = validationErrors.get(name);
+                
+                if(errs == null)
+                {
+                    errs = new LinkedList<>();
+                    validationErrors.put(name, errs);
+                }
+                
+                errs.add(field.getDefaultMessage());
+            }
+        }
+        
+        if(validationErrors.isEmpty())
+            validationErrors.put(rs.getObjectName(), Arrays.asList(rs.toString()));
+        
+        ServiceException se = wrapServiceException(PARAM_VERIFY_EXCEPTION, e);
+        
+        logServiceException(log, se.getMessage(), se);
+        
+        return new Response<>(se, validationErrors);
+    }
 
-	/** {@linkplain RpcException} 异常处理器 */
-	@ExceptionHandler({RpcException.class})
-	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RpcException e)
-	{
-		Throwable real	= e;
-		Throwable cause	= null;
-		
-		do
-		{
-			cause = real.getCause();
-			
-			if(cause == null)
-				break;
-			
-			real = cause;
-		} while(cause instanceof RpcException);
-		
-		
-		ServiceException se = null;
-		
-		if(real instanceof TimeoutException)
-			se = wrapServiceException(TIMEOUT_EXCEPTION, real);
-		else if(real instanceof ExecutionException)
-			se = wrapServiceException(INNER_API_CALL_EXCEPTION, real);
-		
-		if(se == null)
-			se = wrapServiceException(GENERAL_EXCEPTION, real);
-		
-		logServiceException(log, se.getMessage(), se);
-		
-		return new Response<>(se);
-	}
+    /** {@linkplain RpcException} 异常处理器 */
+    @ExceptionHandler({RpcException.class})
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RpcException e)
+    {
+        Throwable real    = e;
+        Throwable cause    = null;
+        
+        do
+        {
+            cause = real.getCause();
+            
+            if(cause == null)
+                break;
+            
+            real = cause;
+        } while(cause instanceof RpcException);
+        
+        
+        ServiceException se = null;
+        
+        if(real instanceof TimeoutException)
+            se = wrapServiceException(TIMEOUT_EXCEPTION, real);
+        else if(real instanceof ExecutionException)
+            se = wrapServiceException(INNER_API_CALL_EXCEPTION, real);
+        
+        if(se == null)
+            se = wrapServiceException(GENERAL_EXCEPTION, real);
+        
+        logServiceException(log, se.getMessage(), se);
+        
+        return new Response<>(se);
+    }
 
-	/** {@linkplain Exception} 异常处理器 */
-	@ExceptionHandler({Exception.class})
-	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
-	{
-		ServiceException se = null;
-		
-		if(e instanceof NoHandlerFoundException)
-			se = wrapServiceException(NOT_EXIST_EXCEPTION, e);
-		else if(e instanceof HttpRequestMethodNotSupportedException)
-			se = wrapServiceException(NOT_IMPLEMENTED_EXCEPTION, e);
-		else if(e instanceof HttpMediaTypeException)
-			se = wrapServiceException(NOT_SUPPORTED_EXCEPTION, e);
-		else if(e instanceof HttpMessageConversionException)
-			se = wrapServiceException(BAD_REQUEST_EXCEPTION, e);
-		
-		if(se == null)
-			se = wrapServiceException(GENERAL_EXCEPTION, e);
+    /** {@linkplain Exception} 异常处理器 */
+    @ExceptionHandler({Exception.class})
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
+    {
+        ServiceException se = null;
+        
+        if(e instanceof NoHandlerFoundException)
+            se = wrapServiceException(NOT_EXIST_EXCEPTION, e);
+        else if(e instanceof HttpRequestMethodNotSupportedException)
+            se = wrapServiceException(NOT_IMPLEMENTED_EXCEPTION, e);
+        else if(e instanceof HttpMediaTypeException)
+            se = wrapServiceException(NOT_SUPPORTED_EXCEPTION, e);
+        else if(e instanceof HttpMessageConversionException)
+            se = wrapServiceException(BAD_REQUEST_EXCEPTION, e);
+        
+        if(se == null)
+            se = wrapServiceException(GENERAL_EXCEPTION, e);
 
-		logServiceException(log, se.getMessage(), se);
-		
-		return new Response<>(se);
-	}
+        logServiceException(log, se.getMessage(), se);
+        
+        return new Response<>(se);
+    }
 
 }

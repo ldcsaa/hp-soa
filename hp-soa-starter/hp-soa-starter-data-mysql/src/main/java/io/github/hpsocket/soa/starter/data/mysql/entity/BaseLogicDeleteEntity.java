@@ -13,7 +13,7 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public class BaseLogicDeleteEntity extends BaseEntity
 {
-	/** 逻辑删除标记（0 - 未删除，1 - 已删除） */
-	@TableLogic
-	private Byte deleted;
+    /** 逻辑删除标记（0 - 未删除，1 - 已删除） */
+    @TableLogic
+    private Byte deleted;
 }

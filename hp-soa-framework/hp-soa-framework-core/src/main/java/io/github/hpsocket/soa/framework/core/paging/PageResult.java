@@ -14,6 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PageResult<T>
 {
-	private PageInfo page;
-	private List<T> data;
+    private PageInfo page;
+    private List<T> data;
 }

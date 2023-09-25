@@ -62,22 +62,22 @@ public class SoaAbstractRedisConfig
     private static final String REDIS_PROTOCOL_PREFIX = "redis://";
     private static final String REDISS_PROTOCOL_PREFIX = "rediss://";
 
-	protected static final StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+    protected static final StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
 
-	protected static final FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
-	protected static final GenericFastJsonRedisSerializer genericFastJsonRedisSerializer = new GenericFastJsonRedisSerializer(true);
+    protected static final FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+    protected static final GenericFastJsonRedisSerializer genericFastJsonRedisSerializer = new GenericFastJsonRedisSerializer(true);
 
-	protected static final KryoRedisSerializer<Object> kryoRedisSerializer = new KryoRedisSerializer<Object>();
-	protected static final KryoNotNullRedisSerializer<Object> kryoNotNullRedisSerializer = new KryoNotNullRedisSerializer<Object>();
+    protected static final KryoRedisSerializer<Object> kryoRedisSerializer = new KryoRedisSerializer<Object>();
+    protected static final KryoNotNullRedisSerializer<Object> kryoNotNullRedisSerializer = new KryoNotNullRedisSerializer<Object>();
 
-	static
-	{
-		FastJsonConfig config = new FastJsonConfig();
-		config.setJSONB(true);
-		fastJsonRedisSerializer.setFastJsonConfig(config);
-	}
-	
-	protected final List<RedissonAutoConfigurationCustomizer> redissonAutoConfigurationCustomizers;
+    static
+    {
+        FastJsonConfig config = new FastJsonConfig();
+        config.setJSONB(true);
+        fastJsonRedisSerializer.setFastJsonConfig(config);
+    }
+    
+    protected final List<RedissonAutoConfigurationCustomizer> redissonAutoConfigurationCustomizers;
 
     protected final RedissonProperties redissonProperties;
 
@@ -86,21 +86,21 @@ public class SoaAbstractRedisConfig
     @Autowired
     private ApplicationContext ctx;
 
-	public SoaAbstractRedisConfig(
-		ObjectProvider<List<RedissonAutoConfigurationCustomizer>> redissonAutoConfigurationCustomizers,
-		ObjectProvider<RedissonProperties> redissonProperties,
-		ObjectProvider<RedisProperties> redisProperties)
-	{
-		this.redissonAutoConfigurationCustomizers = redissonAutoConfigurationCustomizers.getIfUnique();
-		this.redissonProperties = redissonProperties.getIfUnique(() -> new RedissonProperties());
-		this.redisProperties = redisProperties.getIfUnique(() -> new RedisProperties());
-	}
-	
-	public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory redisConnectionFactory)
-	{
-		return genericJsonRedisTemplate(redisConnectionFactory);
-	}
-	
+    public SoaAbstractRedisConfig(
+        ObjectProvider<List<RedissonAutoConfigurationCustomizer>> redissonAutoConfigurationCustomizers,
+        ObjectProvider<RedissonProperties> redissonProperties,
+        ObjectProvider<RedisProperties> redisProperties)
+    {
+        this.redissonAutoConfigurationCustomizers = redissonAutoConfigurationCustomizers.getIfUnique();
+        this.redissonProperties = redissonProperties.getIfUnique(() -> new RedissonProperties());
+        this.redisProperties = redisProperties.getIfUnique(() -> new RedisProperties());
+    }
+    
+    public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        return genericJsonRedisTemplate(redisConnectionFactory);
+    }
+    
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
         StringRedisTemplate template = new StringRedisTemplate();
@@ -109,172 +109,172 @@ public class SoaAbstractRedisConfig
         return template;
     }
 
-	public RedisTemplate<String, Object> jsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
-	{
-		RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
+    public RedisTemplate<String, Object> jsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
 
-		template.setKeySerializer(RedisSerializer.string());
-		template.setValueSerializer(fastJsonRedisSerializer);
-		template.setHashKeySerializer(RedisSerializer.string());
-		template.setHashValueSerializer(fastJsonRedisSerializer);
-		template.setConnectionFactory(redisConnectionFactory);
+        template.setKeySerializer(RedisSerializer.string());
+        template.setValueSerializer(fastJsonRedisSerializer);
+        template.setHashKeySerializer(RedisSerializer.string());
+        template.setHashValueSerializer(fastJsonRedisSerializer);
+        template.setConnectionFactory(redisConnectionFactory);
 
-		return template;
-	}
+        return template;
+    }
 
-	public <T> RedisTemplate<String, T> genericJsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
-	{
-		RedisTemplate<String, T> template = new RedisTemplate<String, T>();
+    public <T> RedisTemplate<String, T> genericJsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        RedisTemplate<String, T> template = new RedisTemplate<String, T>();
 
-		template.setKeySerializer(RedisSerializer.string());
-		template.setValueSerializer(genericFastJsonRedisSerializer);
-		template.setHashKeySerializer(RedisSerializer.string());
-		template.setHashValueSerializer(genericFastJsonRedisSerializer);
-		template.setConnectionFactory(redisConnectionFactory);
+        template.setKeySerializer(RedisSerializer.string());
+        template.setValueSerializer(genericFastJsonRedisSerializer);
+        template.setHashKeySerializer(RedisSerializer.string());
+        template.setHashValueSerializer(genericFastJsonRedisSerializer);
+        template.setConnectionFactory(redisConnectionFactory);
 
-		return template;
-	}
+        return template;
+    }
 
-	public <T> RedisTemplate<String, T> kryoRedisTemplate(RedisConnectionFactory redisConnectionFactory)
-	{
-		RedisTemplate<String, T> template = new RedisTemplate<String, T>();
+    public <T> RedisTemplate<String, T> kryoRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        RedisTemplate<String, T> template = new RedisTemplate<String, T>();
 
-		template.setKeySerializer(RedisSerializer.string());
-		template.setValueSerializer(kryoRedisSerializer);
-		template.setHashKeySerializer(RedisSerializer.string());
-		template.setHashValueSerializer(kryoRedisSerializer);
-		template.setConnectionFactory(redisConnectionFactory);
+        template.setKeySerializer(RedisSerializer.string());
+        template.setValueSerializer(kryoRedisSerializer);
+        template.setHashKeySerializer(RedisSerializer.string());
+        template.setHashValueSerializer(kryoRedisSerializer);
+        template.setConnectionFactory(redisConnectionFactory);
 
-		return template;
-	}
+        return template;
+    }
 
-	public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(RedisConnectionFactory redisConnectionFactory)
-	{
-		RedisTemplate<String, T> template = new RedisTemplate<String, T>();
+    public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        RedisTemplate<String, T> template = new RedisTemplate<String, T>();
 
-		template.setKeySerializer(RedisSerializer.string());
-		template.setValueSerializer(kryoNotNullRedisSerializer);
-		template.setHashKeySerializer(RedisSerializer.string());
-		template.setHashValueSerializer(kryoNotNullRedisSerializer);
-		template.setConnectionFactory(redisConnectionFactory);
+        template.setKeySerializer(RedisSerializer.string());
+        template.setValueSerializer(kryoNotNullRedisSerializer);
+        template.setHashKeySerializer(RedisSerializer.string());
+        template.setHashValueSerializer(kryoNotNullRedisSerializer);
+        template.setConnectionFactory(redisConnectionFactory);
 
-		return template;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <T> ReactiveRedisTemplate<String, T> reactiveRedisTemplate(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
-	{
-		RedisSerializationContext<String, T> serializationContext = (RedisSerializationContext<String, T>)
-																	(RedisSerializationContext<?, ?>)
-																	RedisSerializationContext
-																		.<String, T>newSerializationContext()
-																		.key(RedisSerializer.string())
-																		.value((RedisSerializer<T>)genericFastJsonRedisSerializer)
-																		.hashKey(RedisSerializer.string())
-																		.hashValue(genericFastJsonRedisSerializer)
-																		.build();
-		
-		return new ReactiveRedisTemplate<String, T>(reactiveRedisConnectionFactory, serializationContext);
-	}
+        return template;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T> ReactiveRedisTemplate<String, T> reactiveRedisTemplate(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
+    {
+        RedisSerializationContext<String, T> serializationContext = (RedisSerializationContext<String, T>)
+                                                                    (RedisSerializationContext<?, ?>)
+                                                                    RedisSerializationContext
+                                                                        .<String, T>newSerializationContext()
+                                                                        .key(RedisSerializer.string())
+                                                                        .value((RedisSerializer<T>)genericFastJsonRedisSerializer)
+                                                                        .hashKey(RedisSerializer.string())
+                                                                        .hashValue(genericFastJsonRedisSerializer)
+                                                                        .build();
+        
+        return new ReactiveRedisTemplate<String, T>(reactiveRedisConnectionFactory, serializationContext);
+    }
 
-	public ReactiveStringRedisTemplate reactiveStringRedisTemplate(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
-	{
-		return new ReactiveStringRedisTemplate(reactiveRedisConnectionFactory);
-	}
+    public ReactiveStringRedisTemplate reactiveStringRedisTemplate(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
+    {
+        return new ReactiveStringRedisTemplate(reactiveRedisConnectionFactory);
+    }
 
-	@SuppressWarnings("unchecked")
-	public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory,
-		RedisCacheConfiguration redisDefaultCacheConfiguration,
-		MapPropertySource redisInitialCacheConfigurations)
-	{
-		RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(redisConnectionFactory)
-			.cacheDefaults(redisDefaultCacheConfiguration)
-			.withInitialCacheConfigurations((Map<String, RedisCacheConfiguration>)(Map<?, ?>)redisInitialCacheConfigurations.getSource())
-			.allowCreateOnMissingCache(false);
+    @SuppressWarnings("unchecked")
+    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory,
+        RedisCacheConfiguration redisDefaultCacheConfiguration,
+        MapPropertySource redisInitialCacheConfigurations)
+    {
+        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(redisConnectionFactory)
+            .cacheDefaults(redisDefaultCacheConfiguration)
+            .withInitialCacheConfigurations((Map<String, RedisCacheConfiguration>)(Map<?, ?>)redisInitialCacheConfigurations.getSource())
+            .allowCreateOnMissingCache(false);
 
-		return builder.build();
-	}
-	
-	public RedisCacheConfiguration redisDefaultCacheConfiguration()
-	{
-		return createRedisCacheConfiguration(3600);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public MapPropertySource redisInitialCacheConfigurations()
-	{
-		Map<String, RedisCacheConfiguration> cfgs = new LinkedHashMap<>();
+        return builder.build();
+    }
+    
+    public RedisCacheConfiguration redisDefaultCacheConfiguration()
+    {
+        return createRedisCacheConfiguration(3600);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public MapPropertySource redisInitialCacheConfigurations()
+    {
+        Map<String, RedisCacheConfiguration> cfgs = new LinkedHashMap<>();
 
-		cfgs.put("10s", createRedisCacheConfiguration(10));
-		cfgs.put("30s", createRedisCacheConfiguration(30));
-		cfgs.put("1m", createRedisCacheConfiguration(60));
-		cfgs.put("5m", createRedisCacheConfiguration(300));
-		cfgs.put("15m", createRedisCacheConfiguration(900));
-		cfgs.put("30m", createRedisCacheConfiguration(1800));
-		cfgs.put("1h", createRedisCacheConfiguration(3600));
-		cfgs.put("3h", createRedisCacheConfiguration(10800));
-		cfgs.put("6h", createRedisCacheConfiguration(21600));
-		cfgs.put("12h", createRedisCacheConfiguration(43200));
-		cfgs.put("1d", createRedisCacheConfiguration(86400));
-		cfgs.put("7d", createRedisCacheConfiguration(604800));
-		cfgs.put("15d", createRedisCacheConfiguration(1296000));
-		cfgs.put("30d", createRedisCacheConfiguration(2592000));
-		
-		MapFactoryBean bean = new MapFactoryBean();
-		bean.setSourceMap(cfgs);
+        cfgs.put("10s", createRedisCacheConfiguration(10));
+        cfgs.put("30s", createRedisCacheConfiguration(30));
+        cfgs.put("1m", createRedisCacheConfiguration(60));
+        cfgs.put("5m", createRedisCacheConfiguration(300));
+        cfgs.put("15m", createRedisCacheConfiguration(900));
+        cfgs.put("30m", createRedisCacheConfiguration(1800));
+        cfgs.put("1h", createRedisCacheConfiguration(3600));
+        cfgs.put("3h", createRedisCacheConfiguration(10800));
+        cfgs.put("6h", createRedisCacheConfiguration(21600));
+        cfgs.put("12h", createRedisCacheConfiguration(43200));
+        cfgs.put("1d", createRedisCacheConfiguration(86400));
+        cfgs.put("7d", createRedisCacheConfiguration(604800));
+        cfgs.put("15d", createRedisCacheConfiguration(1296000));
+        cfgs.put("30d", createRedisCacheConfiguration(2592000));
+        
+        MapFactoryBean bean = new MapFactoryBean();
+        bean.setSourceMap(cfgs);
 
-		return new MapPropertySource("redisInitialCacheConfigurations", (Map<String, Object>)(Map<?, ?>)cfgs);
-	}
+        return new MapPropertySource("redisInitialCacheConfigurations", (Map<String, Object>)(Map<?, ?>)cfgs);
+    }
 
-	private RedisCacheConfiguration createRedisCacheConfiguration(long ttlSeconds)
-	{
-		return RedisCacheConfiguration
-			.defaultCacheConfig()
-			.entryTtl(Duration.ofSeconds(ttlSeconds))
-			.serializeKeysWith(SerializationPair.fromSerializer(stringRedisSerializer))
-			.serializeValuesWith(SerializationPair.fromSerializer(genericFastJsonRedisSerializer));
-	}
+    private RedisCacheConfiguration createRedisCacheConfiguration(long ttlSeconds)
+    {
+        return RedisCacheConfiguration
+            .defaultCacheConfig()
+            .entryTtl(Duration.ofSeconds(ttlSeconds))
+            .serializeKeysWith(SerializationPair.fromSerializer(stringRedisSerializer))
+            .serializeValuesWith(SerializationPair.fromSerializer(genericFastJsonRedisSerializer));
+    }
 
-	public KeyGenerator keyGenerator()
-	{
-		return new KeyGenerator()
-		{
+    public KeyGenerator keyGenerator()
+    {
+        return new KeyGenerator()
+        {
             @Override
-			public Object generate(Object target, Method method, Object... params)
-			{
-            	StringBuilder sb1 = new StringBuilder()
-            						.append(target.getClass().getName())
-            						.append(':')
-            						.append(method.getName());
-				
-				String prefix = sb1.toString();
-				
-				int length = params.length;
-				
-				if(length == 0)
-					return prefix;
-				
-				StringBuilder sb2 = new StringBuilder();
-				
-				for(int i = 0; i < length; i++)
-				{
-					Object obj = params[i];
-					sb2.append(obj == null ? "null" : obj.toString());
-					
-					if(i < length - 1)
-						sb2.append(':');
-				}
-				
-				String key = sb2.toString();
-				
-				if(key.length() > 40)
-					key = CryptHelper.md5(key);
-				
-				return prefix + ':' + key;
-			}
-		};
-	}
-	
+            public Object generate(Object target, Method method, Object... params)
+            {
+                StringBuilder sb1 = new StringBuilder()
+                                    .append(target.getClass().getName())
+                                    .append(':')
+                                    .append(method.getName());
+                
+                String prefix = sb1.toString();
+                
+                int length = params.length;
+                
+                if(length == 0)
+                    return prefix;
+                
+                StringBuilder sb2 = new StringBuilder();
+                
+                for(int i = 0; i < length; i++)
+                {
+                    Object obj = params[i];
+                    sb2.append(obj == null ? "null" : obj.toString());
+                    
+                    if(i < length - 1)
+                        sb2.append(':');
+                }
+                
+                String key = sb2.toString();
+                
+                if(key.length() > 40)
+                    key = CryptHelper.md5(key);
+                
+                return prefix + ':' + key;
+            }
+        };
+    }
+    
     public RedissonConnectionFactory redissonConnectionFactory(RedissonClient redisson)
     {
         return new RedissonConnectionFactory(redisson);

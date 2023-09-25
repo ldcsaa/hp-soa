@@ -19,31 +19,31 @@ import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConsta
 /** <b>Fastjson 消息转换器</b> */
 public class FastJsonMessageConverter extends AbstractMessageConverter
 {
-	@Override
-	public Object fromMessage(Message message) throws MessageConversionException
-	{
-		return JSON.parse(message.getBody());
-	}
+    @Override
+    public Object fromMessage(Message message) throws MessageConversionException
+    {
+        return JSON.parse(message.getBody());
+    }
 
-	@Override
-	protected Message createMessage(Object object, MessageProperties messageProperties)
-	{
-		if(object instanceof DomainEvent event)
-			return event.toMessage(messageProperties);
-		
-		String json  = JSON.toJSONString(object);
-		byte[] bytes = json.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ);
-		String msgId = IdGenerator.nextIdStr();
-		String sourceRequestId = MDC.get(MdcAttr.MDC_REQUEST_ID_KEY);
-		
-		messageProperties.setMessageId(msgId);
-		messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
-		messageProperties.setContentEncoding(WebServerHelper.DEFAULT_CHARSET);
-		messageProperties.setContentLength(bytes.length);
-		messageProperties.setHeader(HEADER_MSG_ID, msgId);
-		messageProperties.setHeader(HEADER_SOURCE_REQUEST_ID, sourceRequestId);
-		
-		return new Message(bytes, messageProperties);
-	}
+    @Override
+    protected Message createMessage(Object object, MessageProperties messageProperties)
+    {
+        if(object instanceof DomainEvent event)
+            return event.toMessage(messageProperties);
+        
+        String json  = JSON.toJSONString(object);
+        byte[] bytes = json.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ);
+        String msgId = IdGenerator.nextIdStr();
+        String sourceRequestId = MDC.get(MdcAttr.MDC_REQUEST_ID_KEY);
+        
+        messageProperties.setMessageId(msgId);
+        messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
+        messageProperties.setContentEncoding(WebServerHelper.DEFAULT_CHARSET);
+        messageProperties.setContentLength(bytes.length);
+        messageProperties.setHeader(HEADER_MSG_ID, msgId);
+        messageProperties.setHeader(HEADER_SOURCE_REQUEST_ID, sourceRequestId);
+        
+        return new Message(bytes, messageProperties);
+    }
 
 }

@@ -8,32 +8,32 @@ import lombok.Getter;
 @Getter
 abstract public class MdcFunction<T, R> implements Function<T, R>
 {
-	private final MdcAttr mdcAttr;
+    private final MdcAttr mdcAttr;
 
-	abstract protected R doApply(T t);
+    abstract protected R doApply(T t);
 
-	public MdcFunction()
-	{
-		this(MdcAttr.fromMdc());
-	}
+    public MdcFunction()
+    {
+        this(MdcAttr.fromMdc());
+    }
 
-	public MdcFunction(MdcAttr mdcAttr)
-	{
-		this.mdcAttr = mdcAttr;
-	}
-	
-	@Override
-	public R apply(T t)
-	{
-		try
-		{
-			mdcAttr.putMdc();
-			
-			return doApply(t);
-		}
-		finally
-		{
-			mdcAttr.removeMdc();
-		}
-	}
+    public MdcFunction(MdcAttr mdcAttr)
+    {
+        this.mdcAttr = mdcAttr;
+    }
+    
+    @Override
+    public R apply(T t)
+    {
+        try
+        {
+            mdcAttr.putMdc();
+            
+            return doApply(t);
+        }
+        finally
+        {
+            mdcAttr.removeMdc();
+        }
+    }
 }

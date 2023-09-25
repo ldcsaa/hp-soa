@@ -17,27 +17,27 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReadOnlyRefreshEventListener implements ApplicationListener<RefreshEvent>, Ordered
 {
-	@Autowired
-	IAppProperties appProperties;
+    @Autowired
+    IAppProperties appProperties;
 
-	@Override
-	public void onApplicationEvent(RefreshEvent event)
-	{
-		boolean preVal = AppConfigHolder.isReadOnly();
-		boolean curVal = appProperties.isReadOnly();
-		
-		if(preVal != curVal)
-		{
-			log.info("application state switch -> (read-only: {})", curVal);
-			
-			AppConfigHolder.setReadOnly(curVal);
-			SpringContextHolder.publishEvent(new ReadOnlyEvent(event, curVal, false));
-		}
-	}
+    @Override
+    public void onApplicationEvent(RefreshEvent event)
+    {
+        boolean preVal = AppConfigHolder.isReadOnly();
+        boolean curVal = appProperties.isReadOnly();
+        
+        if(preVal != curVal)
+        {
+            log.info("application state switch -> (read-only: {})", curVal);
+            
+            AppConfigHolder.setReadOnly(curVal);
+            SpringContextHolder.publishEvent(new ReadOnlyEvent(event, curVal, false));
+        }
+    }
 
-	@Override
-	public int getOrder()
-	{
-		return Ordered.LOWEST_PRECEDENCE;
-	}
+    @Override
+    public int getOrder()
+    {
+        return Ordered.LOWEST_PRECEDENCE;
+    }
 }

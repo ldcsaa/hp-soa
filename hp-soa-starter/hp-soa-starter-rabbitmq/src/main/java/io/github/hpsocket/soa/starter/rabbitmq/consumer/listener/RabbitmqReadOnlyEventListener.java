@@ -14,36 +14,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RabbitmqReadOnlyEventListener implements ApplicationListener<ReadOnlyEvent>, Ordered
 {
-	@Autowired
-	private RabbitListenerEndpointRegistry registry;
+    @Autowired
+    private RabbitListenerEndpointRegistry registry;
 
-	@Override
-	public void onApplicationEvent(ReadOnlyEvent event)
-	{
-		boolean readOnly = event.isReadOnly();
-		boolean initial  =event.isInitial();
-		
-		if(!initial)
-		{
-			log.info("receive read-only switch event (read-only: {}), prepare to {} all consumers", readOnly, readOnly ? "STOP" : "START");
-			
-			if(readOnly)
-				registry.stop();
-			else
-				registry.start();			
-		}
-		else if(readOnly && registry.isRunning())
-		{
-			log.info("application is read-only, then STOP RabbitListenerEndpointRegistry");
+    @Override
+    public void onApplicationEvent(ReadOnlyEvent event)
+    {
+        boolean readOnly = event.isReadOnly();
+        boolean initial  =event.isInitial();
+        
+        if(!initial)
+        {
+            log.info("receive read-only switch event (read-only: {}), prepare to {} all consumers", readOnly, readOnly ? "STOP" : "START");
+            
+            if(readOnly)
+                registry.stop();
+            else
+                registry.start();            
+        }
+        else if(readOnly && registry.isRunning())
+        {
+            log.info("application is read-only, then STOP RabbitListenerEndpointRegistry");
 
-			registry.stop();
-		}
-	}
+            registry.stop();
+        }
+    }
 
-	@Override
-	public int getOrder()
-	{
-		return Ordered.HIGHEST_PRECEDENCE;
-	}
+    @Override
+    public int getOrder()
+    {
+        return Ordered.HIGHEST_PRECEDENCE;
+    }
 
 }

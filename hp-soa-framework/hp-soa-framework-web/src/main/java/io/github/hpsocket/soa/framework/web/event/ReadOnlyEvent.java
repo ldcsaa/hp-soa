@@ -17,21 +17,21 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public class ReadOnlyEvent extends ApplicationEvent
 {
-	/** 是否只读 */
-	private boolean readOnly;
-	/** 是否初始触发 */
-	private boolean initial;
-	
-	public ReadOnlyEvent(Object source, boolean readOnly)
-	{
-		this(source, readOnly, false);
-	}
+    /** 是否只读 */
+    private boolean readOnly;
+    /** 是否初始触发 */
+    private boolean initial;
+    
+    public ReadOnlyEvent(Object source, boolean readOnly)
+    {
+        this(source, readOnly, false);
+    }
 
-	public ReadOnlyEvent(Object source, boolean readOnly, boolean initial)
-	{
-		super(source);
-		this.readOnly = readOnly;
-		this.initial  = initial;
-	}
+    public ReadOnlyEvent(Object source, boolean readOnly, boolean initial)
+    {
+        super(source);
+        this.readOnly = readOnly;
+        this.initial  = initial;
+    }
 
 }

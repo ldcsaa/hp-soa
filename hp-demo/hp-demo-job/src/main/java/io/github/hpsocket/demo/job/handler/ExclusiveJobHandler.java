@@ -11,15 +11,15 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ExclusiveJobHandler
 {
-	int i = 0;
-	
-	//@Scheduled(cron = "*/5 * * * * ?")
-	@ExclusiveJob(jobName = "job1", cron = "*/5 * * * * ?")
-	public void job1()
-	{
-		if((++i) % 5 == 0)
-			throw new RuntimeException("test thow exceptions");
-		
-		log.info("traceId: {}", WebServerHelper.getTraceId());
-	}
+    int i = 0;
+    
+    //@Scheduled(cron = "*/5 * * * * ?")
+    @ExclusiveJob(jobName = "job1", cron = "*/5 * * * * ?")
+    public void job1()
+    {
+        if((++i) % 5 == 0)
+            throw new RuntimeException("test thow exceptions");
+        
+        log.info("traceId: {}", WebServerHelper.getTraceId());
+    }
 }

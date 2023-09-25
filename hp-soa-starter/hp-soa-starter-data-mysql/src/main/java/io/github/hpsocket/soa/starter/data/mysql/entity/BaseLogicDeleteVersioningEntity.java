@@ -13,10 +13,10 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public class BaseLogicDeleteVersioningEntity extends BaseEntity
 {
-	 /** 逻辑删除标记（0 - 未删除，1 - 已删除） */
-	@TableLogic
-	private Byte deleted;
-	/** 乐观锁版本号 */
-	@Version
-	private Integer version;
+     /** 逻辑删除标记（0 - 未删除，1 - 已删除） */
+    @TableLogic
+    private Byte deleted;
+    /** 乐观锁版本号 */
+    @Version
+    private Integer version;
 }

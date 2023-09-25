@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.hpsocket.demo</groupId>
         <artifactId>hp-demo</artifactId>
@@ -14,19 +14,19 @@
     </properties>
 
     <dependencies>
-		<dependency>
-			<groupId>io.github.hpsocket.demo</groupId>
-			<artifactId>hp-demo-infra-basic-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.github.hpsocket</groupId>
-			<artifactId>hp-soa-starter-web</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>com.alibaba.nacos</groupId>
-		    <artifactId>nacos-client</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>io.github.hpsocket.demo</groupId>
+            <artifactId>hp-demo-infra-basic-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+        </dependency>
     </dependencies>
     
     <build>
@@ -74,5 +74,5 @@
                 </configuration>
             </plugin>
         </plugins>
-	</build>
+    </build>
 </project>

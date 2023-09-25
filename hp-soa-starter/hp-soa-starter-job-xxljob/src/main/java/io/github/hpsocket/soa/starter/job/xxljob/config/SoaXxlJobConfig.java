@@ -20,28 +20,28 @@ import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 @ConditionalOnProperty(name = "xxl.job.enabled", matchIfMissing = true)
 public class SoaXxlJobConfig
 {
-	private SoaXxlJobProperties soaXxlJobProperties;
-	
-	public SoaXxlJobConfig(SoaXxlJobProperties soaXxlJobProperties)
-	{
-		this.soaXxlJobProperties = soaXxlJobProperties;
-	}
-	
-	@Bean
-	public XxlJobSpringExecutor xxlJobSpringExecutor()
-	{
-		XxlJobSpringExecutor executor = new XxlJobSpringExecutor();
-		
-		executor.setAdminAddresses(soaXxlJobProperties.getAdmin().getAddresses());
-		executor.setAppname(soaXxlJobProperties.getExecutor().getAppname());
-		executor.setAddress(soaXxlJobProperties.getExecutor().getAddress());
-		executor.setIp(soaXxlJobProperties.getExecutor().getIp());
-		executor.setPort(soaXxlJobProperties.getExecutor().getPort());
-		executor.setLogPath(soaXxlJobProperties.getExecutor().getLogPath());
-		executor.setLogRetentionDays(soaXxlJobProperties.getExecutor().getLogRetentionDays());
-		executor.setAccessToken(soaXxlJobProperties.getAccessToken());
+    private SoaXxlJobProperties soaXxlJobProperties;
+    
+    public SoaXxlJobConfig(SoaXxlJobProperties soaXxlJobProperties)
+    {
+        this.soaXxlJobProperties = soaXxlJobProperties;
+    }
+    
+    @Bean
+    public XxlJobSpringExecutor xxlJobSpringExecutor()
+    {
+        XxlJobSpringExecutor executor = new XxlJobSpringExecutor();
+        
+        executor.setAdminAddresses(soaXxlJobProperties.getAdmin().getAddresses());
+        executor.setAppname(soaXxlJobProperties.getExecutor().getAppname());
+        executor.setAddress(soaXxlJobProperties.getExecutor().getAddress());
+        executor.setIp(soaXxlJobProperties.getExecutor().getIp());
+        executor.setPort(soaXxlJobProperties.getExecutor().getPort());
+        executor.setLogPath(soaXxlJobProperties.getExecutor().getLogPath());
+        executor.setLogRetentionDays(soaXxlJobProperties.getExecutor().getLogRetentionDays());
+        executor.setAccessToken(soaXxlJobProperties.getAccessToken());
 
-		return executor;
-	}
+        return executor;
+    }
 
 }

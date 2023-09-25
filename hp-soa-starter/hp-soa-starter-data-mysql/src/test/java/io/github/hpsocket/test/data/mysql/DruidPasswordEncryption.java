@@ -9,9 +9,9 @@ public class DruidPasswordEncryption
     public static final String DEFAULT_PUBLIC_KEY_STRING = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJRhKGNr3IAJcs4+0ys/4zmwUJoBYqAdx6EcyiWIBt7cIFS5QdruakTmGk8XOVPMVz9jOLOvhPfjLzgPgwaKo6UCAwEAAQ==";
 
     public static void main(String[] args) throws Exception
-	{
-    	String password = args.length > 0 ? args[0] : "123456";
-    	
+    {
+        String password = args.length > 0 ? args[0] : "123456";
+        
         System.out.println("privateKey: " + DEFAULT_PRIVATE_KEY_STRING);
         System.out.println("publicKey: " + DEFAULT_PUBLIC_KEY_STRING);
         System.out.println();
@@ -20,5 +20,5 @@ public class DruidPasswordEncryption
         
         System.out.println("enc-password: " +  encPassword);
         System.out.println("dec-password: " +  ConfigTools.decrypt(DEFAULT_PUBLIC_KEY_STRING, encPassword));
-	}
+    }
 }

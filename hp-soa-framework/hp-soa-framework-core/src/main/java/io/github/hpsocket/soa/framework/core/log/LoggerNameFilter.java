@@ -23,86 +23,86 @@ import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 @Plugin(name = "LoggerNameFilter", category = Node.CATEGORY, elementType = Filter.ELEMENT_TYPE, printObject = true)
 public class LoggerNameFilter extends AbstractFilter
 {
-	private final Level level;
-	private final Pattern name;
+    private final Level level;
+    private final Pattern name;
 
-	private LoggerNameFilter(final Pattern name, final Level level, final Result onMatch, final Result onMismatch)
-	{
-		super(onMatch, onMismatch);
-		this.level = level;
-		this.name = name;
-	}
+    private LoggerNameFilter(final Pattern name, final Level level, final Result onMatch, final Result onMismatch)
+    {
+        super(onMatch, onMismatch);
+        this.level = level;
+        this.name = name;
+    }
 
-	@Override
-	public Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object... params)
-	{
-		return filter(logger.getName(), level);
-	}
+    @Override
+    public Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object... params)
+    {
+        return filter(logger.getName(), level);
+    }
 
-	@Override
-	public Result filter(final Logger logger, final Level level, final Marker marker, final Object msg, final Throwable t)
-	{
-		return filter(logger.getName(), level);
-	}
+    @Override
+    public Result filter(final Logger logger, final Level level, final Marker marker, final Object msg, final Throwable t)
+    {
+        return filter(logger.getName(), level);
+    }
 
-	@Override
-	public Result filter(final Logger logger, final Level level, final Marker marker, final Message msg, final Throwable t)
-	{
-		return filter(logger.getName(), level);
-	}
+    @Override
+    public Result filter(final Logger logger, final Level level, final Marker marker, final Message msg, final Throwable t)
+    {
+        return filter(logger.getName(), level);
+    }
 
-	@Override
-	public Result filter(final LogEvent event)
-	{
-		return filter(event.getLoggerName(), event.getLevel());
-	}
+    @Override
+    public Result filter(final LogEvent event)
+    {
+        return filter(event.getLoggerName(), event.getLevel());
+    }
 
-	private Result filter(String name, final Level level)
-	{
-		if(level.isLessSpecificThan(this.level) && this.name.matcher(name).matches())
-			return onMismatch;
+    private Result filter(String name, final Level level)
+    {
+        if(level.isLessSpecificThan(this.level) && this.name.matcher(name).matches())
+            return onMismatch;
 
-		return onMatch;
-	}
+        return onMatch;
+    }
 
-	public Level getLevel()
-	{
-		return level;
-	}
+    public Level getLevel()
+    {
+        return level;
+    }
 
-	public String getName()
-	{
-		return name.toString();
-	}
+    public String getName()
+    {
+        return name.toString();
+    }
 
-	@Override
-	public String toString()
-	{
-		final StringBuilder sb = new StringBuilder();
-		
-		sb.append("level=").append(level);
-		sb.append(", name=").append(name);
-		
-		return sb.toString();
-	}
+    @Override
+    public String toString()
+    {
+        final StringBuilder sb = new StringBuilder();
+        
+        sb.append("level=").append(level);
+        sb.append(", name=").append(name);
+        
+        return sb.toString();
+    }
 
-	@PluginFactory
-	public static LoggerNameFilter createFilter(
-					@PluginAttribute("name") final String name,
-					@PluginAttribute("level") final Level level,
-					@PluginAttribute("onMatch") final Result match,
-					@PluginAttribute("onMismatch") final Result mismatch)
-	{
-		if(GeneralHelper.isStrEmpty(name))
-		{
+    @PluginFactory
+    public static LoggerNameFilter createFilter(
+                    @PluginAttribute("name") final String name,
+                    @PluginAttribute("level") final Level level,
+                    @PluginAttribute("onMatch") final Result match,
+                    @PluginAttribute("onMismatch") final Result mismatch)
+    {
+        if(GeneralHelper.isStrEmpty(name))
+        {
             LOGGER.error("'name' attribute must be provided for LoggerNameFilter");
             return null;
         }
 
-		final Level actualLevel	= level == null ? Level.ERROR : level;
-		final Result onMatch	= match == null ? Result.NEUTRAL : match;
-		final Result onMismatch	= mismatch == null ? Result.DENY : mismatch;
-		
-		return new LoggerNameFilter(Pattern.compile(name), actualLevel, onMatch, onMismatch);
-	}
+        final Level actualLevel    = level == null ? Level.ERROR : level;
+        final Result onMatch    = match == null ? Result.NEUTRAL : match;
+        final Result onMismatch    = mismatch == null ? Result.DENY : mismatch;
+        
+        return new LoggerNameFilter(Pattern.compile(name), actualLevel, onMatch, onMismatch);
+    }
 }

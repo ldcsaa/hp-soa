@@ -14,13 +14,13 @@ import org.aspectj.lang.annotation.Pointcut;
 @Order(Integer.MIN_VALUE)
 public class RabbitmqListenerTracingInspector
 {
-	@Pointcut(RabbitmqListenerMdcInspector.INSPECTOR_POINTCUT_PATTERN)
-	protected void aroundMethod() {}
-	
-	@Trace
-	@Around(value = "aroundMethod()")
-	public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
-	{
-		return joinPoint.proceed();
-	}
+    @Pointcut(RabbitmqListenerMdcInspector.INSPECTOR_POINTCUT_PATTERN)
+    protected void aroundMethod() {}
+    
+    @Trace
+    @Around(value = "aroundMethod()")
+    public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
+    {
+        return joinPoint.proceed();
+    }
 }

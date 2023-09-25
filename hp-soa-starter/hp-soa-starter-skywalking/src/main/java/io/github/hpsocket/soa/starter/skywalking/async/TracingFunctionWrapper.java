@@ -11,33 +11,33 @@ import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 @TraceCrossThread
 public class TracingFunctionWrapper<T, R> extends FunctionWrapper<T, R>
 {
-	private final MdcAttr mdcAttr;
-	
-	public TracingFunctionWrapper(Function<T, R> f)
-	{
-		this(f, MdcAttr.fromMdc());
-	}
-	
-	public TracingFunctionWrapper(Function<T, R> f, MdcAttr mdcAttr)
-	{
-		super(f);
-		
-		this.mdcAttr = mdcAttr;
-	}
-	
+    private final MdcAttr mdcAttr;
+    
+    public TracingFunctionWrapper(Function<T, R> f)
+    {
+        this(f, MdcAttr.fromMdc());
+    }
+    
+    public TracingFunctionWrapper(Function<T, R> f, MdcAttr mdcAttr)
+    {
+        super(f);
+        
+        this.mdcAttr = mdcAttr;
+    }
+    
     @Override
     public R apply(T t)
     {
-		try
-		{
-			mdcAttr.putMdc();
-			
-			return super.apply(t);
-		}
-		finally
-		{
-			mdcAttr.removeMdc();
-		}
+        try
+        {
+            mdcAttr.putMdc();
+            
+            return super.apply(t);
+        }
+        finally
+        {
+            mdcAttr.removeMdc();
+        }
     }
 
     public static <T, R> TracingFunctionWrapper<T, R> of(Function<T, R> f)

@@ -18,12 +18,12 @@ import static org.apache.ibatis.mapping.SqlCommandType.*;
  */
 public class ReadOnlyInterceptor implements InnerInterceptor
 {
-	@Override
-	public void beforeUpdate(Executor executor, MappedStatement ms, Object parameter) throws SQLException
-	{
-		SqlCommandType type = ms.getSqlCommandType();
-		
-		if(type == INSERT || type == UPDATE || type == DELETE)
-			Assert.isFalse(WebServerHelper.isAppReadOnly(), "application is read-only, can NOT execute update");;
-	}
+    @Override
+    public void beforeUpdate(Executor executor, MappedStatement ms, Object parameter) throws SQLException
+    {
+        SqlCommandType type = ms.getSqlCommandType();
+        
+        if(type == INSERT || type == UPDATE || type == DELETE)
+            Assert.isFalse(WebServerHelper.isAppReadOnly(), "application is read-only, can NOT execute update");;
+    }
 }

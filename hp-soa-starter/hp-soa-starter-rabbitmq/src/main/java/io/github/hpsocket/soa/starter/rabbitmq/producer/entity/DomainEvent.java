@@ -29,146 +29,146 @@ import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConsta
 @SuppressWarnings("serial")
 public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
 {
-	/**
-	 * 领域名称
-	 */
-	private String domainName;
+    /**
+     * 领域名称
+     */
+    private String domainName;
 
-	/**
-	 * 事件名称
-	 */
-	private String eventName;
+    /**
+     * 事件名称
+     */
+    private String eventName;
 
-	/**
-	 * 交换机（领域事件的交换机是fanout类型）
-	 */
-	private String exchange;
+    /**
+     * 交换机（领域事件的交换机是fanout类型）
+     */
+    private String exchange;
 
-	/**
-	 * 路由键（领域事件的路由键为空）
-	 */
-	private String routingKey;
+    /**
+     * 路由键（领域事件的路由键为空）
+     */
+    private String routingKey;
 
-	/**
-	 * 事件唯一Id
-	 */
-	private String msgId;
+    /**
+     * 事件唯一Id
+     */
+    private String msgId;
 
-	/**
-	 * 消息体
-	 */
-	private String msg;
+    /**
+     * 消息体
+     */
+    private String msg;
 
-	/**
-	 * 关联请求Id
-	 */
-	private String sourceRequestId;
+    /**
+     * 关联请求Id
+     */
+    private String sourceRequestId;
 
-	/**
-	 * 发送标记（{@linkplain RabbitmqConstant#SF_NOT_SEND SF_NOT_SEND} - 未发送，{@linkplain RabbitmqConstant#SF_SENDING SF_SENDING} - 正在发送，{@linkplain RabbitmqConstant#SF_SEND_SUCC SF_SEND_SUCC} - 发送成功，{@linkplain RabbitmqConstant#SF_SEND_FAIL SF_SEND_FAIL} - 发送失败）
-	 */
-	private Integer sendFlag;
+    /**
+     * 发送标记（{@linkplain RabbitmqConstant#SF_NOT_SEND SF_NOT_SEND} - 未发送，{@linkplain RabbitmqConstant#SF_SENDING SF_SENDING} - 正在发送，{@linkplain RabbitmqConstant#SF_SEND_SUCC SF_SEND_SUCC} - 发送成功，{@linkplain RabbitmqConstant#SF_SEND_FAIL SF_SEND_FAIL} - 发送失败）
+     */
+    private Integer sendFlag;
 
-	/**
-	 * 重试次数
-	 */
-	private Integer retries;
+    /**
+     * 重试次数
+     */
+    private Integer retries;
 
-	/**
-	 * 最后发送时间
-	 */
-	private LocalDateTime lastSendTime;
+    /**
+     * 最后发送时间
+     */
+    private LocalDateTime lastSendTime;
 
-	public DomainEvent()
-	{
-		this(IdGenerator.nextIdStr());
-	}
-	
-	public DomainEvent(String msgId)
-	{
-		this(msgId, MDC.get(MdcAttr.MDC_REQUEST_ID_KEY));
-	}
-	
-	public DomainEvent(String msgId, String sourceRequestId)
-	{
-		this.msgId = msgId;
-		this.sourceRequestId = sourceRequestId;
-	}
-	
-	public Message toMessage()
-	{
-		return toMessage(null, null);
-	}
-	
-	public Message toMessage(MessageProperties messageProperties)
-	{
-		return toMessage(messageProperties, null);
-	}
-	
-	public Message toMessage(String correlationId)
-	{
-		return toMessage(null, correlationId);
-	}
-	
-	public Message toMessage(MessageProperties messageProperties, String correlationId)
-	{
-		MessageBuilder builder = MessageBuilder.withBody(msg.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
-		
-		if(messageProperties != null)
-			builder.andProperties(messageProperties);
-		
-		if(GeneralHelper.isStrNotEmpty(correlationId))
-			builder.setCorrelationId(correlationId);
-		
-		return builder
-			.setContentEncoding(WebServerHelper.DEFAULT_CHARSET)
-			.setContentType(MessageProperties.CONTENT_TYPE_JSON)
-			.setMessageId(msgId)
-			
-			.setHeader(HEADER_DOMAIN_NAME, domainName)
-			.setHeader(HEADER_EVENT_NAME, eventName)
-			.setHeader(HEADER_MSG_ID, msgId)
-			.setHeader(HEADER_SOURCE_REQUEST_ID, sourceRequestId)
-			.build();
-	}
-	
-	public Message toStreamMessage()
-	{
-		return toStreamMessage(null, null);
-	}
-	
-	public Message toStreamMessage(StreamMessageProperties streamMessageProperties)
-	{
-		return toStreamMessage(streamMessageProperties, null);
-	}
-	
-	public Message toStreamMessage(String correlationId)
-	{
-		return toStreamMessage(null, correlationId);			
-	}
-	
-	public Message toStreamMessage(StreamMessageProperties streamMessageProperties, String correlationId)
-	{
-		if(streamMessageProperties == null)
-			streamMessageProperties = new StreamMessageProperties();
-		
-		streamMessageProperties.setGroupId(domainName);
-		
-		MessageBuilder builder = MessageBuilder.withBody(msg.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
-		builder.andProperties(streamMessageProperties);
-		
-		if(GeneralHelper.isStrNotEmpty(correlationId))
-			builder.setCorrelationId(correlationId);
-		
-		return builder
-			.setContentEncoding(WebServerHelper.DEFAULT_CHARSET)
-			.setContentType(MessageProperties.CONTENT_TYPE_JSON)
-			.setMessageId(msgId)
-			.setHeader(HEADER_DOMAIN_NAME, domainName)
-			.setHeader(HEADER_EVENT_NAME, eventName)
-			.setHeader(HEADER_MSG_ID, msgId)
-			.setHeader(HEADER_SOURCE_REQUEST_ID, sourceRequestId)
-			.build();
-	}
-	
+    public DomainEvent()
+    {
+        this(IdGenerator.nextIdStr());
+    }
+    
+    public DomainEvent(String msgId)
+    {
+        this(msgId, MDC.get(MdcAttr.MDC_REQUEST_ID_KEY));
+    }
+    
+    public DomainEvent(String msgId, String sourceRequestId)
+    {
+        this.msgId = msgId;
+        this.sourceRequestId = sourceRequestId;
+    }
+    
+    public Message toMessage()
+    {
+        return toMessage(null, null);
+    }
+    
+    public Message toMessage(MessageProperties messageProperties)
+    {
+        return toMessage(messageProperties, null);
+    }
+    
+    public Message toMessage(String correlationId)
+    {
+        return toMessage(null, correlationId);
+    }
+    
+    public Message toMessage(MessageProperties messageProperties, String correlationId)
+    {
+        MessageBuilder builder = MessageBuilder.withBody(msg.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
+        
+        if(messageProperties != null)
+            builder.andProperties(messageProperties);
+        
+        if(GeneralHelper.isStrNotEmpty(correlationId))
+            builder.setCorrelationId(correlationId);
+        
+        return builder
+            .setContentEncoding(WebServerHelper.DEFAULT_CHARSET)
+            .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+            .setMessageId(msgId)
+            
+            .setHeader(HEADER_DOMAIN_NAME, domainName)
+            .setHeader(HEADER_EVENT_NAME, eventName)
+            .setHeader(HEADER_MSG_ID, msgId)
+            .setHeader(HEADER_SOURCE_REQUEST_ID, sourceRequestId)
+            .build();
+    }
+    
+    public Message toStreamMessage()
+    {
+        return toStreamMessage(null, null);
+    }
+    
+    public Message toStreamMessage(StreamMessageProperties streamMessageProperties)
+    {
+        return toStreamMessage(streamMessageProperties, null);
+    }
+    
+    public Message toStreamMessage(String correlationId)
+    {
+        return toStreamMessage(null, correlationId);            
+    }
+    
+    public Message toStreamMessage(StreamMessageProperties streamMessageProperties, String correlationId)
+    {
+        if(streamMessageProperties == null)
+            streamMessageProperties = new StreamMessageProperties();
+        
+        streamMessageProperties.setGroupId(domainName);
+        
+        MessageBuilder builder = MessageBuilder.withBody(msg.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
+        builder.andProperties(streamMessageProperties);
+        
+        if(GeneralHelper.isStrNotEmpty(correlationId))
+            builder.setCorrelationId(correlationId);
+        
+        return builder
+            .setContentEncoding(WebServerHelper.DEFAULT_CHARSET)
+            .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+            .setMessageId(msgId)
+            .setHeader(HEADER_DOMAIN_NAME, domainName)
+            .setHeader(HEADER_EVENT_NAME, eventName)
+            .setHeader(HEADER_MSG_ID, msgId)
+            .setHeader(HEADER_SOURCE_REQUEST_ID, sourceRequestId)
+            .build();
+    }
+    
 }

@@ -32,70 +32,70 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaFirstRabbitm
 @ConditionalOnBean({SoaRabbitmqConsumerConfig.class, SoaFirstRabbitmqProperties.class})
 public class SoaFirstRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerConfig
 {
-	public SoaFirstRabbitmqConsumerConfig(
-		ObjectProvider<MessageConverter> messageConverter,
-		ObjectProvider<MessageRecoverer> messageRecoverer,
-		ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers,
-		SoaFirstRabbitmqProperties properties)
-	{
-		super(messageConverter, messageRecoverer, retryTemplateCustomizers, properties);
-	}
-	
-	@Override
-	@Bean("firstSimpleRabbitListenerContainerFactoryConfigurer")
-	public SimpleRabbitListenerContainerFactoryConfigurer simpleRabbitListenerContainerFactoryConfigurer()
-	{
-		return super.simpleRabbitListenerContainerFactoryConfigurer();
-	}
-	
-	@Override
-	@Bean("firstSimpleRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq-first.listener", name = "type", havingValue = "simple", matchIfMissing = true)
-	public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
-		@Qualifier("firstSimpleRabbitListenerContainerFactoryConfigurer") SimpleRabbitListenerContainerFactoryConfigurer configurer,
-		@Qualifier("firstRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
-		@Qualifier("firstRabbitSimpleContainerCustomizer") ObjectProvider<ContainerCustomizer<SimpleMessageListenerContainer>> simpleContainerCustomizer)
-	{
-		return super.simpleRabbitListenerContainerFactory(configurer, connectionFactory, simpleContainerCustomizer);
-	}
-	
-	@Override
-	@Bean("firstDirectRabbitListenerContainerFactoryConfigurer")
-	public DirectRabbitListenerContainerFactoryConfigurer directRabbitListenerContainerFactoryConfigurer()
-	{
-		return super.directRabbitListenerContainerFactoryConfigurer();
-	}
+    public SoaFirstRabbitmqConsumerConfig(
+        ObjectProvider<MessageConverter> messageConverter,
+        ObjectProvider<MessageRecoverer> messageRecoverer,
+        ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers,
+        SoaFirstRabbitmqProperties properties)
+    {
+        super(messageConverter, messageRecoverer, retryTemplateCustomizers, properties);
+    }
+    
+    @Override
+    @Bean("firstSimpleRabbitListenerContainerFactoryConfigurer")
+    public SimpleRabbitListenerContainerFactoryConfigurer simpleRabbitListenerContainerFactoryConfigurer()
+    {
+        return super.simpleRabbitListenerContainerFactoryConfigurer();
+    }
+    
+    @Override
+    @Bean("firstSimpleRabbitListenerContainerFactory")
+    @ConditionalOnProperty(prefix = "spring.rabbitmq-first.listener", name = "type", havingValue = "simple", matchIfMissing = true)
+    public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
+        @Qualifier("firstSimpleRabbitListenerContainerFactoryConfigurer") SimpleRabbitListenerContainerFactoryConfigurer configurer,
+        @Qualifier("firstRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
+        @Qualifier("firstRabbitSimpleContainerCustomizer") ObjectProvider<ContainerCustomizer<SimpleMessageListenerContainer>> simpleContainerCustomizer)
+    {
+        return super.simpleRabbitListenerContainerFactory(configurer, connectionFactory, simpleContainerCustomizer);
+    }
+    
+    @Override
+    @Bean("firstDirectRabbitListenerContainerFactoryConfigurer")
+    public DirectRabbitListenerContainerFactoryConfigurer directRabbitListenerContainerFactoryConfigurer()
+    {
+        return super.directRabbitListenerContainerFactoryConfigurer();
+    }
 
-	@Override
-	@Bean("firstDirectRabbitListenerContainerFactory")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq-first.listener", name = "type", havingValue = "direct")
-	public DirectRabbitListenerContainerFactory directRabbitListenerContainerFactory(
-		@Qualifier("firstDirectRabbitListenerContainerFactoryConfigurer") DirectRabbitListenerContainerFactoryConfigurer configurer,
-		@Qualifier("firstRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
-		@Qualifier("firstRabbitDirectContainerCustomizer") ObjectProvider<ContainerCustomizer<DirectMessageListenerContainer>> directContainerCustomizer)
-	{
-		return super.directRabbitListenerContainerFactory(configurer, connectionFactory, directContainerCustomizer);
-	}
-	
-	@Bean(name = "firstRabbitStreamConsumerCustomizer")
-	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-	@ConditionalOnMissingBean(name = "firstRabbitStreamConsumerCustomizer")
-	@ConditionalOnProperty(prefix = "spring.rabbitmq-first.listener", name = "type", havingValue = "stream")
-	ConsumerCustomizer consumerCustomizer()
-	{
-		return defaultConsumerCustomizer("firstRabbitStreamConsumer", OffsetSpecification.next());
-	}
-	
-	@Override
-	@Bean(name = "firstStreamRabbitListenerContainerFactory")
-	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-	@ConditionalOnProperty(prefix = "spring.rabbitmq-first.listener", name = "type", havingValue = "stream")
-	public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
-		@Qualifier("firstRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
-		@Qualifier("firstRabbitStreamConsumerCustomizer") ObjectProvider<ConsumerCustomizer> consumerCustomizer,
-		@Qualifier("firstRabbitStreamContainerCustomizer") ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
-	{
-		return super.streamRabbitListenerContainerFactory(rabbitStreamEnvironment, consumerCustomizer, containerCustomizer);
-	}
+    @Override
+    @Bean("firstDirectRabbitListenerContainerFactory")
+    @ConditionalOnProperty(prefix = "spring.rabbitmq-first.listener", name = "type", havingValue = "direct")
+    public DirectRabbitListenerContainerFactory directRabbitListenerContainerFactory(
+        @Qualifier("firstDirectRabbitListenerContainerFactoryConfigurer") DirectRabbitListenerContainerFactoryConfigurer configurer,
+        @Qualifier("firstRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
+        @Qualifier("firstRabbitDirectContainerCustomizer") ObjectProvider<ContainerCustomizer<DirectMessageListenerContainer>> directContainerCustomizer)
+    {
+        return super.directRabbitListenerContainerFactory(configurer, connectionFactory, directContainerCustomizer);
+    }
+    
+    @Bean(name = "firstRabbitStreamConsumerCustomizer")
+    @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
+    @ConditionalOnMissingBean(name = "firstRabbitStreamConsumerCustomizer")
+    @ConditionalOnProperty(prefix = "spring.rabbitmq-first.listener", name = "type", havingValue = "stream")
+    ConsumerCustomizer consumerCustomizer()
+    {
+        return defaultConsumerCustomizer("firstRabbitStreamConsumer", OffsetSpecification.next());
+    }
+    
+    @Override
+    @Bean(name = "firstStreamRabbitListenerContainerFactory")
+    @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
+    @ConditionalOnProperty(prefix = "spring.rabbitmq-first.listener", name = "type", havingValue = "stream")
+    public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
+        @Qualifier("firstRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
+        @Qualifier("firstRabbitStreamConsumerCustomizer") ObjectProvider<ConsumerCustomizer> consumerCustomizer,
+        @Qualifier("firstRabbitStreamContainerCustomizer") ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
+    {
+        return super.streamRabbitListenerContainerFactory(rabbitStreamEnvironment, consumerCustomizer, containerCustomizer);
+    }
 
 }

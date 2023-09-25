@@ -13,7 +13,7 @@ import lombok.Setter;
 @ConditionalOnProperty(name = "xxl.job.enabled", matchIfMissing = true)
 public class SoaXxlJobProperties
 {
-	private boolean enabled = true;
+    private boolean enabled = true;
 
     private String accessToken;
 
@@ -24,7 +24,7 @@ public class SoaXxlJobProperties
     @Setter
     public static class Admin
     {
-        private String addresses;    	
+        private String addresses;        
     }
     
     @Getter
@@ -36,7 +36,7 @@ public class SoaXxlJobProperties
         private String ip;
         private int port;
         private String logPath;
-        private int logRetentionDays;    	
+        private int logRetentionDays;        
     }
 
 }

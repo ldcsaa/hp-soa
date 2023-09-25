@@ -17,25 +17,25 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConve
 @ComponentScan(basePackages = "io.github.hpsocket.soa.starter.rabbitmq.common.properties")
 public class SoaRabbitmqCommonConfig
 {
-	/** 默认消息转换器 */
-	@Primary
-	@Bean("messageConverter")
-	@ConditionalOnMissingBean(name = "messageConverter")
-	MessageConverter messageConverter()
-	{
-		MessageConverter textConverter = new TextMessageConverter();
-		MessageConverter fastJsonConverter = new FastJsonMessageConverter();
-		ContentTypeDelegatingMessageConverter delegatingConverter = new ContentTypeDelegatingMessageConverter(fastJsonConverter);
-		
-		delegatingConverter.addDelegate(MessageProperties.CONTENT_TYPE_JSON_ALT, fastJsonConverter);
-		delegatingConverter.addDelegate(MessageProperties.CONTENT_TYPE_JSON, fastJsonConverter);
-		delegatingConverter.addDelegate("text/json", fastJsonConverter);
-		delegatingConverter.addDelegate("json", fastJsonConverter);
-		
-		delegatingConverter.addDelegate(MessageProperties.CONTENT_TYPE_TEXT_PLAIN, textConverter);
-		delegatingConverter.addDelegate(MessageProperties.CONTENT_TYPE_XML, textConverter);
-		delegatingConverter.addDelegate("text", textConverter);
-		
-		return delegatingConverter;
-	}
+    /** 默认消息转换器 */
+    @Primary
+    @Bean("messageConverter")
+    @ConditionalOnMissingBean(name = "messageConverter")
+    MessageConverter messageConverter()
+    {
+        MessageConverter textConverter = new TextMessageConverter();
+        MessageConverter fastJsonConverter = new FastJsonMessageConverter();
+        ContentTypeDelegatingMessageConverter delegatingConverter = new ContentTypeDelegatingMessageConverter(fastJsonConverter);
+        
+        delegatingConverter.addDelegate(MessageProperties.CONTENT_TYPE_JSON_ALT, fastJsonConverter);
+        delegatingConverter.addDelegate(MessageProperties.CONTENT_TYPE_JSON, fastJsonConverter);
+        delegatingConverter.addDelegate("text/json", fastJsonConverter);
+        delegatingConverter.addDelegate("json", fastJsonConverter);
+        
+        delegatingConverter.addDelegate(MessageProperties.CONTENT_TYPE_TEXT_PLAIN, textConverter);
+        delegatingConverter.addDelegate(MessageProperties.CONTENT_TYPE_XML, textConverter);
+        delegatingConverter.addDelegate("text", textConverter);
+        
+        return delegatingConverter;
+    }
 }

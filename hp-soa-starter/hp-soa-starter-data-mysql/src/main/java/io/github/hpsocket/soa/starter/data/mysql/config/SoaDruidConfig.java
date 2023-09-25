@@ -32,59 +32,59 @@ import lombok.extern.slf4j.Slf4j;
 public class SoaDruidConfig
 {
 
-	/** <b>Druid 监控页面广告屏蔽 {@linkplain Filter} */
-	@Bean
-	public FilterRegistrationBean<Filter> druidAdFilterRegistrationBean(DruidStatProperties properties)
-	{
-		DruidStatProperties.StatViewServlet config = properties.getStatViewServlet();
-		String pattern = config.getUrlPattern() != null ? config.getUrlPattern() : "/druid/*";
-		String commonJsPattern = pattern.replaceAll("\\*", "js/common.js");
-		final String filePath = "support/http/resources/js/common.js";
+    /** <b>Druid 监控页面广告屏蔽 {@linkplain Filter} */
+    @Bean
+    public FilterRegistrationBean<Filter> druidAdFilterRegistrationBean(DruidStatProperties properties)
+    {
+        DruidStatProperties.StatViewServlet config = properties.getStatViewServlet();
+        String pattern = config.getUrlPattern() != null ? config.getUrlPattern() : "/druid/*";
+        String commonJsPattern = pattern.replaceAll("\\*", "js/common.js");
+        final String filePath = "support/http/resources/js/common.js";
 
-		Filter filter = new Filter()
-		{
-			private String commonJs;
-			
-			@Override
-			public void init(FilterConfig filterConfig) throws ServletException
-			{
-				log.info("starting up: (DruidAdRemoverFilter) ...");
-			}
+        Filter filter = new Filter()
+        {
+            private String commonJs;
+            
+            @Override
+            public void init(FilterConfig filterConfig) throws ServletException
+            {
+                log.info("starting up: (DruidAdRemoverFilter) ...");
+            }
 
-			@Override
-			public void destroy()
-			{
-				log.info("shutting down: (DruidAdRemoverFilter) OK!");
-			}
+            @Override
+            public void destroy()
+            {
+                log.info("shutting down: (DruidAdRemoverFilter) OK!");
+            }
 
-			@Override
-			public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-			{
-				chain.doFilter(request, response);
-				response.resetBuffer();
-				
-				if(GeneralHelper.isStrEmpty(commonJs))
-				{
-					synchronized(this)
-					{
-						if(GeneralHelper.isStrEmpty(commonJs))
-						{
-							String text = Utils.readFromResource(filePath);
-							commonJs = text.replaceAll("<footer[\\s\\S]*?</footer>", "");
-						}
-					}
-				}
-				
-				response.getWriter().write(commonJs);
-			}
-		};
-		
-		FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
+            @Override
+            public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+            {
+                chain.doFilter(request, response);
+                response.resetBuffer();
+                
+                if(GeneralHelper.isStrEmpty(commonJs))
+                {
+                    synchronized(this)
+                    {
+                        if(GeneralHelper.isStrEmpty(commonJs))
+                        {
+                            String text = Utils.readFromResource(filePath);
+                            commonJs = text.replaceAll("<footer[\\s\\S]*?</footer>", "");
+                        }
+                    }
+                }
+                
+                response.getWriter().write(commonJs);
+            }
+        };
+        
+        FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
 
-		registrationBean.setFilter(filter);
-		registrationBean.addUrlPatterns(commonJsPattern);
+        registrationBean.setFilter(filter);
+        registrationBean.addUrlPatterns(commonJsPattern);
 
-		return registrationBean;
-	}
+        return registrationBean;
+    }
 
 }

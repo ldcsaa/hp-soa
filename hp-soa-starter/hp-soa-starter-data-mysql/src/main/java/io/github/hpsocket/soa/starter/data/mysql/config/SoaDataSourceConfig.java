@@ -28,24 +28,24 @@ import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSour
 @AutoConfigureBefore(DynamicDataSourceAutoConfiguration.class)
 public class SoaDataSourceConfig
 {
-	/** 默认动态数据源 */
-	@Primary
+    /** 默认动态数据源 */
+    @Primary
     @Bean("dynamicRoutingDataSource")
-	@ConditionalOnMissingBean(name = "dynamicRoutingDataSource")
+    @ConditionalOnMissingBean(name = "dynamicRoutingDataSource")
     public DataSource dynamicRoutingDataSource(
-		DynamicDataSourceProperties properties,
-		ObjectProvider<List<DynamicDataSourcePropertiesCustomizer>> dataSourcePropertiesCustomizers)
+        DynamicDataSourceProperties properties,
+        ObjectProvider<List<DynamicDataSourcePropertiesCustomizer>> dataSourcePropertiesCustomizers)
     {
-		return new DynamicDataSourceAutoConfiguration(properties, dataSourcePropertiesCustomizers).dataSource();
+        return new DynamicDataSourceAutoConfiguration(properties, dataSourcePropertiesCustomizers).dataSource();
     }
-	
-	/** 默认动态数据源事务管理器 */
-	@Primary
-	@Bean("dynamicRoutingTransactionManager")
-	@ConditionalOnMissingBean(name = "dynamicRoutingTransactionManager")
-	PlatformTransactionManager dynamicRoutingTransactionManager(@Qualifier("dynamicRoutingDataSource") DataSource dataSource)
-	{
-		return new JdbcTransactionManager(dataSource);
-	}
+    
+    /** 默认动态数据源事务管理器 */
+    @Primary
+    @Bean("dynamicRoutingTransactionManager")
+    @ConditionalOnMissingBean(name = "dynamicRoutingTransactionManager")
+    PlatformTransactionManager dynamicRoutingTransactionManager(@Qualifier("dynamicRoutingDataSource") DataSource dataSource)
+    {
+        return new JdbcTransactionManager(dataSource);
+    }
 
 }

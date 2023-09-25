@@ -28,123 +28,123 @@ import lombok.Setter;
 
 public class Main
 {
-	private static final FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
-	private static final GenericFastJsonRedisSerializer genericFastJsonRedisSerializer1 = new GenericFastJsonRedisSerializer(true);
-	private static final GenericFastJsonRedisSerializer genericFastJsonRedisSerializer2 = new GenericFastJsonRedisSerializer(false);
+    private static final FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+    private static final GenericFastJsonRedisSerializer genericFastJsonRedisSerializer1 = new GenericFastJsonRedisSerializer(true);
+    private static final GenericFastJsonRedisSerializer genericFastJsonRedisSerializer2 = new GenericFastJsonRedisSerializer(false);
 
-	private static final KryoRedisSerializer<Object> kryoRedisSerializer = new KryoRedisSerializer<Object>();
-	
-	public static void main(String[] args)
-	{
-		final int COUNT = 100000;
-		
-		MyClass my = new MyClass();
-		my.setName("Kingfisher");
-		my.setAge(23);
-		
-		testFastJson(my, false);
-		testFastJson(my, true);
-		testGenericFastJson1(my);
-		testGenericFastJson2(my);
-		testKryo(my);
-		
-		StopWatch sw = new StopWatch("serial");
-		
-		sw.start();
-		for(int i = 0; i < COUNT; i++)
-		{
-			testFastJson(my, false);
-		}
-		sw.stop();
-		System.out.println("testFastJson - 1: " + sw.getLastTaskTimeMillis());
-		
-		sw.start();
-		for(int i = 0; i < COUNT; i++)
-		{
-			testFastJson(my, true);
-		}
-		sw.stop();
-		System.out.println("testFastJson - 2: " + sw.getLastTaskTimeMillis());
-		
-		sw.start();
-		for(int i = 0; i < COUNT; i++)
-		{
-			testGenericFastJson1(my);
-		}
-		sw.stop();
-		System.out.println("testGenericFastJson - 1: " + sw.getLastTaskTimeMillis());
-		
-		sw.start();
-		for(int i = 0; i < COUNT; i++)
-		{
-			testGenericFastJson2(my);
-		}
-		sw.stop();
-		System.out.println("testGenericFastJson - 2: " + sw.getLastTaskTimeMillis());
-		
-		sw.start();
-		for(int i = 0; i < COUNT; i++)
-		{
-			testKryo(my);
-		}
-		sw.stop();
-		System.out.println("testKryo: " + sw.getLastTaskTimeMillis());
-		
-	}
+    private static final KryoRedisSerializer<Object> kryoRedisSerializer = new KryoRedisSerializer<Object>();
+    
+    public static void main(String[] args)
+    {
+        final int COUNT = 100000;
+        
+        MyClass my = new MyClass();
+        my.setName("Kingfisher");
+        my.setAge(23);
+        
+        testFastJson(my, false);
+        testFastJson(my, true);
+        testGenericFastJson1(my);
+        testGenericFastJson2(my);
+        testKryo(my);
+        
+        StopWatch sw = new StopWatch("serial");
+        
+        sw.start();
+        for(int i = 0; i < COUNT; i++)
+        {
+            testFastJson(my, false);
+        }
+        sw.stop();
+        System.out.println("testFastJson - 1: " + sw.getLastTaskTimeMillis());
+        
+        sw.start();
+        for(int i = 0; i < COUNT; i++)
+        {
+            testFastJson(my, true);
+        }
+        sw.stop();
+        System.out.println("testFastJson - 2: " + sw.getLastTaskTimeMillis());
+        
+        sw.start();
+        for(int i = 0; i < COUNT; i++)
+        {
+            testGenericFastJson1(my);
+        }
+        sw.stop();
+        System.out.println("testGenericFastJson - 1: " + sw.getLastTaskTimeMillis());
+        
+        sw.start();
+        for(int i = 0; i < COUNT; i++)
+        {
+            testGenericFastJson2(my);
+        }
+        sw.stop();
+        System.out.println("testGenericFastJson - 2: " + sw.getLastTaskTimeMillis());
+        
+        sw.start();
+        for(int i = 0; i < COUNT; i++)
+        {
+            testKryo(my);
+        }
+        sw.stop();
+        System.out.println("testKryo: " + sw.getLastTaskTimeMillis());
+        
+    }
 
-	@SuppressWarnings("unused")
-	private static void testFastJson(MyClass my, boolean toJavaObj)
-	{
-		byte[] bytes = fastJsonRedisSerializer.serialize(my);
-		Object obj = fastJsonRedisSerializer.deserialize(bytes);
-		
-		if(toJavaObj)
-		{
-			Object obj2 = ((JSONObject)obj).toJavaObject(MyClass.class);
-		}
-		
-		//System.out.println(obj2);
-		
-	}
+    @SuppressWarnings("unused")
+    private static void testFastJson(MyClass my, boolean toJavaObj)
+    {
+        byte[] bytes = fastJsonRedisSerializer.serialize(my);
+        Object obj = fastJsonRedisSerializer.deserialize(bytes);
+        
+        if(toJavaObj)
+        {
+            Object obj2 = ((JSONObject)obj).toJavaObject(MyClass.class);
+        }
+        
+        //System.out.println(obj2);
+        
+    }
 
-	@SuppressWarnings("unused")
-	private static void testGenericFastJson1(MyClass my)
-	{
-		byte[] bytes = genericFastJsonRedisSerializer1.serialize(my);
-		Object obj = genericFastJsonRedisSerializer1.deserialize(bytes);
-		
-		//System.out.println(obj);
-	}
+    @SuppressWarnings("unused")
+    private static void testGenericFastJson1(MyClass my)
+    {
+        byte[] bytes = genericFastJsonRedisSerializer1.serialize(my);
+        Object obj = genericFastJsonRedisSerializer1.deserialize(bytes);
+        
+        //System.out.println(obj);
+    }
 
-	@SuppressWarnings("unused")
-	private static void testGenericFastJson2(MyClass my)
-	{
-		byte[] bytes = genericFastJsonRedisSerializer2.serialize(my);
-		Object obj = genericFastJsonRedisSerializer2.deserialize(bytes);
-		
-		//System.out.println(obj);
-	}
+    @SuppressWarnings("unused")
+    private static void testGenericFastJson2(MyClass my)
+    {
+        byte[] bytes = genericFastJsonRedisSerializer2.serialize(my);
+        Object obj = genericFastJsonRedisSerializer2.deserialize(bytes);
+        
+        //System.out.println(obj);
+    }
 
-	@SuppressWarnings("unused")
-	private static void testKryo(MyClass my)
-	{
-		byte[] bytes = kryoRedisSerializer.serialize(my);
-		Object obj = kryoRedisSerializer.deserialize(bytes);
-		
-		//System.out.println(obj);
-	}
+    @SuppressWarnings("unused")
+    private static void testKryo(MyClass my)
+    {
+        byte[] bytes = kryoRedisSerializer.serialize(my);
+        Object obj = kryoRedisSerializer.deserialize(bytes);
+        
+        //System.out.println(obj);
+    }
 }
 
 @Getter
 @Setter
 class MyClass
 {
-	String name;
-	Integer age;
+    String name;
+    Integer age;
 
-	///*
-	private RedisProperties redisProperties = new RedisProperties();
-	
+    ///*
+    private RedisProperties redisProperties = new RedisProperties();
+    
     private SentinelServersConfig sentinelServersConfig = new SentinelServersConfig();
 
     private MasterSlaveServersConfig masterSlaveServersConfig = new MasterSlaveServersConfig();
@@ -152,8 +152,8 @@ class MyClass
     private SingleServerConfig singleServerConfig;
 
     private ClusterServersConfig clusterServersConfig = new ClusterServersConfig();
-	//*/
-	
+    //*/
+    
     private ReplicatedServersConfig replicatedServersConfig = new ReplicatedServersConfig();
 
     private ConnectionManager connectionManager;
@@ -196,10 +196,10 @@ class MyClass
 
     private boolean useThreadClassLoader = true;
 
-	
-	@Override
-	public String toString()
-	{
-		return String.format("{name: %s, age: %d}", name, age);
-	}
+    
+    @Override
+    public String toString()
+    {
+        return String.format("{name: %s, age: %d}", name, age);
+    }
 }

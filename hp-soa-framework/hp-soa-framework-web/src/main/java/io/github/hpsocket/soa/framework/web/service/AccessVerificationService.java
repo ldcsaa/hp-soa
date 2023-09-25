@@ -7,11 +7,11 @@ import io.github.hpsocket.soa.framework.core.util.Pair;
  */
 public interface AccessVerificationService
 {
-	/** appCode 校验 */
-	boolean verifyAppCode(String appCode);
-	/** 用户认证校验 */
-	Pair<Long, String> verifyUserByTokenAndGroupId(String token, Long groupId);
-	/** 用户授权校验 */
-	Pair<Boolean, String> verifyRouteAuthorized(String route, String appCode, Long groupId, Long userId);
+    /** appCode 校验 */
+    boolean verifyAppCode(String appCode);
+    /** 用户认证校验 */
+    Pair<Long, String> verifyUserByTokenAndGroupId(String token, Long groupId);
+    /** 用户授权校验 */
+    Pair<Boolean, String> verifyRouteAuthorized(String route, String appCode, Long groupId, Long userId);
 
 }

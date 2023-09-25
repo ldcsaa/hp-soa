@@ -15,30 +15,30 @@ import com.baomidou.mybatisplus.extension.handlers.AbstractJsonTypeHandler;
 @MappedJdbcTypes(JdbcType.VARCHAR)
 public class FastJson2TypeHandler extends AbstractJsonTypeHandler<Object>
 {
-	boolean jsonObjecct;
-	private final Class<?> type;
+    boolean jsonObjecct;
+    private final Class<?> type;
 
-	public FastJson2TypeHandler(Class<?> type)
-	{
-		this.type = type;
-		this.jsonObjecct = (JSONObject.class.isAssignableFrom(type));
-	}
+    public FastJson2TypeHandler(Class<?> type)
+    {
+        this.type = type;
+        this.jsonObjecct = (JSONObject.class.isAssignableFrom(type));
+    }
 
-	@Override
-	protected Object parse(String json)
-	{
-		if(jsonObjecct)
-			return JSONObject.parse(json);
-		
-		return JSON.parseObject(json, type);
-	}
+    @Override
+    protected Object parse(String json)
+    {
+        if(jsonObjecct)
+            return JSONObject.parse(json);
+        
+        return JSON.parseObject(json, type);
+    }
 
-	@Override
+    @Override
     protected String toJson(Object obj)
-	{
-		if(jsonObjecct)
-			return ((JSONObject)(obj)).toString(JSONWriter.Feature.WriteNonStringKeyAsString);
-		
+    {
+        if(jsonObjecct)
+            return ((JSONObject)(obj)).toString(JSONWriter.Feature.WriteNonStringKeyAsString);
+        
         return JSON.toJSONString(obj, JSONWriter.Feature.WriteNonStringKeyAsString);
     }
 }

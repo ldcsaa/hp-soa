@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Import;
 /** <b>HP-SOA Web Aspect 配置</b> */
 @AutoConfiguration
 @Import({
-			SiteLocalInspector.class
+            SiteLocalInspector.class
         })
 public class AspectAopConfig
 {
-	@Bean
-	@ConditionalOnProperty(name="hp.soa.web.access-verification.enabled", havingValue="true", matchIfMissing = true)
-	AccessVerificationInspector accessVerificationInspector(IAccessVerificationProperties accessVerificationProperties, AccessVerificationService accessVerificationService)
-	{
-		return new AccessVerificationInspector(accessVerificationProperties.getDefaultAccessPolicyEnum(), accessVerificationService);
-	}	
+    @Bean
+    @ConditionalOnProperty(name="hp.soa.web.access-verification.enabled", havingValue="true", matchIfMissing = true)
+    AccessVerificationInspector accessVerificationInspector(IAccessVerificationProperties accessVerificationProperties, AccessVerificationService accessVerificationService)
+    {
+        return new AccessVerificationInspector(accessVerificationProperties.getDefaultAccessPolicyEnum(), accessVerificationService);
+    }    
 }

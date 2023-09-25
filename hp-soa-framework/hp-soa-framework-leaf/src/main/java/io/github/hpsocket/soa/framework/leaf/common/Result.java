@@ -12,13 +12,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Result
 {
-	private long id;
-	private Status status;
+    private long id;
+    private Status status;
 
-	@Override
-	public String toString()
-	{
-		final StringBuilder sb = new StringBuilder();
-		return sb.append("{status=").append(status).append(", id=").append(id).append('}').toString();
-	}
+    @Override
+    public String toString()
+    {
+        final StringBuilder sb = new StringBuilder();
+        return sb.append("{status=").append(status).append(", id=").append(id).append('}').toString();
+    }
 }

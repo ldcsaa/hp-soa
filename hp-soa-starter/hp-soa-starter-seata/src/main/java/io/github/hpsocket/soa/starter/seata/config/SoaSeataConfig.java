@@ -1,6 +1,6 @@
 
 package io.github.hpsocket.soa.starter.seata.config;
-		
+        
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

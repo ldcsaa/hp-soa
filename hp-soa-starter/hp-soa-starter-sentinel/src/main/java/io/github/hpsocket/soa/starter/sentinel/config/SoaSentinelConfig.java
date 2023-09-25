@@ -34,62 +34,62 @@ import lombok.extern.slf4j.Slf4j;
 @ConditionalOnProperty(name = "spring.cloud.sentinel.enabled", matchIfMissing = true)
 public class SoaSentinelConfig
 {
-	/** 资源变换器 */
-	@Bean
-	@ConditionalOnMissingBean(UrlCleaner.class)
-	@ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
-	public UrlCleaner urlCleaner()
-	{
-		final Set<String> suffixSet = new HashSet<>(Arrays.asList(".js", ".css", ".html", ".ico", ".txt", ".md", ".jpg", ".png"));
-		
-		return new UrlCleaner()
-		{
-			@Override
-			public String clean(String originUrl)
-			{
-				if(GeneralHelper.isStrEmpty(originUrl))
-					return originUrl;
-				
-				int i = originUrl.lastIndexOf('.');
-				
-				if(i < 0)
-					return originUrl;
-				
-				String suffix = originUrl.substring(i).toLowerCase();
-				
-				if(suffixSet.contains(suffix))
-					return null;
-				
-				return originUrl;
-			}
-		};
-	}
-	
-	/** 限流处理器 */
-	@Bean
-	@ConditionalOnMissingBean(BlockExceptionHandler.class)
-	@ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
-	public BlockExceptionHandler blockExceptionHandler()
-	{
-		return new BlockExceptionHandler()
-		{
-			@Override
-			public void handle(HttpServletRequest request, HttpServletResponse response, BlockException e) throws Exception
-			{
-				ServiceException se = wrapServiceException(FREQUENCY_LIMIT_EXCEPTION, e);
+    /** 资源变换器 */
+    @Bean
+    @ConditionalOnMissingBean(UrlCleaner.class)
+    @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
+    public UrlCleaner urlCleaner()
+    {
+        final Set<String> suffixSet = new HashSet<>(Arrays.asList(".js", ".css", ".html", ".ico", ".txt", ".md", ".jpg", ".png"));
+        
+        return new UrlCleaner()
+        {
+            @Override
+            public String clean(String originUrl)
+            {
+                if(GeneralHelper.isStrEmpty(originUrl))
+                    return originUrl;
+                
+                int i = originUrl.lastIndexOf('.');
+                
+                if(i < 0)
+                    return originUrl;
+                
+                String suffix = originUrl.substring(i).toLowerCase();
+                
+                if(suffixSet.contains(suffix))
+                    return null;
+                
+                return originUrl;
+            }
+        };
+    }
+    
+    /** 限流处理器 */
+    @Bean
+    @ConditionalOnMissingBean(BlockExceptionHandler.class)
+    @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
+    public BlockExceptionHandler blockExceptionHandler()
+    {
+        return new BlockExceptionHandler()
+        {
+            @Override
+            public void handle(HttpServletRequest request, HttpServletResponse response, BlockException e) throws Exception
+            {
+                ServiceException se = wrapServiceException(FREQUENCY_LIMIT_EXCEPTION, e);
 
-				logServiceException(log, se.getMessage(), se);
+                logServiceException(log, se.getMessage(), se);
 
-		        response.setStatus(FREQUENCY_LIMIT_ERROR);
-				response.setContentType("application/json; charset=utf-8");
-		        
-				try(PrintWriter out = response.getWriter())
-				{
-			        out.print(JSON.toJSONString(new Response<>(se)));
-			        out.flush();
-				}
-			}
-		};
-	}
+                response.setStatus(FREQUENCY_LIMIT_ERROR);
+                response.setContentType("application/json; charset=utf-8");
+                
+                try(PrintWriter out = response.getWriter())
+                {
+                    out.print(JSON.toJSONString(new Response<>(se)));
+                    out.flush();
+                }
+            }
+        };
+    }
 
 }

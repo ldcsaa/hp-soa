@@ -18,14 +18,14 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public class BaseEntity implements Serializable
 {
-	/** 主键 */
-	@TableId
-	private Long id;
-	/** 创建时间 */
-	@TableField(fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
-	/** 最后更新时间 */
-	@TableField(fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime updateTime;
+    /** 主键 */
+    @TableId
+    private Long id;
+    /** 创建时间 */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+    /** 最后更新时间 */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
 }

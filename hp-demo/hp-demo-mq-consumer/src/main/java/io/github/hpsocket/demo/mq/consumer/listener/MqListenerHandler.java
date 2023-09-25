@@ -24,163 +24,163 @@ import java.util.Map;
 @Component
 public class MqListenerHandler
 {
-	@RabbitListener(queues = {AppConfig.QUE_REGION_0}, ackMode = "MANUAL", containerFactory = "defaultSimpleRabbitListenerContainerFactory")
-	public void onDefaultMessage(Message message, Channel channel) throws IOException
-	{
+    @RabbitListener(queues = {AppConfig.QUE_REGION_0}, ackMode = "MANUAL", containerFactory = "defaultSimpleRabbitListenerContainerFactory")
+    public void onDefaultMessage(Message message, Channel channel) throws IOException
+    {
         MessageProperties properties = message.getMessageProperties();
 
-        String msgId		= properties.getMessageId();
-        long deliveryTag	= properties.getDeliveryTag();
-        String domainName	= properties.getHeader(HEADER_DOMAIN_NAME);
-        String eventName	= properties.getHeader(HEADER_EVENT_NAME);
+        String msgId        = properties.getMessageId();
+        long deliveryTag    = properties.getDeliveryTag();
+        String domainName    = properties.getHeader(HEADER_DOMAIN_NAME);
+        String eventName    = properties.getHeader(HEADER_EVENT_NAME);
         
         try
         {
-        	JSONObject msg = JSON.parseObject(message.getBody());
+            JSONObject msg = JSON.parseObject(message.getBody());
 
             log.info("receive message -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, msg: {}", AppConfig.QUE_REGION_0, msgId, domainName, eventName, msg.toJSONString());
             channel.basicAck(deliveryTag, false);
         }
         catch(Exception e)
         {
-        	channel.basicNack(deliveryTag, false, false);
-        	log.error("receive message fail -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, exception: {}", AppConfig.QUE_REGION_0, msgId, domainName, eventName, e.getMessage(), e);
-		}
-	}
+            channel.basicNack(deliveryTag, false, false);
+            log.error("receive message fail -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, exception: {}", AppConfig.QUE_REGION_0, msgId, domainName, eventName, e.getMessage(), e);
+        }
+    }
 
-	@RabbitListener(queues = {AppConfig.QUE_REGION_1}, ackMode = "AUTO", containerFactory = "firstSimpleRabbitListenerContainerFactory")
-	public void onFirstMessage(org.springframework.messaging.Message<JSONObject> message, Channel channel) throws IOException
-	{
-		MessageHeaders headers = message.getHeaders();
-		String msgId 		= (String)headers.get(HEADER_AMQP_MESSAGE_ID);
-        //long deliveryTag	= (Long)headers.get(HEADER_AMQP_DELIVERY_TAG);
-		String domainName	= (String)headers.get(HEADER_DOMAIN_NAME);
-		String eventName	= (String)headers.get(HEADER_EVENT_NAME);
+    @RabbitListener(queues = {AppConfig.QUE_REGION_1}, ackMode = "AUTO", containerFactory = "firstSimpleRabbitListenerContainerFactory")
+    public void onFirstMessage(org.springframework.messaging.Message<JSONObject> message, Channel channel) throws IOException
+    {
+        MessageHeaders headers = message.getHeaders();
+        String msgId         = (String)headers.get(HEADER_AMQP_MESSAGE_ID);
+        //long deliveryTag    = (Long)headers.get(HEADER_AMQP_DELIVERY_TAG);
+        String domainName    = (String)headers.get(HEADER_DOMAIN_NAME);
+        String eventName    = (String)headers.get(HEADER_EVENT_NAME);
         
         try
         {
-        	JSONObject msg = message.getPayload();
-        	
+            JSONObject msg = message.getPayload();
+            
             log.info("receive message -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, msg: {}", AppConfig.QUE_REGION_1, msgId, domainName, eventName, msg.toJSONString());
         }
         catch(Exception e)
         {
-        	log.error("receive message fail -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, exception: {}", AppConfig.QUE_REGION_1, msgId, domainName, eventName, e.getMessage(), e);
-		}
-	}
+            log.error("receive message fail -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, exception: {}", AppConfig.QUE_REGION_1, msgId, domainName, eventName, e.getMessage(), e);
+        }
+    }
 
-	/*
-	@RabbitListener(queues = {AppConfig.QUE_REGION_2}, ackMode = "AUTO", containerFactory = "secondSimpleRabbitListenerContainerFactory")
-	public void onSecondMessage(Message message, Channel channel) throws IOException
-	{
+    /*
+    @RabbitListener(queues = {AppConfig.QUE_REGION_2}, ackMode = "AUTO", containerFactory = "secondSimpleRabbitListenerContainerFactory")
+    public void onSecondMessage(Message message, Channel channel) throws IOException
+    {
         MessageProperties properties = message.getMessageProperties();
 
-        String msgId		= properties.getMessageId();
-        //long deliveryTag	= properties.getDeliveryTag();
-        String domainName	= properties.getHeader(HEADER_DOMAIN_NAME);
-        String eventName	= properties.getHeader(HEADER_EVENT_NAME);
+        String msgId        = properties.getMessageId();
+        //long deliveryTag    = properties.getDeliveryTag();
+        String domainName    = properties.getHeader(HEADER_DOMAIN_NAME);
+        String eventName    = properties.getHeader(HEADER_EVENT_NAME);
         
         try
         {
-        	JSONObject msg = JSON.parseObject(message.getBody());
+            JSONObject msg = JSON.parseObject(message.getBody());
 
             log.info("receive message -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, msg: {}", AppConfig.QUE_REGION_2, msgId, domainName, eventName, msg.toJSONString());
         }
         catch(Exception e)
         {
-        	log.error("receive message fail -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, exception: {}", AppConfig.QUE_REGION_2, msgId, domainName, eventName, e.getMessage(), e);
-		}
-	}
-	
-	@RabbitListener(queues = {AppConfig.QUE_REGION_3}, ackMode = "MANUAL", containerFactory = "thirdSimpleRabbitListenerContainerFactory")
-	public void onThirdMessage(org.springframework.messaging.Message<JSONObject> message, Channel channel) throws IOException
-	{
-		MessageHeaders headers = message.getHeaders();
-		String msgId 		= (String)headers.get(HEADER_AMQP_MESSAGE_ID);
-        long deliveryTag	= (Long)headers.get(HEADER_AMQP_DELIVERY_TAG);
-		String domainName	= (String)headers.get(HEADER_DOMAIN_NAME);
-		String eventName	= (String)headers.get(HEADER_EVENT_NAME);
+            log.error("receive message fail -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, exception: {}", AppConfig.QUE_REGION_2, msgId, domainName, eventName, e.getMessage(), e);
+        }
+    }
+    
+    @RabbitListener(queues = {AppConfig.QUE_REGION_3}, ackMode = "MANUAL", containerFactory = "thirdSimpleRabbitListenerContainerFactory")
+    public void onThirdMessage(org.springframework.messaging.Message<JSONObject> message, Channel channel) throws IOException
+    {
+        MessageHeaders headers = message.getHeaders();
+        String msgId         = (String)headers.get(HEADER_AMQP_MESSAGE_ID);
+        long deliveryTag    = (Long)headers.get(HEADER_AMQP_DELIVERY_TAG);
+        String domainName    = (String)headers.get(HEADER_DOMAIN_NAME);
+        String eventName    = (String)headers.get(HEADER_EVENT_NAME);
         
         try
         {
-        	JSONObject msg = message.getPayload();
-        	
+            JSONObject msg = message.getPayload();
+            
             log.info("receive message -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, msg: {}", AppConfig.QUE_REGION_3, msgId, domainName, eventName, msg.toJSONString());
             channel.basicAck(deliveryTag, false);
         }
         catch(Exception e)
         {
-        	channel.basicNack(deliveryTag, false, false);
-        	log.error("receive message fail -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, exception: {}", AppConfig.QUE_REGION_3, msgId, domainName, eventName, e.getMessage(), e);
-		}
-	}
-	
-	@RabbitListener(queues = {AppConfig.STM_REGION_0}, containerFactory = "defaultStreamRabbitListenerContainerFactory")
-	public void onDefaultStreamMessage(com.rabbitmq.stream.Message message, Context context) throws IOException
-	{
-		onStreamMessage(AppConfig.STM_REGION_0, message, context);
-	}
-	
-	@RabbitListener(queues = {AppConfig.STM_REGION_1}, containerFactory = "firstStreamRabbitListenerContainerFactory")
-	public void onFirstStreamMessage(com.rabbitmq.stream.Message message, Context context) throws IOException
-	{
-		onStreamMessage(AppConfig.STM_REGION_1, message, context);
-	}
-	*/
-	
-	@RabbitListener(queues = {AppConfig.STM_REGION_2}, containerFactory = "secondStreamRabbitListenerContainerFactory")
-	public void onSecondStreamMessage(com.rabbitmq.stream.Message message, Context context) throws IOException
-	{
-		onStreamMessage(AppConfig.STM_REGION_2, message, context);
-	}
-	
-	@RabbitListener(queues = {AppConfig.STM_REGION_3}, containerFactory = "thirdStreamRabbitListenerContainerFactory", messageConverter = "messageConverter")
-	public void onThirdStreamMessage(org.springframework.messaging.Message<JSONObject> message) throws IOException
-	{
-		onStreamMessage(AppConfig.STM_REGION_3, message);
-	}
-	
-	private void onStreamMessage(String stream, com.rabbitmq.stream.Message message, Context context)
-	{
-		Properties props = message.getProperties();
-		Map<String, Object> appProps = message.getApplicationProperties();
+            channel.basicNack(deliveryTag, false, false);
+            log.error("receive message fail -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, exception: {}", AppConfig.QUE_REGION_3, msgId, domainName, eventName, e.getMessage(), e);
+        }
+    }
+    
+    @RabbitListener(queues = {AppConfig.STM_REGION_0}, containerFactory = "defaultStreamRabbitListenerContainerFactory")
+    public void onDefaultStreamMessage(com.rabbitmq.stream.Message message, Context context) throws IOException
+    {
+        onStreamMessage(AppConfig.STM_REGION_0, message, context);
+    }
+    
+    @RabbitListener(queues = {AppConfig.STM_REGION_1}, containerFactory = "firstStreamRabbitListenerContainerFactory")
+    public void onFirstStreamMessage(com.rabbitmq.stream.Message message, Context context) throws IOException
+    {
+        onStreamMessage(AppConfig.STM_REGION_1, message, context);
+    }
+    */
+    
+    @RabbitListener(queues = {AppConfig.STM_REGION_2}, containerFactory = "secondStreamRabbitListenerContainerFactory")
+    public void onSecondStreamMessage(com.rabbitmq.stream.Message message, Context context) throws IOException
+    {
+        onStreamMessage(AppConfig.STM_REGION_2, message, context);
+    }
+    
+    @RabbitListener(queues = {AppConfig.STM_REGION_3}, containerFactory = "thirdStreamRabbitListenerContainerFactory", messageConverter = "messageConverter")
+    public void onThirdStreamMessage(org.springframework.messaging.Message<JSONObject> message) throws IOException
+    {
+        onStreamMessage(AppConfig.STM_REGION_3, message);
+    }
+    
+    private void onStreamMessage(String stream, com.rabbitmq.stream.Message message, Context context)
+    {
+        Properties props = message.getProperties();
+        Map<String, Object> appProps = message.getApplicationProperties();
 
-        String msgId		= props.getMessageIdAsString();
-        String corId		= props.getCorrelationIdAsString();
-        String domainName	= (String)appProps.get(HEADER_DOMAIN_NAME);
-        String eventName	= (String)appProps.get(HEADER_EVENT_NAME);
+        String msgId        = props.getMessageIdAsString();
+        String corId        = props.getCorrelationIdAsString();
+        String domainName    = (String)appProps.get(HEADER_DOMAIN_NAME);
+        String eventName    = (String)appProps.get(HEADER_EVENT_NAME);
         
         try
         {
-        	JSONObject msg = JSON.parseObject(message.getBodyAsBinary());
+            JSONObject msg = JSON.parseObject(message.getBodyAsBinary());
 
             log.info("receive message -> stream: {}, msgId: {}, corId: {}, domainName: {}, evnetName: {}, msg: {}", stream, msgId, corId, domainName, eventName, msg.toJSONString());
         }
         catch(Exception e)
         {
-        	log.error("receive message fail -> stream: {}, msgId: {}, corId: {}, domainName: {}, evnetName: {}, exception: {}", stream, msgId, corId, domainName, eventName, e.getMessage(), e);
-		}
-	}
-	
-	private void onStreamMessage(String stream, org.springframework.messaging.Message<JSONObject> message)
-	{
-		MessageHeaders headers = message.getHeaders();
+            log.error("receive message fail -> stream: {}, msgId: {}, corId: {}, domainName: {}, evnetName: {}, exception: {}", stream, msgId, corId, domainName, eventName, e.getMessage(), e);
+        }
+    }
+    
+    private void onStreamMessage(String stream, org.springframework.messaging.Message<JSONObject> message)
+    {
+        MessageHeaders headers = message.getHeaders();
 
-        String msgId		= (String)headers.get(HEADER_MSG_ID);
-        String corId		= (String)headers.get(HEADER_CORRELA_DATA_ID);
-        String domainName	= (String)headers.get(HEADER_DOMAIN_NAME);
-        String eventName	= (String)headers.get(HEADER_EVENT_NAME);
+        String msgId        = (String)headers.get(HEADER_MSG_ID);
+        String corId        = (String)headers.get(HEADER_CORRELA_DATA_ID);
+        String domainName    = (String)headers.get(HEADER_DOMAIN_NAME);
+        String eventName    = (String)headers.get(HEADER_EVENT_NAME);
         
         try
         {
-        	JSONObject msg = message.getPayload();
+            JSONObject msg = message.getPayload();
 
             log.info("receive message -> stream: {}, msgId: {}, corId: {}, domainName: {}, evnetName: {}, msg: {}", stream, msgId, corId, domainName, eventName, msg.toJSONString());
         }
         catch(Exception e)
         {
-        	log.error("receive message fail -> stream: {}, msgId: {}, corId: {}, domainName: {}, evnetName: {}, exception: {}", stream, msgId, corId, domainName, eventName, e.getMessage(), e);
-		}
-	}
+            log.error("receive message fail -> stream: {}, msgId: {}, corId: {}, domainName: {}, evnetName: {}, exception: {}", stream, msgId, corId, domainName, eventName, e.getMessage(), e);
+        }
+    }
 
 }
