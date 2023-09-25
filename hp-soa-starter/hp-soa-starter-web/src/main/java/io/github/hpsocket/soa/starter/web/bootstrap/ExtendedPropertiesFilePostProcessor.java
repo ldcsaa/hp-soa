@@ -1,13 +1,13 @@
-package io.github.hpsocket.soa.starter.web.processor;
+package io.github.hpsocket.soa.starter.web.bootstrap;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.dubbo.config.spring.context.event.DubboConfigInitEvent;
+import org.apache.commons.logging.Log;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
-import org.springframework.boot.logging.DeferredLog;
-import org.springframework.context.ApplicationListener;
+import org.springframework.boot.logging.DeferredLogFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
@@ -18,22 +18,31 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.DefaultPropertySourceFactory;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
-import org.springframework.stereotype.Component;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 
-/** <b>HP-SOA 外部属性文件加载器</b><br>
+/** <b>HP-SOA 扩展属性配置文件加载器</b><br>
  * <ul>
- * <li>加载由 {@linkplain #EXTERNAL_PROPERTIES_FILE_KEY} JVM 启动参数指定的外部属性配置文件</li>
+ * <li>默认扩展属性配置文件：{@linkplain #DEFAULT_EXTENDED_PROPERTIES_FILE_PATH}</li>
+ * <li>可通过 JVM 启动参数 {@linkplain #EXTENDED_PROPERTIES_FILE_KEY} 指定扩展属性配置文件路径</li>
+ * <li>如果扩展属性配置文件不存在则忽略</li>
  * </ul>
  */
-@Component
-public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProcessor, Ordered, ApplicationListener<DubboConfigInitEvent>
+public class ExtendedPropertiesFilePostProcessor implements EnvironmentPostProcessor, Ordered
 {
-	public static final String EXTERNAL_PROPERTIES_FILE_KEY = "hp.soa.external.properties.file";
+	/** 扩展属性配置文件 Key */
+	public static final String EXTENDED_PROPERTIES_FILE_KEY				= "hp.soa.extended.properties.file";
+	/** 默认扩展属性配置文件 */
+	public static final String DEFAULT_EXTENDED_PROPERTIES_FILE_PATH	= "/opt/hp-soa/config/extended-config.properties";
 	
-	private static final DeferredLog logger	= new DeferredLog();
 	private static AtomicBoolean processed	= new AtomicBoolean();
+	
+	private Log logger;
+
+	public ExtendedPropertiesFilePostProcessor(DeferredLogFactory logFactory)
+	{
+		logger = logFactory.getLog(getClass());
+	}
 	
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application)
@@ -41,15 +50,18 @@ public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProce
 		if(!processed.compareAndSet(false, true))
 			return;
 		
-        String filePath = environment.getProperty(EXTERNAL_PROPERTIES_FILE_KEY);
+        String filePath = environment.getProperty(EXTENDED_PROPERTIES_FILE_KEY);
         
         if(GeneralHelper.isStrEmpty(filePath))
+        	filePath = DEFAULT_EXTENDED_PROPERTIES_FILE_PATH;
+        
+        if(!(new File(filePath).isFile()))
         {
-        	logger.info("hp-soa not uses external properties file");
+        	logger.warn(String.format("hp-soa ignore extended properties file (File Not Exist) -> '%s'", filePath));
             return;
         }
 
-    	logger.info("load hp-soa external properties file -> " + filePath);
+    	logger.info("hp-soa load extended properties file -> " + filePath);
 
         String resolvedLocation = "file:" + environment.resolveRequiredPlaceholders(filePath);
         PropertySourceFactory factory = new DefaultPropertySourceFactory();
@@ -63,17 +75,11 @@ public class ExternalPropertiesFilePostProcessor implements EnvironmentPostProce
         }
         catch(IOException e)
         {
-        	String msg = String.format("load hp-soa external properties file fail -> [%s] %s", filePath, e.getMessage());
+        	String msg = String.format("hp-soa load extended properties file fail -> [%s] %s", filePath, e.getMessage());
         	
         	logger.error(msg, e);
             throw new RuntimeException(msg, e);
         }
-	}
-
-	@Override
-	public void onApplicationEvent(DubboConfigInitEvent event)
-	{
-		logger.replayTo(getClass());
 	}
 
 	@Override

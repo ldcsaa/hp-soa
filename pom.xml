@@ -382,6 +382,9 @@
 							<goals>
 								<goal>single</goal>
 							</goals>
+							<configuration>
+                                <tarLongFileMode>gnu</tarLongFileMode>
+                            </configuration>
 						</execution>
 					</executions>
 				</plugin>
