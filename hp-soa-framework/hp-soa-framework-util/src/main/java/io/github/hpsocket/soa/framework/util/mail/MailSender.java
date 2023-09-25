@@ -28,31 +28,31 @@ import lombok.Setter;
 public class MailSender
 {
     /** 默认 Content Type -> text/plain */
-    public static final String DEFAULT_CONTENT_TYPE    = "text/plain";
+    public static final String DEFAULT_CONTENT_TYPE = "text/plain";
     /** 默认字符编码 -> UTF-8 */
-    public static final String DEFAULT_ENCODING        = GeneralHelper.DEFAULT_ENCODING;
+    public static final String DEFAULT_ENCODING     = GeneralHelper.DEFAULT_ENCODING;
     /** 默认 SMTP 端口 -> 25 */
     public static final int DEFAULT_PORT            = 25;
     
-    private String host            = "";
-    private String from            = "";
-    private String user            = "";
-    private String password        = "";
-    private String subject        = "";
-    private String text            = "";
-    private String contentType    = DEFAULT_CONTENT_TYPE;
-    private String charset        = DEFAULT_ENCODING;
+    private String host         = "";
+    private String from         = "";
+    private String user         = "";
+    private String password     = "";
+    private String subject      = "";
+    private String text         = "";
+    private String contentType  = DEFAULT_CONTENT_TYPE;
+    private String charset      = DEFAULT_ENCODING;
     private int port            = DEFAULT_PORT;
     private boolean auth        = true;
-    private boolean needReceipt    = false;
-    private Date sentDate        = null;
+    private boolean needReceipt = false;
+    private Date sentDate       = null;
     
-    private List<String>        to        = new ArrayList<String>();
-    private List<String>        cc        = new ArrayList<String>();
-    private List<String>        bcc        = new ArrayList<String>();
-    private List<String>        replyTo    = new ArrayList<String>();
-    private List<String>         fileAcc = new ArrayList<String>();
-    private List<MimeBodyPart>     byteAcc = new ArrayList<MimeBodyPart>();
+    private List<String>        to      = new ArrayList<String>();
+    private List<String>        cc      = new ArrayList<String>();
+    private List<String>        bcc     = new ArrayList<String>();
+    private List<String>        replyTo = new ArrayList<String>();
+    private List<String>        fileAcc = new ArrayList<String>();
+    private List<MimeBodyPart>  byteAcc = new ArrayList<MimeBodyPart>();
     
     private boolean proxySet;
     private String socksProxyHost;

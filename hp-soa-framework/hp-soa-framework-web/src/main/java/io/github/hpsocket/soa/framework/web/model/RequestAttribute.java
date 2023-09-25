@@ -10,6 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RequestAttribute
 {
+    /** 游客（未登录）用户 ID */
+    public static final long GUEST_USER_ID = 0L;
+    
     private String appCode;
     private String srcAppCode;
     private String token;
@@ -38,12 +41,12 @@ public class RequestAttribute
     
     public RequestAttribute(String appCode, String srcAppCode, String token, String clientId, String requestId, String sessionId, Long groupId)
     {
-        this.appCode = appCode;
+        this.appCode    = appCode;
         this.srcAppCode = srcAppCode;
-        this.token = token;
-        this.clientId = clientId;
-        this.requestId = requestId;
-        this.sessionId = sessionId;
-        this.groupId = groupId;
+        this.token      = token;
+        this.clientId   = clientId;
+        this.requestId  = requestId;
+        this.sessionId  = sessionId;
+        this.groupId    = groupId;
     }
 }

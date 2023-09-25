@@ -9,66 +9,66 @@ import org.slf4j.MDC;
 public class MdcAttr
 {
     public static final String MDC_TRACE_ID_KEY    =     "__traceId";
-    public static final String MDC_REQUEST_ID_KEY    = "__requestId";
+    public static final String MDC_REQUEST_ID_KEY   = "__requestId";
     public static final String MDC_CLIENT_ID_KEY    = "__clientId";
-    public static final String MDC_SESSION_ID_KEY    = "__sessionId";
-    public static final String MDC_APP_CODE_KEY        = "__appCode";
-    public static final String MDC_SRC_APP_CODE_KEY    = "__srcAppCode";
+    public static final String MDC_SESSION_ID_KEY   = "__sessionId";
+    public static final String MDC_APP_CODE_KEY     = "__appCode";
+    public static final String MDC_SRC_APP_CODE_KEY = "__srcAppCode";
     public static final String MDC_TOKEN_KEY        = "__token";
-    public static final String MDC_USER_ID_KEY        = "__userId";
-    public static final String MDC_GROUP_ID_KEY        = "__groupId";
+    public static final String MDC_USER_ID_KEY      = "__userId";
+    public static final String MDC_GROUP_ID_KEY     = "__groupId";
     public static final String MDC_EXTRA_KEY        = "__extra";
-    public static final String MDC_APP_ID_KEY        = "__appId";
-    public static final String MDC_APP_NAME_KEY        = "__appName";
-    public static final String MDC_SERVICE_ID_KEY    = "__serviceId";
-    public static final String MDC_SERVICE_NAME_KEY    = "__serviceName";
-    public static final String MDC_SERVICE_ADDR_KEY    = "__serviceAddr";
-    public static final String MDC_ORG_KEY            = "__organization";
+    public static final String MDC_APP_ID_KEY       = "__appId";
+    public static final String MDC_APP_NAME_KEY     = "__appName";
+    public static final String MDC_SERVICE_ID_KEY   = "__serviceId";
+    public static final String MDC_SERVICE_NAME_KEY = "__serviceName";
+    public static final String MDC_SERVICE_ADDR_KEY = "__serviceAddr";
+    public static final String MDC_ORG_KEY          = "__organization";
     public static final String MDC_OWNER_KEY        = "__owner";
 
-    public static final String MDC_MESSAGE_ID_KEY            = "__messageId";
+    public static final String MDC_MESSAGE_ID_KEY           = "__messageId";
     public static final String MDC_SOURCE_REQUEST_ID_KEY    = "__sourceRequestId";
 
-    public static final String MDC_FROM_SERVICE_ID_KEY        = "__fromServiceId";
+    public static final String MDC_FROM_SERVICE_ID_KEY      = "__fromServiceId";
     public static final String MDC_FROM_SERVICE_NAME_KEY    = "__fromServiceName";
     public static final String MDC_FROM_SERVICE_ADDR_KEY    = "__fromServiceAddr";
     
     public static final String TRANSFER_MDC_KEYS[] = {
-                    MDC_TRACE_ID_KEY,
-                    MDC_REQUEST_ID_KEY,
-                    MDC_CLIENT_ID_KEY,
-                    MDC_SESSION_ID_KEY,
-                    MDC_MESSAGE_ID_KEY,
-                    MDC_SOURCE_REQUEST_ID_KEY,
-                    MDC_APP_CODE_KEY,
-                    MDC_SRC_APP_CODE_KEY,
-                    MDC_TOKEN_KEY,
-                    MDC_USER_ID_KEY,
-                    MDC_GROUP_ID_KEY,
-                    MDC_EXTRA_KEY,
-                    MDC_APP_ID_KEY,
-                    MDC_APP_NAME_KEY
-    };
+                                                        MDC_TRACE_ID_KEY,
+                                                        MDC_REQUEST_ID_KEY,
+                                                        MDC_CLIENT_ID_KEY,
+                                                        MDC_SESSION_ID_KEY,
+                                                        MDC_MESSAGE_ID_KEY,
+                                                        MDC_SOURCE_REQUEST_ID_KEY,
+                                                        MDC_APP_CODE_KEY,
+                                                        MDC_SRC_APP_CODE_KEY,
+                                                        MDC_TOKEN_KEY,
+                                                        MDC_USER_ID_KEY,
+                                                        MDC_GROUP_ID_KEY,
+                                                        MDC_EXTRA_KEY,
+                                                        MDC_APP_ID_KEY,
+                                                        MDC_APP_NAME_KEY
+                                                    };
     
     public static final String TRANSFER_MDC_ALL_KEYS[] = {
-                    MDC_TRACE_ID_KEY,
-                    MDC_REQUEST_ID_KEY,
-                    MDC_CLIENT_ID_KEY,
-                    MDC_SESSION_ID_KEY,
-                    MDC_MESSAGE_ID_KEY,
-                    MDC_SOURCE_REQUEST_ID_KEY,
-                    MDC_APP_CODE_KEY,
-                    MDC_SRC_APP_CODE_KEY,
-                    MDC_TOKEN_KEY,
-                    MDC_USER_ID_KEY,
-                    MDC_GROUP_ID_KEY,
-                    MDC_EXTRA_KEY,
-                    MDC_APP_ID_KEY,
-                    MDC_APP_NAME_KEY,
-                    MDC_FROM_SERVICE_ID_KEY,
-                    MDC_FROM_SERVICE_NAME_KEY,
-                    MDC_FROM_SERVICE_ADDR_KEY
-    };
+                                                            MDC_TRACE_ID_KEY,
+                                                            MDC_REQUEST_ID_KEY,
+                                                            MDC_CLIENT_ID_KEY,
+                                                            MDC_SESSION_ID_KEY,
+                                                            MDC_MESSAGE_ID_KEY,
+                                                            MDC_SOURCE_REQUEST_ID_KEY,
+                                                            MDC_APP_CODE_KEY,
+                                                            MDC_SRC_APP_CODE_KEY,
+                                                            MDC_TOKEN_KEY,
+                                                            MDC_USER_ID_KEY,
+                                                            MDC_GROUP_ID_KEY,
+                                                            MDC_EXTRA_KEY,
+                                                            MDC_APP_ID_KEY,
+                                                            MDC_APP_NAME_KEY,
+                                                            MDC_FROM_SERVICE_ID_KEY,
+                                                            MDC_FROM_SERVICE_NAME_KEY,
+                                                            MDC_FROM_SERVICE_ADDR_KEY
+                                                        };
     
     Map<String, String> ctxMap;
     

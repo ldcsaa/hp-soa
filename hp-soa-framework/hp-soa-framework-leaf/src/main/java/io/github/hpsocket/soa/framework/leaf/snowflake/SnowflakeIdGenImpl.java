@@ -17,17 +17,17 @@ public class SnowflakeIdGenImpl implements IdGen
 {
 
     private final long twepoch;
-    private final long timeStampBits = 41L;
-    private final long workerIdBits = 10L;
-    private final long maxWorkerId = ~(-1L << workerIdBits);// 最大能够分配的workerid
+    private final long timeStampBits    = 41L;
+    private final long workerIdBits     = 10L;
+    private final long maxWorkerId      = ~(-1L << workerIdBits);// 最大能够分配的workerid
                                                             // =1023
-    private final long sequenceBits = 12L;
-    private final long workerIdShift = sequenceBits;
+    private final long sequenceBits     = 12L;
+    private final long workerIdShift    = sequenceBits;
     private final long timestampLeftShift = sequenceBits + workerIdBits;
-    private final long sequenceMask = ~(-1L << sequenceBits);
+    private final long sequenceMask     = ~(-1L << sequenceBits);
     private long workerId;
-    private long sequence = 0L;
-    private long lastTimestamp = -1L;
+    private long sequence       = 0L;
+    private long lastTimestamp  = -1L;
     private final long maxTimeStamp;
     private static final Random RANDOM = new Random();
 

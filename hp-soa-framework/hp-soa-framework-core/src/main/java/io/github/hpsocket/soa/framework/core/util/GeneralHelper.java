@@ -41,29 +41,29 @@ public class GeneralHelper
     
 
     private static final Pattern PATTERN_NUMERIC    = Pattern.compile("^0$|^\\-?[1-9]+[0-9]*$");
-    private static final Pattern PATTERN_EMAIL_ADDR    = Pattern.compile("^[a-z0-9_\\-]+(\\.[_a-z0-9\\-]+)*@([_a-z0-9\\-]+\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)$");
+    private static final Pattern PATTERN_EMAIL_ADDR = Pattern.compile("^[a-z0-9_\\-]+(\\.[_a-z0-9\\-]+)*@([_a-z0-9\\-]+\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)$");
     private static final Pattern PATTERN_IP_ADDR    = Pattern.compile("^([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$");
-    private static final Pattern PATTERN_LINK        = Pattern.compile("<a[^>]*href=\\\"[^\\s\\\"]+\\\"[^>]*>[^<]*<\\/a>");
-    private static final Pattern PATTERN_HTTP_URL    = Pattern.compile("^(https?:\\/\\/)?([a-z]([a-z0-9\\-]*\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))(\\/[a-z0-9_\\-\\.~]+)*(\\/([a-z0-9_\\-\\.]*)(\\?[a-z0-9+_\\-\\.%=&amp;]*)?)?(#[a-z][a-z0-9_]*)?$");
+    private static final Pattern PATTERN_LINK       = Pattern.compile("<a[^>]*href=\\\"[^\\s\\\"]+\\\"[^>]*>[^<]*<\\/a>");
+    private static final Pattern PATTERN_HTTP_URL   = Pattern.compile("^(https?:\\/\\/)?([a-z]([a-z0-9\\-]*\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))(\\/[a-z0-9_\\-\\.~]+)*(\\/([a-z0-9_\\-\\.]*)(\\?[a-z0-9+_\\-\\.%=&amp;]*)?)?(#[a-z][a-z0-9_]*)?$");
     private static final Pattern PATTERN_XML_ESCAPES= Pattern.compile(".*[&|\"|\'|<|>].*");
     
-    private static final String[] SHORT_DATE_PATTERN                 = {"yyyy-MM-dd", "yyyy/MM/dd", "yyyy\\MM\\dd", "yyyyMMdd"};
+    private static final String[] SHORT_DATE_PATTERN                = {"yyyy-MM-dd", "yyyy/MM/dd", "yyyy\\MM\\dd", "yyyyMMdd"};
     private static final String[] LONG_DATE_PATTERN                 = {"yyyy-MM-dd HH:mm:ss", "yyyy/MM/dd HH:mm:ss", "yyyy\\MM\\dd HH:mm:ss", "yyyyMMddHHmmss"};
     private static final String[] LONG_DATE_PATTERN_WITH_MILSEC     = {"yyyy-MM-dd HH:mm:ss.SSS", "yyyy/MM/dd HH:mm:ss.SSS", "yyyy\\MM\\dd HH:mm:ss.SSS", "yyyyMMddHHmmssSSS"};
 
-    private static final Map<String, Locale> AVAILABLE_LOCALES        = new HashMap<String, Locale>();
-    private static final char[][] XML_ESCAPE_CHARS                    = new char[63][];
+    private static final Map<String, Locale> AVAILABLE_LOCALES      = new HashMap<String, Locale>();
+    private static final char[][] XML_ESCAPE_CHARS                  = new char[63][];
     
     /** 空字符串 */
-    public static final String EMPTY_STRING                = "";
+    public static final String EMPTY_STRING         = "";
     /** 默认字符编码 */
-    public static final String DEFAULT_ENCODING            = "UTF-8";
+    public static final String DEFAULT_ENCODING     = "UTF-8";
     /** 当前操作系统平台 */
-    public static final String OS_PLATFORM                = getOSName();
+    public static final String OS_PLATFORM          = getOSName();
     /** 当前操作系统平台是否为 Windows */
-    public static final boolean IS_WINDOWS_PLATFORM        = isWindowsPlatform();
+    public static final boolean IS_WINDOWS_PLATFORM = isWindowsPlatform();
     /** 当前操作系统平台的换行符 */
-    public static final String NEWLINE_CHAR                = IS_WINDOWS_PLATFORM ? "\r\n" : "\n";
+    public static final String NEWLINE_CHAR         = IS_WINDOWS_PLATFORM ? "\r\n" : "\n";
     
     static
     {
@@ -71,11 +71,11 @@ public class GeneralHelper
         for(Locale locale : locales)
             AVAILABLE_LOCALES.put(locale.toString(), locale);
         
-        XML_ESCAPE_CHARS[38] = "&amp;"    .toCharArray();
-        XML_ESCAPE_CHARS[60] = "&lt;"    .toCharArray();
-        XML_ESCAPE_CHARS[62] = "&gt;"    .toCharArray();
-        XML_ESCAPE_CHARS[34] = "&quot;"    .toCharArray();
-        XML_ESCAPE_CHARS[39] = "&apos;"    .toCharArray();
+        XML_ESCAPE_CHARS[38] = "&amp;"  .toCharArray();
+        XML_ESCAPE_CHARS[60] = "&lt;"   .toCharArray();
+        XML_ESCAPE_CHARS[62] = "&gt;"   .toCharArray();
+        XML_ESCAPE_CHARS[34] = "&quot;" .toCharArray();
+        XML_ESCAPE_CHARS[39] = "&apos;" .toCharArray();
     }
     
     /** 字符串转换为字节数组 */

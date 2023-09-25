@@ -17,10 +17,10 @@ public class PageInfo implements Serializable
     public static final int DEFAULT_PAGE_SIZE = 20;
 
     private int pageRows    = 0;
-    private int pageNumber    = 1;
+    private int pageNumber  = 1;
     private int pageSize    = DEFAULT_PAGE_SIZE;
-    private int pageCount    = 0;
-    private int totalRows    = 0;
+    private int pageCount   = 0;
+    private int totalRows   = 0;
 
     public int calculatePageCount()
     {
