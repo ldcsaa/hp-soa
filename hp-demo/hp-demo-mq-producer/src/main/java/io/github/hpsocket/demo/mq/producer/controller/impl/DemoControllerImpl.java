@@ -32,14 +32,14 @@ public class DemoControllerImpl implements DemoController
     
     @Autowired
     private OrderConverter orderConverter;
-	
+    
     @Override
     @AccessVerification(Type.REQUIRE_LOGIN)
     public Response<DemoCreateOrderResponse> createOrder(@RequestBody @Valid DemoCreateOrderReuqest request)
     {
-    	System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
-    	
-    	Order order = orderService.createOrder(orderConverter.fromRequest(request));
+        System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
+        
+        Order order = orderService.createOrder(orderConverter.fromRequest(request));
         DemoCreateOrderResponse resp = orderConverter.toResponse(order);
         
         log.debug(resp.toString());
@@ -51,7 +51,7 @@ public class DemoControllerImpl implements DemoController
     @Override
     public Response<DemoCreateOrderResponse> sendStream(@Valid DemoCreateOrderReuqest request)
     {
-    	Order order = streamSender.sendOrder(orderConverter.fromRequest(request));
+        Order order = streamSender.sendOrder(orderConverter.fromRequest(request));
         DemoCreateOrderResponse resp = orderConverter.toResponse(order);
         
         log.debug(resp.toString());

@@ -13,7 +13,7 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public class BaseVersioningEntity extends BaseEntity
 {
-	/** 乐观锁版本号 */
-	@Version
-	private Integer version;
+    /** 乐观锁版本号 */
+    @Version
+    private Integer version;
 }

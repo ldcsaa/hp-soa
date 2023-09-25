@@ -1,46 +1,46 @@
 <?xml version="1.0"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.github.hpsocket</groupId>
-		<artifactId>hp-soa-framework</artifactId>
-		<version>${revision}</version>
-	</parent>
-	<artifactId>hp-soa-framework-util</artifactId>
-	<name>${project.artifactId}</name>
-	<packaging>jar</packaging>
-	<description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
-	<url>https://github.com/ldcsaa/hp-soa</url>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.hpsocket</groupId>
+        <artifactId>hp-soa-framework</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>hp-soa-framework-util</artifactId>
+    <name>${project.artifactId}</name>
+    <packaging>jar</packaging>
+    <description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
+    <url>https://github.com/ldcsaa/hp-soa</url>
 
-	<properties>
-	</properties>
+    <properties>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>io.github.hpsocket</groupId>
-			<artifactId>hp-soa-framework-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba.fastjson2</groupId>
-			<artifactId>fastjson2</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.httpcomponents.client5</groupId>
-		    <artifactId>httpclient5</artifactId>
-		    <scope>provided</scope>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.poi</groupId>
-		    <artifactId>poi-ooxml</artifactId>
-		    <scope>provided</scope>
-		</dependency>
-		<dependency>
-		    <groupId>jakarta.mail</groupId>
-		    <artifactId>jakarta.mail-api</artifactId>
-		    <scope>provided</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-framework-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

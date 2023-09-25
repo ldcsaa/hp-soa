@@ -20,36 +20,36 @@ import lombok.extern.slf4j.Slf4j;
 @Order(Integer.MIN_VALUE)
 public class ScheduledTraceIdInspector
 {
-	private static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
-												 + "@annotation(org.springframework.scheduling.annotation.Scheduled)";
+    private static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
+                                                 + "@annotation(org.springframework.scheduling.annotation.Scheduled)";
 
-	@Pointcut(POINTCUT_PATTERN)
-	protected void aroundMethod() {}
-	
-	@Around(value = "aroundMethod()")
-	public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
-	{
-		WebServerHelper.putMdcTraceId();
-		
-		if(WebServerHelper.isAppReadOnly())
-		{
-			String methodName = AspectHelper.getMethod(joinPoint).getName();
-			String msg = String.format("current application is read only, skip scheduled task '%s'", methodName);
-			
-			log.debug(msg);
-			
-			return null;
-		}
-		
-		try
-		{
-			return joinPoint.proceed();
-		}
-		finally
-		{
-			WebServerHelper.removeMdcTraceId();
-		}
-	}
+    @Pointcut(POINTCUT_PATTERN)
+    protected void aroundMethod() {}
+    
+    @Around(value = "aroundMethod()")
+    public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
+    {
+        WebServerHelper.putMdcTraceId();
+        
+        if(WebServerHelper.isAppReadOnly())
+        {
+            String methodName = AspectHelper.getMethod(joinPoint).getName();
+            String msg = String.format("current application is read only, skip scheduled task '%s'", methodName);
+            
+            log.debug(msg);
+            
+            return null;
+        }
+        
+        try
+        {
+            return joinPoint.proceed();
+        }
+        finally
+        {
+            WebServerHelper.removeMdcTraceId();
+        }
+    }
 
 }
 

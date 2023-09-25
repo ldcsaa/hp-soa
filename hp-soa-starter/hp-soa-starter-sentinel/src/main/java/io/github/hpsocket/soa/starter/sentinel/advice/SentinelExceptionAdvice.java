@@ -24,59 +24,59 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class SentinelExceptionAdvice implements Ordered
 {
-	@Autowired
-	ControllerGlobalExceptionAdvice globalExceptionAdvice;
-	
-	private static final String BLOCK_EXCEPTION_MESSAGE_PREFIX = "SentinelBlockException:";
-	
-	@Override
-	public int getOrder()
-	{
-		return -100;
-	}
+    @Autowired
+    ControllerGlobalExceptionAdvice globalExceptionAdvice;
+    
+    private static final String BLOCK_EXCEPTION_MESSAGE_PREFIX = "SentinelBlockException:";
+    
+    @Override
+    public int getOrder()
+    {
+        return -100;
+    }
 
-	/** {@linkplain BlockException} 异常处理器 */
-	@ExceptionHandler({BlockException.class})
-	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, BlockException e)
-	{
-		ServiceException se = wrapServiceException(FORBID_EXCEPTION, e);;
-		logServiceException(log, se.getMessage(), se);
-		
-		return new Response<>(se);			
-	}
+    /** {@linkplain BlockException} 异常处理器 */
+    @ExceptionHandler({BlockException.class})
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, BlockException e)
+    {
+        ServiceException se = wrapServiceException(FORBID_EXCEPTION, e);;
+        logServiceException(log, se.getMessage(), se);
+        
+        return new Response<>(se);            
+    }
 
-	/** {@linkplain UndeclaredThrowableException} 异常处理器 */
-	@ExceptionHandler({UndeclaredThrowableException.class})
-	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, UndeclaredThrowableException e)
-	{
-		Throwable t = e.getCause();
-		
-		if(t instanceof BlockException)
-			return handleException(request, response, (BlockException)t);
+    /** {@linkplain UndeclaredThrowableException} 异常处理器 */
+    @ExceptionHandler({UndeclaredThrowableException.class})
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, UndeclaredThrowableException e)
+    {
+        Throwable t = e.getCause();
+        
+        if(t instanceof BlockException)
+            return handleException(request, response, (BlockException)t);
 
-		return globalExceptionAdvice.handleException(request, response, e);
-	}
-	
-	/** {@linkplain RuntimeException} 异常处理器 */
-	@ExceptionHandler({RuntimeException.class})
-	public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RuntimeException e)
-	{
-		ServiceException se = null;
-		String message = e.getMessage();
-		
-		if(GeneralHelper.isStrNotEmpty(message))
-		{
-			if(message.startsWith(BLOCK_EXCEPTION_MESSAGE_PREFIX))
-				se = wrapServiceException(FORBID_EXCEPTION, e);
-		}
-		
-		if(se == null)
-			return globalExceptionAdvice.handleException(request, response, e);
+        return globalExceptionAdvice.handleException(request, response, e);
+    }
+    
+    /** {@linkplain RuntimeException} 异常处理器 */
+    @ExceptionHandler({RuntimeException.class})
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RuntimeException e)
+    {
+        ServiceException se = null;
+        String message = e.getMessage();
+        
+        if(GeneralHelper.isStrNotEmpty(message))
+        {
+            if(message.startsWith(BLOCK_EXCEPTION_MESSAGE_PREFIX))
+                se = wrapServiceException(FORBID_EXCEPTION, e);
+        }
+        
+        if(se == null)
+            return globalExceptionAdvice.handleException(request, response, e);
 
-		logServiceException(log, se.getMessage(), se);
-		
-		return new Response<>(se);
-	}
+        logServiceException(log, se.getMessage(), se);
+        
+        return new Response<>(se);
+    }
 
 
 }

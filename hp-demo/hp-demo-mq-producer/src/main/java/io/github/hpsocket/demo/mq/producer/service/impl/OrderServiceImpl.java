@@ -16,29 +16,29 @@ import io.github.hpsocket.soa.starter.rabbitmq.producer.service.DomainEventServi
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService
 {
-	@Autowired
-	private DomainEventService<DemoEvent> demoEventService;
+    @Autowired
+    private DomainEventService<DemoEvent> demoEventService;
 
-	@Override
-	public Order createOrder(Order order)
-	{
-		save(order);
-		raiseCreateOrderEvent(order);
-		
-		return order;
-	}
+    @Override
+    public Order createOrder(Order order)
+    {
+        save(order);
+        raiseCreateOrderEvent(order);
+        
+        return order;
+    }
 
-	private void raiseCreateOrderEvent(Order order)
-	{
-		DemoEvent event = new DemoEvent(order.getId(), order.getRegionId());
-		
-		event.setDomainName(AppConfig.DOMAIN_NAME);
-		event.setEventName(AppConfig.CREATE_ORDER_EVENT_NAME);
-		event.setExchange(AppConfig.REGION_EXCHANGES[event.getRegionId()]);
-		event.setRoutingKey(AppConfig.CREATE_ORDER_ROUTING_KEY);
-		event.setMsg(JSONObject.toJSONString(order));
-		
-		demoEventService.save(event);
-	}
+    private void raiseCreateOrderEvent(Order order)
+    {
+        DemoEvent event = new DemoEvent(order.getId(), order.getRegionId());
+        
+        event.setDomainName(AppConfig.DOMAIN_NAME);
+        event.setEventName(AppConfig.CREATE_ORDER_EVENT_NAME);
+        event.setExchange(AppConfig.REGION_EXCHANGES[event.getRegionId()]);
+        event.setRoutingKey(AppConfig.CREATE_ORDER_ROUTING_KEY);
+        event.setMsg(JSONObject.toJSONString(order));
+        
+        demoEventService.save(event);
+    }
 
 }

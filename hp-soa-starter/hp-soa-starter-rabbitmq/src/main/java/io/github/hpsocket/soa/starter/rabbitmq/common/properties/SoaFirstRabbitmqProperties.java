@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "spring.rabbitmq-first")
 @ConditionalOnExpression("'${spring.rabbitmq-first.host:}' != '' || '${spring.rabbitmq-first.addresses:}' != ''")
 public class SoaFirstRabbitmqProperties extends RabbitProperties
-{	
+{    
 
 }

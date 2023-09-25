@@ -11,14 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class XxlJobHandler
 {
-	private int i;
-	
-	@XxlJob("xxlJobHandler1")
-	public void xxlJobHandler1()
-	{
-		if((++i) % 5 == 0)
-			throw new RuntimeException("test thow exceptions");
-		
-		log.info("traceId: {}", WebServerHelper.getTraceId());
-	}
+    private int i;
+    
+    @XxlJob("xxlJobHandler1")
+    public void xxlJobHandler1()
+    {
+        if((++i) % 5 == 0)
+            throw new RuntimeException("test thow exceptions");
+        
+        log.info("traceId: {}", WebServerHelper.getTraceId());
+    }
 }

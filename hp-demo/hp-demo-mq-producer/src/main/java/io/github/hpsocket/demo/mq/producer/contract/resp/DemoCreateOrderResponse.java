@@ -14,13 +14,13 @@ import lombok.Setter;
 @Schema(description = "响应对象示例")
 public class DemoCreateOrderResponse
 {
-	@Schema(description = "ID", example = "123", requiredMode = RequiredMode.REQUIRED, nullable = false)
+    @Schema(description = "ID", example = "123", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private Long id;
 
     @Schema(description = "订单号", example = "1234567890987654", requiredMode = RequiredMode.REQUIRED, minLength = 16, nullable = false)
     private String orderNumber;
 
-	@Schema(description = "创建时间", example = "2023-11-22 12:34:56.789", requiredMode = RequiredMode.REQUIRED, nullable = false)
+    @Schema(description = "创建时间", example = "2023-11-22 12:34:56.789", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private LocalDateTime createTime;
 
     @Override

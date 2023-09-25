@@ -7,31 +7,31 @@ import io.github.hpsocket.soa.framework.leaf.common.Status;
 
 public interface IdGen
 {
-	final long DEFAULT_SNOWFLAKE_TWEPOCK = 1688140800000L;
+    final long DEFAULT_SNOWFLAKE_TWEPOCK = 1688140800000L;
 
-	Result get(String key);
+    Result get(String key);
 
-	boolean init();
+    boolean init();
 
-	default BatchResult getBatch(String key, int size)
-	{
-		BatchResult.checkBatchSize(size);
+    default BatchResult getBatch(String key, int size)
+    {
+        BatchResult.checkBatchSize(size);
 
-		long[] ids = new long[size];
-		
-		for(int i = 0; i < size; i++)
-		{
-			Result rs = get(key);
-			
-			if(rs.getStatus() == Status.SUCCESS)
-				ids[i] = rs.getId();
-			else
-			{
-				return BatchResult.exceptionResult(ids, rs.getId());
-			}
-		}
+        long[] ids = new long[size];
+        
+        for(int i = 0; i < size; i++)
+        {
+            Result rs = get(key);
+            
+            if(rs.getStatus() == Status.SUCCESS)
+                ids[i] = rs.getId();
+            else
+            {
+                return BatchResult.exceptionResult(ids, rs.getId());
+            }
+        }
 
-		return new BatchResult(ids, Status.SUCCESS);
-	}
+        return new BatchResult(ids, Status.SUCCESS);
+    }
 
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public class UserBo implements Serializable
 {
-	private Long id;
-	private String name;
-	private Integer age;
+    private Long id;
+    private String name;
+    private Integer age;
 }

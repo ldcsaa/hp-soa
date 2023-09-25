@@ -9,5 +9,5 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 @MapperScan(basePackages = "io.github.hpsocket.soa.starter.rabbitmq.producer.mapper")
 public class SoaRabbitmqProducerConfig
 {
-	
+    
 }

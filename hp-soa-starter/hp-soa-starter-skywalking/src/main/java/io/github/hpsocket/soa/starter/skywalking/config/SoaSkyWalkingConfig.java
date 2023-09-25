@@ -26,55 +26,55 @@ import io.micrometer.observation.ObservationRegistry;
 @ConditionalOnClass(TraceContext.class)
 public class SoaSkyWalkingConfig
 {
-	/** 调用链上下文服务 */
-	@Bean
-	public TracingContext tracingContext()
-	{
-		return new TracingContext() {
-			@Override
-			public String getTraceId()
-			{
-				return TraceContext.traceId();
-			}
+    /** 调用链上下文服务 */
+    @Bean
+    public TracingContext tracingContext()
+    {
+        return new TracingContext() {
+            @Override
+            public String getTraceId()
+            {
+                return TraceContext.traceId();
+            }
 
-			@Override
-			public String getSpanId()
-			{
-				String segmentId = TraceContext.segmentId();
+            @Override
+            public String getSpanId()
+            {
+                String segmentId = TraceContext.segmentId();
 
-				if(GeneralHelper.isStrEmpty(segmentId))
-					return null;
+                if(GeneralHelper.isStrEmpty(segmentId))
+                    return null;
 
-				return (segmentId + '#' + TraceContext.spanId());
-			}
-		};
-	}
+                return (segmentId + '#' + TraceContext.spanId());
+            }
+        };
+    }
 
-	@Bean
-	ObservationRegistry observationRegistry(List<MeterObservationHandler<?>> handlers)
-	{
-		ObservationRegistry registry = ObservationRegistry.create();
+    @Bean
+    ObservationRegistry observationRegistry(List<MeterObservationHandler<?>> handlers)
+    {
+        ObservationRegistry registry = ObservationRegistry.create();
 
-		registry.observationConfig().observationHandler(
-			new ObservationHandler.FirstMatchingCompositeObservationHandler(
-				new SkywalkingMeterHandler(new SkywalkingMeterRegistry())));
-		registry.observationConfig().observationHandler(
-			new ObservationHandler.FirstMatchingCompositeObservationHandler(handlers));
-		registry.observationConfig().observationHandler(
-			new ObservationHandler.FirstMatchingCompositeObservationHandler(
-				new SkywalkingSenderTracingHandler(),
-				new SkywalkingReceiverTracingHandler(),
-				new SkywalkingDefaultTracingHandler()));
-		
-		return registry;
-	}
+        registry.observationConfig().observationHandler(
+            new ObservationHandler.FirstMatchingCompositeObservationHandler(
+                new SkywalkingMeterHandler(new SkywalkingMeterRegistry())));
+        registry.observationConfig().observationHandler(
+            new ObservationHandler.FirstMatchingCompositeObservationHandler(handlers));
+        registry.observationConfig().observationHandler(
+            new ObservationHandler.FirstMatchingCompositeObservationHandler(
+                new SkywalkingSenderTracingHandler(),
+                new SkywalkingReceiverTracingHandler(),
+                new SkywalkingDefaultTracingHandler()));
+        
+        return registry;
+    }
 
-	@Bean
-	ApplicationModel applicationModel(ObservationRegistry observationRegistry)
-	{
-		ApplicationModel applicationModel = ApplicationModel.defaultModel();
-		applicationModel.getBeanFactory().registerBean(observationRegistry);
-		
-		return applicationModel;
-	}
+    @Bean
+    ApplicationModel applicationModel(ObservationRegistry observationRegistry)
+    {
+        ApplicationModel applicationModel = ApplicationModel.defaultModel();
+        applicationModel.getBeanFactory().registerBean(observationRegistry);
+        
+        return applicationModel;
+    }
 }

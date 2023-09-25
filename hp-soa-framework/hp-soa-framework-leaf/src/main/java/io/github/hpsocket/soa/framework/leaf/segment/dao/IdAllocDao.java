@@ -7,11 +7,11 @@ import io.github.hpsocket.soa.framework.leaf.segment.model.LeafAlloc;
 
 public interface IdAllocDao
 {
-	List<LeafAlloc> getAllLeafAllocs();
+    List<LeafAlloc> getAllLeafAllocs();
 
-	LeafAlloc updateMaxIdAndGetLeafAlloc(String tag);
+    LeafAlloc updateMaxIdAndGetLeafAlloc(String tag);
 
-	LeafAlloc updateMaxIdByCustomStepAndGetLeafAlloc(LeafAlloc leafAlloc);
+    LeafAlloc updateMaxIdByCustomStepAndGetLeafAlloc(LeafAlloc leafAlloc);
 
-	List<String> getAllTags();
+    List<String> getAllTags();
 }

@@ -17,18 +17,18 @@ import io.github.hpsocket.soa.starter.task.config.SoaTaskConfig;
 @AutoConfigureBefore(SoaTaskConfig.class)
 public class SoaSkyWalkingTaskConfig
 {
-	/** Task 任务装饰器（注入 {@linkplain org.slf4j.MDC MDC} 和 traceId 调用链跟踪信息）*/
-	@Bean("mdcTaskDecorator")
-	TaskDecorator taskDecorator()
-	{
-		return new TaskDecorator()
-		{	
-			@Override
-			public Runnable decorate(Runnable runnable)
-			{
-				return TracingRunnableWrapper.of(runnable);
-			}
-		};
-	}
-	
+    /** Task 任务装饰器（注入 {@linkplain org.slf4j.MDC MDC} 和 traceId 调用链跟踪信息）*/
+    @Bean("mdcTaskDecorator")
+    TaskDecorator taskDecorator()
+    {
+        return new TaskDecorator()
+        {    
+            @Override
+            public Runnable decorate(Runnable runnable)
+            {
+                return TracingRunnableWrapper.of(runnable);
+            }
+        };
+    }
+    
 }

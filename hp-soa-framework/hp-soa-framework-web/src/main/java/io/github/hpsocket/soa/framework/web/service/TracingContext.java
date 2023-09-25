@@ -5,8 +5,8 @@ package io.github.hpsocket.soa.framework.web.service;
  */
 public interface TracingContext
 {
-	/** 获取调用链 traceId */
-	String getTraceId();
-	/** 获取调用链 spanId */
-	String getSpanId();
+    /** 获取调用链 traceId */
+    String getTraceId();
+    /** 获取调用链 spanId */
+    String getSpanId();
 }

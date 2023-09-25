@@ -33,119 +33,120 @@ import lombok.extern.slf4j.Slf4j;
 @Order(0)
 public class ExclusiveJobInspector
 {
-	private static final String JOB_LOCK_KEY_PREFIX	= "hp.soa.job:lock:";
-	private static final String POINTCUT_PATTERN 	= "execution (public void *.*()) && "
-													+ "@annotation(io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob)";
-	
-	private static final AtomicBoolean RUNNING = new AtomicBoolean(false);	
-	private static final AspectHelper.AnnotationHolder<ExclusiveJob> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
-	
-	@Autowired(required = false)
-	ExclusiveJobExceptionHandler exceptionHandler;
-	
-	@Autowired(required = false)
-	AsyncService asyncService;
-	@Autowired
-	private RedissonClient redissonClient;
+    private static final String JOB_LOCK_KEY_PREFIX    = "hp.soa.job:lock:";
+    private static final String POINTCUT_PATTERN     = "execution (public void *.*()) && "
+                                                    + "@annotation(io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob)";
+    
+    private static final AtomicBoolean RUNNING = new AtomicBoolean(false);    
+    private static final AspectHelper.AnnotationHolder<ExclusiveJob> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
+    
+    @Autowired(required = false)
+    ExclusiveJobExceptionHandler exceptionHandler;
+    
+    @Autowired(required = false)
+    AsyncService asyncService;
+    
+    @Autowired
+    private RedissonClient redissonClient;
 
-	@Pointcut(POINTCUT_PATTERN)
-	protected void aroundMethod() {}
+    @Pointcut(POINTCUT_PATTERN)
+    protected void aroundMethod() {}
 
-	@Around(value = "aroundMethod()")
-	public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
-	{	
-		MdcAttr mdcAttr = WebServerHelper.createMdcAttr();		
+    @Around(value = "aroundMethod()")
+    public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
+    {    
+        MdcAttr mdcAttr = WebServerHelper.createMdcAttr();        
 
-		ExclusiveJob job = ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
-		Assert.notNull(job, "ExclusiveJob annotation not found");
-		
-		String prefix	= job.prefix();
-		String jobName	= job.jobName();
-		
-		if(GeneralHelper.isStrEmpty(prefix))
-			prefix = AppConfigHolder.getAppName();
-		
-		String fullJobName = prefix + ':' + jobName;
-		boolean needThrow  = true;
+        ExclusiveJob job = ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
+        Assert.notNull(job, "ExclusiveJob annotation not found");
+        
+        String prefix    = job.prefix();
+        String jobName    = job.jobName();
+        
+        if(GeneralHelper.isStrEmpty(prefix))
+            prefix = AppConfigHolder.getAppName();
+        
+        String fullJobName = prefix + ':' + jobName;
+        boolean needThrow  = true;
 
-		try
-		{
-			if(!RUNNING.compareAndSet(false, true))
-				return null;
-			
-			mdcAttr.putMdc();
-			
-			if(WebServerHelper.isAppReadOnly())
-			{
-				if(log.isTraceEnabled())
-				{
-					String msg = String.format("current application is read only, skip exclusive job '%s'", fullJobName);
-					log.trace(msg);
-				}
-				
-				return null;
-			}
-			
-			String lockKey	= JOB_LOCK_KEY_PREFIX + fullJobName;
-			RLock lock		= redissonClient.getLock(lockKey);
-			
-			if(lock.tryLock(0, job.maxLockTime(), job.lockTimeUnit()))
-			{
-				StopWatch sw = new StopWatch(fullJobName);
-				
-				try
-				{
-					if(log.isTraceEnabled())
-						log.trace("start exclusive job -> {}", fullJobName);
-					
-					sw.start();
+        try
+        {
+            if(!RUNNING.compareAndSet(false, true))
+                return null;
+            
+            mdcAttr.putMdc();
+            
+            if(WebServerHelper.isAppReadOnly())
+            {
+                if(log.isTraceEnabled())
+                {
+                    String msg = String.format("current application is read only, skip exclusive job '%s'", fullJobName);
+                    log.trace(msg);
+                }
+                
+                return null;
+            }
+            
+            String lockKey    = JOB_LOCK_KEY_PREFIX + fullJobName;
+            RLock lock        = redissonClient.getLock(lockKey);
+            
+            if(lock.tryLock(0, job.maxLockTime(), job.lockTimeUnit()))
+            {
+                StopWatch sw = new StopWatch(fullJobName);
+                
+                try
+                {
+                    if(log.isTraceEnabled())
+                        log.trace("start exclusive job -> {}", fullJobName);
+                    
+                    sw.start();
 
-					return joinPoint.proceed();	
-				}
-				catch(Exception e)
-				{
-					log.error("execute exclusive job -> {} exception : {}", fullJobName, e.getMessage(), e);
-					
-					needThrow = false;
-					throw e;
-				}
-				finally
-				{
-					sw.stop();
-					
-					try {lock.unlock();} catch(Exception e) {}
-					
-					if(log.isTraceEnabled())
-						log.trace("end exclusive job -> {} (costTime: {})", fullJobName, sw.getLastTaskTimeMillis());				
-				}
-			}
-		}
-		catch(Exception e)
-		{
-			invokeExceptionHandler(prefix, jobName, e);
-			
-			if(needThrow)
-				throw e;
-		}
-		finally
-		{
-			RUNNING.compareAndSet(true, false);
-			mdcAttr.removeMdc();
-		}
-		
-		return null;
-	}
+                    return joinPoint.proceed();    
+                }
+                catch(Exception e)
+                {
+                    log.error("execute exclusive job -> {} exception : {}", fullJobName, e.getMessage(), e);
+                    
+                    needThrow = false;
+                    throw e;
+                }
+                finally
+                {
+                    sw.stop();
+                    
+                    try {lock.unlock();} catch(Exception e) {}
+                    
+                    if(log.isTraceEnabled())
+                        log.trace("end exclusive job -> {} (costTime: {})", fullJobName, sw.getLastTaskTimeMillis());                
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            invokeExceptionHandler(prefix, jobName, e);
+            
+            if(needThrow)
+                throw e;
+        }
+        finally
+        {
+            RUNNING.compareAndSet(true, false);
+            mdcAttr.removeMdc();
+        }
+        
+        return null;
+    }
 
-	private void invokeExceptionHandler(String prefix, String jobName, Exception e)
-	{
-		if(exceptionHandler == null)
-			return;
-		
-		if(asyncService == null)
-			exceptionHandler.handleException(prefix, jobName, e);
-		else
-		{
-			asyncService.execute(() -> exceptionHandler.handleException(prefix, jobName, e));
-		}
-	}
+    private void invokeExceptionHandler(String prefix, String jobName, Exception e)
+    {
+        if(exceptionHandler == null)
+            return;
+        
+        if(asyncService == null)
+            exceptionHandler.handleException(prefix, jobName, e);
+        else
+        {
+            asyncService.execute(() -> exceptionHandler.handleException(prefix, jobName, e));
+        }
+    }
 }

@@ -1,63 +1,63 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>io.github.hpsocket</groupId>
-	<artifactId>hp-soa-parent</artifactId>
-	<name>${project.artifactId}</name>
-	<version>${revision}</version>
-	<packaging>pom</packaging>
-	<description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
-	<url>https://github.com/ldcsaa/hp-soa</url>
+    <groupId>io.github.hpsocket</groupId>
+    <artifactId>hp-soa-parent</artifactId>
+    <name>${project.artifactId}</name>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
+    <url>https://github.com/ldcsaa/hp-soa</url>
 
-	<properties>
-		<revision>0.1.0</revision>
-		<hp-soa.version>${revision}</hp-soa.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.source>17</maven.compiler.source>       
-		<maven.compiler.target>17</maven.compiler.target>       
-		<maven.compiler.compilerVersion>17</maven.compiler.compilerVersion>
-		<build.timestamp>${maven.build.timestamp}</build.timestamp>
-		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-		
-		<spring-boot.main_class>io.github.hpsocket.soa.framework.web.server.main.AppStarter</spring-boot.main_class>
+    <properties>
+        <revision>0.2.0-SNAPSHOT</revision>
+        <hp-soa.version>${revision}</hp-soa.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>17</maven.compiler.source>       
+        <maven.compiler.target>17</maven.compiler.target>       
+        <maven.compiler.compilerVersion>17</maven.compiler.compilerVersion>
+        <build.timestamp>${maven.build.timestamp}</build.timestamp>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        
+        <spring-boot.main_class>io.github.hpsocket.soa.framework.web.server.main.AppStarter</spring-boot.main_class>
 
-		<lombok.version>1.18.30</lombok.version>
-		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <lombok.version>1.18.30</lombok.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
 
-		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
-		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
-		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>
-		<maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
-		<maven-install-plugin.version>3.1.1</maven-install-plugin.version>
-		<maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
-		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
-		<maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-		<nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
-		<flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
-		<docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
-		<spring-boot-maven-plugin.version>3.1.4</spring-boot-maven-plugin.version>
+        <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
+        <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+        <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
+        <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
+        <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
+        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
+        <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
+        <docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
+        <spring-boot-maven-plugin.version>3.1.4</spring-boot-maven-plugin.version>
 
-		<maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
-		<maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
-		<maven.surefire.conf.parallel>all</maven.surefire.conf.parallel>
-		<maven.surefire.conf.useSystemClassLoader>true</maven.surefire.conf.useSystemClassLoader>
-		<maven.surefire.conf.argLine>${env.MAVEN_FORK_JVM_ARGS} -Dfile.encoding=UTF-8</maven.surefire.conf.argLine>
-	</properties>
+        <maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
+        <maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
+        <maven.surefire.conf.parallel>all</maven.surefire.conf.parallel>
+        <maven.surefire.conf.useSystemClassLoader>true</maven.surefire.conf.useSystemClassLoader>
+        <maven.surefire.conf.argLine>${env.MAVEN_FORK_JVM_ARGS} -Dfile.encoding=UTF-8</maven.surefire.conf.argLine>
+    </properties>
 
-	<modules>
-		<module>hp-soa-dependencies</module>
-		<module>hp-soa-framework</module>
-		<module>hp-soa-starter</module>
-	</modules>
-	
+    <modules>
+        <module>hp-soa-dependencies</module>
+        <module>hp-soa-framework</module>
+        <module>hp-soa-starter</module>
+    </modules>
+    
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -79,83 +79,83 @@
         </developer>
     </developers>
 
-	<repositories>
-		<!-- >> BEGIN >> : Publish Repositories -->
+    <repositories>
+        <!-- >> BEGIN >> : Publish Repositories -->
         <repository>
             <id>ossrh-snapshots</id>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<updatePolicy>always</updatePolicy>
-				<enabled>true</enabled>
-			</snapshots>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>ossrh-releases</id>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
-		<!-- << END << : Publish Repositories -->
+        <!-- << END << : Publish Repositories -->
 
-		<!-- >> BEGIN >> : Develop Repositories -->
-		<!--
-		<repository>
-			<id>private-snapshots</id>
-			<name>Private Snapshots</name>
-			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
-			<snapshots>
-				<updatePolicy>always</updatePolicy>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
+        <!-- >> BEGIN >> : Develop Repositories -->
+        <!--
+        <repository>
+            <id>private-snapshots</id>
+            <name>Private Snapshots</name>
+            <url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
 
-		<repository>
-			<id>private-thirdparty</id>
-			<name>Private 3rd-party</name>
-			<url>http://192.168.56.23:8081/repository/maven-thirdparty/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
+        <repository>
+            <id>private-thirdparty</id>
+            <name>Private 3rd-party</name>
+            <url>http://192.168.56.23:8081/repository/maven-thirdparty/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
 
-		<repository>
-			<id>private-releases</id>
-			<name>Private Releases</name>
-			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		-->
-		<!-- << END << : Develop Repositories -->
+        <repository>
+            <id>private-releases</id>
+            <name>Private Releases</name>
+            <url>http://192.168.56.23:8081/repository/maven-releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        -->
+        <!-- << END << : Develop Repositories -->
 
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>alimaven</id>
-			<name>aliyun maven</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-		</repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
 
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Maven Repository Switchboard</name>
-			<url>http://repo1.maven.org/maven2</url>
-		</repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
 
-		<repository>
-			<id>JBoss repository public</id>
-			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
-		</repository>
-	</repositories>
+        <repository>
+            <id>JBoss repository public</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
-	<distributionManagement>
-		<!-- >> BEGIN >> : Publish Repositories -->
+    <distributionManagement>
+        <!-- >> BEGIN >> : Publish Repositories -->
         <repository>
             <id>ossrh</id>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
@@ -164,389 +164,392 @@
             <id>ossrh</id>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-		<!-- << END << : Publish Repositories -->
+        <!-- << END << : Publish Repositories -->
 
-		<!-- >> BEGIN >> : Develop Repositories -->
+        <!-- >> BEGIN >> : Develop Repositories -->
         <!--
-		<repository>
-			<id>private</id>
-			<name>Private Nexus Releases Repository</name>
-			<url>http://192.168.56.23:8081/repository/maven-releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>private</id>
-			<name>Private Nexus Snapshots Repository</name>
-			<url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
-		</snapshotRepository>
-		-->
-		<!--<< END << : Develop Repositories -->
-	</distributionManagement>
+        <repository>
+            <id>private</id>
+            <name>Private Nexus Releases Repository</name>
+            <url>http://192.168.56.23:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>private</id>
+            <name>Private Nexus Snapshots Repository</name>
+            <url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        -->
+        <!--<< END << : Develop Repositories -->
+    </distributionManagement>
 
-	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
 
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>**/*.xml</include>
-					<include>**/*.yml</include>
-					<include>**/*.yaml</include>
-					<include>**/*.properties</include>
-					<include>**/*.conf</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>**/*.json</include>
-		    		<include>**/*.imports</include>
-		    		<include>**/*.factories</include>
-		    		<include>**/*.Filter</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/java</directory>
-				<filtering>false</filtering>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>pl.project13.maven</groupId>
-					<artifactId>git-commit-id-plugin</artifactId>
-					<version>${git-commit-id-plugin.version}</version>
-					<executions>
-						<execution>
-							<id>get-the-git-infos</id>
-							<goals>
-								<goal>revision</goal>
-							</goals>
-							<phase>initialize</phase>
-						</execution>
-						<execution>
-							<id>validate-the-git-infos</id>
-							<goals>
-								<goal>validateRevision</goal>
-							</goals>
-							<phase>package</phase>
-						</execution>
-					</executions>
-					<configuration>
-						<includeOnlyProperties>
-							<includeOnlyProperty>git.branch</includeOnlyProperty>
-							<includeOnlyProperty>git.build.version</includeOnlyProperty>
-							<includeOnlyProperty>git.commit.id</includeOnlyProperty>
-							<includeOnlyProperty>git.commit.id.abbrev</includeOnlyProperty>
-							<includeOnlyProperty>git.commit.message.short</includeOnlyProperty>
-							<includeOnlyProperty>git.commit.time</includeOnlyProperty>
-							<includeOnlyProperty>git.commit.user.name</includeOnlyProperty>
-						</includeOnlyProperties>
-						<dateFormat>yyyyMMddHHmmss</dateFormat>
-						<abbrevLength>8</abbrevLength>
-						<generateGitPropertiesFile>true</generateGitPropertiesFile>
-						<verbose>false</verbose>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${maven-compiler-plugin.version}</version>
-					<configuration>
-						<encoding>${project.build.sourceEncoding}</encoding>
-				        <compilerArgs>
-				            <arg>-parameters</arg>
-				        </compilerArgs>
-	                    <annotationProcessorPaths>
-	                        <path>
-	                            <groupId>org.projectlombok</groupId>
-	                            <artifactId>lombok</artifactId>
-	                            <version>${lombok.version}</version>
-	                        </path>
-	                        <path>
-	                            <groupId>org.mapstruct</groupId>
-	                            <artifactId>mapstruct-processor</artifactId>
-	                            <version>${mapstruct.version}</version>
-	                        </path>
-	                        <path>
-							    <groupId>org.projectlombok</groupId>
-							    <artifactId>lombok-mapstruct-binding</artifactId>
-							    <version>${lombok-mapstruct-binding.version}</version>
-	                        </path>
-	                   </annotationProcessorPaths>
-					</configuration>
-				</plugin>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.yaml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.conf</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.json</include>
+                    <include>**/*.imports</include>
+                    <include>**/*.factories</include>
+                    <include>**/*.Filter</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>pl.project13.maven</groupId>
+                    <artifactId>git-commit-id-plugin</artifactId>
+                    <version>${git-commit-id-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>get-the-git-infos</id>
+                            <goals>
+                                <goal>revision</goal>
+                            </goals>
+                            <phase>initialize</phase>
+                        </execution>
+                        <execution>
+                            <id>validate-the-git-infos</id>
+                            <goals>
+                                <goal>validateRevision</goal>
+                            </goals>
+                            <phase>package</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <includeOnlyProperties>
+                            <includeOnlyProperty>git.branch</includeOnlyProperty>
+                            <includeOnlyProperty>git.build.version</includeOnlyProperty>
+                            <includeOnlyProperty>git.commit.id</includeOnlyProperty>
+                            <includeOnlyProperty>git.commit.id.abbrev</includeOnlyProperty>
+                            <includeOnlyProperty>git.commit.message.short</includeOnlyProperty>
+                            <includeOnlyProperty>git.commit.time</includeOnlyProperty>
+                            <includeOnlyProperty>git.commit.user.name</includeOnlyProperty>
+                        </includeOnlyProperties>
+                        <dateFormat>yyyyMMddHHmmss</dateFormat>
+                        <abbrevLength>8</abbrevLength>
+                        <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                        <verbose>false</verbose>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <compilerArgs>
+                            <arg>-parameters</arg>
+                        </compilerArgs>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${mapstruct.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                                <version>${lombok-mapstruct-binding.version}</version>
+                            </path>
+                       </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
 
-	            <plugin>
-	                <groupId>org.apache.maven.plugins</groupId>
-	                <artifactId>maven-resources-plugin</artifactId>
-	                <version>${maven-resources-plugin.version}</version>
-	                <configuration>
-	                    <encoding>${project.build.sourceEncoding}</encoding>
-	                </configuration>
-	                <executions>
-	                    <execution>
-	                        <phase>compile</phase>
-	                    </execution>
-	                </executions>
-	            </plugin>
-	            
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>${maven-release-plugin.version}</version>
-				</plugin>
-				
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>${maven-install-plugin.version}</version>
-				</plugin>
-				
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>${maven-deploy-plugin.version}</version>
-				</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${maven-release-plugin.version}</version>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                </plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>${maven-jar-plugin.version}</version>
-					<executions>
-						<execution>
-							<id>default-jar</id>
-							<phase>package</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>${maven-source-plugin.version}</version>
-					<configuration>
-					</configuration>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<phase>package</phase>
-							<goals>
-								<goal>jar-no-fork</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>default-jar</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <configuration>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${maven-javadoc-plugin.version}</version>
-					<configuration>
-						<encoding>${project.build.sourceEncoding}</encoding>
-						<charset>${project.build.sourceEncoding}</charset>
-						<doclint>none</doclint>
-					</configuration>
-					<executions>
-						<execution>
-							<phase>package</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>${maven-assembly-plugin.version}</version>
-					<configuration>
-					<descriptors>
-						<descriptor>src/main/assembly/assembly.xml</descriptor>
-					</descriptors>
-					</configuration>
-					<executions>
-						<execution>
-							<id>make-assembly</id>
-							<phase>package</phase>
-							<goals>
-								<goal>single</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>${maven-surefire-plugin.version}</version>
-					<configuration>
-						<encoding>${project.build.sourceEncoding}</encoding>
-						<forkCount>${maven.surefire.conf.forkCount}</forkCount>
-						<reuseForks>${maven.surefire.conf.reuseForks}</reuseForks>
-						<parallel>${maven.surefire.conf.parallel}</parallel>
-						<useSystemClassLoader>${maven.surefire.conf.useSystemClassLoader}</useSystemClassLoader>
-						<argLine>${maven.surefire.conf.argLine}</argLine>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>test</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				
-	            <plugin>
-	                <groupId>org.sonatype.plugins</groupId>
-	                <artifactId>nexus-staging-maven-plugin</artifactId>
-	                <version>${nexus-staging-maven-plugin.version}</version>
-	                <extensions>true</extensions>
-	                <configuration>
-	                    <serverId>ossrh</serverId>
-	                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-	                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-	                </configuration>
-	            </plugin>
-				
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-gpg-plugin</artifactId>
-					<version>${maven-gpg-plugin.version}</version>
-					<executions>
-						<execution>
-							<phase>verify</phase>
-							<goals>
-								<goal>sign</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <charset>${project.build.sourceEncoding}</charset>
+                        <doclint>none</doclint>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven-assembly-plugin.version}</version>
+                    <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>make-assembly</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                            <configuration>
+                                <tarLongFileMode>gnu</tarLongFileMode>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <forkCount>${maven.surefire.conf.forkCount}</forkCount>
+                        <reuseForks>${maven.surefire.conf.reuseForks}</reuseForks>
+                        <parallel>${maven.surefire.conf.parallel}</parallel>
+                        <useSystemClassLoader>${maven.surefire.conf.useSystemClassLoader}</useSystemClassLoader>
+                        <argLine>${maven.surefire.conf.argLine}</argLine>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>${nexus-staging-maven-plugin.version}</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${maven-gpg-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 
-	           <plugin>
-	                <groupId>org.springframework.boot</groupId>
-	                <artifactId>spring-boot-maven-plugin</artifactId>
-	                <version>${spring-boot-maven-plugin.version}</version>
-	                <configuration>
-	                	<mainClass>${spring-boot.main_class}</mainClass>
-	                </configuration>
-	                <executions>
-	                    <execution>
-	                        <goals>
-	                            <goal>repackage</goal>
-	                        </goals>
-	                    </execution>
-	                </executions>
-	            </plugin>
-	            
-	            <plugin>
-	                <groupId>org.codehaus.mojo</groupId>
-	                <artifactId>flatten-maven-plugin</artifactId>
-	                <version>${flatten-maven-plugin.version}</version>
-	                <executions>
-	                    <execution>
-	                        <id>flatten</id>
-	                        <phase>process-resources</phase>
-	                        <goals>
-	                            <goal>flatten</goal>
-	                        </goals>
-	                        <configuration>
-	                            <updatePomFile>true</updatePomFile>
-	                            <flattenMode>resolveCiFriendliesOnly</flattenMode>
-	                        </configuration>
-	                    </execution>
-	                    <execution>
-	                        <id>flatten.clean</id>
-	                        <phase>clean</phase>
-	                        <goals>
-	                            <goal>clean</goal>
-	                        </goals>
-	                    </execution>
-	                </executions>
-	                <inherited>true</inherited>
-	                <configuration>
-	                    <updatePomFile>true</updatePomFile>
-	                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
-	                </configuration>
-	            </plugin>
+               <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot-maven-plugin.version}</version>
+                    <configuration>
+                        <mainClass>${spring-boot.main_class}</mainClass>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>${flatten-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>flatten</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>flatten</goal>
+                            </goals>
+                            <configuration>
+                                <updatePomFile>true</updatePomFile>
+                                <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>flatten.clean</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <updatePomFile>true</updatePomFile>
+                        <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                    </configuration>
+                </plugin>
 
-		        <plugin>
-		            <groupId>io.fabric8</groupId>
-		            <artifactId>docker-maven-plugin</artifactId>
-		            <version>${docker-maven-plugin.version}</version>
-					<!--
-					<configuration>
-					    # Docker 推送镜像仓库地址
-					    <pushRegistry>http://hub.myserver.com:5000</pushRegistry>
-					    <images>
-					        <image>
-					            # 推送到私有镜像仓库，镜像名需要添加仓库地址
-					            <name>hub.myserver.com:5000/${project.name}:${project.version}</name>
-					            #定义镜像构建行为
-					            <build>
-					                <dockerFileDir>${project.basedir}</dockerFileDir>
-					            </build>
-					            #定义容器启动行为
-					            <run>
-					                # 设置容器名，可采用通配符
-					                <containerNamePattern>${project.artifactId}</containerNamePattern>
-					                # 设置端口映射
-					                <ports>
-					                    <port>8082:8082</port>
-					                </ports>
-					                # 设置容器间连接
-					                <links>
-					                    <link>mysql:db</link>
-					                </links>
-					                # 设置容器和宿主机目录挂载
-					                <volumes>
-					                    <bind>
-					                        <volume>/etc/localtime:/etc/localtime</volume>
-					                    </bind>
-					                </volumes>
-					            </run>
-					        </image>
-					    </images>
-					</configuration>
-					-->
-		        </plugin>
-			</plugins>
-		</pluginManagement>
-		
-		<plugins>
-			<plugin>
-	        	<groupId>org.codehaus.mojo</groupId>
-	        	<artifactId>flatten-maven-plugin</artifactId>
-			</plugin>
-			
-			<!-- >> BEGIN >> : Publish Plugins -->
-			<!--
-			-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                    <!--
+                    <configuration>
+                        # Docker 推送镜像仓库地址
+                        <pushRegistry>http://hub.myserver.com:5000</pushRegistry>
+                        <images>
+                            <image>
+                                # 推送到私有镜像仓库，镜像名需要添加仓库地址
+                                <name>hub.myserver.com:5000/${project.name}:${project.version}</name>
+                                #定义镜像构建行为
+                                <build>
+                                    <dockerFileDir>${project.basedir}</dockerFileDir>
+                                </build>
+                                #定义容器启动行为
+                                <run>
+                                    # 设置容器名，可采用通配符
+                                    <containerNamePattern>${project.artifactId}</containerNamePattern>
+                                    # 设置端口映射
+                                    <ports>
+                                        <port>8082:8082</port>
+                                    </ports>
+                                    # 设置容器间连接
+                                    <links>
+                                        <link>mysql:db</link>
+                                    </links>
+                                    # 设置容器和宿主机目录挂载
+                                    <volumes>
+                                        <bind>
+                                            <volume>/etc/localtime:/etc/localtime</volume>
+                                        </bind>
+                                    </volumes>
+                                </run>
+                            </image>
+                        </images>
+                    </configuration>
+                    -->
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+            </plugin>
+            
+            <!-- >> BEGIN >> : Publish Plugins -->
+            <!--
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
             </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-			</plugin>
-			<!-- << END << : Publish Plugins -->
-		</plugins>
-		
-	</build>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+            </plugin>
+            <!-- << END << : Publish Plugins -->
+        </plugins>
+        
+    </build>
 
 </project>

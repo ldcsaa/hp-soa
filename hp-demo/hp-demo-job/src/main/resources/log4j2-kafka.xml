@@ -49,27 +49,27 @@
             <DefaultRolloverStrategy max="${logfile.max.count}"/>
         </RollingRandomAccessFile>
         
-		<kafka name="KAFKA_MONITOR" topic="${kafka.topic}"
-			ignoreExceptions="${kafka.ignoreExceptions}" syncSend="${kafka.syncSend}">
-			<Property name="bootstrap.servers">${kafka.bootstrap.servers}</Property>
-			<Property name="sasl.jaas.config">${kafka.sasl.jaas.config}</Property>
-			<JsonTemplateLayout eventTemplateUri="${json.template.layout}">
-				<EventTemplateAdditionalField key="log_type" value="${kafka.logType}"/>
-				<EventTemplateAdditionalField key="facility" value="SOA-MONITOR"/>
-				<EventTemplateAdditionalField key="@version" value="${project.version}"/>
-			</JsonTemplateLayout>
-		</kafka>
+        <kafka name="KAFKA_MONITOR" topic="${kafka.topic}"
+            ignoreExceptions="${kafka.ignoreExceptions}" syncSend="${kafka.syncSend}">
+            <Property name="bootstrap.servers">${kafka.bootstrap.servers}</Property>
+            <Property name="sasl.jaas.config">${kafka.sasl.jaas.config}</Property>
+            <JsonTemplateLayout eventTemplateUri="${json.template.layout}">
+                <EventTemplateAdditionalField key="log_type" value="${kafka.logType}"/>
+                <EventTemplateAdditionalField key="facility" value="SOA-MONITOR"/>
+                <EventTemplateAdditionalField key="@version" value="${project.version}"/>
+            </JsonTemplateLayout>
+        </kafka>
 
-		<kafka name="KAFKA_SERVICE" topic="${kafka.topic}"
-			ignoreExceptions="${kafka.ignoreExceptions}" syncSend="${kafka.syncSend}">
-			<Property name="bootstrap.servers">${kafka.bootstrap.servers}</Property>
-			<Property name="sasl.jaas.config">${kafka.sasl.jaas.config}</Property>
-			<JsonTemplateLayout eventTemplateUri="${json.template.layout}">
-				<EventTemplateAdditionalField key="log_type" value="${kafka.logType}"/>
-				<EventTemplateAdditionalField key="facility" value="SOA-SERVICE"/>
-				<EventTemplateAdditionalField key="@version" value="${project.version}"/>
-			</JsonTemplateLayout>
-		</kafka>
+        <kafka name="KAFKA_SERVICE" topic="${kafka.topic}"
+            ignoreExceptions="${kafka.ignoreExceptions}" syncSend="${kafka.syncSend}">
+            <Property name="bootstrap.servers">${kafka.bootstrap.servers}</Property>
+            <Property name="sasl.jaas.config">${kafka.sasl.jaas.config}</Property>
+            <JsonTemplateLayout eventTemplateUri="${json.template.layout}">
+                <EventTemplateAdditionalField key="log_type" value="${kafka.logType}"/>
+                <EventTemplateAdditionalField key="facility" value="SOA-SERVICE"/>
+                <EventTemplateAdditionalField key="@version" value="${project.version}"/>
+            </JsonTemplateLayout>
+        </kafka>
     </Appenders>
 
     <Loggers>

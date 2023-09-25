@@ -4,5 +4,5 @@ import io.github.hpsocket.demo.mq.producer.entity.Order;
 
 public interface OrderService
 {
-	Order createOrder(Order order);
+    Order createOrder(Order order);
 }

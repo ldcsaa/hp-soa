@@ -23,36 +23,36 @@ import org.springframework.web.bind.annotation.RestController;
 @AccessVerification(Type.NO_LOGIN)
 public class DemoControllerImpl implements DemoController
 {
-	@DubboReference
-	DemoService demoService;
-	
-	@DubboReference
-	UserService userService;
+    @DubboReference
+    DemoService demoService;
+    
+    @DubboReference
+    UserService userService;
 
     @Override
     @AccessVerification(Type.REQUIRE_LOGIN)
     public Response<DemoResponse> queryUser(@RequestBody @Valid DemoReuqest request)
     {
         /* 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
-    	System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
-    	
-    	UserBo userBo = null;
-    	String name = request.getName();
-    	
-    	if(name.equalsIgnoreCase("master"))
-    		userBo = userService.getMasterUser();
-    	else if(name.equalsIgnoreCase("slave"))
-    		userBo = userService.getSlaveUser();
-    	else if(name.equalsIgnoreCase("slave-1"))
-    		userBo = userService.getSlave1User();
-    	else if(name.equalsIgnoreCase("slave-2"))
-    		userBo = userService.getSlave2User();
-    	else
-    		userBo = userService.getDefaultUser();
-    	
-    	Long userId = userBo != null ? userBo.getId() : null;
-    	String userName = userBo != null ? userBo.getName() : "null";
-    	Integer userAge = userBo != null ? userBo.getAge() : null;
+        System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
+        
+        UserBo userBo = null;
+        String name = request.getName();
+        
+        if(name.equalsIgnoreCase("master"))
+            userBo = userService.getMasterUser();
+        else if(name.equalsIgnoreCase("slave"))
+            userBo = userService.getSlaveUser();
+        else if(name.equalsIgnoreCase("slave-1"))
+            userBo = userService.getSlave1User();
+        else if(name.equalsIgnoreCase("slave-2"))
+            userBo = userService.getSlave2User();
+        else
+            userBo = userService.getDefaultUser();
+        
+        Long userId = userBo != null ? userBo.getId() : null;
+        String userName = userBo != null ? userBo.getName() : "null";
+        Integer userAge = userBo != null ? userBo.getAge() : null;
 
         DemoResponse resp = new DemoResponse();
         resp.setId(userId);
@@ -69,12 +69,12 @@ public class DemoControllerImpl implements DemoController
     @Override
     public Object test(@Valid DemoReuqest request)
     {
-    	UserBo userBo = new UserBo();
-    	
-    	userBo.setId(request.getId());
-    	userBo.setName(request.getName());
-    	userBo.setAge(request.getAge());
-    	
-    	return "save user: " + userService.saveUser(userBo);
+        UserBo userBo = new UserBo();
+        
+        userBo.setId(request.getId());
+        userBo.setName(request.getName());
+        userBo.setAge(request.getAge());
+        
+        return "save user: " + userService.saveUser(userBo);
     }
 }

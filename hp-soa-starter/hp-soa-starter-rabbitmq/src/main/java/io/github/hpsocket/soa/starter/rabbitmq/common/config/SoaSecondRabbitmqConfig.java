@@ -31,72 +31,72 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaSecondRabbit
 @ConditionalOnBean({SoaSecondRabbitmqProperties.class})
 public class SoaSecondRabbitmqConfig extends SoaAbstractRabbitmqConfig
 {
-	public SoaSecondRabbitmqConfig(SoaSecondRabbitmqProperties properties)
-	{
-		super(properties);
-	}
+    public SoaSecondRabbitmqConfig(SoaSecondRabbitmqProperties properties)
+    {
+        super(properties);
+    }
 
-	@Override
-	@Bean("secondRabbitConnectionDetails")
-	RabbitConnectionDetails rabbitConnectionDetails()
-	{
-		return super.rabbitConnectionDetails();
-	}
+    @Override
+    @Bean("secondRabbitConnectionDetails")
+    RabbitConnectionDetails rabbitConnectionDetails()
+    {
+        return super.rabbitConnectionDetails();
+    }
 
-	@Override
-	@Bean("secondRabbitConnectionFactoryBeanConfigurer")
-	public RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer(
-		ResourceLoader resourceLoader,
-		@Qualifier("secondRabbitConnectionDetails") RabbitConnectionDetails connectionDetails,
-		@Qualifier("secondRabbitCredentialsProvider") ObjectProvider<CredentialsProvider> credentialsProvider,
-		@Qualifier("secondRabbitCredentialsRefreshService") ObjectProvider<CredentialsRefreshService> credentialsRefreshService)
-	{
-		return super.rabbitConnectionFactoryBeanConfigurer(resourceLoader, connectionDetails, credentialsProvider, credentialsRefreshService);
-	}
-	
-	@Override
-	@Bean("secondRabbitCachingConnectionFactoryConfigurer")
-	public CachingConnectionFactoryConfigurer rabbitConnectionFactoryConfigurer(
-		@Qualifier("secondRabbitConnectionDetails") RabbitConnectionDetails connectionDetails,
-		@Qualifier("secondRabbitConnectionNameStrategy") ObjectProvider<ConnectionNameStrategy> connectionNameStrategy)
-	{
-		return super.rabbitConnectionFactoryConfigurer(connectionDetails, connectionNameStrategy);
-	}
-	
-	@Override
-	@Bean("secondRabbitCachingConnectionFactory")
-	public CachingConnectionFactory rabbitConnectionFactory(
-		@Qualifier("secondRabbitConnectionFactoryBeanConfigurer") RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer,
-		@Qualifier("secondRabbitCachingConnectionFactoryConfigurer") CachingConnectionFactoryConfigurer rabbitCachingConnectionFactoryConfigurer,
-		@Qualifier("secondRabbitConnectionFactoryCustomizer") ObjectProvider<ConnectionFactoryCustomizer> connectionFactoryCustomizers) throws Exception
-	{
-		return super.rabbitConnectionFactory(rabbitConnectionFactoryBeanConfigurer, rabbitCachingConnectionFactoryConfigurer, connectionFactoryCustomizers);
-	}
-	
-	@Override
-	@Bean("secondAmqpAdmin")
-	public AmqpAdmin amqpAdmin(@Qualifier("secondRabbitCachingConnectionFactory") ConnectionFactory connectionFactory)
-	{
-		return super.amqpAdmin(connectionFactory);
-	}
-	
-	@Override
-	@Bean(name = "secondRabbitStreamEnvironment")
-	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-	public Environment rabbitStreamEnvironment(
-		@Qualifier("secondRabbitStreamEnvironmentBuilderCustomizer") ObjectProvider<EnvironmentBuilderCustomizer> customizers)
-	{
-		return super.rabbitStreamEnvironment(customizers);
-	}
-	
-	@Override
-	@Bean(name = "secondStreamAdmin")
-	@ConditionalOnMissingBean(name = "secondStreamAdmin")
-	@ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-	@ConditionalOnProperty(prefix = "spring.rabbitmq-second.stream", name = "name")
-	public StreamAdmin streamAdmin(@Qualifier("secondRabbitStreamEnvironment") Environment env)
-	{
-		return super.streamAdmin(env);
-	}
+    @Override
+    @Bean("secondRabbitConnectionFactoryBeanConfigurer")
+    public RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer(
+        ResourceLoader resourceLoader,
+        @Qualifier("secondRabbitConnectionDetails") RabbitConnectionDetails connectionDetails,
+        @Qualifier("secondRabbitCredentialsProvider") ObjectProvider<CredentialsProvider> credentialsProvider,
+        @Qualifier("secondRabbitCredentialsRefreshService") ObjectProvider<CredentialsRefreshService> credentialsRefreshService)
+    {
+        return super.rabbitConnectionFactoryBeanConfigurer(resourceLoader, connectionDetails, credentialsProvider, credentialsRefreshService);
+    }
+    
+    @Override
+    @Bean("secondRabbitCachingConnectionFactoryConfigurer")
+    public CachingConnectionFactoryConfigurer rabbitConnectionFactoryConfigurer(
+        @Qualifier("secondRabbitConnectionDetails") RabbitConnectionDetails connectionDetails,
+        @Qualifier("secondRabbitConnectionNameStrategy") ObjectProvider<ConnectionNameStrategy> connectionNameStrategy)
+    {
+        return super.rabbitConnectionFactoryConfigurer(connectionDetails, connectionNameStrategy);
+    }
+    
+    @Override
+    @Bean("secondRabbitCachingConnectionFactory")
+    public CachingConnectionFactory rabbitConnectionFactory(
+        @Qualifier("secondRabbitConnectionFactoryBeanConfigurer") RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer,
+        @Qualifier("secondRabbitCachingConnectionFactoryConfigurer") CachingConnectionFactoryConfigurer rabbitCachingConnectionFactoryConfigurer,
+        @Qualifier("secondRabbitConnectionFactoryCustomizer") ObjectProvider<ConnectionFactoryCustomizer> connectionFactoryCustomizers) throws Exception
+    {
+        return super.rabbitConnectionFactory(rabbitConnectionFactoryBeanConfigurer, rabbitCachingConnectionFactoryConfigurer, connectionFactoryCustomizers);
+    }
+    
+    @Override
+    @Bean("secondAmqpAdmin")
+    public AmqpAdmin amqpAdmin(@Qualifier("secondRabbitCachingConnectionFactory") ConnectionFactory connectionFactory)
+    {
+        return super.amqpAdmin(connectionFactory);
+    }
+    
+    @Override
+    @Bean(name = "secondRabbitStreamEnvironment")
+    @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
+    public Environment rabbitStreamEnvironment(
+        @Qualifier("secondRabbitStreamEnvironmentBuilderCustomizer") ObjectProvider<EnvironmentBuilderCustomizer> customizers)
+    {
+        return super.rabbitStreamEnvironment(customizers);
+    }
+    
+    @Override
+    @Bean(name = "secondStreamAdmin")
+    @ConditionalOnMissingBean(name = "secondStreamAdmin")
+    @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
+    @ConditionalOnProperty(prefix = "spring.rabbitmq-second.stream", name = "name")
+    public StreamAdmin streamAdmin(@Qualifier("secondRabbitStreamEnvironment") Environment env)
+    {
+        return super.streamAdmin(env);
+    }
 
 }

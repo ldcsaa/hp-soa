@@ -12,9 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PageRequest<T>
 {
-	private int pageNumber	= 1;
-	private int pageSize	= PageInfo.DEFAULT_PAGE_SIZE;
-	private String orderBy;
+    private int pageNumber    = 1;
+    private int pageSize    = PageInfo.DEFAULT_PAGE_SIZE;
+    private String orderBy;
 
-	private T param;
+    private T param;
 }

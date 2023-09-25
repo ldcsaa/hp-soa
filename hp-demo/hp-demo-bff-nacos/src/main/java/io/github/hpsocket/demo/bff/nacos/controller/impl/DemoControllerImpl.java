@@ -21,17 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 @AccessVerification(Type.NO_LOGIN)
 public class DemoControllerImpl implements DemoController
 {
-	@DubboReference
-	DemoService demoService;
+    @DubboReference
+    DemoService demoService;
 
     @Override
     @AccessVerification(Type.REQUIRE_LOGIN)
     public Response<DemoResponse> queryUser(@RequestBody @Valid DemoReuqest request)
     {
         /* 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
-    	System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
-    	
-    	String name = demoService.sayHello(request.getName());
+        System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
+        
+        String name = demoService.sayHello(request.getName());
 
         DemoResponse resp = new DemoResponse();
         resp.setId(1001L);
@@ -48,6 +48,6 @@ public class DemoControllerImpl implements DemoController
     @Override
     public Object test(@Valid DemoReuqest request)
     {
-    	return "test";
+        return "test";
     }
 }

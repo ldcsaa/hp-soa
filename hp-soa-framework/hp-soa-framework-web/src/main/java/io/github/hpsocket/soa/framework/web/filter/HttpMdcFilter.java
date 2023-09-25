@@ -1,4 +1,4 @@
-	package io.github.hpsocket.soa.framework.web.filter;
+    package io.github.hpsocket.soa.framework.web.filter;
 
 import java.io.IOException;
 
@@ -31,60 +31,60 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class HttpMdcFilter implements Filter
 {
-	public static final int ORDER			= -100;
-	public static final String DISPLAY_NAME	= HttpMdcFilter.class.getSimpleName();
-	public static final String URL_PATTERNS = "/*";
-	
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException
-	{
-		log.info("starting up: ({}) ...", DISPLAY_NAME);
-	}
+    public static final int ORDER            = -100;
+    public static final String DISPLAY_NAME    = HttpMdcFilter.class.getSimpleName();
+    public static final String URL_PATTERNS = "/*";
+    
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException
+    {
+        log.info("starting up: ({}) ...", DISPLAY_NAME);
+    }
 
-	@Override
-	public void destroy()
-	{
-		log.info("shutting down: ({}) OK!", DISPLAY_NAME);
-	}
+    @Override
+    public void destroy()
+    {
+        log.info("shutting down: ({}) OK!", DISPLAY_NAME);
+    }
 
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-	{
-		MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false);
-		RequestAttribute reqAttr = RequestContext.parseRequestAttribute((HttpServletRequest)request, (HttpServletResponse)response);
-		
-		try
-		{			
-			fillMdcAttr(mdcAttr, reqAttr);
-			mdcAttr.putMdc();
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+    {
+        MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false);
+        RequestAttribute reqAttr = RequestContext.parseRequestAttribute((HttpServletRequest)request, (HttpServletResponse)response);
+        
+        try
+        {            
+            fillMdcAttr(mdcAttr, reqAttr);
+            mdcAttr.putMdc();
 
-			chain.doFilter(request, response);
-		}
-		finally
-		{
-			mdcAttr.removeMdc();
-		}
-	}
-	
-	private void fillMdcAttr(MdcAttr mdcAttr, RequestAttribute reqAttr)
-	{
-		if(GeneralHelper.isStrNotEmpty(reqAttr.getClientId()))
-			mdcAttr.setClientId(reqAttr.getClientId());
-		if(GeneralHelper.isStrNotEmpty(reqAttr.getRequestId()))
-			mdcAttr.setRequestId(reqAttr.getRequestId());
-		if(GeneralHelper.isStrNotEmpty(reqAttr.getSessionId()))
-			mdcAttr.setSessionId(reqAttr.getSessionId());
-		if(GeneralHelper.isStrNotEmpty(reqAttr.getAppCode()))
-			mdcAttr.setAppCode(reqAttr.getAppCode());
-		if(GeneralHelper.isStrNotEmpty(reqAttr.getSrcAppCode()))
-			mdcAttr.setSrcAppCode(reqAttr.getSrcAppCode());
-		if(GeneralHelper.isStrNotEmpty(reqAttr.getToken()))
-			mdcAttr.setToken(reqAttr.getToken());
-		if(reqAttr.getUserId() != null)
-			mdcAttr.setUserId(reqAttr.getUserId().toString());
-		if(reqAttr.getGroupId() != null)
-			mdcAttr.setGroupId(reqAttr.getGroupId().toString());
-		if(GeneralHelper.isStrNotEmpty(reqAttr.getExtra()))
-			mdcAttr.setExtra(reqAttr.getExtra());
-	}
+            chain.doFilter(request, response);
+        }
+        finally
+        {
+            mdcAttr.removeMdc();
+        }
+    }
+    
+    private void fillMdcAttr(MdcAttr mdcAttr, RequestAttribute reqAttr)
+    {
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getClientId()))
+            mdcAttr.setClientId(reqAttr.getClientId());
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getRequestId()))
+            mdcAttr.setRequestId(reqAttr.getRequestId());
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getSessionId()))
+            mdcAttr.setSessionId(reqAttr.getSessionId());
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getAppCode()))
+            mdcAttr.setAppCode(reqAttr.getAppCode());
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getSrcAppCode()))
+            mdcAttr.setSrcAppCode(reqAttr.getSrcAppCode());
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getToken()))
+            mdcAttr.setToken(reqAttr.getToken());
+        if(reqAttr.getUserId() != null)
+            mdcAttr.setUserId(reqAttr.getUserId().toString());
+        if(reqAttr.getGroupId() != null)
+            mdcAttr.setGroupId(reqAttr.getGroupId().toString());
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getExtra()))
+            mdcAttr.setExtra(reqAttr.getExtra());
+    }
 }

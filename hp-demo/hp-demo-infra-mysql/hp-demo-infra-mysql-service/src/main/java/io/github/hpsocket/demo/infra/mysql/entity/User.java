@@ -11,12 +11,12 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public class User extends BaseLogicDeleteVersioningEntity
 {
-	private String name;
-	private Integer age;
-	
-	@Override
-	public String toString()
-	{
-		return JSONObject.toJSONString(this);
-	}
+    private String name;
+    private Integer age;
+    
+    @Override
+    public String toString()
+    {
+        return JSONObject.toJSONString(this);
+    }
 }

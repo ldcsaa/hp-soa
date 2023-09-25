@@ -25,27 +25,27 @@ import io.github.hpsocket.soa.starter.web.config.WebConfig;
 @AutoConfigureBefore(WebConfig.class)
 public class SoaSkyWalkingAsyncConfig
 {
-	/** 异步线程池（注入 traceId） */
+    /** 异步线程池（注入 traceId） */
     @Bean("asyncThreadPoolExecutor")
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
     public TracingAsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
     {
-		RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
-		BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 
-										? new SynchronousQueue<>() 
-										: new LinkedBlockingDeque<>(asyncProperties.getQueueCapacity());
-		
-		TracingAsyncThreadPoolExecutor executor = new TracingAsyncThreadPoolExecutor(
-											asyncProperties.getCorePoolSize(),
-											asyncProperties.getMaxPoolSize(),
-											asyncProperties.getKeepAliveSeconds(),
-											TimeUnit.SECONDS,
-											queue,
-											rjh);
-		
-		executor.allowCoreThreadTimeOut(asyncProperties.isAllowCoreThreadTimeOut());
-    	
-		return executor;
+        RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
+        BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 
+                                        ? new SynchronousQueue<>() 
+                                        : new LinkedBlockingDeque<>(asyncProperties.getQueueCapacity());
+        
+        TracingAsyncThreadPoolExecutor executor = new TracingAsyncThreadPoolExecutor(
+                                            asyncProperties.getCorePoolSize(),
+                                            asyncProperties.getMaxPoolSize(),
+                                            asyncProperties.getKeepAliveSeconds(),
+                                            TimeUnit.SECONDS,
+                                            queue,
+                                            rjh);
+        
+        executor.allowCoreThreadTimeOut(asyncProperties.isAllowCoreThreadTimeOut());
+        
+        return executor;
     }
-	
+    
 }

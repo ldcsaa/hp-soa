@@ -11,8 +11,8 @@ import io.github.hpsocket.demo.mq.producer.entity.Order;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface OrderConverter
 {
-	OrderConverter INSTANCE = Mappers.getMapper(OrderConverter.class);
-	
-	DemoCreateOrderResponse toResponse(Order order);
-	Order fromRequest(DemoCreateOrderReuqest req);
+    OrderConverter INSTANCE = Mappers.getMapper(OrderConverter.class);
+    
+    DemoCreateOrderResponse toResponse(Order order);
+    Order fromRequest(DemoCreateOrderReuqest req);
 }

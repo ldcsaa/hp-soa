@@ -9,7 +9,7 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public class Order extends BaseLogicDeleteEntity
 {
-	private Integer regionId;
-	private String orderNumber;
-	private Long price;
+    private Integer regionId;
+    private String orderNumber;
+    private Long price;
 }

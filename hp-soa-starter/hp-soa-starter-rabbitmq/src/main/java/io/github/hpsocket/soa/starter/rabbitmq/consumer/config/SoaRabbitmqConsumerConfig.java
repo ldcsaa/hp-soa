@@ -16,23 +16,23 @@ import io.github.hpsocket.soa.starter.rabbitmq.consumer.listener.RabbitmqReadOnl
 @AutoConfiguration
 public class SoaRabbitmqConsumerConfig
 {
-	@Bean
-	RabbitmqReadOnlyEventListener rabbitmqReadOnlyEventListener()
-	{
-		return new RabbitmqReadOnlyEventListener();
-	}
-	
-	@Bean
-	@ConditionalOnClass(Trace.class)
-	RabbitmqListenerTracingInspector rabbitmqListenerTracingInspector()
-	{
-		return new RabbitmqListenerTracingInspector();
-	}	
-	
-	@Bean
-	RabbitmqListenerMdcInspector rabbitmqListenerMdcInspector()
-	{
-		return new RabbitmqListenerMdcInspector();
-	}
-	
+    @Bean
+    RabbitmqReadOnlyEventListener rabbitmqReadOnlyEventListener()
+    {
+        return new RabbitmqReadOnlyEventListener();
+    }
+    
+    @Bean
+    @ConditionalOnClass(Trace.class)
+    RabbitmqListenerTracingInspector rabbitmqListenerTracingInspector()
+    {
+        return new RabbitmqListenerTracingInspector();
+    }    
+    
+    @Bean
+    RabbitmqListenerMdcInspector rabbitmqListenerMdcInspector()
+    {
+        return new RabbitmqListenerMdcInspector();
+    }
+    
 }

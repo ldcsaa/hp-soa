@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.hpsocket.demo</groupId>
         <artifactId>hp-demo</artifactId>
@@ -14,27 +14,27 @@
     </properties>
 
     <dependencies>
-		<dependency>
-			<groupId>io.github.hpsocket.demo</groupId>
-			<artifactId>hp-demo-infra-skywalking-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.github.hpsocket</groupId>
-			<artifactId>hp-soa-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.github.hpsocket</groupId>
-			<artifactId>hp-soa-starter-nacos</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.github.hpsocket</groupId>
-			<artifactId>hp-soa-starter-sentinel</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.github.hpsocket</groupId>
-			<artifactId>hp-soa-starter-skywalking</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>io.github.hpsocket.demo</groupId>
+            <artifactId>hp-demo-infra-skywalking-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-starter-nacos</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-starter-sentinel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-starter-skywalking</artifactId>
+        </dependency>
     </dependencies>
     
     <build>
@@ -82,5 +82,5 @@
                 </configuration>
             </plugin>
         </plugins>
-	</build>
+    </build>
 </project>

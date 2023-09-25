@@ -33,20 +33,20 @@ import io.swagger.v3.oas.models.parameters.HeaderParameter;
 @ConditionalOnProperty(name="springdoc.api-docs.enabled", havingValue="true", matchIfMissing = false)
 public class SwaggerConfig implements WebMvcConfigurer
 {
-	private static final String SWAGGER_UI_REDIRECT_PATH = "/swagger-ui";
-	
-	@Value("${springdoc.api-docs.path:/v3/api-docs}")
-	String apiDocPath;
-	@Value("${springdoc.swagger-ui.path:/swagger-ui.html}")
-	String swaggerUiPath;
+    private static final String SWAGGER_UI_REDIRECT_PATH = "/swagger-ui";
+    
+    @Value("${springdoc.api-docs.path:/v3/api-docs}")
+    String apiDocPath;
+    @Value("${springdoc.swagger-ui.path:/swagger-ui.html}")
+    String swaggerUiPath;
 
-	private final SwaggerProperties swaggerProperties;
+    private final SwaggerProperties swaggerProperties;
 
-	public SwaggerConfig(SwaggerProperties swaggerProperties)
-	{
-		this.swaggerProperties = swaggerProperties;
-	}
-	
+    public SwaggerConfig(SwaggerProperties swaggerProperties)
+    {
+        this.swaggerProperties = swaggerProperties;
+    }
+    
     @Bean
     @ConditionalOnMissingBean(OpenAPI.class)
     public OpenAPI springDocOpenAPI()
@@ -58,7 +58,7 @@ public class SwaggerConfig implements WebMvcConfigurer
                     .version(swaggerProperties.getVersion())
                 )
                 .components(new Components()
-            		
+                    
                 )
                 .externalDocs(new ExternalDocumentation()
                     .description("SpringDoc Documentation")
@@ -71,7 +71,7 @@ public class SwaggerConfig implements WebMvcConfigurer
     public OpenApiCustomizer customerGlobalHeaderOpenApiCustomiser()
     {
         return openApi -> openApi.getPaths().values().stream().flatMap(pathItem -> pathItem.readOperations().stream())
-        		.forEach(operation -> operation
+                .forEach(operation -> operation
                     .addParametersItem(new HeaderParameter().name(HEADER_REQUEST_INFO).required(false).example("appCode=; token=; groupId=; requestId=; clientId=; sessionId=; srcAppCode=; version=; extra="))
                     .addParametersItem(new HeaderParameter().name(HEADER_APP_CODE).required(false).example("100"))
                     .addParametersItem(new HeaderParameter().name(HEADER_TOKEN).required(false).example("2d2fc1d30cffa1cf185cfeed9037b658"))
@@ -82,33 +82,33 @@ public class SwaggerConfig implements WebMvcConfigurer
                     .addParametersItem(new HeaderParameter().name(HEADER_SRC_APP_CODE).required(false).example(""))
                     .addParametersItem(new HeaderParameter().name(HEADER_VERSION).required(false).example(""))
                     .addParametersItem(new HeaderParameter().name(HEADER_EXTRA).required(false).example(""))
-	            );
+                );
     }
     
     @Override
-	@SuppressWarnings("unchecked")
-	public void addInterceptors(InterceptorRegistry registry)
-	{
-		try
-		{
-			Field registrationsField = FieldUtils.getField(InterceptorRegistry.class, "registrations", true);
-			List<InterceptorRegistration> registrations = (List<InterceptorRegistration>)ReflectionUtils.getField(registrationsField, registry);
+    @SuppressWarnings("unchecked")
+    public void addInterceptors(InterceptorRegistry registry)
+    {
+        try
+        {
+            Field registrationsField = FieldUtils.getField(InterceptorRegistry.class, "registrations", true);
+            List<InterceptorRegistration> registrations = (List<InterceptorRegistration>)ReflectionUtils.getField(registrationsField, registry);
 
-			if(registrations != null)
-			{
-				for(InterceptorRegistration interceptorRegistration : registrations)
-				{
-					interceptorRegistration
-					.excludePathPatterns(SWAGGER_UI_REDIRECT_PATH + "/**")
-					.excludePathPatterns(swaggerUiPath)
-					.excludePathPatterns(apiDocPath)
-					.excludePathPatterns(apiDocPath + "/**");
-				}
-			}
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
+            if(registrations != null)
+            {
+                for(InterceptorRegistration interceptorRegistration : registrations)
+                {
+                    interceptorRegistration
+                    .excludePathPatterns(SWAGGER_UI_REDIRECT_PATH + "/**")
+                    .excludePathPatterns(swaggerUiPath)
+                    .excludePathPatterns(apiDocPath)
+                    .excludePathPatterns(apiDocPath + "/**");
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
 }

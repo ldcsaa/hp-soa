@@ -6,33 +6,33 @@ import lombok.Getter;
 @Getter
 abstract public class MdcRunnable implements Runnable
 {
-	private final MdcAttr mdcAttr;
+    private final MdcAttr mdcAttr;
 
-	abstract protected void doRun();
+    abstract protected void doRun();
 
-	public MdcRunnable()
-	{
-		this(MdcAttr.fromMdc());
-	}
+    public MdcRunnable()
+    {
+        this(MdcAttr.fromMdc());
+    }
 
-	public MdcRunnable(MdcAttr mdcAttr)
-	{
-		this.mdcAttr = mdcAttr;
-	}
+    public MdcRunnable(MdcAttr mdcAttr)
+    {
+        this.mdcAttr = mdcAttr;
+    }
 
-	@Override
-	public void run()
-	{
-		try
-		{
-			mdcAttr.putMdc();
-			
-			doRun();
-		}
-		finally
-		{
-			mdcAttr.removeMdc();
-		}
-	}
+    @Override
+    public void run()
+    {
+        try
+        {
+            mdcAttr.putMdc();
+            
+            doRun();
+        }
+        finally
+        {
+            mdcAttr.removeMdc();
+        }
+    }
 
 }

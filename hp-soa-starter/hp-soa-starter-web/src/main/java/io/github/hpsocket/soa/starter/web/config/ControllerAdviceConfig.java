@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Import;
 
 /** <b>HP-SOA Web Controller Advice 配置</b> */
 @AutoConfiguration
-@Import	({
-			ControllerRequestAdvice.class,
-			ControllerResponseAdvice.class,
-			ControllerGlobalExceptionAdvice.class
-		})
+@Import    ({
+            ControllerRequestAdvice.class,
+            ControllerResponseAdvice.class,
+            ControllerGlobalExceptionAdvice.class
+        })
 public class ControllerAdviceConfig
 {
 

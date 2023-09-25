@@ -5,9 +5,9 @@ package io.github.hpsocket.soa.framework.web.propertries;
  */
 public interface IServletPathsPropertries
 {
-	String getServletContextPath();
-	String getSpringMvcServletPath();
-	String getManagementEndpointsBasePath();
-	String getSpringdocApiDocsPath();
-	String getSpringdocSwaggerUiPath();
+    String getServletContextPath();
+    String getSpringMvcServletPath();
+    String getManagementEndpointsBasePath();
+    String getSpringdocApiDocsPath();
+    String getSpringdocSwaggerUiPath();
 }
