@@ -6,7 +6,7 @@ import org.springframework.core.Ordered;
 
 import io.github.hpsocket.soa.framework.web.server.init.ServerInitializer;
 
-public class SoaSpringApplicationRunListener implements SpringApplicationRunListener, Ordered
+public class WebServerApplicationRunListener implements SpringApplicationRunListener, Ordered
 {
     @Override
     public void contextPrepared(ConfigurableApplicationContext context)

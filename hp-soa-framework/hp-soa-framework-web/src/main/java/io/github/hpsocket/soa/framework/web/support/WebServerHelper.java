@@ -40,15 +40,15 @@ public class WebServerHelper
     public static final String REQUEST_ATTRIBUTE_INFO       = "__request.attribute.info__";
     
     public static final String HEADER_REQUEST_INFO          = "X-Request-Info";
-    public static final String HEADER_REQUEST_ID            = "requestId";
-    public static final String HEADER_CLIENT_ID             = "clientId";
-    public static final String HEADER_SESSION_ID            = "sessionId";
-    public static final String HEADER_TOKEN                 = "token";
-    public static final String HEADER_APP_CODE              = "appCode";
-    public static final String HEADER_SRC_APP_CODE          = "srcAppCode";
-    public static final String HEADER_GROUP_ID              = "groupId";
-    public static final String HEADER_VERSION               = "version";
-    public static final String HEADER_EXTRA                 = "extra";
+    public static final String HEADER_REQUEST_ID            = "X-Request-Id";
+    public static final String HEADER_CLIENT_ID             = "X-Client-Id";
+    public static final String HEADER_SESSION_ID            = "X-Session-Id";
+    public static final String HEADER_TOKEN                 = "X-Token";
+    public static final String HEADER_APP_CODE              = "X-App-Code";
+    public static final String HEADER_SRC_APP_CODE          = "X-Src-App-Code";
+    public static final String HEADER_GROUP_ID              = "X-Group-Id";
+    public static final String HEADER_VERSION               = "X-Version";
+    public static final String HEADER_EXTRA                 = "X-Extra";
 
     public static final int DEFAULT_COOKIE_MAX_AGE  = 10 * 365 * 24 * 60 * 60;
     public static final String DEFAULT_CHARSET      = GeneralHelper.DEFAULT_ENCODING;
@@ -97,8 +97,8 @@ public class WebServerHelper
     /** 检测 HTTP 请求是否包含 Body */
     public static final boolean isHasBodyRequest(String method)
     {
-        return    GeneralHelper.isStrNotEmpty(method)
-                && (POST.equalsIgnoreCase(method) || PUT.equalsIgnoreCase(method) || PATCH.equals(method));    
+        return GeneralHelper.isStrNotEmpty(method) && 
+               (POST.equalsIgnoreCase(method) || PUT.equalsIgnoreCase(method) || PATCH.equals(method));    
     }
 
     /** 检测 HTTP Content-Type 是否为 JSON 类型 */
@@ -158,7 +158,7 @@ public class WebServerHelper
         cookie.setMaxAge(maxAge);
         cookie.setHttpOnly(HTTP_ONLY_COOKIE);
 
-        String host = req.getHeader("Host");
+        String host = getHeader(req, "Host");
 
         if(GeneralHelper.isStrNotEmpty(host))
         {        
@@ -205,17 +205,17 @@ public class WebServerHelper
     /** 获取 HTTP 请求 User-Agent */
     public static final String getUserAgent(HttpServletRequest req)
     {
-        return req.getHeader("User-Agent");
+        return getHeader(req, "User-Agent");
     }
     
-    /** 获取 HTTP 请求客户端 IP */
-    public static final String getIpAddr(HttpServletRequest request)
+    /** 获取 HTTP 请求客户端 IP 地址 */
+    public static final String getRequestAddr(HttpServletRequest request)
     {
-        String ip = request.getHeader("X-Real-IP");
+        String ip = getHeader(request, "X-Real-IP");
         
         if(GeneralHelper.isStrEmpty(ip))
         {
-            String forwards = request.getHeader("X-Forwarded-For");
+            String forwards = getHeader(request, "X-Forwarded-For");
             
             if(GeneralHelper.isStrNotEmpty(forwards))
             {
@@ -276,7 +276,7 @@ public class WebServerHelper
         if(GeneralHelper.isStrEmpty(encoding))
             encoding = DEFAULT_REQUEST_CHARSET;
         
-        String header = request.getHeader(HEADER_REQUEST_INFO);
+        String header = getHeader(request, HEADER_REQUEST_INFO);
         
         if(GeneralHelper.isStrNotEmpty(header))
         {
@@ -304,6 +304,44 @@ public class WebServerHelper
         request.setAttribute(REQUEST_ATTRIBUTE_INFO, infos);
         
         return infos;
+    }
+    
+    /** 解析 HTTP 请求字段 */
+    public static final String parseRequestField(HttpServletRequest request, Map<String, String> attrs, String name, boolean checkCookie)
+    {
+        String value = attrs.get(name);
+        
+        if(GeneralHelper.isStrEmpty(value))
+        {
+            value = getHeader(request, name);
+            
+            if(GeneralHelper.isStrEmpty(value) && checkCookie)
+            {
+                Cookie cookie = getCookie(request, name);
+                
+                if(cookie != null)
+                    value = cookie.getValue();
+            }
+        }
+
+        return value;
+    }
+    
+    /** 获取 HTTP 请求头（兼容小写） */
+    public static final String getHeader(HttpServletRequest request, String name)
+    {
+        return getHeader(request, name, true);
+    }
+    
+    /** 获取 HTTP 请求头（可设置是否兼容小写） */
+    public static final String getHeader(HttpServletRequest request, String name, boolean lcCompatible)
+    {
+        String value = request.getHeader(name);
+        
+        if(value == null && lcCompatible)
+            value = request.getHeader(name.toLowerCase());
+        
+        return value;
     }
 
     /** 创建调用链 MDC 相关属性 */

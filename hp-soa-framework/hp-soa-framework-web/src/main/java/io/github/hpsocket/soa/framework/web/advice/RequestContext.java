@@ -203,7 +203,7 @@ public class RequestContext
                                                         GeneralHelper.str2Long(groupId));
         reqAttr.setVersion(version);
         reqAttr.setExtra(extra);
-        reqAttr.setClientAddr(WebServerHelper.getIpAddr(request));
+        reqAttr.setClientAddr(WebServerHelper.getRequestAddr(request));
         reqAttr.setRequestUri(requestUri);
         reqAttr.setRequestPath(requestPath);
         reqAttr.setRequestMethod(requestMethod);
@@ -214,23 +214,4 @@ public class RequestContext
         return reqAttr;
     }
 
-    private static String parseRequestField(HttpServletRequest request, Map<String, String> attrs, String name, boolean checkCookie)
-    {
-        String value = attrs.get(name);
-        
-        if(GeneralHelper.isStrEmpty(value))
-        {
-            value = request.getHeader(name);
-            
-            if(GeneralHelper.isStrEmpty(value) && checkCookie)
-            {
-                Cookie cookie = getCookie(request, name);
-                
-                if(cookie != null)
-                    value = cookie.getValue();
-            }
-        }
-
-        return value;
-    }
 }

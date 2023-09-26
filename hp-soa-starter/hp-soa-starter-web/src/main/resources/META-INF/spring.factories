@@ -1,2 +1,2 @@
-org.springframework.boot.SpringApplicationRunListener=io.github.hpsocket.soa.starter.web.bootstrap.SoaSpringApplicationRunListener
+org.springframework.boot.SpringApplicationRunListener=io.github.hpsocket.soa.starter.web.bootstrap.WebServerApplicationRunListener
 org.springframework.boot.env.EnvironmentPostProcessor=io.github.hpsocket.soa.starter.web.bootstrap.ExtendedPropertiesFilePostProcessor

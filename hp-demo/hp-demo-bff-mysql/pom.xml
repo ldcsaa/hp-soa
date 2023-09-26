@@ -27,10 +27,6 @@
             <groupId>io.github.hpsocket</groupId>
             <artifactId>hp-soa-starter-nacos</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.github.hpsocket</groupId>
-            <artifactId>hp-soa-starter-leaf</artifactId>
-        </dependency>
     </dependencies>
     
     <build>

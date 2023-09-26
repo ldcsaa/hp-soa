@@ -261,10 +261,20 @@ public class ServiceException extends RuntimeException
 
     public static void logServiceException(Logger logger, ServiceException e)
     {
-        logServiceException(logger, e.getMessage(), e);
+        logServiceException(logger, e.getMessage(), e, true);
+    }
+
+    public static void logServiceException(Logger logger, ServiceException e, boolean printWarnStackTrace)
+    {
+        logServiceException(logger, e.getMessage(), e, printWarnStackTrace);
     }
 
     public static void logServiceException(Logger logger, String msg, ServiceException e)
+    {
+        logServiceException(logger, msg, e, true);
+    }
+
+    public static void logServiceException(Logger logger, String msg, ServiceException e, boolean printWarnStackTrace)
     {
         final String FORMAT = "(SERVICE EXCEPTION - SC: {}, RC: {}) -> {}";
         final Integer statusCode = e.getStatusCode();
@@ -277,7 +287,12 @@ public class ServiceException extends RuntimeException
             if(e instanceof UnimportantException)
                 logger.info(FORMAT, statusCode, resultCode, msg);
             else
-                logger.warn(FORMAT, statusCode, resultCode, msg, e);
+            {
+                if(printWarnStackTrace)
+                    logger.warn(FORMAT, statusCode, resultCode, msg, e);
+                else
+                    logger.warn(FORMAT, statusCode, resultCode, msg);
+            }
         }
     }
 
