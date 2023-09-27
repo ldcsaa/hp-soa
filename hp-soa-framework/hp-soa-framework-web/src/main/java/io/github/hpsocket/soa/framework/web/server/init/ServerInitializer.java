@@ -32,16 +32,16 @@ import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 public class ServerInitializer
 {
     /** 系统属性配置文件 Key */
-    public static final String SYSTEM_PROPERTIES_FILE_KEY                            = "hp.soa.system.properties.file";
+    public static final String SYSTEM_PROPERTIES_FILE_KEY                           = "hp.soa.system.properties.file";
     /** 默认系统属性配置文件 */
-    public static final String DEFAULT_SYSTEM_PROPERTIES_FILE_PATH                    = "/opt/hp-soa/config/system-config.properties";
+    public static final String DEFAULT_SYSTEM_PROPERTIES_FILE_PATH                  = "/opt/hp-soa/config/system-config.properties";
     
     private static final String LOCAL_IP_ADDRESS                                    = "local.ip.address";
-    private static final String LOG4J2_CONTEXT_SELECTOR                                = "log4j2.contextSelector";
-    private static final String LOG4J2_CONTEXT_SELECTOR_VALUE                        = "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector";
-    private static final String LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP                = "log4j2.garbagefreeThreadContextMap";
+    private static final String LOG4J2_CONTEXT_SELECTOR                             = "log4j2.contextSelector";
+    private static final String LOG4J2_CONTEXT_SELECTOR_VALUE                       = "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector";
+    private static final String LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP              = "log4j2.garbagefreeThreadContextMap";
     private static final String LOG4J2_IS_THREAD_CONTEXT_MAP_INHERITABLE            = "log4j2.isThreadContextMapInheritable";
-    private static final String LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED    = "log4j.layout.jsonTemplate.locationInfoEnabled";
+    private static final String LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED   = "log4j.layout.jsonTemplate.locationInfoEnabled";
     
     private static final DeferredLogs LOG_FACTORY = new DeferredLogs();
     private static final Log LOGGER = LOG_FACTORY.getLog(ServerInitializer.class);
@@ -107,23 +107,28 @@ public class ServerInitializer
     
     public static final boolean setSystemProperties(String key, Object value, boolean override)
     {
+        String oldVal = System.getProperty(key);
+        
         if(value == null)
         {
-            System.getProperties().remove(key);
-            return true;
+            if(oldVal != null && override)
+            {
+                System.getProperties().remove(key);
+                return true;
+            }
+            
+            return false;
         }
-        
-        boolean rs = true;
-        String realVal = value.toString();
+
+        boolean rs    = true;
+        String newVal = value.toString();
         
         if(override)
-            System.setProperty(key, realVal);
+            System.setProperty(key, newVal);
         else
         {
-            String val = System.getProperty(key);
-            
-            if(GeneralHelper.isStrEmpty(val))
-                System.setProperty(key, realVal);
+            if(oldVal == null)
+                System.setProperty(key, newVal);
             else
                 rs = false;
         }
