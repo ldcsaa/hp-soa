@@ -1,3 +1,9 @@
 Example:
 
--javaagent:E:\Servers\skywalking-agent\skywalking-agent.jar=agent.service_name=hp-demo-infra-skywalking-service,collector.backend_service=192.168.56.23:11800,logging.level=WARN,logging.dir=/data/logs/skywalking,logging.file_name=skywalking-agent_hp-demo-infra-skywalking-service.log,logging.max_file_size=10485760,logging.max_history_files=10
+-javaagent:/opt/skywalking-agent/skywalking-agent.jar=\
+agent.service_name=hp-demo-infra-skywalking-service,\
+collector.backend_service=192.168.56.23:11800,\
+logging.level=WARN,logging.dir=/data/logs/skywalking,\
+logging.file_name=skywalking-agent_hp-demo-infra-skywalking-service.log,\
+logging.max_file_size=10485760,\
+logging.max_history_files=10\
