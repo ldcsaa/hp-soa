@@ -55,9 +55,6 @@ import io.github.hpsocket.soa.starter.web.properties.WebProperties.ProxyProperti
 @EnableConfigurationProperties({WebProperties.class, SecurityProperties.class})
 public class WebConfig implements WebMvcConfigurer
 {
-    //@Autowired
-    //private ApplicationContext applicationContext;
-
     private final WebProperties webProperties;
     private final SecurityProperties securityProperties;
     
