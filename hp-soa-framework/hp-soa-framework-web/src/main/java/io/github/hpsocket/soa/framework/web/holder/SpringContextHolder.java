@@ -2,19 +2,17 @@
 package io.github.hpsocket.soa.framework.web.holder;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 
 import io.github.hpsocket.soa.framework.web.service.TracingContext;
 
 /** <b>Spring 上下文持有者</b> */
-public class SpringContextHolder implements ApplicationContextAware
+public class SpringContextHolder
 {
     private static ApplicationContext applicationContext;
     private static TracingContext tracingContext;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
+    public SpringContextHolder(ApplicationContext applicationContext)
     {
         SpringContextHolder.applicationContext = applicationContext;
         SpringContextHolder.tracingContext = getBean(TracingContext.class, false);

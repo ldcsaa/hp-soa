@@ -1,16 +1,19 @@
 # app
-hp.soa.web:
-  app:
-    id: "0010100011"
-    name: ${project.artifactId}
-    version: ${project.version}
-    organization: HP-Socket
-    owner: Kingfisher
-  component-scan:
-    base-package: ${project.groupId}
-  access-verification:
-    enabled: true
-    default-access-policy: maybe_login
+hp.soa:
+  web:
+    app:
+      id: "0010100011"
+      name: ${project.artifactId}
+      version: ${project.version}
+      organization: HP-Socket
+      owner: Kingfisher
+    component-scan:
+      base-package: ${project.groupId}
+    access-verification:
+      enabled: true
+      default-access-policy: maybe_login
+  # Redisson Client 实例名称（默认：空，自动查找）
+  #job.exclusive.redisson-client-name: firstRedissonClient
 
 # logging
 logging.config: classpath:log4j2-kafka.xml
