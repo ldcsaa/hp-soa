@@ -50,11 +50,11 @@ public class ServerInitializer
     {
         loadExternalSystemProperties();
 
-        setSystemProperties(LOCAL_IP_ADDRESS, SystemUtil.getAddress());
-        setSystemProperties(LOG4J2_CONTEXT_SELECTOR, LOG4J2_CONTEXT_SELECTOR_VALUE);
-        setSystemProperties(LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP, Boolean.TRUE);
-        setSystemProperties(LOG4J2_IS_THREAD_CONTEXT_MAP_INHERITABLE, Boolean.TRUE);
-        setSystemProperties(LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED, Boolean.TRUE);
+        GeneralHelper.setSystemPropertyIfAbsent(LOCAL_IP_ADDRESS, SystemUtil.getAddress());
+        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_CONTEXT_SELECTOR, LOG4J2_CONTEXT_SELECTOR_VALUE);
+        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP, Boolean.TRUE);
+        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_IS_THREAD_CONTEXT_MAP_INHERITABLE, Boolean.TRUE);
+        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED, Boolean.TRUE);
     }
     
     private static void loadExternalSystemProperties()
@@ -82,7 +82,7 @@ public class ServerInitializer
             PropertySource<?> propertySource = factory.createPropertySource(filePath, new EncodedResource(resource));
             Properties props = (Properties)propertySource.getSource();
             
-            props.forEach((k, v) -> setSystemProperties((String)k, (String)v));
+            props.forEach((k, v) -> GeneralHelper.setSystemPropertyIfAbsent((String)k, (String)v));
         }
         catch(IOException e)
         {
@@ -99,40 +99,5 @@ public class ServerInitializer
     {
         LOG_FACTORY.switchOverAll();
     }
-
-    public static final boolean setSystemProperties(String key, Object value)
-    {
-        return setSystemProperties(key, value, false);
-    }
     
-    public static final boolean setSystemProperties(String key, Object value, boolean override)
-    {
-        String oldVal = System.getProperty(key);
-        
-        if(value == null)
-        {
-            if(oldVal != null && override)
-            {
-                System.getProperties().remove(key);
-                return true;
-            }
-            
-            return false;
-        }
-
-        boolean rs    = true;
-        String newVal = value.toString();
-        
-        if(override)
-            System.setProperty(key, newVal);
-        else
-        {
-            if(oldVal == null)
-                System.setProperty(key, newVal);
-            else
-                rs = false;
-        }
-        
-        return rs;
-    }
 }

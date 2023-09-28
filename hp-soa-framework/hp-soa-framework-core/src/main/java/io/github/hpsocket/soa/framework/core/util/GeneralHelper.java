@@ -1417,6 +1417,59 @@ public class GeneralHelper
             tryClear(map);
         }
     }
+    
+    /** 获取 System Property */
+    public static final String getSystemProperty(String key)
+    {
+        return System.getProperty(key);
+    }
+
+    /** 获取 System Property，不存在则返回 <i>def</i> 参数值 */
+    public static final String getSystemProperty(String key, String def)
+    {
+        return System.getProperty(key, def);
+    }
+
+    /** 当 System Property 不存在时，设置 System Property */
+    public static final boolean setSystemPropertyIfAbsent(String key, Object value)
+    {
+        return setSystemProperty(key, value, false);
+    }
+    
+    /** 设置 System Property */
+    public static final boolean setSystemProperty(String key, Object value)
+    {
+        return setSystemProperty(key, value, true);
+    }
+    
+    /** 设置 System Property，<i>def</i> 参数值标识是否覆盖现有值 */
+    public static final boolean setSystemProperty(String key, Object value, boolean override)
+    {
+        String oldVal = System.getProperty(key);
+        
+        if(!override && oldVal != null)
+            return false;
+        
+        if(value == null)
+            System.getProperties().remove(key);
+        else
+            System.setProperty(key, value.toString());
+        
+        return true;
+    }
+    
+    /** 获取 System Env */
+    public static final String getSystemEnv(String key)
+    {
+        return System.getenv(key);
+    }
+
+    /** 获取所有 System Env */
+    public static final Map<String, String> getSystemEnvMap()
+    {
+        return System.getenv();
+    }
+
 
     /** 获取当前 JVM 进程的 ID */
     public static final int getProcessId()
@@ -1427,13 +1480,13 @@ public class GeneralHelper
     /** 获取当前 JVM 进程的 Java 版本 */
     public static final String getJavaVersion()
     {
-        return System.getProperty("java.version");
+        return getSystemProperty("java.version");
     }
 
     /** 获取当前操作系统的名称 */
     public static final String getOSName()
     {
-        return System.getProperty("os.name");
+        return getSystemProperty("os.name");
     }
 
     /** 检查当前操作系统是否为 Windows 系列 */
