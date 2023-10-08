@@ -52,13 +52,13 @@
 </dependencies>
 ```
 2. 应用配置（bootstrap.yml）
-  - hp.soa.web
-  - dubbo
-  - server
-  - spring
-  - management
-  - springdoc
+    - hp.soa.web
+    - dubbo
+    - server
+    - spring
+    - management
+    - springdoc
 3. 实现HTTP鉴权接口（可选）
-  - 如果是Gateway/BFF应用，并且`hp.soa.web.access-verification.enabled = true`，则需要实现`io.github.hpsocket.soa.framework.web.service.AccessVerificationService`接口，用于HTTP调用鉴权。
+    - 如果是Gateway/BFF应用，并且`hp.soa.web.access-verification.enabled = true`，则需要实现`io.github.hpsocket.soa.framework.web.service.AccessVerificationService`接口，用于HTTP调用鉴权。
 4. 启动应用
-  - 以`io.github.hpsocket.soa.framework.web.server.main.AppStarter`作为启动类，启动应用程序。
+    - 以`io.github.hpsocket.soa.framework.web.server.main.AppStarter`作为启动类，启动应用程序。
