@@ -51,14 +51,18 @@
     </dependency>
 </dependencies>
 ```
-2. 应用配置（bootstrap.yml）
+2. 修改应用配置（参考 Demo [hp-demo-bff-basic](hp-demo/hp-demo-bff-basic/src/main/resources/bootstrap.yml)，[hp-demo-bff-nacos](hp-demo/hp-demo-bff-nacos/src/main/resources/bootstrap.yml)）
     - hp.soa.web
     - dubbo
     - server
     - spring
     - management
     - springdoc
-3. 实现HTTP鉴权接口（可选）
-    - 如果是Gateway/BFF应用，并且`hp.soa.web.access-verification.enabled = true`，则需要实现`io.github.hpsocket.soa.framework.web.service.AccessVerificationService`接口，用于HTTP请求鉴权。
-4. 启动应用
-    - 以`io.github.hpsocket.soa.framework.web.server.main.AppStarter`作为启动类，启动应用程序。
+3. 修改全局配置（可选）
+    - 系统配置文件，用于设置系统属性，默认配置文件：`/opt/hp-soa/config/system-config.properties`参考：[system-config.properties](misc/opt/hp-soa/config/system-config.properties)
+    - 扩展配置文件，用于配置注册中心地址、配置中心地址等公共属性，默认配置文件：`/opt/hp-soa/config/extended-config.properties`参考：[extended-config.properties](misc/opt/hp-soa/config/extended-config.properties)
+4. 实现HTTP鉴权接口（可选）
+    - 如果是Gateway/BFF应用，并且应用属性`hp.soa.web.access-verification.enabled = true`，则需要实现[AccessVerificationService](hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/service/AccessVerificationService.java)接口，用于HTTP请求鉴权。
+5. 启动应用
+    - 以[io.github.hpsocket.soa.framework.web.server.main.AppStarter](hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/server/main/AppStarter.java)作为启动类，启动应用程序。
+    - JVM启动参数参考：[java-opts.txt](misc/jvm/java-opts.txt)
