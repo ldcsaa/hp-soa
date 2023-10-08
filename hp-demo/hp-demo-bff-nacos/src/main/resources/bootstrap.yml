@@ -34,9 +34,6 @@ spring.cloud.nacos.config:
     - group: GLOBAL_GROUP
       data-id: dubbo.yml
       refresh: true
-    - group: GLOBAL_GROUP
-      data-id: redis.yml
-      refresh: true
 
 # dubbo
 dubbo.protocols:

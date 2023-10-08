@@ -1,2 +1,64 @@
-# hp-soa
-功能完备，简单易用，高度可扩展的 Java 微服务框架。
+#  HP-SOA
+功能完备，简单易用，高度可扩展的Java微服务框架。
+
+### 技术架构
+![技术架构](misc/doc/Technical-Architecture.png)
+
+### 技术集成
+- Web服务框架：spring-boot 3.x
+- 微服务框架：Dubbo 3.x
+- 服务注册中心：Nacos
+- 配置中心：Nacos
+- 服务治理中心：Dubbo Admin
+- 流量控制中心：Sentinel Dashboard + Nacos
+- 数据库：MySQL、Druid、mybatis-plus（支持多数据源）
+- 缓存：Redis + Redisson（支持多实例）
+- 消息总线：RabbitMQ（支持多实例，支持可靠消息）
+- 分布式Job：xxl-job
+- 轻量级Job：Redisson + Spring Scheduled
+- 分布式事务：Seata
+- 全局ID：Leaf（支持 Snowflake ID 和 Segment ID）
+- 统一日志：Log4j + Kafka + ELK
+- 调用链跟踪：Skywalking
+- 监控告警：Prometheus + Grafana + Alert Manager
+
+### 应用接入（参考：[hp-demo](hp-demo/)）
+1. pom.xml 中添加 HP-SOA 依赖
+```xml
+<dependencyManagement>
+    <dependencies>
+        <!-- 添加 hp-soa 依赖管理 -->
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-dependencies</artifactId>
+            <version>${hp-soa.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+    <!-- 引用 hp-soa-starter-web -->
+    <dependency>
+        <groupId>io.github.hpsocket</groupId>
+        <artifactId>hp-soa-starter-web</artifactId>
+    </dependency>
+    <!-- 引用 hp-soa 其它 starter -->
+    <dependency>
+        <groupId>io.github.hpsocket</groupId>
+        <artifactId>hp-soa-starter-xxx</artifactId>
+    </dependency>
+</dependencies>
+```
+2. 应用配置（bootstrap.yml）
+    - hp.soa.web
+    - dubbo
+    - server
+    - spring
+    - management
+    - springdoc
+3. 实现HTTP鉴权接口（可选）
+    - 如果是Gateway/BFF应用，并且`hp.soa.web.access-verification.enabled = true`，则需要实现`io.github.hpsocket.soa.framework.web.service.AccessVerificationService`接口，用于HTTP请求鉴权。
+4. 启动应用
+    - 以`io.github.hpsocket.soa.framework.web.server.main.AppStarter`作为启动类，启动应用程序。
