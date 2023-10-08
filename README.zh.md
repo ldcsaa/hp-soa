@@ -51,7 +51,7 @@
     </dependency>
 </dependencies>
 ```
-2. 修改应用配置（bootstrap.yml）
+2. 修改应用配置（参考 Demo [hp-demo-bff-basic](hp-demo/hp-demo-bff-basic/src/main/resources/bootstrap.yml)，[hp-demo-bff-nacos](hp-demo/hp-demo-bff-nacos/src/main/resources/bootstrap.yml)）
     - hp.soa.web
     - dubbo
     - server
