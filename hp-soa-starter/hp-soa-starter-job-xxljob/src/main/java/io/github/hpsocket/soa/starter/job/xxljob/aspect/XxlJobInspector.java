@@ -121,11 +121,13 @@ public class XxlJobInspector
         if(exceptionHandler == null)
             return;
         
+        long timestamp = System.currentTimeMillis();
+        
         if(asyncService == null)
-            exceptionHandler.handleException(jobName, jobId, param, e);
+            exceptionHandler.handleException(jobName, jobId, param, timestamp, e);
         else
         {
-            asyncService.execute(() -> exceptionHandler.handleException(jobName, jobId, param, e));
+            asyncService.execute(() -> exceptionHandler.handleException(jobName, jobId, param, timestamp, e));
         }
     }
 }

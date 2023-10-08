@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class XxlJobExceptionHandlerImpl implements XxlJobExceptionHandler
 {
     @Override
-    public void handleException(String jobName, long jobId, String param, Exception e)
+    public void handleException(String jobName, long jobId, String param, long timestamp, Exception e)
     {
         log.info("handle xxl-job exception : (jobName: {}, jobId: {}, param: '{}', exception: {})", jobName, jobId, param, e);
     }

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ExclusiveJobExceptionHandlerImpl implements ExclusiveJobExceptionHandler
 {
     @Override
-    public void handleException(String jobPrefix, String jobName, Exception e)
+    public void handleException(String jobPrefix, String jobName, long timestamp, Exception e)
     {
         log.info("handle exclusive job exception : (jobPrefix: {}, jobName: {}, exception: {})", jobPrefix, jobName, e);
     }
