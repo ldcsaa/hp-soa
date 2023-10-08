@@ -18,7 +18,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 /** <b>默认应用程序启动器</b><br>
  * 启动应用程序
  */
-@SpringBootApplication(exclude = {    DataSourceAutoConfiguration.class,
+@SpringBootApplication(exclude = {  DataSourceAutoConfiguration.class,
                                     RedisAutoConfiguration.class,
                                     RedisReactiveAutoConfiguration.class,
                                     RedisRepositoriesAutoConfiguration.class,
