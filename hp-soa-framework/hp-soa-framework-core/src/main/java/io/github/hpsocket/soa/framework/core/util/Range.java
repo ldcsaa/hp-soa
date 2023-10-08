@@ -13,7 +13,7 @@ public class Range<T extends Number>
     
     public Range(T begin, T end)
     {
-        this.begin    = begin;
+        this.begin  = begin;
         this.end    = end;
     }
 

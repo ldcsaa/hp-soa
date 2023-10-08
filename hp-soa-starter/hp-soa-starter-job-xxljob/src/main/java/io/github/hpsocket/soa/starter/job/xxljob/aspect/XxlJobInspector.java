@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Order(0)
 public class XxlJobInspector
 {
-    private static final int SKIP_RESULT_CODE     = 202;
+    private static final int SKIP_RESULT_CODE    = 202;
     private static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
                                                  + "@annotation(com.xxl.job.core.handler.annotation.XxlJob)";
     
@@ -50,10 +50,10 @@ public class XxlJobInspector
         MdcAttr mdcAttr = WebServerHelper.createMdcAttr();        
 
         XxlJob job = ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
-        Assert.notNull(job, "XxlJob annotation not found");
+        Assert.notNull(job, "@XxlJob annotation not found");
         
-        String jobName    = job.value();
-        long jobId        = XxlJobHelper.getJobId();
+        String jobName  = job.value();
+        long jobId      = XxlJobHelper.getJobId();
         String param    = XxlJobHelper.getJobParam();
             
         try
@@ -121,11 +121,13 @@ public class XxlJobInspector
         if(exceptionHandler == null)
             return;
         
+        long timestamp = System.currentTimeMillis();
+        
         if(asyncService == null)
-            exceptionHandler.handleException(jobName, jobId, param, e);
+            exceptionHandler.handleException(jobName, jobId, param, timestamp, e);
         else
         {
-            asyncService.execute(() -> exceptionHandler.handleException(jobName, jobId, param, e));
+            asyncService.execute(() -> exceptionHandler.handleException(jobName, jobId, param, timestamp, e));
         }
     }
 }

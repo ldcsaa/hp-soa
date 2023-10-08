@@ -163,15 +163,15 @@ public class RequestContext
     
     public static final RequestAttribute parseRequestAttribute(HttpServletRequest request, HttpServletResponse response)
     {
-        long timestamp                 = System.currentTimeMillis();
+        long timestamp               = System.currentTimeMillis();
         Map<String, String> reqInfos = parseRequestInfo(request);
         
-        String appCode        = parseRequestField(request, reqInfos, HEADER_APP_CODE, false);
-        String srcAppCode    = parseRequestField(request, reqInfos, HEADER_SRC_APP_CODE, false);
-        String version        = parseRequestField(request, reqInfos, HEADER_VERSION, false);
+        String appCode      = parseRequestField(request, reqInfos, HEADER_APP_CODE, false);
+        String srcAppCode   = parseRequestField(request, reqInfos, HEADER_SRC_APP_CODE, false);
+        String version      = parseRequestField(request, reqInfos, HEADER_VERSION, false);
         String extra        = parseRequestField(request, reqInfos, HEADER_EXTRA, false);
         String token        = parseRequestField(request, reqInfos, HEADER_TOKEN, true);
-        String groupId        = parseRequestField(request, reqInfos, HEADER_GROUP_ID, false);
+        String groupId      = parseRequestField(request, reqInfos, HEADER_GROUP_ID, false);
         String sessionId    = parseRequestField(request, reqInfos, HEADER_SESSION_ID, true);
         String requestId    = parseRequestField(request, reqInfos, HEADER_REQUEST_ID, false);
         String clientId     = parseRequestField(request, reqInfos, HEADER_CLIENT_ID, false);
@@ -194,8 +194,8 @@ public class RequestContext
         if(GeneralHelper.isStrEmpty(requestId))
             requestId = WebServerHelper.randomUUID();
 
-        String requestUri     = WebServerHelper.getRequestUri(request);
-        String requestPath     = WebServerHelper.getRequestPath(request);
+        String requestUri    = WebServerHelper.getRequestUri(request);
+        String requestPath   = WebServerHelper.getRequestPath(request);
         String requestMethod = WebServerHelper.getRequestMethod(request);
         
         RequestAttribute reqAttr = new RequestAttribute(appCode, srcAppCode, token,
@@ -203,7 +203,7 @@ public class RequestContext
                                                         GeneralHelper.str2Long(groupId));
         reqAttr.setVersion(version);
         reqAttr.setExtra(extra);
-        reqAttr.setClientAddr(WebServerHelper.getIpAddr(request));
+        reqAttr.setClientAddr(WebServerHelper.getRequestAddr(request));
         reqAttr.setRequestUri(requestUri);
         reqAttr.setRequestPath(requestPath);
         reqAttr.setRequestMethod(requestMethod);
@@ -214,23 +214,4 @@ public class RequestContext
         return reqAttr;
     }
 
-    private static String parseRequestField(HttpServletRequest request, Map<String, String> attrs, String name, boolean checkCookie)
-    {
-        String value = attrs.get(name);
-        
-        if(GeneralHelper.isStrEmpty(value))
-        {
-            value = request.getHeader(name);
-            
-            if(GeneralHelper.isStrEmpty(value) && checkCookie)
-            {
-                Cookie cookie = getCookie(request, name);
-                
-                if(cookie != null)
-                    value = cookie.getValue();
-            }
-        }
-
-        return value;
-    }
 }

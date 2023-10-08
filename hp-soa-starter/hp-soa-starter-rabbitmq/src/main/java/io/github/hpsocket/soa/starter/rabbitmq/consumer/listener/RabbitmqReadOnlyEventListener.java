@@ -20,24 +20,28 @@ public class RabbitmqReadOnlyEventListener implements ApplicationListener<ReadOn
     @Override
     public void onApplicationEvent(ReadOnlyEvent event)
     {
-        boolean readOnly = event.isReadOnly();
-        boolean initial  =event.isInitial();
-        
-        if(!initial)
+        synchronized(RabbitmqReadOnlyEventListener.class)
         {
-            log.info("receive read-only switch event (read-only: {}), prepare to {} all consumers", readOnly, readOnly ? "STOP" : "START");
+            boolean readOnly = event.isReadOnly();
+            boolean initial  = event.isInitial();
             
-            if(readOnly)
-                registry.stop();
-            else
-                registry.start();            
+            if(!initial)
+                log.info("receive read-only switch event (read-only: {}), prepare to {} RabbitListenerEndpointRegistry", readOnly, readOnly ? "STOP" : "START");
+            else if(readOnly)
+                log.info("application is read-only, then STOP RabbitListenerEndpointRegistry");
+            
+            doSwitch(readOnly);
         }
-        else if(readOnly && registry.isRunning())
-        {
-            log.info("application is read-only, then STOP RabbitListenerEndpointRegistry");
-
+    }
+    
+    private void doSwitch(boolean readOnly)
+    {
+        boolean running = registry.isRunning();
+        
+        if(readOnly && running)
             registry.stop();
-        }
+        else if(!readOnly && !running)
+            registry.start();
     }
 
     @Override

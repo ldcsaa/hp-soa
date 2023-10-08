@@ -32,7 +32,8 @@ import static io.github.hpsocket.soa.framework.web.annotation.AccessVerification
 @Order(0)
 public class AccessVerificationInspector
 {
-    static final String POINTCUT_PATTERN = "execution (public io.github.hpsocket.soa.framework.web.model.Response *.*(..)) && @within(org.springframework.web.bind.annotation.RestController)";
+    static final String POINTCUT_PATTERN    = "execution (public io.github.hpsocket.soa.framework.web.model.Response *.*(..))"
+                                            + " && @within(org.springframework.web.bind.annotation.RestController)";
 
     @Pointcut(POINTCUT_PATTERN)
     protected void inspectMethod() {}
@@ -116,14 +117,21 @@ public class AccessVerificationInspector
 
     private Response<Boolean> inspectApp(RequestAttribute reqAttr)
     {
-        String appCode = reqAttr.getAppCode();
+        String appCode    = reqAttr.getAppCode();
+        String srcAppCode = reqAttr.getSrcAppCode();
         
-        if(GeneralHelper.isStrEmpty(appCode))
-            return new Response<>("缺少参数：appCode", PARAM_VALIDATION_ERROR);
+        Pair<Boolean, String> rs = accessVerificationService.verifyAppCode(appCode, srcAppCode);
         
-        if(!accessVerificationService.verifyAppCode(appCode))
-            return new Response<>(APPCODE_NOT_EXIST_EXCEPTION);
-        
+        if(!Boolean.TRUE.equals(rs.getFirst()))
+        {
+            String msg = rs.getSecond();
+            
+            if(GeneralHelper.isStrEmpty(msg))
+                msg = APPCODE_CHECK_EXCEPTION.getMessage();
+            
+            return new Response<>(msg, APPCODE_CHECK_ERROR);
+        }
+
         return new Response<>(Boolean.TRUE);
     }
 
@@ -134,18 +142,18 @@ public class AccessVerificationInspector
         if(GeneralHelper.isStrEmpty(token))
         {
             if(type == MAYBE_LOGIN)
-                return new Response<>(0L);
+                return new Response<>(RequestAttribute.GUEST_USER_ID);
             else
                 return new Response<>(NOT_LOGGED_IN_EXCEPTION);
         }
         
-        Pair<Long, String> rs = accessVerificationService.verifyUserByTokenAndGroupId(token, reqAttr.getGroupId());
+        Pair<Long, String> rs = accessVerificationService.verifyUser(token, reqAttr.getGroupId());
         Long userId = rs.getFirst();
         
         if(userId == null)
         {
             if(type == MAYBE_LOGIN)
-                return new Response<>(0L);
+                return new Response<>(RequestAttribute.GUEST_USER_ID);
             else
             {
                 String msg = rs.getSecond();
@@ -165,10 +173,7 @@ public class AccessVerificationInspector
 
     private Response<Boolean> inspectRole(RequestAttribute reqAttr)
     {
-        if(reqAttr.getGroupId() == null)
-            return new Response<>("缺少参数：groupId", AUTHOR_ERROR);
-        
-        Pair<Boolean, String> rs = accessVerificationService.verifyRouteAuthorized(reqAttr.getRequestUri(), reqAttr.getAppCode(), reqAttr.getGroupId(), reqAttr.getUserId());
+        Pair<Boolean, String> rs = accessVerificationService.verifyAuthorization(reqAttr.getRequestUri(), reqAttr.getAppCode(), reqAttr.getGroupId(), reqAttr.getUserId());
         
         if(!Boolean.TRUE.equals(rs.getFirst()))
         {

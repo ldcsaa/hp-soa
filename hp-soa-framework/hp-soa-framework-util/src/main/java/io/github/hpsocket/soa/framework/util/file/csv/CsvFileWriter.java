@@ -9,10 +9,10 @@ import java.io.OutputStreamWriter;
 /** <b>CSV 文件写入器</b> */
 public class CsvFileWriter extends BufferedWriter
 {
-    public static final char SEPARATOR            = ',';
-    public static final String UTF8_CHARSET        = "UTF-8";
-    public static final String GB18030_CHARSET    = "GB18030";
-    public static final String DEFAULT_CHARSET    = UTF8_CHARSET;
+    public static final char SEPARATOR          = ',';
+    public static final String UTF8_CHARSET     = "UTF-8";
+    public static final String GB18030_CHARSET  = "GB18030";
+    public static final String DEFAULT_CHARSET  = UTF8_CHARSET;
     
     public CsvFileWriter(String fileName) throws IOException
     {

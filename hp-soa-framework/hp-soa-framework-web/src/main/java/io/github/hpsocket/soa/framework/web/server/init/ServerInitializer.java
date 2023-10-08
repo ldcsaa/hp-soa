@@ -32,16 +32,16 @@ import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 public class ServerInitializer
 {
     /** 系统属性配置文件 Key */
-    public static final String SYSTEM_PROPERTIES_FILE_KEY                            = "hp.soa.system.properties.file";
+    public static final String SYSTEM_PROPERTIES_FILE_KEY                           = "hp.soa.system.properties.file";
     /** 默认系统属性配置文件 */
-    public static final String DEFAULT_SYSTEM_PROPERTIES_FILE_PATH                    = "/opt/hp-soa/config/system-config.properties";
+    public static final String DEFAULT_SYSTEM_PROPERTIES_FILE_PATH                  = "/opt/hp-soa/config/system-config.properties";
     
     private static final String LOCAL_IP_ADDRESS                                    = "local.ip.address";
-    private static final String LOG4J2_CONTEXT_SELECTOR                                = "log4j2.contextSelector";
-    private static final String LOG4J2_CONTEXT_SELECTOR_VALUE                        = "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector";
-    private static final String LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP                = "log4j2.garbagefreeThreadContextMap";
+    private static final String LOG4J2_CONTEXT_SELECTOR                             = "log4j2.contextSelector";
+    private static final String LOG4J2_CONTEXT_SELECTOR_VALUE                       = "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector";
+    private static final String LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP              = "log4j2.garbagefreeThreadContextMap";
     private static final String LOG4J2_IS_THREAD_CONTEXT_MAP_INHERITABLE            = "log4j2.isThreadContextMapInheritable";
-    private static final String LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED    = "log4j.layout.jsonTemplate.locationInfoEnabled";
+    private static final String LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED   = "log4j.layout.jsonTemplate.locationInfoEnabled";
     
     private static final DeferredLogs LOG_FACTORY = new DeferredLogs();
     private static final Log LOGGER = LOG_FACTORY.getLog(ServerInitializer.class);
@@ -50,11 +50,11 @@ public class ServerInitializer
     {
         loadExternalSystemProperties();
 
-        setSystemProperties(LOCAL_IP_ADDRESS, SystemUtil.getAddress());
-        setSystemProperties(LOG4J2_CONTEXT_SELECTOR, LOG4J2_CONTEXT_SELECTOR_VALUE);
-        setSystemProperties(LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP, Boolean.TRUE);
-        setSystemProperties(LOG4J2_IS_THREAD_CONTEXT_MAP_INHERITABLE, Boolean.TRUE);
-        setSystemProperties(LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED, Boolean.TRUE);
+        GeneralHelper.setSystemPropertyIfAbsent(LOCAL_IP_ADDRESS, SystemUtil.getAddress());
+        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_CONTEXT_SELECTOR, LOG4J2_CONTEXT_SELECTOR_VALUE);
+        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP, Boolean.TRUE);
+        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_IS_THREAD_CONTEXT_MAP_INHERITABLE, Boolean.TRUE);
+        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED, Boolean.TRUE);
     }
     
     private static void loadExternalSystemProperties()
@@ -82,7 +82,7 @@ public class ServerInitializer
             PropertySource<?> propertySource = factory.createPropertySource(filePath, new EncodedResource(resource));
             Properties props = (Properties)propertySource.getSource();
             
-            props.forEach((k, v) -> setSystemProperties((String)k, (String)v));
+            props.forEach((k, v) -> GeneralHelper.setSystemPropertyIfAbsent((String)k, (String)v));
         }
         catch(IOException e)
         {
@@ -99,35 +99,5 @@ public class ServerInitializer
     {
         LOG_FACTORY.switchOverAll();
     }
-
-    public static final boolean setSystemProperties(String key, Object value)
-    {
-        return setSystemProperties(key, value, false);
-    }
     
-    public static final boolean setSystemProperties(String key, Object value, boolean override)
-    {
-        if(value == null)
-        {
-            System.getProperties().remove(key);
-            return true;
-        }
-        
-        boolean rs = true;
-        String realVal = value.toString();
-        
-        if(override)
-            System.setProperty(key, realVal);
-        else
-        {
-            String val = System.getProperty(key);
-            
-            if(GeneralHelper.isStrEmpty(val))
-                System.setProperty(key, realVal);
-            else
-                rs = false;
-        }
-        
-        return rs;
-    }
 }

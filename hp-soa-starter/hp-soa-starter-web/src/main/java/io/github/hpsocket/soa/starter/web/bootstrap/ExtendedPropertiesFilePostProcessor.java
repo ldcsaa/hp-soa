@@ -2,7 +2,6 @@ package io.github.hpsocket.soa.starter.web.bootstrap;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.logging.Log;
 import org.springframework.boot.SpringApplication;
@@ -31,25 +30,23 @@ import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 public class ExtendedPropertiesFilePostProcessor implements EnvironmentPostProcessor, Ordered
 {
     /** 扩展属性配置文件 Key */
-    public static final String EXTENDED_PROPERTIES_FILE_KEY                = "hp.soa.extended.properties.file";
+    public static final String EXTENDED_PROPERTIES_FILE_KEY          = "hp.soa.extended.properties.file";
     /** 默认扩展属性配置文件 */
-    public static final String DEFAULT_EXTENDED_PROPERTIES_FILE_PATH    = "/opt/hp-soa/config/extended-config.properties";
+    public static final String DEFAULT_EXTENDED_PROPERTIES_FILE_PATH = "/opt/hp-soa/config/extended-config.properties";
     
-    private static AtomicBoolean processed    = new AtomicBoolean();
+    private static boolean hasPrintLog;
     
-    private Log logger;
+    private static Log logger;
 
     public ExtendedPropertiesFilePostProcessor(DeferredLogFactory logFactory)
     {
-        logger = logFactory.getLog(getClass());
+        if(logger == null)
+            logger = logFactory.getLog(getClass());
     }
     
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application)
     {
-        if(!processed.compareAndSet(false, true))
-            return;
-        
         String filePath = environment.getProperty(EXTENDED_PROPERTIES_FILE_KEY);
         
         if(GeneralHelper.isStrEmpty(filePath))
@@ -57,11 +54,14 @@ public class ExtendedPropertiesFilePostProcessor implements EnvironmentPostProce
         
         if(!(new File(filePath).isFile()))
         {
-            logger.warn(String.format("hp-soa ignore extended properties file (File Not Exist) -> '%s'", filePath));
+            if(!hasPrintLog)
+                logger.warn(String.format("hp-soa ignore extended properties file (File Not Exist) -> '%s'", filePath));
+            
             return;
         }
 
-        logger.info("hp-soa load extended properties file -> " + filePath);
+        if(!hasPrintLog)
+            logger.info("hp-soa load extended properties file -> " + filePath);
 
         String resolvedLocation = "file:" + environment.resolveRequiredPlaceholders(filePath);
         PropertySourceFactory factory = new DefaultPropertySourceFactory();
@@ -77,9 +77,14 @@ public class ExtendedPropertiesFilePostProcessor implements EnvironmentPostProce
         {
             String msg = String.format("hp-soa load extended properties file fail -> [%s] %s", filePath, e.getMessage());
             
-            logger.error(msg, e);
+            if(!hasPrintLog)
+                logger.error(msg, e);
+            
             throw new RuntimeException(msg, e);
         }
+        
+        if(!hasPrintLog)
+            hasPrintLog = true;
     }
 
     @Override

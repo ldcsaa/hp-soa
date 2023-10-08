@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
@@ -76,9 +77,9 @@ public class WebConfig implements WebMvcConfigurer
     
     /** {@linkplain SpringContextHolder} Spring 上下文持有者配置 */
     @Bean("springContextHolder")
-    public SpringContextHolder springContextHolder()
+    public SpringContextHolder springContextHolder(ApplicationContext applicationContext)
     {
-        return new SpringContextHolder();
+        return new SpringContextHolder(applicationContext);
     }
 
     /** {@linkplain ReadOnlyContextRefreshedEventListener} 应用程序监听器配置 */

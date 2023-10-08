@@ -52,7 +52,7 @@ public class RabbitmqListenerMdcInspector
         MdcAttr mdcAttr = WebServerHelper.createMdcAttr();        
 
         RabbitListener listener = ANNOTATION_HOLDER.findAnnotationByMethodOrClass(joinPoint);
-        Assert.notNull(listener, "RabbitListener annotation not found");
+        Assert.notNull(listener, "@RabbitListener annotation not found");
         
         String listenerId        = listener.id();
         String correlationId    = null;

@@ -30,14 +30,14 @@ import java.util.TreeSet;
 public class BeanHelper
 {
     /** 原生数据类型集合 */
-    public static final Set<Class<?>> NATIVE_CLASS_SET    = new HashSet<Class<?>>(8);
+    public static final Set<Class<?>> NATIVE_CLASS_SET  = new HashSet<Class<?>>(8);
     /** 简单数据类型集合 */
-    public static final Set<Class<?>> SMIPLE_CLASS_SET    = new HashSet<Class<?>>(18);
+    public static final Set<Class<?>> SMIPLE_CLASS_SET  = new HashSet<Class<?>>(18);
     /** 基本类型包装类集合 */
-    public static final Set<Class<?>> WRAPPER_CLASS_SET    = new HashSet<Class<?>>(8);
+    public static final Set<Class<?>> WRAPPER_CLASS_SET = new HashSet<Class<?>>(8);
 
-    private static final String STRING_DELIMITERS        = " ,;|\t\n\r\f";
-    private static final char ATTR_SEP_CHAR                = '.';
+    private static final String STRING_DELIMITERS       = " ,;|\t\n\r\f";
+    private static final char ATTR_SEP_CHAR             = '.';
     
     static
     {

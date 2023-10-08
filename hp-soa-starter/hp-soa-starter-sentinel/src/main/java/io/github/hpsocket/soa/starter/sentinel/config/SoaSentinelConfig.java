@@ -65,7 +65,7 @@ public class SoaSentinelConfig
         };
     }
     
-    /** 限流处理器 */
+    /** 默认限流处理器 */
     @Bean
     @ConditionalOnMissingBean(BlockExceptionHandler.class)
     @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
@@ -78,7 +78,7 @@ public class SoaSentinelConfig
             {
                 ServiceException se = wrapServiceException(FREQUENCY_LIMIT_EXCEPTION, e);
 
-                logServiceException(log, se.getMessage(), se);
+                logServiceException(log, se, false);
 
                 response.setStatus(FREQUENCY_LIMIT_ERROR);
                 response.setContentType("application/json; charset=utf-8");

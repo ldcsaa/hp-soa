@@ -19,7 +19,7 @@ public class ReadOnlyEvent extends ApplicationEvent
 {
     /** 是否只读 */
     private boolean readOnly;
-    /** 是否初始触发 */
+    /** 是否应用程序启动时初始触发 */
     private boolean initial;
     
     public ReadOnlyEvent(Object source, boolean readOnly)

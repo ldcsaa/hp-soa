@@ -110,20 +110,20 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 public class HttpExecutor
 {
-    public static final int DEFAULT_RETRIES                        = 1;
-    public static final int DEFAULT_MAX_REDIRECTS                = 30;
+    public static final int DEFAULT_RETRIES                     = 1;
+    public static final int DEFAULT_MAX_REDIRECTS               = 30;
     public static final int DEFAULT_MAX_CONNECTION_TOTAL        = 100;
     public static final int DEFAULT_MAX_CONNECTION_PER_ROUTE    = 50;
-    public static final int DEFAULT_CONNECTION_REQUEST_TIMEOUT    = 5 * 1000;
-    public static final int DEFAULT_CONNECTION_TIMEOUT            = 10 * 1000;
+    public static final int DEFAULT_CONNECTION_REQUEST_TIMEOUT  = 5 * 1000;
+    public static final int DEFAULT_CONNECTION_TIMEOUT          = 10 * 1000;
     public static final int DEFAULT_RESPONSE_TIMEOUT            = 20 * 1000;
-    public static final int DEFAULT_SOCKET_TIMEOUT                = 30 * 1000;
-    public static final String DEFAULT_ENCODING                    = "UTF-8";
+    public static final int DEFAULT_SOCKET_TIMEOUT              = 30 * 1000;
+    public static final String DEFAULT_ENCODING                 = "UTF-8";
     
-    private static final int MAX_LOG_CONTENT_LENGTH                = 5 * 1000;
-    private static final String MONITOR_LOGGER_NAME                = "SOA-MONITOR";
+    private static final int MAX_LOG_CONTENT_LENGTH             = 5 * 1000;
+    private static final String MONITOR_LOGGER_NAME             = "SOA-MONITOR";
     private static final String MONITOR_LOG_TYPE                = "MONITOR-EGRESS";
-    private static final Logger MONITOR_LOGGER                    = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
+    private static final Logger MONITOR_LOGGER                  = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
     
     private static final ThreadPoolExecutor LOG_EXECUTOR = new ThreadPoolExecutor(
                                                                                     1,
@@ -139,24 +139,24 @@ public class HttpExecutor
     private CloseableHttpClient httpClient;
     private PoolingHttpClientConnectionManager connManager;
     
-    private boolean useCookie                = true;
-    private boolean relaxedCookieSpec        = true;
-    private boolean useSystemProperties        = true;
+    private boolean useCookie               = true;
+    private boolean relaxedCookieSpec       = true;
+    private boolean useSystemProperties     = true;
     private boolean redirectsEnabled        = true;
     private boolean circularRedirectsAllowed= true;
-    private boolean retainHeaderCookie        = true;
-    private boolean trustAllCerts            = true;
+    private boolean retainHeaderCookie      = true;
+    private boolean trustAllCerts           = true;
     private boolean credentialsSupported    = false;
-    private boolean logRequest                = false;
-    private int retries                        = DEFAULT_RETRIES;
+    private boolean logRequest              = false;
+    private int retries                     = DEFAULT_RETRIES;
     private int maxRedirects                = DEFAULT_MAX_REDIRECTS;
-    private int maxConnectionTotal            = DEFAULT_MAX_CONNECTION_TOTAL;
-    private int maxConnectionPerRoute        = DEFAULT_MAX_CONNECTION_PER_ROUTE;
+    private int maxConnectionTotal          = DEFAULT_MAX_CONNECTION_TOTAL;
+    private int maxConnectionPerRoute       = DEFAULT_MAX_CONNECTION_PER_ROUTE;
     private int connectionRequestTimeout    = DEFAULT_CONNECTION_REQUEST_TIMEOUT;
-    private int connectTimeout                = DEFAULT_CONNECTION_TIMEOUT;
-    private int responseTimeout                = DEFAULT_RESPONSE_TIMEOUT;
-    private int socketTimeout                = DEFAULT_SOCKET_TIMEOUT;
-    private String encoding                    = DEFAULT_ENCODING;
+    private int connectTimeout              = DEFAULT_CONNECTION_TIMEOUT;
+    private int responseTimeout             = DEFAULT_RESPONSE_TIMEOUT;
+    private int socketTimeout               = DEFAULT_SOCKET_TIMEOUT;
+    private String encoding                 = DEFAULT_ENCODING;
     
     private HttpHost httpProxy;
     private String[] supportedProtocols;

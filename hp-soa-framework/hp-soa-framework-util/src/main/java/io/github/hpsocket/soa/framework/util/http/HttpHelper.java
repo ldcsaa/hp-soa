@@ -29,25 +29,25 @@ import io.github.hpsocket.soa.framework.core.util.KV;
 public class HttpHelper
 {
     /** URL scheme 指示符 */
-    public static final String URL_SECHEME_SUFFIX        = "://";
+    public static final String URL_SECHEME_SUFFIX   = "://";
     /** URL 目录分隔符 */
-    public static final String URL_PATH_SEPARATOR        = "/";
+    public static final String URL_PATH_SEPARATOR   = "/";
     /** URL 端口分隔符 */
-    public static final String URL_PORT_SEPARATOR        = ":";
+    public static final String URL_PORT_SEPARATOR   = ":";
     /** URL 参数标识符 */
-    public static final String URL_PARAM_FLAG            = "?";
+    public static final String URL_PARAM_FLAG       = "?";
     /** URL 参数分隔符 */
-    public static final String URL_PARAM_SEPARATOR        = "&";
+    public static final String URL_PARAM_SEPARATOR  = "&";
     /** HTTP URL 标识 */
-    public static final String HTTP_SCHEME                = "http";
+    public static final String HTTP_SCHEME          = "http";
     /** HTTPS URL 标识 */
-    public static final String HTTPS_SCHEME                = "https";
+    public static final String HTTPS_SCHEME         = "https";
     /** HTTP 默认端口 */
-    public static final int HTTP_DEFAULT_PORT            = 80;
+    public static final int HTTP_DEFAULT_PORT       = 80;
     /** HTTPS 默认端口 */
-    public static final int HTTPS_DEFAULT_PORT            = 443;
+    public static final int HTTPS_DEFAULT_PORT      = 443;
     /** 默认缓冲区大小 */
-    private static final int DEFAULT_BUFFER_SIZE        = 8192;
+    private static final int DEFAULT_BUFFER_SIZE    = 8192;
 
     /** 获取 {@link HttpURLConnection} */
     @SafeVarargs

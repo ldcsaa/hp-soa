@@ -24,9 +24,9 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 @Schema(description="接口方法返回值对象")
 public class Response<T> implements Serializable
 {
-    public static final String MSG_OK        = "ok";    
+    public static final String MSG_OK       = "ok";    
     public static final Integer RT_LOGIN    = Integer.valueOf(1);
-    public static final Integer RT_LOGOUT    = Integer.valueOf(2);
+    public static final Integer RT_LOGOUT   = Integer.valueOf(2);
 
     /** 状态码：应用程序可自定义状态码，系统状态码参考 {@linkplain ServiceException} */
     @Schema(title="状态码", example="0", requiredMode=RequiredMode.REQUIRED, nullable=false)

@@ -7,84 +7,87 @@ import org.slf4j.Logger;
 public class ServiceException extends RuntimeException
 {
     /** 成功 */
-    public static final int OK                        = 0;
+    public static final int OK                      = 0;
     /** 已接受 */
     public static final int ACCEPTED                = 202;
     /** 空内容 */
-    public static final int NO_CONTENT                = 204;
+    public static final int NO_CONTENT              = 204;
     /** 部分成功 */
-    public static final int PARTIAL_OK                = 206;
+    public static final int PARTIAL_OK              = 206;
     /** 非法请求 */
-    public static final int BAD_REQUEST                = 400;
+    public static final int BAD_REQUEST             = 400;
     /** 目标不存在 */
-    public static final int NOT_EXIST                = 404;
+    public static final int NOT_EXIST               = 404;
     /** 参数校验失败 */
-    public static final int PARAM_VERIFY_ERROR        = 409;
+    public static final int PARAM_VERIFY_ERROR      = 409;
     /** 服务器内部错误 */
-    public static final int GENERAL_ERROR            = 500;
+    public static final int GENERAL_ERROR           = 500;
     /** 参数验证错误 */
-    public static final int PARAM_VALIDATION_ERROR    = 501;
+    public static final int PARAM_VALIDATION_ERROR  = 501;
     /** 接口未实现 */
-    public static final int NOT_IMPLEMENTED            = 502;
+    public static final int NOT_IMPLEMENTED         = 502;
     /** 频次超限 */
-    public static final int FREQUENCY_LIMIT_ERROR    = 503;
+    public static final int FREQUENCY_LIMIT_ERROR   = 503;
     /** 拒绝访问 */
-    public static final int FORBID_ERROR             = 504;
+    public static final int FORBID_ERROR            = 504;
     /** 请求参数非法 */
     public static final int PARAMS_ERROR            = 505;
     /** 重复请求 */
-    public static final int REPEATED_REQ_ERROR        = 506;
+    public static final int REPEATED_REQ_ERROR      = 506;
     /** 访问被限流 */
-    public static final int TRAFFIC_LIMIT_ERROR        = 507;
+    public static final int TRAFFIC_LIMIT_ERROR     = 507;
     /** 接口不支持 */
-    public static final int NOT_SUPPORTED            = 508;
+    public static final int NOT_SUPPORTED           = 508;
     /** 禁止更新 */
     public static final int FORBID_UPDATE_ERROR     = 509;
     /** 调用超时 */
-    public static final int TIMEOUT_ERROR            = 511;
-    /** APP CODE 不存在 */
-    public static final int APPCODE_NOT_EXIST_ERROR    = 601;
-    /** APP CODE 已存在 */
-    public static final int APPCODE_EXIST_ERROR        = 602;
-    /** 用户验证错误 */
+    public static final int TIMEOUT_ERROR           = 511;
+    /** 应用程序编号验证错误 */
+    public static final int APPCODE_CHECK_ERROR     = 601;
+    /** 应用程序编号不存在 */
+    public static final int APPCODE_NOT_EXIST_ERROR = 602;
+    /** 应用程序编号已存在 */
+    public static final int APPCODE_EXIST_ERROR     = 603;
+    /** 用户认证错误 */
     public static final int AUTHEN_ERROR            = 701;
-    /** 用户授权错误 */
+    /** 授权验证错误 */
     public static final int AUTHOR_ERROR            = 702;
     /** 网络错误 */
-    public static final int NETWORK_ERROR            = 801;
+    public static final int NETWORK_ERROR           = 801;
     /** 外部服务调用失败 */
-    public static final int OUTER_API_CALL_FAIL        = 802;
+    public static final int OUTER_API_CALL_FAIL     = 802;
     /** 内部服务调用失败 */
-    public static final int INNER_API_CALL_FAIL        = 803;
+    public static final int INNER_API_CALL_FAIL     = 803;
     /** 签名验证失败 */
-    public static final int SIGN_VERIFY_ERROR        = 901;
+    public static final int SIGN_VERIFY_ERROR       = 901;
     /** 登录已失效 */
-    public static final int LOGIN_INVALID            = 904;
+    public static final int LOGIN_INVALID           = 904;
     /** 未登录 */
-    public static final int NOT_LOGGED_IN            = 907;
+    public static final int NOT_LOGGED_IN           = 907;
     
-    public static final ServiceException BAD_REQUEST_EXCEPTION        = new ServiceException("非法请求", BAD_REQUEST);
+    public static final ServiceException BAD_REQUEST_EXCEPTION      = new ServiceException("非法请求", BAD_REQUEST);
     public static final ServiceException NOT_EXIST_EXCEPTION        = new ServiceException("目标不存在", NOT_EXIST);
-    public static final ServiceException PARAM_VERIFY_EXCEPTION        = new ServiceException("参数校验失败", PARAM_VERIFY_ERROR);
-    public static final ServiceException GENERAL_EXCEPTION            = new ServiceException("服务器内部错误", GENERAL_ERROR);
-    public static final ServiceException PARAM_VALIDATION_EXCEPTION    = new ServiceException("参数验证错误", PARAM_VALIDATION_ERROR);
-    public static final ServiceException NOT_IMPLEMENTED_EXCEPTION    = new ServiceException("接口未实现", NOT_IMPLEMENTED);
+    public static final ServiceException PARAM_VERIFY_EXCEPTION     = new ServiceException("参数校验失败", PARAM_VERIFY_ERROR);
+    public static final ServiceException GENERAL_EXCEPTION          = new ServiceException("服务器内部错误", GENERAL_ERROR);
+    public static final ServiceException PARAM_VALIDATION_EXCEPTION = new ServiceException("参数验证错误", PARAM_VALIDATION_ERROR);
+    public static final ServiceException NOT_IMPLEMENTED_EXCEPTION  = new ServiceException("接口未实现", NOT_IMPLEMENTED);
     public static final ServiceException NOT_SUPPORTED_EXCEPTION    = new ServiceException("接口不支持", NOT_SUPPORTED);
-    public static final ServiceException FORBID_SERVICE_EXCEPTION    = new ServiceException("禁止更新", FORBID_UPDATE_ERROR);
+    public static final ServiceException FORBID_SERVICE_EXCEPTION   = new ServiceException("禁止更新", FORBID_UPDATE_ERROR);
+    public static final ServiceException APPCODE_CHECK_EXCEPTION    = new ServiceException("应用程序编号验证错误", APPCODE_CHECK_ERROR);
     public static final ServiceException APPCODE_NOT_EXIST_EXCEPTION= new ServiceException("应用程序编号不存在", APPCODE_NOT_EXIST_ERROR);
     public static final ServiceException APPCODE_EXIST_EXCEPTION    = new ServiceException("应用程序编号已存在", APPCODE_EXIST_ERROR);
-    public static final ServiceException AUTHEN_EXCEPTION            = new ServiceException("用户认证失败", AUTHEN_ERROR);
-    public static final ServiceException AUTHOR_EXCEPTION            = new ServiceException("授权验证失败", AUTHOR_ERROR);
-    public static final ServiceException NETWORK_EXCEPTION            = new ServiceException("网络错误", NETWORK_ERROR);
-    public static final ServiceException PARAMS_EXCEPTION            = new ServiceException("请求参数非法", PARAMS_ERROR);
-    public static final ServiceException REPEATED_REQ_EXCEPTION        = new ServiceException("请勿重复请求", REPEATED_REQ_ERROR);
-    public static final ServiceException TIMEOUT_EXCEPTION            = new ServiceException("调用超时", TIMEOUT_ERROR);
-    public static final ServiceException OUTER_API_CALL_EXCEPTION    = new ServiceException("外部服务调用失败", OUTER_API_CALL_FAIL);
-    public static final ServiceException INNER_API_CALL_EXCEPTION    = new ServiceException("内部服务调用失败", INNER_API_CALL_FAIL);
-    public static final ServiceException SIGN_VERIFY_EXCEPTION        = new ServiceException("签名验证失败", SIGN_VERIFY_ERROR);
+    public static final ServiceException AUTHEN_EXCEPTION           = new ServiceException("用户认证失败", AUTHEN_ERROR);
+    public static final ServiceException AUTHOR_EXCEPTION           = new ServiceException("授权验证失败", AUTHOR_ERROR);
+    public static final ServiceException NETWORK_EXCEPTION          = new ServiceException("网络错误", NETWORK_ERROR);
+    public static final ServiceException PARAMS_EXCEPTION           = new ServiceException("请求参数非法", PARAMS_ERROR);
+    public static final ServiceException REPEATED_REQ_EXCEPTION     = new ServiceException("请勿重复请求", REPEATED_REQ_ERROR);
+    public static final ServiceException TIMEOUT_EXCEPTION          = new ServiceException("调用超时", TIMEOUT_ERROR);
+    public static final ServiceException OUTER_API_CALL_EXCEPTION   = new ServiceException("外部服务调用失败", OUTER_API_CALL_FAIL);
+    public static final ServiceException INNER_API_CALL_EXCEPTION   = new ServiceException("内部服务调用失败", INNER_API_CALL_FAIL);
+    public static final ServiceException SIGN_VERIFY_EXCEPTION      = new ServiceException("签名验证失败", SIGN_VERIFY_ERROR);
 
-    public static final ServiceException FREQUENCY_LIMIT_EXCEPTION    = new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
-    public static final ServiceException FORBID_EXCEPTION             = new UnimportantException("拒绝访问", FORBID_ERROR);
+    public static final ServiceException FREQUENCY_LIMIT_EXCEPTION  = new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
+    public static final ServiceException FORBID_EXCEPTION           = new UnimportantException("拒绝访问", FORBID_ERROR);
     public static final ServiceException TRAFFIC_LIMIT_EXCEPTION    = new UnimportantException("系统繁忙", TRAFFIC_LIMIT_ERROR);
     public static final ServiceException LOGIN_INVALID_EXCEPTION    = new UnimportantException("登录已失效", LOGIN_INVALID);
     public static final ServiceException NOT_LOGGED_IN_EXCEPTION    = new UnimportantException("未登录", NOT_LOGGED_IN);
@@ -258,10 +261,20 @@ public class ServiceException extends RuntimeException
 
     public static void logServiceException(Logger logger, ServiceException e)
     {
-        logServiceException(logger, e.getMessage(), e);
+        logServiceException(logger, e.getMessage(), e, true);
+    }
+
+    public static void logServiceException(Logger logger, ServiceException e, boolean printWarnStackTrace)
+    {
+        logServiceException(logger, e.getMessage(), e, printWarnStackTrace);
     }
 
     public static void logServiceException(Logger logger, String msg, ServiceException e)
+    {
+        logServiceException(logger, msg, e, true);
+    }
+
+    public static void logServiceException(Logger logger, String msg, ServiceException e, boolean printWarnStackTrace)
     {
         final String FORMAT = "(SERVICE EXCEPTION - SC: {}, RC: {}) -> {}";
         final Integer statusCode = e.getStatusCode();
@@ -274,7 +287,12 @@ public class ServiceException extends RuntimeException
             if(e instanceof UnimportantException)
                 logger.info(FORMAT, statusCode, resultCode, msg);
             else
-                logger.warn(FORMAT, statusCode, resultCode, msg, e);
+            {
+                if(printWarnStackTrace)
+                    logger.warn(FORMAT, statusCode, resultCode, msg, e);
+                else
+                    logger.warn(FORMAT, statusCode, resultCode, msg);
+            }
         }
     }
 

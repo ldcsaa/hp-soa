@@ -158,12 +158,12 @@ public class XlsxReader
         
         public Parser(File file, int sheetIndex, boolean parseBlankRow, boolean nullAsEmpty)
         {
-            this.file            = file;
-            this.sheetIndex        = sheetIndex < 0 ? -1 : sheetIndex;
-            this.parseAllSheets    = this.sheetIndex < 0;
-            this.parseBlankRow    = parseBlankRow;
+            this.file           = file;
+            this.sheetIndex     = sheetIndex < 0 ? -1 : sheetIndex;
+            this.parseAllSheets = this.sheetIndex < 0;
+            this.parseBlankRow  = parseBlankRow;
             this.nullAsEmpty    = nullAsEmpty;
-            this.EMPTY            = nullAsEmpty ? null : "";
+            this.EMPTY          = nullAsEmpty ? null : "";
         }
         
         public void parse()
@@ -182,11 +182,11 @@ public class XlsxReader
                     
                     curRowNumber    = 0;
                     curColNumber    = 0;
-                    lastRowNumber    = 0;
-                    lastColNumber    = 0;
-                    maxCols            = 0;
-                    hasContentCols    = 0;
-                    blankDatas        = null;
+                    lastRowNumber   = 0;
+                    lastColNumber   = 0;
+                    maxCols         = 0;
+                    hasContentCols  = 0;
+                    blankDatas      = null;
                     
                     InputStream sheet = sheets.next();
                     

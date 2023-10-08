@@ -31,7 +31,7 @@ public class MqListenerHandler
 
         String msgId        = properties.getMessageId();
         long deliveryTag    = properties.getDeliveryTag();
-        String domainName    = properties.getHeader(HEADER_DOMAIN_NAME);
+        String domainName   = properties.getHeader(HEADER_DOMAIN_NAME);
         String eventName    = properties.getHeader(HEADER_EVENT_NAME);
         
         try
@@ -52,9 +52,9 @@ public class MqListenerHandler
     public void onFirstMessage(org.springframework.messaging.Message<JSONObject> message, Channel channel) throws IOException
     {
         MessageHeaders headers = message.getHeaders();
-        String msgId         = (String)headers.get(HEADER_AMQP_MESSAGE_ID);
-        //long deliveryTag    = (Long)headers.get(HEADER_AMQP_DELIVERY_TAG);
-        String domainName    = (String)headers.get(HEADER_DOMAIN_NAME);
+        String msgId        = (String)headers.get(HEADER_AMQP_MESSAGE_ID);
+        //long deliveryTag  = (Long)headers.get(HEADER_AMQP_DELIVERY_TAG);
+        String domainName   = (String)headers.get(HEADER_DOMAIN_NAME);
         String eventName    = (String)headers.get(HEADER_EVENT_NAME);
         
         try
@@ -76,8 +76,8 @@ public class MqListenerHandler
         MessageProperties properties = message.getMessageProperties();
 
         String msgId        = properties.getMessageId();
-        //long deliveryTag    = properties.getDeliveryTag();
-        String domainName    = properties.getHeader(HEADER_DOMAIN_NAME);
+        //long deliveryTag  = properties.getDeliveryTag();
+        String domainName   = properties.getHeader(HEADER_DOMAIN_NAME);
         String eventName    = properties.getHeader(HEADER_EVENT_NAME);
         
         try
@@ -96,9 +96,9 @@ public class MqListenerHandler
     public void onThirdMessage(org.springframework.messaging.Message<JSONObject> message, Channel channel) throws IOException
     {
         MessageHeaders headers = message.getHeaders();
-        String msgId         = (String)headers.get(HEADER_AMQP_MESSAGE_ID);
+        String msgId        = (String)headers.get(HEADER_AMQP_MESSAGE_ID);
         long deliveryTag    = (Long)headers.get(HEADER_AMQP_DELIVERY_TAG);
-        String domainName    = (String)headers.get(HEADER_DOMAIN_NAME);
+        String domainName   = (String)headers.get(HEADER_DOMAIN_NAME);
         String eventName    = (String)headers.get(HEADER_EVENT_NAME);
         
         try
@@ -147,7 +147,7 @@ public class MqListenerHandler
 
         String msgId        = props.getMessageIdAsString();
         String corId        = props.getCorrelationIdAsString();
-        String domainName    = (String)appProps.get(HEADER_DOMAIN_NAME);
+        String domainName   = (String)appProps.get(HEADER_DOMAIN_NAME);
         String eventName    = (String)appProps.get(HEADER_EVENT_NAME);
         
         try
@@ -168,7 +168,7 @@ public class MqListenerHandler
 
         String msgId        = (String)headers.get(HEADER_MSG_ID);
         String corId        = (String)headers.get(HEADER_CORRELA_DATA_ID);
-        String domainName    = (String)headers.get(HEADER_DOMAIN_NAME);
+        String domainName   = (String)headers.get(HEADER_DOMAIN_NAME);
         String eventName    = (String)headers.get(HEADER_EVENT_NAME);
         
         try

@@ -34,54 +34,54 @@ import static io.github.hpsocket.soa.framework.web.holder.AppConfigHolder.*;
 /** <b>通用 Web 功能辅助类</b> */
 public class WebServerHelper
 {
-    public static final String REQUEST_ATTRIBUTE_JSON_BODY    = "__request.attribute.json.body__";
-    public static final String REQUEST_ATTRIBUTE_RESP_BODY    = "__request.attribute.resp.body__";
+    public static final String REQUEST_ATTRIBUTE_JSON_BODY  = "__request.attribute.json.body__";
+    public static final String REQUEST_ATTRIBUTE_RESP_BODY  = "__request.attribute.resp.body__";
     public static final String REQUEST_ATTRIBUTE_CONTEXT    = "__request.attribute.context__";
-    public static final String REQUEST_ATTRIBUTE_INFO        = "__request.attribute.info__";
+    public static final String REQUEST_ATTRIBUTE_INFO       = "__request.attribute.info__";
     
-    public static final String HEADER_REQUEST_INFO            = "X-Request-Info";
-    public static final String HEADER_REQUEST_ID            = "requestId";
-    public static final String HEADER_CLIENT_ID                = "clientId";
-    public static final String HEADER_SESSION_ID            = "sessionId";
-    public static final String HEADER_TOKEN                    = "token";
-    public static final String HEADER_APP_CODE                = "appCode";
-    public static final String HEADER_SRC_APP_CODE            = "srcAppCode";
-    public static final String HEADER_GROUP_ID                = "groupId";
-    public static final String HEADER_VERSION                = "version";
-    public static final String HEADER_EXTRA                    = "extra";
+    public static final String HEADER_REQUEST_INFO          = "X-Request-Info";
+    public static final String HEADER_REQUEST_ID            = "X-Request-Id";
+    public static final String HEADER_CLIENT_ID             = "X-Client-Id";
+    public static final String HEADER_SESSION_ID            = "X-Session-Id";
+    public static final String HEADER_TOKEN                 = "X-Token";
+    public static final String HEADER_APP_CODE              = "X-App-Code";
+    public static final String HEADER_SRC_APP_CODE          = "X-Src-App-Code";
+    public static final String HEADER_GROUP_ID              = "X-Group-Id";
+    public static final String HEADER_VERSION               = "X-Version";
+    public static final String HEADER_EXTRA                 = "X-Extra";
 
-    public static final int DEFAULT_COOKIE_MAX_AGE    = 10 * 365 * 24 * 60 * 60;
-    public static final String DEFAULT_CHARSET        = GeneralHelper.DEFAULT_ENCODING;
-    public static final Charset DEFAULT_CHARSET_OBJ    = Charset.forName(DEFAULT_CHARSET);
+    public static final int DEFAULT_COOKIE_MAX_AGE  = 10 * 365 * 24 * 60 * 60;
+    public static final String DEFAULT_CHARSET      = GeneralHelper.DEFAULT_ENCODING;
+    public static final Charset DEFAULT_CHARSET_OBJ = Charset.forName(DEFAULT_CHARSET);
     
     public static final boolean HTTP_ONLY_COOKIE    = false;
     
-    public static final String GET        = "GET";
-    public static final String PUT        = "PUT";
-    public static final String POST        = "POST";
-    public static final String DELETE    = "DELETE";
-    public static final String HEAD        = "HEAD";
+    public static final String GET      = "GET";
+    public static final String PUT      = "PUT";
+    public static final String POST     = "POST";
+    public static final String DELETE   = "DELETE";
+    public static final String HEAD     = "HEAD";
     public static final String PATCH    = "PATCH";
-    public static final String OPTIONS    = "OPTIONS";
+    public static final String OPTIONS  = "OPTIONS";
     public static final String TRACE    = "TRACE";
-    public static final String CONNECT    = "CONNECT";
+    public static final String CONNECT  = "CONNECT";
 
-    public static final String REQUEST_FORMAT_JSON        = "json";
-    public static final String REQUEST_FORMAT_FORM        = "form";
-    public static final String DEFAULT_REQUEST_CHARSET    = DEFAULT_CHARSET;
-    public static final String DEFAULT_REQUEST_FORMAT    = REQUEST_FORMAT_JSON;
+    public static final String REQUEST_FORMAT_JSON      = "json";
+    public static final String REQUEST_FORMAT_FORM      = "form";
+    public static final String DEFAULT_REQUEST_CHARSET  = DEFAULT_CHARSET;
+    public static final String DEFAULT_REQUEST_FORMAT   = REQUEST_FORMAT_JSON;
     public static final String RESPONSE_CONTENT_TYPE    = "application/json;charset=" + DEFAULT_REQUEST_CHARSET.toLowerCase();
     public static final Pattern DOMAIN_PATTERN    = Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
     public static final Pattern SPIDER_PATTERN    = Pattern.compile(".*(Googlebot|Baiduspider|Yahoo\\!\\ Slurp|iaskspider|YodaoBot|msnbot|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
     
-    public static final String MONITOR_LOGGER_NAME    = "SOA-MONITOR";
-    public static final String MONITOR_INGRESS        = "MONITOR-INGRESS";
-    public static final String MONITOR_EGRESS        = "MONITOR-EGRESS";
+    public static final String MONITOR_LOGGER_NAME  = "SOA-MONITOR";
+    public static final String MONITOR_INGRESS      = "MONITOR-INGRESS";
+    public static final String MONITOR_EGRESS       = "MONITOR-EGRESS";
 
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT        = {WriteByteArrayAsBase64, WriteNonStringKeyAsString, WriteMapNullValue};
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL    = {WriteByteArrayAsBase64, WriteNonStringKeyAsString};
     
-    public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor(    4,
+    public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor( 4,
                                                                                         16,
                                                                                         60,
                                                                                         TimeUnit.SECONDS,
@@ -97,8 +97,8 @@ public class WebServerHelper
     /** 检测 HTTP 请求是否包含 Body */
     public static final boolean isHasBodyRequest(String method)
     {
-        return    GeneralHelper.isStrNotEmpty(method)
-                && (POST.equalsIgnoreCase(method) || PUT.equalsIgnoreCase(method) || PATCH.equals(method));    
+        return GeneralHelper.isStrNotEmpty(method) && 
+               (POST.equalsIgnoreCase(method) || PUT.equalsIgnoreCase(method) || PATCH.equals(method));    
     }
 
     /** 检测 HTTP Content-Type 是否为 JSON 类型 */
@@ -158,7 +158,7 @@ public class WebServerHelper
         cookie.setMaxAge(maxAge);
         cookie.setHttpOnly(HTTP_ONLY_COOKIE);
 
-        String host = req.getHeader("Host");
+        String host = getHeader(req, "Host");
 
         if(GeneralHelper.isStrNotEmpty(host))
         {        
@@ -205,17 +205,17 @@ public class WebServerHelper
     /** 获取 HTTP 请求 User-Agent */
     public static final String getUserAgent(HttpServletRequest req)
     {
-        return req.getHeader("User-Agent");
+        return getHeader(req, "User-Agent");
     }
     
-    /** 获取 HTTP 请求客户端 IP */
-    public static final String getIpAddr(HttpServletRequest request)
+    /** 获取 HTTP 请求客户端 IP 地址 */
+    public static final String getRequestAddr(HttpServletRequest request)
     {
-        String ip = request.getHeader("X-Real-IP");
+        String ip = getHeader(request, "X-Real-IP");
         
         if(GeneralHelper.isStrEmpty(ip))
         {
-            String forwards = request.getHeader("X-Forwarded-For");
+            String forwards = getHeader(request, "X-Forwarded-For");
             
             if(GeneralHelper.isStrNotEmpty(forwards))
             {
@@ -276,7 +276,7 @@ public class WebServerHelper
         if(GeneralHelper.isStrEmpty(encoding))
             encoding = DEFAULT_REQUEST_CHARSET;
         
-        String header = request.getHeader(HEADER_REQUEST_INFO);
+        String header = getHeader(request, HEADER_REQUEST_INFO);
         
         if(GeneralHelper.isStrNotEmpty(header))
         {
@@ -304,6 +304,44 @@ public class WebServerHelper
         request.setAttribute(REQUEST_ATTRIBUTE_INFO, infos);
         
         return infos;
+    }
+    
+    /** 解析 HTTP 请求字段 */
+    public static final String parseRequestField(HttpServletRequest request, Map<String, String> attrs, String name, boolean checkCookie)
+    {
+        String value = attrs.get(name);
+        
+        if(GeneralHelper.isStrEmpty(value))
+        {
+            value = getHeader(request, name);
+            
+            if(GeneralHelper.isStrEmpty(value) && checkCookie)
+            {
+                Cookie cookie = getCookie(request, name);
+                
+                if(cookie != null)
+                    value = cookie.getValue();
+            }
+        }
+
+        return value;
+    }
+    
+    /** 获取 HTTP 请求头（兼容小写） */
+    public static final String getHeader(HttpServletRequest request, String name)
+    {
+        return getHeader(request, name, true);
+    }
+    
+    /** 获取 HTTP 请求头（可设置是否兼容小写） */
+    public static final String getHeader(HttpServletRequest request, String name, boolean lcCompatible)
+    {
+        String value = request.getHeader(name);
+        
+        if(value == null && lcCompatible)
+            value = request.getHeader(name.toLowerCase());
+        
+        return value;
     }
 
     /** 创建调用链 MDC 相关属性 */

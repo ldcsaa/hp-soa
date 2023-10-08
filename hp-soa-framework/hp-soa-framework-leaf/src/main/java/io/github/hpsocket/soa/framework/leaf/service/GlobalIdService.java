@@ -11,14 +11,14 @@ import lombok.Getter;
 public interface GlobalIdService
 {
     /** 默认段号标签 */
-    final String UNIQUE_SEGMENT_TAG    = "__default__";
+    final String UNIQUE_SEGMENT_TAG = "__default__";
     /** 测试段号标签 */
-    final String TEST_SEGMENT_TAG    = "__test__";
+    final String TEST_SEGMENT_TAG   = "__test__";
     
     /** 段号 ID 生成器 Bean 名称 */
-    final String LEAF_SEGMENT_ID_GENERATOR_BEAN        = "leafSegmentIdGenerator";
+    final String LEAF_SEGMENT_ID_GENERATOR_BEAN     = "leafSegmentIdGenerator";
     /** 雪花 ID 生成器 Bean 名称 */
-    final String LEAF_SNOWFLAKE_ID_GENERATOR_BEAN    = "leafSnowflakeIdGenerator";
+    final String LEAF_SNOWFLAKE_ID_GENERATOR_BEAN   = "leafSnowflakeIdGenerator";
     
     /** 通过 snowflake 方式获取 ID */
     long getSnowflakeId();

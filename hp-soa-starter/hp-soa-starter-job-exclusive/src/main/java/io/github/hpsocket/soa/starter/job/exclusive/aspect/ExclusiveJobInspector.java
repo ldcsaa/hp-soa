@@ -22,7 +22,6 @@ import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob;
 import io.github.hpsocket.soa.starter.job.exclusive.exception.ExclusiveJobExceptionHandler;
-
 import lombok.extern.slf4j.Slf4j;
 
 /** <b>分布式独占 Job 拦截器</b><br>
@@ -33,8 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @Order(0)
 public class ExclusiveJobInspector
 {
-    private static final String JOB_LOCK_KEY_PREFIX    = "hp.soa.job:lock:";
-    private static final String POINTCUT_PATTERN     = "execution (public void *.*()) && "
+    private static final String JOB_LOCK_KEY_PREFIX = "hp.soa.job:lock:";
+    private static final String POINTCUT_PATTERN    = "execution (public void *.*()) && "
                                                     + "@annotation(io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob)";
     
     private static final AtomicBoolean RUNNING = new AtomicBoolean(false);    
@@ -45,9 +44,13 @@ public class ExclusiveJobInspector
     
     @Autowired(required = false)
     AsyncService asyncService;
-    
-    @Autowired
+
     private RedissonClient redissonClient;
+    
+    public ExclusiveJobInspector(RedissonClient redissonClient)
+    {
+        this.redissonClient = redissonClient;
+    }
 
     @Pointcut(POINTCUT_PATTERN)
     protected void aroundMethod() {}
@@ -58,10 +61,10 @@ public class ExclusiveJobInspector
         MdcAttr mdcAttr = WebServerHelper.createMdcAttr();        
 
         ExclusiveJob job = ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
-        Assert.notNull(job, "ExclusiveJob annotation not found");
+        Assert.notNull(job, "@ExclusiveJob annotation not found");
         
-        String prefix    = job.prefix();
-        String jobName    = job.jobName();
+        String prefix   = job.prefix();
+        String jobName  = job.jobName();
         
         if(GeneralHelper.isStrEmpty(prefix))
             prefix = AppConfigHolder.getAppName();
@@ -87,8 +90,8 @@ public class ExclusiveJobInspector
                 return null;
             }
             
-            String lockKey    = JOB_LOCK_KEY_PREFIX + fullJobName;
-            RLock lock        = redissonClient.getLock(lockKey);
+            String lockKey  = JOB_LOCK_KEY_PREFIX + fullJobName;
+            RLock lock      = redissonClient.getLock(lockKey);
             
             if(lock.tryLock(0, job.maxLockTime(), job.lockTimeUnit()))
             {
@@ -142,11 +145,13 @@ public class ExclusiveJobInspector
         if(exceptionHandler == null)
             return;
         
+        long timestamp = System.currentTimeMillis();
+        
         if(asyncService == null)
-            exceptionHandler.handleException(prefix, jobName, e);
+            exceptionHandler.handleException(prefix, jobName, timestamp, e);
         else
         {
-            asyncService.execute(() -> exceptionHandler.handleException(prefix, jobName, e));
+            asyncService.execute(() -> exceptionHandler.handleException(prefix, jobName, timestamp, e));
         }
     }
 }

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class LocalExecutorServiceFactory
 {
-    public static final LocalExecutorServiceFactory DEFAULT_FACTORY    = new LocalExecutorServiceFactory();
+    public static final LocalExecutorServiceFactory DEFAULT_FACTORY      = new LocalExecutorServiceFactory();
     private static final RejectedExecutionHandler DEFAULT_REJECT_HANDLER = new SynchronousRejectedExecutionHandler();
     
     private ThreadLocal<ThreadPoolExecutor> local = new ThreadLocal<ThreadPoolExecutor>();
