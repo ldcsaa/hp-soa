@@ -11,7 +11,7 @@ public interface AccessVerificationService
     Pair<Boolean, String> verifyAppCode(String appCode, String srcAppCode);
     /** 用户身份校验 */
     Pair<Long, String> verifyUser(String token, Long groupId);
-    /** 授权授权校验 */
+    /** 用户授权校验 */
     Pair<Boolean, String> verifyAuthorization(String route, String appCode, Long groupId, Long userId);
 
 }
