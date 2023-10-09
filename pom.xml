@@ -239,7 +239,6 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <!--
                         <includeOnlyProperties>
                             <includeOnlyProperty>git.branch</includeOnlyProperty>
                             <includeOnlyProperty>git.build.time</includeOnlyProperty>
@@ -249,8 +248,8 @@
                             <includeOnlyProperty>git.commit.time</includeOnlyProperty>
                             <includeOnlyProperty>git.commit.user.name</includeOnlyProperty>
                             <includeOnlyProperty>git.commit.message.short</includeOnlyProperty>
+                            <includeOnlyProperty>git.dirty</includeOnlyProperty>
                         </includeOnlyProperties>
-                        -->
                         <dateFormat>yyyyMMddHHmmss</dateFormat>
                         <abbrevLength>8</abbrevLength>
                         <generateGitPropertiesFile>true</generateGitPropertiesFile>
@@ -487,11 +486,11 @@
                     </configuration>
                 </plugin>
 
+                <!--
                 <plugin>
                     <groupId>io.fabric8</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
                     <version>${docker-maven-plugin.version}</version>
-                    <!--
                     <configuration>
                         # Docker 推送镜像仓库地址
                         <pushRegistry>http://hub.myserver.com:5000</pushRegistry>
@@ -525,8 +524,9 @@
                             </image>
                         </images>
                     </configuration>
-                    -->
                 </plugin>
+                -->
+
             </plugins>
         </pluginManagement>
         
