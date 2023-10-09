@@ -1,15 +1,19 @@
-# app
+## 应用程序配置
 hp.soa.web:
+  # 应用程序信息
   app:
     id: "0010100001"
     name: ${project.artifactId}
     version: ${project.version}
     organization: HP-Socket
     owner: Kingfisher
+  # Spring Bean 扫描包路径（多个包用','分隔）
   component-scan:
     base-package: ${project.groupId}
+  # Cookie 生命周期（默认：10年）
   cookie: 
     max-age: 315360000
+  # 跨域访问配置
   cors:
     mapping: "/**"
     allowed-origins: "*"
@@ -18,16 +22,21 @@ hp.soa.web:
     exposed-headers: 
     allow-credentials: false
     maxAge: 3600
+  # HTTP请求鉴权
   access-verification:
+    # 是否启用 HTTP 请求鉴权（默认：true，通常 Gateway/BFF 应用设置为 true，其它应用设置为 false）
     enabled: true
+    # 默认鉴权策略（默认：MAYBE_LOGIN，可选值：NO_CHECK，NO_LOGIN，MAYBE_LOGIN，REQUIRE_LOGIN，REQUIRE_AUTHORIZED）
     default-access-policy: maybe_login
 
-# logging
+## Log4J 配置文件（默认：log4j2.xml）
 logging.config: classpath:log4j2-kafka.xml
 
-# dubbo
+## Dubbo 配置
 dubbo:
+  # Dubbo Service 和 Reference 扫描包路径（多个包用','分隔）
   scan.base-packages: ${hp.soa.web.component-scan.base-package}
+  # Dubbo 服务协议和端口
   protocols:
     #dubbo:
     #  name: dubbo
@@ -35,8 +44,10 @@ dubbo:
     tri:
       name: tri
       port: 6001
+  # 注册中心缓存文件
   registry:
     file: "/data/dubbo/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
+  # 应用程序配置
   application:
     qos-port: 7001
     qos-enable: false
@@ -45,17 +56,21 @@ dubbo:
     owner: ${hp.soa.web.app.owner:}
     organization: ${hp.soa.web.app.organization:}
 
-# server
+## Spring-Boot 服务配置
 server:
+  # 服务端口
   port: 9001
+  # Servlet 配置
   servlet:
     context-path: /
+  # Tomcat 配置
   tomcat:
     max-connections: 10000
     connection-timeout: 30000
     threads:
       max: 200
       min-spare: 5
+  # undertow 配置
   undertow:
     buffer-size: 1024
     direct-buffers: true
@@ -65,29 +80,35 @@ server:
       worker: 64
       io: 4
 
-# spring
+## Spring 配置
 spring:
+  # Spring 应用程序名称
   application.name: ${hp.soa.web.app.name}
+  # Spring MVC
   mvc:
     servlet:
       load-on-startup: 1
       path: /
     throw-exception-if-no-handler-found: true
+  # Spring Web
   web:
     resources:
       add-mappings: false
+  # Spring Security
   security:
     user:
       name: admin
       password: "123456"
       roles: ADMIN
+  # Spring Servlet
   servlet:
+    # 文件上传
     multipart:
       enabled: false
       max-file-size: 10MB
       max-request-size: 10MB
 
-# management
+## Spring-Boot Management 配置
 management:
   endpoint:
     health.show-details: when-authorized
@@ -101,7 +122,7 @@ management:
     export.influx.enabled: false
     tags.application: ${hp.soa.web.app.name}
 
-# api doc
+## Spring-Doc 配置
 springdoc:
   api-docs:
     enabled: true

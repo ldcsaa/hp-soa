@@ -1,4 +1,6 @@
+## Spring 数据源配置
 spring.datasource:
+  ## Druid 监控配置
   druid:
     web-stat-filter:
       enabled: true
@@ -25,12 +27,15 @@ spring.datasource:
         enabled: true
       config:
         enabled: true
-        
+
+## Spring 动态数据源配置        
 spring.datasource.dynamic:
+  # 默认数据源
   primary: master
   strict: true
   lazy: false
   seata: false
+  # Druid 默认连接池属性
   druid:
     max-active: 10
     min-idle: 1
@@ -49,13 +54,14 @@ spring.datasource.dynamic:
     # public-key uses to encrypt database access password
     #public-key: "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJRhKGNr3IAJcs4+0ys/4zmwUJoBYqAdx6EcyiWIBt7cIFS5QdruakTmGk8XOVPMVz9jOLOvhPfjLzgPgwaKo6UCAwEAAQ=="
 
+## mybatis-plus 配置 
 mybatis-plus:
   mapper-locations:
   type-aliases-package:
   check-config-location: false
   executor-type: reuse
   configuration:
-    # prod env: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    # SQL日志输出器，生产环境屏蔽输出，log-impl 设置为: org.apache.ibatis.logging.nologging.NoLoggingImpl
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     map-underscore-to-camel-case: true
     lazy-loading-enabled: true
@@ -81,7 +87,7 @@ mybatis-plus:
       update-strategy: not_null
       select-strategy: not_null
 
-# 全局事务配置
+## 全局事务配置
 hp.soa.data.global-transaction-management:
   # 默认不开启全局事务
   enabled: false
@@ -92,4 +98,5 @@ hp.soa.data.global-transaction-management:
   read-only-timeout: 3000
   read-only-isolation: ISOLATION_READ_COMMITTED
   read-only-propagation: PROPAGATION_REQUIRED
+  # 注入全局事务的方法签名格式
   pointcut-expression: "execution(* ${hp.soa.web.component-scan.base-package}..service..*.*(..))"

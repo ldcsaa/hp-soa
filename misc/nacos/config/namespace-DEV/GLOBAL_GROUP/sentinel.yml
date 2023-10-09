@@ -1,5 +1,8 @@
+## Sentinel 流控配置
 spring.cloud.sentinel:
+  # 是否开启
   enabled: true
+  # 是否立即加载
   eager: true
   filter:
     enabled: true
@@ -7,9 +10,12 @@ spring.cloud.sentinel:
     dir: /data/logs/sentinel
     switch-pid: true
   transport:
+    # 上报 Dashboard 地址
     dashboard: 192.168.56.23:8383
     heartbeat-interval-ms: 30000
+  # 流控规则数据源
   datasource:
+    # 流控规则
     flow:
       nacos:
         server-addr: 192.168.56.23:8848
@@ -20,6 +26,7 @@ spring.cloud.sentinel:
         dataId: ${spring.application.name}-flow-rules
         data-type: json
         rule-type: flow
+    # 熔断规则
     degrade:
       nacos:
         server-addr: 192.168.56.23:8848
@@ -30,6 +37,7 @@ spring.cloud.sentinel:
         dataId: ${spring.application.name}-degrade-rules
         data-type: json
         rule-type: degrade
+    # 热点规则
     param-flow:
       nacos:
         server-addr: 192.168.56.23:8848
@@ -40,6 +48,7 @@ spring.cloud.sentinel:
         dataId: ${spring.application.name}-param-rules
         data-type: json
         rule-type: param-flow
+    # 系统规则
     system:
       nacos:
         server-addr: 192.168.56.23:8848
@@ -50,6 +59,7 @@ spring.cloud.sentinel:
         dataId: ${spring.application.name}-system-rules
         data-type: json
         rule-type: system
+    # 授权规则
     authority:
       nacos:
         server-addr: 192.168.56.23:8848

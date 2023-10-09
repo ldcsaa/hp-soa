@@ -1,4 +1,6 @@
+## Spring Task 配置
 spring.task:
+  # Execution 配置
   execution:
     thread-name-prefix: "task-"
     pool:
@@ -14,6 +16,7 @@ spring.task:
       await-termination: false
       # milliseconds
       await-termination-period: 5000
+  # Scheduling 配置
   scheduling:
     thread-name-prefix: "scheduling-"
     pool:

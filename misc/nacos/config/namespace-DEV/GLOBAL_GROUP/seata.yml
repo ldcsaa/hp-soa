@@ -1,3 +1,4 @@
+## Seata 分布式事务配置
 seata:
   enabled: true
   application-id: ${spring.application.name}  
