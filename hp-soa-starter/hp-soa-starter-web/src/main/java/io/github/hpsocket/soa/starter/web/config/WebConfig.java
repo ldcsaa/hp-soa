@@ -229,7 +229,7 @@ public class WebConfig implements WebMvcConfigurer
         CorsRegistration mapping = registry.addMapping(crosProperties.getMapping());
         
         mapping
-            .allowedOrigins(crosProperties.getAllowedOrigins())
+            .allowedOriginPatterns(crosProperties.getAllowedOrigins())
             .allowedHeaders(crosProperties.getAllowedHeaders())
             .allowedMethods(crosProperties.getAllowedMethods())
             .allowCredentials(crosProperties.isAllowCredentials())
@@ -302,13 +302,13 @@ public class WebConfig implements WebMvcConfigurer
                 System.setProperty("java.net.socks.password", password);
                 
                 Authenticator.setDefault(new Authenticator()
-                                        {
-                                            @Override
-                                            protected PasswordAuthentication getPasswordAuthentication()
-                                            {
-                                                return new PasswordAuthentication(userName, password.toCharArray());
-                                            }
-                                        });
+                {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication()
+                    {
+                        return new PasswordAuthentication(userName, password.toCharArray());
+                    }
+                });
             }
         }        
     }

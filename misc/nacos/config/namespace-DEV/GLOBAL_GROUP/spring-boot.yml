@@ -1,16 +1,19 @@
-# logging
+## Log4J 配置文件（默认：log4j2.xml）
 logging.config: classpath:log4j2-kafka.xml
 
-# server
+## Spring-Boot 服务配置
 server:
+  # Servlet 配置
   servlet:
     context-path: /
+  # Tomcat 配置
   tomcat:
     max-connections: 10000
     connection-timeout: 30000
     threads:
       max: 200
       min-spare: 5
+  # undertow 配置
   undertow:
     buffer-size: 1024
     direct-buffers: true
@@ -20,38 +23,45 @@ server:
       worker: 64
       io: 4
 
-# spring
+## Spring 配置
 spring:
+  # Spring 应用程序名称
   application.name: ${hp.soa.web.app.name}
+  # Spring Cloud 配置
   cloud.config:
-    # dev env -> enable override
+    # 配置覆盖规则：开发、测试环境允许本地配置覆盖远程配置
     allow-override: true
     override-system-properties: true
     override-none: true
-    # prod env -> disable override
+    # 配置覆盖规则：生成环境不允许本地配置覆盖远程配置
     #allow-override: false
     #override-system-properties: false
     #override-none: false
+  # Spring MVC
   mvc:
     servlet:
       load-on-startup: 1
       path: /
     throw-exception-if-no-hand1ler-found: true
+  # Spring Web
   web:
     resources:
       add-mappings: false
+  # Spring Security
   security:
     user:
       name: admin
       password: "123456"
       roles: ADMIN
+  # Spring Servlet
   servlet:
+    # 文件上传
     multipart:
       enabled: false
       max-file-size: 10MB
       max-request-size: 10MB
 
-# management
+## Spring-Boot Management 配置
 management:
   endpoint:
     health.show-details: when-authorized
@@ -65,12 +75,14 @@ management:
     export.influx.enabled: false
     tags.application: ${hp.soa.web.app.name}
 
-# api doc
+## Spring-Doc 配置
 springdoc:
   api-docs:
+    # 是否开启（生成环境应设置为 false）
     enabled: true
     path: /v3/api-docs
   swagger-ui:
+    # 是否开启（生成环境应设置为 false）
     enabled: true
     path: /swagger-ui
   packagesToScan: com.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}

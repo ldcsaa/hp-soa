@@ -1,3 +1,4 @@
+## XXL-Job 配置
 xxl.job:
   enabled: true
   access-token: 0123456789abcdef
@@ -6,7 +7,7 @@ xxl.job:
     appname: ${spring.application.name}
     address:
     ip:
-    # use static port, which is config by application config file
+    # use static port, which is config by application local config file
     #port: 
     log-path: /data/logs/xxl-job/${spring.application.name}
     log-retention-days: 7

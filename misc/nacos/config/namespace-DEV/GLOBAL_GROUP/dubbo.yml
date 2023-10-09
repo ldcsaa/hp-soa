@@ -1,7 +1,11 @@
+## Dubbo 配置
 dubbo:
+  # Dubbo Service 和 Reference 扫描包路径（多个包用','分隔）
   scan.base-packages: ${hp.soa.web.component-scan.base-package}
+  # 注册中心缓存文件
   registry:
-    file: "/data/hp-soa/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
+    file: "/opt/hp-soa/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
+  # 应用程序配置
   application:
     #qos-enable: false
     name: ${hp.soa.web.app.name}

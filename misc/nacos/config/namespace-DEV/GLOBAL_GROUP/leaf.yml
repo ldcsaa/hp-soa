@@ -1,10 +1,15 @@
+## Leaf 分布式全局ID生成器配置
 hp.soa.gid.leaf:
+  # 雪花ID生成器配置
   snowflake:
+    # 是否开启（默认：true）
     #enable: true
     leaf-name: hp-soa
     zk-address: 192.168.56.23:2181
     server-port: ${server.port}
+  # 段号ID生成器配置（配置方式参考 Druid 数据库连接池）
   segment:
+     # 是否开启（默认：false）
     enable: true
     url: "jdbc:mysql://192.168.56.23:3306/leaf_db?serverTimezone=Asia/Shanghai&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false&failOverReadOnly=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true"
     username: leaf

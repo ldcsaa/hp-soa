@@ -1,6 +1,9 @@
+## 应用程序配置
 hp.soa.web:
-  cookie: 
+  # Cookie 生命周期（默认：10年）
+  cookie:
     max-age: 315360000
+  # 跨域访问配置
   cors:
     mapping: "/**"
     allowed-origins: "*"
@@ -9,6 +12,7 @@ hp.soa.web:
     exposed-headers: 
     allow-credentials: false
     maxAge: 3600
+  # 异步服务（io.github.hpsocket.soa.framework.web.service.AsyncService）配置
   async:
     enabled: true
     core-pool-size: 4
