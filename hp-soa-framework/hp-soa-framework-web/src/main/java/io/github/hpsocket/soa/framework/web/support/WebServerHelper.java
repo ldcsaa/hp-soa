@@ -23,6 +23,8 @@ import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.Result;
 
 import com.alibaba.fastjson2.JSONWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.service.TracingContext;
@@ -87,6 +89,8 @@ public class WebServerHelper
                                                                                         TimeUnit.SECONDS,
                                                                                         new LinkedBlockingDeque<>(2000),
                                                                                         new ThreadPoolExecutor.CallerRunsPolicy());
+    
+    private static ObjectMapper jacksonObjectMapper;
 
     /** 检测 HTTP 请求的 User-Agent 是否合法 */
     public static final boolean checkUserAgent(String ua)
@@ -454,5 +458,22 @@ public class WebServerHelper
     public static final String randomUUID()
     {
         return IdGenerator.nextCompactUUID();
+    }
+    
+    /** 获取默认 Jackson {@linkplain ObjectMapper} */
+    public static final ObjectMapper getJacksonObjectMapper()
+    {
+        if(jacksonObjectMapper == null)
+        {
+            synchronized(WebServerHelper.class)
+            {
+                if(jacksonObjectMapper == null)
+                {
+                    jacksonObjectMapper = SpringContextHolder.getBean(ObjectMapper.class);
+                }
+            }
+        }
+        
+        return jacksonObjectMapper;
     }
 }

@@ -23,7 +23,10 @@ public class FastJsonExcludePropertyFilter implements PropertyFilter
         
         Class<?> clazz = object.getClass();
         
-        if(Map.class.isAssignableFrom(clazz) || Collection.class.isAssignableFrom(clazz) || clazz.isArray())
+        if( clazz.isPrimitive()                     ||
+            clazz.isArray()                         ||
+            Map.class.isAssignableFrom(clazz)       ||
+            Collection.class.isAssignableFrom(clazz))
             return true;
         
         try
