@@ -12,8 +12,8 @@ import io.github.hpsocket.soa.framework.web.propertries.IServletPathsPropertries
 /** <b>应用程序 Web 基本配置持有者</b> */
 public class AppConfigHolder
 {
-    public static final String REQUEST_PATH_SEPARATOR    = "/";
-    public static final String FAVICON_PATH                = "/favicon.ico";
+    public static final String REQUEST_PATH_SEPARATOR   = "/";
+    public static final String FAVICON_PATH             = "/favicon.ico";
     
     private static boolean readOnly;
 
@@ -48,19 +48,19 @@ public class AppConfigHolder
                 if(!initialized)
                 {
                     readOnly        = appProperties.isReadOnly();
-                    appId            = appProperties.getId();
-                    appName            = appProperties.getName();
-                    appVersion        = appProperties.getVersion();
-                    appOrganization    = appProperties.getOrganization();
+                    appId           = appProperties.getId();
+                    appName         = appProperties.getName();
+                    appVersion      = appProperties.getVersion();
+                    appOrganization = appProperties.getOrganization();
                     appOwner        = appProperties.getOwner();
                     cookieMaxAge    = appProperties.getCookieMaxAge();
-                    appAddress        = SystemUtil.getAddress();
+                    appAddress      = SystemUtil.getAddress();
                     
-                    servletContextPath            = servletProperties.getServletContextPath();
+                    servletContextPath          = servletProperties.getServletContextPath();
                     springMvcServletPath        = servletProperties.getSpringMvcServletPath();
-                    managementEndpointsBasePath    = servletProperties.getManagementEndpointsBasePath();
+                    managementEndpointsBasePath = servletProperties.getManagementEndpointsBasePath();
                     springdocApiDocsPath        = servletProperties.getSpringdocApiDocsPath();
-                    springdocSwaggerUiPath        = servletProperties.getSpringdocSwaggerUiPath();
+                    springdocSwaggerUiPath      = servletProperties.getSpringdocSwaggerUiPath();
                     
                     StringBuilder sb = new StringBuilder();;
                     
@@ -70,9 +70,9 @@ public class AppConfigHolder
                         sb.append(springMvcServletPath);
                     
                     servletUriPrefix = sb.toString();
-                    managementEndpointsBaseFullPath    = servletUriPrefix + managementEndpointsBasePath;
+                    managementEndpointsBaseFullPath = servletUriPrefix + managementEndpointsBasePath;
                     springdocApiDocsFullPath        = servletUriPrefix + springdocApiDocsPath;
-                    springdocSwaggerUiFullPath        = servletUriPrefix + springdocSwaggerUiPath;
+                    springdocSwaggerUiFullPath      = servletUriPrefix + springdocSwaggerUiPath;
                     
                     
                     excludedLogPaths.add(managementEndpointsBaseFullPath);

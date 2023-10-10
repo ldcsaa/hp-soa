@@ -17,9 +17,12 @@ import org.springframework.context.annotation.Import;
         })
 public class AspectAopConfig
 {
+    /** {@linkplain AccessVerificationService} HTTP 请求校验拦截器配置 */
     @Bean
     @ConditionalOnProperty(name="hp.soa.web.access-verification.enabled", havingValue="true", matchIfMissing = true)
-    AccessVerificationInspector accessVerificationInspector(IAccessVerificationProperties accessVerificationProperties, AccessVerificationService accessVerificationService)
+    AccessVerificationInspector accessVerificationInspector(
+        IAccessVerificationProperties accessVerificationProperties,
+        AccessVerificationService accessVerificationService)
     {
         return new AccessVerificationInspector(accessVerificationProperties.getDefaultAccessPolicyEnum(), accessVerificationService);
     }    

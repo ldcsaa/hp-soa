@@ -16,7 +16,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
@@ -33,6 +32,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
 import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
+
 import io.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
@@ -58,30 +58,21 @@ public class WebConfig implements WebMvcConfigurer
     private final WebProperties webProperties;
     private final SecurityProperties securityProperties;
     
-    public WebConfig(WebProperties webProperties, SecurityProperties securityProperties)
+    public WebConfig(WebProperties webProperties, SecurityProperties securityProperties, SpringContextHolder springContextHolder)
     {
+        this.webProperties = webProperties;
+        this.securityProperties = securityProperties;
+        
         AppProperties app = webProperties.getApp();
         
         if(GeneralHelper.isStrEmpty(app.getId()) || GeneralHelper.isStrEmpty(app.getName()))
             throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.app.id' or 'hp.soa.web.app.name' property is empty", WebConfig.class.getSimpleName()));
         
-        ProxyProperties proxy = webProperties.getProxy();
-        
-        checkProxy(proxy);
+        checkProxy(webProperties.getProxy());
 
-        this.webProperties = webProperties;
-        this.securityProperties = securityProperties;
-        
         AppConfigHolder.init(webProperties, securityProperties);
     }
     
-    /** {@linkplain SpringContextHolder} Spring 上下文持有者配置 */
-    @Bean("springContextHolder")
-    public SpringContextHolder springContextHolder(ApplicationContext applicationContext)
-    {
-        return new SpringContextHolder(applicationContext);
-    }
-
     /** {@linkplain ReadOnlyContextRefreshedEventListener} 应用程序监听器配置 */
     @Bean("readOnlyContextRefreshedEventListener")
     @DependsOn("springContextHolder")
