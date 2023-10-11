@@ -30,6 +30,13 @@ def parse_conf():
     if not server_port_val:
         server = get_conf(None, 'server', False, conf)
         server_port_val = get_conf('server', 'port', False, server)
+        
+    startup_max_wait_seconds_val = get_conf(None, 'startup.max-wait-seconds', True, conf)
+
+    if not startup_max_wait_seconds_val:
+        startup = get_conf(None, 'startup', True, conf)
+        if startup:
+            startup_max_wait_seconds_val = get_conf('startup', 'max-wait-seconds', True, startup)
 
     jvm_options_env_val = get_conf(None, 'jvm.options' + '.' + env_name, True, conf)
 
@@ -41,7 +48,7 @@ def parse_conf():
             else:
                 jvm_options_env_val = get_conf('jvm.options', env_name, True, jvm_options)
 
-    print(('hp.soa.web.app.name={}#server.port={}#jvm.options' + '.' + env_name + '={}').format(hp_soa_web_app_name_val, server_port_val, (jvm_options_env_val if jvm_options_env_val else '')))
+    print(('hp.soa.web.app.name={}#server.port={}#startup.max-wait-seconds={}#jvm.options' + '.' + env_name + '={}').format(hp_soa_web_app_name_val, server_port_val, (startup_max_wait_seconds_val if startup_max_wait_seconds_val else ''), (jvm_options_env_val if jvm_options_env_val else '')))
 
 
 def get_conf(prefix, name, optional, conf):

@@ -1,4 +1,5 @@
 #!/bin/bash
+
 BIN_DIR=$(dirname $0)
 source $BIN_DIR/env.sh
 
