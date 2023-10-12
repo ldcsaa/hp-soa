@@ -56,7 +56,7 @@ if [[ -z "$APP_NAME" || -z "$SERVER_PORT"  ]]; then
     exit 1
 fi
 
-if [[ -z "$JVM_OPTIONS" ]]; then
+if [[ -z "$JVM_OPTIONS" || "${JVM_OPTIONS,,}" == "default" ]]; then
     JVM_OPTIONS="$DEFAULT_JVM_OPTIONS"
 fi
 
