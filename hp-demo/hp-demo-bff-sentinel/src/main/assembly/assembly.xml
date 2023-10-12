@@ -18,6 +18,12 @@
     </fileSets>
     <files>
         <file>
+            <source>target/classes/bootstrap.yml</source>
+            <outputDirectory>deploy</outputDirectory>
+            <fileMode>0644</fileMode>
+            <lineEnding>unix</lineEnding>
+        </file>
+        <file>
             <source>target/classes/git.properties</source>
             <outputDirectory>deploy</outputDirectory>
             <fileMode>0644</fileMode>

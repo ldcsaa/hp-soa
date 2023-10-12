@@ -1,89 +1,104 @@
 #!/bin/bash
+
 BIN_DIR=$(cd $(dirname $0); pwd)
+DEPLOY_DIR=$BIN_DIR/../deploy
 export PRG_HOME=$(cd $(dirname $BIN_DIR); pwd)
-export CONF_FILE="$BIN_DIR/application.properties"
+export CONF_FILE="$DEPLOY_DIR/bootstrap.yml"
 
 if [ ! -f "$CONF_FILE" ]; then
-	echo "  > environment check failed -> (config file '$CONF_FILE' not exists)"
-	exit 1
+    echo "  > environment check failed -> (config file '$CONF_FILE' not exists)"
+    exit 1
 fi
 
 source /etc/profile
 
-APP_ID_KEY='app.id'
-APP_NAME_KEY='app.name'
-SERVER_PORT_KEY='server.port'
-JMX_PORT_KEY='jmx.port'
-DUBBO_PORT_KEY='dubbo.protocol.port'
-XXL_PORT_KEY='xxl.job.executor.port'
 RUNTIME_ENV=${environment:-local}
-JVM_XMS_KEY="env.${RUNTIME_ENV}.jvm.xms"
-JVM_XMX_KEY="env.${RUNTIME_ENV}.jvm.xmx"
-STARTUP_SECONDS_KEY="startup.max.wait.seconds"
+APP_NAME_KEY='hp.soa.web.app.name'
+SERVER_PORT_KEY='server.port'
+JVM_OPTIONS_KEY="jvm.options.${RUNTIME_ENV}"
+STARTUP_WAIT_SECONDS_KEY="startup.max-wait-seconds"
 
-export APP_ID=$(cat $CONF_FILE | grep -E '^'$APP_ID_KEY'=' | cut -d "=" -f 2 | tr -d "[ \r\n]")
-export APP_NAME=$(cat $CONF_FILE | grep -E '^'$APP_NAME_KEY'=' | cut -d "=" -f 2 | tr -d "[ \r\n]")
-export SERVER_PORT=$(cat $CONF_FILE | grep -E '^'$SERVER_PORT_KEY'=' | cut -d "=" -f 2 | tr -d "[ \r\n]")
-export JMX_PORT=$(cat $CONF_FILE | grep -E '^'$JMX_PORT_KEY'=' | cut -d "=" -f 2 | tr -d "[ \r\n]")
-export JVM_XMS=$(cat $CONF_FILE | grep -E '^'$JVM_XMS_KEY'=' | cut -d "=" -f 2 | tr -d "[ \r\n]")
-export JVM_XMX=$(cat $CONF_FILE | grep -E '^'$JVM_XMX_KEY'=' | cut -d "=" -f 2 | tr -d "[ \r\n]")
-export DUBBO_PORT=$(cat $CONF_FILE | grep -E '^'$DUBBO_PORT_KEY'=' | cut -d "=" -f 2 | tr -d "[ \r\n]")
-export XXL_PORT=$(cat $CONF_FILE | grep -E '^'$XXL_PORT_KEY'=' | cut -d "=" -f 2 | tr -d "[ \r\n]")
-STARTUP_SECONDS=$(cat $CONF_FILE | grep -E '^'$STARTUP_SECONDS_KEY'=' | cut -d "=" -f 2 | tr -d "[ \r\n]")
+APP_NAME=
+SERVER_PORT=
+JVM_OPTIONS=
+STARTUP_WAIT_SECONDS=
 
-if [[ -z "$STARTUP_SECONDS" || "$STARTUP_SECONDS" -le 0 ]]; then
-	STARTUP_SECONDS=90
+OLD_IFS="$IFS"
+IFS="#"
+CONF=($(python3 $BIN_DIR/conf_parser.py $RUNTIME_ENV $CONF_FILE))
+RS=$?
+IFS="$OLD_IFS"
+
+if [ $RS -ne 0 ]; then
+  exit 1
 fi
 
-export STARTUP_SECONDS
+for i in "${CONF[@]}"; do
+    key=${i%=*}
+    val=${i##*=}
+    
+    if [ "$key" == "$APP_NAME_KEY" ]; then
+        APP_NAME=$val
+    elif [ "$key" == "$SERVER_PORT_KEY" ]; then
+        SERVER_PORT=$val
+    elif [ "$key" == "$JVM_OPTIONS_KEY" ]; then
+        JVM_OPTIONS=$val
+    elif [ "$key" == "$STARTUP_WAIT_SECONDS_KEY" ]; then
+        STARTUP_WAIT_SECONDS=$val
+    fi
+done
 
-if [[ -z "$APP_ID" || -z "$APP_NAME" || -z "$SERVER_PORT" || -z "$JMX_PORT" ]]; then
-	echo "  > environment check failed -> (can't find '$APP_ID_KEY' / '$APP_NAME_KEY' / '$SERVER_PORT_KEY' / '$JMX_PORT_KEY' property in config file '$CONF_FILE')"
-	exit 1
+if [[ -z "$APP_NAME" || -z "$SERVER_PORT"  ]]; then
+    echo "  > environment check failed -> (can't find '$APP_NAME_KEY' / '$SERVER_PORT_KEY' property in config file '$CONF_FILE')"
+    exit 1
 fi
+
+if [[ -z "$JVM_OPTIONS" ]]; then
+    JVM_OPTIONS="-Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m"
+fi
+
+if [[ -z "$STARTUP_WAIT_SECONDS" || "$STARTUP_WAIT_SECONDS" -le 0 ]]; then
+    STARTUP_WAIT_SECONDS=90
+fi
+
+export RUNTIME_ENV
+export APP_NAME
+export SERVER_PORT
+export JVM_OPTIONS
+export STARTUP_WAIT_SECONDS
 
 LOG_LEVEL=
-GELF_HOST=
 
-if [ "$RUNTIME_ENV" == "production" ]; then
-	LOG_LEVEL="INFO"
+if [ "$RUNTIME_ENV" == "prod" ]; then
+    LOG_LEVEL="INFO"
 else
-	LOG_LEVEL="DEBUG"
-fi
-
-if [ "$RUNTIME_ENV" == "local" ]; then
-	GELF_HOST="udp:localhost"
-else
-	GELF_HOST="tcp:localhost"
+    LOG_LEVEL="DEBUG"
 fi
 
 export LOG_LEVEL
-export GELF_HOST
-export GELF_PORT="12201"
 export LOG_FILE_PATH="/data/logs/access"
 export LOG_FILE="${LOG_FILE_PATH}/${APP_NAME}/service.log"
-export DUBBO_PROPERTIES_FILE="/data/dubbo/dubbo.properties"
-export DUBBO_RESOLVE_FILE="/data/dubbo/dubbo-resolve.properties"
-export JAVA_AGENT_FILE="/opt/settings/javaagent.config"
+export SYSTEM_PROPERTIES_FILE="/opt/hp-soa/config/system-config.properties"
+export EXTENDED_PROPERTIES_FILE="/opt/hp-soa/config/extended-config.properties"
+export DUBBO_RESOLVE_FILE="/opt/hp-soa/config/dubbo-resolve.properties"
+export JAVA_AGENT_FILE="/opt/hp-soa/config/java-agent.config"
 
 JAVA_AGENT=
 
 if [ -f "$JAVA_AGENT_FILE" ]; then
-	while read LINE
-	do
-		if [[ -n "$LINE" && ${LINE:0:1} != "#" ]]; then
-			LINE=${LINE//\$\{APP_NAME\}/$APP_NAME}
-			LINE=${LINE//\$APP_NAME/$APP_NAME}
-			LINE=${LINE//\$\{APP_ID\}/$APP_ID}
-			LINE=${LINE//\$APP_ID/$APP_ID}
-			
-			if [ -z "$JAVA_AGENT" ]; then
-				JAVA_AGENT="$LINE"
-			else
-				JAVA_AGENT="$JAVA_AGENT $LINE"
-			fi
-		fi
-	done < $JAVA_AGENT_FILE
+    while read LINE
+    do
+        if [[ -n "$LINE" && ${LINE:0:1} != "#" ]]; then
+            LINE=${LINE//\$\{APP_NAME\}/$APP_NAME}
+            LINE=${LINE//\$APP_NAME/$APP_NAME}
+            
+            if [ -z "$JAVA_AGENT" ]; then
+                JAVA_AGENT="$LINE"
+            else
+                JAVA_AGENT="$JAVA_AGENT $LINE"
+            fi
+        fi
+    done < $JAVA_AGENT_FILE
 fi
 
 export JAVA_AGENT
