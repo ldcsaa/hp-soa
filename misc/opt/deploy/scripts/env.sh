@@ -40,11 +40,11 @@ for i in "${CONF[@]}"; do
     if [ "$key" == "$APP_NAME_KEY" ]; then
         APP_NAME=$val
     elif [ "$key" == "$SERVER_PORT_KEY" ]; then
-	    SERVER_PORT=$val
+        SERVER_PORT=$val
     elif [ "$key" == "$JVM_OPTIONS_KEY" ]; then
-	    JVM_OPTIONS=$val
+        JVM_OPTIONS=$val
     elif [ "$key" == "$STARTUP_WAIT_SECONDS_KEY" ]; then
-	    STARTUP_WAIT_SECONDS=$val
+        STARTUP_WAIT_SECONDS=$val
     fi
 done
 
