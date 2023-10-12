@@ -59,7 +59,7 @@ if [[ -z "$STARTUP_WAIT_SECONDS" || "$STARTUP_WAIT_SECONDS" -le 0 ]]; then
     STARTUP_WAIT_SECONDS=$DEFAULT_STARTUP_WAIT_SECONDS
 fi
 
-if [ -z "$LOG_LEVEL"]; then
+if [ -z "$LOG_LEVEL" ]; then
     if [ "$RUNTIME_ENV" == "prod" ]; then
         LOG_LEVEL="INFO"
     else
