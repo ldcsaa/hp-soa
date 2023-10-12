@@ -46,7 +46,7 @@ dubbo:
       port: 6001
   # 注册中心缓存文件
   registry:
-    file: "/data/dubbo/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
+    file: "/opt/hp-soa/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
   # 应用程序配置
   application:
     qos-port: 7001

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-BIN_DIR=$(dirname $0)
+BIN_DIR=$(cd $(dirname $0); pwd)
+
 source $BIN_DIR/env.sh
 
 if [ $? -ne 0 ]; then
@@ -27,16 +28,11 @@ check_pid()
 }
 
 if ! check_pid "$SERVER_PORT"; then
-	if ! check_pid "$JMX_PORT"; then
-		if ! check_pid "$DUBBO_PORT"; then
-			if ! check_pid "$XXL_PORT"; then
-				:
-			fi
-		fi
-	fi
+	echo "  > skip stop -> no process running with (SERVER_PORT: $PORT)"
+	exit 1
 fi
 
-echo "  > stopping ... ($PORT)"
+echo "  > stopping ... (SERVER_PORT: $PORT)"
 
 if [ -n "$LINE" ]; then
 	tail -0f "$LOG_FILE" 2>/dev/null &
@@ -48,7 +44,7 @@ if [ -n "$LINE" ]; then
 	kill $PID
 	
 	SEP=3
-	CNT=$((STARTUP_SECONDS/SEP))
+	CNT=$((STARTUP_WAIT_SECONDS/SEP))
 
 	for ((i=1; i<=$CNT; i++))
 		do

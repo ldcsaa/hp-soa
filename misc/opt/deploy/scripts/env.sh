@@ -16,7 +16,7 @@ RUNTIME_ENV=${environment:-local}
 APP_NAME_KEY='hp.soa.web.app.name'
 SERVER_PORT_KEY='server.port'
 JVM_OPTIONS_KEY="jvm.options.${RUNTIME_ENV}"
-STARTUP_SECONDS_KEY="startup.max-wait-seconds"
+STARTUP_WAIT_SECONDS_KEY="startup.max-wait-seconds"
 
 APP_NAME=
 SERVER_PORT=
@@ -25,7 +25,7 @@ STARTUP_WAIT_SECONDS=
 
 OLD_IFS="$IFS"
 IFS="#"
-CONF=($(python3 conf_parser.py dev))
+CONF=($(python3 $BIN_DIR/conf_parser.py $RUNTIME_ENV $CONF_FILE))
 RS=$?
 IFS="$OLD_IFS"
 
@@ -34,16 +34,16 @@ if [ $RS -ne 0 ]; then
 fi
 
 for i in "${CONF[@]}"; do
-    local key=${i%=*}
-    local val=${i##*=}
+    key=${i%=*}
+    val=${i##*=}
     
-    if [ "$key" = "$APP_NAME_KEY" ]; then
+    if [ "$key" == "$APP_NAME_KEY" ]; then
         APP_NAME=$val
-    elif [ "$key" = "$SERVER_PORT_KEY" ]; then
+    elif [ "$key" == "$SERVER_PORT_KEY" ]; then
 	    SERVER_PORT=$val
-    elif [ "$key" = "$JVM_OPTIONS_KEY" ]; then
+    elif [ "$key" == "$JVM_OPTIONS_KEY" ]; then
 	    JVM_OPTIONS=$val
-    elif [ "$key" = "$STARTUP_SECONDS_KEY" ]; then
+    elif [ "$key" == "$STARTUP_WAIT_SECONDS_KEY" ]; then
 	    STARTUP_WAIT_SECONDS=$val
     fi
 done
@@ -61,6 +61,7 @@ if [[ -z "$STARTUP_WAIT_SECONDS" || "$STARTUP_WAIT_SECONDS" -le 0 ]]; then
     STARTUP_WAIT_SECONDS=90
 fi
 
+export RUNTIME_ENV
 export APP_NAME
 export SERVER_PORT
 export JVM_OPTIONS

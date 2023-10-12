@@ -1,6 +1,7 @@
 #!/bin/bash
 
-BIN_DIR=$(dirname $0)
+BIN_DIR=$(cd $(dirname $0); pwd)
+
 source $BIN_DIR/env.sh
 
 if [ $? -ne 0 ]; then
@@ -15,5 +16,5 @@ if [ -n "$LINE" ]; then
 	exit 0
 fi
 
-echo "  > '$APP_NAME' has stopped -> (SERVER_PORT: $SERVER_PORT)"
+echo "  > '$APP_NAME' has stopped -> no process running with (SERVER_PORT: $SERVER_PORT)"
 exit 1

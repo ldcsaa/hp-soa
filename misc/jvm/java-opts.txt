@@ -3,6 +3,7 @@ Example:
 java \
 -DskipTests=true \
 -Dfile.encoding=UTF-8 \
+-Djava.awt.headless=true \
 -Dhp.soa.system.properties.file=/opt/hp-soa/config/system-config.properties \
 -Dhp.soa.extended.properties.file=/opt/hp-soa/config/extended-config.properties \
 -Ddubbo.resolve.file=/opt/hp-soa/config/dubbo-resolve.properties \
