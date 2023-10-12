@@ -69,6 +69,7 @@ fi
 
 LOG_FILE_PATH=${LOG_FILE_PATH:-/data/logs/access}
 LOG_FILE="${LOG_FILE_PATH}/${APP_NAME}/service.log"
+HEAP_DUMP_PATH="${LOG_FILE_PATH}/${APP_NAME}"
 
 if [ -z "$JAVA_AGENT"]; then
     if [ -f "$JAVA_AGENT_FILE" ]; then
@@ -95,7 +96,7 @@ JAVA_OPTS="\
 -Djava.security.egd=file:/dev/./urandom \
 -Dnetworkaddress.cache.ttl=10 -Dnetworkaddress.cache.negative.ttl=1 \
 $DEFAULT_JVM_MEMORY_OPTIONS \
--XX:-OmitStackTraceInFastThrow -XX:+DisableExplicitGC -XX:MaxGCPauseMillis=50 -XX:+HeapDumpOnOutOfMemoryError \
+-XX:-OmitStackTraceInFastThrow -XX:+DisableExplicitGC -XX:MaxGCPauseMillis=50 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$HEAP_DUMP_PATH \
 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:GuaranteedSafepointInterval=0 -XX:+UseCountedLoopSafepoints -XX:LoopStripMiningIter=1000 \
 --add-opens java.base/java.lang=ALL-UNNAMED \
 --add-opens java.base/java.lang.reflect=ALL-UNNAMED \
