@@ -12,7 +12,7 @@ import lombok.Setter;
 @ConditionalOnProperty(name="springdoc.api-docs.enabled", havingValue="true", matchIfMissing = false)
 public class SwaggerProperties
 {
-    private String groupName = "HP-Socket";
+    private String groupName = "HP-SOA";
     private String title;
     private String description;
     private String version;

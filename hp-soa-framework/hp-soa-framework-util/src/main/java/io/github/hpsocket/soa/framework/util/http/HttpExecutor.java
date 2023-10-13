@@ -1218,15 +1218,15 @@ public class HttpExecutor
     @NoArgsConstructor
     public static class Response
     {
-        public static final int Success                            = 0;
+        public static final int Success                         = 0;
         public static final int Redirect                        = 1;
-        public static final int ResponseError                    = 2;
-        public static final int ConnectionPoolTimeoutException    = 3;
-        public static final int ConnectTimeoutException            = 4;
-        public static final int SocketTimeoutException            = 5;
-        public static final int ClientProtocolException            = 6;
-        public static final int IOException                        = 7;
-        public static final int Exception                        = 8;
+        public static final int ResponseError                   = 2;
+        public static final int ConnectionPoolTimeoutException  = 3;
+        public static final int ConnectTimeoutException         = 4;
+        public static final int SocketTimeoutException          = 5;
+        public static final int ClientProtocolException         = 6;
+        public static final int IOException                     = 7;
+        public static final int Exception                       = 8;
 
         public String encoding;
         public String version;
@@ -1256,8 +1256,8 @@ public class HttpExecutor
 
         public boolean isNoError()
         {
-            return    resultCode == Response.Success        ||
-                    resultCode == Response.Redirect        ;
+            return    resultCode == Response.Success ||
+                    resultCode == Response.Redirect  ;
         }
 
         public boolean isNoExecption()
@@ -1294,13 +1294,13 @@ public class HttpExecutor
         R response                    = null;
         List<NameValuePair> headers    = new ArrayList<NameValuePair>();
         
-        headers.add(new BasicNameValuePair("Accept"                , "application/json"));
+        headers.add(new BasicNameValuePair("Accept"             , "application/json"));
         headers.add(new BasicNameValuePair("Accept-Encoding"    , "gzip, deflate"));
         headers.add(new BasicNameValuePair("Accept-Language"    , "zh-CN,zh;q=0.8,en-us;q=0.5,en;q=0.3,*;q=0.2"));
-        headers.add(new BasicNameValuePair("Connection"            , "keep-alive"));
-        headers.add(new BasicNameValuePair("Cache-Control"        , "max-age=0"));
-        headers.add(new BasicNameValuePair("Pragma"                , "no-cache"));
-        headers.add(new BasicNameValuePair("User-Agent"            , "Mozilla/5.0"));
+        headers.add(new BasicNameValuePair("Connection"         , "keep-alive"));
+        headers.add(new BasicNameValuePair("Cache-Control"      , "max-age=0"));
+        headers.add(new BasicNameValuePair("Pragma"             , "no-cache"));
+        headers.add(new BasicNameValuePair("User-Agent"         , "Mozilla/5.0"));
         headers.add(new BasicNameValuePair("Content-Type"       , "application/json"));
         
         if(GeneralHelper.isNotNullOrEmpty(extraHeaders))
@@ -1353,13 +1353,13 @@ public class HttpExecutor
         if(GeneralHelper.isNullOrEmpty(headers))
         {
             headers    = new ArrayList<NameValuePair>();
-            headers.add(new BasicNameValuePair("Accept"                , "text/html"));
+            headers.add(new BasicNameValuePair("Accept"             , "text/html"));
             headers.add(new BasicNameValuePair("Accept-Encoding"    , "gzip, deflate"));
             headers.add(new BasicNameValuePair("Accept-Language"    , "zh-CN,zh;q=0.8,en-us;q=0.5,en;q=0.3,*;q=0.2"));
-            headers.add(new BasicNameValuePair("Connection"            , "keep-alive"));
-            headers.add(new BasicNameValuePair("Cache-Control"        , "max-age=0"));
-            headers.add(new BasicNameValuePair("Pragma"                , "no-cache"));
-            headers.add(new BasicNameValuePair("User-Agent"            , "Mozilla/5.0"));
+            headers.add(new BasicNameValuePair("Connection"         , "keep-alive"));
+            headers.add(new BasicNameValuePair("Cache-Control"      , "max-age=0"));
+            headers.add(new BasicNameValuePair("Pragma"             , "no-cache"));
+            headers.add(new BasicNameValuePair("User-Agent"         , "Mozilla/5.0"));
         }
         
         List<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -1419,13 +1419,13 @@ public class HttpExecutor
         R response                    = null;
         List<NameValuePair> headers    = new ArrayList<NameValuePair>();
         
-        headers.add(new BasicNameValuePair("Accept"                , "*/*"));
+        headers.add(new BasicNameValuePair("Accept"             , "*/*"));
         headers.add(new BasicNameValuePair("Accept-Encoding"    , "gzip, deflate"));
         headers.add(new BasicNameValuePair("Accept-Language"    , "zh-CN,zh;q=0.8,en-us;q=0.5,en;q=0.3,*;q=0.2"));
-        headers.add(new BasicNameValuePair("Connection"            , "keep-alive"));
-        headers.add(new BasicNameValuePair("Cache-Control"        , "max-age=0"));
-        headers.add(new BasicNameValuePair("Pragma"                , "no-cache"));
-        headers.add(new BasicNameValuePair("User-Agent"            , "Mozilla/5.0"));
+        headers.add(new BasicNameValuePair("Connection"         , "keep-alive"));
+        headers.add(new BasicNameValuePair("Cache-Control"      , "max-age=0"));
+        headers.add(new BasicNameValuePair("Pragma"             , "no-cache"));
+        headers.add(new BasicNameValuePair("User-Agent"         , "Mozilla/5.0"));
         
         if(GeneralHelper.isNotNullOrEmpty(extraHeaders))
             headers.addAll(extraHeaders);
