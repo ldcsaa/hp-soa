@@ -1832,9 +1832,9 @@ public class GeneralHelper
         if(GeneralHelper.isStrEmpty(str))
             return "";
         
-        int len        = str.length();
-        int end        = len - offset;
-        int begin    = len - size - offset;
+        int len   = str.length();
+        int end   = len - offset;
+        int begin = len - size - offset;
         
         if(end <= 0)
             return str;
