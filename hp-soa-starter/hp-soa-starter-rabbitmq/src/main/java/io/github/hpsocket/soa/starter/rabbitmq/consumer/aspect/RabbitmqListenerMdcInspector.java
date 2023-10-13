@@ -32,13 +32,13 @@ import java.util.Map;
 @Order(0)
 public class RabbitmqListenerMdcInspector
 {
-    static final String INSPECTOR_POINTCUT_PATTERN     = "execution (public void *.*(..)) && "
+    static final String INSPECTOR_POINTCUT_PATTERN  = "execution (public void *.*(..)) && "
                                                     + "("
-                                                    + "        @annotation(org.springframework.amqp.rabbit.annotation.RabbitListener) || "
-                                                    + "        ("
-                                                    + "            @target(org.springframework.amqp.rabbit.annotation.RabbitListener) &&"
-                                                    + "            @annotation(org.springframework.amqp.rabbit.annotation.RabbitHandler)"
-                                                    + "        )"
+                                                    + "     @annotation(org.springframework.amqp.rabbit.annotation.RabbitListener) || "
+                                                    + "     ("
+                                                    + "         @target(org.springframework.amqp.rabbit.annotation.RabbitListener) &&"
+                                                    + "         @annotation(org.springframework.amqp.rabbit.annotation.RabbitHandler)"
+                                                    + "     )"
                                                     + ")";
 
     private static final AspectHelper.AnnotationHolder<RabbitListener> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
