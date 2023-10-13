@@ -983,7 +983,7 @@ public class GeneralHelper
         return df.format(date);
     }
 
-    /** 修整 SQL 语句字符串：' -> ''，（includeWidlcard 指定是否对星号和问号作转换：* -> %, ? -> _） */
+    /** 修整 SQL 语句字符串：' -> '，（includeWidlcard 指定是否对星号和问号作转换：* -> %, ? -> _） */
     public static final String regularSQLStr(String str, boolean includeWidlcard)
     {
         str = str.replace("'", "''");
