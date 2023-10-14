@@ -27,7 +27,7 @@
 - **[hp-soa-framework-core](hp-soa-framework/hp-soa-framework-core)** 基础模块，定义 HP-SOA 基础组件和工具
 - **[hp-soa-framework-web](hp-soa-framework/hp-soa-framework-web)** Web应用模块，集成 spring-boot 和 Dubbo，提供核心微服务功能
 - **[hp-soa-framework-leaf](hp-soa-framework/hp-soa-framework-leaf)** Leaf全局ID模块，基于Leaf，提供分布式全局ID功能
-- **[hp-soa-framework-util](hp-soa-framework/hp-soa-framework-util)** 扩展工具包模块，提供文件处理、邮件、远程访问等组件和工具
+- **[hp-soa-framework-util](hp-soa-framework/hp-soa-framework-util)** 工具包模块，提供文件处理、邮件、远程访问等组件和工具
 - **[hp-soa-starter-web](hp-soa-starter/hp-soa-starter-web)** Web应用启动器，配置并启动应用服务，所有 HP-SOA 项目都必须引入该启动器
 - **[hp-soa-starter-task](hp-soa-starter/hp-soa-starter-task)** Task启动器，开启 Spring Task 功能，并为 Spring Task 提供日志关联和调用链跟踪能力
 - **[hp-soa-starter-nacos](hp-soa-starter/hp-soa-starter-nacos)** Nacos配置中心启动器，开启配置中心功能，应用程序可以从远程配置中心加载配置
@@ -86,11 +86,19 @@
     - 以[io.github.hpsocket.soa.framework.web.server.main.AppStarter](hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/server/main/AppStarter.java)作为启动类，启动应用程序。
     - JVM启动参数参考：[JVM启动参数示例](misc/jvm/java-opts.txt)
 
-### 最佳实践
-- 项目架构（待续）
-- 应用配置（待续）
-- API接口（待续）
+### 用户指南
+- Web应用配置（待续）
+- Nacos配置中心（待续）
+- MySQL数据库（待续）
+- Redis缓存（待续）
+- RabbitMQ消息队列（待续）
+- Spring Task（待续）
 - Job调度（待续）
-- 可靠消息（待续）
-- 统一日志（待续）
+- Leaf全局ID生成（待续）
+- Seata分布式事务（待续）
+- ELK统一日志（待续）
+- Sentinel流量控制（待续）
+- Skywalking调用链跟踪（待续）
+- 工具包（待续）
 - 打包发布（待续）
+- 最佳实践（待续）
