@@ -87,7 +87,7 @@
     - JVM启动参数参考：[JVM启动参数示例](misc/jvm/java-opts.txt)
 
 ### 用户指南
-- Web应用配置（待续）
+- 应用配置（待续）
 - Nacos配置中心（待续）
 - MySQL数据库（待续）
 - Redis缓存（待续）
