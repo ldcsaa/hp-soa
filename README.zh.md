@@ -2,7 +2,7 @@
 功能完备，简单易用，高度可扩展的Java微服务框架。
 
 ### 技术架构
-![技术架构](misc/doc/Technical-Architecture.png)
+![技术架构](misc/doc/images/Technical-Architecture.png)
 
 ### 技术集成
 - Web服务框架：spring-boot 3.x
