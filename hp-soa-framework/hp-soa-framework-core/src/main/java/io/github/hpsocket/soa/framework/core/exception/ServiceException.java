@@ -276,7 +276,7 @@ public class ServiceException extends RuntimeException
 
     public static void logServiceException(Logger logger, String msg, ServiceException e, boolean printWarnStackTrace)
     {
-        final String FORMAT = "(SERVICE EXCEPTION - SC: {}, RC: {}) -> {}";
+        final String FORMAT = "(SERVICE EXCEPTION - statusCode: {}, resultCode: {}) -> {}";
         final Integer statusCode = e.getStatusCode();
         final Integer resultCode = e.getResultCode();
 
