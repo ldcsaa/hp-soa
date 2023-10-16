@@ -87,18 +87,18 @@
     - JVM启动参数参考：[JVM启动参数示例](misc/jvm/java-opts.txt)
 
 ### 用户指南
-- 应用集成（待续）
-- Nacos配置中心（待续）
-- MySQL数据库（待续）
-- Redis缓存（待续）
-- RabbitMQ消息队列（待续）
-- Spring Task（待续）
-- Job调度（待续）
-- Leaf全局ID生成（待续）
-- Seata分布式事务（待续）
-- ELK统一日志（待续）
-- Sentinel流量控制（待续）
-- Skywalking调用链跟踪（待续）
-- 工具包（待续）
-- 打包发布（待续）
-- 最佳实践（待续）
+- [应用集成](misc/doc/app_integration.md)
+- [Nacos配置中心](misc/doc/nacos.md)
+- [MySQL数据库](misc/doc/mysql.md)
+- [Redis缓存](misc/doc/redis.md)
+- [RabbitMQ消息队列](misc/doc/rabbitmq.md)
+- [Spring Task](misc/doc/spring-task.md)
+- [Job调度](misc/doc/job.md)
+- [Leaf全局ID生成](misc/doc/leaf.md)
+- [Seata分布式事务](misc/doc/seata.md)
+- [ELK统一日志](misc/doc/elk.md)
+- [Sentinel流量控制](misc/doc/sentinel.md)
+- [Skywalking调用链跟踪](misc/doc/skywalking.md)
+- [工具包](misc/doc/hp-soa-util.md)
+- [打包发布](misc/doc/deploy.md)
+- [最佳实践](misc/doc/best-practices.md)
