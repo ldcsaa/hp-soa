@@ -41,7 +41,7 @@
 - **[hp-soa-starter-sentinel](hp-soa-starter/hp-soa-starter-sentinel)** Sentinel启动器，开启Sentinel流量控制功能，结合 Sentinel Dashboard 和 Nacos 提供流量控制和流控规则持久化能力
 - **[hp-soa-starter-skywalking](hp-soa-starter/hp-soa-starter-skywalking)** Skywalking启动器，开启Skywalking调用链跟踪功能，结合 Skywalking Agent 和 Skywalking Server 提供调用链跟踪能力
 
-### 应用接入（参考：[hp-demo](hp-demo/)）
+### 应用配置（参考：[hp-demo](hp-demo/)）
 1. pom.xml 中添加 HP-SOA 依赖
 ```xml
 <dependencyManagement>
@@ -87,7 +87,7 @@
     - JVM启动参数参考：[JVM启动参数示例](misc/jvm/java-opts.txt)
 
 ### 用户指南
-- 应用配置（待续）
+- 应用接入（待续）
 - Nacos配置中心（待续）
 - MySQL数据库（待续）
 - Redis缓存（待续）
