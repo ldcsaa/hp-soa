@@ -16,12 +16,11 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
+        <dubbo.version>3.2.7</dubbo.version>
         <nacos-client.version>2.2.4</nacos-client.version>
         <nacos-config-spring-boot-starter.version>0.2.12</nacos-config-spring-boot-starter.version>
-        <dubbo.version>3.2.7</dubbo.version>
         <netty.version>4.1.100.Final</netty.version>
         <zookeeper.version>3.9.1</zookeeper.version>
-        <zkclient.version>0.11</zkclient.version>
         <kryo.version>5.5.0</kryo.version>
         <fst.version>3.0.4-jdk17</fst.version>
         <xxl-job.version>2.4.0</xxl-job.version>
@@ -33,8 +32,6 @@
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <spring-security-oauth.version>2.5.2.RELEASE</spring-security-oauth.version>
         <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
-        <spring-data.version>3.1.4</spring-data.version>
-        <spring-data-mongodb.version>4.1.5</spring-data-mongodb.version>
         <spring-amqp.version>3.0.9</spring-amqp.version>
         <spring-kafka.version>3.0.11</spring-kafka.version>
         <kafka-clients.version>3.6.0</kafka-clients.version>
@@ -130,9 +127,6 @@
         
         <micrometer-jvm-extras.version>0.2.2</micrometer-jvm-extras.version>
         <micrometer-core.version>1.11.5</micrometer-core.version>
-        
-        <zipkin-brave.version>5.16.0</zipkin-brave.version>
-        <zipkin-reporter.version>2.16.4</zipkin-reporter.version>
     </properties>
     
     <dependencyManagement>
@@ -321,11 +315,6 @@
                         <artifactId>logback-classic</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.101tec</groupId>
-                <artifactId>zkclient</artifactId>
-                <version>${zkclient.version}</version>
             </dependency>
 
             <dependency>
@@ -542,11 +531,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-commons</artifactId>
-                <version>${spring-data.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.springframework.amqp</groupId>
                 <artifactId>spring-amqp</artifactId>
                 <version>${spring-amqp.version}</version>
@@ -560,28 +544,6 @@
                 <groupId>org.springframework.amqp</groupId>
                 <artifactId>spring-rabbit-stream</artifactId>
                 <version>${spring-amqp.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-redis</artifactId>
-                <version>${spring-data.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-redis</artifactId>
-                <version>${spring-data.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-mongodb</artifactId>
-                <version>${spring-data.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-mongodb</artifactId>
-                <version>${spring-data-mongodb.version}</version>
             </dependency>
             
             <dependency>
@@ -1363,63 +1325,6 @@
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-core</artifactId>
                 <version>${micrometer-core.version}</version>
-            </dependency>
-
-            <!-- zipkin -->
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave</artifactId>
-                <version>${zipkin-brave.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-context-slf4j</artifactId>
-                <version>${zipkin-brave.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-spring-beans</artifactId>
-                <version>${zipkin-brave.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-instrumentation-spring-rabbit</artifactId>
-                <version>${zipkin-brave.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-instrumentation-http</artifactId>
-                <version>${zipkin-brave.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-instrumentation-servlet</artifactId>
-                <version>${zipkin-brave.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-instrumentation-mysql</artifactId>
-                <version>${zipkin-brave.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.reporter2</groupId>
-                <artifactId>zipkin-sender-urlconnection</artifactId>
-                <version>${zipkin-reporter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.reporter2</groupId>
-                <artifactId>zipkin-sender-okhttp3</artifactId>
-                <version>${zipkin-reporter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.reporter2</groupId>
-                <artifactId>zipkin-sender-amqp-client</artifactId>
-                <version>${zipkin-reporter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.reporter2</groupId>
-                <artifactId>zipkin-reporter-spring-beans</artifactId>
-                <version>${zipkin-reporter.version}</version>
             </dependency>
 
         </dependencies>
