@@ -9,10 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "springdoc.api-infos")
-@ConditionalOnProperty(name="springdoc.api-docs.enabled", havingValue="true", matchIfMissing = false)
+@ConditionalOnProperty(name = "springdoc.api-docs.enabled", havingValue = "true", matchIfMissing = false)
 public class SwaggerProperties
 {
-    private String groupName = "HP-Socket";
+    private String groupName = "HP-SOA";
     private String title;
     private String description;
     private String version;

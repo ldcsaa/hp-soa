@@ -3,7 +3,7 @@
 
     <Properties>
         <Property name="base.package">${project.groupId}</Property>
-        <Property name="logger.dao.pattern">com\.github\.hpsocket\.demo\..*\.dao\..+</Property>
+        <Property name="logger.dao.pattern">io\.github\.hpsocket\.demo\..*\.dao\..+</Property>
         <Property name="log.include.location">${sys:log4j.include.location:-true}</Property>
         <Property name="log.level">${sys:log4j.log.level:-DEBUG}</Property>
         <Property name="kafka.bootstrap.servers">${sys:log4j.kafka.bootstrap.servers:-192.168.56.23:9092}</Property>

@@ -41,9 +41,9 @@ class ByteArrayDataSource implements DataSource
 {
     public static final String DEFAULT_ENCODING = GeneralHelper.DEFAULT_ENCODING;
     
-    private ByteArrayOutputStream    baos = null;
-    private String                    type = "application/octet-stream";
-    private String                    name = "ByteArrayDataSource";
+    private ByteArrayOutputStream   baos = null;
+    private String                  type = "application/octet-stream";
+    private String                  name = "ByteArrayDataSource";
     
     private void init(String type, String name)
     {

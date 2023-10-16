@@ -114,7 +114,7 @@ public class MailSender
             msg.setSubject(subject, charset);
             
             MimeMultipart mm    = new MimeMultipart();
-            MimeBodyPart mbText    = new MimeBodyPart();
+            MimeBodyPart mbText = new MimeBodyPart();
             mbText.setContent(text, contentType + ";charset=" + charset);
             mm.addBodyPart(mbText);
             
@@ -123,8 +123,8 @@ public class MailSender
                 String fileName = (new File(filePath)).getName();
                 fileName = MimeUtility.encodeText(fileName, charset, "B");
                 
-                MimeBodyPart mbFile        = new MimeBodyPart();
-                DataSource datasource    = new FileDataSource(filePath);
+                MimeBodyPart mbFile   = new MimeBodyPart();
+                DataSource datasource = new FileDataSource(filePath);
                 
                 mbFile.setDataHandler(new DataHandler(datasource));
                 mbFile.setFileName(fileName);

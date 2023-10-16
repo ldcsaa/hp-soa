@@ -296,7 +296,7 @@ public class GeneralHelper
         if(!PATTERN_XML_ESCAPES.matcher(str).matches())
             return str;
         
-        char[] src         = str.toCharArray();
+        char[] src       = str.toCharArray();
         StringBuilder sb = new StringBuilder(src.length);
         
         for(char c : src)
@@ -320,7 +320,7 @@ public class GeneralHelper
     /** 屏蔽正则表达式的转义字符（但不屏蔽 ignores 参数中包含的字符） */
     public static final String escapeRegexChars(String str, char ... ignores)
     {
-        final char ESCAPE_CHAR     = '\\';
+        final char ESCAPE_CHAR   = '\\';
         final char[] REGEX_CHARS = {'.', ',', '?', '+', '-', '*', '^', '$', '|', '&', '{', '}', '[', ']', '(', ')', '\\'};
         
         char[] regex_chars = REGEX_CHARS;
@@ -677,8 +677,8 @@ public class GeneralHelper
         try
         {
             final char SEPARATOR    = '-';
-            final String[] PATTERN    = {"yyyy", "MM", "dd", "HH", "mm", "ss", "SSS"};
-            String[] values            = safeTrimString(str).split("\\D");
+            final String[] PATTERN  = {"yyyy", "MM", "dd", "HH", "mm", "ss", "SSS"};
+            String[] values         = safeTrimString(str).split("\\D");
             String[] element        = new String[values.length];
             
             int length = 0;
@@ -695,7 +695,7 @@ public class GeneralHelper
 
             if(length > 0)
             {
-                   StringBuilder value    = new StringBuilder();
+                StringBuilder value = new StringBuilder();
 
                 if(length > 1)
                 {
@@ -707,16 +707,16 @@ public class GeneralHelper
                 }
                 else
                 {
-                    String src    = element[0];
-                    int remain    = src.length();
-                    int pos        = 0;
-                    int i        = 0;
+                    String src  = element[0];
+                    int remain  = src.length();
+                    int pos     = 0;
+                    int i       = 0;
 
                     for(i = 0; remain > 0 && i < PATTERN.length; ++i)
                     {
                         int p_length    = PATTERN[i].length();
                         int v_length    = Math.min(p_length, remain);
-                        String v         = src.substring(pos, pos + v_length);
+                        String v        = src.substring(pos, pos + v_length);
                         pos            += v_length;
                         remain         -= v_length;
 
@@ -789,9 +789,9 @@ public class GeneralHelper
     /** String -> Any，字符串转换为 8 种基础数据类型、及其包装类 {@link Date}、 或 {@link String} 
      * 
      * @param type    : 目标类型的 {@link Class} 对象
-     * @param v        : 要转换的字符串
+     * @param v       : 要转换的字符串
      * @return        : 转换结果，如果转换不成功返回 null
-     * @throws         : 如果目标类型不支持抛出 {@link IllegalArgumentException}
+     * @throws        : 如果目标类型不支持抛出 {@link IllegalArgumentException}
      * 
      */
     public static final <T> T str2Object(Class<T> type, String v)
@@ -802,10 +802,10 @@ public class GeneralHelper
     /** String -> Any，如果 handler 为 null 则把字符串转换为 8 种基础数据类型、及其包装类、 {@link Date} 或 {@link String}，
      *                   如果 handler 不为 null 则由 handler 执行转换 
      * 
-     * @param type    : 目标类型的 {@link Class} 对象
+     * @param type     : 目标类型的 {@link Class} 对象
      * @param v        : 要转换的字符串
-     * @param handler    : 类型转换处理器
-     * @return        : 转换结果，如果转换不成功返回 null
+     * @param handler  : 类型转换处理器
+     * @return         : 转换结果，如果转换不成功返回 null
      * @throws         : 如果目标类型不支持抛出 {@link IllegalArgumentException}
      * 
      */
@@ -861,13 +861,13 @@ public class GeneralHelper
 
     /** Any -> Object[] <br>
      * 
-     *  obj == null                    : 返回 Object[] {null} <br>
+     *  obj == null                 : 返回 Object[] {null} <br>
      *  obj 为对象数组                : 强制转换为 Object[], 并返回自身 <br>
-     *  obj 为基础类型数组            : 返回 Object[], 其元素类型为基础类型的包装类 <br>
-     *  obj 为 {@link Collection}    : 通过 toArray() 方法返回 Object[] <br>
-     *  obj 为 {@link Iterable}        : 遍历 {@link Iterable}, 并返回包含其所有元素的 Object[] <br>
-     *  obj 为 {@link Iterator}        : 遍历 {@link Iterator}, 并返回包含其所有元素的 Object[] <br>
-     *  obj 为 {@link Enumeration}    : 遍历 {@link Enumeration}, 并返回包含其所有元素的 Object[] <br>
+     *  obj 为基础类型数组             : 返回 Object[], 其元素类型为基础类型的包装类 <br>
+     *  obj 为 {@link Collection}   : 通过 toArray() 方法返回 Object[] <br>
+     *  obj 为 {@link Iterable}     : 遍历 {@link Iterable}, 并返回包含其所有元素的 Object[] <br>
+     *  obj 为 {@link Iterator}     : 遍历 {@link Iterator}, 并返回包含其所有元素的 Object[] <br>
+     *  obj 为 {@link Enumeration}  : 遍历 {@link Enumeration}, 并返回包含其所有元素的 Object[] <br>
      *  obj 为普通对象                : 返回 Object[] {obj} <br>
      * 
      * @param obj    : 任何对象
@@ -966,10 +966,10 @@ public class GeneralHelper
 
         if(trimTime)
         {
-                c.set(Calendar.HOUR, 0);
-                c.set(Calendar.MINUTE, 0);
-                c.set(Calendar.SECOND, 0);
-                c.set(Calendar.MILLISECOND, 0);
+            c.set(Calendar.HOUR, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
         }
 
         return c.getTime();
@@ -983,7 +983,7 @@ public class GeneralHelper
         return df.format(date);
     }
 
-    /** 修整 SQL 语句字符串：' -> ''，（includeWidlcard 指定是否对星号和问号作转换：* -> %, ? -> _） */
+    /** 修整 SQL 语句字符串：' -> '，（includeWidlcard 指定是否对星号和问号作转换：* -> %, ? -> _） */
     public static final String regularSQLStr(String str, boolean includeWidlcard)
     {
         str = str.replace("'", "''");
@@ -1011,8 +1011,8 @@ public class GeneralHelper
     /** 加载类名为  className 的 {@link Class} 对象，如果加载失败则返回 null */
     public static final Class<?> loadClass(String className)
     {
-        Class<?> clazz        = null;
-        ClassLoader loader    = getClassLoader(GeneralHelper.class);
+        Class<?> clazz     = null;
+        ClassLoader loader = getClassLoader(GeneralHelper.class);
         
         try
         {
@@ -1083,8 +1083,8 @@ public class GeneralHelper
     /** 获取 clazz 资源环境中 resPath 相对路径的 URL 对象列表 */
     public static final List<URL> getClassResources(Class<?> clazz, String resPath)
     {
-        List<URL> urlList        = new ArrayList<URL>();
-        Enumeration<URL> urls    = null;
+        List<URL> urlList     = new ArrayList<URL>();
+        Enumeration<URL> urls = null;
         
         try
         {
@@ -1832,9 +1832,9 @@ public class GeneralHelper
         if(GeneralHelper.isStrEmpty(str))
             return "";
         
-        int len        = str.length();
-        int end        = len - offset;
-        int begin    = len - size - offset;
+        int len   = str.length();
+        int end   = len - offset;
+        int begin = len - size - offset;
         
         if(end <= 0)
             return str;
