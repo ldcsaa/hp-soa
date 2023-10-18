@@ -38,7 +38,10 @@
                                         "at java.base/jdk.internal.reflect",
                                         "at com.sun",
                                         "at javax.servlet",
-                                        "at jakarta.servlet"
+                                        "at jakarta.servlet",
+                                        "at io.netty.handler.codec",
+                                        "at org.springframework.security.web",
+                                        "at org.apache.dubbo.rpc.cluster.filter"
                                     ]
           }
         }

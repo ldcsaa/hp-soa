@@ -19,7 +19,7 @@
         <Property name="logfile.max.count">10</Property>
         <Property name="logfile.archive.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}/${date:yyyy-MM}</Property>
         <Property name="logfile.archive.suffix">%d{yyyy-MM-dd}-%i.log.gz</Property>
-        <Property name="logfile.stacktrace.filters">org.springframework.security.web.ObservationFilterChainDecorator,org.apache.catalina,org.apache.coyote,org.apache.tomcat,org.hibernate,org.apache.el,org.apache.cxf,org.junit,junit.framework,org.jboss,org.h2,org.eclipse,org.richfaces,java.lang.reflect,java.base/java.lang.reflect,jdk.internal.reflect,java.base/jdk.internal.reflect,com.sun,javax.servlet,jakarta.servlet</Property>
+        <Property name="logfile.stacktrace.filters">org.springframework.security.web,org.apache.catalina,org.apache.coyote,org.apache.tomcat,org.hibernate,org.apache.el,org.apache.cxf,org.junit,junit.framework,org.jboss,org.h2,org.eclipse,org.richfaces,java.lang.reflect,java.base/java.lang.reflect,jdk.internal.reflect,java.base/jdk.internal.reflect,com.sun,javax.servlet,jakarta.servlet,io.netty.handler.codec,org.apache.dubbo.rpc.cluster.filter</Property>
         <Property name="logfile.pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{1.1.1.*}#%M\(L:%L\) -&gt; %m%xEx{filters(${logfile.stacktrace.filters})}%n</Property>
         <Property name="json.template.layout">classpath:log4j2-default-template.json</Property>
     </Properties>
