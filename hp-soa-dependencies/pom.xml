@@ -27,13 +27,13 @@
         <sentinel.version>1.8.6</sentinel.version>
         
         <spring.version>6.0.13</spring.version>
-        <spring-boot.version>3.1.4</spring-boot.version>
+        <spring-boot.version>3.1.5</spring-boot.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <spring-security-oauth.version>2.5.2.RELEASE</spring-security-oauth.version>
         <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
-        <spring-amqp.version>3.0.9</spring-amqp.version>
-        <spring-kafka.version>3.0.11</spring-kafka.version>
+        <spring-amqp.version>3.0.10</spring-amqp.version>
+        <spring-kafka.version>3.0.12</spring-kafka.version>
         <kafka-clients.version>3.6.0</kafka-clients.version>
         <druid.version>1.2.20</druid.version>
         <jedis.version>5.0.1</jedis.version>
