@@ -55,7 +55,7 @@
 ```
 
 #### 2. 修改应用配置
-&nbsp;&nbsp;HP-SOA应用程序主配置文件为`bootstrap.yml`，包含以下基本配置项（参考 Demo [hp-demo-bff-basic](hp-demo/hp-demo-bff-basic) 的[本地配置文件](hp-demo/hp-demo-bff-basic/src/main/resources/bootstrap.yml)），其中大部分配置都可以迁移到配置中心作为多个应用的共享配置（参考：配置中心的[远程配置文件](misc/nacos/config/namespace-DEV/GLOBAL_GROUP)）
+&nbsp;&nbsp;HP-SOA应用程序主配置文件为`bootstrap.yml`，包含以下基本配置项（参考 Demo [hp-demo-bff-basic](../../hp-demo/hp-demo-bff-basic) 的[本地配置文件](../../hp-demo/hp-demo-bff-basic/src/main/resources/bootstrap.yml)），其中大部分配置都可以迁移到配置中心作为多个应用的共享配置（参考：配置中心的[远程配置文件](../../misc/nacos/config/namespace-DEV/GLOBAL_GROUP)）
 
 - **hp.soa.web** 
 ```yaml
