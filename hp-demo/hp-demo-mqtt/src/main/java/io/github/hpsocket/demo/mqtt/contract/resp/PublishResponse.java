@@ -19,9 +19,23 @@ public class PublishResponse
     private int code    = 0;
     private String desc = "ok";
     
+    private Integer messageId;
+    
+    public PublishResponse(int code, String desc)
+    {
+         this.code = code;
+         this.desc = desc;
+    }
+
+    public PublishResponse(Integer messageId)
+    {
+        this.messageId = messageId;
+    }    
+    
     @Override
     public String toString()
     {
         return JSON.toJSONString(this);
     }
+
 }

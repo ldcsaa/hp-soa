@@ -38,13 +38,13 @@ public class HttpMdcFilter implements Filter
     @Override
     public void init(FilterConfig filterConfig) throws ServletException
     {
-        log.info("starting up: ({}) ...", DISPLAY_NAME);
+        log.info("({}) starting up ...", DISPLAY_NAME);
     }
 
     @Override
     public void destroy()
     {
-        log.info("shutting down: ({}) OK!", DISPLAY_NAME);
+        log.info("({}) shutting down !", DISPLAY_NAME);
     }
 
     @Override

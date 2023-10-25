@@ -3,18 +3,18 @@ package io.github.hpsocket.soa.starter.mqtt.support;
 import java.time.Duration;
 import java.util.List;
 
+import org.apache.commons.lang3.ThreadUtils;
 import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttCallback;
 import org.eclipse.paho.mqttv5.client.MqttDisconnectResponse;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
-import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson2.JSON;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttOptions.SubscribeOptions;
+import io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties.SubscribeOptions;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttMessageListener;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -77,7 +77,7 @@ public class DefaultMqttCallback implements MqttCallback
     {
         log.info("(mqtt callback) connectComplete : (reconnect: {}, serverURI: {})", reconnect, serverURI);
         
-        if(CollectionUtils.isEmpty(subscribes))
+        if(GeneralHelper.isNullOrEmpty(subscribes))
             return;
 
         // 连接/重连成功：执行订阅
@@ -87,16 +87,19 @@ public class DefaultMqttCallback implements MqttCallback
         {
             try
             {
-                mqttClient.subscribe(subscribes.toArray(new SubscribeOptions[]{}));
-                log.info("subscribe topics succ -> {}", subscribes);
+                for(SubscribeOptions subscribe : subscribes)
+                {
+                    mqttClient.subscribe(subscribe, subscribe.getIdentifier(), subscribe.getTopicAlias());
+                    log.info("subscribe topic succ -> {}", subscribe);
+                }
                 
                 break;
             }
-            catch(MqttException e)
+            catch(Exception e)
             {
                 
                 log.error("subscribe topics fail -> {} {}", subscribes, e.getMessage(), e);
-                GeneralHelper.waitFor(Duration.ofSeconds(5));
+                ThreadUtils.sleepQuietly(Duration.ofSeconds(5));
             }
         }         
     }

@@ -20,12 +20,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "mqtt")
-public class SoaMqttOptions extends MqttConnectionOptions
+public class SoaMqttProperties extends MqttConnectionOptions
 {
     private String clientId;
     
     private long timeToWait = -1;
     private boolean manualAcks = false;
+    private String dataDir;
     
     private String sslCaCertPath;
     private String sslClientCertPath;
@@ -72,7 +73,10 @@ public class SoaMqttOptions extends MqttConnectionOptions
     @Setter
     public static class SubscribeOptions extends MqttSubscription
     {
-       public SubscribeOptions()
+        private Integer identifier;
+        private Integer topicAlias;
+        
+        public SubscribeOptions()
         {
             super("");
         }
@@ -93,6 +97,8 @@ public class SoaMqttOptions extends MqttConnectionOptions
             return new StringBuilder(200)
                         .append('(')
                         .append("topic: ").append(getTopic())
+                        .append(", topicAlias: ").append(getTopicAlias())
+                        .append(", identifier: ").append(getIdentifier())
                         .append(", qos: ").append(getQos())
                         .append(", noLocal: ").append(isNoLocal())
                         .append(", retainAsPublished: ").append(isRetainAsPublished())

@@ -7,7 +7,6 @@ import javax.net.ssl.HostnameVerifier;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.paho.mqttv5.client.MqttCallback;
-import org.eclipse.paho.mqttv5.client.MqttClient;
 import org.eclipse.paho.mqttv5.client.MqttClientPersistence;
 import org.eclipse.paho.mqttv5.client.persist.MqttDefaultFilePersistence;
 import org.eclipse.paho.mqttv5.common.MqttException;
@@ -24,7 +23,7 @@ import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 import io.github.hpsocket.soa.framework.util.sstl.SSLUtil;
 import io.github.hpsocket.soa.framework.web.support.NumberByteArrayConverter;
 import io.github.hpsocket.soa.framework.web.support.StringByteArrayConverter;
-import io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttOptions;
+import io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttMessageListener;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttPropertiesCustomizer;
 import io.github.hpsocket.soa.starter.mqtt.service.impl.MqttMessagePublisherImpl;
@@ -33,16 +32,21 @@ import io.github.hpsocket.soa.starter.mqtt.support.ExtMqttClient;
 
 /** <b>MQTT 配置类</b> */
 @AutoConfiguration
-@EnableConfigurationProperties(SoaMqttOptions.class)
+@EnableConfigurationProperties(SoaMqttProperties.class)
 @Import({StringByteArrayConverter.class, NumberByteArrayConverter.class, MqttMessagePublisherImpl.class})
 public class SoaMqttConfig
 {
     /** 默认持久化对象（可由应用程序覆盖）*/
-    @Bean
+    @Bean(destroyMethod = "")
     @ConditionalOnMissingBean(MqttClientPersistence.class)
-    public MqttClientPersistence mqttClientPersistence()
+    public MqttClientPersistence mqttClientPersistence(SoaMqttProperties mqttProperties)
     {
-        return new MqttDefaultFilePersistence();
+        String dataDir = mqttProperties.getDataDir();
+        
+        if(GeneralHelper.isStrEmpty(dataDir))
+            dataDir = System.getProperty("user.dir");
+        
+        return new MqttDefaultFilePersistence(dataDir);
     }
 
     /** 默认 MQTT 事件处理器（可由应用程序覆盖）*/
@@ -55,8 +59,8 @@ public class SoaMqttConfig
 
     /** MQTT 客户端对象 */
     @Bean(destroyMethod = "disconnectAndClose")
-    public MqttClient mqttClient(
-        SoaMqttOptions mqttProperties,
+    public ExtMqttClient mqttClient(
+        SoaMqttProperties mqttProperties,
         MqttClientPersistence mqttClientPersistence,
         ObjectProvider<MqttMessageListener> messageListenerProvider,
         ObjectProvider<MqttCallback> mqttCallbackProvider,
@@ -72,7 +76,7 @@ public class SoaMqttConfig
         parseSocketFactory(mqttProperties, socketFactoryProvider.getIfUnique(), hostnameVerifierProvider.getIfUnique());
         parseClientId(mqttProperties);
         
-        ExtMqttClient mqttClient = new ExtMqttClient(mqttProperties.getServerURIs()[0], mqttProperties.getClientId(), mqttClientPersistence, mqttProperties.isManualAcks());
+        ExtMqttClient mqttClient = new ExtMqttClient(mqttProperties.getServerURIs()[0], mqttProperties.getClientId(), mqttClientPersistence);
         MqttCallback callBack = mqttCallbackProvider.getIfUnique();
         
         if(callBack == null)
@@ -93,7 +97,7 @@ public class SoaMqttConfig
         return mqttClient;
     }
 
-    private void parseSocketFactory(SoaMqttOptions mqttProperties, SocketFactory socketFactory, HostnameVerifier hostnameVerifier)
+    private void parseSocketFactory(SoaMqttProperties mqttProperties, SocketFactory socketFactory, HostnameVerifier hostnameVerifier)
     {
         SocketFactory sf = mqttProperties.getSocketFactory();
         HostnameVerifier hnv = mqttProperties.getSSLHostnameVerifier();
@@ -135,7 +139,7 @@ public class SoaMqttConfig
             mqttProperties.setSSLHostnameVerifier(hostnameVerifier);
     }
     
-    private void parseClientId(SoaMqttOptions mqttProperties)
+    private void parseClientId(SoaMqttProperties mqttProperties)
     {
         String clientId = mqttProperties.getClientId();
         

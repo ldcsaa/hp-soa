@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.starter.mqtt.service;
 
+import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.MqttPersistenceException;
@@ -28,13 +29,13 @@ public interface MqttMessagePublisher
     MqttMessage createMqttMessage(byte[] payload, int qos, boolean retained, MqttProperties properties);
     
     /** 发布消息 */
-    void publish(String topic, MqttMessage message) throws MqttException, MqttPersistenceException;
+    IMqttToken publish(String topic, MqttMessage message) throws MqttException, MqttPersistenceException;
     /** 发布消息 */
-    void publish(String topic, byte[] payload) throws MqttException, MqttPersistenceException;
+    IMqttToken publish(String topic, byte[] payload) throws MqttException, MqttPersistenceException;
     /** 发布消息 */
-    void publish(String topic, byte[] payload, int qos) throws MqttException, MqttPersistenceException;
+    IMqttToken publish(String topic, byte[] payload, int qos) throws MqttException, MqttPersistenceException;
     /** 发布消息 */
-    void publish(String topic, byte[] payload, boolean retained) throws MqttException, MqttPersistenceException;
+    IMqttToken publish(String topic, byte[] payload, boolean retained) throws MqttException, MqttPersistenceException;
     /** 发布消息 */
-    void publish(String topic, byte[] payload, int qos, boolean retained) throws MqttException, MqttPersistenceException;
+    IMqttToken publish(String topic, byte[] payload, int qos, boolean retained) throws MqttException, MqttPersistenceException;
 }
