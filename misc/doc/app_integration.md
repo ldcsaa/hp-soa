@@ -55,7 +55,162 @@
 ```
 
 #### 2. 修改应用配置
+&nbsp;&nbsp;HP-SOA应用程序主配置文件为`bootstrap.yml`，包含以下基本配置项（参考 Demo [hp-demo-bff-basic](../../hp-demo/hp-demo-bff-basic) 的[本地配置文件](../../hp-demo/hp-demo-bff-basic/src/main/resources/bootstrap.yml)），其中大部分配置都可以迁移到配置中心作为多个应用的共享配置（参考：配置中心的[远程配置文件](../../misc/nacos/config/namespace-DEV/GLOBAL_GROUP)）
 
+- **hp.soa.web** 
+```yaml
+## 应用程序配置
+hp.soa.web:
+  # 应用程序信息
+  app:
+    id: "0010100001"
+    name: ${project.artifactId}
+    version: ${project.version}
+    organization: HP-Socket
+    owner: Kingfisher
+  # Spring Bean 扫描包路径（多个包用','分隔）
+  component-scan:
+    base-package: ${project.groupId}
+  # Cookie 生命周期（默认：10年）
+  cookie: 
+    max-age: 315360000
+  # 跨域访问配置
+  cors:
+    mapping: "/**"
+    allowed-origins: "*"
+    allowed-headers: "*"
+    allowed-methods: "*"
+    exposed-headers: 
+    allow-credentials: false
+    max-age: 3600
+  # HTTP请求鉴权
+  access-verification:
+    # 是否启用 HTTP 请求鉴权（默认：true，通常 Gateway/BFF 应用设置为 true，其它应用设置为 false）
+    enabled: true
+    # 默认鉴权策略（默认：MAYBE_LOGIN，可选值：NO_CHECK，NO_LOGIN，MAYBE_LOGIN，REQUIRE_LOGIN，REQUIRE_AUTHORIZED）
+    default-access-policy: maybe_login
+```
+&nbsp;&nbsp;HTTP请求鉴权相关内容将在下文详述。
+
+- **dubbo**
+```yaml
+## Dubbo 配置
+dubbo:
+  # Dubbo Service 和 Reference 扫描包路径（多个包用','分隔）
+  scan.base-packages: ${hp.soa.web.component-scan.base-package}
+  # Dubbo 服务协议和端口
+  protocols:
+    #dubbo:
+    #  name: dubbo
+    #  port: 5001
+    tri:
+      name: tri
+      port: 6001
+  # 注册中心缓存文件
+  registry:
+    file: "/opt/hp-soa/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"
+  # 应用程序配置
+  application:
+    qos-port: 7001
+    qos-enable: false
+    name: ${hp.soa.web.app.name}
+    version: ${hp.soa.web.app.version}
+    owner: ${hp.soa.web.app.owner:}
+    organization: ${hp.soa.web.app.organization:}
+```
+&nbsp;&nbsp;Dubbo注册中心、配置中心和元数据中心在扩展配置文件中配置，将在下文详述。
+
+- **server**
+```yaml
+## Spring-Boot 服务配置
+server:
+  # 服务端口
+  port: 9001
+  # Servlet 配置
+  servlet:
+    context-path: /
+  # Tomcat 配置
+  tomcat:
+    max-connections: 10000
+    connection-timeout: 30000
+    threads:
+      max: 200
+      min-spare: 5
+```
+
+- **spring**
+```yaml
+## Spring 配置
+spring:
+  # Spring 应用程序名称
+  application.name: ${hp.soa.web.app.name}
+  # Spring MVC
+  mvc:
+    servlet:
+      load-on-startup: 1
+      path: /
+    throw-exception-if-no-handler-found: true
+  # Spring Web
+  web:
+    resources:
+      add-mappings: false
+  # Spring Security
+  security:
+    user:
+      name: admin
+      password: "123456"
+      roles: ADMIN
+  # Spring Servlet
+  servlet:
+    # 文件上传
+    multipart:
+      enabled: false
+      max-file-size: 10MB
+      max-request-size: 10MB
+```
+
+- **management**（可选）
+```yaml
+## Spring-Boot Management 配置
+management:
+  endpoint:
+    health.show-details: when-authorized
+    shutdown.enabled: false
+  endpoints:
+    enabled-by-default: true
+    jmx.exposure.include: "*"
+    web.base-path: /__admin
+    web.exposure.include: "*"
+  metrics:
+    export.influx.enabled: false
+    tags.application: ${hp.soa.web.app.name}
+```
+
+- **springdoc**（可选）
+```yaml
+## Spring-Doc 配置
+springdoc:
+  api-docs:
+    # 是否开启（生成环境应设置为 false）
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    # 是否开启（生成环境应设置为 false）
+    enabled: true
+    path: /swagger-ui.html
+  packagesToScan: io.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}
+  api-infos:
+    group-name: ${hp.soa.web.app.name}
+    title: ${hp.soa.web.app.name}
+    version: ${hp.soa.web.app.version}
+    description: "Spring Boot Project >> ${hp.soa.web.app.name} (v${hp.soa.web.app.version})"
+```
+
+- **logging**（可选）
+```yaml
+## Log4J 配置文件（默认：log4j2.xml）
+logging.config: classpath:log4j2-kafka.xml
+```
 
 #### 3. 修改全局配置（可选）
 
