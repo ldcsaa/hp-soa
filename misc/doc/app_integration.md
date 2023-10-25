@@ -85,7 +85,7 @@ hp.soa.web:
     max-age: 3600
   # HTTP请求鉴权
   access-verification:
-    # 是否启用 HTTP 请求鉴权（默认：true，通常 Gateway/BFF 应用设置为 true，其它应用设置为 false）
+    # 是否开启 HTTP 请求鉴权（默认：true，通常 Gateway/BFF 应用设置为 true，其它应用设置为 false）
     enabled: true
     # 默认鉴权策略（默认：MAYBE_LOGIN，可选值：NO_CHECK，NO_LOGIN，MAYBE_LOGIN，REQUIRE_LOGIN，REQUIRE_AUTHORIZED）
     default-access-policy: maybe_login
@@ -213,9 +213,46 @@ logging.config: classpath:log4j2-kafka.xml
 ```
 
 #### 3. 修改全局配置（可选）
+&nbsp;&nbsp;在分布式应用系统中，多个应用共享配置中心地址、注册中心地址、日志收集器地址和功能特性开关等全局配置，这些配置与应用无关，只与部署环境有关。因此，最好把这些配置从应用程序配置中抽离出来作为共享配置，统一管理。对于部署在Docker中的应用，共享配置文件可以预置到Docker镜像，或者运行时Mount到Docker容器；对于部署在k8s中的应用，可以通过 Config Map 为容器生成共享配置文件。
 
+&nbsp;&nbsp;HP-SOA 应用启动时，会查找并加载下列共享配置文件：
+- 系统配置文件：启动 spring-boot 前由Java系统加载，用于配置那些需要在 spring-boot 启动前已配置好的系统属性（如：lo4j日志相关配置）。默认配置文件：`/opt/hp-soa/config/system-config.properties`，可通过JVM启动参数`-Dhp.soa.system.properties.file`修改系统配置文件路径。参考：[system-config.properties](../../misc/opt/hp-soa/config/system-config.properties)
+- 扩展配置文件：由 spring-boot 加载，用于配置注册中心地址、配置中心地址和系统全局设置等公共应用属性，默认配置文件：`/opt/hp-soa/config/extended-config.properties`，，可通过JVM启动参数`-Dhp.soa.extended.properties.file`修改扩展配置文件路径。参考：[extended-config.properties](../../misc/opt/hp-soa/config/extended-config.properties)
 
 #### 4. 实现 HTTP 鉴权接口（Gateway/BFF应用）
+&nbsp;&nbsp;Gateway/BFF应用作为系统访问入口接收外部HTTP请求，通常需要对请求执行认证和授权。HP-SOA 通过以下3个步骤实现HTTP请求鉴权：
+
+##### 1) 开启HTTP请求鉴权
+```
+hp.soa.web:
+  # HTTP请求鉴权
+  access-verification:
+    # 是否开启 HTTP 请求鉴权（默认：true，通常 Gateway/BFF 应用设置为 true，其它应用设置为 false）
+    enabled: true
+    # 默认鉴权策略（默认：MAYBE_LOGIN，可选值：NO_CHECK，NO_LOGIN，MAYBE_LOGIN，REQUIRE_LOGIN，REQUIRE_AUTHORIZED）
+    default-access-policy: maybe_login
+```
+&nbsp;&nbsp;`hp.soa.web.access-verification.enabled`标识是否开启 HTTP 请求鉴权；`hp.soa.web.access-verification.default-access-policy`设置默认鉴权策略，当 spring-boot Controller 的类和方法中都没有声明[AccessVerification](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/annotation/AccessVerification.java)注解时，使用该默认鉴权策略。
+
+&nbsp;&nbsp;鉴权策略由[AccessVerification.Type](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/annotation/AccessVerification.java)定义：  
+- **NO_CHECK** 不作任何校验
+- **NO_LOGIN** 不校验登录（只校验 appCode）
+- **MAYBE_LOGIN** 不强制校验登录（只校验 appCode），如果已登录则加载用户信息
+- **REQUIRE_LOGIN** 校验登录
+- **REQUIRE_AUTHORIZED** 校验授权
+
+##### 2) 实现HTTP请求鉴权接口[AccessVerificationService](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/service/AccessVerificationService.java)
+```
+public interface AccessVerificationService
+{
+    /** 应用程序编号校验 */
+    Pair<Boolean, String> verifyAppCode(String appCode, String srcAppCode);
+    /** 用户身份校验 */
+    Pair<Long, String> verifyUser(String token, Long groupId);
+    /** 用户授权校验 */
+    Pair<Boolean, String> verifyAuthorization(String route, String appCode, Long groupId, Long userId);
+}
+```
 
 
 #### 5. 启动应用
