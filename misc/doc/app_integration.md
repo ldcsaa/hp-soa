@@ -223,7 +223,7 @@ logging.config: classpath:log4j2-kafka.xml
 &nbsp;&nbsp;Gateway/BFF应用作为系统访问入口接收外部HTTP请求，通常需要对请求执行认证和授权。HP-SOA 通过以下3个步骤实现HTTP请求鉴权：
 
 ##### 1) 开启HTTP请求鉴权
-```
+```yaml
 hp.soa.web:
   # HTTP请求鉴权
   access-verification:
@@ -242,7 +242,7 @@ hp.soa.web:
 - **REQUIRE_AUTHORIZED** 校验授权
 
 ##### 2) 实现HTTP请求鉴权接口[AccessVerificationService](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/service/AccessVerificationService.java)
-```
+```java
 public interface AccessVerificationService
 {
     /** 应用程序编号校验，成功：Pair(True, ?)，失败：Pair(False, ?) */
@@ -262,7 +262,7 @@ public interface AccessVerificationService
 - **REQUIRE_AUTHORIZED** `verifyAppCode`、`verifyUser`、`verifyAuthorization`
 
 ##### 3) 在 spring-boot Controller 中声明鉴权策略
-```
+```java
 @RestController
 /* Controller 默认鉴权策略：NO_LOGIN */
 /* 注意：如果 Controller 没有声明 @AccessVerification 注解，默认鉴权策略为 ${hp.soa.web.access-verification.default-access-policy} 配置的策略 */
@@ -289,7 +289,7 @@ public class DemoController
 
 #### 5. 启动应用
 &nbsp;&nbsp;HP-SOA 提供了默认应用程序启动器[io.github.hpsocket.soa.framework.web.server.main.AppStarter](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/server/main/AppStarter.java)
-```
+```java
 /** <b>默认应用程序启动器</b> */
 /* 排除部分自动配置 */
 @SpringBootApplication(exclude = {  DataSourceAutoConfiguration.class,
@@ -328,7 +328,7 @@ public class AppStarter
 &nbsp;&nbsp;如无特殊原因，建议应用程序都使用[AppStarter](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/server/main/AppStarter.java)作为应用程序启动器；如果应用程序必须使用自定义应用程序启动器，上述功能支持也必须保留。
 
 &nbsp;&nbsp;另外，HP-SOA 的建议JVM启动参数如下，应用程序可以根据实际情况调整：
-```
+```shell
 java \
 -DskipTests=true \
 -Dfile.encoding=UTF-8 \
@@ -381,7 +381,7 @@ java \
 | X-Request-Info | 组合属性 | √ | × | 组合属性 X-Request-Info 可以把上述属性组合到一个请求头，例如<br>**X-Request-Info:** X-App-Code=001;X-Group-Id=999;X-Version=2.3.4 |
 
 ##### 2) HTTP 响应对象
-```
+```java
 /** <b>HTTP 请求统一响应对象</b> */
 public class Response<T> implements Serializable
 {
