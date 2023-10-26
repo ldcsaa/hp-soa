@@ -1,6 +1,8 @@
 #  HP-SOA
 功能完备，简单易用，高度可扩展的Java微服务框架。
 
+【[快速开始](misc/doc/app_integration.md)】
+
 ### 技术架构
 ![技术架构](misc/doc/images/Technical-Architecture.png)
 
