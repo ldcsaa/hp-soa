@@ -13,6 +13,7 @@ import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -406,14 +407,16 @@ public class GeneralHelper
         return true;
     }
 
-    /** 调用 {@linkplain Thread#sleep(long)} 方法使当前线程睡眠 period 个 unit 时间单元 <br>
-     * 
-     * 如果 {@linkplain Thread#sleep(long)} 方法被中断则返回 false
-     * 
-     */
+    /** 参考：{@linkplain GeneralHelper#waitFor(long) waitFor(long)} */
     public final static boolean waitFor(long period, TimeUnit unit)
     {
         return waitFor(unit.toMillis(period));
+    }
+
+    /** 参考：{@linkplain GeneralHelper#waitFor(long) waitFor(long)} */
+    public final static boolean waitFor(Duration duration)
+    {
+        return waitFor(duration.toMillis());
     }
 
     /** String -> Integer，如果转换不成功则返回 null */

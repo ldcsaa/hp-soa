@@ -1,26 +1,20 @@
 
 package io.github.hpsocket.soa.starter.leaf.config;
         
-import java.sql.SQLException;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.pool.ValidConnectionChecker;
-import com.alibaba.druid.pool.vendor.MySqlValidConnectionChecker;
+import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
+import com.baomidou.dynamic.datasource.exception.CannotFindDataSourceException;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.leaf.segment.SegmentIdGenImpl;
@@ -28,15 +22,16 @@ import io.github.hpsocket.soa.framework.leaf.segment.dao.impl.IdAllocDaoImpl;
 import io.github.hpsocket.soa.framework.leaf.service.GlobalIdService;
 import io.github.hpsocket.soa.framework.leaf.service.IdGen;
 import io.github.hpsocket.soa.framework.leaf.snowflake.SnowflakeIdGenImpl;
+import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.starter.leaf.service.impl.GlobalIdServiceImpl;
 
 /** <b>HP-SOA Leaf 分布式全局 ID 配置</b> */
 @AutoConfiguration
 @Import(GlobalIdServiceImpl.class)
-@ConditionalOnExpression("${hp.soa.gid.leaf.segment.enable:false} || ${hp.soa.gid.leaf.snowflake.enable:true}")
+@ConditionalOnExpression("${hp.soa.gid.leaf.snowflake.enabled:true} || ${hp.soa.gid.leaf.segment.enabled:false}")
 public class SoaLeafConfig
 {
-    private static final String LEAF_SEGMENT_ID_DATA_SOURCE_BEAN    = "leafSegmentIdDataSource";
+    private static final String DEFAULT_LEAF_SEGMENT_DATA_SOURCE = "leaf";
     
     @Value("${hp.soa.gid.leaf.snowflake.name:default}")
     private String leafName;
@@ -44,46 +39,13 @@ public class SoaLeafConfig
     private String zkAddress;
     @Value("${hp.soa.gid.leaf.snowflake.server-port:${server.port}}")
     private int port;
-
-    @AutoConfiguration
-    @SuppressWarnings("serial")
-    @ConditionalOnClass({DruidDataSource.class, SqlSessionFactory.class})
-    @ConfigurationProperties(prefix = "hp.soa.gid.leaf.segment")
-    @ConditionalOnProperty(name = "hp.soa.gid.leaf.segment.enable", havingValue = "true", matchIfMissing = false)
-    public static class LeafSegmentIdProperties extends DruidDataSource
-    {
-        @Bean(name = LEAF_SEGMENT_ID_DATA_SOURCE_BEAN, initMethod = "init", destroyMethod = "close")
-        public DataSource leafSegmentIdDataSource(LeafSegmentIdProperties leafSegmentIdProperties) throws SQLException
-        {
-            DruidDataSource ds = leafSegmentIdProperties.cloneDruidDataSource();
-
-            ds.init();
-
-            ValidConnectionChecker vcc = ds.getValidConnectionChecker();
-            
-            if(vcc instanceof MySqlValidConnectionChecker mvcc)
-                mvcc.setUsePingMethod(false);
-            
-            return ds;
-        }
-        
-        @Bean(GlobalIdService.LEAF_SEGMENT_ID_GENERATOR_BEAN)
-        @ConditionalOnBean(name = LEAF_SEGMENT_ID_DATA_SOURCE_BEAN, value = DataSource.class)
-        public IdGen segmentIdGen(@Qualifier(LEAF_SEGMENT_ID_DATA_SOURCE_BEAN) DataSource dataSource)
-        {
-            IdAllocDaoImpl dao = new IdAllocDaoImpl(dataSource);
-            SegmentIdGenImpl idGen = new SegmentIdGenImpl();
-            idGen.setDao(dao);
-            
-            if(!idGen.init())
-                throw new BeanCreationException(GlobalIdService.LEAF_SEGMENT_ID_GENERATOR_BEAN, "Segment Service Init Fail");
-            
-            return idGen;
-        }
-    }
     
+    @Value("${hp.soa.gid.leaf.segment.data-source:" + DEFAULT_LEAF_SEGMENT_DATA_SOURCE + "}")
+    private String leafSegmentDataSource;
+    
+    /** 雪花 ID 生成器 */
     @Bean(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN)
-    @ConditionalOnProperty(name = "hp.soa.gid.leaf.snowflake.enable", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = "hp.soa.gid.leaf.snowflake.enabled", havingValue = "true", matchIfMissing = true)
     public IdGen snowflakeIdGen()
     {
         if(GeneralHelper.isStrEmpty(leafName))
@@ -96,9 +58,57 @@ public class SoaLeafConfig
         SnowflakeIdGenImpl idGen = new SnowflakeIdGenImpl(zkAddress, port, leafName);
         
         if(!idGen.init())
-            throw new BeanCreationException(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN, "Snowflake Service Init Fail");
+            throw new BeanCreationException(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN, "Bean Init Fail");
         
         return idGen;
+    }
+    
+    /** 段号 ID 生成器 */
+    @Bean(GlobalIdService.LEAF_SEGMENT_ID_GENERATOR_BEAN)
+    @ConditionalOnProperty(name = "hp.soa.gid.leaf.segment.enabled", havingValue = "true", matchIfMissing = false)
+    public IdGen segmentIdGen()
+    {
+        DataSource dataSource   = findLeafSegmentDataSource();
+        IdAllocDaoImpl dao      = new IdAllocDaoImpl(dataSource);
+        SegmentIdGenImpl idGen  = new SegmentIdGenImpl();
+        
+        idGen.setDao(dao);
+        
+        if(!idGen.init())
+            throw new BeanCreationException(GlobalIdService.LEAF_SEGMENT_ID_GENERATOR_BEAN, "Bean Init Fail");
+        
+        return idGen;
+    }
+    
+    private DataSource findLeafSegmentDataSource()
+    {
+        Map<String, DataSource> dataSources = SpringContextHolder.getApplicationContext().getBeansOfType(DataSource.class);
+        
+        for(Map.Entry<String, DataSource> entry : dataSources.entrySet())
+        {
+            DataSource ds = entry.getValue();
+            
+            if(entry.getKey().equals(leafSegmentDataSource))
+                return ds;
+            else if(ds instanceof DynamicRoutingDataSource drDs)
+            {
+                DataSource dataSource = null;
+                
+                try
+                {
+                    dataSource = drDs.getDataSource(leafSegmentDataSource);
+                }
+                catch(CannotFindDataSourceException e)
+                {
+                    
+                }
+                
+                if(dataSource != null)
+                    return dataSource;
+            }
+        }
+        
+        throw new BeanCreationException(GlobalIdService.LEAF_SEGMENT_ID_GENERATOR_BEAN, "data source '" + leafSegmentDataSource + "' not found");
     }
     
 }

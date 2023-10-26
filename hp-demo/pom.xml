@@ -27,6 +27,7 @@
         <module>hp-demo-bff-sentinel</module>
         <module>hp-demo-bff-skywalking</module>
         <module>hp-demo-job</module>
+        <module>hp-demo-mqtt</module>
         <module>hp-demo-mq-producer</module>
         <module>hp-demo-mq-consumer</module>
     </modules>

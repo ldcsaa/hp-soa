@@ -28,13 +28,13 @@
             <artifactId>hp-soa-framework-leaf</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>

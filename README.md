@@ -14,6 +14,7 @@
 - 数据库：MySQL、Druid、mybatis-plus（支持多数据源）
 - 缓存：Redis + Redisson（支持多实例）
 - 消息总线：RabbitMQ（支持多实例、可靠消息、Stream 消息）
+- MQTT发布订阅：Eclipse PAHO mqttv5
 - 分布式Job：xxl-job
 - 轻量级Job：Redisson + Spring Scheduled
 - 分布式事务：Seata
@@ -34,6 +35,7 @@
 - **[hp-soa-starter-data-mysql](hp-soa-starter/hp-soa-starter-data-mysql)** MySQL启动器，开启MySQL数据库访问功能，并提供动态数据源、数据源监控和全局事务管理等能力
 - **[hp-soa-starter-data-redis](hp-soa-starter/hp-soa-starter-data-redis)** Redis启动器，开启Redis访问功能，支持多Redis实例，支持Spring Cache
 - **[hp-soa-starter-rabbitmq](hp-soa-starter/hp-soa-starter-rabbitmq)** Rabbitmq启动器，开启Rabbitmq访问功能，支持多Rabbitmq实例，提供可靠消息实施方案以及消息跟踪能力
+- **[hp-soa-starter-mqtt](hp-soa-starter/hp-soa-starter-mqtt)** MQTT启动器，开启MQTT发布订阅功能，全面支持mqttv5协议
 - **[hp-soa-starter-job-exclusive](hp-soa-starter/hp-soa-starter-job-exclusive)** 轻量级Job启动器，开启轻量级排他Job功能，提供Job执行日志关联和调用链跟踪能力
 - **[hp-soa-starter-job-xxljob](hp-soa-starter/hp-soa-starter-job-xxljob)** Xxl-Job启动器，开启 Xxl-Job 功能，结合 xxl-job-admin 提供分布式Job能力
 - **[hp-soa-starter-leaf](hp-soa-starter/hp-soa-starter-leaf)** Leaf全局ID启动器，开启Leaf全局ID功能，支持通过Snowflake算法和Segment算法生成全局ID
@@ -80,7 +82,7 @@
 3. 修改全局配置（可选）
     - 系统配置文件，用于设置系统属性，默认配置文件：`/opt/hp-soa/config/system-config.properties`参考：[system-config.properties](misc/opt/hp-soa/config/system-config.properties)
     - 扩展配置文件，用于配置注册中心地址、配置中心地址等公共属性，默认配置文件：`/opt/hp-soa/config/extended-config.properties`参考：[extended-config.properties](misc/opt/hp-soa/config/extended-config.properties)
-4. 实现HTTP鉴权接口（可选）
+4. 实现 HTTP 鉴权接口（可选）
     - 如果是Gateway/BFF应用，并且应用属性`hp.soa.web.access-verification.enabled = true`，则需要实现[AccessVerificationService](hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/service/AccessVerificationService.java)接口，用于HTTP请求鉴权。
 5. 启动应用
     - 以[io.github.hpsocket.soa.framework.web.server.main.AppStarter](hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/server/main/AppStarter.java)作为启动类，启动应用程序。
@@ -92,6 +94,7 @@
 - [MySQL数据库](misc/doc/mysql.md)
 - [Redis缓存](misc/doc/redis.md)
 - [RabbitMQ消息队列](misc/doc/rabbitmq.md)
+- [MQTT发布订阅](misc/doc/mqtt.md)
 - [Spring Task](misc/doc/spring-task.md)
 - [Job调度](misc/doc/job.md)
 - [Leaf全局ID生成](misc/doc/leaf.md)

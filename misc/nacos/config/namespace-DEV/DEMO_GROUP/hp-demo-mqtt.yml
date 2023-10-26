@@ -1,0 +1,37 @@
+## mqtt 配置
+# 完整配置可参考以下配置类：
+# io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties
+# org.eclipse.paho.mqttv5.client.MqttConnectionOptions
+mqtt:
+  # 消息订阅配置
+  # 参考文档：
+  # https://www.emqx.io/docs/zh/latest/dashboard/subscriptions/subscriptions.html
+  # 配置类：
+  # org.eclipse.paho.mqttv5.common.MqttSubscription
+  # io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties.SubscribeOptions
+  #
+  # 注意：服务应用通常是多实例部署，因此需要配置共享订阅
+  # 共享订阅文档：https://www.emqx.io/docs/zh/latest/messaging/mqtt-shared-subscription.html
+  subscribes:
+    - topic: $share/srv/topicx  # 订阅主题（必选）
+      topic-alias: 12  # 主题别名（整数，可选，默认：null）
+      identifier: 111  # 订阅标识符（可选，默认：null）
+      qos: 0  # （可选，默认：1）
+      noLocal: false  # （可选，默认：false），注意：共享订阅的 noLocal 不能设置为 true
+      retainAsPublished: false  # （可选，默认：false）
+      retainHandling: 0  # （可选，默认：0）
+    - topic: $share/srv/testtopic-1
+      topic-alias: 34
+      identifier: 222
+      qos: 1
+      #noLocal: true
+      retainAsPublished: true
+      retainHandling: 1
+    - topic: $share/srv/testtopic-2
+      topic-alias: 56
+      identifier: 333
+      qos: 2
+      #noLocal: false
+      retainAsPublished: true
+      retainHandling: 2
+    - topic: $share/srv/testtopic-3

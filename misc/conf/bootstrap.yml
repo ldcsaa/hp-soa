@@ -21,10 +21,10 @@ hp.soa.web:
     allowed-methods: "*"
     exposed-headers: 
     allow-credentials: false
-    maxAge: 3600
+    max-age: 3600
   # HTTP请求鉴权
   access-verification:
-    # 是否启用 HTTP 请求鉴权（默认：true，通常 Gateway/BFF 应用设置为 true，其它应用设置为 false）
+    # 是否开启 HTTP 请求鉴权（默认：true，通常 Gateway/BFF 应用设置为 true，其它应用设置为 false）
     enabled: true
     # 默认鉴权策略（默认：MAYBE_LOGIN，可选值：NO_CHECK，NO_LOGIN，MAYBE_LOGIN，REQUIRE_LOGIN，REQUIRE_AUTHORIZED）
     default-access-policy: maybe_login
@@ -125,9 +125,11 @@ management:
 ## Spring-Doc 配置
 springdoc:
   api-docs:
+    # 是否启用（生成环境应该设置为 false） 
     enabled: true
     path: /v3/api-docs
   swagger-ui:
+    # 是否启用（生成环境应该设置为 false）
     enabled: true
     path: /swagger-ui.html
   packagesToScan: io.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}

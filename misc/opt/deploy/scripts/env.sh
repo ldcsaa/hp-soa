@@ -113,7 +113,11 @@ $DEFAULT_JVM_MEMORY_OPTIONS \
 --add-opens java.base/java.security=ALL-UNNAMED \
 --add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED \
 --add-opens java.base/jdk.internal.access=ALL-UNNAMED \
---add-opens java.base/jdk.internal.misc=ALL-UNNAMED"
+--add-opens java.base/jdk.internal.misc=ALL-UNNAMED \
+--add-opens=java.base/sun.nio.ch=ALL-UNNAMED \
+--add-opens=java.base/sun.nio.cs=ALL-UNNAMED \
+--add-opens=java.base/sun.security.action=ALL-UNNAMED \
+--add-opens=java.base/sun.util.calendar=ALL-UNNAMED"
 
 if [ -n "$LOG_LEVEL" ]; then
     JAVA_OPTS="-Dlog4j.log.level=$LOG_LEVEL $JAVA_OPTS"

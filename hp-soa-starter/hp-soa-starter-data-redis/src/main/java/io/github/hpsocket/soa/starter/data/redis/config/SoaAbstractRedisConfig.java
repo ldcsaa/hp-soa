@@ -299,7 +299,7 @@ public class SoaAbstractRedisConfig
         }
     }
 
-    @SuppressWarnings({ "deprecation", "unchecked"})
+    @SuppressWarnings({ "deprecation", "unchecked", "rawtypes"})
     public RedissonClient redisson() throws IOException {
         Config config;
         Method clusterMethod = ReflectionUtils.findMethod(RedisProperties.class, "getCluster");
@@ -437,7 +437,7 @@ public class SoaAbstractRedisConfig
             if (clusterMethod != null && ReflectionUtils.invokeMethod(clusterMethod, redisProperties) != null) {
                 Object clusterObject = ReflectionUtils.invokeMethod(clusterMethod, redisProperties);
                 Method nodesMethod = ReflectionUtils.findMethod(clusterObject.getClass(), "getNodes");
-                List<String> nodesObject = (List<String>)ReflectionUtils.invokeMethod(nodesMethod, clusterObject);
+                List<String> nodesObject = (List) ReflectionUtils.invokeMethod(nodesMethod, clusterObject);
 
                 nodes = convert(prefix, nodesObject);
             }

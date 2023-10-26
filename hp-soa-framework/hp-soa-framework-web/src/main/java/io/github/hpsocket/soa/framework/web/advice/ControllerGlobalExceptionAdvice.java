@@ -51,9 +51,8 @@ public class ControllerGlobalExceptionAdvice implements Ordered
         
         for(ObjectError obj : rs.getAllErrors())
         {
-            if(obj instanceof FieldError)
+            if(obj instanceof FieldError field)
             {
-                FieldError field = (FieldError)obj;
                 String name = field.getField();
                 
                 List<String> errs = validationErrors.get(name);
@@ -82,8 +81,8 @@ public class ControllerGlobalExceptionAdvice implements Ordered
     @ExceptionHandler({RpcException.class})
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RpcException e)
     {
-        Throwable real    = e;
-        Throwable cause    = null;
+        Throwable real  = e;
+        Throwable cause = null;
         
         do
         {

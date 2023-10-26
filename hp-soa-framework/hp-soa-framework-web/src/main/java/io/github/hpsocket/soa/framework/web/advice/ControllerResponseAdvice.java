@@ -90,10 +90,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
         HttpServletRequest req     = ((ServletServerHttpRequest)request).getServletRequest();
         HttpServletResponse resp = ((ServletServerHttpResponse)response).getServletResponse();
         
-        if(body instanceof Response<?>)
-        {
-            Response<?> respBody = (Response<?>)body;
-            
+        if(body instanceof Response<?> respBody)
+        {            
             if(respBody.getResultCode() == null)
                 respBody.setResultCode(respBody.getStatusCode());
             
@@ -208,10 +206,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                 jsonLog.put("request", json.toString());
                 jsonLog.put("response", JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_DEFAULT));
                 
-                if(body instanceof Response<?>)
-                {
-                    Response<?> respBody = (Response<?>)body;
-                    
+                if(body instanceof Response<?> respBody)
+                {                    
                     jsonLog.put("resultCode", respBody.getResultCode());
                     jsonLog.put("statusCode", respBody.getStatusCode());
                     jsonLog.put("costTime", respBody.getCostTime());
@@ -234,10 +230,9 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
 
                 String msg = jsonLog.toJSONString();
                 
-                if(body instanceof Response<?>)
+                if(body instanceof Response<?> respBody)
                 {
-                    Response<?> respBody = (Response<?>)body;
-                    Integer statusCode     = respBody.getStatusCode();
+                    Integer statusCode = respBody.getStatusCode();
                     
                     if(GeneralHelper.equals(statusCode, OK))
                         MONITOR_LOGGER.info(msg);

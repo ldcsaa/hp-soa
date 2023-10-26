@@ -74,16 +74,16 @@ public class WebConfig implements WebMvcConfigurer
     }
     
     /** {@linkplain ReadOnlyContextRefreshedEventListener} 应用程序监听器配置 */
-    @Bean("readOnlyContextRefreshedEventListener")
     @DependsOn("springContextHolder")
+    @Bean("readOnlyContextRefreshedEventListener")
     public ReadOnlyContextRefreshedEventListener readOnlyContextRefreshedEventListener()
     {
         return new ReadOnlyContextRefreshedEventListener();
     }
 
     /** {@linkplain ReadOnlyRefreshEventListener} 应用程序监听器配置 */
-    @Bean("readOnlyRefreshEventListener")
     @DependsOn("springContextHolder")
+    @Bean("readOnlyRefreshEventListener")
     public ReadOnlyRefreshEventListener readOnlyRefreshEventListener()
     {
         return new ReadOnlyRefreshEventListener();

@@ -47,7 +47,6 @@ public class SnowflakeZookeeperHolder
     @Setter
     private int workerID;
     
-    private final String PREFIX_ZK_PATH;
     private final String PROP_PATH;
     private final String PATH_FOREVER;// 保存所有数据持久的节点
     private String ip;
@@ -62,9 +61,8 @@ public class SnowflakeZookeeperHolder
         this.listenAddress = ip + ":" + port;
         this.connectionString = connectionString;
 
-        PREFIX_ZK_PATH = "/snowflake/" + leafName;
         PROP_PATH = System.getProperty("java.io.tmpdir") + File.separator + leafName + "/leafconf/{port}/workerID.properties";
-        PATH_FOREVER = PREFIX_ZK_PATH + "/forever";// 保存所有数据持久的节点
+        PATH_FOREVER = "/snowflake/" + leafName + "/forever";// 保存所有数据持久的节点
     }
 
     public boolean init()

@@ -33,8 +33,8 @@ import com.rabbitmq.stream.EnvironmentBuilder;
 public class SoaAbstractRabbitmqConfig
 {
     public static final ByteCapacity DEFAULT_STREAM_MAX_LENGTH_BYTES        = ByteCapacity.GB(100);
-    public static final ByteCapacity DEFAULT_STREAM_MAX_SEGMENT_SIZE_BYTES    = ByteCapacity.MB(100);
-    public static final Duration DEFAULT_STREAM_MAX_AGE                        = Duration.ofHours(72);
+    public static final ByteCapacity DEFAULT_STREAM_MAX_SEGMENT_SIZE_BYTES  = ByteCapacity.MB(100);
+    public static final Duration DEFAULT_STREAM_MAX_AGE                     = Duration.ofHours(72);
     
     protected final RabbitProperties properties;
 
@@ -69,11 +69,16 @@ public class SoaAbstractRabbitmqConfig
             public List<Address> getAddresses()
             {
                 List<Address> addresses = new ArrayList<>();
-                for(String address : properties.determineAddresses().split(","))
+                
+                for (String address : properties.determineAddresses().split(","))
                 {
-                    String[] components = address.split(":");
-                    addresses.add(new Address(components[0], Integer.parseInt(components[1])));
+                    int portSeparatorIndex = address.lastIndexOf(':');
+                    String host = address.substring(0, portSeparatorIndex);
+                    String port = address.substring(portSeparatorIndex + 1);
+                    
+                    addresses.add(new Address(host, Integer.parseInt(port)));
                 }
+                
                 return addresses;
             }
         };

@@ -1,0 +1,89 @@
+## mqtt 配置
+# 完整配置可参考以下配置类：
+# io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties
+# org.eclipse.paho.mqttv5.client.MqttConnectionOptions
+mqtt:
+  # 客户端ID，必须全局唯一（默认：空，随机生成）
+  # 支持占位符：%A - 本机IP地址，%P - 当前进程ID，%R - 随机字符串
+  clientId: ${spring.application.name}_%A_${server.port}
+  # 命令操作最大等待时间（单位：毫秒，默认：-1，一直等待）
+  timeToWait: -1
+  # 手工握手（默认：false）
+  manualAcks: false
+  # 发布消息缓存目录（默认：用户当前目录）
+  dataDir: /data/mqtt
+  
+  # TCP 协议服务地址
+  serverURIs: tcp://192.168.56.23:1883
+  # SSL 协议服务地址
+  #serverURIs: ssl://192.168.56.23:8883
+  # WS 协议服务地址
+  #serverURIs: ws://192.168.56.23:8083
+  # WSS 协议服务地址
+  #serverURIs: wss://192.168.56.23:8084
+
+  # 用户名
+  userName: bruce
+  # 密码，类型为 byte[]，可以写成以下两种形式
+  password: 123456
+  #password: !!binary MTIzNDU2
+
+  # 自动重连（默认：false）
+  automaticReconnect: true
+  # 自动清除会话（默认：true）
+  # 注意：共享订阅需要设置自动清除会话
+  # 参考：https://www.emqx.io/docs/zh/latest/messaging/mqtt-shared-subscription.html
+  cleanStart: true
+  # 会话保持时间（单位：秒，cleanStart 为 false 时生效）
+  sessionExpiryInterval: 10800
+  
+  # 遗嘱消息，参考：https://www.emqx.io/docs/zh/latest/messaging/mqtt-will-message.html
+  # 注意：客户端异常断线才会发送遗嘱消息；不配置遗嘱消息则不会发送。
+  # 遗嘱消息发送主题
+  #willDestination: testtopic-1
+  # 遗嘱消息属性和内容
+  #willMessage:
+  #  qos: 0
+  #  retained: false
+  #  payload: "app-server disconnected !"
+  
+  # 消息发布默认配置（发布消息时不指定 qos 或 retained 则用默认值）
+  publish:
+    defaultQos: 1  # 默认：1
+    defaultRetained: false  # 默认：false
+    
+  # 消息订阅配置
+  # 参考文档：
+  # https://www.emqx.io/docs/zh/latest/dashboard/subscriptions/subscriptions.html
+  # 配置类：
+  # org.eclipse.paho.mqttv5.common.MqttSubscription
+  # io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties.SubscribeOptions
+  #
+  # 注意：服务应用通常是多实例部署，因此需要配置共享订阅
+  # 共享订阅文档：https://www.emqx.io/docs/zh/latest/messaging/mqtt-shared-subscription.html
+  #subscribes:
+  #  - topic: $share/srv/topicx  # 订阅主题（必选）
+  #    topic-alias: 12  # 主题别名（整数，可选，默认：null）
+  #    identifier: 111  # 订阅标识符（可选，默认：null）
+  #    qos: 0  # （可选，默认：1）
+  #    noLocal: false  # （可选，默认：false），注意：共享订阅的 noLocal 不能设置为 true
+  #    retainAsPublished: false  # （可选，默认：false）
+  #    retainHandling: 0  # （可选，默认：0）
+  #  - topic: $share/srv/testtopic-3
+
+  # HTTPS/SSL 检验服务端主机地址（默认：true）
+  # 注意：生产环境应该设置为 true
+  httpsHostnameVerificationEnabled: false
+  
+  # SSL 证书配置
+  # 1. 当 sslCaCertPath 为空时，不加载 SSL 证书
+  # 2. 当 sslCaCertPath 不为空，sslClientCertPath或sslClientKeyPath 为空时，执行单向验证
+  # 3. 当 sslCaCertPath ，sslClientCertPath，sslClientKeyPath 都不为空时，执行双向验证
+  # 根证书
+  #sslCaCertPath: /opt/emqx/certs/cacert.pem
+  # 客户端证书
+  #sslClientCertPath: /opt/emqx/certs/client-cert.pem
+  # 客户端证书 key 文件
+  #sslClientKeyPath: /opt/emqx/certs/client-key.pem
+  # 客户端证书 key 文件密码
+  #sslKeyPassword: 
