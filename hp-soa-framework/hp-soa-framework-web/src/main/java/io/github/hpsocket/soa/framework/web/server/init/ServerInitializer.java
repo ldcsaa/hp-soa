@@ -17,7 +17,7 @@ import org.springframework.core.io.support.PropertySourceFactory;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 
-/** <b>应用程序初始化器</b><br>
+/** <b>应用服务初始化器</b><br>
  * <ol>
  * <li>加载系统属性配置文件
  *   <ul>

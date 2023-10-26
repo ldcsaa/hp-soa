@@ -245,15 +245,119 @@ hp.soa.web:
 ```
 public interface AccessVerificationService
 {
-    /** 应用程序编号校验 */
+    /** 应用程序编号校验，成功：Pair(True, ?)，失败：Pair(False, ?) */
     Pair<Boolean, String> verifyAppCode(String appCode, String srcAppCode);
-    /** 用户身份校验 */
+    /** 用户身份校验，成功：Pair(userId, ?)，失败：Pair(null, ?) */
     Pair<Long, String> verifyUser(String token, Long groupId);
-    /** 用户授权校验 */
+    /** 用户授权校验，成功：Pair(True, ?)，失败：Pair(False, ?) */
     Pair<Boolean, String> verifyAuthorization(String route, String appCode, Long groupId, Long userId);
 }
 ```
+&nbsp;&nbsp;应用程序需要创建一个实现了[AccessVerificationService](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/service/AccessVerificationService.java)鉴权接口的 Spring Bean，由该  Spring Bean 实现请求鉴权。
+&nbsp;&nbsp;spring-boot Controller 接口方法会根据不同的鉴权策略调用相应的鉴权接口方法：
+- **NO_CHECK** （不调用任何鉴权接口方法）
+- **NO_LOGIN** `verifyAppCode`
+- **MAYBE_LOGIN** `verifyAppCode`、`verifyUser`
+- **REQUIRE_LOGIN** `verifyAppCode`、`verifyUser`
+- **REQUIRE_AUTHORIZED** `verifyAppCode`、`verifyUser`、`verifyAuthorization`
 
+##### 3) 在 spring-boot Controller 中声明鉴权策略
+```
+@RestController
+/* Controller 默认鉴权策略：NO_LOGIN */
+/* 注意：如果 Controller 没有声明 @AccessVerification 注解，默认鉴权策略为 ${hp.soa.web.access-verification.default-access-policy} 配置的策略 */
+@AccessVerification(Type.MAYBE_LOGIN)
+public class DemoController
+{
+    /* 方法没有声明 @AccessVerification 注解，使用 Controller 默认鉴权策略：NO_LOGIN */
+    public Response<QueryResponse> queryUser(@RequestBody @Valid QueryReuqest request)
+    {
+        // ...
+    }
+    
+    /* 使用方法注解 @AccessVerification 声明的鉴权策略：REQUIRE_LOGIN */
+    @AccessVerification(Type.REQUIRE_LOGIN)
+    public Response<SaveResponse> saveUser(@RequestBody @Valid SaveReuqest request)
+    {
+        // ...
+    }
+}
+```
+&nbsp;&nbsp;spring-boot Controller 可以在类或接口方法中通过[AccessVerification](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/annotation/AccessVerification.java)注解声明鉴权策略，策略优先级：**方法鉴权策略** &gt; **类鉴权策略** &gt; **配置文件默认鉴权策略**。  
+&nbsp;&nbsp;<font color=blue>注意：spring-boot Controller 接口方法的返回值类型必须为[Response&lt;?&gt;](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/model/Response.java)类型，鉴权策略才会生效。</font>
 
 #### 5. 启动应用
+&nbsp;&nbsp;HP-SOA 提供了默认应用程序启动器[io.github.hpsocket.soa.framework.web.server.main.AppStarter](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/server/main/AppStarter.java)
+```
+/** <b>默认应用程序启动器</b> */
+/* 排除部分自动配置 */
+@SpringBootApplication(exclude = {  DataSourceAutoConfiguration.class,
+                                    RedisAutoConfiguration.class,
+                                    RedisReactiveAutoConfiguration.class,
+                                    RedisRepositoriesAutoConfiguration.class,
+                                    MongoAutoConfiguration.class,
+                                    KafkaAutoConfiguration.class,
+                                    RabbitAutoConfiguration.class
+                                })
+/* 开启 AspectJ AOP */
+@EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
+/* 扫描 Spring Bean */
+@ComponentScan(basePackages = {"${hp.soa.web.component-scan.base-package:}"})
+public class AppStarter
+{
+    static
+    {
+        /* 调用应用服务初始化器，加载系统属性配置文件 */
+        ServerInitializer.initSystemProperties();
+    }
+    
+    /** 应用程序入口 */
+    public static void main(String[] args)
+    {
+        SpringApplication.run(AppStarter.class, args);
+    }
+}
+```
+&nbsp;&nbsp;[AppStarter](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/server/main/AppStarter.java)与 HP-SOA 服务框架紧密结合，为 HP-SOA 提供下列功能支持：
+- **排除部分自动配置:** 避免这些自动配置与 HP-SOA 的自动配置（hp-soa-starter-xxx）冲突
+- **开启 AspectJ AOP:** 支持 AspectJ AOP 增强
+- **扫描 Spring Bean:** 支持通过`hp.soa.web.component-scan.base-package`配置指定 Spring Bean 扫描包路径
+- **调用应用服务初始化器:** 加载系统属性配置文件[system-config.properties](../../misc/opt/hp-soa/config/system-config.properties)
 
+&nbsp;&nbsp;如无特殊原因，建议应用程序都使用[AppStarter](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/server/main/AppStarter.java)作为应用程序启动器；如果应用程序必须使用自定义应用程序启动器，上述功能支持也必须保留。
+
+&nbsp;&nbsp;另外，HP-SOA 的建议JVM启动参数如下，应用程序可以根据实际情况调整：
+```
+java \
+-DskipTests=true \
+-Dfile.encoding=UTF-8 \
+-Djava.awt.headless=true \
+-Dhp.soa.system.properties.file=/opt/hp-soa/config/system-config.properties \
+-Dhp.soa.extended.properties.file=/opt/hp-soa/config/extended-config.properties \
+-Ddubbo.resolve.file=/opt/hp-soa/config/dubbo-resolve.properties \
+-Djava.security.egd=file:/dev/./urandom \
+-Dnetworkaddress.cache.ttl=10 -Dnetworkaddress.cache.negative.ttl=1 \
+-Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m \
+-XX:-OmitStackTraceInFastThrow -XX:+DisableExplicitGC -XX:MaxGCPauseMillis=50 -XX:+HeapDumpOnOutOfMemoryError \
+-XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:GuaranteedSafepointInterval=0 -XX:+UseCountedLoopSafepoints -XX:LoopStripMiningIter=1000 \
+--add-opens java.base/java.lang=ALL-UNNAMED \
+--add-opens java.base/java.lang.reflect=ALL-UNNAMED \
+--add-opens java.base/java.util=ALL-UNNAMED \
+--add-opens java.base/java.util.concurrent=ALL-UNNAMED \
+--add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED \
+--add-opens java.base/java.io=ALL-UNNAMED \
+--add-opens java.base/java.nio=ALL-UNNAMED \
+--add-opens java.base/java.math=ALL-UNNAMED \
+--add-opens java.base/java.text=ALL-UNNAMED \
+--add-opens java.base/java.time=ALL-UNNAMED \
+--add-opens java.base/java.net=ALL-UNNAMED \
+--add-opens java.base/javax.net.ssl=ALL-UNNAMED \
+--add-opens java.base/java.security=ALL-UNNAMED \
+--add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED \
+--add-opens java.base/jdk.internal.access=ALL-UNNAMED \
+--add-opens java.base/jdk.internal.misc=ALL-UNNAMED \
+--add-opens=java.base/sun.nio.ch=ALL-UNNAMED \
+--add-opens=java.base/sun.nio.cs=ALL-UNNAMED \
+--add-opens=java.base/sun.security.action=ALL-UNNAMED \
+--add-opens=java.base/sun.util.calendar=ALL-UNNAMED
+```
