@@ -1,3 +1,7 @@
+[[用户指南](user_guide.md)]
+
+---
+
 ## 应用程序类型
 &nbsp;&nbsp;微服务系统通常有以下几种应用程序：
 - **Gateway/BFF应用** 接受外部HTTP请求，对请求鉴权，调用内部服务应用处理请求，封装返回结果。
@@ -413,4 +417,4 @@ public class Response<T> implements Serializable
 
 ---
 
-&nbsp;&nbsp;[[用户指南](user_guide.md)]
+[[用户指南](user_guide.md)]

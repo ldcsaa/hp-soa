@@ -96,4 +96,4 @@
 
 ---
 
-&nbsp;&nbsp;[[用户指南](misc/doc/user_guide.md)]
+[[用户指南](misc/doc/user_guide.md)]
