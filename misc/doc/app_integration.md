@@ -410,3 +410,7 @@ public class Response<T> implements Serializable
 &nbsp;&nbsp;[Response](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/model/Response.java)统一封装HTTP请求的返回值，其中`result`为业务模型对象。`respType`为响应类型，当`respType=RT_LOGIN`时，表示当前请求为登录请求并成功登录，HP-SOA 会自动创建一个登录token给调用方，登录token以Cookie方式返回，Cookie名称为`X-Token`，有效期为`${hp.soa.web.cookie.max-age}`配置值；当`respType=RT_LOGOUT`时，表示当前请求为登出请求并成功登出，HP-SOA 会自动删除调用方token。
 
 &nbsp;&nbsp;*注意：spring-boot Controller 接口方法的返回值类型为[Response](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/model/Response.java)鉴权策略才会生效。*
+
+---
+
+&nbsp;&nbsp;[[用户指南](user_guide.md)]
