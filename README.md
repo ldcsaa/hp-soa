@@ -107,3 +107,7 @@
 - [工具包](misc/doc/hp-soa-util.md)
 - [打包发布](misc/doc/deploy.md)
 - [最佳实践](misc/doc/best-practices.md)
+
+### 技术交流
+- [怪兽乐园①群](https://jq.qq.com/?_wv=1027&k=3UAbrhTG)
+- [怪兽乐园②群](https://jq.qq.com/?_wv=1027&k=uYBpc6bG)
