@@ -16,3 +16,7 @@
 - [打包发布](deploy.md)
 - [最佳实践](best-practices.md)
 - [[返回首页](../../README.md)]
+
+### 技术交流
+- [怪兽乐园①群](https://jq.qq.com/?_wv=1027&k=3UAbrhTG)
+- [怪兽乐园②群](https://jq.qq.com/?_wv=1027&k=uYBpc6bG)

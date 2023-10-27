@@ -90,10 +90,6 @@
     - 以[io.github.hpsocket.soa.framework.web.server.main.AppStarter](hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/server/main/AppStarter.java)作为启动类，启动应用程序。
     - JVM启动参数参考：[JVM启动参数示例](misc/jvm/java-opts.txt)
 
-### 技术交流
-- [怪兽乐园①群](https://jq.qq.com/?_wv=1027&k=3UAbrhTG)
-- [怪兽乐园②群](https://jq.qq.com/?_wv=1027&k=uYBpc6bG)
-
 ---
 
 [[用户指南](misc/doc/user_guide.md)]
