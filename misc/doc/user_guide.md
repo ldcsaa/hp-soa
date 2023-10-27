@@ -1,3 +1,7 @@
+【[返回首页](../../README.md)】
+
+---
+
 ### 用户指南
 - [应用集成](app_integration.md)
 - [Nacos配置中心](nacos.md)
@@ -15,7 +19,6 @@
 - [工具包](hp-soa-util.md)
 - [打包发布](deploy.md)
 - [最佳实践](best-practices.md)
-- [[返回首页](../../README.md)]
 
 ### 技术交流
 - [怪兽乐园①群](https://jq.qq.com/?_wv=1027&k=3UAbrhTG)
