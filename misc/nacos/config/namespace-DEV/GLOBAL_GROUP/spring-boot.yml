@@ -29,11 +29,11 @@ spring:
   application.name: ${hp.soa.web.app.name}
   # Spring Cloud 配置
   cloud.config:
-    # 配置覆盖规则：开发、测试环境允许本地配置覆盖远程配置
-    allow-override: true
-    override-system-properties: true
-    override-none: true
-    # 配置覆盖规则：生成环境不允许本地配置覆盖远程配置
+    # 配置覆盖规则：（开发、测试环境）允许本地配置覆盖远程配置
+    allow-override: true              # 总开关，允许本地配置文件覆盖行为
+    override-none: true               # 不要覆盖本地任何配置（直接将远程配置的优先级降低到最低），前提条件是allowOverride是true
+    override-system-properties: true  # 覆盖本地JAVA属性值（java system property，也就是java -Dxxx传入的参数）
+    # 配置覆盖规则：（生产环境）不允许本地配置覆盖远程配置
     #allow-override: false
     #override-system-properties: false
     #override-none: false
