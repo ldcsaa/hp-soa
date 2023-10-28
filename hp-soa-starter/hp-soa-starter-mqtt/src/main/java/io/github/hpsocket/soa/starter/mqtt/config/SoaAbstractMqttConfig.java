@@ -8,7 +8,6 @@ import org.eclipse.paho.mqttv5.client.MqttCallback;
 import org.eclipse.paho.mqttv5.client.MqttClientPersistence;
 import org.eclipse.paho.mqttv5.client.persist.MqttDefaultFilePersistence;
 import org.eclipse.paho.mqttv5.common.MqttException;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectProvider;
 
@@ -56,17 +55,17 @@ public abstract class SoaAbstractMqttConfig
         ObjectProvider<SocketFactory> socketFactoryProvider,
         ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
-        ObjectProvider<MqttMessageListener> realMessageListenerProvider = checkMessageListenerProvider(messageListenerProvider);
         MqttPropertiesCustomizer customier = mqttPropertiesCustomizerProvider.getIfUnique();
         
         if(customier != null)
             customier.customize(mqttProperties);
         
-        parseSocketFactory(socketFactoryProvider.getIfUnique(), hostnameVerifierProvider.getIfUnique());
         parseClientId();
+        parseSocketFactory(socketFactoryProvider.getIfUnique(), hostnameVerifierProvider.getIfUnique());
         
-        ExtMqttClient mqttClient = new ExtMqttClient(mqttProperties.getServerURIs()[0], mqttProperties.getClientId(), mqttClientPersistence);
-        MqttCallback callBack = mqttCallbackProvider.getIfUnique();
+        MqttMessageListener listener = parseMessageListener(messageListenerProvider);
+        ExtMqttClient mqttClient     = new ExtMqttClient(mqttProperties.getServerURIs()[0], mqttProperties.getClientId(), mqttClientPersistence);
+        MqttCallback callBack        = mqttCallbackProvider.getIfUnique();
         
         if(callBack == null)
             callBack = mqttCallback();
@@ -74,8 +73,8 @@ public abstract class SoaAbstractMqttConfig
         if(callBack instanceof DefaultMqttCallback defCallBack)
         {
             defCallBack.setMqttClient(mqttClient);
+            defCallBack.setMessageListener(listener);
             defCallBack.setSubscribes(mqttProperties.getSubscribes());
-            defCallBack.setMessageListener(realMessageListenerProvider.getIfUnique());
         }
         
         mqttClient.setTimeToWait(mqttProperties.getTimeToWait());
@@ -156,48 +155,14 @@ public abstract class SoaAbstractMqttConfig
         mqttProperties.setClientId(clientId);
     }
 
-    private ObjectProvider<MqttMessageListener> checkMessageListenerProvider(ObjectProvider<MqttMessageListener> messageListenerProvider)
+    private MqttMessageListener parseMessageListener(ObjectProvider<MqttMessageListener> messageListenerProvider)
     {
-        ObjectProvider<MqttMessageListener> realMessageListenerProvider = messageListenerProvider;
-        MqttMessageListener listener = realMessageListenerProvider.getIfUnique();
+        MqttMessageListener listener = messageListenerProvider.getIfUnique();
         
-        if(listener == null)
-        {
-            listener = SpringContextHolder.getBean(MqttMessageListener.class, false);
-            
-            if(listener != null)
-            {
-                final MqttMessageListener realListener = listener;
-                realMessageListenerProvider = new ObjectProvider<MqttMessageListener>() {
-                    
-                    @Override
-                    public MqttMessageListener getObject() throws BeansException
-                    {
-                        return realListener;
-                    }
-                    
-                    @Override
-                    public MqttMessageListener getObject(Object... args) throws BeansException
-                    {
-                        return realListener;
-                    }
-                    
-                    @Override
-                    public MqttMessageListener getIfUnique() throws BeansException
-                    {
-                        return realListener;
-                    }
-                    
-                    @Override
-                    public MqttMessageListener getIfAvailable() throws BeansException
-                    {
-                        return realListener;
-                    }
-                };
-            }
-        }
+        if(listener == null && GeneralHelper.isNotNullOrEmpty(mqttProperties.getSubscribes()))
+            listener = SpringContextHolder.getBean(MqttMessageListener.class);
         
-        return realMessageListenerProvider;
+        return listener;
     }
 
 }
