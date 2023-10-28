@@ -9,10 +9,22 @@ import com.alibaba.fastjson2.JSON;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttMessageListener;
 import lombok.extern.slf4j.Slf4j;
 
-/** <b>MQTT 消息监听器<b> */
+/** <b>MQTT 消息监听器</b><p>
+ * 
+ * <ol>
+ * <li>MQTT 消息监听器声明为 Spring Bean</li>
+ * <li>HP-SOA 支持多 MQTT 实例，每个 MQTT 实例的消息监听器需通过 Bean 名称区分：
+ *   <ul>
+ *     <li>默认 MQTT 实例消息监听器：mqttMessageListener</li>
+ *     <li>第一个 MQTT 实例消息监听器：firstMqttMessageListener</li>
+ *     <li>第二个 MQTT 实例消息监听器：secondMqttMessageListener</li>
+ *   </ul>
+ * </li>
+ * </ol>
+ * 
+ */
 @Slf4j
-/* 声明为 Spring Bean */
-@Component
+@Component("mqttMessageListener")
 public class DemoMqttMessageListener implements MqttMessageListener
 {
     @Override

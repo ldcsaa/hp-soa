@@ -33,7 +33,7 @@ import com.rabbitmq.stream.OffsetSpecification;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 
-public class SoaAbstractRabbitmqConsumerConfig
+public abstract class SoaAbstractRabbitmqConsumerConfig
 {
     protected final ObjectProvider<MessageConverter> messageConverter;
     protected final ObjectProvider<MessageRecoverer> messageRecoverer;

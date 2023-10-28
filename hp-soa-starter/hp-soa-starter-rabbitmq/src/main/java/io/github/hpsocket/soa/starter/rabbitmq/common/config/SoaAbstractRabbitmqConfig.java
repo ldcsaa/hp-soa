@@ -30,7 +30,7 @@ import com.rabbitmq.stream.ByteCapacity;
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.EnvironmentBuilder;
 
-public class SoaAbstractRabbitmqConfig
+public abstract class SoaAbstractRabbitmqConfig
 {
     public static final ByteCapacity DEFAULT_STREAM_MAX_LENGTH_BYTES        = ByteCapacity.GB(100);
     public static final ByteCapacity DEFAULT_STREAM_MAX_SEGMENT_SIZE_BYTES  = ByteCapacity.MB(100);

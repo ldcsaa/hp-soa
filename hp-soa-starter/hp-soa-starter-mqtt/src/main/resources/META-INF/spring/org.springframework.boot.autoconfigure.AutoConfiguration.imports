@@ -1,1 +1,4 @@
 io.github.hpsocket.soa.starter.mqtt.config.SoaMqttConfig
+io.github.hpsocket.soa.starter.mqtt.config.SoaDefaultMqttConfig
+io.github.hpsocket.soa.starter.mqtt.config.SoaFirstMqttConfig
+io.github.hpsocket.soa.starter.mqtt.config.SoaSecondMqttConfig
