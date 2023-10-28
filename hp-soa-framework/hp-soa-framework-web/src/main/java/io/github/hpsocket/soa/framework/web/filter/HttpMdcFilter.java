@@ -44,7 +44,7 @@ public class HttpMdcFilter implements Filter
     @Override
     public void destroy()
     {
-        log.info("({}) shutting down !", DISPLAY_NAME);
+        log.info("({}) shutted down !", DISPLAY_NAME);
     }
 
     @Override

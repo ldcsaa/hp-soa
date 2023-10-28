@@ -14,16 +14,16 @@ import io.github.hpsocket.soa.starter.rabbitmq.annotation.EnableSoaRabbitmqProdu
 @Configuration
 /* enable rabbitmq producer */
 @EnableSoaRabbitmqProducer
-/* default mybatis mapper scan package -> ${hp.soa.web.mapper-scan.base-package} */
+/* default mybatis mapper scan package -> ${hp.soa.data.mysql.mapper-scan.base-package} */
 @MapperScan("io.github.hpsocket.demo.mq.producer.mapper")
 public class AppConfig
 {
-    public static final String DOMAIN_NAME                = "demo.order";
-    public static final String CREATE_ORDER_EVENT_NAME    = "createOrder";
-    public static final String CREATE_ORDER_ROUTING_KEY    = "order.create.*";
+    public static final String DOMAIN_NAME              = "demo.order";
+    public static final String CREATE_ORDER_EVENT_NAME  = "createOrder";
+    public static final String CREATE_ORDER_ROUTING_KEY = "order.create.*";
     
-    public static final String[] REGION_EXCHANGES        = {"EXC_REGION_0", "EXC_REGION_1", "EXC_REGION_2", "EXC_REGION_3"};
-    public static final String[] REGION_QUEUES            = {"QUE_REGION_0", "QUE_REGION_1", "QUE_REGION_2", "QUE_REGION_3"};
+    public static final String[] REGION_EXCHANGES       = {"EXC_REGION_0", "EXC_REGION_1", "EXC_REGION_2", "EXC_REGION_3"};
+    public static final String[] REGION_QUEUES          = {"QUE_REGION_0", "QUE_REGION_1", "QUE_REGION_2", "QUE_REGION_3"};
     
     @Autowired
     @Qualifier("defaultAmqpAdmin")

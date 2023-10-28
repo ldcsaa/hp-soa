@@ -7,7 +7,7 @@ spring.datasource.dynamic.datasource:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-hp.soa.data.global-transaction-management:
+hp.soa.data.mysql.global-transaction-management:
   enabled: true
   #timeout: 3000
   #isolation: ISOLATION_READ_COMMITTED

@@ -48,13 +48,13 @@ public class SoaDruidConfig
             @Override
             public void init(FilterConfig filterConfig) throws ServletException
             {
-                log.info("starting up: (DruidAdRemoverFilter) ...");
+                log.info("(DruidAdRemoverFilter) starting up ...");
             }
 
             @Override
             public void destroy()
             {
-                log.info("shutting down: (DruidAdRemoverFilter) OK!");
+                log.info("(DruidAdRemoverFilter) shutted down !");
             }
 
             @Override

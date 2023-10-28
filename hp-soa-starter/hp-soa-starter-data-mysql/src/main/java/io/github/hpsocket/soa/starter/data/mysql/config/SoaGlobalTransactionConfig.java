@@ -26,30 +26,30 @@ import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 /** <b>HP-SOA 全局事务配置</b><br>
- * 当 <i>${hp.soa.data.global-transaction-management.enabled}</i> 为 true 时，启用全局事务配置
+ * 当 <i>${hp.soa.data.mysql.global-transaction-management.enabled}</i> 为 true 时，启用全局事务配置
  */
 @AutoConfiguration
 @EnableTransactionManagement
-@ConditionalOnProperty(name = "hp.soa.data.global-transaction-management.enabled", matchIfMissing = false)
+@ConditionalOnProperty(name = "hp.soa.data.mysql.global-transaction-management.enabled", matchIfMissing = false)
 public class SoaGlobalTransactionConfig
 {
-    @Value("${hp.soa.data.global-transaction-management.timeout:3000}")
+    @Value("${hp.soa.data.mysql.global-transaction-management.timeout:3000}")
     private int timeout;
-    @Value("${hp.soa.data.global-transaction-management.isolation:ISOLATION_READ_COMMITTED}")
+    @Value("${hp.soa.data.mysql.global-transaction-management.isolation:ISOLATION_READ_COMMITTED}")
     private String isolation;
-    @Value("${hp.soa.data.global-transaction-management.propagation:PROPAGATION_REQUIRED}")
+    @Value("${hp.soa.data.mysql.global-transaction-management.propagation:PROPAGATION_REQUIRED}")
     private String propagation;
-    @Value("${hp.soa.data.global-transaction-management.rollback-for:java.lang.Exception}")
+    @Value("${hp.soa.data.mysql.global-transaction-management.rollback-for:java.lang.Exception}")
     Class<Throwable>[] rollbackFor;
     
-    @Value("${hp.soa.data.global-transaction-management.read-only-timeout:3000}")
+    @Value("${hp.soa.data.mysql.global-transaction-management.read-only-timeout:3000}")
     private int readOnlyTimeout;
-    @Value("${hp.soa.data.global-transaction-management.read-only-isolation:ISOLATION_READ_COMMITTED}")
+    @Value("${hp.soa.data.mysql.global-transaction-management.read-only-isolation:ISOLATION_READ_COMMITTED}")
     private String readOnlyIsolation;
-    @Value("${hp.soa.data.global-transaction-management.read-only-propagation:PROPAGATION_REQUIRED}")
+    @Value("${hp.soa.data.mysql.global-transaction-management.read-only-propagation:PROPAGATION_REQUIRED}")
     private String readOnlyPropagation;
 
-    @Value("${hp.soa.data.global-transaction-management.pointcut-expression:}")
+    @Value("${hp.soa.data.mysql.global-transaction-management.pointcut-expression:}")
     private String pointcutExpression;
     
     /** 全局事务的默认 Advice */
@@ -116,7 +116,7 @@ public class SoaGlobalTransactionConfig
     @Primary
     @Bean("dynamicRoutingTransactionAdvisor")
     @ConditionalOnMissingBean(name = "dynamicRoutingTransactionAdvisor")
-    @ConditionalOnExpression("'${hp.soa.data.global-transaction-management.pointcut-expression:}' != ''")
+    @ConditionalOnExpression("'${hp.soa.data.mysql.global-transaction-management.pointcut-expression:}' != ''")
     public Advisor dynamicRoutingTransactionAdvisor(@Qualifier("dynamicRoutingTransactionAdvice") TransactionInterceptor txAdvice)
     {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();

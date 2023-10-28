@@ -88,7 +88,7 @@ mybatis-plus:
       select-strategy: not_null
 
 ## 全局事务配置
-hp.soa.data.global-transaction-management:
+hp.soa.data.mysql.global-transaction-management:
   # 默认不开启全局事务
   enabled: false
   timeout: 3000

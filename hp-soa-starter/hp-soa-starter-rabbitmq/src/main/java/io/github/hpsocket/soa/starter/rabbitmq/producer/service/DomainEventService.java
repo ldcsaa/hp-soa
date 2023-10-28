@@ -11,11 +11,11 @@ import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 public interface DomainEventService<T extends DomainEvent> extends IService<T>
 {
     /** 默认发送批次大小 */
-    int DEFAULT_SEND_BATCH_SIZE            = 100;
+    int DEFAULT_SEND_BATCH_SIZE         = 100;
     /** 默认补偿批次大小 */
-    int DEFAULT_COMPENSATE_BATCH_SIZE    = 200;
+    int DEFAULT_COMPENSATE_BATCH_SIZE   = 200;
     /** 默认超时补偿时间（秒） */
-    int DEFAULT_COMPENSATE_TIMEOUT        = 30;
+    int DEFAULT_COMPENSATE_TIMEOUT      = 30;
     
     /** 标记一个领域事件为正在发送 */
     T markOneEventToSend();

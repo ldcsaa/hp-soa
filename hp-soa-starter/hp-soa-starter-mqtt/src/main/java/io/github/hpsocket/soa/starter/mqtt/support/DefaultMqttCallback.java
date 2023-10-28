@@ -3,7 +3,6 @@ package io.github.hpsocket.soa.starter.mqtt.support;
 import java.time.Duration;
 import java.util.List;
 
-import org.apache.commons.lang3.ThreadUtils;
 import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttCallback;
 import org.eclipse.paho.mqttv5.client.MqttDisconnectResponse;
@@ -99,7 +98,7 @@ public class DefaultMqttCallback implements MqttCallback
             {
                 
                 log.error("subscribe topics fail -> {} {}", subscribes, e.getMessage(), e);
-                ThreadUtils.sleepQuietly(Duration.ofSeconds(5));
+                GeneralHelper.waitFor(Duration.ofSeconds(5));
             }
         }         
     }
