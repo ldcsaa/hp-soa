@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  *     <li>默认 MQTT 实例消息监听器：mqttMessageListener</li>
  *     <li>第一个 MQTT 实例消息监听器：firstMqttMessageListener</li>
  *     <li>第二个 MQTT 实例消息监听器：secondMqttMessageListener</li>
+ *     <li>如果应用程序只有唯一一个消息监听器 Bean，则所有 MQTT 实例共享该消息监听器，可以不指定 Bean 名称</li>
  *   </ul>
  * </li>
  * </ol>

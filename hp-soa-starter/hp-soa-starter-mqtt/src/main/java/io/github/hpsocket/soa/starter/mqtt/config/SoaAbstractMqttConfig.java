@@ -8,12 +8,14 @@ import org.eclipse.paho.mqttv5.client.MqttCallback;
 import org.eclipse.paho.mqttv5.client.MqttClientPersistence;
 import org.eclipse.paho.mqttv5.client.persist.MqttDefaultFilePersistence;
 import org.eclipse.paho.mqttv5.common.MqttException;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectProvider;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 import io.github.hpsocket.soa.framework.util.sstl.SSLUtil;
+import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttMessageListener;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttMessagePublisher;
@@ -54,6 +56,7 @@ public abstract class SoaAbstractMqttConfig
         ObjectProvider<SocketFactory> socketFactoryProvider,
         ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
+        ObjectProvider<MqttMessageListener> realMessageListenerProvider = checkMessageListenerProvider(messageListenerProvider);
         MqttPropertiesCustomizer customier = mqttPropertiesCustomizerProvider.getIfUnique();
         
         if(customier != null)
@@ -72,7 +75,7 @@ public abstract class SoaAbstractMqttConfig
         {
             defCallBack.setMqttClient(mqttClient);
             defCallBack.setSubscribes(mqttProperties.getSubscribes());
-            defCallBack.setMessageListener(messageListenerProvider.getIfUnique());
+            defCallBack.setMessageListener(realMessageListenerProvider.getIfUnique());
         }
         
         mqttClient.setTimeToWait(mqttProperties.getTimeToWait());
@@ -151,6 +154,50 @@ public abstract class SoaAbstractMqttConfig
         }
         
         mqttProperties.setClientId(clientId);
+    }
+
+    private ObjectProvider<MqttMessageListener> checkMessageListenerProvider(ObjectProvider<MqttMessageListener> messageListenerProvider)
+    {
+        ObjectProvider<MqttMessageListener> realMessageListenerProvider = messageListenerProvider;
+        MqttMessageListener listener = realMessageListenerProvider.getIfUnique();
+        
+        if(listener == null)
+        {
+            listener = SpringContextHolder.getBean(MqttMessageListener.class, false);
+            
+            if(listener != null)
+            {
+                final MqttMessageListener realListener = listener;
+                realMessageListenerProvider = new ObjectProvider<MqttMessageListener>() {
+                    
+                    @Override
+                    public MqttMessageListener getObject() throws BeansException
+                    {
+                        return realListener;
+                    }
+                    
+                    @Override
+                    public MqttMessageListener getObject(Object... args) throws BeansException
+                    {
+                        return realListener;
+                    }
+                    
+                    @Override
+                    public MqttMessageListener getIfUnique() throws BeansException
+                    {
+                        return realListener;
+                    }
+                    
+                    @Override
+                    public MqttMessageListener getIfAvailable() throws BeansException
+                    {
+                        return realListener;
+                    }
+                };
+            }
+        }
+        
+        return realMessageListenerProvider;
     }
 
 }
