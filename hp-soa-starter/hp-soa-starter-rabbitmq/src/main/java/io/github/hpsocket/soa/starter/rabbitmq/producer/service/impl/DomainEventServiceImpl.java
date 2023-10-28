@@ -23,8 +23,8 @@ import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConsta
  */
 public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEvent> extends ServiceImpl<M, T> implements DomainEventService<T>
 {
-    private static final String SQL_SET_RETRIES                    = String.format("retries = IF(send_flag = %d, 0, retries + 1)", SF_NOT_SEND);
-    private static final String SQL_PATTERN_LAST_SEND_TIME_LE    = "DATE_ADD(NOW(), INTERVAL -%d SECOND)";
+    private static final String SQL_SET_RETRIES                 = String.format("retries = IF(send_flag = %d, 0, retries + 1)", SF_NOT_SEND);
+    private static final String SQL_PATTERN_LAST_SEND_TIME_LE   = "DATE_ADD(NOW(), INTERVAL -%d SECOND)";
     
     @Override
     public T markOneEventToSend()

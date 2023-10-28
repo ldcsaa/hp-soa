@@ -2,13 +2,14 @@ package io.github.hpsocket.demo.mq.producer.converter;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import io.github.hpsocket.demo.mq.producer.contract.req.DemoCreateOrderReuqest;
 import io.github.hpsocket.demo.mq.producer.contract.resp.DemoCreateOrderResponse;
 import io.github.hpsocket.demo.mq.producer.entity.Order;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface OrderConverter
 {
     OrderConverter INSTANCE = Mappers.getMapper(OrderConverter.class);

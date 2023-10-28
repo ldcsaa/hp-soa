@@ -9,12 +9,13 @@ hp.soa.web:
   # spring bean scan packages
   component-scan:
     base-package: ${project.groupId}
-  # mybatis mapper scan packages
-  mapper-scan:
-    base-package: ${project.groupId}.infra.mysql.mapper
   access-verification:
     enabled: false
     default-access-policy: maybe_login
+hp.soa.data.mysql:
+  # mybatis mapper scan packages
+  mapper-scan:
+    base-package: ${project.groupId}.infra.mysql.mapper
 
 # logging
 logging.config: classpath:log4j2-kafka.xml

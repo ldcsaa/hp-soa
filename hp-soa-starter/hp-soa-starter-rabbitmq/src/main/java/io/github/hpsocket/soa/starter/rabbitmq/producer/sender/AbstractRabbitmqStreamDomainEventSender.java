@@ -30,9 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 abstract public class AbstractRabbitmqStreamDomainEventSender<T extends DomainEvent>
 {
-    private int sendBatchSize        = DomainEventService.DEFAULT_SEND_BATCH_SIZE;
-    private int compensateBatchSize    = DomainEventService.DEFAULT_COMPENSATE_BATCH_SIZE;
-    private int compensateTimeout    = DomainEventService.DEFAULT_COMPENSATE_TIMEOUT;
+    private int sendBatchSize       = DomainEventService.DEFAULT_SEND_BATCH_SIZE;
+    private int compensateBatchSize = DomainEventService.DEFAULT_COMPENSATE_BATCH_SIZE;
+    private int compensateTimeout   = DomainEventService.DEFAULT_COMPENSATE_TIMEOUT;
     
     /** 获取消息发送模版 {@linkplain RabbitStreamTemplate}
      * @param event 待发送的领域事件

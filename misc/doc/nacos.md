@@ -22,18 +22,18 @@
 </dependencies>
 ```
 #### 2. 创建远程配置文件
-&nbsp;&nbsp;把所有与运行环境相关的配置或共享配置都配置到Nacos远程配置文件，包含共享配置和应用程序主配置，共享配置最好放在独立配置组中。以 [hp-demo-bff-nacos](../../hp-demo/hp-demo-bff-nacos) 为例：
+&nbsp;&nbsp;把与运行环境相关的配置或共享配置分别配置到Nacos远程应用程序主配置文件和远程共享配置文件，共享配置最好放在独立配置组中。以 [hp-demo-bff-nacos](../../hp-demo/hp-demo-bff-nacos) 为例：
 
-1.共享配置
+1.远程共享配置文件
 - HP-SOA 配置文件 [hp-soa-web.yml](../../misc/nacos/config/namespace-DEV/GLOBAL_GROUP/hp-soa-web.yml)
 - spring-boot 配置文件 [spring-boot.yml](../../misc/nacos/config/namespace-DEV/GLOBAL_GROUP/spring-boot.yml)
 - Dubbo 配置文件 [dubbo.yml](../../misc/nacos/config/namespace-DEV/GLOBAL_GROUP/dubbo.yml)
 
-2.应用程序主配置
+2.远程应用程序主配置
 - [hp-demo-bff-nacos.yml](../../misc/nacos/config/namespace-DEV/DEMO_GROUP/hp-demo-bff-nacos.yml)
 
 #### 3. 创建应用程序本地配置文件
-&nbsp;&nbsp;创建应用程序本地主配置文件`bootstrap.yml`，`bootstrap.yml`只保留了应用程序自身的固定配置，共享配置以及与运行环境相关的配置都迁移到Nacos。其中，`spring.cloud.nacos.config`配置项声明了需要引用的远程主配置文件（`${spring.cloud.nacos.config.name}.${spring.cloud.nacos.config.file-extension}`）和共享配置文件（`${spring.cloud.nacos.config.shared-configs}`）。另外，`bootstrap.yml`并没有设置配置中心地址。
+&nbsp;&nbsp;创建应用程序本地主配置文件`bootstrap.yml`，与运行环境相关的配置以及共享配置都迁移到Nacos，`bootstrap.yml`只保留了应用程序自身的固定配置。其中，（`${spring.cloud.nacos.config.name}.${spring.cloud.nacos.config.file-extension}`）设置远程主配置文件，（`${spring.cloud.nacos.config.shared-configs}`）设置远程共享配置文件列表。另外，`bootstrap.yml`并没有设置配置中心地址。
 ```yaml
 # app
 hp.soa.web:
@@ -82,7 +82,7 @@ dubbo.protocols:
 server.port: 9003
 ```
 #### 4. 设置配置中心地址
-&nbsp;&nbsp;本示例使用[扩展配置文件](app_integration.md#3-修改全局配置可选)来设置配置中心地址，[扩展配置文件](app_integration.md#3-修改全局配置可选)默认路径为 [/opt/hp-soa/config/extended-config.properties](../../misc/opt/hp-soa/config/extended-config.properties)
+&nbsp;&nbsp;本示例使用[扩展配置文件](app_integration.md#3-修改全局配置可选)来设置配置中心地址，[扩展配置文件](app_integration.md#3-修改全局配置可选)由 spring-boot 自动加载，默认路径为 [/opt/hp-soa/config/extended-config.properties](../../misc/opt/hp-soa/config/extended-config.properties)
 ```yaml
 ## Nacos Config Center
 spring.cloud.nacos.config.server-addr=192.168.56.23:8848
@@ -106,7 +106,7 @@ spring.cloud.nacos.config.namespace=DEV
 
 3. 本地/远程配置文件之间的优先级顺序
 
-&nbsp;&nbsp;默认情况下，远程配置文件优先级高于本地配置文件。可以通过`spring.cloud.config`调整优先级（注：`spring.cloud.config`必须在远程配置中心中配置才会生效）
+&nbsp;&nbsp;默认情况下，远程配置文件优先级高于本地配置文件。可以通过`spring.cloud.config`调整优先级（注：`spring.cloud.config`必须配置在远程配置中心中才会生效）
 ```yaml
 ## Spring 配置
 spring:
@@ -121,6 +121,24 @@ spring:
     #override-system-properties: false
     #override-none: false
 ```
+
+## 动态更新配置
+&nbsp;&nbsp;要在应用程序运行期间动态更新配置，最简单的方法是用`@Value`注解注入Bean属性，并且在Bean类中声明`@RefreshScope`注解，另外，使用Nacos提供的注解和事件可以更细节地监控和处理动态配置更新过程（参考：[Nacos Spring](https://nacos.io/zh-cn/docs/nacos-spring.html)）。
+```java
+@Service
+/* 声明此注解可动态更新通过 @Value 注入的属性 */
+@RefreshScope
+public class MyService
+{
+    /* 可动态更新的属性 */
+    @Value("${xxx.yyy}")
+    Integer val;
+
+    // other codes ...
+}
+```
+
+&nbsp;&nbsp;HP-SOA 的“应用程序只读”配置就是一个典型的动态更新配置示例，只读应用程序会暂停执行Job，暂停接收MQ消息，禁止数据库更新等可能导致数据变更的操作。当`hp.soa.web.app-read-only`设置为`true`时，应用程序变为只读并发布[ReadOnlyEvent(true)](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/event/ReadOnlyEvent.java)事件；当`hp.soa.web.app-read-only`设置为`false`时，应用程序恢复为可读写并发布[ReadOnlyEvent(false)](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/event/ReadOnlyEvent.java)事件。
 
 ---
 
