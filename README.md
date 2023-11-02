@@ -1,3 +1,7 @@
+![HP-SOA](misc/doc/images/HP-SOA.png "HP-SOA")
+
+---
+
 #  HP-SOA
 功能完备，简单易用，高度可扩展的Java微服务框架。
 
