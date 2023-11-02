@@ -14,6 +14,8 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -1495,9 +1497,19 @@ public class GeneralHelper
     /** 检查当前操作系统是否为 Windows 系列 */
     public static final boolean isWindowsPlatform()
     {
-        // return CURRENT_OS.toUpperCase().indexOf("WINDOWS") != -1;
-        
         return File.pathSeparatorChar == ';';
+    }
+    
+    /** 根据前缀和日期时间生成名称，格式：$prefix&lt;yyyyMMdd&gt; */    
+    public static String genNameByDateTime(String prefix, ZonedDateTime dateTime)
+    {
+        return genNameByDateTime(prefix, dateTime, "yyyyMMdd");
+    }
+    
+    /** 根据前缀和日期时间生成名称，格式：$prefix&lt;dateTime.format(dateTimePattern)&gt; */    
+    public static String genNameByDateTime(String prefix, ZonedDateTime dateTime, String dateTimePattern)
+    {
+        return prefix + dateTime.format(DateTimeFormatter.ofPattern(dateTimePattern));
     }
 
     /** 按拼音排序的字符串比较器 */

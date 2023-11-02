@@ -1,0 +1,7 @@
+
+PUT /employee_info_internal
+{
+    "aliases": {
+        "employee_info": {}
+    }
+}

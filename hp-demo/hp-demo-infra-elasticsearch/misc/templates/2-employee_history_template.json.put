@@ -1,0 +1,124 @@
+
+PUT _index_template/employee_history_template
+{
+    "priority": 100,
+    "version": 1,
+    "index_patterns": ["employee_history_*"],
+    "template": {
+        "aliases" : { "employee_history": {} },
+        "settings": {
+            "number_of_shards": 3,
+            "number_of_replicas": 0,
+            "index.lifecycle.name": "employee_history_lifecycle_policy"
+        },
+        "mappings": {
+            "_source": {"enabled": true},
+            "dynamic_templates": [
+                {
+                    "time_template": {
+                        "match_mapping_type": "string",
+                        "match_pattern": "regex",
+                        "match": "^[0-9-a-z_]*(time|Time)$",
+                        "mapping": {
+                            "type": "date",
+                            "format": "yyyy-MM-dd HH:mm:ss || yyyy-MM-dd HH:mm:ss.SSS || yyyy-MM-dd'T'HH:mm:ss.SSS'Z' || yyyy-MM-dd'T'HH:mm:ss'Z' || yyyy-MM-dd || strict_date_optional_time || epoch_millis"
+                        }
+                    }
+                },
+                {
+                    "long_id_template": {
+                        "match_mapping_type": "long",
+                        "match_pattern": "regex",
+                        "match": "^[0-9-a-z_]*(id|Id)$",
+                        "mapping": {
+                            "type": "long"
+                        }
+                    }
+                },
+                {
+                    "str_id_template": {
+                        "match_mapping_type": "string",
+                        "match_pattern": "regex",
+                        "match": "^[0-9-a-z_]*(id|Id)$",
+                        "mapping": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                {
+                    "long_template": {
+                        "match_mapping_type": "long",
+                        "match": "*",
+                        "mapping": {
+                            "type": "long"
+                        }
+                    }
+                },
+                {
+                    "double_template": {
+                        "match_mapping_type": "double",
+                        "match": "*",
+                        "mapping": {
+                            "type": "double"
+                        }
+                    }
+                },
+                {
+                    "text_template": {
+                        "match_mapping_type": "string",
+                        "match": "*",
+                        "mapping": {
+                            "type": "text"
+                        }
+                    }
+                }
+            ],
+            "properties": {
+                "jobNumber": {
+                    "type": "keyword"
+                },
+                "name": {
+                    "type": "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word", 
+                    "fields": {
+                      "keyword" : {"ignore_above" : 50, "type" : "keyword"}
+                    }
+                },
+                "photoUri": {
+                    "type": "text",
+                    "index": false
+                },
+                "birthday": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd HH:mm:ss || yyyy-MM-dd HH:mm:ss.SSS || yyyy-MM-dd'T'HH:mm:ss.SSS'Z' || yyyy-MM-dd'T'HH:mm:ss'Z' || yyyy-MM-dd || strict_date_optional_time || epoch_millis"
+                },
+                "salary": {
+                    "type": "integer"
+                },
+                "resign": {
+                    "type": "boolean"
+                },
+                "updateTime": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd HH:mm:ss || yyyy-MM-dd HH:mm:ss.SSS || yyyy-MM-dd'T'HH:mm:ss.SSS'Z' || yyyy-MM-dd'T'HH:mm:ss'Z' || yyyy-MM-dd || strict_date_optional_time || epoch_millis"
+                },
+                "department": {
+                    "properties": {
+                        "number": {
+                            "type": "keyword"
+                        },
+                        "name": {
+                            "type": "text",
+                            "analyzer": "ik_max_word",
+                            "search_analyzer": "ik_max_word", 
+                            "fields": {
+                              "keyword" : {"ignore_above" : 50, "type" : "keyword"}
+                            }
+                        }                            
+                    }
+                }
+            }
+        }
+    }
+}
