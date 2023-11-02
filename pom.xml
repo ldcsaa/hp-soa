@@ -447,6 +447,24 @@
                     <configuration>
                         <mainClass>${spring-boot.main_class}</mainClass>
                         <jvmArguments>${spring-boot.jvm_arguments}</jvmArguments>
+                         <excludes>
+                             <exclude>
+                                 <groupId>org.projectlombok</groupId>
+                                 <artifactId>lombok</artifactId>
+                             </exclude>
+                            <exclude>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct</artifactId>
+                            </exclude>
+                            <exclude>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                            </exclude>
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                            </exclude>
+                         </excludes>                        
                     </configuration>
                     <executions>
                         <execution>
