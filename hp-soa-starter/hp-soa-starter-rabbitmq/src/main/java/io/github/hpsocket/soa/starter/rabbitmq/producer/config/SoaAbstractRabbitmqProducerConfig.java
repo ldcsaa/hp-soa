@@ -23,7 +23,7 @@ import org.springframework.retry.RetryContext;
 
 import com.rabbitmq.stream.Environment;
 
-public class SoaAbstractRabbitmqProducerConfig
+public abstract class SoaAbstractRabbitmqProducerConfig
 {
     protected final RabbitProperties properties;
 

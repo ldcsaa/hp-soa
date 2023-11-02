@@ -191,6 +191,11 @@
             </dependency>
             <dependency>
                 <groupId>io.github.hpsocket</groupId>
+                <artifactId>hp-soa-starter-data-elasticsearch</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.hpsocket</groupId>
                 <artifactId>hp-soa-starter-job-xxljob</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
@@ -1212,11 +1217,6 @@
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
-                <version>${mapstruct.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-jdk8</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
             <dependency>

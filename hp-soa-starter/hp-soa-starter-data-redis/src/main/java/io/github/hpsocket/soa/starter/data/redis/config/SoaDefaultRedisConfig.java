@@ -32,7 +32,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonAutoConfigurationCustomizer;
 import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
 
-/** <b>HP-SOA 默认 Redis 配置</b> */
+/** <b>默认 Redis 配置</b> */
 @AutoConfiguration
 @ConditionalOnExpression("'${spring.data.redis.host:}' != '' || '${spring.data.redis.url:}' != '' || '${spring.redis.redisson.config:}' != '' || '${spring.redis.redisson.file:}' != ''")
 public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig

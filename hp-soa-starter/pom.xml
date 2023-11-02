@@ -26,6 +26,7 @@
         <module>hp-soa-starter-skywalking</module>
         <module>hp-soa-starter-data-redis</module>
         <module>hp-soa-starter-data-mysql</module>
+        <module>hp-soa-starter-data-elasticsearch</module>
         <module>hp-soa-starter-job-exclusive</module>
         <module>hp-soa-starter-job-xxljob</module>
         <module>hp-soa-starter-rabbitmq</module>

@@ -31,7 +31,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonAutoConfigurationCustomizer;
 import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
 
-/** <b>HP-SOA 默认 Redis 实例之外第二个 Redis 配置</b> */
+/** <b>默认 Redis 实例之外第二个 Redis 配置</b> */
 @AutoConfiguration
 @ConditionalOnExpression("'${spring.data.redis-second.host:}' != '' || '${spring.data.redis-second.url:}' != '' || '${spring.redis.redisson-second.config:}' != '' || '${spring.redis.redisson-second.file:}' != ''")
 public class SoaSecondRedisConfig extends SoaAbstractRedisConfig

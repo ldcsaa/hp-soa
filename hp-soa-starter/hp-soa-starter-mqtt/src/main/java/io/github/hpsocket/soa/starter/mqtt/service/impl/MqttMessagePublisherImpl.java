@@ -5,7 +5,6 @@ import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.MqttPersistenceException;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttMessagePublisher;
@@ -14,11 +13,15 @@ import io.github.hpsocket.soa.starter.mqtt.support.ExtMqttClient;
 /** <b>MQTT 消息发布器实现类</b> */
 public class MqttMessagePublisherImpl implements MqttMessagePublisher
 {
-    @Autowired
     ExtMqttClient mqttClient;
-    @Autowired
     SoaMqttProperties mqttProperties;
     
+    public MqttMessagePublisherImpl(ExtMqttClient mqttClient, SoaMqttProperties mqttProperties)
+    {
+        this.mqttClient = mqttClient;
+        this.mqttProperties = mqttProperties;
+    }
+
     @Override
     public MqttMessage createMqttMessage(byte[] payload)
     {

@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.paho.mqttv5.client.MqttConnectionOptions;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.MqttSubscription;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
@@ -19,7 +18,6 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "mqtt")
 public class SoaMqttProperties extends MqttConnectionOptions
 {
     private String clientId;

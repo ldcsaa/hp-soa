@@ -57,7 +57,7 @@ import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
 import io.github.hpsocket.soa.starter.data.redis.serializer.KryoNotNullRedisSerializer;
 import io.github.hpsocket.soa.starter.data.redis.serializer.KryoRedisSerializer;
 
-public class SoaAbstractRedisConfig
+public abstract class SoaAbstractRedisConfig
 {
     private static final String REDIS_PROTOCOL_PREFIX = "redis://";
     private static final String REDISS_PROTOCOL_PREFIX = "rediss://";
