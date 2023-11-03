@@ -41,7 +41,7 @@
         <redisson.version>3.24.3</redisson.version>
         <amqp-client.version>5.19.0</amqp-client.version>
         <stream-client.version>0.13.0</stream-client.version>
-        <mongo-java-driver.version>3.12.14</mongo-java-driver.version>
+        <mongodb-driver-sync.version>4.11.0</mongodb-driver-sync.version>
         <mysql-connector-j.version>8.1.0</mysql-connector-j.version>
         <mybatis-spring.version>3.0.2</mybatis-spring.version>
         <mybatis.version>3.5.13</mybatis.version>
@@ -669,8 +669,8 @@
 
             <dependency>
                 <groupId>org.mongodb</groupId>
-                <artifactId>mongo-java-driver</artifactId>
-                <version>${mongo-java-driver.version}</version>
+                <artifactId>mongodb-driver-sync</artifactId>
+                <version>${mongodb-driver-sync.version}</version>
             </dependency>
 
             <dependency>
