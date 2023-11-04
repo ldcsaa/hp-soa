@@ -28,10 +28,11 @@ import io.github.hpsocket.soa.framework.web.support.ZonedDateTimeProvider;
 @ConditionalOnExpression("'${spring.elasticsearch.uris:}' != ''")
 public class SoaElasticConfig extends ElasticsearchConfigurationSupport
 {
+    public static final String zonedDateTimeProvider = "zonedDateTimeProvider";
 
     /** {@linkplain ZonedDateTime} 时间日期提供者 */
-    @Bean("zonedDateTimeProvider")
-    @ConditionalOnMissingBean(name = "zonedDateTimeProvider")
+    @Bean(zonedDateTimeProvider)
+    @ConditionalOnMissingBean(name = zonedDateTimeProvider)
     public ZonedDateTimeProvider zonedDateTimeProvider()
     {
         return new ZonedDateTimeProvider();

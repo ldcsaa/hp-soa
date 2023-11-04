@@ -36,18 +36,38 @@ import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
 @ConditionalOnExpression("'${spring.data.redis-second.host:}' != '' || '${spring.data.redis-second.url:}' != '' || '${spring.redis.redisson-second.config:}' != '' || '${spring.redis.redisson-second.file:}' != ''")
 public class SoaSecondRedisConfig extends SoaAbstractRedisConfig
 {
+    public static final String redissonAutoConfigurationCustomizer = "secondRedissonAutoConfigurationCustomizer";
+    public static final String soaDefaultRedissionProperties = "soaSecondRedissionProperties";
+    public static final String soaDefaultRedisProperties = "soaSecondRedisProperties";
+    public static final String redisStringKeyGenerator = "secondRedisStringKeyGenerator";
+    public static final String redisTemplate = "secondRedisTemplate";
+    public static final String redisStringTemplate = "secondRedisStringTemplate";
+    public static final String redisJsonTemplate = "secondRedisJsonTemplate";
+    public static final String redisGenericJsonTemplate = "secondRedisGenericJsonTemplate";
+    public static final String redisKryoTemplate = "secondRedisKryoTemplate";
+    public static final String redisKryoNotNullTemplate = "secondRedisKryoNotNullTemplate";
+    public static final String redisReactiveTemplate = "secondRedisReactiveTemplate";
+    public static final String redisReactiveStringTemplate = "secondRedisReactiveStringTemplate";
+    public static final String redisCacheManager = "secondRedisCacheManager";
+    public static final String redisDefaultCacheConfiguration = "secondRedisDefaultCacheConfiguration";
+    public static final String redisInitialCacheConfigurations = "secondRedisInitialCacheConfigurations";
+    public static final String redisConnectionFactory = "secondRedisConnectionFactory";
+    public static final String redissonReactiveClient = "secondRedissonReactiveClient";
+    public static final String redissonRxClient = "secondRedissonRxClient";
+    public static final String redissonClient = "secondRedissonClient";
+
     public SoaSecondRedisConfig(
-        @Qualifier("secondRedissonAutoConfigurationCustomizer") ObjectProvider<List<RedissonAutoConfigurationCustomizer>> redissonAutoConfigurationCustomizers,
-        @Qualifier("soaSecondRedissionProperties") ObjectProvider<RedissonProperties> SoaRedissionProperties,
-        @Qualifier("soaSecondRedisProperties") ObjectProvider<RedisProperties> SoaRedisProperties)
+        @Qualifier(redissonAutoConfigurationCustomizer) ObjectProvider<List<RedissonAutoConfigurationCustomizer>> redissonAutoConfigurationCustomizers,
+        @Qualifier(soaDefaultRedissionProperties) ObjectProvider<RedissonProperties> SoaRedissionProperties,
+        @Qualifier(soaDefaultRedisProperties) ObjectProvider<RedisProperties> SoaRedisProperties)
     {
         super(redissonAutoConfigurationCustomizers, SoaRedissionProperties, SoaRedisProperties);
     }
 
     /** 第二个 Redis {@linkplain KeyGenerator} */
     @Override
-    @Bean("secondRedisStringKeyGenerator")
-    @ConditionalOnMissingBean(name = "secondRedisStringKeyGenerator")
+    @Bean(redisStringKeyGenerator)
+    @ConditionalOnMissingBean(name = redisStringKeyGenerator)
     public KeyGenerator keyGenerator()
     {
         return super.keyGenerator();
@@ -55,92 +75,92 @@ public class SoaSecondRedisConfig extends SoaAbstractRedisConfig
                 
     /** 第二个 Redis {@linkplain RedisTemplate} */
     @Override
-    @Bean("secondRedisTemplate")
-    @ConditionalOnMissingBean(name = "secondRedisTemplate")
-    public <T> RedisTemplate<String, T> redisTemplate(@Qualifier("secondRedisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisTemplate)
+    @ConditionalOnMissingBean(name = redisTemplate)
+    public <T> RedisTemplate<String, T> redisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.redisTemplate(redisConnectionFactory);
     }
 
     /** 第二个 Redis {@linkplain StringRedisTemplate} */
     @Override
-    @Bean("secondRedisStringTemplate")
-    @ConditionalOnMissingBean(name = "secondRedisStringTemplate")
-    public StringRedisTemplate stringRedisTemplate(@Qualifier("secondRedisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisStringTemplate)
+    @ConditionalOnMissingBean(name = redisStringTemplate)
+    public StringRedisTemplate stringRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.stringRedisTemplate(redisConnectionFactory);
     }
 
     /** 第二个 Redis 基于 FastJson 序列化的 {@linkplain RedisTemplate} */
     @Override
-    @Bean("secondRedisJsonTemplate")
-    @ConditionalOnMissingBean(name = "secondRedisJsonTemplate")
-    public RedisTemplate<String, Object> jsonRedisTemplate(@Qualifier("secondRedisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisJsonTemplate)
+    @ConditionalOnMissingBean(name = redisJsonTemplate)
+    public RedisTemplate<String, Object> jsonRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.jsonRedisTemplate(redisConnectionFactory);
     }
 
     /** 第二个 Redis 基于通用 FastJson 序列化的 {@linkplain RedisTemplate} */
     @Override
-    @Bean("secondRedisGenericJsonTemplate")
-    @ConditionalOnMissingBean(name = "secondRedisGenericJsonTemplate")
-    public <T> RedisTemplate<String, T> genericJsonRedisTemplate(@Qualifier("secondRedisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisGenericJsonTemplate)
+    @ConditionalOnMissingBean(name = redisGenericJsonTemplate)
+    public <T> RedisTemplate<String, T> genericJsonRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.genericJsonRedisTemplate(redisConnectionFactory);
     }
 
     /** 第二个 Redis 基于 Kryo 序列化的 {@linkplain RedisTemplate} */
     @Override
-    @Bean("secondRedisKryoTemplate")
-    @ConditionalOnMissingBean(name = "secondRedisKryoTemplate")
-    public <T> RedisTemplate<String, T> kryoRedisTemplate(@Qualifier("secondRedisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisKryoTemplate)
+    @ConditionalOnMissingBean(name = redisKryoTemplate)
+    public <T> RedisTemplate<String, T> kryoRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.kryoRedisTemplate(redisConnectionFactory);
     }
 
     /** 第二个 Redis 基于 Kryo 序列化的 {@linkplain RedisTemplate} （不支持存储 null 值）*/
     @Override
-    @Bean("secondRedisKryoNotNullTemplate")
-    @ConditionalOnMissingBean(name = "secondRedisKryoNotNullTemplate")
-    public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(@Qualifier("secondRedisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisKryoNotNullTemplate)
+    @ConditionalOnMissingBean(name = redisKryoNotNullTemplate)
+    public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.kryoNotNullRedisTemplate(redisConnectionFactory);
     }
     
     /** 第二个 {@linkplain ReactiveRedisTemplate} */
     @Override
-    @Bean("secondRedisReactiveTemplate")
-    @ConditionalOnMissingBean(name = "secondRedisReactiveTemplate")
-    public <T> ReactiveRedisTemplate<String, T> reactiveRedisTemplate(@Qualifier("secondRedisConnectionFactory") ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
+    @Bean(redisReactiveTemplate)
+    @ConditionalOnMissingBean(name = redisReactiveTemplate)
+    public <T> ReactiveRedisTemplate<String, T> reactiveRedisTemplate(@Qualifier(redisConnectionFactory) ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
     {
         return super.reactiveRedisTemplate(reactiveRedisConnectionFactory);
     }
 
     /** 第二个 {@linkplain ReactiveStringRedisTemplate} */
     @Override
-    @Bean("secondRedisReactiveStringTemplate")
-    @ConditionalOnMissingBean(name = "secondRedisReactiveStringTemplate")
-    public ReactiveStringRedisTemplate reactiveStringRedisTemplate(@Qualifier("secondRedisConnectionFactory") ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
+    @Bean(redisReactiveStringTemplate)
+    @ConditionalOnMissingBean(name = redisReactiveStringTemplate)
+    public ReactiveStringRedisTemplate reactiveStringRedisTemplate(@Qualifier(redisConnectionFactory) ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
     {
         return super.reactiveStringRedisTemplate(reactiveRedisConnectionFactory);
     }
 
     /** 第二个 Redis {@linkplain RedisCacheManager} */
     @Override
-    @Bean("secondRedisCacheManager")
-    @ConditionalOnMissingBean(name = "secondRedisCacheManager")
+    @Bean(redisCacheManager)
+    @ConditionalOnMissingBean(name = redisCacheManager)
     public RedisCacheManager redisCacheManager(
-        @Qualifier("secondRedisConnectionFactory") RedisConnectionFactory redisConnectionFactory,
-        @Qualifier("secondRedisDefaultCacheConfiguration") RedisCacheConfiguration redisDefaultCacheConfiguration,
-        @Qualifier("secondRedisInitialCacheConfigurations") MapPropertySource redisInitialCacheConfigurations)
+        @Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory,
+        @Qualifier(redisDefaultCacheConfiguration) RedisCacheConfiguration redisDefaultCacheConfiguration,
+        @Qualifier(redisInitialCacheConfigurations) MapPropertySource redisInitialCacheConfigurations)
     {
         return super.redisCacheManager(redisConnectionFactory, redisDefaultCacheConfiguration, redisInitialCacheConfigurations);
     }
     
     /** 第二个 Redis {@linkplain RedisCacheConfiguration} */
     @Override
-    @Bean("secondRedisDefaultCacheConfiguration")
-    @ConditionalOnMissingBean(name = "secondRedisDefaultCacheConfiguration")
+    @Bean(redisDefaultCacheConfiguration)
+    @ConditionalOnMissingBean(name = redisDefaultCacheConfiguration)
     public RedisCacheConfiguration redisDefaultCacheConfiguration()
     {
         return super.redisDefaultCacheConfiguration();
@@ -148,42 +168,42 @@ public class SoaSecondRedisConfig extends SoaAbstractRedisConfig
     
     /** 第二个 Redis 初始 {@linkplain RedisCacheConfiguration} {@linkplain Map} */
     @Override
-    @Bean("secondRedisInitialCacheConfigurations")
-    @ConditionalOnMissingBean(name = "secondRedisInitialCacheConfigurations")
+    @Bean(redisInitialCacheConfigurations)
+    @ConditionalOnMissingBean(name = redisInitialCacheConfigurations)
     public MapPropertySource redisInitialCacheConfigurations()
     {
         return super.redisInitialCacheConfigurations();
     }
     
     @Override
-    @Bean("secondRedisConnectionFactory")
-    @ConditionalOnMissingBean(name = "secondRedisConnectionFactory")
-    public RedissonConnectionFactory redissonConnectionFactory(@Qualifier("secondRedissonClient") RedissonClient redisson)
+    @Bean(redisConnectionFactory)
+    @ConditionalOnMissingBean(name = redisConnectionFactory)
+    public RedissonConnectionFactory redissonConnectionFactory(@Qualifier(redissonClient) RedissonClient redisson)
     {
         return super.redissonConnectionFactory(redisson);
     }
 
     @Lazy
     @Override
-    @Bean("secondRedissonReactiveClient")
-    @ConditionalOnMissingBean(name = "secondRedissonReactiveClient")
-    public RedissonReactiveClient redissonReactive(@Qualifier("secondRedissonClient") RedissonClient redisson)
+    @Bean(redissonReactiveClient)
+    @ConditionalOnMissingBean(name = redissonReactiveClient)
+    public RedissonReactiveClient redissonReactive(@Qualifier(redissonClient) RedissonClient redisson)
     {
         return redisson.reactive();
     }
 
     @Lazy
     @Override
-    @Bean("secondRedissonRxClient")
-    @ConditionalOnMissingBean(name = "secondRedissonRxClient")
-    public RedissonRxClient redissonRxJava(@Qualifier("secondRedissonClient") RedissonClient redisson)
+    @Bean(redissonRxClient)
+    @ConditionalOnMissingBean(name = redissonRxClient)
+    public RedissonRxClient redissonRxJava(@Qualifier(redissonClient) RedissonClient redisson)
     {
         return redisson.rxJava();
     }
 
     @Override
-    @Bean(name = "secondRedissonClient", destroyMethod = "shutdown")
-    @ConditionalOnMissingBean(name = "secondRedissonClient")
+    @Bean(name = redissonClient, destroyMethod = "shutdown")
+    @ConditionalOnMissingBean(name = redissonClient)
     public RedissonClient redisson() throws IOException
     {
         return super.redisson();

@@ -25,8 +25,10 @@ import io.github.hpsocket.soa.starter.web.config.WebConfig;
 @AutoConfigureBefore(WebConfig.class)
 public class SoaSkyWalkingAsyncConfig
 {
+    public static final String asyncThreadPoolExecutor = WebConfig.asyncThreadPoolExecutor;;
+    
     /** 异步线程池（注入 traceId） */
-    @Bean("asyncThreadPoolExecutor")
+    @Bean(asyncThreadPoolExecutor)
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
     public TracingAsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
     {

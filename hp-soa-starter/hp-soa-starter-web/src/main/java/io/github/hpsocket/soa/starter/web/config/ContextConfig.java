@@ -10,9 +10,10 @@ import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 @AutoConfiguration
 public class ContextConfig
 {
+    public static final String springContextHolder = "springContextHolder";
     
     /** {@linkplain SpringContextHolder} Spring 上下文持有者配置 */
-    @Bean("springContextHolder")
+    @Bean(springContextHolder)
     public SpringContextHolder springContextHolder(ApplicationContext applicationContext)
     {
         return new SpringContextHolder(applicationContext);

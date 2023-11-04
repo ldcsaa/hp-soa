@@ -24,6 +24,15 @@ import io.github.hpsocket.soa.starter.mqtt.support.ExtMqttClient;
 @ConditionalOnBean(SoaFirstMqttProperties.class)
 public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
 {
+    public static final String mqttClientPersistence = "firstMqttClientPersistence";
+    public static final String mqttCallback = "firstMqttCallback";
+    public static final String mqttClient = "firstMqttClient";
+    public static final String mqttMessagePublisher = "firstMqttMessagePublisher";
+    public static final String mqttMessageListener = "firstMqttMessageListener";
+    public static final String mqttPropertiesCustomizer = "firstMqttPropertiesCustomizer";
+    public static final String mqttSocketFactory = "firstMqttSocketFactory";
+    public static final String mqttHostnameVerifier = "firstMqttHostnameVerifier";
+    
     public SoaFirstMqttConfig(SoaFirstMqttProperties mqttProperties)
     {
         super(mqttProperties);
@@ -31,8 +40,8 @@ public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
     
     /** 默认 MQTT 实例之外第一个 MQTT 实例持久化对象（可由应用程序覆盖）*/
     @Override
-    @Bean(name = "firstMqttClientPersistence", destroyMethod = "")
-    @ConditionalOnMissingBean(name = "firstMqttClientPersistence")
+    @Bean(name = mqttClientPersistence, destroyMethod = "")
+    @ConditionalOnMissingBean(name = mqttClientPersistence)
     public MqttClientPersistence mqttClientPersistence()
     {
         return super.mqttClientPersistence();
@@ -40,8 +49,8 @@ public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
 
     /** 默认 MQTT 实例之外第一个 MQTT 实例事件处理器（可由应用程序覆盖）*/
     @Override
-    @Bean(name = "firstMqttCallback")
-    @ConditionalOnMissingBean(name = "firstMqttCallback")
+    @Bean(name = mqttCallback)
+    @ConditionalOnMissingBean(name = mqttCallback)
     public MqttCallback mqttCallback()
     {
         return super.mqttCallback();
@@ -49,14 +58,14 @@ public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
 
     /** 默认 MQTT 实例之外第一个 MQTT 实例客户端对象 */
     @Override
-    @Bean(name = "firstMqttClient", destroyMethod = "disconnectAndClose")
+    @Bean(name = mqttClient, destroyMethod = "disconnectAndClose")
     public ExtMqttClient mqttClient(
-        @Qualifier("firstMqttClientPersistence") MqttClientPersistence mqttClientPersistence,
-        @Qualifier("firstMqttMessageListener") ObjectProvider<MqttMessageListener> messageListenerProvider,
-        @Qualifier("firstMqttCallback") ObjectProvider<MqttCallback> mqttCallbackProvider,
-        @Qualifier("firstMqttPropertiesCustomizer") ObjectProvider<MqttPropertiesCustomizer> mqttPropertiesCustomizerProvider,
-        @Qualifier("firstMqttSocketFactory") ObjectProvider<SocketFactory> socketFactoryProvider,
-        @Qualifier("firstMqttHostnameVerifier") ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
+        @Qualifier(mqttClientPersistence) MqttClientPersistence mqttClientPersistence,
+        @Qualifier(mqttMessageListener) ObjectProvider<MqttMessageListener> messageListenerProvider,
+        @Qualifier(mqttCallback) ObjectProvider<MqttCallback> mqttCallbackProvider,
+        @Qualifier(mqttPropertiesCustomizer) ObjectProvider<MqttPropertiesCustomizer> mqttPropertiesCustomizerProvider,
+        @Qualifier(mqttSocketFactory) ObjectProvider<SocketFactory> socketFactoryProvider,
+        @Qualifier(mqttHostnameVerifier) ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
         return super.mqttClient(mqttClientPersistence,
                                 messageListenerProvider,
@@ -68,8 +77,8 @@ public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
     
     /** 默认 MQTT 实例之外第一个 MQTT 消息发布器 */
     @Override
-    @Bean(name = "firstMqttMessagePublisher")
-    public MqttMessagePublisher mqttMessagePublisher(@Qualifier("firstMqttClient") ExtMqttClient mqttClient)
+    @Bean(name = mqttMessagePublisher)
+    public MqttMessagePublisher mqttMessagePublisher(@Qualifier(mqttClient) ExtMqttClient mqttClient)
     {
         return super.mqttMessagePublisher(mqttClient);
     }

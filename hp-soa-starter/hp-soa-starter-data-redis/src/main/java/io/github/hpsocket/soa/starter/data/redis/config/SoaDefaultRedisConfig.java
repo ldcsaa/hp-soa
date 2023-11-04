@@ -37,10 +37,30 @@ import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
 @ConditionalOnExpression("'${spring.data.redis.host:}' != '' || '${spring.data.redis.url:}' != '' || '${spring.redis.redisson.config:}' != '' || '${spring.redis.redisson.file:}' != ''")
 public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
 {
+    public static final String redissonAutoConfigurationCustomizer = "redissonAutoConfigurationCustomizer";
+    public static final String soaDefaultRedissionProperties = "soaDefaultRedissionProperties";
+    public static final String soaDefaultRedisProperties = "soaDefaultRedisProperties";
+    public static final String redisStringKeyGenerator = "redisStringKeyGenerator";
+    public static final String redisTemplate = "redisTemplate";
+    public static final String redisStringTemplate = "redisStringTemplate";
+    public static final String redisJsonTemplate = "redisJsonTemplate";
+    public static final String redisGenericJsonTemplate = "redisGenericJsonTemplate";
+    public static final String redisKryoTemplate = "redisKryoTemplate";
+    public static final String redisKryoNotNullTemplate = "redisKryoNotNullTemplate";
+    public static final String redisReactiveTemplate = "redisReactiveTemplate";
+    public static final String redisReactiveStringTemplate = "redisReactiveStringTemplate";
+    public static final String redisCacheManager = "redisCacheManager";
+    public static final String redisDefaultCacheConfiguration = "redisDefaultCacheConfiguration";
+    public static final String redisInitialCacheConfigurations = "redisInitialCacheConfigurations";
+    public static final String redisConnectionFactory = "redisConnectionFactory";
+    public static final String redissonReactiveClient = "redissonReactiveClient";
+    public static final String redissonRxClient = "redissonRxClient";
+    public static final String redissonClient = "redissonClient";
+
     public SoaDefaultRedisConfig(
-        @Qualifier("redissonAutoConfigurationCustomizer") ObjectProvider<List<RedissonAutoConfigurationCustomizer>> redissonAutoConfigurationCustomizers,
-        @Qualifier("soaDefaultRedissionProperties") ObjectProvider<RedissonProperties> SoaRedissionProperties,
-        @Qualifier("soaDefaultRedisProperties") ObjectProvider<RedisProperties> SoaRedisProperties)
+        @Qualifier(redissonAutoConfigurationCustomizer) ObjectProvider<List<RedissonAutoConfigurationCustomizer>> redissonAutoConfigurationCustomizers,
+        @Qualifier(soaDefaultRedissionProperties) ObjectProvider<RedissonProperties> SoaRedissionProperties,
+        @Qualifier(soaDefaultRedisProperties) ObjectProvider<RedisProperties> SoaRedisProperties)
     {
         super(redissonAutoConfigurationCustomizers, SoaRedissionProperties, SoaRedisProperties);
     }
@@ -48,8 +68,8 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     /** 默认 Redis {@linkplain KeyGenerator} */
     @Primary
     @Override
-    @Bean("redisStringKeyGenerator")
-    @ConditionalOnMissingBean(name = "redisStringKeyGenerator")
+    @Bean(redisStringKeyGenerator)
+    @ConditionalOnMissingBean(name = redisStringKeyGenerator)
     public KeyGenerator keyGenerator()
     {
         return super.keyGenerator();
@@ -58,9 +78,9 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     /** 默认 {@linkplain RedisTemplate} */
     @Primary
     @Override
-    @Bean("redisTemplate")
-    @ConditionalOnMissingBean(name = "redisTemplate")
-    public <T> RedisTemplate<String, T> redisTemplate(@Qualifier("redisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisTemplate)
+    @ConditionalOnMissingBean(name = redisTemplate)
+    public <T> RedisTemplate<String, T> redisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.redisTemplate(redisConnectionFactory);
     }
@@ -68,45 +88,45 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     /** 默认 {@linkplain StringRedisTemplate} */
     @Primary
     @Override
-    @Bean("redisStringTemplate")
-    @ConditionalOnMissingBean(name = "redisStringTemplate")
-    public StringRedisTemplate stringRedisTemplate(@Qualifier("redisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisStringTemplate)
+    @ConditionalOnMissingBean(name = redisStringTemplate)
+    public StringRedisTemplate stringRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.stringRedisTemplate(redisConnectionFactory);
     }
 
     /** 基于 FastJson 序列化的 {@linkplain RedisTemplate} */
     @Override
-    @Bean("redisJsonTemplate")
-    @ConditionalOnMissingBean(name = "redisJsonTemplate")
-    public RedisTemplate<String, Object> jsonRedisTemplate(@Qualifier("redisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisJsonTemplate)
+    @ConditionalOnMissingBean(name = redisJsonTemplate)
+    public RedisTemplate<String, Object> jsonRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.jsonRedisTemplate(redisConnectionFactory);
     }
 
     /** 基于通用 FastJson 序列化的 {@linkplain RedisTemplate} */
     @Override
-    @Bean("redisGenericJsonTemplate")
-    @ConditionalOnMissingBean(name = "redisGenericJsonTemplate")
-    public <T> RedisTemplate<String, T> genericJsonRedisTemplate(@Qualifier("redisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisGenericJsonTemplate)
+    @ConditionalOnMissingBean(name = redisGenericJsonTemplate)
+    public <T> RedisTemplate<String, T> genericJsonRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.genericJsonRedisTemplate(redisConnectionFactory);
     }
 
     /** 基于 Kryo 序列化的 {@linkplain RedisTemplate} */
     @Override
-    @Bean("redisKryoTemplate")
-    @ConditionalOnMissingBean(name = "redisKryoTemplate")
-    public <T> RedisTemplate<String, T> kryoRedisTemplate(@Qualifier("redisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisKryoTemplate)
+    @ConditionalOnMissingBean(name = redisKryoTemplate)
+    public <T> RedisTemplate<String, T> kryoRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.kryoRedisTemplate(redisConnectionFactory);
     }
 
     /** 基于 Kryo 序列化的 {@linkplain RedisTemplate} （不支持存储 null 值）*/
     @Override
-    @Bean("redisKryoNotNullTemplate")
-    @ConditionalOnMissingBean(name = "redisKryoNotNullTemplate")
-    public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(@Qualifier("redisConnectionFactory") RedisConnectionFactory redisConnectionFactory)
+    @Bean(redisKryoNotNullTemplate)
+    @ConditionalOnMissingBean(name = redisKryoNotNullTemplate)
+    public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(@Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory)
     {
         return super.kryoNotNullRedisTemplate(redisConnectionFactory);
     }
@@ -114,9 +134,9 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     /** 默认 {@linkplain ReactiveRedisTemplate} */
     @Primary
     @Override
-    @Bean("redisReactiveTemplate")
-    @ConditionalOnMissingBean(name = "redisReactiveTemplate")
-    public <T> ReactiveRedisTemplate<String, T> reactiveRedisTemplate(@Qualifier("redisConnectionFactory") ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
+    @Bean(redisReactiveTemplate)
+    @ConditionalOnMissingBean(name = redisReactiveTemplate)
+    public <T> ReactiveRedisTemplate<String, T> reactiveRedisTemplate(@Qualifier(redisConnectionFactory) ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
     {
         return super.reactiveRedisTemplate(reactiveRedisConnectionFactory);
     }
@@ -124,8 +144,8 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     /** 默认 {@linkplain ReactiveStringRedisTemplate} */
     @Primary
     @Override
-    @Bean("redisReactiveStringTemplate")
-    public ReactiveStringRedisTemplate reactiveStringRedisTemplate(@Qualifier("redisConnectionFactory") ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
+    @Bean(redisReactiveStringTemplate)
+    public ReactiveStringRedisTemplate reactiveStringRedisTemplate(@Qualifier(redisConnectionFactory) ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
     {
         return super.reactiveStringRedisTemplate(reactiveRedisConnectionFactory);
     }
@@ -133,20 +153,20 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     /** 默认 {@linkplain RedisCacheManager} */
     @Primary
     @Override
-    @Bean("redisCacheManager")
-    @ConditionalOnMissingBean(name = "redisCacheManager")
+    @Bean(redisCacheManager)
+    @ConditionalOnMissingBean(name = redisCacheManager)
     public RedisCacheManager redisCacheManager(
-        @Qualifier("redisConnectionFactory") RedisConnectionFactory redisConnectionFactory,
-        @Qualifier("redisDefaultCacheConfiguration") RedisCacheConfiguration redisDefaultCacheConfiguration,
-        @Qualifier("redisInitialCacheConfigurations") MapPropertySource redisInitialCacheConfigurations)
+        @Qualifier(redisConnectionFactory) RedisConnectionFactory redisConnectionFactory,
+        @Qualifier(redisDefaultCacheConfiguration) RedisCacheConfiguration redisDefaultCacheConfiguration,
+        @Qualifier(redisInitialCacheConfigurations) MapPropertySource redisInitialCacheConfigurations)
     {
         return super.redisCacheManager(redisConnectionFactory, redisDefaultCacheConfiguration, redisInitialCacheConfigurations);
     }
     
     /** 默认 {@linkplain RedisCacheConfiguration} */
     @Override
-    @Bean("redisDefaultCacheConfiguration")
-    @ConditionalOnMissingBean(name = "redisDefaultCacheConfiguration")
+    @Bean(redisDefaultCacheConfiguration)
+    @ConditionalOnMissingBean(name = redisDefaultCacheConfiguration)
     public RedisCacheConfiguration redisDefaultCacheConfiguration()
     {
         return super.redisDefaultCacheConfiguration();
@@ -154,8 +174,8 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     
     /** 初始 {@linkplain RedisCacheConfiguration} {@linkplain Map} */
     @Override
-    @Bean("redisInitialCacheConfigurations")
-    @ConditionalOnMissingBean(name = "redisInitialCacheConfigurations")
+    @Bean(redisInitialCacheConfigurations)
+    @ConditionalOnMissingBean(name = redisInitialCacheConfigurations)
     public MapPropertySource redisInitialCacheConfigurations()
     {
         return super.redisInitialCacheConfigurations();
@@ -163,9 +183,9 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     
     @Override
     @Primary
-    @Bean("redisConnectionFactory")
-    @ConditionalOnMissingBean(name = "redisConnectionFactory")
-    public RedissonConnectionFactory redissonConnectionFactory(@Qualifier("redissonClient") RedissonClient redisson)
+    @Bean(redisConnectionFactory)
+    @ConditionalOnMissingBean(name = redisConnectionFactory)
+    public RedissonConnectionFactory redissonConnectionFactory(@Qualifier(redissonClient) RedissonClient redisson)
     {
         return super.redissonConnectionFactory(redisson);
     }
@@ -173,9 +193,9 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     @Lazy
     @Primary
     @Override
-    @Bean("redissonReactiveClient")
-    @ConditionalOnMissingBean(name = "redissonReactiveClient")
-    public RedissonReactiveClient redissonReactive(@Qualifier("redissonClient") RedissonClient redisson)
+    @Bean(redissonReactiveClient)
+    @ConditionalOnMissingBean(name = redissonReactiveClient)
+    public RedissonReactiveClient redissonReactive(@Qualifier(redissonClient) RedissonClient redisson)
     {
         return redisson.reactive();
     }
@@ -183,17 +203,17 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     @Lazy
     @Primary
     @Override
-    @Bean("redissonRxClient")
-    @ConditionalOnMissingBean(name = "redissonRxClient")
-    public RedissonRxClient redissonRxJava(@Qualifier("redissonClient") RedissonClient redisson)
+    @Bean(redissonRxClient)
+    @ConditionalOnMissingBean(name = redissonRxClient)
+    public RedissonRxClient redissonRxJava(@Qualifier(redissonClient) RedissonClient redisson)
     {
         return redisson.rxJava();
     }
 
     @Primary
     @Override
-    @Bean(name = "redissonClient", destroyMethod = "shutdown")
-    @ConditionalOnMissingBean(name = "redissonClient")
+    @Bean(name = redissonClient, destroyMethod = "shutdown")
+    @ConditionalOnMissingBean(name = redissonClient)
     public RedissonClient redisson() throws IOException
     {
         return super.redisson();

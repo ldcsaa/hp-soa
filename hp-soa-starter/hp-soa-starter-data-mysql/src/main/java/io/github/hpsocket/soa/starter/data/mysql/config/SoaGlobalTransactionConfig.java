@@ -25,6 +25,8 @@ import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute
 import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
+import static io.github.hpsocket.soa.starter.data.mysql.config.SoaDataSourceConfig.*;
+
 /** <b>HP-SOA 全局事务配置</b><br>
  * 当 <i>${hp.soa.data.mysql.global-transaction-management.enabled}</i> 为 true 时，启用全局事务配置
  */
@@ -33,6 +35,12 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 @ConditionalOnProperty(name = "hp.soa.data.mysql.global-transaction-management.enabled", matchIfMissing = false)
 public class SoaGlobalTransactionConfig
 {
+    public static final String dynamicRoutingTransactionAdvice = "dynamicRoutingTransactionAdvice";
+    public static final String soaTransactionAttributeSourceNameMapProvider = "soaTransactionAttributeSourceNameMapProvider";
+    public static final String requiredRuleBasedTransactionAttribute = "requiredRuleBasedTransactionAttribute";
+    public static final String readOnlyRuleBasedTransactionAttribute = "readOnlyRuleBasedTransactionAttribute";
+    public static final String dynamicRoutingTransactionAdvisor = "dynamicRoutingTransactionAdvisor";
+    
     @Value("${hp.soa.data.mysql.global-transaction-management.timeout:3000}")
     private int timeout;
     @Value("${hp.soa.data.mysql.global-transaction-management.isolation:ISOLATION_READ_COMMITTED}")
@@ -54,13 +62,13 @@ public class SoaGlobalTransactionConfig
     
     /** 全局事务的默认 Advice */
     @Primary
-    @Bean("dynamicRoutingTransactionAdvice")
-    @ConditionalOnMissingBean(name = "dynamicRoutingTransactionAdvice")
+    @Bean(dynamicRoutingTransactionAdvice)
+    @ConditionalOnMissingBean(name = dynamicRoutingTransactionAdvice)
     public TransactionInterceptor dynamicRoutingTransactionAdvice(
-        @Qualifier("dynamicRoutingTransactionManager") TransactionManager transactionManager,
-        @Qualifier("soaTransactionAttributeSourceNameMapProvider") SoaTransactionAttributeSourceNameMapProvider nameMapProvider,
-        @Qualifier("requiredRuleBasedTransactionAttribute") RuleBasedTransactionAttribute required, 
-        @Qualifier("readOnlyRuleBasedTransactionAttribute") RuleBasedTransactionAttribute readOnly)
+        @Qualifier(dynamicRoutingTransactionManager) TransactionManager transactionManager,
+        @Qualifier(soaTransactionAttributeSourceNameMapProvider) SoaTransactionAttributeSourceNameMapProvider nameMapProvider,
+        @Qualifier(requiredRuleBasedTransactionAttribute) RuleBasedTransactionAttribute required, 
+        @Qualifier(readOnlyRuleBasedTransactionAttribute) RuleBasedTransactionAttribute readOnly)
     {
         NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
         source.setNameMap(nameMapProvider.getNameMap(required, readOnly));
@@ -70,8 +78,8 @@ public class SoaGlobalTransactionConfig
     
     /** 全局事务的默认普通事务属性 */
     @Primary
-    @Bean("requiredRuleBasedTransactionAttribute")
-    @ConditionalOnMissingBean(name = "requiredRuleBasedTransactionAttribute")
+    @Bean(requiredRuleBasedTransactionAttribute)
+    @ConditionalOnMissingBean(name = requiredRuleBasedTransactionAttribute)
     RuleBasedTransactionAttribute requiredRuleBasedTransactionAttribute()
     {
         List<RollbackRuleAttribute> ruleAttrs = new ArrayList<>(rollbackFor.length);
@@ -90,8 +98,8 @@ public class SoaGlobalTransactionConfig
     
     /** 全局事务的默认只读事务属性 */
     @Primary
-    @Bean("readOnlyRuleBasedTransactionAttribute")
-    @ConditionalOnMissingBean(name = "readOnlyRuleBasedTransactionAttribute")
+    @Bean(readOnlyRuleBasedTransactionAttribute)
+    @ConditionalOnMissingBean(name = readOnlyRuleBasedTransactionAttribute)
     RuleBasedTransactionAttribute readOnlyRuleBasedTransactionAttribute()
     {
         RuleBasedTransactionAttribute readOnly = new RuleBasedTransactionAttribute();
@@ -105,8 +113,8 @@ public class SoaGlobalTransactionConfig
     
     /** 全局事务的默认事务拦截匹配参数提供者 */
     @Primary
-    @Bean("soaTransactionAttributeSourceNameMapProvider")
-    @ConditionalOnMissingBean(name = "soaTransactionAttributeSourceNameMapProvider")
+    @Bean(soaTransactionAttributeSourceNameMapProvider)
+    @ConditionalOnMissingBean(name = soaTransactionAttributeSourceNameMapProvider)
     SoaTransactionAttributeSourceNameMapProvider soaTransactionAttributeSourceNameMapProvider()
     {
         return new SoaTransactionAttributeSourceNameMapProvider() {};
@@ -114,10 +122,10 @@ public class SoaGlobalTransactionConfig
 
     /** 全局事务的默认 Advisor */
     @Primary
-    @Bean("dynamicRoutingTransactionAdvisor")
-    @ConditionalOnMissingBean(name = "dynamicRoutingTransactionAdvisor")
+    @Bean(dynamicRoutingTransactionAdvisor)
+    @ConditionalOnMissingBean(name = dynamicRoutingTransactionAdvisor)
     @ConditionalOnExpression("'${hp.soa.data.mysql.global-transaction-management.pointcut-expression:}' != ''")
-    public Advisor dynamicRoutingTransactionAdvisor(@Qualifier("dynamicRoutingTransactionAdvice") TransactionInterceptor txAdvice)
+    public Advisor dynamicRoutingTransactionAdvisor(@Qualifier(dynamicRoutingTransactionAdvice) TransactionInterceptor txAdvice)
     {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
         pointcut.setExpression(pointcutExpression);
