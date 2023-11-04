@@ -1,0 +1,5 @@
+## MongoDB 配置
+# 完整配置参数参考：org.springframework.boot.autoconfigure.mongo.MongoProperties
+spring.data.mongodb:
+  # MongoDB 服务地址，多个地址用','分隔
+  uri: mongodb://demo:123456@192.168.56.23:27017/demo
