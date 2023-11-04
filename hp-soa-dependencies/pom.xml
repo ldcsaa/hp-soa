@@ -32,6 +32,7 @@
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <spring-security-oauth.version>2.5.2.RELEASE</spring-security-oauth.version>
         <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
+        <spring-security-rsa.version>1.1.1</spring-security-rsa.version>
         <spring-amqp.version>3.0.10</spring-amqp.version>
         <spring-kafka.version>3.0.12</spring-kafka.version>
         <kafka-clients.version>3.6.0</kafka-clients.version>
@@ -122,7 +123,7 @@
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
         
         <curator.version>5.5.0</curator.version>
-        <hutool.version>5.8.22</hutool.version>      
+        <hutool.version>5.8.22</hutool.version>
         <jjwt.version>0.12.3</jjwt.version>
         
         <seata.version>1.7.1</seata.version>
@@ -426,9 +427,20 @@
                 <artifactId>org.eclipse.paho.mqttv5.client</artifactId>
                 <version>${mqttv5.client.version}</version>
             </dependency>
+            
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcpkix-jdk18on</artifactId>
+                <version>${bcpkix.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bcpkix.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcutil-jdk18on</artifactId>
                 <version>${bcpkix.version}</version>
             </dependency>
 
@@ -664,7 +676,12 @@
                 <artifactId>spring-security-jwt</artifactId>
                 <version>${spring-security-jwt.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-rsa</artifactId>
+                <version>${spring-security-rsa.version}</version>
+            </dependency>
+            
             <dependency>
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>

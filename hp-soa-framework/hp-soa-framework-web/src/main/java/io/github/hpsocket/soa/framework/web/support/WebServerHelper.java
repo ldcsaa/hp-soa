@@ -74,7 +74,7 @@ public class WebServerHelper
     public static final String DEFAULT_REQUEST_FORMAT   = REQUEST_FORMAT_JSON;
     public static final String RESPONSE_CONTENT_TYPE    = "application/json;charset=" + DEFAULT_REQUEST_CHARSET.toLowerCase();
     public static final Pattern DOMAIN_PATTERN    = Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
-    public static final Pattern SPIDER_PATTERN    = Pattern.compile(".*(Googlebot|Baiduspider|Yahoo\\!\\ Slurp|iaskspider|YodaoBot|msnbot|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
+    public static final Pattern SPIDER_PATTERN    = Pattern.compile(".*(Googlebot|Baiduspider|iaskspider|YodaoBot|msnbot|\\ Crawler|\\ Slurp|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
     
     public static final String MONITOR_LOGGER_NAME  = "SOA-MONITOR";
     public static final String MONITOR_INGRESS      = "MONITOR-INGRESS";

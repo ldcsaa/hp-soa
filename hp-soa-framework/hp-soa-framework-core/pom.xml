@@ -44,9 +44,17 @@
             <artifactId>log4j-layout-template-json</artifactId>
         </dependency>
         
+        <!-- support log4j async logger -->
         <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
+        </dependency>
+        
+        <!-- support log4j kafka appender -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <optional>true</optional>
         </dependency>
         
         <dependency>
