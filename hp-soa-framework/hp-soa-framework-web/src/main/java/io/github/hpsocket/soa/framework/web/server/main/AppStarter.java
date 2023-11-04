@@ -10,8 +10,6 @@ import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
@@ -21,9 +19,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
                                     RedisAutoConfiguration.class,
                                     RedisReactiveAutoConfiguration.class,
                                     RedisRepositoriesAutoConfiguration.class,
-                                    MongoAutoConfiguration.class,
-                                    KafkaAutoConfiguration.class,
                                     RabbitAutoConfiguration.class
+                                    //MongoAutoConfiguration.class,
+                                    //KafkaAutoConfiguration.class,
                                 })
 /* 开启 AspectJ AOP */
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)

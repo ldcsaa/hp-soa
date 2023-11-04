@@ -19,6 +19,7 @@
 - 流量控制中心：Sentinel Dashboard + Nacos
 - 数据库：MySQL、mybatis-plus（支持多数据源）
 - 缓存：Redis + Redisson（支持多实例）
+- NoSQL数据库：MongoDB
 - 搜索引擎：Elasticsearch
 - 消息总线：RabbitMQ（支持多实例、可靠消息、Stream 消息）
 - MQTT发布订阅：Eclipse PAHO mqttv5
@@ -41,6 +42,7 @@
 - **[hp-soa-starter-nacos](hp-soa-starter/hp-soa-starter-nacos)** Nacos配置中心启动器，开启配置中心功能，应用程序可以从远程配置中心加载配置
 - **[hp-soa-starter-data-mysql](hp-soa-starter/hp-soa-starter-data-mysql)** MySQL启动器，开启MySQL数据库访问功能，并提供动态数据源、数据源监控和全局事务管理等能力
 - **[hp-soa-starter-data-redis](hp-soa-starter/hp-soa-starter-data-redis)** Redis启动器，开启Redis访问功能，支持多Redis实例，支持Spring Cache
+- **[hp-soa-starter-data-mongodb](hp-soa-starter/hp-soa-starter-data-mongodb)** MongoDB启动器，开启MongoDB访问功能，支持通过 Spring Data 接口方式访问MongoDB
 - **[hp-soa-starter-data-elasticsearch](hp-soa-starter/hp-soa-starter-data-elasticsearch)** Elasticsearch启动器，开启Elasticsearch访问功能，支持通过 Spring Data 接口方式访问Elasticsearch
 - **[hp-soa-starter-rabbitmq](hp-soa-starter/hp-soa-starter-rabbitmq)** Rabbitmq启动器，开启Rabbitmq访问功能，支持多Rabbitmq实例，提供可靠消息实施方案以及消息跟踪能力
 - **[hp-soa-starter-mqtt](hp-soa-starter/hp-soa-starter-mqtt)** MQTT启动器，开启MQTT发布订阅功能，全面支持mqttv5协议

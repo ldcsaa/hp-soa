@@ -13,20 +13,29 @@ import java.util.List;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.elasticsearch.config.ElasticsearchConfigurationSupport;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchCustomConversions;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+
+import io.github.hpsocket.soa.framework.web.support.ZonedDateTimeProvider;
 
 /** <b>HP-SOA Elasticsearch 配置</b> */
 @AutoConfiguration
 @ConditionalOnExpression("'${spring.elasticsearch.uris:}' != ''")
-@EnableElasticsearchRepositories(basePackages = {"${spring.elasticsearch.repositories-base-packages:${hp.soa.web.component-scan.base-package:}}"})
 public class SoaElasticConfig extends ElasticsearchConfigurationSupport
 {
+
+    /** {@linkplain ZonedDateTime} 时间日期提供者 */
+    @Bean("zonedDateTimeProvider")
+    @ConditionalOnMissingBean(name = "zonedDateTimeProvider")
+    public ZonedDateTimeProvider zonedDateTimeProvider()
+    {
+        return new ZonedDateTimeProvider();
+    }
 
     /** 自定义日期时间类型转换器<br/>
      * 处理 Java Bean 的日期时间类型字段与 ES Date 类型字段映射。
