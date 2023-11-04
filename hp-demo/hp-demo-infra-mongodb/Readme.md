@@ -9,9 +9,9 @@ ES 项目开发分为以下2个步骤：
 #### 二、环境准备
 1. 创建集合
     - 创建“员工信息集合”：  
-        -> misc/collections/1-employee_info.js
+        -> [1-employee_info.js](misc/collections/1-employee_info.js)
     - 创建“员工信息变更历史集合”：  
-        -> misc/collections/2-employee_history.js
+        -> [2-employee_history.js](misc/collections/2-employee_history.js)
         
 #### 三、代码开发
 1. pom.xml 文件引入 spring-boot-starter-data-mongodb 依赖

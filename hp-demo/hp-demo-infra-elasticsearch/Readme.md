@@ -9,13 +9,13 @@ ES 项目开发分为以下2个步骤：
 #### 二、环境准备
 1. 创建索引模版（把文件内容拷贝到 Kibana Management - Dev Tools 界面执行）
     - 创建“员工信息变更历史索引生命周期策略”：  
-        -> misc/templates/1-employee_history_lifecycle_policy.json.put
+        -> [1-employee_history_lifecycle_policy.json.put](misc/templates/1-employee_history_lifecycle_policy.json.put)
     - 创建“员工信息变更历史索引模版”：  
-        -> misc/templates/2-employee_history_template.json.put
+        -> [2-employee_history_template.json.put](misc/templates/2-employee_history_template.json.put)
     - 创建“员工信息索引模版”：  
-        -> misc/templates/3-employee_info_template.json.put
+        -> [3-employee_info_template.json.put](misc/templates/3-employee_info_template.json.put)
     - 创建“员工信息索引及别名”：  
-        -> misc/templates/4-create_employee_info_internal_index.json.put
+        -> [4-create_employee_info_internal_index.json.put](misc/templates/4-create_employee_info_internal_index.json.put)
 2. 创建 data view
     - name：EMPLOYEE-INFO, Index pattern：employee_info
     - name：EMPLOYEE-HISTORY, Index pattern：employee_history_*
