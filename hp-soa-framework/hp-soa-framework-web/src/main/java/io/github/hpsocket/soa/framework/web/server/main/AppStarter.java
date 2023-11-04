@@ -20,8 +20,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
                                     RedisReactiveAutoConfiguration.class,
                                     RedisRepositoriesAutoConfiguration.class,
                                     RabbitAutoConfiguration.class
-                                    //MongoAutoConfiguration.class,
-                                    //KafkaAutoConfiguration.class,
                                 })
 /* 开启 AspectJ AOP */
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
