@@ -25,7 +25,7 @@
 &nbsp;&nbsp;把与运行环境相关的配置或共享配置分别配置到Nacos远程应用程序主配置文件和远程共享配置文件，共享配置最好放在独立配置组中。以 [hp-demo-bff-nacos](../../hp-demo/hp-demo-bff-nacos) 为例：
 
 1.远程共享配置文件
-- HP-SOA 配置文件 [hp-soa-web.yml](../../misc/nacos/config/namespace-DEV/GLOBAL_GROUP/hp-soa-web.yml)
+- HP-SOA 配置文件 [hp-soa.yml](../../misc/nacos/config/namespace-DEV/GLOBAL_GROUP/hp-soa.yml)
 - spring-boot 配置文件 [spring-boot.yml](../../misc/nacos/config/namespace-DEV/GLOBAL_GROUP/spring-boot.yml)
 - Dubbo 配置文件 [dubbo.yml](../../misc/nacos/config/namespace-DEV/GLOBAL_GROUP/dubbo.yml)
 
@@ -60,7 +60,7 @@ spring.cloud.nacos.config:
   refresh-enabled: true
   shared-configs:
     - group: GLOBAL_GROUP
-      data-id: hp-soa-web.yml
+      data-id: hp-soa.yml
       refresh: true
     - group: GLOBAL_GROUP
       data-id: spring-boot.yml
