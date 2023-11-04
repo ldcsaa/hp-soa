@@ -39,16 +39,16 @@ public class AppConfig
 
     
     @Autowired
-    @Qualifier("defaultAmqpAdmin")
+    @Qualifier("defaultRabbitAmqpAdmin")
     AmqpAdmin defaultAmqpAdmin;
     @Autowired
-    @Qualifier("firstAmqpAdmin")
+    @Qualifier("firstRabbitAmqpAdmin")
     AmqpAdmin firstAmqpAdmin;
     @Autowired
-    @Qualifier("secondAmqpAdmin")
+    @Qualifier("secondRabbitAmqpAdmin")
     AmqpAdmin secondAmqpAdmin;
     @Autowired
-    @Qualifier("thirdAmqpAdmin")
+    @Qualifier("thirdRabbitAmqpAdmin")
     AmqpAdmin thirdAmqpAdmin;
     
     @Bean

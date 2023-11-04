@@ -26,16 +26,16 @@ public class AppConfig
     public static final String[] REGION_QUEUES          = {"QUE_REGION_0", "QUE_REGION_1", "QUE_REGION_2", "QUE_REGION_3"};
     
     @Autowired
-    @Qualifier("defaultAmqpAdmin")
+    @Qualifier("defaultRabbitAmqpAdmin")
     AmqpAdmin defaultAmqpAdmin;
     @Autowired
-    @Qualifier("firstAmqpAdmin")
+    @Qualifier("firstRabbitAmqpAdmin")
     AmqpAdmin firstAmqpAdmin;
     @Autowired
-    @Qualifier("secondAmqpAdmin")
+    @Qualifier("secondRabbitAmqpAdmin")
     AmqpAdmin secondAmqpAdmin;
     @Autowired
-    @Qualifier("thirdAmqpAdmin")
+    @Qualifier("thirdRabbitAmqpAdmin")
     AmqpAdmin thirdAmqpAdmin;
     
     @Bean

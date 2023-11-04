@@ -134,7 +134,7 @@ public class MqListenerHandler
         onStreamMessage(AppConfig.STM_REGION_2, message, context);
     }
     
-    @RabbitListener(queues = {AppConfig.STM_REGION_3}, containerFactory = "thirdStreamRabbitListenerContainerFactory", messageConverter = "messageConverter")
+    @RabbitListener(queues = {AppConfig.STM_REGION_3}, containerFactory = "thirdStreamRabbitListenerContainerFactory", messageConverter = "rabbitMessageConverter")
     public void onThirdStreamMessage(org.springframework.messaging.Message<JSONObject> message) throws IOException
     {
         onStreamMessage(AppConfig.STM_REGION_3, message);

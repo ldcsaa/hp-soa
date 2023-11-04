@@ -24,14 +24,14 @@ import io.github.hpsocket.soa.starter.mqtt.support.ExtMqttClient;
 @ConditionalOnBean(SoaFirstMqttProperties.class)
 public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
 {
-    public static final String mqttClientPersistence = "firstMqttClientPersistence";
-    public static final String mqttCallback = "firstMqttCallback";
-    public static final String mqttClient = "firstMqttClient";
-    public static final String mqttMessagePublisher = "firstMqttMessagePublisher";
-    public static final String mqttMessageListener = "firstMqttMessageListener";
-    public static final String mqttPropertiesCustomizer = "firstMqttPropertiesCustomizer";
-    public static final String mqttSocketFactory = "firstMqttSocketFactory";
-    public static final String mqttHostnameVerifier = "firstMqttHostnameVerifier";
+    public static final String mqttClientPersistenceBeanName = "firstMqttClientPersistence";
+    public static final String mqttCallbackBeanName = "firstMqttCallback";
+    public static final String mqttClientBeanName = "firstMqttClient";
+    public static final String mqttMessagePublisherBeanName = "firstMqttMessagePublisher";
+    public static final String mqttMessageListenerBeanName = "firstMqttMessageListener";
+    public static final String mqttPropertiesCustomizerBeanName = "firstMqttPropertiesCustomizer";
+    public static final String mqttSocketFactoryBeanName = "firstMqttSocketFactory";
+    public static final String mqttHostnameVerifierBeanName = "firstMqttHostnameVerifier";
     
     public SoaFirstMqttConfig(SoaFirstMqttProperties mqttProperties)
     {
@@ -40,8 +40,8 @@ public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
     
     /** 默认 MQTT 实例之外第一个 MQTT 实例持久化对象（可由应用程序覆盖）*/
     @Override
-    @Bean(name = mqttClientPersistence, destroyMethod = "")
-    @ConditionalOnMissingBean(name = mqttClientPersistence)
+    @Bean(name = mqttClientPersistenceBeanName, destroyMethod = "")
+    @ConditionalOnMissingBean(name = mqttClientPersistenceBeanName)
     public MqttClientPersistence mqttClientPersistence()
     {
         return super.mqttClientPersistence();
@@ -49,8 +49,8 @@ public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
 
     /** 默认 MQTT 实例之外第一个 MQTT 实例事件处理器（可由应用程序覆盖）*/
     @Override
-    @Bean(name = mqttCallback)
-    @ConditionalOnMissingBean(name = mqttCallback)
+    @Bean(name = mqttCallbackBeanName)
+    @ConditionalOnMissingBean(name = mqttCallbackBeanName)
     public MqttCallback mqttCallback()
     {
         return super.mqttCallback();
@@ -58,14 +58,14 @@ public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
 
     /** 默认 MQTT 实例之外第一个 MQTT 实例客户端对象 */
     @Override
-    @Bean(name = mqttClient, destroyMethod = "disconnectAndClose")
+    @Bean(name = mqttClientBeanName, destroyMethod = "disconnectAndClose")
     public ExtMqttClient mqttClient(
-        @Qualifier(mqttClientPersistence) MqttClientPersistence mqttClientPersistence,
-        @Qualifier(mqttMessageListener) ObjectProvider<MqttMessageListener> messageListenerProvider,
-        @Qualifier(mqttCallback) ObjectProvider<MqttCallback> mqttCallbackProvider,
-        @Qualifier(mqttPropertiesCustomizer) ObjectProvider<MqttPropertiesCustomizer> mqttPropertiesCustomizerProvider,
-        @Qualifier(mqttSocketFactory) ObjectProvider<SocketFactory> socketFactoryProvider,
-        @Qualifier(mqttHostnameVerifier) ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
+        @Qualifier(mqttClientPersistenceBeanName) MqttClientPersistence mqttClientPersistence,
+        @Qualifier(mqttMessageListenerBeanName) ObjectProvider<MqttMessageListener> messageListenerProvider,
+        @Qualifier(mqttCallbackBeanName) ObjectProvider<MqttCallback> mqttCallbackProvider,
+        @Qualifier(mqttPropertiesCustomizerBeanName) ObjectProvider<MqttPropertiesCustomizer> mqttPropertiesCustomizerProvider,
+        @Qualifier(mqttSocketFactoryBeanName) ObjectProvider<SocketFactory> socketFactoryProvider,
+        @Qualifier(mqttHostnameVerifierBeanName) ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
         return super.mqttClient(mqttClientPersistence,
                                 messageListenerProvider,
@@ -77,8 +77,8 @@ public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
     
     /** 默认 MQTT 实例之外第一个 MQTT 消息发布器 */
     @Override
-    @Bean(name = mqttMessagePublisher)
-    public MqttMessagePublisher mqttMessagePublisher(@Qualifier(mqttClient) ExtMqttClient mqttClient)
+    @Bean(name = mqttMessagePublisherBeanName)
+    public MqttMessagePublisher mqttMessagePublisher(@Qualifier(mqttClientBeanName) ExtMqttClient mqttClient)
     {
         return super.mqttMessagePublisher(mqttClient);
     }

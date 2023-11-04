@@ -17,10 +17,12 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConve
 @ComponentScan(basePackages = "io.github.hpsocket.soa.starter.rabbitmq.common.properties")
 public class SoaRabbitmqCommonConfig
 {
+    public static final String rabbitMessageConverter = "rabbitMessageConverter";
+    
     /** 默认消息转换器 */
     @Primary
-    @Bean("messageConverter")
-    @ConditionalOnMissingBean(name = "messageConverter")
+    @Bean(rabbitMessageConverter)
+    @ConditionalOnMissingBean(name = rabbitMessageConverter)
     MessageConverter messageConverter()
     {
         MessageConverter textConverter = new TextMessageConverter();
