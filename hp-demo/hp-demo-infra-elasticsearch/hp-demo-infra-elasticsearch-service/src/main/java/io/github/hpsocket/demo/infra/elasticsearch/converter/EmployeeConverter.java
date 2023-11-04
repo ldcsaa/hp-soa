@@ -32,8 +32,7 @@ public interface EmployeeConverter
     /** 对象转换：{@linkplain SaveEmployeeRequest} -> {@linkplain EmployeeInfo} */
     @Mappings({
                 @Mapping(source = "deptNumber", target = "department.number"),
-                @Mapping(source = "deptName", target = "department.name"),
-                @Mapping(target = "updateTime", expression = "java(java.time.ZonedDateTime.now())")
+                @Mapping(source = "deptName", target = "department.name")
              })
     EmployeeInfo fromSaveEmployeeRequest(SaveEmployeeRequestBo req);
 

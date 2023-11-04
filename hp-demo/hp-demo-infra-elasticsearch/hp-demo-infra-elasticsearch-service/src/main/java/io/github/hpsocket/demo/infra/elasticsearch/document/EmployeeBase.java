@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.elasticsearch.annotations.Field;
 
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class EmployeeBase
     
     @Field
     //@Field(type = FieldType.Date)
+    @LastModifiedDate
     private ZonedDateTime updateTime;
 
 }

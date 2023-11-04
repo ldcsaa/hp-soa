@@ -41,7 +41,6 @@
         <redisson.version>3.24.3</redisson.version>
         <amqp-client.version>5.19.0</amqp-client.version>
         <stream-client.version>0.13.0</stream-client.version>
-        <mongo-java-driver.version>3.12.14</mongo-java-driver.version>
         <mysql-connector-j.version>8.1.0</mysql-connector-j.version>
         <mybatis-spring.version>3.0.2</mybatis-spring.version>
         <mybatis.version>3.5.13</mybatis.version>
@@ -187,6 +186,11 @@
             <dependency>
                 <groupId>io.github.hpsocket</groupId>
                 <artifactId>hp-soa-starter-data-mysql</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.hpsocket</groupId>
+                <artifactId>hp-soa-starter-data-mongodb</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -665,12 +669,6 @@
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql-connector-j.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mongodb</groupId>
-                <artifactId>mongo-java-driver</artifactId>
-                <version>${mongo-java-driver.version}</version>
             </dependency>
 
             <dependency>

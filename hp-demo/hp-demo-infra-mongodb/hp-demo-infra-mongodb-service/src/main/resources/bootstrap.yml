@@ -1,0 +1,51 @@
+# app
+hp.soa.web:
+  app:
+    id: "0010100016"
+    name: ${project.artifactId}
+    version: ${project.version}
+    organization: HP-Socket
+    owner: Kingfisher
+  component-scan:
+    base-package: ${project.groupId}
+  access-verification:
+    enabled: false
+    default-access-policy: maybe_login
+
+# logging
+logging.config: classpath:log4j2-kafka.xml
+
+spring.cloud.nacos.config:
+  #server-addr: 192.168.56.23:8848
+  #username: nacos
+  #password: 123456
+  #namespace: DEV
+  group: DEMO_GROUP
+  name: ${hp.soa.web.app.name}
+  file-extension: yml
+  refresh-enabled: true
+  shared-configs:
+    - group: GLOBAL_GROUP
+      data-id: hp-soa-web.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: spring-boot.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: dubbo.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: mongodb.yml
+      refresh: true
+
+# dubbo
+dubbo.protocols:
+  #dubbo:
+  #  name: dubbo
+  #  port: 5016
+  tri:
+    name: tri
+    port: 6016
+
+# server
+server.port: 9016

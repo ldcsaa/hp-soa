@@ -7,6 +7,7 @@
 - [Nacos配置中心](nacos.md)
 - [MySQL数据库](mysql.md)
 - [Redis缓存](redis.md)
+- [MongoDB数据库](mongodb.md)
 - [Elasticsearch搜索引擎](elasticsearch.md)
 - [RabbitMQ消息队列](rabbitmq.md)
 - [MQTT发布订阅](mqtt.md)

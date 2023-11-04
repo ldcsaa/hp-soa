@@ -1,0 +1,46 @@
+## ES 配置
+# 完整配置参数参考：org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchProperties
+spring.elasticsearch:
+  # ES 服务地址，多个地址用','分隔
+  uris: http://192.168.56.23:9200
+#  username:
+#  password:
+#  connectionTimeout:
+#  socketTimeout:
+#  socketKeepAlive:
+#  pathPrefix:
+#  restclient:
+#    sniffer: 
+#      interval:
+#      delayAfterFailure:
+#    ssl:
+#      bundle:
+#      
+## SSL 配置
+# 如果 ES 服务端开启了 SSL，则需要配置 SSL，并在 ES 配置中引用
+#spring.ssl:
+#  bundle:
+#    pem:
+#      xxx:
+#        keystore:
+#          type:
+#          certificate:
+#          privateKey:
+#          privateKeyPassword:
+#        truststore:
+#          type:
+#          certificate:
+#          privateKey:
+#          privateKeyPassword:
+#    jks:
+#      xxx:
+#        keystore:
+#          type:
+#          provider:
+#          location:
+#          password:
+#        truststore:
+#          type:
+#          provider:
+#          location:
+#          password:
