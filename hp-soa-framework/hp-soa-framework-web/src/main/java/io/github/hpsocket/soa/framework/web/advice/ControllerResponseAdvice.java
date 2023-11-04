@@ -1,6 +1,5 @@
 package io.github.hpsocket.soa.framework.web.advice;
 
-import java.io.IOException;
 import java.util.Map;
 
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
@@ -26,10 +25,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.blueconic.browscap.Capabilities;
-import com.blueconic.browscap.ParseException;
-import com.blueconic.browscap.UserAgentParser;
-import com.blueconic.browscap.UserAgentService;
+
+import cn.hutool.http.useragent.Browser;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentParser;
 
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
@@ -45,19 +44,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ordered
 {
     private static final Logger MONITOR_LOGGER = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
-    private static final UserAgentParser uaParser;
-    
-    static
-    {
-        try
-        {
-            uaParser = new UserAgentService().loadParser();
-        }
-        catch(IOException | ParseException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
     
     @Override
     public int getOrder()
@@ -217,14 +203,15 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                 if(GeneralHelper.isStrNotEmpty(ua))
                 {
                     JSONObject jsonUa = new JSONObject();
-                    final Capabilities caps = uaParser.parse(ua);
+                    UserAgent agent   = UserAgentParser.parse(ua);
+                    Browser browser   = agent.getBrowser();
                     
                     jsonUa.put("name", ua);
-                    jsonUa.put("browser", caps.getBrowser().concat(GeneralHelper.isStrNotEmpty(caps.getBrowserMajorVersion()) ? " " + caps.getBrowserMajorVersion() : ""));
-                    jsonUa.put("browserType", caps.getBrowserType());
-                    jsonUa.put("deviceType", caps.getDeviceType());
-                    jsonUa.put("platform", caps.getPlatform().concat(GeneralHelper.isStrNotEmpty(caps.getPlatformVersion()) ? " " + caps.getPlatformVersion() : ""));
-                    
+                    jsonUa.put("browser", browser.getName().concat(GeneralHelper.isStrNotEmpty(agent.getVersion()) ? " " + agent.getVersion() : ""));
+                    jsonUa.put("browserType", agent.getEngine().getName().concat(GeneralHelper.isStrNotEmpty(agent.getEngineVersion()) ? " " + agent.getEngineVersion() : ""));
+                    jsonUa.put("deviceType", browser.isUnknown() ? Browser.Unknown.getName() : (agent.isMobile() ? "Mobile" : "Desktop"));
+                    jsonUa.put("platform", agent.getOs().getName().concat(GeneralHelper.isStrNotEmpty(agent.getOsVersion()) ? " " + agent.getOsVersion() : ""));
+                                        
                     jsonLog.put("ua", jsonUa);
                 }
 

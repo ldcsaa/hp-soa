@@ -26,7 +26,7 @@ spring.cloud.nacos.config:
   refresh-enabled: true
   shared-configs:
     - group: GLOBAL_GROUP
-      data-id: hp-soa-web.yml
+      data-id: hp-soa.yml
       refresh: true
     - group: GLOBAL_GROUP
       data-id: spring-boot.yml

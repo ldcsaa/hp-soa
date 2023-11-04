@@ -19,12 +19,14 @@
         <module>hp-demo-infra-basic</module>
         <module>hp-demo-infra-nacos</module>
         <module>hp-demo-infra-mysql</module>
+        <module>hp-demo-infra-mongodb</module>
         <module>hp-demo-infra-elasticsearch</module>
         <module>hp-demo-infra-sentinel</module>
         <module>hp-demo-infra-skywalking</module>
         <module>hp-demo-bff-basic</module>
         <module>hp-demo-bff-nacos</module>
         <module>hp-demo-bff-mysql</module>
+        <module>hp-demo-bff-mongodb</module>
         <module>hp-demo-bff-elasticsearch</module>
         <module>hp-demo-bff-sentinel</module>
         <module>hp-demo-bff-skywalking</module>
@@ -55,7 +57,11 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
         </dependency>
-
+        <!-- support log4j kafka appender -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+        </dependency>
     </dependencies>
     
     <build>
