@@ -182,7 +182,7 @@ public class WebServerHelper
     /** 获取 HTTP 请求 Cookie */
     public static final Cookie getCookie(HttpServletRequest req, String name, boolean includeEmptyValue)
     {
-        Cookie cookie     = null;
+        Cookie cookie    = null;
         Cookie[] cookies = req.getCookies();
 
         if(cookies != null && cookies.length > 0)
