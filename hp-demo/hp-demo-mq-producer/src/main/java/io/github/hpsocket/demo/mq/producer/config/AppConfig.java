@@ -27,38 +27,38 @@ public class AppConfig
     
     @Autowired
     @Qualifier("defaultRabbitAmqpAdmin")
-    AmqpAdmin defaultAmqpAdmin;
+    private AmqpAdmin defaultRabbitAmqpAdmin;
     @Autowired
     @Qualifier("firstRabbitAmqpAdmin")
-    AmqpAdmin firstAmqpAdmin;
+    private AmqpAdmin firstRabbitAmqpAdmin;
     @Autowired
     @Qualifier("secondRabbitAmqpAdmin")
-    AmqpAdmin secondAmqpAdmin;
+    private AmqpAdmin secondRabbitAmqpAdmin;
     @Autowired
     @Qualifier("thirdRabbitAmqpAdmin")
-    AmqpAdmin thirdAmqpAdmin;
+    private AmqpAdmin thirdRabbitAmqpAdmin;
     
     @Bean
     TopicExchange region0TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[0]).durable(true).admins(defaultAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[0]).durable(true).admins(defaultRabbitAmqpAdmin).build();
     }
     
     @Bean
     TopicExchange region1TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[1]).durable(true).admins(firstAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[1]).durable(true).admins(firstRabbitAmqpAdmin).build();
     }
     
     @Bean
     TopicExchange region2TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[2]).durable(true).admins(secondAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[2]).durable(true).admins(secondRabbitAmqpAdmin).build();
     }
     
     @Bean
     TopicExchange region3TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[3]).durable(true).admins(thirdAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[3]).durable(true).admins(thirdRabbitAmqpAdmin).build();
     }
 }
