@@ -39,7 +39,7 @@ import jakarta.activation.DataSource;
 /** Byte Array 数据源 */
 class ByteArrayDataSource implements DataSource
 {
-    public static final String DEFAULT_ENCODING = GeneralHelper.DEFAULT_ENCODING;
+    public static final String DEFAULT_ENCODING = GeneralHelper.DEFAULT_CHARSET;
     
     private ByteArrayOutputStream   baos = null;
     private String                  type = "application/octet-stream";

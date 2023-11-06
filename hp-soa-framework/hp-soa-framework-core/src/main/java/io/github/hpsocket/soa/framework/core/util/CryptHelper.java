@@ -27,7 +27,7 @@ public class CryptHelper
     /** 解密模式 */
     public static final int DECRYPT_MODE        = Cipher.DECRYPT_MODE;
     /** 默认字符集（UTF-8） */
-    public static final String DEFAULT_ENCODING = GeneralHelper.DEFAULT_ENCODING;
+    public static final String DEFAULT_ENCODING = GeneralHelper.DEFAULT_CHARSET;
     /** 加密方法：MD5 */
     public static final String MD5              = "MD5";
     /** 加密方法：SHA */

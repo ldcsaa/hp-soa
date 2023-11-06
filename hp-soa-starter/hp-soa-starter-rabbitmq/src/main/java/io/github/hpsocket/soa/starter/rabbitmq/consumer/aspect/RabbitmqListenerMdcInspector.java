@@ -54,11 +54,11 @@ public class RabbitmqListenerMdcInspector
         RabbitListener listener = ANNOTATION_HOLDER.findAnnotationByMethodOrClass(joinPoint);
         Assert.notNull(listener, "@RabbitListener annotation not found");
         
-        String listenerId        = listener.id();
+        String listenerId       = listener.id();
         String correlationId    = null;
         String messageId        = null;
-        String sourceRequestId    = null;
-        String domainName        = null;
+        String sourceRequestId  = null;
+        String domainName       = null;
         String eventName        = null;
         
         Object obj = AspectHelper.findFirstArgByTypes(joinPoint, Message.class

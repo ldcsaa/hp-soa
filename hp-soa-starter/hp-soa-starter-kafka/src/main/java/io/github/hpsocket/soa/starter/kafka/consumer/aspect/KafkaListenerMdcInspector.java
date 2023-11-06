@@ -52,11 +52,11 @@ public class KafkaListenerMdcInspector
         KafkaListener listener = ANNOTATION_HOLDER.findAnnotationByMethodOrClass(joinPoint);
         Assert.notNull(listener, "@KafkaListener annotation not found");
         
-        String listenerId        = listener.id();
+        String listenerId       = listener.id();
         String correlationId    = null;
         String messageId        = null;
-        String sourceRequestId    = null;
-        String domainName        = null;
+        String sourceRequestId  = null;
+        String domainName       = null;
         String eventName        = null;
         
         Object obj = AspectHelper.findFirstArgByTypes(joinPoint, ConsumerRecord.class, Message.class, Iterable.class);
@@ -73,10 +73,10 @@ public class KafkaListenerMdcInspector
             {
                 MessageHeaders headers = msg.getHeaders();
                 
-                messageId       = (String)headers.get(KafkaConstant.HEADER_MSG_ID);
-                sourceRequestId = (String)headers.get(KafkaConstant.HEADER_SOURCE_REQUEST_ID);
-                domainName      = (String)headers.get(KafkaConstant.HEADER_DOMAIN_NAME);
-                eventName       = (String)headers.get(KafkaConstant.HEADER_EVENT_NAME);
+                messageId       = GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_MSG_ID));
+                sourceRequestId = GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_SOURCE_REQUEST_ID));
+                domainName      = GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_DOMAIN_NAME));
+                eventName       = GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_EVENT_NAME));
                 correlationId   = (String)headers.get(KafkaConstant.HEADER_CORRELA_DATA_ID);
             }
             else if(obj instanceof ConsumerRecord crc)

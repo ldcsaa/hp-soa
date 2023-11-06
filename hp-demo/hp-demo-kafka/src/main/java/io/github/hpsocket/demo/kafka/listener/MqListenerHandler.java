@@ -2,9 +2,11 @@ package io.github.hpsocket.demo.kafka.listener;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.header.Headers;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
@@ -23,37 +25,37 @@ import java.util.List;
 public class MqListenerHandler
 {
     @KafkaListener(topics = TOPIC_0)
-    public void onMessageTopic0(Message<String> msg, Consumer<String, String> consumer, Acknowledgment ack)
+    public void onMessageTopic0(Message<String> msg/*, Acknowledgment ack, Consumer<String, String> consumer*/)
     {
         logMessage(msg);
     }
 
     @KafkaListener(topics = TOPIC_1)
-    public void onMessageTopic1(List<Message<String>> msgs, Consumer<String, String> consumer, Acknowledgment ack)
+    public void onMessageTopic1(List<Message<String>> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
     {
         msgs.forEach(msg -> logMessage(msg));
     }
     
     @KafkaListener(topics = TOPIC_2)
-    public void onMessageTopic2(ConsumerRecord<String, String> msg, Consumer<String, String> consumer, Acknowledgment ack)
+    public void onMessageTopic2(ConsumerRecord<String, String> msg/*, Acknowledgment ack, Consumer<String, String> consumer*/)
     {
         logMessage(msg);
     }
     
     @KafkaListener(topics = TOPIC_3)
-    public void onMessageTopic3(List<ConsumerRecord<String, String>> msgs, Consumer<String, String> consumer, Acknowledgment ack)
+    public void onMessageTopic3(ConsumerRecords<String, String> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
     {
         msgs.forEach(msg -> logMessage(msg));
     }
     
     @KafkaListener(topics = TOPIC_4)
-    public void onMessageTopic4(String msg, Consumer<String, String> consumer, Acknowledgment ack)
+    public void onMessageTopic4(String msg/*, Acknowledgment ack, Consumer<String, String> consumer*/)
     {
         logMessage(msg);        
     }
     
     @KafkaListener(topics = TOPIC_5)
-    public void onMessageTopic5(List<String> msgs, Consumer<String, String> consumer, Acknowledgment ack)
+    public void onMessageTopic5(List<String> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
     {
         msgs.forEach(msg -> logMessage(msg));
     }
@@ -66,9 +68,12 @@ public class MqListenerHandler
         json.put("domain", headers.get(KafkaConstant.HEADER_DOMAIN_NAME));
         json.put("eventName", headers.get(KafkaConstant.HEADER_EVENT_NAME));
         json.put("topic", TOPIC_0);
-        //json.put("partition", payload.get("partition"));
-        //json.put("timestamp", );
-        //json.put("key", );
+        json.put("partition", headers.get(KafkaHeaders.RECEIVED_PARTITION));
+        json.put("timestamp", headers.get(KafkaHeaders.RECEIVED_TIMESTAMP));
+        json.put("correlationId", headers.get(KafkaHeaders.CORRELATION_ID));
+        json.put("groupId", headers.get(KafkaHeaders.GROUP_ID));
+        json.put("groupId", headers.get(KafkaHeaders.GROUP_ID));
+        json.put("key", headers.get(KafkaHeaders.RECEIVED_KEY));
         //json.put("headers", );
         json.put("sourceRequestId", headers.get(KafkaConstant.HEADER_EVENT_NAME));
         json.put("correlaDataId", headers.get(KafkaConstant.HEADER_CORRELA_DATA_ID));

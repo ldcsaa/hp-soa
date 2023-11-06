@@ -30,7 +30,7 @@ public class MailSender
     /** 默认 Content Type -> text/plain */
     public static final String DEFAULT_CONTENT_TYPE = "text/plain";
     /** 默认字符编码 -> UTF-8 */
-    public static final String DEFAULT_ENCODING     = GeneralHelper.DEFAULT_ENCODING;
+    public static final String DEFAULT_ENCODING     = GeneralHelper.DEFAULT_CHARSET;
     /** 默认 SMTP 端口 -> 25 */
     public static final int DEFAULT_PORT            = 25;
     

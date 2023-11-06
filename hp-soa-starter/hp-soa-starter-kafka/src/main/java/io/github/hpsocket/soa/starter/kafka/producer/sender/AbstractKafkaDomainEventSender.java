@@ -75,17 +75,20 @@ abstract public class AbstractKafkaDomainEventSender<T extends DomainEvent>
                     ProducerRecord<String, String> rc = event.toProducerRecord(corId);
                     KafkaTemplate<String, String> template = getKafkaTemplate(event);
                     
-                    template.executeInTransaction(op -> 
-                    {
-                        try
+                    if(!template.isTransactional() || template.isAllowNonTransactional())
+                        template.send(rc).get();
+                    else
+                        template.executeInTransaction(op -> 
                         {
-                            return op.send(rc).get();
-                        }
-                        catch(InterruptedException | ExecutionException e)
-                        {
-                            throw new RuntimeException(e.getMessage(), e);
-                        }
-                    });
+                            try
+                            {
+                                return op.send(rc).get();
+                            }
+                            catch(InterruptedException | ExecutionException e)
+                            {
+                                throw new RuntimeException(e.getMessage(), e);
+                            }
+                        });
                     
                     succ.add(id);
                 }

@@ -40,23 +40,28 @@ public class KafkaSender
         event.setMsgTimestamp(null);
         event.setMsgKey(IdGenerator.nextIdStr());
         event.setMsgHeaders(headers.toString());
-        event.setSourceRequestId(null);
+        //event.setSourceRequestId(null);
         event.setMsg(JSONObject.toJSONString(order));
         
         try
         {
-            long offset = kafkaTemplate.executeInTransaction(op -> 
-            {
-                try
-                {
-                    return op.send(event.toProducerRecord(corId)).get().getRecordMetadata().offset();
-                }
-                catch(InterruptedException | ExecutionException e)
-                {
-                    throw new RuntimeException(e.getMessage(), e);
-                }
-            });
+            long offset = -1;
             
+            if(!kafkaTemplate.isTransactional() || kafkaTemplate.isAllowNonTransactional())
+                offset = kafkaTemplate.send(event.toProducerRecord(corId)).get().getRecordMetadata().offset();
+            else
+                offset = kafkaTemplate.executeInTransaction(op -> 
+                {
+                    try
+                    {
+                        return op.send(event.toProducerRecord(corId)).get().getRecordMetadata().offset();
+                    }
+                    catch(InterruptedException | ExecutionException e)
+                    {
+                        throw new RuntimeException(e.getMessage(), e);
+                    }
+                });
+                            
             log.info("send MQ message -> (regionId: {}, msgId: {}, offset: {})", regionId, event.getMsgId(), offset);
         }
         catch(Exception e)
