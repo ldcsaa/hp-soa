@@ -25,6 +25,15 @@ import io.github.hpsocket.soa.starter.mqtt.support.ExtMqttClient;
 @ConditionalOnBean(SoaDefaultMqttProperties.class)
 public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
 {
+    public static final String mqttClientPersistenceBeanName = "mqttClientPersistence";
+    public static final String mqttCallbackBeanName = "mqttCallback";
+    public static final String mqttClientBeanName = "mqttClient";
+    public static final String mqttMessagePublisherBeanName = "mqttMessagePublisher";
+    public static final String mqttMessageListenerBeanName = "mqttMessageListener";
+    public static final String mqttPropertiesCustomizerBeanName = "mqttPropertiesCustomizer";
+    public static final String mqttSocketFactoryBeanName = "mqttSocketFactory";
+    public static final String mqttHostnameVerifierBeanName = "mqttHostnameVerifier";
+    
     public SoaDefaultMqttConfig(SoaDefaultMqttProperties mqttProperties)
     {
         super(mqttProperties);
@@ -33,8 +42,8 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
     /** 默认 MQTT 实例持久化对象（可由应用程序覆盖）*/
     @Primary
     @Override
-    @Bean(name = "mqttClientPersistence", destroyMethod = "")
-    @ConditionalOnMissingBean(name = "mqttClientPersistence")
+    @Bean(name = mqttClientPersistenceBeanName, destroyMethod = "")
+    @ConditionalOnMissingBean(name = mqttClientPersistenceBeanName)
     public MqttClientPersistence mqttClientPersistence()
     {
         return super.mqttClientPersistence();
@@ -43,8 +52,8 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
     /** 默认 MQTT 实例事件处理器（可由应用程序覆盖）*/
     @Primary
     @Override
-    @Bean(name = "mqttCallback")
-    @ConditionalOnMissingBean(name = "mqttCallback")
+    @Bean(name = mqttCallbackBeanName)
+    @ConditionalOnMissingBean(name = mqttCallbackBeanName)
     public MqttCallback mqttCallback()
     {
         return super.mqttCallback();
@@ -53,14 +62,14 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
     /** 默认 MQTT 实例客户端对象 */
     @Primary
     @Override
-    @Bean(name = "mqttClient", destroyMethod = "disconnectAndClose")
+    @Bean(name = mqttClientBeanName, destroyMethod = "disconnectAndClose")
     public ExtMqttClient mqttClient(
-        @Qualifier("mqttClientPersistence") MqttClientPersistence mqttClientPersistence,
-        @Qualifier("mqttMessageListener") ObjectProvider<MqttMessageListener> messageListenerProvider,
-        @Qualifier("mqttCallback") ObjectProvider<MqttCallback> mqttCallbackProvider,
-        @Qualifier("mqttPropertiesCustomizer") ObjectProvider<MqttPropertiesCustomizer> mqttPropertiesCustomizerProvider,
-        @Qualifier("mqttSocketFactory") ObjectProvider<SocketFactory> socketFactoryProvider,
-        @Qualifier("mqttHostnameVerifier") ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
+        @Qualifier(mqttClientPersistenceBeanName) MqttClientPersistence mqttClientPersistence,
+        @Qualifier(mqttMessageListenerBeanName) ObjectProvider<MqttMessageListener> messageListenerProvider,
+        @Qualifier(mqttCallbackBeanName) ObjectProvider<MqttCallback> mqttCallbackProvider,
+        @Qualifier(mqttPropertiesCustomizerBeanName) ObjectProvider<MqttPropertiesCustomizer> mqttPropertiesCustomizerProvider,
+        @Qualifier(mqttSocketFactoryBeanName) ObjectProvider<SocketFactory> socketFactoryProvider,
+        @Qualifier(mqttHostnameVerifierBeanName) ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
         return super.mqttClient(mqttClientPersistence,
                                 messageListenerProvider,
@@ -73,8 +82,8 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
     /** 默认 MQTT 消息发布器 */
     @Primary
     @Override
-    @Bean(name = "mqttMessagePublisher")
-    public MqttMessagePublisher mqttMessagePublisher(@Qualifier("mqttClient") ExtMqttClient mqttClient)
+    @Bean(name = mqttMessagePublisherBeanName)
+    public MqttMessagePublisher mqttMessagePublisher(@Qualifier(mqttClientBeanName) ExtMqttClient mqttClient)
     {
         return super.mqttMessagePublisher(mqttClient);
     }

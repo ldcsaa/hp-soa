@@ -37,6 +37,8 @@ import io.github.hpsocket.soa.starter.task.properties.SoaTaskProperties.Scheduli
 @ConditionalOnProperty(name = "spring.task.enabled", matchIfMissing = true)
 public class SoaTaskConfig
 {
+    public static final String mdcTaskDecoratorBeanName = "mdcTaskDecorator";
+    
     private SoaTaskProperties soaTaskProperties;
     
     public SoaTaskConfig(SoaTaskProperties soaTaskProperties)
@@ -45,8 +47,8 @@ public class SoaTaskConfig
     }
     
     /** Task 任务装饰器（注入 {@linkplain org.slf4j.MDC MDC} 调用链跟踪信息）*/
-    @Bean("mdcTaskDecorator")
-    @ConditionalOnMissingBean(name = "mdcTaskDecorator")
+    @Bean(mdcTaskDecoratorBeanName)
+    @ConditionalOnMissingBean(name = mdcTaskDecoratorBeanName)
     TaskDecorator taskDecorator()
     {
         return new TaskDecorator()

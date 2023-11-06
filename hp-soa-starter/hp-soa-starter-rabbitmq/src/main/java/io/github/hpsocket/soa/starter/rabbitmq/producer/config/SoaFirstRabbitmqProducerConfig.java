@@ -32,13 +32,26 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaFirstRabbitm
 @ConditionalOnBean({SoaRabbitmqProducerConfig.class, SoaFirstRabbitmqProperties.class})
 public class SoaFirstRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerConfig
 {
+    public static final String rabbitTemplateConfigurerBeanName = "firstRabbitTemplateConfigurer";
+    public static final String rabbitTemplateBeanName = "firstRabbitTemplate";
+    public static final String rabbitCachingConnectionFactoryBeanName = "firstRabbitCachingConnectionFactory";
+    public static final String rabbitTemplateCustomizerBeanName = "firstRabbitTemplateCustomizer";
+    public static final String rabbitReturnsCallbackBeanName = "firstRabbitReturnsCallback";
+    public static final String rabbitConfirmCallbackBeanName = "firstRabbitConfirmCallback";
+    public static final String rabbitRecoveryCallbackBeanName = "firstRabbitRecoveryCallback";
+    public static final String rabbitMessagingTemplateBeanName = "firstRabbitMessagingTemplate";
+    public static final String rabbitStreamTemplateConfigurerBeanName = "firstRabbitStreamTemplateConfigurer";
+    public static final String rabbitStreamProducerCustomizerBeanName = "firstRabbitStreamProducerCustomizer";
+    public static final String rabbitStreamTemplateBeanName = "firstRabbitStreamTemplate";
+    public static final String rabbitStreamEnvironmentBeanName = "firstRabbitStreamEnvironment";
+    
     public SoaFirstRabbitmqProducerConfig(SoaFirstRabbitmqProperties properties)
     {
         super(properties);
     }
 
     @Override
-    @Bean("firstRabbitTemplateConfigurer")
+    @Bean(rabbitTemplateConfigurerBeanName)
     public RabbitTemplateConfigurer rabbitTemplateConfigurer(
         ObjectProvider<MessageConverter> messageConverter,
         ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers)
@@ -47,68 +60,68 @@ public class SoaFirstRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerC
     }
     
     @Override
-    @Bean("firstRabbitTemplate")
+    @Bean(rabbitTemplateBeanName)
     public RabbitTemplate rabbitTemplate(
-        @Qualifier("firstRabbitTemplateConfigurer") RabbitTemplateConfigurer configurer,
-        @Qualifier("firstRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
-        @Qualifier("firstRabbitTemplateCustomizer") ObjectProvider<RabbitTemplateCustomizer> customizers,
-        @Qualifier("firstRabbitReturnsCallback") ObjectProvider<ReturnsCallback> returnsCallback,
-        @Qualifier("firstRabbitConfirmCallback") ObjectProvider<ConfirmCallback> confirmCallback,
-        @Qualifier("firstRabbitRecoveryCallback") ObjectProvider<RecoveryCallback<?>> recoveryCallback)
+        @Qualifier(rabbitTemplateConfigurerBeanName) RabbitTemplateConfigurer configurer,
+        @Qualifier(rabbitCachingConnectionFactoryBeanName) ConnectionFactory connectionFactory,
+        @Qualifier(rabbitTemplateCustomizerBeanName) ObjectProvider<RabbitTemplateCustomizer> customizers,
+        @Qualifier(rabbitReturnsCallbackBeanName) ObjectProvider<ReturnsCallback> returnsCallback,
+        @Qualifier(rabbitConfirmCallbackBeanName) ObjectProvider<ConfirmCallback> confirmCallback,
+        @Qualifier(rabbitRecoveryCallbackBeanName) ObjectProvider<RecoveryCallback<?>> recoveryCallback)
     {
         return super.rabbitTemplate(configurer, connectionFactory, customizers, returnsCallback, confirmCallback, recoveryCallback);
     }
     
     @Override
-    @Bean("firstRabbitReturnsCallback")
-    @ConditionalOnMissingBean(name = "firstRabbitReturnsCallback")
+    @Bean(rabbitReturnsCallbackBeanName)
+    @ConditionalOnMissingBean(name = rabbitReturnsCallbackBeanName)
     public ReturnsCallback returnsCallback()
     {
         return super.returnsCallback();
     }
     
     @Override
-    @Bean("firstRabbitConfirmCallback")
-    @ConditionalOnMissingBean(name = "firstRabbitConfirmCallback")
+    @Bean(rabbitConfirmCallbackBeanName)
+    @ConditionalOnMissingBean(name = rabbitConfirmCallbackBeanName)
     public ConfirmCallback confirmCallback()
     {
         return super.confirmCallback();
     }
     
     @Override
-    @Bean("firstRabbitRecoveryCallback")
-    @ConditionalOnMissingBean(name = "firstRabbitRecoveryCallback")
+    @Bean(rabbitRecoveryCallbackBeanName)
+    @ConditionalOnMissingBean(name = rabbitRecoveryCallbackBeanName)
     public <T> RecoveryCallback<T> recoveryCallback()
     {
         return super.recoveryCallback();
     }
     
     @Override
-    @Bean("firstRabbitMessagingTemplate")
-    public RabbitMessagingTemplate rabbitMessagingTemplate(@Qualifier("firstRabbitTemplate") RabbitTemplate rabbitTemplate)
+    @Bean(rabbitMessagingTemplateBeanName)
+    public RabbitMessagingTemplate rabbitMessagingTemplate(@Qualifier(rabbitTemplateBeanName) RabbitTemplate rabbitTemplate)
     {
         return super.rabbitMessagingTemplate(rabbitTemplate);
     }
     
     @Override
-    @Bean("firstRabbitStreamTemplateConfigurer")
+    @Bean(rabbitStreamTemplateConfigurerBeanName)
     @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-    @ConditionalOnMissingBean(name = "firstRabbitStreamTemplateConfigurer")
+    @ConditionalOnMissingBean(name = rabbitStreamTemplateConfigurerBeanName)
     public RabbitStreamTemplateConfigurer rabbitStreamTemplateConfigurer(
         ObjectProvider<MessageConverter> messageConverter,
         ObjectProvider<StreamMessageConverter> streamMessageConverter,
-        @Qualifier("firstRabbitStreamProducerCustomizer")ObjectProvider<ProducerCustomizer> producerCustomizer)
+        @Qualifier(rabbitStreamProducerCustomizerBeanName)ObjectProvider<ProducerCustomizer> producerCustomizer)
     {
         return super.rabbitStreamTemplateConfigurer(messageConverter, streamMessageConverter, producerCustomizer);
     }
 
     @Override
-    @Bean("firstRabbitStreamTemplate")
+    @Bean(rabbitStreamTemplateBeanName)
     @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
     @ConditionalOnProperty(prefix = "spring.rabbitmq-first.stream", name = "name")
     public RabbitStreamTemplate rabbitStreamTemplate(
-        @Qualifier("firstRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
-        @Qualifier("firstRabbitStreamTemplateConfigurer") RabbitStreamTemplateConfigurer configurer)
+        @Qualifier(rabbitStreamEnvironmentBeanName) Environment rabbitStreamEnvironment,
+        @Qualifier(rabbitStreamTemplateConfigurerBeanName) RabbitStreamTemplateConfigurer configurer)
     {
         return super.rabbitStreamTemplate(rabbitStreamEnvironment, configurer);
     }

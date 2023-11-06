@@ -29,10 +29,13 @@ import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSour
 @AutoConfigureBefore(DynamicDataSourceAutoConfiguration.class)
 public class SoaDataSourceConfig
 {
+    public static final String dynamicRoutingDataSourceBeanName = "dynamicRoutingDataSource";
+    public static final String dynamicRoutingTransactionManagerBeanName = "dynamicRoutingTransactionManager";
+    
     /** 默认动态数据源 */
     @Primary
-    @Bean("dynamicRoutingDataSource")
-    @ConditionalOnMissingBean(name = "dynamicRoutingDataSource")
+    @Bean(dynamicRoutingDataSourceBeanName)
+    @ConditionalOnMissingBean(name = dynamicRoutingDataSourceBeanName)
     public DataSource dynamicRoutingDataSource(
         DynamicDataSourceProperties properties,
         ObjectProvider<List<DynamicDataSourcePropertiesCustomizer>> dataSourcePropertiesCustomizers,
@@ -43,9 +46,9 @@ public class SoaDataSourceConfig
     
     /** 默认动态数据源事务管理器 */
     @Primary
-    @Bean("dynamicRoutingTransactionManager")
-    @ConditionalOnMissingBean(name = "dynamicRoutingTransactionManager")
-    PlatformTransactionManager dynamicRoutingTransactionManager(@Qualifier("dynamicRoutingDataSource") DataSource dataSource)
+    @Bean(dynamicRoutingTransactionManagerBeanName)
+    @ConditionalOnMissingBean(name = dynamicRoutingTransactionManagerBeanName)
+    PlatformTransactionManager dynamicRoutingTransactionManager(@Qualifier(dynamicRoutingDataSourceBeanName) DataSource dataSource)
     {
         return new JdbcTransactionManager(dataSource);
     }

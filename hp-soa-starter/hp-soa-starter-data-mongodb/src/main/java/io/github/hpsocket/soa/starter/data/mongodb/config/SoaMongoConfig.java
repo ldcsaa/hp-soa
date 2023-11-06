@@ -25,7 +25,8 @@ import io.github.hpsocket.soa.framework.web.support.ZonedDateTimeProvider;
 @ConditionalOnExpression("'${spring.data.mongodb.uri:}' != '' || '${spring.data.mongodb.host:}' != ''")
 public class SoaMongoConfig
 {
-
+    public static final String zonedDateTimeProviderBeanName = "zonedDateTimeProvider";
+    
     /** 事务管理器（注：单机部署不支持事务） */
     @Bean
     @ConditionalOnMissingBean(MongoTransactionManager.class)
@@ -35,8 +36,8 @@ public class SoaMongoConfig
     }
 
     /** {@linkplain ZonedDateTime} 时间日期提供者 */
-    @Bean("zonedDateTimeProvider")
-    @ConditionalOnMissingBean(name = "zonedDateTimeProvider")
+    @Bean(zonedDateTimeProviderBeanName)
+    @ConditionalOnMissingBean(name = zonedDateTimeProviderBeanName)
     public ZonedDateTimeProvider zonedDateTimeProvider()
     {
         return new ZonedDateTimeProvider();

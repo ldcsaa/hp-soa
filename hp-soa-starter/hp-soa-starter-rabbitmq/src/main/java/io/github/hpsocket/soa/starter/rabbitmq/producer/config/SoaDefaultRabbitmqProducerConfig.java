@@ -33,6 +33,19 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbi
 @ConditionalOnBean({SoaRabbitmqProducerConfig.class, SoaDefaultRabbitmqProperties.class})
 public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerConfig
 {
+    public static final String rabbitTemplateConfigurerBeanName = "defaultRabbitTemplateConfigurer";
+    public static final String rabbitTemplateBeanName = "defaultRabbitTemplate";
+    public static final String rabbitCachingConnectionFactoryBeanName = "defaultRabbitCachingConnectionFactory";
+    public static final String rabbitTemplateCustomizerBeanName = "defaultRabbitTemplateCustomizer";
+    public static final String rabbitReturnsCallbackBeanName = "defaultRabbitReturnsCallback";
+    public static final String rabbitConfirmCallbackBeanName = "defaultRabbitConfirmCallback";
+    public static final String rabbitRecoveryCallbackBeanName = "defaultRabbitRecoveryCallback";
+    public static final String rabbitMessagingTemplateBeanName = "defaultRabbitMessagingTemplate";
+    public static final String rabbitStreamTemplateConfigurerBeanName = "defaultRabbitStreamTemplateConfigurer";
+    public static final String rabbitStreamProducerCustomizerBeanName = "defaultRabbitStreamProducerCustomizer";
+    public static final String rabbitStreamTemplateBeanName = "defaultRabbitStreamTemplate";
+    public static final String rabbitStreamEnvironmentBeanName = "defaultRabbitStreamEnvironment";
+    
     public SoaDefaultRabbitmqProducerConfig(SoaDefaultRabbitmqProperties properties)
     {
         super(properties);
@@ -40,7 +53,7 @@ public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProduce
 
     @Primary
     @Override
-    @Bean("defaultRabbitTemplateConfigurer")
+    @Bean(rabbitTemplateConfigurerBeanName)
     public RabbitTemplateConfigurer rabbitTemplateConfigurer(
         ObjectProvider<MessageConverter> messageConverter,
         ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers)
@@ -50,22 +63,22 @@ public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProduce
     
     @Primary
     @Override
-    @Bean("defaultRabbitTemplate")
+    @Bean(rabbitTemplateBeanName)
     public RabbitTemplate rabbitTemplate(
-        @Qualifier("defaultRabbitTemplateConfigurer") RabbitTemplateConfigurer configurer,
-        @Qualifier("defaultRabbitCachingConnectionFactory") ConnectionFactory connectionFactory,
-        @Qualifier("defaultRabbitTemplateCustomizer") ObjectProvider<RabbitTemplateCustomizer> customizers,
-        @Qualifier("defaultRabbitReturnsCallback") ObjectProvider<ReturnsCallback> returnsCallback,
-        @Qualifier("defaultRabbitConfirmCallback") ObjectProvider<ConfirmCallback> confirmCallback,
-        @Qualifier("defaultRabbitRecoveryCallback") ObjectProvider<RecoveryCallback<?>> recoveryCallback)
+        @Qualifier(rabbitTemplateConfigurerBeanName) RabbitTemplateConfigurer configurer,
+        @Qualifier(rabbitCachingConnectionFactoryBeanName) ConnectionFactory connectionFactory,
+        @Qualifier(rabbitTemplateCustomizerBeanName) ObjectProvider<RabbitTemplateCustomizer> customizers,
+        @Qualifier(rabbitReturnsCallbackBeanName) ObjectProvider<ReturnsCallback> returnsCallback,
+        @Qualifier(rabbitConfirmCallbackBeanName) ObjectProvider<ConfirmCallback> confirmCallback,
+        @Qualifier(rabbitRecoveryCallbackBeanName) ObjectProvider<RecoveryCallback<?>> recoveryCallback)
     {
         return super.rabbitTemplate(configurer, connectionFactory, customizers, returnsCallback, confirmCallback, recoveryCallback);
     }
     
     @Primary
     @Override
-    @Bean("defaultRabbitReturnsCallback")
-    @ConditionalOnMissingBean(name = "defaultRabbitReturnsCallback")
+    @Bean(rabbitReturnsCallbackBeanName)
+    @ConditionalOnMissingBean(name = rabbitReturnsCallbackBeanName)
     public ReturnsCallback returnsCallback()
     {
         return super.returnsCallback();
@@ -73,8 +86,8 @@ public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProduce
     
     @Primary
     @Override
-    @Bean("defaultRabbitConfirmCallback")
-    @ConditionalOnMissingBean(name = "defaultRabbitConfirmCallback")
+    @Bean(rabbitConfirmCallbackBeanName)
+    @ConditionalOnMissingBean(name = rabbitConfirmCallbackBeanName)
     public ConfirmCallback confirmCallback()
     {
         return super.confirmCallback();
@@ -82,8 +95,8 @@ public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProduce
     
     @Primary
     @Override
-    @Bean("defaultRabbitRecoveryCallback")
-    @ConditionalOnMissingBean(name = "defaultRabbitRecoveryCallback")
+    @Bean(rabbitRecoveryCallbackBeanName)
+    @ConditionalOnMissingBean(name = rabbitRecoveryCallbackBeanName)
     public <T> RecoveryCallback<T> recoveryCallback()
     {
         return super.recoveryCallback();
@@ -91,33 +104,33 @@ public class SoaDefaultRabbitmqProducerConfig extends SoaAbstractRabbitmqProduce
     
     @Primary
     @Override
-    @Bean("defaultRabbitMessagingTemplate")
-    public RabbitMessagingTemplate rabbitMessagingTemplate(@Qualifier("defaultRabbitTemplate") RabbitTemplate rabbitTemplate)
+    @Bean(rabbitMessagingTemplateBeanName)
+    public RabbitMessagingTemplate rabbitMessagingTemplate(@Qualifier(rabbitTemplateBeanName) RabbitTemplate rabbitTemplate)
     {
         return super.rabbitMessagingTemplate(rabbitTemplate);
     }
     
     @Primary
     @Override
-    @Bean("defaultRabbitStreamTemplateConfigurer")
+    @Bean(rabbitStreamTemplateConfigurerBeanName)
     @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
-    @ConditionalOnMissingBean(name = "defaultRabbitStreamTemplateConfigurer")
+    @ConditionalOnMissingBean(name = rabbitStreamTemplateConfigurerBeanName)
     public RabbitStreamTemplateConfigurer rabbitStreamTemplateConfigurer(
         ObjectProvider<MessageConverter> messageConverter,
         ObjectProvider<StreamMessageConverter> streamMessageConverter,
-        @Qualifier("defaultRabbitStreamProducerCustomizer")ObjectProvider<ProducerCustomizer> producerCustomizer)
+        @Qualifier(rabbitStreamProducerCustomizerBeanName)ObjectProvider<ProducerCustomizer> producerCustomizer)
     {
         return super.rabbitStreamTemplateConfigurer(messageConverter, streamMessageConverter, producerCustomizer);
     }
 
     @Primary
     @Override
-    @Bean("defaultRabbitStreamTemplate")
+    @Bean(rabbitStreamTemplateBeanName)
     @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
     @ConditionalOnProperty(prefix = "spring.rabbitmq.stream", name = "name")
     public RabbitStreamTemplate rabbitStreamTemplate(
-        @Qualifier("defaultRabbitStreamEnvironment") Environment rabbitStreamEnvironment,
-        @Qualifier("defaultRabbitStreamTemplateConfigurer") RabbitStreamTemplateConfigurer configurer)
+        @Qualifier(rabbitStreamEnvironmentBeanName) Environment rabbitStreamEnvironment,
+        @Qualifier(rabbitStreamTemplateConfigurerBeanName) RabbitStreamTemplateConfigurer configurer)
     {
         return super.rabbitStreamTemplate(rabbitStreamEnvironment, configurer);
     }

@@ -26,39 +26,39 @@ public class AppConfig
     public static final String[] REGION_QUEUES          = {"QUE_REGION_0", "QUE_REGION_1", "QUE_REGION_2", "QUE_REGION_3"};
     
     @Autowired
-    @Qualifier("defaultAmqpAdmin")
-    AmqpAdmin defaultAmqpAdmin;
+    @Qualifier("defaultRabbitAmqpAdmin")
+    private AmqpAdmin defaultRabbitAmqpAdmin;
     @Autowired
-    @Qualifier("firstAmqpAdmin")
-    AmqpAdmin firstAmqpAdmin;
+    @Qualifier("firstRabbitAmqpAdmin")
+    private AmqpAdmin firstRabbitAmqpAdmin;
     @Autowired
-    @Qualifier("secondAmqpAdmin")
-    AmqpAdmin secondAmqpAdmin;
+    @Qualifier("secondRabbitAmqpAdmin")
+    private AmqpAdmin secondRabbitAmqpAdmin;
     @Autowired
-    @Qualifier("thirdAmqpAdmin")
-    AmqpAdmin thirdAmqpAdmin;
+    @Qualifier("thirdRabbitAmqpAdmin")
+    private AmqpAdmin thirdRabbitAmqpAdmin;
     
     @Bean
     TopicExchange region0TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[0]).durable(true).admins(defaultAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[0]).durable(true).admins(defaultRabbitAmqpAdmin).build();
     }
     
     @Bean
     TopicExchange region1TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[1]).durable(true).admins(firstAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[1]).durable(true).admins(firstRabbitAmqpAdmin).build();
     }
     
     @Bean
     TopicExchange region2TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[2]).durable(true).admins(secondAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[2]).durable(true).admins(secondRabbitAmqpAdmin).build();
     }
     
     @Bean
     TopicExchange region3TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[3]).durable(true).admins(thirdAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[3]).durable(true).admins(thirdRabbitAmqpAdmin).build();
     }
 }

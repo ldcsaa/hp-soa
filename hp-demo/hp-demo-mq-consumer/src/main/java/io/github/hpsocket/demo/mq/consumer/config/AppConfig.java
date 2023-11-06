@@ -39,47 +39,47 @@ public class AppConfig
 
     
     @Autowired
-    @Qualifier("defaultAmqpAdmin")
-    AmqpAdmin defaultAmqpAdmin;
+    @Qualifier("defaultRabbitAmqpAdmin")
+    private AmqpAdmin defaultRabbitAmqpAdmin;
     @Autowired
-    @Qualifier("firstAmqpAdmin")
-    AmqpAdmin firstAmqpAdmin;
+    @Qualifier("firstRabbitAmqpAdmin")
+    private AmqpAdmin firstRabbitAmqpAdmin;
     @Autowired
-    @Qualifier("secondAmqpAdmin")
-    AmqpAdmin secondAmqpAdmin;
+    @Qualifier("secondRabbitAmqpAdmin")
+    private AmqpAdmin secondRabbitAmqpAdmin;
     @Autowired
-    @Qualifier("thirdAmqpAdmin")
-    AmqpAdmin thirdAmqpAdmin;
+    @Qualifier("thirdRabbitAmqpAdmin")
+    private AmqpAdmin thirdRabbitAmqpAdmin;
     
     @Bean
     TopicExchange region0TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[0]).durable(true).admins(defaultAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[0]).durable(true).admins(defaultRabbitAmqpAdmin).build();
     }
     
     @Bean
     TopicExchange region1TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[1]).durable(true).admins(firstAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[1]).durable(true).admins(firstRabbitAmqpAdmin).build();
     }
     
     @Bean
     TopicExchange region2TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[2]).durable(true).admins(secondAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[2]).durable(true).admins(secondRabbitAmqpAdmin).build();
     }
     
     @Bean
     TopicExchange region3TopicExchange()
     {
-        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[3]).durable(true).admins(thirdAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(REGION_EXCHANGES[3]).durable(true).admins(thirdRabbitAmqpAdmin).build();
     }
     
     @Bean
     Queue region0Queue()
     {
         Queue queue = QueueBuilder.durable(REGION_QUEUES[0]).maxLength(1000000).maxLengthBytes(300485760).build();
-        queue.setAdminsThatShouldDeclare(defaultAmqpAdmin);
+        queue.setAdminsThatShouldDeclare(defaultRabbitAmqpAdmin);
         
         return queue;
     }
@@ -88,7 +88,7 @@ public class AppConfig
     Queue region1Queue()
     {
         Queue queue = QueueBuilder.durable(REGION_QUEUES[1]).maxLength(1000000).maxLengthBytes(300485760).build();
-        queue.setAdminsThatShouldDeclare(firstAmqpAdmin);
+        queue.setAdminsThatShouldDeclare(firstRabbitAmqpAdmin);
         
         return queue;
     }
@@ -97,7 +97,7 @@ public class AppConfig
     Queue region2Queue()
     {
         Queue queue = QueueBuilder.durable(REGION_QUEUES[2]).maxLength(1000000).maxLengthBytes(300485760).build();
-        queue.setAdminsThatShouldDeclare(secondAmqpAdmin);
+        queue.setAdminsThatShouldDeclare(secondRabbitAmqpAdmin);
         
         return queue;
     }
@@ -106,7 +106,7 @@ public class AppConfig
     Queue region3Queue()
     {
         Queue queue = QueueBuilder.durable(REGION_QUEUES[3]).maxLength(1000000).maxLengthBytes(300485760).build();
-        queue.setAdminsThatShouldDeclare(thirdAmqpAdmin);
+        queue.setAdminsThatShouldDeclare(thirdRabbitAmqpAdmin);
         
         return queue;
     }
@@ -115,7 +115,7 @@ public class AppConfig
     Binding region0Binding(@Qualifier("region0Queue") Queue queue, @Qualifier("region0TopicExchange") TopicExchange exchange)
     {
         Binding binding = BindingBuilder.bind(queue).to(exchange).with(CREATE_ORDER_ROUTING_KEY);
-        binding.setAdminsThatShouldDeclare(defaultAmqpAdmin);
+        binding.setAdminsThatShouldDeclare(defaultRabbitAmqpAdmin);
         
         return binding;
     }
@@ -124,7 +124,7 @@ public class AppConfig
     Binding region1Binding(@Qualifier("region1Queue") Queue queue, @Qualifier("region1TopicExchange") TopicExchange exchange)
     {
         Binding binding = BindingBuilder.bind(queue).to(exchange).with(CREATE_ORDER_ROUTING_KEY);
-        binding.setAdminsThatShouldDeclare(firstAmqpAdmin);
+        binding.setAdminsThatShouldDeclare(firstRabbitAmqpAdmin);
         
         return binding;
     }
@@ -133,7 +133,7 @@ public class AppConfig
     Binding region2Binding(@Qualifier("region2Queue") Queue queue, @Qualifier("region2TopicExchange") TopicExchange exchange)
     {
         Binding binding = BindingBuilder.bind(queue).to(exchange).with(CREATE_ORDER_ROUTING_KEY);
-        binding.setAdminsThatShouldDeclare(secondAmqpAdmin);
+        binding.setAdminsThatShouldDeclare(secondRabbitAmqpAdmin);
         
         return binding;
     }
@@ -142,7 +142,7 @@ public class AppConfig
     Binding region3Binding(@Qualifier("region3Queue") Queue queue, @Qualifier("region3TopicExchange") TopicExchange exchange)
     {
         Binding binding = BindingBuilder.bind(queue).to(exchange).with(CREATE_ORDER_ROUTING_KEY);
-        binding.setAdminsThatShouldDeclare(thirdAmqpAdmin);
+        binding.setAdminsThatShouldDeclare(thirdRabbitAmqpAdmin);
         
         return binding;
     }

@@ -50,11 +50,17 @@ import io.github.hpsocket.soa.starter.web.properties.WebProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties.ProxyProperties;
 
+import static io.github.hpsocket.soa.starter.web.config.ContextConfig.*;
+
 /** <b>HP-SOA Web 基础配置</b> */
 @AutoConfiguration
 @EnableConfigurationProperties({WebProperties.class, SecurityProperties.class})
 public class WebConfig implements WebMvcConfigurer
 {
+    public static final String readOnlyContextRefreshedEventListenerBeanName = "readOnlyContextRefreshedEventListener";
+    public static final String readOnlyRefreshEventListenerBeanName = "readOnlyRefreshEventListener";
+    public static final String asyncThreadPoolExecutorBeanName = "asyncThreadPoolExecutor";
+    
     private final WebProperties webProperties;
     private final SecurityProperties securityProperties;
     
@@ -74,16 +80,16 @@ public class WebConfig implements WebMvcConfigurer
     }
     
     /** {@linkplain ReadOnlyContextRefreshedEventListener} 应用程序监听器配置 */
-    @DependsOn("springContextHolder")
-    @Bean("readOnlyContextRefreshedEventListener")
+    @DependsOn(springContextHolderBeanName)
+    @Bean(readOnlyContextRefreshedEventListenerBeanName)
     public ReadOnlyContextRefreshedEventListener readOnlyContextRefreshedEventListener()
     {
         return new ReadOnlyContextRefreshedEventListener();
     }
 
     /** {@linkplain ReadOnlyRefreshEventListener} 应用程序监听器配置 */
-    @DependsOn("springContextHolder")
-    @Bean("readOnlyRefreshEventListener")
+    @DependsOn(springContextHolderBeanName)
+    @Bean(readOnlyRefreshEventListenerBeanName)
     public ReadOnlyRefreshEventListener readOnlyRefreshEventListener()
     {
         return new ReadOnlyRefreshEventListener();
@@ -148,8 +154,8 @@ public class WebConfig implements WebMvcConfigurer
     }
     
     /** {@linkplain AsyncThreadPoolExecutor} 异步线程池配置 */
-    @Bean("asyncThreadPoolExecutor")
-    @ConditionalOnMissingBean(name = "asyncThreadPoolExecutor")
+    @Bean(asyncThreadPoolExecutorBeanName)
+    @ConditionalOnMissingBean(name = asyncThreadPoolExecutorBeanName)
     @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
     public AsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
     {

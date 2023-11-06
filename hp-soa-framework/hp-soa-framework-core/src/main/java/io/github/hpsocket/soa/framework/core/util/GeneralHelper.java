@@ -42,7 +42,6 @@ public class GeneralHelper
 {
     private static final String DELIMITERR_CHARS    = " ,\t\r\n\f";
     
-
     private static final Pattern PATTERN_NUMERIC    = Pattern.compile("^0$|^\\-?[1-9]+[0-9]*$");
     private static final Pattern PATTERN_EMAIL_ADDR = Pattern.compile("^[a-z0-9_\\-]+(\\.[_a-z0-9\\-]+)*@([_a-z0-9\\-]+\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)$");
     private static final Pattern PATTERN_IP_ADDR    = Pattern.compile("^([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$");

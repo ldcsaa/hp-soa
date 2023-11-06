@@ -32,8 +32,8 @@
         <module>hp-soa-starter-job-xxljob</module>
         <module>hp-soa-starter-rabbitmq</module>
         <module>hp-soa-starter-seata</module>
-        <module>hp-soa-starter-leaf</module>
         <module>hp-soa-starter-mqtt</module>
+        <module>hp-soa-starter-leaf</module>
     </modules>
     
     <dependencyManagement>
