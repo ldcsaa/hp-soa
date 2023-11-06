@@ -2,6 +2,7 @@ package io.github.hpsocket.soa.starter.kafka.producer.sender;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -74,7 +75,18 @@ abstract public class AbstractKafkaDomainEventSender<T extends DomainEvent>
                     ProducerRecord<String, String> rc = event.toProducerRecord(corId);
                     KafkaTemplate<String, String> template = getKafkaTemplate(event);
                     
-                    template.send(rc).get();
+                    template.executeInTransaction(op -> 
+                    {
+                        try
+                        {
+                            return op.send(rc).get();
+                        }
+                        catch(InterruptedException | ExecutionException e)
+                        {
+                            throw new RuntimeException(e.getMessage(), e);
+                        }
+                    });
+                    
                     succ.add(id);
                 }
                 catch(Exception e)

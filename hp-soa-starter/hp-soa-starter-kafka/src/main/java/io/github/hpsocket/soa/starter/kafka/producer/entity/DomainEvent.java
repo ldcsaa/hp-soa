@@ -45,24 +45,24 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
     private String topic;
 
     /**
-     * 分区
+     * 主题分区
      */
-    private Integer partition;
+    private Integer topicPartition;
 
     /**
-     * 时间戳
+     * 消息时间戳
      */
-    private Long timestamp;
+    private Long msgTimestamp;
 
     /**
      * 消息键
      */
-    private String key;
+    private String msgKey;
 
     /**
      * 消息头
      */
-    private String headers;
+    private String msgHeaders;
 
     /**
      * 事件唯一Id
@@ -117,7 +117,7 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
     
     public ProducerRecord<String, String> toProducerRecord(String correlationId)
     {
-        ProducerRecord<String, String> rc = new ProducerRecord<>(topic, partition, timestamp, key, msg);
+        ProducerRecord<String, String> rc = new ProducerRecord<>(topic, topicPartition, msgTimestamp, msgKey, msg);
         Headers rcHeaders = rc.headers();
         
         KafkaHelper.addHeader(rcHeaders, KafkaConstant.HEADER_DOMAIN_NAME, domainName);
@@ -128,9 +128,9 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
         if(GeneralHelper.isStrNotEmpty(correlationId))
             rcHeaders.add(KafkaConstant.HEADER_CORRELA_DATA_ID, correlationId.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
         
-        if(GeneralHelper.isStrNotEmpty(headers))
+        if(GeneralHelper.isStrNotEmpty(msgHeaders))
         {
-            JSONObject json = JSON.parseObject(headers);
+            JSONObject json = JSON.parseObject(msgHeaders);
             json.forEach((k, v) -> KafkaHelper.addHeader(rcHeaders, k, v));
         }
         

@@ -34,6 +34,7 @@
         <module>hp-demo-mqtt</module>
         <module>hp-demo-mq-producer</module>
         <module>hp-demo-mq-consumer</module>
+        <module>hp-demo-kafka</module>
     </modules>
 
     <dependencyManagement>
