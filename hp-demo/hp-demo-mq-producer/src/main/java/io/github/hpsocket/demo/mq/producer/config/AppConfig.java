@@ -14,6 +14,8 @@ import io.github.hpsocket.soa.starter.rabbitmq.annotation.EnableSoaRabbitmqProdu
 @Configuration
 /* enable rabbitmq producer */
 @EnableSoaRabbitmqProducer
+/* enable rabbitmq producer and consumer */
+//@EnableSoaRabbitmqAll
 /* default mybatis mapper scan package -> ${hp.soa.data.mysql.mapper-scan.base-package} */
 @MapperScan("io.github.hpsocket.demo.mq.producer.mapper")
 public class AppConfig

@@ -164,6 +164,7 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
             .setContentEncoding(WebServerHelper.DEFAULT_CHARSET)
             .setContentType(MessageProperties.CONTENT_TYPE_JSON)
             .setMessageId(msgId)
+            
             .setHeader(HEADER_DOMAIN_NAME, domainName)
             .setHeader(HEADER_EVENT_NAME, eventName)
             .setHeader(HEADER_MSG_ID, msgId)

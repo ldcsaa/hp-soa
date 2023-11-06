@@ -17,6 +17,8 @@ import io.github.hpsocket.soa.starter.rabbitmq.annotation.EnableSoaRabbitmqConsu
 @Configuration
 /* enable rabbitmq consumer */
 @EnableSoaRabbitmqConsumer
+/* enable rabbitmq producer and consumer */
+//@EnableSoaRabbitmqAll
 public class AppConfig
 {
     public static final String DOMAIN_NAME                = "demo.order";

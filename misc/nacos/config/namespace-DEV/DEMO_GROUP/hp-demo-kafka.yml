@@ -1,0 +1,4 @@
+spring.kafka:
+  consumer:
+    # 默认消费者组ID：同一组中的consumer不会读取到同一个消息
+    group-id: demo

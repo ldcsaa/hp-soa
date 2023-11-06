@@ -70,31 +70,31 @@ public class RabbitmqListenerMdcInspector
             if(obj instanceof Message msg)
             {
                 MessageProperties properties = msg.getMessageProperties();
-                messageId         = properties.getMessageId();
-                correlationId    = properties.getCorrelationId();
-                sourceRequestId    = properties.getHeader(HEADER_SOURCE_REQUEST_ID);
-                domainName        = properties.getHeader(HEADER_DOMAIN_NAME);
-                eventName        = properties.getHeader(HEADER_EVENT_NAME);                
+                messageId       = properties.getMessageId();
+                correlationId   = properties.getCorrelationId();
+                sourceRequestId = properties.getHeader(HEADER_SOURCE_REQUEST_ID);
+                domainName      = properties.getHeader(HEADER_DOMAIN_NAME);
+                eventName       = properties.getHeader(HEADER_EVENT_NAME);                
             }
             else if(obj instanceof org.springframework.messaging.Message msg)
             {
                 MessageHeaders headers = msg.getHeaders();
-                messageId         = (String)headers.get(HEADER_MSG_ID);
-                correlationId    = (String)headers.get(HEADER_CORRELA_DATA_ID);
-                sourceRequestId    = (String)headers.get(HEADER_SOURCE_REQUEST_ID);
-                domainName        = (String)headers.get(HEADER_DOMAIN_NAME);
-                eventName        = (String)headers.get(HEADER_EVENT_NAME);
+                messageId       = (String)headers.get(HEADER_MSG_ID);
+                correlationId   = (String)headers.get(HEADER_CORRELA_DATA_ID);
+                sourceRequestId = (String)headers.get(HEADER_SOURCE_REQUEST_ID);
+                domainName      = (String)headers.get(HEADER_DOMAIN_NAME);
+                eventName       = (String)headers.get(HEADER_EVENT_NAME);
             }
             else if(obj instanceof com.rabbitmq.stream.Message msg)
             {
                 Properties props = msg.getProperties();
                 Map<String, Object> appProps = msg.getApplicationProperties();
 
-                messageId        = props.getMessageIdAsString();
-                correlationId    = props.getCorrelationIdAsString();
-                sourceRequestId    = (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
-                domainName        = (String)appProps.get(HEADER_DOMAIN_NAME);
-                eventName        = (String)appProps.get(HEADER_EVENT_NAME);                
+                messageId       = props.getMessageIdAsString();
+                correlationId   = props.getCorrelationIdAsString();
+                sourceRequestId = (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
+                domainName      = (String)appProps.get(HEADER_DOMAIN_NAME);
+                eventName       = (String)appProps.get(HEADER_EVENT_NAME);                
             }
             
             if(GeneralHelper.isStrNotEmpty(messageId))
