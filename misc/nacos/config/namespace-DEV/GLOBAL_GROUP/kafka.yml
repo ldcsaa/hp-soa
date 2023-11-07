@@ -51,7 +51,7 @@ spring.kafka:
   listener:
     concurrency: 3
     # 消费模式（可选值：SINGLE、BATCH）
-    # 注意：SINGLE模式需要用单条消息监听器接收，BATCH模式需要用多条消息监听器接收，否则会报各种消息转换异常
+    # 注意：SINGLE模式需要用单条消息监听器接收，BATCH模式需要用批量消息监听器接收，否则会报各种消息转换异常
     type: SINGLE
     # 确认模式
     # RECORD：当每一条记录被Listener处理之后提交
