@@ -30,7 +30,7 @@ public class SoaSecondMqttConfig extends SoaAbstractMqttConfig
     public static final String mqttClientBeanName = "secondMqttClient";
     public static final String mqttMessagePublisherBeanName = "secondMqttMessagePublisher";
     public static final String mqttMessageListenerBeanName = "secondMqttMessageListener";
-    public static final String mqttPropertiesCustomizerBeanName = "secondMqttPropertiesCustomizer";
+    public static final String mqttPropertiesCustomizersBeanName = "secondMqttPropertiesCustomizers";
     public static final String mqttSocketFactoryBeanName = "secondMqttSocketFactory";
     public static final String mqttHostnameVerifierBeanName = "secondMqttHostnameVerifier";
     
@@ -64,7 +64,7 @@ public class SoaSecondMqttConfig extends SoaAbstractMqttConfig
         @Qualifier(mqttClientPersistenceBeanName) MqttClientPersistence mqttClientPersistence,
         @Qualifier(mqttMessageListenerBeanName) ObjectProvider<MqttMessageListener> messageListenerProvider,
         @Qualifier(mqttCallbackBeanName) ObjectProvider<MqttCallback> mqttCallbackProvider,
-        @Qualifier(mqttPropertiesCustomizerBeanName) ObjectProvider<List<MqttPropertiesCustomizer>> mqttPropertiesCustomizerProviders,
+        @Qualifier(mqttPropertiesCustomizersBeanName) ObjectProvider<List<MqttPropertiesCustomizer>> mqttPropertiesCustomizerProviders,
         @Qualifier(mqttSocketFactoryBeanName) ObjectProvider<SocketFactory> socketFactoryProvider,
         @Qualifier(mqttHostnameVerifierBeanName) ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {

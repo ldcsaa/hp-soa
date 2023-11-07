@@ -57,7 +57,7 @@ public abstract class SoaAbstractMqttConfig
         ObjectProvider<SocketFactory> socketFactoryProvider,
         ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
-        List<MqttPropertiesCustomizer> customiers = mqttPropertiesCustomizerProviders.getIfAvailable();
+        List<MqttPropertiesCustomizer> customiers = mqttPropertiesCustomizerProviders.getIfUnique();
         
         if(customiers != null)
             customiers.forEach((c) -> c.customize(mqttProperties));
