@@ -2,7 +2,7 @@
 package io.github.hpsocket.soa.starter.rabbitmq.producer.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import org.slf4j.MDC;
 import org.springframework.amqp.core.Message;
@@ -77,7 +77,7 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
     /**
      * 最后发送时间
      */
-    private LocalDateTime lastSendTime;
+    private ZonedDateTime lastSendTime;
 
     public DomainEvent()
     {

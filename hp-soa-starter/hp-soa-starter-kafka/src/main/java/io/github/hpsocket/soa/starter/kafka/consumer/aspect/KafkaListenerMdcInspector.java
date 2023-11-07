@@ -1,5 +1,7 @@
 package io.github.hpsocket.soa.starter.kafka.consumer.aspect;
 
+import java.util.Iterator;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Headers;
 import org.apache.logging.log4j.core.config.Order;
@@ -12,6 +14,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
+
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
@@ -19,8 +22,6 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.kafka.util.KafkaConstant;
 import io.github.hpsocket.soa.starter.kafka.util.KafkaHelper;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Iterator;
 
 /** <b>Kafka Listener MDC 拦截器</b><br>
  * 用于注入 MDC 调用链跟踪信息
@@ -77,7 +78,7 @@ public class KafkaListenerMdcInspector
                 sourceRequestId = GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_SOURCE_REQUEST_ID));
                 domainName      = GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_DOMAIN_NAME));
                 eventName       = GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_EVENT_NAME));
-                correlationId   = (String)headers.get(KafkaConstant.HEADER_CORRELA_DATA_ID);
+                correlationId   = GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELA_DATA_ID));                    
             }
             else if(obj instanceof ConsumerRecord crc)
             {
@@ -98,25 +99,31 @@ public class KafkaListenerMdcInspector
         
         mdcAttr.putMdc();
         
-        StopWatch sw = new StopWatch(listenerId);
+        StopWatch sw = null;
         
         try
         {
             if(log.isTraceEnabled())
+            {
                 log.trace("kafka listener start consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
                     , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName);
-            
-            sw.start();
+                
+                sw = new StopWatch(listenerId);
+                sw.start();
+            }
             
             return joinPoint.proceed();
         }
         finally
         {
-            sw.stop();
             
             if(log.isTraceEnabled())
+            {
+                sw.stop();
+
                 log.trace("kafka listener end consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
-                    , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getLastTaskTimeMillis());                
+                    , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getLastTaskTimeMillis());
+            }
 
             mdcAttr.removeMdc();
         }

@@ -342,8 +342,10 @@ public class PoiHelper
             cell.setCellValue(((Date)value));
         else if(value instanceof LocalDate)
             cell.setCellValue(Date.from(((LocalDate)value).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        else if(value instanceof LocalDateTime)
-            cell.setCellValue(GregorianCalendar.from(ZonedDateTime.of(((LocalDateTime)value), ZoneId.systemDefault())));
+        else if(value instanceof LocalDateTime dt)
+            cell.setCellValue(GregorianCalendar.from(ZonedDateTime.of((dt), ZoneId.systemDefault())));
+        else if(value instanceof ZonedDateTime dt)
+            cell.setCellValue(GregorianCalendar.from(dt));
         else if(value instanceof Calendar)
             cell.setCellValue(((Calendar)value));
         else

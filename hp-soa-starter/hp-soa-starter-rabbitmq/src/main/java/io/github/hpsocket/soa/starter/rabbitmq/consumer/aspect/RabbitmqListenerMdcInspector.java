@@ -105,26 +105,31 @@ public class RabbitmqListenerMdcInspector
         
         mdcAttr.putMdc();
         
-        StopWatch sw = new StopWatch(listenerId);
+        StopWatch sw = null;
         
         try
         {
             if(log.isTraceEnabled())
+            {
                 log.trace("rabbit listener start consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
                     , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName);
             
-            sw.start();
+                sw = new StopWatch(listenerId);
+                sw.start();
+            }
             
             return joinPoint.proceed();
         }
         finally
         {
-            sw.stop();
-            
             if(log.isTraceEnabled())
+            {
+                sw.stop();
+
                 log.trace("rabbit listener end consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
                     , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getLastTaskTimeMillis());                
-
+            }
+            
             mdcAttr.removeMdc();
         }
     }

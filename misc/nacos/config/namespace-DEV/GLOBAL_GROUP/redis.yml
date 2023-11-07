@@ -8,7 +8,7 @@ spring.data.redis:
 
 ## （默认 Redis 之外）第一个 Redis 配置
 spring.data.redis-first:
-  host: 192.168.111.222
+  host: 192.168.56.23
   port: 6379
   #username: 
   #password: 
@@ -16,7 +16,7 @@ spring.data.redis-first:
 
 ## （默认 Redis 之外）第二个 Redis 配置
 #spring.data.redis-second:
-#  host: 192.168.56.23
+#  host: 192.168.111.222
 #  port: 6379
 #  #username: 
 #  #password: 

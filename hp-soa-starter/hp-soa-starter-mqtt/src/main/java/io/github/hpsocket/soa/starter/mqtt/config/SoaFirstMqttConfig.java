@@ -1,5 +1,7 @@
 package io.github.hpsocket.soa.starter.mqtt.config;
 
+import java.util.List;
+
 import javax.net.SocketFactory;
 import javax.net.ssl.HostnameVerifier;
 
@@ -63,14 +65,14 @@ public class SoaFirstMqttConfig extends SoaAbstractMqttConfig
         @Qualifier(mqttClientPersistenceBeanName) MqttClientPersistence mqttClientPersistence,
         @Qualifier(mqttMessageListenerBeanName) ObjectProvider<MqttMessageListener> messageListenerProvider,
         @Qualifier(mqttCallbackBeanName) ObjectProvider<MqttCallback> mqttCallbackProvider,
-        @Qualifier(mqttPropertiesCustomizerBeanName) ObjectProvider<MqttPropertiesCustomizer> mqttPropertiesCustomizerProvider,
+        @Qualifier(mqttPropertiesCustomizerBeanName) ObjectProvider<List<MqttPropertiesCustomizer>> mqttPropertiesCustomizerProviders,
         @Qualifier(mqttSocketFactoryBeanName) ObjectProvider<SocketFactory> socketFactoryProvider,
         @Qualifier(mqttHostnameVerifierBeanName) ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
         return super.mqttClient(mqttClientPersistence,
                                 messageListenerProvider,
                                 mqttCallbackProvider,
-                                mqttPropertiesCustomizerProvider,
+                                mqttPropertiesCustomizerProviders,
                                 socketFactoryProvider,
                                 hostnameVerifierProvider);
     }

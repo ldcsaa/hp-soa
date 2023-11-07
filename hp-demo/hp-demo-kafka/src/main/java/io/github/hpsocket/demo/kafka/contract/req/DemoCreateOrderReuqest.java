@@ -16,7 +16,7 @@ import lombok.Setter;
 public class DemoCreateOrderReuqest
 {
     @NotNull(message = "区域不能为空")
-    @Range(min = 0, max = 5, message = "区域超出范围 [0 ~ 3]")
+    @Range(min = 0, max = 2, message = "区域超出范围 [0 ~ 3]")
     @Schema(description = "区域", example = "1", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private Integer regionId;
 

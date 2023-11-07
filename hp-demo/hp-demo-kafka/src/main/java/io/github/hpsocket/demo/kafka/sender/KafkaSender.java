@@ -40,7 +40,6 @@ public class KafkaSender
         event.setMsgTimestamp(null);
         event.setMsgKey(IdGenerator.nextIdStr());
         event.setMsgHeaders(headers.toString());
-        //event.setSourceRequestId(null);
         event.setMsg(JSONObject.toJSONString(order));
         
         try

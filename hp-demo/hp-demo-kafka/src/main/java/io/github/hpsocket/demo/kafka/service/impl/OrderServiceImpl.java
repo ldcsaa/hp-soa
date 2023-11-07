@@ -39,11 +39,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         event.setDomainName(AppConfig.DOMAIN_NAME);
         event.setEventName(AppConfig.CREATE_ORDER_EVENT_NAME);
         event.setTopic(AppConfig.TOPICS[event.getRegionId()]);
-        event.setTopicPartition(null);
-        event.setMsgTimestamp(System.currentTimeMillis());
+        //event.setTopicPartition(null);
+        //event.setMsgTimestamp(System.currentTimeMillis());
         event.setMsgKey(IdGenerator.nextIdStr());
         event.setMsgHeaders(headers.toString());
-        event.setSourceRequestId(null);
         event.setMsg(JSONObject.toJSONString(order));
         
         demoEventService.save(event);

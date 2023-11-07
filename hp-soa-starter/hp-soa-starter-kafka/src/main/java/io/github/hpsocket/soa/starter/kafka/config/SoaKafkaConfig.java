@@ -20,7 +20,7 @@ import io.github.hpsocket.soa.starter.kafka.consumer.aspect.KafkaListenerMdcInsp
 import io.github.hpsocket.soa.starter.kafka.consumer.aspect.KafkaListenerTracingInspector;
 import io.github.hpsocket.soa.starter.kafka.consumer.listener.KafkaReadOnlyEventListener;
 
-/** <b>HP-SOA Nacos 配置</b> */
+/** <b>HP-SOA Kafka 配置</b> */
 @AutoConfiguration(before = {KafkaAutoConfiguration.class})
 @MapperScan(basePackages = "io.github.hpsocket.soa.starter.kafka.producer.mapper")
 public class SoaKafkaConfig
@@ -44,6 +44,7 @@ public class SoaKafkaConfig
         return new KafkaListenerMdcInspector();
     }
     
+    /** 默认 Kafka Template，在事务环境下支持以非事方式务发送消息。 */
     @Bean
     @ConditionalOnMissingBean(KafkaTemplate.class)
     public KafkaTemplate<?, ?> allowNonTransactionalKafkaTemplate(
