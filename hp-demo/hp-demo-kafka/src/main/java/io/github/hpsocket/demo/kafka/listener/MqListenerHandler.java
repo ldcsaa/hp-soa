@@ -16,9 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import static io.github.hpsocket.demo.kafka.config.AppConfig.*;
 
-import java.util.List;
-import java.util.Map;
-
 @Slf4j
 @Component
 public class MqListenerHandler
@@ -73,11 +70,9 @@ public class MqListenerHandler
 //        msgs.forEach(msg -> logMessage(msg));
 //    }
 
-    @SuppressWarnings("unchecked")
     private void logMessage(Message<String> msg)
     {
         JSONObject json = new JSONObject();
-        
         MessageHeaders headers = msg.getHeaders();
         
         json.put("topic", headers.get(KafkaHeaders.RECEIVED_TOPIC));
@@ -87,23 +82,11 @@ public class MqListenerHandler
         json.put("groupId", headers.get(KafkaHeaders.GROUP_ID));
         json.put("key", headers.get(KafkaHeaders.RECEIVED_KEY));
         
-        List<Map<String, byte[]>> convertedHeaders = (List<Map<String, byte[]>>)headers.get(KafkaHeaders.BATCH_CONVERTED_HEADERS);
-        
-        if(GeneralHelper.isNotNullOrEmpty(convertedHeaders))
-        {
-            JSONObject h = new JSONObject();
-            json.put(KafkaHeaders.BATCH_CONVERTED_HEADERS, h);
-            
-            convertedHeaders.forEach(m -> m.forEach((k,  v) -> h.put(k, GeneralHelper.bytes2Str(v))));
-        }
-        else
-        {
-            json.put("messageId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_MSG_ID)));
-            json.put("sourceRequestId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_SOURCE_REQUEST_ID)));
-            json.put("domainName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_DOMAIN_NAME)));
-            json.put("eventName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_EVENT_NAME)));
-            json.put("correlationId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELA_DATA_ID)));                    
-        }
+        json.put("messageId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_MSG_ID)));
+        json.put("sourceRequestId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_SOURCE_REQUEST_ID)));
+        json.put("domainName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_DOMAIN_NAME)));
+        json.put("eventName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_EVENT_NAME)));
+        json.put("correlationId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELA_DATA_ID)));                    
 
         json.put("msg", JSONObject.parseObject(msg.getPayload()));
         
