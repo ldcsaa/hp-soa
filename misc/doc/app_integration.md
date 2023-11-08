@@ -79,8 +79,8 @@ hp.soa.web:
   http:
     # Cookie 生命周期（默认：10年）
     cookie-max-age: 315360000
-    # 日期时间类型默认序列化格式（默认："yyyy-MM-dd'T'HH:mm:ss.SSSXXX"）
-    default-date-time-format: "yyyy-MM-dd HH:mm:ss.SSS"
+    # 日期时间序列化格式（默认："yyyy-MM-dd'T'HH:mm:ss.SSSXXX"）
+    date-time-format: "yyyy-MM-dd HH:mm:ss.SSS"
   # 跨域访问配置
   cors:
     mapping: "/**"
