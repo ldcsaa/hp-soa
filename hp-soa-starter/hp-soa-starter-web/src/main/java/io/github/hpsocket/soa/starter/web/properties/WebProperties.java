@@ -64,7 +64,7 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
         public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
         
         private int cookieMaxAge = WebServerHelper.DEFAULT_COOKIE_MAX_AGE;
-        private String defaultDateTimeFormat = DEFAULT_DATE_TIME_FORMAT;
+        private String dateTimeFormat = DEFAULT_DATE_TIME_FORMAT;
     }
     
     @Getter
