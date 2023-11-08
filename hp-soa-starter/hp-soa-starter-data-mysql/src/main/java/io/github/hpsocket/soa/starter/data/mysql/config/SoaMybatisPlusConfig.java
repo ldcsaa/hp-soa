@@ -1,7 +1,7 @@
 
 package io.github.hpsocket.soa.starter.data.mysql.config;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -51,7 +51,7 @@ public class SoaMybatisPlusConfig
             @Override
             public void insertFill(MetaObject metaObject)
             {
-                ZonedDateTime now = ZonedDateTime.now();
+                OffsetDateTime now = OffsetDateTime.now();
                 fillStrategy(metaObject, CREATE_TIME_FIELD_NAME, now);
                 fillStrategy(metaObject, UPDATE_TIME_FIELD_NAME, now);
             }
@@ -59,7 +59,7 @@ public class SoaMybatisPlusConfig
             @Override
             public void updateFill(MetaObject metaObject)
             {
-                fillStrategy(metaObject, UPDATE_TIME_FIELD_NAME, ZonedDateTime.now());
+                fillStrategy(metaObject, UPDATE_TIME_FIELD_NAME, OffsetDateTime.now());
             }
         };
     }

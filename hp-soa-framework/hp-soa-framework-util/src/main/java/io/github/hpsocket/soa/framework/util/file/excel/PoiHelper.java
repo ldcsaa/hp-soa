@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -344,6 +345,8 @@ public class PoiHelper
             cell.setCellValue(Date.from(((LocalDate)value).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         else if(value instanceof LocalDateTime dt)
             cell.setCellValue(GregorianCalendar.from(ZonedDateTime.of((dt), ZoneId.systemDefault())));
+        else if(value instanceof OffsetDateTime dt)
+            cell.setCellValue(GregorianCalendar.from(dt.toZonedDateTime()));
         else if(value instanceof ZonedDateTime dt)
             cell.setCellValue(GregorianCalendar.from(dt));
         else if(value instanceof Calendar)

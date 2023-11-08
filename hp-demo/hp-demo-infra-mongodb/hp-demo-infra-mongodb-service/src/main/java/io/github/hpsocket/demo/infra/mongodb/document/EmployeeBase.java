@@ -1,7 +1,7 @@
 package io.github.hpsocket.demo.infra.mongodb.document;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -45,6 +45,6 @@ public class EmployeeBase
     @Field
     //@Field(type = FieldType.Date)
     @LastModifiedDate
-    private ZonedDateTime updateTime;
+    private OffsetDateTime updateTime;
 
 }

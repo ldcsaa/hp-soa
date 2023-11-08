@@ -1,6 +1,6 @@
 package io.github.hpsocket.soa.starter.kafka.producer.service.impl;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +48,7 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
                 .eq(T::getId, event.getId())
                 .setSql(SQL_SET_RETRIES)
                 .set(T::getSendFlag, SF_SENDING)
-                .set(T::getLastSendTime, ZonedDateTime.now())
+                .set(T::getLastSendTime, OffsetDateTime.now())
                 .update();
         }
         
@@ -89,7 +89,7 @@ public class DomainEventServiceImpl<M extends BaseMapper<T>, T extends DomainEve
                 .in(T::getId, events.stream().map(T::getId).toList())
                 .setSql(SQL_SET_RETRIES)
                 .set(T::getSendFlag, SF_SENDING)
-                .set(T::getLastSendTime, ZonedDateTime.now())
+                .set(T::getLastSendTime, OffsetDateTime.now())
                 .update();
         }
         

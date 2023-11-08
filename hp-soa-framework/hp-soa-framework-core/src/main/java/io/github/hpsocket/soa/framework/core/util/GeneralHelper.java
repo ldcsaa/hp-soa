@@ -15,6 +15,8 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -1523,13 +1525,37 @@ public class GeneralHelper
     }
     
     /** 根据前缀和日期时间生成名称，格式：$prefix&lt;yyyyMMdd&gt; */    
+    public static String genNameByDateTime(String prefix, LocalDateTime dateTime)
+    {
+        return genNameByDateTime(prefix, dateTime, "yyyyMMdd");
+    }
+    
+    /** 根据前缀和日期时间生成名称，格式：$prefix&lt;yyyyMMdd&gt; */    
     public static String genNameByDateTime(String prefix, ZonedDateTime dateTime)
     {
         return genNameByDateTime(prefix, dateTime, "yyyyMMdd");
     }
     
+    /** 根据前缀和日期时间生成名称，格式：$prefix&lt;yyyyMMdd&gt; */    
+    public static String genNameByDateTime(String prefix, OffsetDateTime dateTime)
+    {
+        return genNameByDateTime(prefix, dateTime, "yyyyMMdd");
+    }
+    
+    /** 根据前缀和日期时间生成名称，格式：$prefix&lt;dateTime.format(dateTimePattern)&gt; */    
+    public static String genNameByDateTime(String prefix, LocalDateTime dateTime, String dateTimePattern)
+    {
+        return prefix + dateTime.format(DateTimeFormatter.ofPattern(dateTimePattern));
+    }
+
     /** 根据前缀和日期时间生成名称，格式：$prefix&lt;dateTime.format(dateTimePattern)&gt; */    
     public static String genNameByDateTime(String prefix, ZonedDateTime dateTime, String dateTimePattern)
+    {
+        return prefix + dateTime.format(DateTimeFormatter.ofPattern(dateTimePattern));
+    }
+
+    /** 根据前缀和日期时间生成名称，格式：$prefix&lt;dateTime.format(dateTimePattern)&gt; */    
+    public static String genNameByDateTime(String prefix, OffsetDateTime dateTime, String dateTimePattern)
     {
         return prefix + dateTime.format(DateTimeFormatter.ofPattern(dateTimePattern));
     }

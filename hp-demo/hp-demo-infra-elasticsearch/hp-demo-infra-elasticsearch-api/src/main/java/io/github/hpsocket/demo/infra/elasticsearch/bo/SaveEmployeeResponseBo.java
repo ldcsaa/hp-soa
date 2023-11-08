@@ -1,7 +1,7 @@
 package io.github.hpsocket.demo.infra.elasticsearch.bo;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +20,5 @@ public class SaveEmployeeResponseBo implements Serializable
     private String docId;
     
     /** 更新时间 */
-    private ZonedDateTime updateTime;
+    private OffsetDateTime updateTime;
 }

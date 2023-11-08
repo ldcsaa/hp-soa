@@ -1,7 +1,7 @@
 package io.github.hpsocket.demo.bff.elasticsearch.contract.resp;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.alibaba.fastjson2.JSON;
@@ -49,7 +49,7 @@ public class FindEmployeeResponse
         private Boolean resign;
         private String deptNumber;
         private String deptName;
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSXXX")
-        private ZonedDateTime updateTime;
+        //@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        private OffsetDateTime updateTime;
     }
 }

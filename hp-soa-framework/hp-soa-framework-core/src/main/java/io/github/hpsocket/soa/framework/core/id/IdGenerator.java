@@ -1,6 +1,6 @@
 package io.github.hpsocket.soa.framework.core.id;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -50,6 +50,6 @@ public class IdGenerator
     /** 获取当前时间并格式化为字符串（精确到毫秒） */
     public static final String curMillisecondStr()
     {
-        return ZonedDateTime.now().format(DATE_TIME_PATTERN);
+        return OffsetDateTime.now().format(DATE_TIME_PATTERN);
     }
 }
