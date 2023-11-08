@@ -214,7 +214,7 @@ public class WebConfig implements WebMvcConfigurer
         
         String defaultDateTimeFormat = webProperties.getHttp().getDefaultDateTimeFormat();
         
-        if(GeneralHelper.isStrNotEmpty(defaultDateTimeFormat))
+        if(GeneralHelper.isStrEmpty(defaultDateTimeFormat))
             defaultDateTimeFormat = WebProperties.HttpProperties.DEFAULT_DATE_TIME_FORMAT;
         
         config.setDateFormat(defaultDateTimeFormat);
