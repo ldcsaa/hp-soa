@@ -3,15 +3,15 @@
 
  Source Server         : docker-mysql
  Source Server Type    : MySQL
- Source Server Version : 80033 (8.0.33)
+ Source Server Version : 80100 (8.1.0)
  Source Host           : 192.168.56.23:3306
  Source Schema         : soa-demo_db
 
  Target Server Type    : MySQL
- Target Server Version : 80033 (8.0.33)
+ Target Server Version : 80100 (8.1.0)
  File Encoding         : 65001
 
- Date: 14/09/2023 17:41:19
+ Date: 06/11/2023 19:32:30
 */
 
 SET NAMES utf8mb4;
@@ -46,6 +46,40 @@ CREATE TABLE `t_demo_event`  (
 
 -- ----------------------------
 -- Records of t_demo_event
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_kafka_demo_event
+-- ----------------------------
+DROP TABLE IF EXISTS `t_kafka_demo_event`;
+CREATE TABLE `t_kafka_demo_event`  (
+  `id` bigint NOT NULL,
+  `biz_id` bigint NOT NULL,
+  `region_id` int NOT NULL,
+  `domain_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `event_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `topic` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `topic_partition` int NULL DEFAULT NULL,
+  `msg_timestamp` bigint NULL DEFAULT NULL,
+  `msg_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `msg_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `msg_headers` json NULL,
+  `msg` json NOT NULL,
+  `source_request_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `send_flag` int NOT NULL DEFAULT 0,
+  `retries` int NOT NULL DEFAULT 0,
+  `last_send_time` timestamp(3) NULL DEFAULT NULL,
+  `deleted` tinyint NOT NULL DEFAULT 0,
+  `create_time` timestamp(3) NOT NULL,
+  `update_time` timestamp(3) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `ux_msg_id`(`msg_id` ASC) USING BTREE,
+  INDEX `ix_id_send_flag`(`id` ASC, `send_flag` ASC) USING BTREE,
+  INDEX `ix_last_send_time`(`last_send_time` ASC, `send_flag` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_kafka_demo_event
 -- ----------------------------
 
 -- ----------------------------

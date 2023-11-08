@@ -1,4 +1,6 @@
 package io.github.hpsocket.soa.starter.mqtt.config;
+import java.util.List;
+
 import javax.net.SocketFactory;
 import javax.net.ssl.HostnameVerifier;
 
@@ -28,7 +30,7 @@ public class SoaSecondMqttConfig extends SoaAbstractMqttConfig
     public static final String mqttClientBeanName = "secondMqttClient";
     public static final String mqttMessagePublisherBeanName = "secondMqttMessagePublisher";
     public static final String mqttMessageListenerBeanName = "secondMqttMessageListener";
-    public static final String mqttPropertiesCustomizerBeanName = "secondMqttPropertiesCustomizer";
+    public static final String mqttPropertiesCustomizersBeanName = "secondMqttPropertiesCustomizers";
     public static final String mqttSocketFactoryBeanName = "secondMqttSocketFactory";
     public static final String mqttHostnameVerifierBeanName = "secondMqttHostnameVerifier";
     
@@ -62,14 +64,14 @@ public class SoaSecondMqttConfig extends SoaAbstractMqttConfig
         @Qualifier(mqttClientPersistenceBeanName) MqttClientPersistence mqttClientPersistence,
         @Qualifier(mqttMessageListenerBeanName) ObjectProvider<MqttMessageListener> messageListenerProvider,
         @Qualifier(mqttCallbackBeanName) ObjectProvider<MqttCallback> mqttCallbackProvider,
-        @Qualifier(mqttPropertiesCustomizerBeanName) ObjectProvider<MqttPropertiesCustomizer> mqttPropertiesCustomizerProvider,
+        @Qualifier(mqttPropertiesCustomizersBeanName) ObjectProvider<List<MqttPropertiesCustomizer>> mqttPropertiesCustomizerProviders,
         @Qualifier(mqttSocketFactoryBeanName) ObjectProvider<SocketFactory> socketFactoryProvider,
         @Qualifier(mqttHostnameVerifierBeanName) ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
         return super.mqttClient(mqttClientPersistence,
                                 messageListenerProvider,
                                 mqttCallbackProvider,
-                                mqttPropertiesCustomizerProvider,
+                                mqttPropertiesCustomizerProviders,
                                 socketFactoryProvider,
                                 hostnameVerifierProvider);
     }

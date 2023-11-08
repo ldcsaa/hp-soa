@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson2.JSON;
 
+import io.github.hpsocket.soa.starter.mqtt.config.SoaDefaultMqttConfig;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttMessageListener;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  * 
  */
 @Slf4j
-@Component("mqttMessageListener")
+@Component(SoaDefaultMqttConfig.mqttMessageListenerBeanName)
 public class DemoMqttMessageListener implements MqttMessageListener
 {
     @Override

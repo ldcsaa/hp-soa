@@ -54,11 +54,11 @@ public class RabbitmqListenerMdcInspector
         RabbitListener listener = ANNOTATION_HOLDER.findAnnotationByMethodOrClass(joinPoint);
         Assert.notNull(listener, "@RabbitListener annotation not found");
         
-        String listenerId        = listener.id();
+        String listenerId       = listener.id();
         String correlationId    = null;
         String messageId        = null;
-        String sourceRequestId    = null;
-        String domainName        = null;
+        String sourceRequestId  = null;
+        String domainName       = null;
         String eventName        = null;
         
         Object obj = AspectHelper.findFirstArgByTypes(joinPoint, Message.class
@@ -70,31 +70,31 @@ public class RabbitmqListenerMdcInspector
             if(obj instanceof Message msg)
             {
                 MessageProperties properties = msg.getMessageProperties();
-                messageId         = properties.getMessageId();
-                correlationId    = properties.getCorrelationId();
-                sourceRequestId    = properties.getHeader(HEADER_SOURCE_REQUEST_ID);
-                domainName        = properties.getHeader(HEADER_DOMAIN_NAME);
-                eventName        = properties.getHeader(HEADER_EVENT_NAME);                
+                messageId       = properties.getMessageId();
+                correlationId   = properties.getCorrelationId();
+                sourceRequestId = properties.getHeader(HEADER_SOURCE_REQUEST_ID);
+                domainName      = properties.getHeader(HEADER_DOMAIN_NAME);
+                eventName       = properties.getHeader(HEADER_EVENT_NAME);                
             }
             else if(obj instanceof org.springframework.messaging.Message msg)
             {
                 MessageHeaders headers = msg.getHeaders();
-                messageId         = (String)headers.get(HEADER_MSG_ID);
-                correlationId    = (String)headers.get(HEADER_CORRELA_DATA_ID);
-                sourceRequestId    = (String)headers.get(HEADER_SOURCE_REQUEST_ID);
-                domainName        = (String)headers.get(HEADER_DOMAIN_NAME);
-                eventName        = (String)headers.get(HEADER_EVENT_NAME);
+                messageId       = (String)headers.get(HEADER_MSG_ID);
+                correlationId   = (String)headers.get(HEADER_CORRELA_DATA_ID);
+                sourceRequestId = (String)headers.get(HEADER_SOURCE_REQUEST_ID);
+                domainName      = (String)headers.get(HEADER_DOMAIN_NAME);
+                eventName       = (String)headers.get(HEADER_EVENT_NAME);
             }
             else if(obj instanceof com.rabbitmq.stream.Message msg)
             {
                 Properties props = msg.getProperties();
                 Map<String, Object> appProps = msg.getApplicationProperties();
 
-                messageId        = props.getMessageIdAsString();
-                correlationId    = props.getCorrelationIdAsString();
-                sourceRequestId    = (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
-                domainName        = (String)appProps.get(HEADER_DOMAIN_NAME);
-                eventName        = (String)appProps.get(HEADER_EVENT_NAME);                
+                messageId       = props.getMessageIdAsString();
+                correlationId   = props.getCorrelationIdAsString();
+                sourceRequestId = (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
+                domainName      = (String)appProps.get(HEADER_DOMAIN_NAME);
+                eventName       = (String)appProps.get(HEADER_EVENT_NAME);                
             }
             
             if(GeneralHelper.isStrNotEmpty(messageId))
@@ -105,26 +105,31 @@ public class RabbitmqListenerMdcInspector
         
         mdcAttr.putMdc();
         
-        StopWatch sw = new StopWatch(listenerId);
+        StopWatch sw = null;
         
         try
         {
             if(log.isTraceEnabled())
+            {
                 log.trace("rabbit listener start consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
                     , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName);
             
-            sw.start();
+                sw = new StopWatch(listenerId);
+                sw.start();
+            }
             
             return joinPoint.proceed();
         }
         finally
         {
-            sw.stop();
-            
             if(log.isTraceEnabled())
+            {
+                sw.stop();
+
                 log.trace("rabbit listener end consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
                     , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getLastTaskTimeMillis());                
-
+            }
+            
             mdcAttr.removeMdc();
         }
     }

@@ -1,5 +1,7 @@
 package io.github.hpsocket.soa.starter.mqtt.config;
 
+import java.util.List;
+
 import javax.net.SocketFactory;
 import javax.net.ssl.HostnameVerifier;
 
@@ -51,14 +53,14 @@ public abstract class SoaAbstractMqttConfig
         MqttClientPersistence mqttClientPersistence,
         ObjectProvider<MqttMessageListener> messageListenerProvider,
         ObjectProvider<MqttCallback> mqttCallbackProvider,
-        ObjectProvider<MqttPropertiesCustomizer> mqttPropertiesCustomizerProvider,
+        ObjectProvider<List<MqttPropertiesCustomizer>> mqttPropertiesCustomizerProviders,
         ObjectProvider<SocketFactory> socketFactoryProvider,
         ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
-        MqttPropertiesCustomizer customier = mqttPropertiesCustomizerProvider.getIfUnique();
+        List<MqttPropertiesCustomizer> customiers = mqttPropertiesCustomizerProviders.getIfUnique();
         
-        if(customier != null)
-            customier.customize(mqttProperties);
+        if(customiers != null)
+            customiers.forEach((c) -> c.customize(mqttProperties));
         
         parseClientId();
         parseSocketFactory(socketFactoryProvider.getIfUnique(), hostnameVerifierProvider.getIfUnique());

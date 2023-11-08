@@ -10,6 +10,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -59,7 +60,9 @@ public class GeneralHelper
     /** 空字符串 */
     public static final String EMPTY_STRING         = "";
     /** 默认字符编码 */
-    public static final String DEFAULT_ENCODING     = "UTF-8";
+    public static final String DEFAULT_CHARSET      = "UTF-8";
+    /** 默认字符编码 */
+    public static final Charset DEFAULT_CHARSET_OBJ = Charset.forName(DEFAULT_CHARSET);
     /** 当前操作系统平台 */
     public static final String OS_PLATFORM          = getOSName();
     /** 当前操作系统平台是否为 Windows */
@@ -784,6 +787,26 @@ public class GeneralHelper
         return str2Date(str, LONG_DATE_PATTERN_WITH_MILSEC);
     }
     
+    public static final String bytes2Str(byte[] bytes)
+    {
+        return bytes2Str(bytes, DEFAULT_CHARSET_OBJ);
+    }
+    
+    public static final String bytes2Str(byte[] bytes, String charset)
+    {
+        return bytes2Str(bytes, Charset.forName(charset));
+    }
+    
+    public static final String bytes2Str(byte[] bytes, Charset charset)
+    {
+        if(bytes == null)
+            return null;
+        if(bytes.length == 0)
+            return "";
+        
+        return new String(bytes, charset);
+    }
+    
     /** 类型转换处理器接口 */
     public static interface TypeHandler<T>
     {
@@ -1138,7 +1161,7 @@ public class GeneralHelper
     /** 获取 clazz 资源环境中 resPath 相对路径的 URL 绝对路径（返还的绝对路径用 UTF-8 编码） */
     public static final String getClassResourcePath(Class<?> clazz, String resPath)
     {
-        return getClassResourcePath(clazz, resPath, DEFAULT_ENCODING);
+        return getClassResourcePath(clazz, resPath, DEFAULT_CHARSET);
     }
 
     /** 获取 clazz 资源环境中 resPath 相对路径的 URL 绝对路径（返还的绝对路径用 pathEnc 编码） */
@@ -1167,7 +1190,7 @@ public class GeneralHelper
     /** 获取 clazz 资源环境中 resPath 相对路径的 URL 绝对路径列表（返还的绝对路径用 UTF-8 编码） */
     public static final List<String> getClassResourcePaths(Class<?> clazz, String resPath)
     {
-        return getClassResourcePaths(clazz, resPath, DEFAULT_ENCODING);
+        return getClassResourcePaths(clazz, resPath, DEFAULT_CHARSET);
     }
 
     /** 获取 clazz 资源环境中 resPath 相对路径的 URL 绝对路径列表（返还的绝对路径用 pathEnc 编码） */

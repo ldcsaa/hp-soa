@@ -1,0 +1,68 @@
+## Kafka 配置
+spring.kafka:
+  bootstrap-servers: 192.168.56.23:9092
+  # 生产者
+  producer:
+    # 重试次数
+    retries: 2
+    # 应答级别:多少个分区副本备份完成时向生产者发送ack确认(可选值：all, -1, 0, 1)
+    #acks: 0 如果设置为零，则生产者将不会等待来自服务器的任何确认，该记录将立即添加到套接字缓冲区并视为已发送。在这种情况下，无法保证服务器已收到记录，并且重试配置将不会生效（因为客户端通常不会知道任何故障），为每条记录返回的偏移量始终设置为-1。
+    #acks: 1 这意味着leader会将记录写入其本地日志，但无需等待所有副本服务器的完全确认即可做出回应，在这种情况下，如果leader在确认记录后，但在将数据复制到所有的副本服务器之前崩溃，则记录将会丢失。
+    #acks: all 这意味着leader将等待完整的同步副本集以确认记录，这保证了只要至少一个同步副本服务器仍然存活，记录就不会丢失，这是最强有力的保证，这相当于acks = -1的设置。
+    acks: all
+    # 每次批量发送消息的数量，produce积累到一定数据，一次发送
+    batch-size: 65536
+    # 生产端缓冲区大小，produce积累数据一次发送，缓存大小达到buffer.memory就发送数据
+    buffer-memory: 5242880
+    # 配置事务ID前缀，开启事务支持
+    transaction-id-prefix: tx-
+    # 序列化和反序列化类
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties:
+      # 提交延时
+      # 当生产端积累的消息达到batch-size或接收到消息linger.ms后,生产者就会将消息提交给kafka
+      # linger.ms为0表示每接收到一条消息就提交给kafka,这时候batch-size其实就没用了
+      linger.ms: 0
+  # 消费者
+  consumer:
+    # 默认消费者组ID：同一组中的consumer不会读取到同一个消息
+    group-id: default
+    # 是否自动提交offset
+    enable-auto-commit: true
+    # 提交offset延时(接收到消息后多久提交offset)
+    auto-commit-interval-ms: 1000
+    # 当kafka中没有初始offset或offset超出范围时将自动重置offset
+    # earliest: 重置为分区中最小的offset
+    # latest: 重置为分区中最新的offset(消费分区中新产生的数据)
+    # none: 只要有一个分区不存在已提交的offset,就抛出异常
+    auto-offset-reset: earliest
+    # 序列化和反序列化类
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    properties:
+      # 消费会话超时时间(超过这个时间consumer没有发送心跳,就会触发rebalance操作)
+      session.timeout.ms: 60000
+      # 消费请求超时时间
+      request.timeout.ms: 180000
+      # 分区分配策略（内置可选策略：RangeAssignor、RoundRobinAssignor、StickyAssignor）
+      partition.assignment.strategy: org.apache.kafka.clients.consumer.RoundRobinAssignor
+  # 消息监听器
+  listener:
+    concurrency: 3
+    # 消费模式（可选值：SINGLE、BATCH）
+    # 注意：SINGLE模式需要用单条消息监听器接收，BATCH模式需要用批量消息监听器接收，否则会报各种消息转换异常
+    type: BATCH
+    # 确认模式
+    # RECORD：当每一条记录被Listener处理之后提交
+    # BATCH：当每一批poll()的数据被Listener处理之后提交
+    # TIME：当每一批poll()的数据被Listener处理之后，距离上次提交时间大于TIME时提交
+    # COUNT：当每一批poll()的数据Listener处理之后，被处理record数量大于等于COUNT时提交
+    # COUNT_TIME：TIME或COUNT有一个条件满足时提交
+    # MANUAL：当每一批poll()的数据被Listener处理之后, 手动调用Acknowledgment.acknowledge()后提交
+    # MANUAL_IMMEDIATE：手动调用Acknowledgment.acknowledge()后立即提交
+    ack-mode: batch
+    # 批量消费每次最多消费最大消息数量
+    max-poll-records: 50
+    # 消费端监听的topic不存在时，项目启动会报错
+    missing-topics-fatal: true

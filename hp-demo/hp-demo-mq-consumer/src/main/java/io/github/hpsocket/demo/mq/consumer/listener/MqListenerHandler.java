@@ -24,7 +24,7 @@ import java.util.Map;
 @Component
 public class MqListenerHandler
 {
-    @RabbitListener(queues = {AppConfig.QUE_REGION_0}, ackMode = "MANUAL", containerFactory = "defaultSimpleRabbitListenerContainerFactory")
+    @RabbitListener(queues = {AppConfig.QUE_REGION_0}, ackMode = "MANUAL", autoStartup = "false", containerFactory = "defaultSimpleRabbitListenerContainerFactory")
     public void onDefaultMessage(Message message, Channel channel) throws IOException
     {
         MessageProperties properties = message.getMessageProperties();
@@ -48,7 +48,7 @@ public class MqListenerHandler
         }
     }
 
-    @RabbitListener(queues = {AppConfig.QUE_REGION_1}, ackMode = "AUTO", containerFactory = "firstSimpleRabbitListenerContainerFactory")
+    @RabbitListener(queues = {AppConfig.QUE_REGION_1}, ackMode = "AUTO", autoStartup = "false", containerFactory = "firstSimpleRabbitListenerContainerFactory")
     public void onFirstMessage(org.springframework.messaging.Message<JSONObject> message, Channel channel) throws IOException
     {
         MessageHeaders headers = message.getHeaders();
@@ -70,7 +70,7 @@ public class MqListenerHandler
     }
 
     /*
-    @RabbitListener(queues = {AppConfig.QUE_REGION_2}, ackMode = "AUTO", containerFactory = "secondSimpleRabbitListenerContainerFactory")
+    @RabbitListener(queues = {AppConfig.QUE_REGION_2}, ackMode = "AUTO", autoStartup = "false", containerFactory = "secondSimpleRabbitListenerContainerFactory")
     public void onSecondMessage(Message message, Channel channel) throws IOException
     {
         MessageProperties properties = message.getMessageProperties();
@@ -92,7 +92,7 @@ public class MqListenerHandler
         }
     }
     
-    @RabbitListener(queues = {AppConfig.QUE_REGION_3}, ackMode = "MANUAL", containerFactory = "thirdSimpleRabbitListenerContainerFactory")
+    @RabbitListener(queues = {AppConfig.QUE_REGION_3}, ackMode = "MANUAL", autoStartup = "false", containerFactory = "thirdSimpleRabbitListenerContainerFactory")
     public void onThirdMessage(org.springframework.messaging.Message<JSONObject> message, Channel channel) throws IOException
     {
         MessageHeaders headers = message.getHeaders();
@@ -115,26 +115,26 @@ public class MqListenerHandler
         }
     }
     
-    @RabbitListener(queues = {AppConfig.STM_REGION_0}, containerFactory = "defaultStreamRabbitListenerContainerFactory")
+    @RabbitListener(queues = {AppConfig.STM_REGION_0}, autoStartup = "false", containerFactory = "defaultStreamRabbitListenerContainerFactory")
     public void onDefaultStreamMessage(com.rabbitmq.stream.Message message, Context context) throws IOException
     {
         onStreamMessage(AppConfig.STM_REGION_0, message, context);
     }
     
-    @RabbitListener(queues = {AppConfig.STM_REGION_1}, containerFactory = "firstStreamRabbitListenerContainerFactory")
+    @RabbitListener(queues = {AppConfig.STM_REGION_1}, autoStartup = "false", containerFactory = "firstStreamRabbitListenerContainerFactory")
     public void onFirstStreamMessage(com.rabbitmq.stream.Message message, Context context) throws IOException
     {
         onStreamMessage(AppConfig.STM_REGION_1, message, context);
     }
     */
     
-    @RabbitListener(queues = {AppConfig.STM_REGION_2}, containerFactory = "secondStreamRabbitListenerContainerFactory")
+    @RabbitListener(queues = {AppConfig.STM_REGION_2}, autoStartup = "false", containerFactory = "secondStreamRabbitListenerContainerFactory")
     public void onSecondStreamMessage(com.rabbitmq.stream.Message message, Context context) throws IOException
     {
         onStreamMessage(AppConfig.STM_REGION_2, message, context);
     }
     
-    @RabbitListener(queues = {AppConfig.STM_REGION_3}, containerFactory = "thirdStreamRabbitListenerContainerFactory", messageConverter = "rabbitMessageConverter")
+    @RabbitListener(queues = {AppConfig.STM_REGION_3}, autoStartup = "false", containerFactory = "thirdStreamRabbitListenerContainerFactory", messageConverter = "rabbitMessageConverter")
     public void onThirdStreamMessage(org.springframework.messaging.Message<JSONObject> message) throws IOException
     {
         onStreamMessage(AppConfig.STM_REGION_3, message);

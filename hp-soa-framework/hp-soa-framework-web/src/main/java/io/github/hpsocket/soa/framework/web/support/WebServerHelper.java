@@ -53,7 +53,7 @@ public class WebServerHelper
     public static final String HEADER_EXTRA                 = "X-Extra";
 
     public static final int DEFAULT_COOKIE_MAX_AGE  = 10 * 365 * 24 * 60 * 60;
-    public static final String DEFAULT_CHARSET      = GeneralHelper.DEFAULT_ENCODING;
+    public static final String DEFAULT_CHARSET      = GeneralHelper.DEFAULT_CHARSET;
     public static final Charset DEFAULT_CHARSET_OBJ = Charset.forName(DEFAULT_CHARSET);
     
     public static final boolean HTTP_ONLY_COOKIE    = false;
