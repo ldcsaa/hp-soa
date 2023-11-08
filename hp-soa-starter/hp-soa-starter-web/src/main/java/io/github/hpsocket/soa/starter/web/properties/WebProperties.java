@@ -20,15 +20,15 @@ import lombok.Setter;
 public class WebProperties implements IAppProperties, IAsyncProperties, IAccessVerificationProperties
 {
     @NestedConfigurationProperty
-    private AppProperties app = new AppProperties();
+    private AppProperties app       = new AppProperties();
     @NestedConfigurationProperty
-    private AsyncProperties async = new AsyncProperties();
+    private AsyncProperties async   = new AsyncProperties();
     @NestedConfigurationProperty
-    private CookieProperties cookie = new CookieProperties();
+    private HttpProperties http     = new HttpProperties();
     @NestedConfigurationProperty
-    private CorsProperties cors = new CorsProperties();    
+    private CorsProperties cors     = new CorsProperties();    
     @NestedConfigurationProperty
-    private ProxyProperties proxy = new ProxyProperties();    
+    private ProxyProperties proxy   = new ProxyProperties();    
     @NestedConfigurationProperty
     private AccessVerificationProperties accessVerification = new AccessVerificationProperties();
     
@@ -59,9 +59,12 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     
     @Getter
     @Setter
-    public static class CookieProperties
+    public static class HttpProperties
     {
-        private int maxAge = WebServerHelper.DEFAULT_COOKIE_MAX_AGE;
+        public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+        
+        private int cookieMaxAge = WebServerHelper.DEFAULT_COOKIE_MAX_AGE;
+        private String defaultDateTimeFormat = DEFAULT_DATE_TIME_FORMAT;
     }
     
     @Getter
@@ -156,7 +159,7 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     @Override
     public int getCookieMaxAge()
     {
-        return cookie.getMaxAge();
+        return http.getCookieMaxAge();
     }
     
     @Override

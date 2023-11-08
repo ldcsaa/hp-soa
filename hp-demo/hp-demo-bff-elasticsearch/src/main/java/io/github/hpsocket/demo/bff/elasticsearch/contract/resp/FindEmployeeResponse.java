@@ -49,7 +49,7 @@ public class FindEmployeeResponse
         private Boolean resign;
         private String deptNumber;
         private String deptName;
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSXXX")
+        //@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
         private OffsetDateTime updateTime;
     }
 }

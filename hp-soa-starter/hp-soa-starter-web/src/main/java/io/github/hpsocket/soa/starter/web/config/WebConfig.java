@@ -212,6 +212,13 @@ public class WebConfig implements WebMvcConfigurer
         config.setWriterFilters(new FastJsonExcludePropertyFilter());
         config.setJSONB(true);
         
+        String defaultDateTimeFormat = webProperties.getHttp().getDefaultDateTimeFormat();
+        
+        if(GeneralHelper.isStrNotEmpty(defaultDateTimeFormat))
+            defaultDateTimeFormat = WebProperties.HttpProperties.DEFAULT_DATE_TIME_FORMAT;
+        
+        config.setDateFormat(defaultDateTimeFormat);
+        
         converters.add(i, converter);
         
         WebMvcConfigurer.super.extendMessageConverters(converters);
