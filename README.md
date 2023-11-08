@@ -22,6 +22,7 @@
 - NoSQL数据库：MongoDB
 - 搜索引擎：Elasticsearch
 - 消息总线：RabbitMQ（支持多实例、可靠消息、Stream 消息）
+- 消息队列：Kafka（支持可靠消息）
 - MQTT发布订阅：Eclipse PAHO mqttv5
 - 分布式Job：xxl-job
 - 轻量级Job：Redisson + Spring Scheduled
@@ -45,6 +46,7 @@
 - **[hp-soa-starter-data-mongodb](hp-soa-starter/hp-soa-starter-data-mongodb)** MongoDB启动器，开启MongoDB访问功能，支持通过 Spring Data 接口方式访问MongoDB
 - **[hp-soa-starter-data-elasticsearch](hp-soa-starter/hp-soa-starter-data-elasticsearch)** Elasticsearch启动器，开启Elasticsearch访问功能，支持通过 Spring Data 接口方式访问Elasticsearch
 - **[hp-soa-starter-rabbitmq](hp-soa-starter/hp-soa-starter-rabbitmq)** Rabbitmq启动器，开启Rabbitmq访问功能，支持多Rabbitmq实例，提供可靠消息实施方案以及消息跟踪能力
+- **[hp-soa-starter-kafka](hp-soa-starter/hp-soa-starter-kafka)** Kafka启动器，开启Kafka访问功能，提供可靠消息实施方案以及消息跟踪能力
 - **[hp-soa-starter-mqtt](hp-soa-starter/hp-soa-starter-mqtt)** MQTT启动器，开启MQTT发布订阅功能，全面支持mqttv5协议
 - **[hp-soa-starter-job-exclusive](hp-soa-starter/hp-soa-starter-job-exclusive)** 轻量级Job启动器，开启轻量级排他Job功能，提供Job执行日志关联和调用链跟踪能力
 - **[hp-soa-starter-job-xxljob](hp-soa-starter/hp-soa-starter-job-xxljob)** Xxl-Job启动器，开启 Xxl-Job 功能，结合 xxl-job-admin 提供分布式Job能力

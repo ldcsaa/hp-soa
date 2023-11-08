@@ -10,6 +10,7 @@
 - [MongoDB数据库](mongodb.md)
 - [Elasticsearch搜索引擎](elasticsearch.md)
 - [RabbitMQ消息队列](rabbitmq.md)
+- [Kafka消息队列](kafka.md)
 - [MQTT发布订阅](mqtt.md)
 - [Spring Task](spring-task.md)
 - [Job调度](job.md)
