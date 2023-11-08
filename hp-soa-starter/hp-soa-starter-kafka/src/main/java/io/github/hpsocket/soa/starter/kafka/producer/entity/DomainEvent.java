@@ -2,7 +2,7 @@
 package io.github.hpsocket.soa.starter.kafka.producer.entity;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.Headers;
@@ -92,7 +92,7 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
     /**
      * 最后发送时间
      */
-    private ZonedDateTime lastSendTime;
+    private OffsetDateTime lastSendTime;
 
     public DomainEvent()
     {

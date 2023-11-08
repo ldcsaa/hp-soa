@@ -1,6 +1,6 @@
 package io.github.hpsocket.demo.mq.producer.contract.resp;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
@@ -23,7 +23,7 @@ public class DemoCreateOrderResponse
 
     @JSONField(format = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Schema(description = "创建时间", example = "2023-11-22 12:34:56.789", requiredMode = RequiredMode.REQUIRED, nullable = false)
-    private ZonedDateTime createTime;
+    private OffsetDateTime createTime;
 
     @Override
     public String toString() {

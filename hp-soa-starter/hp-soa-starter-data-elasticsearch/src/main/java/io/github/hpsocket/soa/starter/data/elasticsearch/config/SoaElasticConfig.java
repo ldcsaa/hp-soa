@@ -4,7 +4,9 @@ package io.github.hpsocket.soa.starter.data.elasticsearch.config;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.elasticsearch.config.ElasticsearchConfigurationSupport;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchCustomConversions;
 
+import io.github.hpsocket.soa.framework.web.support.OffsetDateTimeProvider;
 import io.github.hpsocket.soa.framework.web.support.ZonedDateTimeProvider;
 
 /** <b>HP-SOA Elasticsearch 配置</b> */
@@ -28,7 +31,8 @@ import io.github.hpsocket.soa.framework.web.support.ZonedDateTimeProvider;
 @ConditionalOnExpression("'${spring.elasticsearch.uris:}' != ''")
 public class SoaElasticConfig extends ElasticsearchConfigurationSupport
 {
-    public static final String zonedDateTimeProviderBeanName = "zonedDateTimeProvider";
+    public static final String zonedDateTimeProviderBeanName  = "zonedDateTimeProvider";
+    public static final String offsetDateTimeProviderBeanName = "offsetDateTimeProvider";
 
     /** {@linkplain ZonedDateTime} 时间日期提供者 */
     @Bean(zonedDateTimeProviderBeanName)
@@ -36,6 +40,14 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
     public ZonedDateTimeProvider zonedDateTimeProvider()
     {
         return new ZonedDateTimeProvider();
+    }
+
+    /** {@linkplain OffsetDateTime} 时间日期提供者 */
+    @Bean(offsetDateTimeProviderBeanName)
+    @ConditionalOnMissingBean(name = offsetDateTimeProviderBeanName)
+    public OffsetDateTimeProvider offsetDateTimeProvider()
+    {
+        return new OffsetDateTimeProvider();
     }
 
     /** 自定义日期时间类型转换器<br/>
@@ -62,6 +74,11 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
         converters.add(StringToZonedDateTimeConverter.INSTANCE);
         converters.add(DateToZonedDateTimeConverter.INSTANCE);
 
+        // Long/String/Date -> OffsetDateTime
+        converters.add(LongToOffsetDateTimeConverter.INSTANCE);
+        converters.add(StringToOffsetDateTimeConverter.INSTANCE);
+        converters.add(DateToOffsetDateTimeConverter.INSTANCE);
+
         // LocalDateTime -> Long/String/Date
         converters.add(LocalDateTimeToLongConverter.INSTANCE);
         converters.add(LocalDateTimeToStringConverter.INSTANCE);
@@ -76,6 +93,11 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
         converters.add(ZonedDateTimeToLongConverter.INSTANCE);
         converters.add(ZonedDateTimeToStringConverter.INSTANCE);
         converters.add(ZonedDateTimeToDateConverter.INSTANCE);
+
+        // OffsetDateTime -> Long/String/Date
+        converters.add(OffsetDateTimeToLongConverter.INSTANCE);
+        converters.add(OffsetDateTimeToStringConverter.INSTANCE);
+        converters.add(OffsetDateTimeToDateConverter.INSTANCE);
 
         return new ElasticsearchCustomConversions(converters);
     }
@@ -331,6 +353,91 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
 
         @Override
         public Date convert(ZonedDateTime source)
+        {
+            return new Date(source.toInstant().toEpochMilli());
+        }
+    }
+
+    @ReadingConverter
+    enum LongToOffsetDateTimeConverter implements Converter<Long, OffsetDateTime>
+    {
+
+        INSTANCE;
+
+        @Override
+        public OffsetDateTime convert(Long source)
+        {
+            return OffsetDateTime.ofInstant(Instant.ofEpochMilli(source), ZoneId.systemDefault());
+        }
+    }
+
+    @WritingConverter
+    enum OffsetDateTimeToLongConverter implements Converter<OffsetDateTime, Long>
+    {
+
+        INSTANCE;
+
+        @Override
+        public Long convert(OffsetDateTime source)
+        {
+            return source.toInstant().toEpochMilli();
+        }
+    }
+
+    @ReadingConverter
+    enum StringToOffsetDateTimeConverter implements Converter<String, OffsetDateTime>
+    {
+        INSTANCE;
+
+        @Override
+        public OffsetDateTime convert(String source)
+        {
+            String t    = source.indexOf('T') > 0 ? "'T'" : " ";
+            String mill = source.indexOf('.') > 0 ? ".SSS" : "";
+
+            StringBuilder sb = new StringBuilder(30);
+            sb.append("yyyy-MM-dd").append(t).append("HH:mm:ss").append(mill);
+
+            if(source.length() > 19 + mill.length())
+                sb.append("z");
+
+            DateTimeFormatter df = DateTimeFormatter.ofPattern(sb.toString());
+
+            return OffsetDateTime.parse(source, df);
+        }
+    }
+
+    @WritingConverter
+    enum OffsetDateTimeToStringConverter implements Converter<OffsetDateTime, String>
+    {
+        INSTANCE;
+
+        @Override
+        public String convert(OffsetDateTime source)
+        {
+            return source.toString();
+        }
+    }
+
+    @ReadingConverter
+    enum DateToOffsetDateTimeConverter implements Converter<Date, OffsetDateTime>
+    {
+        INSTANCE;
+
+        @Override
+        public OffsetDateTime convert(Date date)
+        {
+            return OffsetDateTime.ofInstant(date.toInstant(), ZoneOffset.systemDefault());
+        }
+    }
+
+    @WritingConverter
+    enum OffsetDateTimeToDateConverter implements Converter<OffsetDateTime, Date>
+    {
+        INSTANCE;
+
+        @Override
+        public Date convert(OffsetDateTime source)
         {
             return new Date(source.toInstant().toEpochMilli());
         }

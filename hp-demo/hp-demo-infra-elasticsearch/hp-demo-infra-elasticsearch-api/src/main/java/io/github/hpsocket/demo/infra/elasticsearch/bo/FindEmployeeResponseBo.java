@@ -2,7 +2,7 @@ package io.github.hpsocket.demo.infra.elasticsearch.bo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -42,6 +42,6 @@ public class FindEmployeeResponseBo implements Serializable
         private Boolean resign;
         private String deptNumber;
         private String deptName;
-        private ZonedDateTime updateTime;
+        private OffsetDateTime updateTime;
     }
 }

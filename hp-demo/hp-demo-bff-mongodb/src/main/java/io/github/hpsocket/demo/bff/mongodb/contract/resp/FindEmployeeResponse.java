@@ -1,7 +1,7 @@
 package io.github.hpsocket.demo.bff.mongodb.contract.resp;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.alibaba.fastjson2.JSON;
@@ -50,6 +50,6 @@ public class FindEmployeeResponse
         private String deptNumber;
         private String deptName;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSXXX")
-        private ZonedDateTime updateTime;
+        private OffsetDateTime updateTime;
     }
 }

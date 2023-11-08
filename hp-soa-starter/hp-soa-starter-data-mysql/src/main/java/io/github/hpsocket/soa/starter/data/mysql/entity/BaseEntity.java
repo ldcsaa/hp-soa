@@ -1,7 +1,7 @@
 package io.github.hpsocket.soa.starter.data.mysql.entity;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -23,9 +23,9 @@ public class BaseEntity implements Serializable
     private Long id;
     /** 创建时间 */
     @TableField(fill = FieldFill.INSERT)
-    private ZonedDateTime createTime;
+    private OffsetDateTime createTime;
     /** 最后更新时间 */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private ZonedDateTime updateTime;
+    private OffsetDateTime updateTime;
 
 }

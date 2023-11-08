@@ -1,6 +1,6 @@
 package io.github.hpsocket.demo.bff.mongodb.contract.resp;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 import com.alibaba.fastjson2.JSON;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,7 +22,7 @@ public class SaveEmployeeResponse
     
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSXXX")
-    private ZonedDateTime updateTime;
+    private OffsetDateTime updateTime;
 
     @Override
     public String toString()
