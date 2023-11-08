@@ -61,8 +61,10 @@ mybatis-plus:
   check-config-location: false
   executor-type: reuse
   configuration:
-    # SQL日志输出器，生产环境屏蔽输出，log-impl 设置为: org.apache.ibatis.logging.nologging.NoLoggingImpl
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    # SQL日志输出器
+    # 开发环境可以打开输出：log-impl => org.apache.ibatis.logging.slf4j.Slf4jImpl
+    # 生产环境需要屏蔽输出：log-impl => org.apache.ibatis.logging.nologging.NoLoggingImpl
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
     map-underscore-to-camel-case: true
     lazy-loading-enabled: true
     aggressive-lazy-loading: false

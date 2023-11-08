@@ -1,6 +1,7 @@
 package io.github.hpsocket.demo.kafka.listener;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.header.Headers;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import static io.github.hpsocket.demo.kafka.config.AppConfig.*;
 
+import java.util.List;
+
 @Slf4j
 @Component
 public class MqListenerHandler
@@ -25,21 +28,21 @@ public class MqListenerHandler
     //////////////////////////////////////////////////
     
     /** 单条消费 */
-    @KafkaListener(topics = TOPIC_0)
+    @KafkaListener(topics = TOPIC_0, groupId = "GROUP_SINGLE", batch = "false", autoStartup = "false")
     public void onMessageTopic0(Message<String> msg/*, Acknowledgment ack, Consumer<String, String> consumer*/)
     {
         logMessage(msg);
     }
 
     /** 单条消费 */
-    @KafkaListener(topics = TOPIC_1)
+    @KafkaListener(topics = TOPIC_1, groupId = "GROUP_SINGLE", batch = "false", autoStartup = "false")
     public void onMessageTopic2(ConsumerRecord<String, String> msg/*, Acknowledgment ack, Consumer<String, String> consumer*/)
     {
         logMessage(msg);
     }
     
     /** 单条消费 */
-    @KafkaListener(topics = TOPIC_2)
+    @KafkaListener(topics = TOPIC_2, groupId = "GROUP_SINGLE", batch = "false", autoStartup = "false")
     public void onMessageTopic4(String msg/*, Acknowledgment ack, Consumer<String, String> consumer*/)
     {
         logMessage(msg);        
@@ -49,26 +52,26 @@ public class MqListenerHandler
     // 批量消费配置：spring.kafka.listener.type=batch ///
     //////////////////////////////////////////////////
     
-//    /** 批量消费 */
-//    @KafkaListener(topics = TOPIC_0)
-//    public void onMessageTopic1(List<Message<String>> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
-//    {
-//        msgs.forEach(msg -> logMessage(msg));
-//    }
-//    
-//    /** 批量消费 */
-//    @KafkaListener(topics = TOPIC_1)
-//    public void onMessageTopic3(ConsumerRecords<String, String> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
-//    {
-//        msgs.forEach(msg -> logMessage(msg));
-//    }
-//    
-//    /** 批量消费 */
-//    @KafkaListener(topics = TOPIC_2)
-//    public void onMessageTopic5(List<String> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
-//    {
-//        msgs.forEach(msg -> logMessage(msg));
-//    }
+    /** 批量消费 */
+    @KafkaListener(topics = TOPIC_0, groupId = "GROUP_BATCH", batch = "true", autoStartup = "false")
+    public void onMessageTopic1(List<Message<String>> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
+    {
+        msgs.forEach(msg -> logMessage(msg));
+    }
+    
+    /** 批量消费 */
+    @KafkaListener(topics = TOPIC_1, groupId = "GROUP_BATCH", batch = "true", autoStartup = "false")
+    public void onMessageTopic3(ConsumerRecords<String, String> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
+    {
+        msgs.forEach(msg -> logMessage(msg));
+    }
+    
+    /** 批量消费 */
+    @KafkaListener(topics = TOPIC_2, groupId = "GROUP_BATCH", batch = "true", autoStartup = "false")
+    public void onMessageTopic5(List<String> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
+    {
+        msgs.forEach(msg -> logMessage(msg));
+    }
 
     private void logMessage(Message<String> msg)
     {

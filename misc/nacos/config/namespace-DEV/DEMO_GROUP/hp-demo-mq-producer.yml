@@ -17,3 +17,8 @@ hp.soa.data.mysql.global-transaction-management:
   #read-only-isolation: ISOLATION_READ_COMMITTED
   #read-only-propagation: PROPAGATION_REQUIRED
   #pointcut-expression: "execution(* ${hp.soa.web.component-scan.base-package}..service..*.*(..))"
+
+#mybatis-plus:
+#  configuration:
+#    # SQL日志输出器，生产环需要境屏蔽输出：log-impl => org.apache.ibatis.logging.nologging.NoLoggingImpl
+#    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl

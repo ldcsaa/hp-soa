@@ -52,7 +52,7 @@ spring.kafka:
     concurrency: 3
     # 消费模式（可选值：SINGLE、BATCH）
     # 注意：SINGLE模式需要用单条消息监听器接收，BATCH模式需要用批量消息监听器接收，否则会报各种消息转换异常
-    type: SINGLE
+    type: BATCH
     # 确认模式
     # RECORD：当每一条记录被Listener处理之后提交
     # BATCH：当每一批poll()的数据被Listener处理之后提交
@@ -65,4 +65,4 @@ spring.kafka:
     # 批量消费每次最多消费最大消息数量
     max-poll-records: 50
     # 消费端监听的topic不存在时，项目启动会报错
-    missing-topics-fatal: false
+    missing-topics-fatal: true
