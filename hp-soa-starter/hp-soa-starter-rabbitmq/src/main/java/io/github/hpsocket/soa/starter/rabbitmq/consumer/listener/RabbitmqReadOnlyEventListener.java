@@ -36,12 +36,19 @@ public class RabbitmqReadOnlyEventListener implements ApplicationListener<ReadOn
     
     private void doSwitch(boolean readOnly)
     {
+        if(readOnly)
+            registry.stop();
+        else
+            registry.start();
+
+        /*
         boolean running = registry.isRunning();
         
         if(readOnly && running)
             registry.stop();
         else if(!readOnly && !running)
             registry.start();
+        */
     }
 
     @Override
