@@ -26,7 +26,8 @@ import lombok.Setter;
 @Setter
 public class SoaMqttProperties extends MqttConnectionOptions
 {
-    public static final String DEFAULT_WILL_TOPIC = "default-will-topic";
+    public static final String DEFAULT_WILL_TOPIC   = "default-will-topic";
+    public static final int RANDOM_CLIENT_ID_LENGTH = 12;
     
     private String clientId;
     
@@ -132,7 +133,7 @@ public class SoaMqttProperties extends MqttConnectionOptions
         String clientId = getClientId();
         
         if(GeneralHelper.isStrEmpty(clientId))
-            clientId = RandomStringUtils.random(16, true, true);
+            clientId = RandomStringUtils.random(RANDOM_CLIENT_ID_LENGTH, true, true);
         else
         {
             final String PH_ADDR = "%A";
@@ -144,7 +145,7 @@ public class SoaMqttProperties extends MqttConnectionOptions
             if(clientId.indexOf(PH_PID) >= 0)
                 clientId = clientId.replaceAll(PH_PID, SystemUtil.getPid());
             if(clientId.indexOf(PH_RAND) >= 0)
-                clientId = clientId.replaceAll(PH_RAND, RandomStringUtils.random(16, true, true));
+                clientId = clientId.replaceAll(PH_RAND, RandomStringUtils.random(RANDOM_CLIENT_ID_LENGTH, true, true));
         }
         
         setClientId(clientId);
