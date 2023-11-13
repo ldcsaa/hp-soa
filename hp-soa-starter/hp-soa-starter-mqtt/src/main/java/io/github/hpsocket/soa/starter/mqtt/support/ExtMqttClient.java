@@ -4,21 +4,26 @@ import org.eclipse.paho.mqttv5.client.IMqttMessageListener;
 import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttClient;
 import org.eclipse.paho.mqttv5.client.MqttClientPersistence;
+import org.eclipse.paho.mqttv5.client.MqttConnectionOptions;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.eclipse.paho.mqttv5.common.MqttPersistenceException;
+import org.eclipse.paho.mqttv5.common.MqttSecurityException;
 import org.eclipse.paho.mqttv5.common.MqttSubscription;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /** <b>扩展 MQTT Client 对象</b> */
 @Slf4j
 @Getter
+@Setter
 public class ExtMqttClient extends MqttClient
 {
     private boolean manualAcks;
+    private MqttConnectionOptions mqttConnectionOptions;
     
     public ExtMqttClient(String serverURI, String clientId, MqttClientPersistence persistence) throws MqttException
     {
@@ -93,6 +98,17 @@ public class ExtMqttClient extends MqttClient
         token.waitForCompletion(getTimeToWait());
         
         return token;
+    }
+    
+    @Override
+    public void connect() throws MqttSecurityException, MqttException
+    {
+        connect(mqttConnectionOptions);
+    }
+    
+    public IMqttToken connectWithResult() throws MqttSecurityException, MqttException
+    {
+        return connectWithResult(mqttConnectionOptions);
     }
     
     public void disconnectAndClose()
