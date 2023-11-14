@@ -1,6 +1,7 @@
 package io.github.hpsocket.soa.starter.web.config;
 
 import io.github.hpsocket.soa.framework.web.aspect.AccessVerificationInspector;
+import io.github.hpsocket.soa.framework.web.aspect.ReadOnlyGuardInspector;
 import io.github.hpsocket.soa.framework.web.aspect.SiteLocalInspector;
 import io.github.hpsocket.soa.framework.web.propertries.IAccessVerificationProperties;
 import io.github.hpsocket.soa.framework.web.service.AccessVerificationService;
@@ -13,7 +14,8 @@ import org.springframework.context.annotation.Import;
 /** <b>HP-SOA Web Aspect 配置</b> */
 @AutoConfiguration
 @Import({
-            SiteLocalInspector.class
+            SiteLocalInspector.class,
+            ReadOnlyGuardInspector.class
         })
 public class AspectAopConfig
 {
