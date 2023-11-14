@@ -11,7 +11,7 @@ import io.github.hpsocket.soa.framework.web.annotation.SiteLocal;
 
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 
-/** <b>内网 HTTP 请求拦截器</b><br>
+/** <b>内网 HTTP 请求拦截器</b><p>
  * 处理 {@linkplain SiteLocal} 注解
  */
 @Aspect

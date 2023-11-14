@@ -1,8 +1,5 @@
 package io.github.hpsocket.soa.framework.web.aspect;
 
-import static io.github.hpsocket.soa.framework.core.exception.ServiceException.READ_ONLY_ERROR;
-import static io.github.hpsocket.soa.framework.core.exception.ServiceException.READ_ONLY_EXCEPTION;
-
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,7 +13,10 @@ import io.github.hpsocket.soa.framework.web.annotation.ReadOnlyGuard;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 
-/** <b>只读保护请求拦截器</b><br>
+import static io.github.hpsocket.soa.framework.core.exception.ServiceException.READ_ONLY_ERROR;
+import static io.github.hpsocket.soa.framework.core.exception.ServiceException.READ_ONLY_EXCEPTION;
+
+/** <b>只读保护请求拦截器</b><p>
  * 处理 {@linkplain ReadOnlyGuard} 注解
  */
 @Aspect

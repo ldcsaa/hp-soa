@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @AccessVerification(Type.NO_LOGIN)
-//@ReadOnlyGuard(enabled = false, desc = "just read only - 1 ~")
+@ReadOnlyGuard(enabled = false, desc = "just read only - 1 ~")
 public class PublishControllerImpl implements PublishController
 {
     /** MQTT 消息发布器 */
@@ -40,7 +40,7 @@ public class PublishControllerImpl implements PublishController
      */
     @Override
     @AccessVerification(Type.REQUIRE_LOGIN)
-    @ReadOnlyGuard(desc = "just read only - 2 ~")
+    //@ReadOnlyGuard(desc = "just read only - 2 ~")
     public Response<PublishResponse> publish(@RequestBody @Valid PublishRequest req)
     {
         log.info("[发布消息请求] -> {}", req);
