@@ -276,7 +276,6 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
     @ReadingConverter
     enum LongToZonedDateTimeConverter implements Converter<Long, ZonedDateTime>
     {
-
         INSTANCE;
 
         @Override
@@ -289,7 +288,6 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
     @WritingConverter
     enum ZonedDateTimeToLongConverter implements Converter<ZonedDateTime, Long>
     {
-
         INSTANCE;
 
         @Override
@@ -361,7 +359,6 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
     @ReadingConverter
     enum LongToOffsetDateTimeConverter implements Converter<Long, OffsetDateTime>
     {
-
         INSTANCE;
 
         @Override
@@ -374,7 +371,6 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
     @WritingConverter
     enum OffsetDateTimeToLongConverter implements Converter<OffsetDateTime, Long>
     {
-
         INSTANCE;
 
         @Override
