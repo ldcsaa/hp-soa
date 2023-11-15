@@ -164,6 +164,7 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     }
     
     /** 默认 {@linkplain RedisCacheConfiguration} */
+    @Primary
     @Override
     @Bean(redisDefaultCacheConfigurationBeanName)
     @ConditionalOnMissingBean(name = redisDefaultCacheConfigurationBeanName)
@@ -173,6 +174,7 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     }
     
     /** 初始 {@linkplain RedisCacheConfiguration} {@linkplain Map} */
+    @Primary
     @Override
     @Bean(redisInitialCacheConfigurationsBeanName)
     @ConditionalOnMissingBean(name = redisInitialCacheConfigurationsBeanName)
@@ -181,8 +183,8 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
         return super.redisInitialCacheConfigurations();
     }
     
-    @Override
     @Primary
+    @Override
     @Bean(redisConnectionFactoryBeanName)
     @ConditionalOnMissingBean(name = redisConnectionFactoryBeanName)
     public RedissonConnectionFactory redissonConnectionFactory(@Qualifier(redissonClientBeanName) RedissonClient redisson)
