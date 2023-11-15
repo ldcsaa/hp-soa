@@ -1,8 +1,8 @@
 package io.github.hpsocket.demo.job.config;
 
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
-@Configuration
+@AutoConfiguration
 public class AppConfig
 {
 
