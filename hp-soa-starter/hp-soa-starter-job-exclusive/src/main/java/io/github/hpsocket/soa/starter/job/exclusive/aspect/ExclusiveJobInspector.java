@@ -95,15 +95,18 @@ public class ExclusiveJobInspector
             
             if(lock.tryLock(0, job.maxLockTime(), job.lockTimeUnit()))
             {
-                StopWatch sw = new StopWatch(fullJobName);
+                StopWatch sw = null;
                 
                 try
                 {
                     if(log.isTraceEnabled())
+                    {
                         log.trace("start exclusive job -> {}", fullJobName);
-                    
-                    sw.start();
 
+                        sw = new StopWatch(fullJobName);
+                        sw.start();
+                    }
+                    
                     return joinPoint.proceed();    
                 }
                 catch(Exception e)
@@ -115,12 +118,14 @@ public class ExclusiveJobInspector
                 }
                 finally
                 {
-                    sw.stop();
-                    
                     try {lock.unlock();} catch(Exception e) {}
                     
                     if(log.isTraceEnabled())
-                        log.trace("end exclusive job -> {} (costTime: {})", fullJobName, sw.getLastTaskTimeMillis());                
+                    {
+                        sw.stop();
+                        
+                        log.trace("end exclusive job -> {} (costTime: {})", fullJobName, sw.getLastTaskTimeMillis());
+                    }
                 }
             }
         }

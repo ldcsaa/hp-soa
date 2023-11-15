@@ -72,14 +72,17 @@ public class XxlJobInspector
                 return null;
             }
             
-            StopWatch sw = new StopWatch(jobName);
+            StopWatch sw = null;
             
             try
             {
                 if(log.isTraceEnabled())
+                {
                     log.trace("start xxl-job -> {} (id: {}, param: '{}')", jobName, jobId, param);
                 
-                sw.start();
+                    sw = new StopWatch(jobName);
+                    sw.start();
+                }
                 
                 return joinPoint.proceed();
             }
@@ -98,10 +101,12 @@ public class XxlJobInspector
             }
             finally
             {
-                sw.stop();
-                
                 if(log.isTraceEnabled())
-                    log.trace("end xxl-job -> {} (id: {}, costTime: {})", jobName, jobId, sw.getLastTaskTimeMillis());                
+                {
+                    sw.stop();
+                    
+                    log.trace("end xxl-job -> {} (id: {}, costTime: {})", jobName, jobId, sw.getLastTaskTimeMillis());
+                }
             }
         }
         catch(Exception e)
