@@ -93,7 +93,7 @@ public class DubboMdcFilter implements Filter, Filter.Listener
             if(GEN_APP_ID.get())
             {
                 String appId    = AppConfigHolder.getAppId();
-                String appName    = AppConfigHolder.getAppName();
+                String appName  = AppConfigHolder.getAppName();
                 
                 MDC.put(MDC_APP_ID_KEY, appId);
                 MDC.put(MDC_APP_NAME_KEY, appName);

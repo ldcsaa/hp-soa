@@ -31,8 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class HttpMdcFilter implements Filter
 {
-    public static final int ORDER            = -100;
-    public static final String DISPLAY_NAME    = HttpMdcFilter.class.getSimpleName();
+    public static final int ORDER           = -100;
+    public static final String DISPLAY_NAME = HttpMdcFilter.class.getSimpleName();
     public static final String URL_PATTERNS = "/*";
     
     @Override
