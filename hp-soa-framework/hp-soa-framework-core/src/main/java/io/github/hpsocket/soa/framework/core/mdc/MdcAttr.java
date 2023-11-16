@@ -8,7 +8,7 @@ import org.slf4j.MDC;
 /** <b>调用链跟踪 {@linkplain MDC} 属性</b> */
 public class MdcAttr
 {
-    public static final String MDC_TRACE_ID_KEY    =     "__traceId";
+    public static final String MDC_TRACE_ID_KEY     = "__traceId";
     public static final String MDC_REQUEST_ID_KEY   = "__requestId";
     public static final String MDC_CLIENT_ID_KEY    = "__clientId";
     public static final String MDC_SESSION_ID_KEY   = "__sessionId";
@@ -20,6 +20,7 @@ public class MdcAttr
     public static final String MDC_EXTRA_KEY        = "__extra";
     public static final String MDC_APP_ID_KEY       = "__appId";
     public static final String MDC_APP_NAME_KEY     = "__appName";
+    
     public static final String MDC_SERVICE_ID_KEY   = "__serviceId";
     public static final String MDC_SERVICE_NAME_KEY = "__serviceName";
     public static final String MDC_SERVICE_ADDR_KEY = "__serviceAddr";
