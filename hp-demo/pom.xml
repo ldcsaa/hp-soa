@@ -13,6 +13,10 @@
     <packaging>pom</packaging>
 
     <properties>
+        <!-- Assembly 文件路径（默认：'/opt/deploy/assembly/assembly.xml'） -->
+        <!--
+        <maven.assembly.descriptor>src/main/assembly/assembly.xml</maven.assembly.descriptor>
+        -->
     </properties>
     
     <modules>
