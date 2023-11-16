@@ -20,6 +20,7 @@
     
     <modules>
         <module>hp-soa-starter-web</module>
+        <module>hp-soa-starter-web-dubbo</module>
         <module>hp-soa-starter-task</module>
         <module>hp-soa-starter-nacos</module>
         <module>hp-soa-starter-sentinel</module>

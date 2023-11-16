@@ -1,3 +1,4 @@
 io.github.hpsocket.soa.starter.skywalking.config.SoaSkyWalkingConfig
+io.github.hpsocket.soa.starter.skywalking.config.SoaSkyWalkingDubboConfig
 io.github.hpsocket.soa.starter.skywalking.config.SoaSkyWalkingAsyncConfig
 io.github.hpsocket.soa.starter.skywalking.config.SoaSkyWalkingTaskConfig

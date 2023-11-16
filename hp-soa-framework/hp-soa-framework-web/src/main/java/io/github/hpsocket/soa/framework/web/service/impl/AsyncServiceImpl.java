@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PreDestroy;
 
 import io.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 import io.github.hpsocket.soa.framework.web.service.AsyncService;

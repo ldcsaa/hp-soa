@@ -162,6 +162,11 @@
             </dependency>
             <dependency>
                 <groupId>io.github.hpsocket</groupId>
+                <artifactId>hp-soa-starter-web-dubbo</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.hpsocket</groupId>
                 <artifactId>hp-soa-starter-task</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
