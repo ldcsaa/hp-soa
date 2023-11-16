@@ -35,10 +35,11 @@
 ### 模块说明
 - **[hp-soa-dependencies](hp-soa-dependencies)** 依赖管理模块，定义依赖包及其版本
 - **[hp-soa-framework-core](hp-soa-framework/hp-soa-framework-core)** 基础模块，定义 HP-SOA 基础组件和工具
-- **[hp-soa-framework-web](hp-soa-framework/hp-soa-framework-web)** Web应用模块，集成 spring-boot 和 Dubbo，提供核心微服务功能
+- **[hp-soa-framework-web](hp-soa-framework/hp-soa-framework-web)** Web应用模块，集成 spring-boot，提供核心Web服务功能
 - **[hp-soa-framework-leaf](hp-soa-framework/hp-soa-framework-leaf)** Leaf全局ID模块，基于Leaf，提供分布式全局ID功能
 - **[hp-soa-framework-util](hp-soa-framework/hp-soa-framework-util)** 工具包模块，提供文件处理、邮件、远程访问等组件和工具
 - **[hp-soa-starter-web](hp-soa-starter/hp-soa-starter-web)** Web应用启动器，配置并启动应用服务，所有 HP-SOA 项目都必须引入该启动器
+- **[hp-soa-starter-web-dubbo](hp-soa-starter/hp-soa-starter-web-dubbo)** Dubbo启动器，开启Dubbo微服务功能，所有 Dubbo 微服务项目都必须引入该启动器
 - **[hp-soa-starter-task](hp-soa-starter/hp-soa-starter-task)** Task启动器，开启 Spring Task 功能，并为 Spring Task 提供日志关联和调用链跟踪能力
 - **[hp-soa-starter-nacos](hp-soa-starter/hp-soa-starter-nacos)** Nacos配置中心启动器，开启配置中心功能，应用程序可以从远程配置中心加载配置
 - **[hp-soa-starter-data-mysql](hp-soa-starter/hp-soa-starter-data-mysql)** MySQL启动器，开启MySQL数据库访问功能，并提供动态数据源、数据源监控和全局事务管理等能力
@@ -72,11 +73,18 @@
 </dependencyManagement>
 
 <dependencies>
-    <!-- 引用 hp-soa-starter-web -->
+    <!-- 普通项目引用 hp-soa-starter-web -->
     <dependency>
         <groupId>io.github.hpsocket</groupId>
         <artifactId>hp-soa-starter-web</artifactId>
     </dependency>
+    <!-- Dubbo项目引用 hp-soa-starter-web-dubbo -->
+    <!--
+    <dependency>
+        <groupId>io.github.hpsocket</groupId>
+        <artifactId>hp-soa-starter-web-dubbo</artifactId>
+    </dependency>
+    -->
     <!-- 根据项目需要，引用其它 hp-soa starter -->
     <dependency>
         <groupId>io.github.hpsocket</groupId>
@@ -86,7 +94,7 @@
 ```
 2. 修改应用配置（参考 Demo [hp-demo-bff-basic](hp-demo/hp-demo-bff-basic) 的[本地配置文件](hp-demo/hp-demo-bff-basic/src/main/resources/bootstrap.yml) ，配置中心的[远程配置文件](misc/nacos/config/namespace-DEV/GLOBAL_GROUP)），主要配置项：
     - hp.soa.web
-    - dubbo
+    - dubbo (Dubbo项目)
     - server
     - spring
     - management

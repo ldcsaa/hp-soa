@@ -200,8 +200,7 @@ public abstract class SoaAbstractRedisConfig
         return createRedisCacheConfiguration(3600);
     }
     
-    @SuppressWarnings("unchecked")
-    public MapPropertySource redisInitialCacheConfigurations()
+    public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap()
     {
         Map<String, RedisCacheConfiguration> cfgs = new LinkedHashMap<>();
 
@@ -219,11 +218,20 @@ public abstract class SoaAbstractRedisConfig
         cfgs.put("7d", createRedisCacheConfiguration(604800));
         cfgs.put("15d", createRedisCacheConfiguration(1296000));
         cfgs.put("30d", createRedisCacheConfiguration(2592000));
+        cfgs.put("90d", createRedisCacheConfiguration(7776000));
+        cfgs.put("180d", createRedisCacheConfiguration(15552000));
+        cfgs.put("1y", createRedisCacheConfiguration(31536000));
         
-        MapFactoryBean bean = new MapFactoryBean();
-        bean.setSourceMap(cfgs);
+        return cfgs;
+    }
 
-        return new MapPropertySource("redisInitialCacheConfigurations", (Map<String, Object>)(Map<?, ?>)cfgs);
+    @SuppressWarnings("unchecked")
+    public MapPropertySource redisInitialCacheConfigurations(Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap)
+    {
+        MapFactoryBean bean = new MapFactoryBean();
+        bean.setSourceMap(redisInitialCacheSourceMap);
+
+        return new MapPropertySource("redisInitialCacheConfigurations", (Map<String, Object>)(Map<?, ?>)redisInitialCacheSourceMap);
     }
 
     private RedisCacheConfiguration createRedisCacheConfiguration(long ttlSeconds)

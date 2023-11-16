@@ -50,6 +50,7 @@ public class SoaSecondRedisConfig extends SoaAbstractRedisConfig
     public static final String redisReactiveStringTemplateBeanName = "secondRedisReactiveStringTemplate";
     public static final String redisCacheManagerBeanName = "secondRedisCacheManager";
     public static final String redisDefaultCacheConfigurationBeanName = "secondRedisDefaultCacheConfiguration";
+    public static final String redisInitialCacheSourceMapBeanName = "secondRedisInitialCacheSourceMap";
     public static final String redisInitialCacheConfigurationsBeanName = "secondRedisInitialCacheConfigurations";
     public static final String redisConnectionFactoryBeanName = "secondRedisConnectionFactory";
     public static final String redissonReactiveClientBeanName = "secondRedissonReactiveClient";
@@ -166,13 +167,21 @@ public class SoaSecondRedisConfig extends SoaAbstractRedisConfig
         return super.redisDefaultCacheConfiguration();
     }
     
+    @Override
+    @Bean(redisInitialCacheSourceMapBeanName)
+    @ConditionalOnMissingBean(name = redisInitialCacheSourceMapBeanName)
+    public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap()
+    {
+        return super.redisInitialCacheSourceMap();
+    }
+    
     /** 第二个 Redis 初始 {@linkplain RedisCacheConfiguration} {@linkplain Map} */
     @Override
     @Bean(redisInitialCacheConfigurationsBeanName)
     @ConditionalOnMissingBean(name = redisInitialCacheConfigurationsBeanName)
-    public MapPropertySource redisInitialCacheConfigurations()
+    public MapPropertySource redisInitialCacheConfigurations(@Qualifier(redisInitialCacheSourceMapBeanName) Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap)
     {
-        return super.redisInitialCacheConfigurations();
+        return super.redisInitialCacheConfigurations(redisInitialCacheSourceMap);
     }
     
     @Override

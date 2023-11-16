@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
-/** <b>SHTTP 请求 Sentinel 异常拦截器</b> */
+/** <b>Sentinel 全局异常拦截器</b> */
 @Slf4j
 @RestControllerAdvice
 public class SentinelExceptionAdvice implements Ordered

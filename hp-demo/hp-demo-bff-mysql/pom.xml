@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.hpsocket</groupId>
-            <artifactId>hp-soa-starter-web</artifactId>
+            <artifactId>hp-soa-starter-web-dubbo</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.hpsocket</groupId>

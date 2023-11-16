@@ -33,6 +33,7 @@
         <spring-security-oauth.version>2.5.2.RELEASE</spring-security-oauth.version>
         <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
         <spring-security-rsa.version>1.1.1</spring-security-rsa.version>
+        <spring-retry.version>2.0.4</spring-retry.version>
         <spring-amqp.version>3.0.10</spring-amqp.version>
         <spring-kafka.version>3.0.12</spring-kafka.version>
         <kafka-clients.version>3.6.0</kafka-clients.version>
@@ -157,6 +158,11 @@
             <dependency>
                 <groupId>io.github.hpsocket</groupId>
                 <artifactId>hp-soa-starter-web</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.hpsocket</groupId>
+                <artifactId>hp-soa-starter-web-dubbo</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -565,6 +571,12 @@
             </dependency>
             
             <dependency>
+                <groupId>org.springframework.retry</groupId>
+                <artifactId>spring-retry</artifactId>
+                <version>${spring-retry.version}</version>
+            </dependency>
+            
+            <dependency>
                 <groupId>com.rabbitmq</groupId>
                 <artifactId>amqp-client</artifactId>
                 <version>${amqp-client.version}</version>
@@ -574,7 +586,6 @@
                 <artifactId>stream-client</artifactId>
                 <version>${stream-client.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.amqp</groupId>
                 <artifactId>spring-amqp</artifactId>

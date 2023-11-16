@@ -6,7 +6,6 @@ import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +14,7 @@ import io.github.hpsocket.demo.mqtt.contract.resp.PublishResponse;
 import io.github.hpsocket.demo.mqtt.controller.PublishController;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
+import io.github.hpsocket.soa.framework.web.annotation.ReadOnlyGuard;
 import io.github.hpsocket.soa.framework.web.model.Response;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttMessagePublisher;
 
@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @AccessVerification(Type.NO_LOGIN)
+@ReadOnlyGuard(enabled = false, desc = "just read only - 1 ~")
 public class PublishControllerImpl implements PublishController
 {
     /** MQTT 消息发布器 */
@@ -38,8 +39,8 @@ public class PublishControllerImpl implements PublishController
      * @return 消息发布响应对象
      */
     @Override
-    @PostMapping(value = "/publish")
     @AccessVerification(Type.REQUIRE_LOGIN)
+    //@ReadOnlyGuard(desc = "just read only - 2 ~")
     public Response<PublishResponse> publish(@RequestBody @Valid PublishRequest req)
     {
         log.info("[发布消息请求] -> {}", req);

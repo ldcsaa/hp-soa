@@ -40,6 +40,8 @@ public class ServiceException extends RuntimeException
     public static final int NOT_SUPPORTED           = 508;
     /** 禁止更新 */
     public static final int FORBID_UPDATE_ERROR     = 509;
+    /** 拒绝写入 */
+    public static final int READ_ONLY_ERROR         = 510;
     /** 调用超时 */
     public static final int TIMEOUT_ERROR           = 511;
     /** 应用程序编号验证错误 */
@@ -89,6 +91,7 @@ public class ServiceException extends RuntimeException
     public static final ServiceException FREQUENCY_LIMIT_EXCEPTION  = new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
     public static final ServiceException FORBID_EXCEPTION           = new UnimportantException("拒绝访问", FORBID_ERROR);
     public static final ServiceException TRAFFIC_LIMIT_EXCEPTION    = new UnimportantException("系统繁忙", TRAFFIC_LIMIT_ERROR);
+    public static final ServiceException READ_ONLY_EXCEPTION        = new UnimportantException("拒绝写入", READ_ONLY_ERROR);
     public static final ServiceException LOGIN_INVALID_EXCEPTION    = new UnimportantException("登录已失效", LOGIN_INVALID);
     public static final ServiceException NOT_LOGGED_IN_EXCEPTION    = new UnimportantException("未登录", NOT_LOGGED_IN);
     

@@ -15,6 +15,9 @@ import java.util.function.Function;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.MergedAnnotation;
+import org.springframework.core.annotation.MergedAnnotations;
+import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -64,26 +67,6 @@ public class AspectHelper
         }
     }
 
-    public static final <T extends Annotation> T getMethodAnnotation(JoinPoint point, Class<T> annotationType)
-    {
-        Method targetMethod = getMethod(point);
-        
-        if(targetMethod == null)
-            return null;
-        
-        return targetMethod.getAnnotation(annotationType);
-    }
-
-    public static final Annotation[] getMethodAnnotations(JoinPoint point)
-    {
-        Method targetMethod = getMethod(point);
-        
-        if(targetMethod == null)
-            return new Annotation[0];
-        
-        return targetMethod.getAnnotations();
-    }
-
     public static final Class<?> getMethodReturnType(JoinPoint point)
     {
         Method targetMethod = getMethod(point);
@@ -94,10 +77,38 @@ public class AspectHelper
         return targetMethod.getReturnType();
     }
 
+    public static final <T extends Annotation> T getMethodAnnotation(JoinPoint point, Class<T> annotationType)
+    {
+        Method targetMethod = getMethod(point);
+        
+        if(targetMethod == null)
+            return null;
+        
+        return MergedAnnotations.from(targetMethod, SearchStrategy.INHERITED_ANNOTATIONS).get(annotationType).synthesize(MergedAnnotation::isPresent).orElse(null);
+    }
+
+    public static final Annotation[] getMethodAnnotations(JoinPoint point)
+    {
+        Method targetMethod = getMethod(point);
+        
+        if(targetMethod == null)
+            return new Annotation[0];
+        
+        return MergedAnnotations.from(targetMethod, SearchStrategy.INHERITED_ANNOTATIONS).stream().map(MergedAnnotation::synthesize).toArray(Annotation[]::new);
+    }
+
     public static final <T extends Annotation> T getClassAnnotation(JoinPoint point, Class<T> annotationType)
     {
         Class<?> targetCls = point.getTarget().getClass();
-        return targetCls.getAnnotation(annotationType);
+        
+        return MergedAnnotations.from(targetCls, SearchStrategy.INHERITED_ANNOTATIONS).get(annotationType).synthesize(MergedAnnotation::isPresent).orElse(null);
+    }
+
+    public static final Annotation[] getClassAnnotations(JoinPoint point)
+    {
+        Class<?> targetCls = point.getTarget().getClass();
+        
+        return MergedAnnotations.from(targetCls, SearchStrategy.INHERITED_ANNOTATIONS).stream().map(MergedAnnotation::synthesize).toArray(Annotation[]::new);
     }
 
     public static final <T extends Annotation> T getMethodOrClassAnnotation(JoinPoint point, Class<T> annotationType)

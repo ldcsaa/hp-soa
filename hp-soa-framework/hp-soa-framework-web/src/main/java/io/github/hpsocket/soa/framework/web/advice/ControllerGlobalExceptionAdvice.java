@@ -5,10 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
-import org.apache.dubbo.rpc.RpcException;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.web.model.Response;
 
@@ -75,39 +72,6 @@ public class ControllerGlobalExceptionAdvice implements Ordered
         logServiceException(log, se.getMessage(), se);
         
         return new Response<>(se, validationErrors);
-    }
-
-    /** {@linkplain RpcException} 异常处理器 */
-    @ExceptionHandler({RpcException.class})
-    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RpcException e)
-    {
-        Throwable real  = e;
-        Throwable cause = null;
-        
-        do
-        {
-            cause = real.getCause();
-            
-            if(cause == null)
-                break;
-            
-            real = cause;
-        } while(cause instanceof RpcException);
-        
-        
-        ServiceException se = null;
-        
-        if(real instanceof TimeoutException)
-            se = wrapServiceException(TIMEOUT_EXCEPTION, real);
-        else if(real instanceof ExecutionException)
-            se = wrapServiceException(INNER_API_CALL_EXCEPTION, real);
-        
-        if(se == null)
-            se = wrapServiceException(GENERAL_EXCEPTION, real);
-        
-        logServiceException(log, se.getMessage(), se);
-        
-        return new Response<>(se);
     }
 
     /** {@linkplain Exception} 异常处理器 */

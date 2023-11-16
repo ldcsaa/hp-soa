@@ -1,0 +1,1 @@
+mdc=io.github.hpsocket.soa.starter.web.dubbo.filter.DubboMdcFilter

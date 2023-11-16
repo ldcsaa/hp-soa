@@ -3,7 +3,6 @@ package io.github.hpsocket.soa.starter.skywalking.config;
 
 import java.util.List;
 
-import org.apache.dubbo.rpc.model.ApplicationModel;
 import org.apache.skywalking.apm.meter.micrometer.SkywalkingMeterRegistry;
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingDefaultTracingHandler;
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingMeterHandler;
@@ -69,12 +68,4 @@ public class SoaSkyWalkingConfig
         return registry;
     }
 
-    @Bean
-    ApplicationModel applicationModel(ObservationRegistry observationRegistry)
-    {
-        ApplicationModel applicationModel = ApplicationModel.defaultModel();
-        applicationModel.getBeanFactory().registerBean(observationRegistry);
-        
-        return applicationModel;
-    }
 }

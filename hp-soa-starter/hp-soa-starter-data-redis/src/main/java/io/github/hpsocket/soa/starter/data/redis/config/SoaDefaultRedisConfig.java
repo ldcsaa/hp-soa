@@ -51,6 +51,7 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     public static final String redisReactiveStringTemplateBeanName = "redisReactiveStringTemplate";
     public static final String redisCacheManagerBeanName = "redisCacheManager";
     public static final String redisDefaultCacheConfigurationBeanName = "redisDefaultCacheConfiguration";
+    public static final String redisInitialCacheSourceMapBeanName = "redisInitialCacheSourceMap";
     public static final String redisInitialCacheConfigurationsBeanName = "redisInitialCacheConfigurations";
     public static final String redisConnectionFactoryBeanName = "redisConnectionFactory";
     public static final String redissonReactiveClientBeanName = "redissonReactiveClient";
@@ -164,6 +165,7 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     }
     
     /** 默认 {@linkplain RedisCacheConfiguration} */
+    @Primary
     @Override
     @Bean(redisDefaultCacheConfigurationBeanName)
     @ConditionalOnMissingBean(name = redisDefaultCacheConfigurationBeanName)
@@ -172,17 +174,27 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
         return super.redisDefaultCacheConfiguration();
     }
     
+    @Primary
+    @Override
+    @Bean(redisInitialCacheSourceMapBeanName)
+    @ConditionalOnMissingBean(name = redisInitialCacheSourceMapBeanName)
+    public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap()
+    {
+        return super.redisInitialCacheSourceMap();
+    }
+    
     /** 初始 {@linkplain RedisCacheConfiguration} {@linkplain Map} */
+    @Primary
     @Override
     @Bean(redisInitialCacheConfigurationsBeanName)
     @ConditionalOnMissingBean(name = redisInitialCacheConfigurationsBeanName)
-    public MapPropertySource redisInitialCacheConfigurations()
+    public MapPropertySource redisInitialCacheConfigurations(@Qualifier(redisInitialCacheSourceMapBeanName) Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap)
     {
-        return super.redisInitialCacheConfigurations();
+        return super.redisInitialCacheConfigurations(redisInitialCacheSourceMap);
     }
     
-    @Override
     @Primary
+    @Override
     @Bean(redisConnectionFactoryBeanName)
     @ConditionalOnMissingBean(name = redisConnectionFactoryBeanName)
     public RedissonConnectionFactory redissonConnectionFactory(@Qualifier(redissonClientBeanName) RedissonClient redisson)

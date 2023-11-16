@@ -34,11 +34,18 @@
 </dependencyManagement>
 
 <dependencies>
-    <!-- 引用 hp-soa-starter-web -->
+    <!-- 普通项目引用 hp-soa-starter-web -->
     <dependency>
         <groupId>io.github.hpsocket</groupId>
         <artifactId>hp-soa-starter-web</artifactId>
     </dependency>
+    <!-- Dubbo项目引用 hp-soa-starter-web-dubbo -->
+    <!--
+    <dependency>
+        <groupId>io.github.hpsocket</groupId>
+        <artifactId>hp-soa-starter-web-dubbo</artifactId>
+    </dependency>
+    -->
     <!-- 根据项目需要，引用其它 hp-soa starter -->
     <dependency>
         <groupId>io.github.hpsocket</groupId>
@@ -99,7 +106,7 @@ hp.soa.web:
 ```
 &nbsp;&nbsp;HTTP请求鉴权相关内容将在下文详述。
 
-- **dubbo**
+- **dubbo**（Dubbo项目）
 ```yaml
 ## Dubbo 配置
 dubbo:
