@@ -28,21 +28,22 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Aspect
-@Order(0)
+@Order(KafkaListenerMdcInspector.ORDER)
 public class KafkaListenerMdcInspector
 {
-    static final String INSPECTOR_POINTCUT_PATTERN  = "execution (public void *.*(..)) && "
-                                                    + "("
-                                                    + "     @annotation(org.springframework.kafka.annotation.KafkaListener) || "
-                                                    + "     ("
-                                                    + "         @target(org.springframework.kafka.annotation.KafkaListener) &&"
-                                                    + "         @annotation(org.springframework.kafka.annotation.KafkaHandler)"
-                                                    + "     )"
-                                                    + ")";
+    public static final int ORDER               = 0;
+    public static final String POINTCUT_PATTERN = "execution (public void *.*(..)) && "
+                                                + "("
+                                                + "     @annotation(org.springframework.kafka.annotation.KafkaListener) || "
+                                                + "     ("
+                                                + "         @target(org.springframework.kafka.annotation.KafkaListener) &&"
+                                                + "         @annotation(org.springframework.kafka.annotation.KafkaHandler)"
+                                                + "     )"
+                                                + ")";
 
     private static final AspectHelper.AnnotationHolder<KafkaListener> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
 
-    @Pointcut(INSPECTOR_POINTCUT_PATTERN)
+    @Pointcut(POINTCUT_PATTERN)
     protected void aroundMethod() {}
     
     @Around(value = "aroundMethod()")

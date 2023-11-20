@@ -60,6 +60,9 @@ public class WebConfig implements WebMvcConfigurer
     public static final String readOnlyContextRefreshedEventListenerBeanName = "readOnlyContextRefreshedEventListener";
     public static final String readOnlyRefreshEventListenerBeanName = "readOnlyRefreshEventListener";
     public static final String asyncThreadPoolExecutorBeanName = "asyncThreadPoolExecutor";
+    public static final String httpMdcFilterRegistrationBeanName = "httpMdcFilterRegistration";
+    
+    private static final String SERVER_PORT_KEY = "server.port";
     
     private final WebProperties webProperties;
     private final SecurityProperties securityProperties;
@@ -75,8 +78,10 @@ public class WebConfig implements WebMvcConfigurer
             throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.app.id' or 'hp.soa.web.app.name' property is empty", WebConfig.class.getSimpleName()));
         
         checkProxy(webProperties.getProxy());
+        
+        int serverPort = Integer.valueOf(SpringContextHolder.getApplicationContext().getEnvironment().getProperty(SERVER_PORT_KEY));
 
-        AppConfigHolder.init(webProperties, securityProperties);
+        AppConfigHolder.init(webProperties, securityProperties, serverPort);
     }
     
     /** {@linkplain ReadOnlyContextRefreshedEventListener} 应用程序监听器配置 */
@@ -96,8 +101,9 @@ public class WebConfig implements WebMvcConfigurer
     }
 
     /** {@linkplain HttpMdcFilter} 过滤器配置 */
-    @Bean
-    public FilterRegistrationBean<HttpMdcFilter> mdcTracingFilterRegistration()
+    @Bean(httpMdcFilterRegistrationBeanName)
+    @ConditionalOnMissingBean(name = httpMdcFilterRegistrationBeanName)
+    public FilterRegistrationBean<HttpMdcFilter> httpMdcFilterRegistration()
     {
         FilterRegistrationBean<HttpMdcFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new HttpMdcFilter());

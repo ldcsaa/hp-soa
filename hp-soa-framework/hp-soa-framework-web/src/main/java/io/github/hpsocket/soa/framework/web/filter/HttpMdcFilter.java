@@ -17,18 +17,16 @@ import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /** <b>HTTP 请求 MDC 过滤器</b><br>
  * 主要功能：
  * <ol>
  * <li>为 HTTP 请求注入调用链跟踪信息</li>
- * <li>创建HTTP 请求上下文 {@linkplain RequestContext}
+ * <li>创建 HTTP 请求上下文 {@linkplain RequestContext}
  * </ol>
  */
 @Slf4j
-@Setter
 public class HttpMdcFilter implements Filter
 {
     public static final int ORDER           = -100;
@@ -57,6 +55,8 @@ public class HttpMdcFilter implements Filter
         {            
             fillMdcAttr(mdcAttr, reqAttr);
             mdcAttr.putMdc();
+            
+            processMdcAttr(mdcAttr, request, response);
 
             chain.doFilter(request, response);
         }
@@ -66,6 +66,11 @@ public class HttpMdcFilter implements Filter
         }
     }
     
+    protected void processMdcAttr(MdcAttr mdcAttr, ServletRequest request, ServletResponse response)
+    {
+        
+    }
+
     private void fillMdcAttr(MdcAttr mdcAttr, RequestAttribute reqAttr)
     {
         if(GeneralHelper.isStrNotEmpty(reqAttr.getClientId()))

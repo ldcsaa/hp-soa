@@ -23,6 +23,7 @@ public class AppConfigHolder
     private static String appOrganization;
     private static String appOwner;
     private static String appAddress;
+    private static int appPort;
     
     private static int cookieMaxAge;
     private static String servletContextPath;
@@ -39,7 +40,7 @@ public class AppConfigHolder
     
     private static boolean initialized;
     
-    public static final void init(IAppProperties appProperties, IServletPathsPropertries servletProperties)
+    public static final void init(IAppProperties appProperties, IServletPathsPropertries servletProperties, int serverPort)
     {
         if(!initialized)
         {
@@ -55,6 +56,7 @@ public class AppConfigHolder
                     appOwner        = appProperties.getOwner();
                     cookieMaxAge    = appProperties.getCookieMaxAge();
                     appAddress      = SystemUtil.getAddress();
+                    appPort         = serverPort;
                     
                     servletContextPath          = servletProperties.getServletContextPath();
                     springMvcServletPath        = servletProperties.getSpringMvcServletPath();
@@ -126,6 +128,11 @@ public class AppConfigHolder
     public static String getAppAddress()
     {
         return appAddress;
+    }
+    
+    public static int getAppPort()
+    {
+        return appPort;
     }
 
     public static int getCookieMaxAge()

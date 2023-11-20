@@ -17,6 +17,7 @@ import io.github.hpsocket.soa.framework.web.service.AsyncService;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.job.xxljob.exception.XxlJobExceptionHandler;
+
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 
@@ -27,12 +28,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Aspect
-@Order(0)
+@Order(XxlJobInspector.ORDER)
 public class XxlJobInspector
 {
-    private static final int SKIP_RESULT_CODE    = 202;
-    private static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
-                                                 + "@annotation(com.xxl.job.core.handler.annotation.XxlJob)";
+    public static final int SKIP_RESULT_CODE    = 202;
+    public static final int ORDER               = 0;
+    public static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
+                                                + "@annotation(com.xxl.job.core.handler.annotation.XxlJob)";
     
     private static final AspectHelper.AnnotationHolder<XxlJob> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
     

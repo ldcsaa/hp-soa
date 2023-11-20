@@ -29,12 +29,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Aspect
-@Order(0)
+@Order(ExclusiveJobInspector.ORDER)
 public class ExclusiveJobInspector
 {
-    private static final String JOB_LOCK_KEY_PREFIX = "hp.soa.job:lock:";
-    private static final String POINTCUT_PATTERN    = "execution (public void *.*()) && "
+    public static final int ORDER                   = 0;
+    public static final String POINTCUT_PATTERN     = "execution (public void *.*()) && "
                                                     + "@annotation(io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob)";
+    private static final String JOB_LOCK_KEY_PREFIX = "hp.soa.job:lock:";
     
     private static final AtomicBoolean RUNNING = new AtomicBoolean(false);    
     private static final AspectHelper.AnnotationHolder<ExclusiveJob> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
@@ -58,7 +59,7 @@ public class ExclusiveJobInspector
     @Around(value = "aroundMethod()")
     public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
     {    
-        MdcAttr mdcAttr = WebServerHelper.createMdcAttr();        
+        MdcAttr mdcAttr = WebServerHelper.createMdcAttr();
 
         ExclusiveJob job = ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
         Assert.notNull(job, "@ExclusiveJob annotation not found");

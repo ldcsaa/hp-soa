@@ -73,7 +73,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response)
     {
-        HttpServletRequest req     = ((ServletServerHttpRequest)request).getServletRequest();
+        HttpServletRequest req   = ((ServletServerHttpRequest)request).getServletRequest();
         HttpServletResponse resp = ((ServletServerHttpResponse)response).getServletResponse();
         
         if(body instanceof Response<?> respBody)

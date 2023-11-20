@@ -131,7 +131,7 @@
         <seata.version>1.8.0</seata.version>
         
         <micrometer-jvm-extras.version>0.2.2</micrometer-jvm-extras.version>
-        <micrometer-core.version>1.11.5</micrometer-core.version>
+        <micrometer-tracing.version>1.2.0</micrometer-tracing.version>
     </properties>
     
     <dependencyManagement>
@@ -1392,8 +1392,18 @@
             </dependency>
             <dependency>
                 <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-core</artifactId>
-                <version>${micrometer-core.version}</version>
+                <artifactId>micrometer-tracing</artifactId>
+                <version>${micrometer-tracing.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bridge-brave</artifactId>
+                <version>${micrometer-tracing.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bridge-otel</artifactId>
+                <version>${micrometer-tracing.version}</version>
             </dependency>
 
         </dependencies>
