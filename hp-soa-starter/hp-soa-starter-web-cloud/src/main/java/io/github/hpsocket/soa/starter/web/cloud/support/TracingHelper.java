@@ -11,26 +11,29 @@ import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 
-public class TraceHelper
+public class TracingHelper
 {
     public static final String SLEUTH_IS_ENTRY_KEY  = "__isEntry";
     
-    public static final boolean isEntry()
+    private static ThreadLocal<Boolean> ENTRY  = new ThreadLocal<>();
+    private static ThreadLocal<Long> TIMESTAMP = new ThreadLocal<>();
+    
+    public static final boolean checkEntry()
     {
         BaggageField bf = BaggageField.getByName(SLEUTH_IS_ENTRY_KEY);
-        return (bf == null || Boolean.TRUE.toString().equals(bf.getValue()));
+        boolean entry = (bf == null || Boolean.TRUE.toString().equals(bf.getValue()));
+        
+        MDC.put(SLEUTH_IS_ENTRY_KEY, entry);
+        
+        ENTRY.set(entry);
+        return entry;
     }
     
-    public static final void setEntry(boolean isEntry)
+    public static final boolean isEntry()
     {
-        BaggageField entry = BaggageField.getByName(SLEUTH_IS_ENTRY_KEY);
-
-        if(entry == null)
-            entry = BaggageField.create(SLEUTH_IS_ENTRY_KEY);
-        
-        entry.updateValue(Boolean.valueOf(isEntry).toString());
+        return ENTRY.get();
     }
-
+    
     public static final void fillBaggageByMdcAttr()
     {
         fillBaggageByMdcAttr(true);
@@ -48,6 +51,16 @@ public class TraceHelper
         
         if(resetEntry)
             setEntry(false);
+    }
+
+    private static final void setEntry(boolean isEntry)
+    {
+        BaggageField entry = BaggageField.getByName(SLEUTH_IS_ENTRY_KEY);
+
+        if(entry == null)
+            entry = BaggageField.create(SLEUTH_IS_ENTRY_KEY);
+        
+        entry.updateValue(Boolean.valueOf(isEntry).toString());
     }
 
     public static final void fillMdcAttrByBaggage()
@@ -104,4 +117,15 @@ public class TraceHelper
         fromServiceName.updateValue(AppConfigHolder.getAppName());
         fromServiceAddr.updateValue(AppConfigHolder.getAppAddress());
     }
+    
+    public static final void StartTiming()
+    {
+        TIMESTAMP.set(System.currentTimeMillis());
+    }
+    
+    public static final long calcTimestamp()
+    {
+        return System.currentTimeMillis() - TIMESTAMP.get();
+    }
+    
 }

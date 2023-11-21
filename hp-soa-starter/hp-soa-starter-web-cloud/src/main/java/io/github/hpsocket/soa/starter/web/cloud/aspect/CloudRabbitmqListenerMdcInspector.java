@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect.RabbitmqListenerMdcInspector;
-import io.github.hpsocket.soa.starter.web.cloud.support.TraceHelper;
+import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 
 /** <b>Spring Cloud Rabbitmq Listener Mdc 拦截器</b><br>
  * 为 Rabbitmq Listener 方法注入调用链跟踪信息
@@ -26,7 +26,9 @@ public class CloudRabbitmqListenerMdcInspector
     @Around(value = "aroundMethod()")
     public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
     {
-        TraceHelper.fillBaggageByMdcAttr();
+        TracingHelper.checkEntry();
+        TracingHelper.fillBaggageByMdcAttr();
+        
         return joinPoint.proceed();
     }
 

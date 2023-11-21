@@ -9,31 +9,23 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.github.hpsocket.soa.framework.web.advice.ControllerRequestAdvice;
-import io.github.hpsocket.soa.starter.web.cloud.support.TraceHelper;
+import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 
 /** <b>Spring Cloud HTTP 请求拦截器</b> */
 @Aspect
 @RestControllerAdvice
 public class CloudControllerRequestAdvice extends ControllerRequestAdvice
 {
-    private static final ThreadLocal<Boolean> entry = new ThreadLocal<>();
-    
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType)
     {
-        boolean isEntry = TraceHelper.isEntry();
-        entry.set(isEntry);
-        
-        return isEntry ? super.supports(methodParameter, targetType, converterType) : false;
+        return super.supports(methodParameter, targetType, converterType);
     }
 
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType)
     {
-        if(entry.get())
-            return super.afterBodyRead(body, inputMessage, parameter, targetType, converterType);
-        
-        return body;
+        return TracingHelper.isEntry() ? super.afterBodyRead(body, inputMessage, parameter, targetType, converterType) : body;
     }
 
 }

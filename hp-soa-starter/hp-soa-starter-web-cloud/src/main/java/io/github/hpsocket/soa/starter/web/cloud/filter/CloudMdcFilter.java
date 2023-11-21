@@ -9,7 +9,7 @@ import org.slf4j.MDC;
 
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
-import io.github.hpsocket.soa.starter.web.cloud.support.TraceHelper;
+import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -45,7 +45,7 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
-        boolean isEntry = TraceHelper.isEntry();
+        boolean isEntry = TracingHelper.checkEntry();
         
         try
         {
@@ -53,7 +53,8 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
                 super.doFilter(request, response, chain);
             else
             {
-                TraceHelper.fillMdcAttrByBaggage();
+                TracingHelper.StartTiming();
+                TracingHelper.fillMdcAttrByBaggage();
                 chain.doFilter(request, response);
             }
         }
@@ -67,6 +68,6 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
     @Override
     protected void processMdcAttr(MdcAttr mdcAttr, ServletRequest request, ServletResponse response)
     {
-        TraceHelper.fillBaggageByMdcAttr();
+        TracingHelper.fillBaggageByMdcAttr();
     }
 }

@@ -29,7 +29,7 @@ public class DubboExceptionAdvice implements Ordered
 
     /** {@linkplain RpcException} 异常处理器 */
     @ExceptionHandler({RpcException.class})
-    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RpcException e)
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, RpcException e) throws RpcException
     {
         Throwable real  = e;
         Throwable cause = null;

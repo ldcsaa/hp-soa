@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 import io.github.hpsocket.soa.starter.job.exclusive.aspect.ExclusiveJobInspector;
-import io.github.hpsocket.soa.starter.web.cloud.support.TraceHelper;
+import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 
 /** <b>Spring Cloud Exclusive Job 拦截器</b><br>
  * 为 Exclusive Job 注解的方法注入调用链跟踪信息
@@ -26,7 +26,9 @@ public class CloudExclusiveJobInspector
     @Around(value = "aroundMethod()")
     public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
     {
-        TraceHelper.fillBaggageByMdcAttr();
+        TracingHelper.checkEntry();
+        TracingHelper.fillBaggageByMdcAttr();
+        
         return joinPoint.proceed();
     }
 

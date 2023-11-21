@@ -32,15 +32,17 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class ControllerGlobalExceptionAdvice implements Ordered
 {
+    public static final int ORDER = 0;
+    
     @Override
     public int getOrder()
     {
-        return 0;
+        return ORDER;
     }
 
     /** {@linkplain MethodArgumentNotValidException} 异常处理器 */
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e)
+    public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e) throws MethodArgumentNotValidException
     {
         BindingResult rs = e.getBindingResult();
         
@@ -76,7 +78,7 @@ public class ControllerGlobalExceptionAdvice implements Ordered
 
     /** {@linkplain Exception} 异常处理器 */
     @ExceptionHandler({Exception.class})
-    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e) throws Exception
     {
         ServiceException se = null;
         

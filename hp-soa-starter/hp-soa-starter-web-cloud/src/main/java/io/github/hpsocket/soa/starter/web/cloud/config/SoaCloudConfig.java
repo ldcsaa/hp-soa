@@ -20,6 +20,7 @@ import io.github.hpsocket.soa.starter.job.exclusive.config.SoaExclusiveJobConfig
 import io.github.hpsocket.soa.starter.job.xxljob.config.SoaXxlJobConfig;
 import io.github.hpsocket.soa.starter.kafka.config.SoaKafkaConfig;
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.config.SoaRabbitmqConsumerConfig;
+import io.github.hpsocket.soa.starter.sentinel.config.SoaSentinelConfig;
 import io.github.hpsocket.soa.starter.task.config.SoaTaskConfig;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerRequestAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerResponseAdvice;
@@ -34,11 +35,13 @@ import io.github.hpsocket.soa.starter.web.config.WebConfig;
 
 /** <b>HP-SOA Spring Cloud 配置</b> */
 @EnableDiscoveryClient
-@AutoConfiguration(before = {WebConfig.class, ControllerAdviceConfig.class})
+@AutoConfiguration(before = {WebConfig.class, ControllerAdviceConfig.class, SoaSentinelConfig.class})
 public class SoaCloudConfig
 {
-    public static final String controllerRequestAdviceBeanName  = ControllerAdviceConfig.controllerRequestAdviceBeanName;
-    public static final String controllerResponseAdviceBeanName = ControllerAdviceConfig.controllerResponseAdviceBeanName;
+    public static final String httpMdcFilterRegistrationBeanName        = WebConfig.httpMdcFilterRegistrationBeanName;
+    public static final String controllerRequestAdviceBeanName          = ControllerAdviceConfig.controllerRequestAdviceBeanName;
+    public static final String controllerResponseAdviceBeanName         = ControllerAdviceConfig.controllerResponseAdviceBeanName;
+    public static final String controllerGlobalExceptionAdviceBeanName  = ControllerAdviceConfig.controllerGlobalExceptionAdviceBeanName;
     
     @Bean
     Tracing tracing()
@@ -56,6 +59,19 @@ public class SoaCloudConfig
                 .propagationFactory(fb.build()).build();
     }
     
+    @Bean(httpMdcFilterRegistrationBeanName)
+    public FilterRegistrationBean<CloudMdcFilter> httpMdcFilterRegistration()
+    {
+        FilterRegistrationBean<CloudMdcFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(new CloudMdcFilter());
+        registration.setName(CloudMdcFilter.DISPLAY_NAME);
+        registration.addUrlPatterns(CloudMdcFilter.URL_PATTERNS);
+        registration.setOrder(CloudMdcFilter.ORDER);
+        registration.setEnabled(true);
+        
+        return registration;
+    }
+    
     @Bean(controllerRequestAdviceBeanName)
     CloudControllerRequestAdvice controllerRequestAdvice()
     {
@@ -68,17 +84,10 @@ public class SoaCloudConfig
         return new CloudControllerResponseAdvice();
     }
     
-   @Bean(WebConfig.httpMdcFilterRegistrationBeanName)
-    public FilterRegistrationBean<CloudMdcFilter> httpMdcFilterRegistration()
+    @Bean(controllerGlobalExceptionAdviceBeanName)
+    CloudControllerResponseAdvice controllerGlobalExceptionAdvice()
     {
-        FilterRegistrationBean<CloudMdcFilter> registration = new FilterRegistrationBean<>();
-        registration.setFilter(new CloudMdcFilter());
-        registration.setName(CloudMdcFilter.DISPLAY_NAME);
-        registration.addUrlPatterns(CloudMdcFilter.URL_PATTERNS);
-        registration.setOrder(CloudMdcFilter.ORDER);
-        registration.setEnabled(true);
-        
-        return registration;
+        return new CloudControllerResponseAdvice();
     }
     
     @Bean
