@@ -3,9 +3,13 @@ package io.github.hpsocket.soa.starter.web.cloud.config;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+
+import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
 
 import brave.Tracing;
 import brave.baggage.BaggageField;
@@ -22,6 +26,7 @@ import io.github.hpsocket.soa.starter.kafka.config.SoaKafkaConfig;
 import io.github.hpsocket.soa.starter.rabbitmq.consumer.config.SoaRabbitmqConsumerConfig;
 import io.github.hpsocket.soa.starter.sentinel.config.SoaSentinelConfig;
 import io.github.hpsocket.soa.starter.task.config.SoaTaskConfig;
+import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerGlobalExceptionAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerRequestAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerResponseAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.aspect.CloudExclusiveJobInspector;
@@ -29,6 +34,7 @@ import io.github.hpsocket.soa.starter.web.cloud.aspect.CloudKafkaListenerMdcInsp
 import io.github.hpsocket.soa.starter.web.cloud.aspect.CloudRabbitmqListenerMdcInspector;
 import io.github.hpsocket.soa.starter.web.cloud.aspect.CloudScheduledInspector;
 import io.github.hpsocket.soa.starter.web.cloud.aspect.CloudXxlJobInspector;
+import io.github.hpsocket.soa.starter.web.cloud.exception.CloudSentinelBlockExceptionHandler;
 import io.github.hpsocket.soa.starter.web.cloud.filter.CloudMdcFilter;
 import io.github.hpsocket.soa.starter.web.config.ControllerAdviceConfig;
 import io.github.hpsocket.soa.starter.web.config.WebConfig;
@@ -42,6 +48,7 @@ public class SoaCloudConfig
     public static final String controllerRequestAdviceBeanName          = ControllerAdviceConfig.controllerRequestAdviceBeanName;
     public static final String controllerResponseAdviceBeanName         = ControllerAdviceConfig.controllerResponseAdviceBeanName;
     public static final String controllerGlobalExceptionAdviceBeanName  = ControllerAdviceConfig.controllerGlobalExceptionAdviceBeanName;
+    public static final String sentinelBlockExceptionHandlerBeanName    = SoaSentinelConfig.sentinelBlockExceptionHandlerBeanName;
     
     @Bean
     Tracing tracing()
@@ -85,9 +92,18 @@ public class SoaCloudConfig
     }
     
     @Bean(controllerGlobalExceptionAdviceBeanName)
-    CloudControllerResponseAdvice controllerGlobalExceptionAdvice()
+    CloudControllerGlobalExceptionAdvice controllerGlobalExceptionAdvice()
     {
-        return new CloudControllerResponseAdvice();
+        return new CloudControllerGlobalExceptionAdvice();
+    }
+    
+    /** 限流处理器 */
+    @Bean(sentinelBlockExceptionHandlerBeanName)
+    @ConditionalOnMissingBean(name = sentinelBlockExceptionHandlerBeanName)
+    @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
+    public BlockExceptionHandler sentinelBlockExceptionHandler()
+    {
+        return new CloudSentinelBlockExceptionHandler();
     }
     
     @Bean
