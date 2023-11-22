@@ -16,7 +16,7 @@ import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 @Order(CloudKafkaListenerMdcInspector.ORDER)
 public class CloudKafkaListenerMdcInspector
 {
-    public static final int ORDER = KafkaListenerMdcInspector.ORDER + 30;
+    public static final int ORDER = KafkaListenerMdcInspector.ORDER + 10;
     
     public static final String POINTCUT_PATTERN = KafkaListenerMdcInspector.POINTCUT_PATTERN;
     

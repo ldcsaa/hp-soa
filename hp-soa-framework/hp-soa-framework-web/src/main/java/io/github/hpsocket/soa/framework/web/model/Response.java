@@ -102,12 +102,5 @@ public class Response<T> implements Serializable
         this.statusCode = statusCode;
         this.resultCode = resultCode;
     }
-    
-    public long calcCostTime(long beginTime)
-    {
-        costTime = System.currentTimeMillis() - beginTime;
-        
-        return costTime;
-    }
 
 }

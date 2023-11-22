@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.github.hpsocket.soa.framework.web.advice.ControllerResponseAdvice;
 import io.github.hpsocket.soa.framework.web.model.Response;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 
 /** <b>Spring Cloud HTTP 响应拦截器</b> */
@@ -28,7 +29,7 @@ public class CloudControllerResponseAdvice extends ControllerResponseAdvice
             return super.beforeBodyWrite(body, returnType, selectedContentType, selectedConverterType, request, response);
         
         if(body instanceof Response<?> respBody)
-            respBody.setCostTime(TracingHelper.calcTimestamp());
+            respBody.setCostTime(WebServerHelper.calcTimestamp());
         
         return body;
     }

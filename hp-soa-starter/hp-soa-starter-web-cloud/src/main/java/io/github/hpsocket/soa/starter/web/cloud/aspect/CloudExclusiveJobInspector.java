@@ -16,7 +16,7 @@ import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 @Order(CloudExclusiveJobInspector.ORDER)
 public class CloudExclusiveJobInspector
 {
-    public static final int ORDER = ExclusiveJobInspector.ORDER + 30;
+    public static final int ORDER = ExclusiveJobInspector.ORDER + 10;
     
     public static final String POINTCUT_PATTERN = ExclusiveJobInspector.POINTCUT_PATTERN;
     

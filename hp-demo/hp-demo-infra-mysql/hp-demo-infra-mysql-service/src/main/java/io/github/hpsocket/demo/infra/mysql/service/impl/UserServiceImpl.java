@@ -28,7 +28,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserBo getDefaultUser()
     {
         User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, 1L));
-        log.info("return user: {}", user);
+        log.info("get user: {}", user);
         
         return userConverter.toBo(user);
     }
@@ -38,7 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserBo getMasterUser()
     {
         User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, 1L));
-        log.info("return user: {}", user);
+        log.info("get user: {}", user);
         
         return userConverter.toBo(user);
     }
@@ -48,7 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserBo getSlaveUser()
     {
         User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, 1L));
-        log.info("return user: {}", user);
+        log.info("get user: {}", user);
         
         return userConverter.toBo(user);
     }
@@ -58,7 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserBo getSlave1User()
     {
         User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, 1));
-        log.info("return user: {}", user);
+        log.info("get user: {}", user);
         
         return userConverter.toBo(user);
     }
@@ -68,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserBo getSlave2User()
     {
         User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, 1));
-        log.info("return user: {}", user);
+        log.info("get user: {}", user);
         
         return userConverter.toBo(user);
     }
@@ -78,7 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public boolean saveUser(UserBo userBo)
     {
         User user = userConverter.fromBo(userBo);
-        log.info("save user: ", user);
+        log.info("save user: {}", user);
         
         if(user.getId() != null)
         {

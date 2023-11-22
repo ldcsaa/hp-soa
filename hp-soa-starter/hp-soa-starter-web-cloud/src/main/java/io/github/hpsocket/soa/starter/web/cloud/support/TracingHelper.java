@@ -16,7 +16,6 @@ public class TracingHelper
     public static final String SLEUTH_IS_ENTRY_KEY  = "__isEntry";
     
     private static ThreadLocal<Boolean> ENTRY  = new ThreadLocal<>();
-    private static ThreadLocal<Long> TIMESTAMP = new ThreadLocal<>();
     
     public static final boolean checkEntry()
     {
@@ -116,16 +115,6 @@ public class TracingHelper
         fromServiceId.updateValue(AppConfigHolder.getAppId());
         fromServiceName.updateValue(AppConfigHolder.getAppName());
         fromServiceAddr.updateValue(AppConfigHolder.getAppAddress());
-    }
-    
-    public static final void StartTiming()
-    {
-        TIMESTAMP.set(System.currentTimeMillis());
-    }
-    
-    public static final long calcTimestamp()
-    {
-        return System.currentTimeMillis() - TIMESTAMP.get();
     }
     
 }

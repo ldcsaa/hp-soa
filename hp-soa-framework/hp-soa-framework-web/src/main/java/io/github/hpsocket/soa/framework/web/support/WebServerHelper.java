@@ -81,6 +81,8 @@ public class WebServerHelper
     public static final String MONITOR_INGRESS      = "MONITOR-INGRESS";
     public static final String MONITOR_EGRESS       = "MONITOR-EGRESS";
 
+    private static ThreadLocal<Long> TIMESTAMP      = new ThreadLocal<>();
+    
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT        = {WriteByteArrayAsBase64, WriteNonStringKeyAsString, WriteMapNullValue};
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL    = {WriteByteArrayAsBase64, WriteNonStringKeyAsString};
     
@@ -92,6 +94,16 @@ public class WebServerHelper
                                                                                         new ThreadPoolExecutor.CallerRunsPolicy());
     
     private static ObjectMapper jacksonObjectMapper;
+    
+    public static final void StartTiming()
+    {
+        TIMESTAMP.set(System.currentTimeMillis());
+    }
+    
+    public static final long calcTimestamp()
+    {
+        return System.currentTimeMillis() - TIMESTAMP.get();
+    }
 
     /** 检测 HTTP 请求的 User-Agent 是否合法 */
     public static final boolean checkUserAgent(String ua)

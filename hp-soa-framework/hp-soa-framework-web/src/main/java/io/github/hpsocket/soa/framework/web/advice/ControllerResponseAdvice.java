@@ -9,6 +9,7 @@ import io.github.hpsocket.soa.framework.core.util.Pair;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import io.github.hpsocket.soa.framework.web.model.Response;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +84,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             
             checkToken(respBody, req, resp);
 
-            respBody.calcCostTime(RequestContext.getTimestamp());
+            respBody.setCostTime(WebServerHelper.calcTimestamp());
         }
         
         logResponse(body, returnType, req);

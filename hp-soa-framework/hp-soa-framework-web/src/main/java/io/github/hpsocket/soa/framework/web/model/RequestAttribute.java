@@ -30,7 +30,6 @@ public class RequestAttribute
     private String extra;
     
     private transient Long userId;
-    private transient long timestamp;
     
     private Object body;
     

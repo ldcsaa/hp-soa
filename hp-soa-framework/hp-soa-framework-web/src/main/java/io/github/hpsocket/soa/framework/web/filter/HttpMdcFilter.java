@@ -48,6 +48,8 @@ public class HttpMdcFilter implements Filter
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
+        WebServerHelper.StartTiming();
+        
         MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false);
         RequestAttribute reqAttr = RequestContext.parseRequestAttribute((HttpServletRequest)request, (HttpServletResponse)response);
         

@@ -16,7 +16,7 @@ import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 @Order(CloudRabbitmqListenerMdcInspector.ORDER)
 public class CloudRabbitmqListenerMdcInspector
 {
-    public static final int ORDER = RabbitmqListenerMdcInspector.ORDER + 30;
+    public static final int ORDER = RabbitmqListenerMdcInspector.ORDER + 10;
     
     public static final String POINTCUT_PATTERN = RabbitmqListenerMdcInspector.POINTCUT_PATTERN;
     

@@ -27,7 +27,7 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
         if(TracingHelper.isEntry())
             return super.handleBlockException(request, response, e);
         
-        log.error(e.getMessage(), e);
+        log.warn(e.getMessage());
         
         throw e;
     }
@@ -40,7 +40,7 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
         if(TracingHelper.isEntry())
             return super.handleUndeclaredThrowableException(request, response, e);
         
-        log.error(e.getMessage(), e);
+        log.warn(e.getMessage());
         
         throw e;
     }
@@ -53,7 +53,7 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
         if(TracingHelper.isEntry())
             return super.handleRuntimeException(request, response, e);
         
-        log.error(e.getMessage(), e);
+        log.warn(e.getMessage());
         
         throw e;
     }

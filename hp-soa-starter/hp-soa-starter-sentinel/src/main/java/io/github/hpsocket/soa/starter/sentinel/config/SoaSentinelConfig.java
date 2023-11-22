@@ -26,12 +26,21 @@ public class SoaSentinelConfig
     public static final String sentinelBlockExceptionHandlerBeanName = "sentinelBblockExceptionHandler";
     
     @Bean(sentinelExceptionAdviceBeanName)
-    @ConditionalOnMissingBean(name = "sentinelExceptionAdviceBeanName")
+    @ConditionalOnMissingBean(name = sentinelExceptionAdviceBeanName)
     SentinelExceptionAdvice sentinelExceptionAdvice()
     {
         return new SentinelExceptionAdvice();
     }
     
+    /** 默认限流处理器 */
+    @Bean(sentinelBlockExceptionHandlerBeanName)
+    @ConditionalOnMissingBean(name = sentinelBlockExceptionHandlerBeanName)
+    @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
+    public BlockExceptionHandler sentinelBlockExceptionHandler()
+    {
+        return new DefaultSentinelBlockExceptionHandler();
+    }
+
     /** 资源变换器 */
     @Bean
     @ConditionalOnMissingBean(UrlCleaner.class)
@@ -63,13 +72,4 @@ public class SoaSentinelConfig
         };
     }
     
-    /** 默认限流处理器 */
-    @Bean(sentinelBlockExceptionHandlerBeanName)
-    @ConditionalOnMissingBean(name = sentinelBlockExceptionHandlerBeanName)
-    @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
-    public BlockExceptionHandler sentinelBlockExceptionHandler()
-    {
-        return new DefaultSentinelBlockExceptionHandler();
-    }
-
 }

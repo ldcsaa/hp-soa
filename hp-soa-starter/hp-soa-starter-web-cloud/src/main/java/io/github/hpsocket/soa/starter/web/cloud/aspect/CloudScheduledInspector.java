@@ -16,7 +16,7 @@ import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 @Order(CloudScheduledInspector.ORDER)
 public class CloudScheduledInspector
 {
-    public static final int ORDER = ScheduledTraceIdInspector.ORDER + 30;
+    public static final int ORDER = ScheduledTraceIdInspector.ORDER + 10;
     
     public static final String POINTCUT_PATTERN = ScheduledTraceIdInspector.POINTCUT_PATTERN;
     

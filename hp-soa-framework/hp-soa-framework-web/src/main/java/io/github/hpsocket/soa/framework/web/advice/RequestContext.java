@@ -136,11 +136,6 @@ public class RequestContext
         return getRequestAttribute().getUserId();
     }
     
-    public static final long getTimestamp()
-    {
-        return getRequestAttribute().getTimestamp();
-    }
-    
     public static final Object getBody()
     {
         return getRequestAttribute().getBody();
@@ -163,7 +158,6 @@ public class RequestContext
     
     public static final RequestAttribute parseRequestAttribute(HttpServletRequest request, HttpServletResponse response)
     {
-        long timestamp               = System.currentTimeMillis();
         Map<String, String> reqInfos = parseRequestInfo(request);
         
         String appCode      = parseRequestField(request, reqInfos, HEADER_APP_CODE, false);
@@ -207,7 +201,6 @@ public class RequestContext
         reqAttr.setRequestUri(requestUri);
         reqAttr.setRequestPath(requestPath);
         reqAttr.setRequestMethod(requestMethod);
-        reqAttr.setTimestamp(timestamp);
         
         setRequestAttribute(reqAttr);
         

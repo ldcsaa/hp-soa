@@ -16,7 +16,7 @@ import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 @Order(CloudXxlJobInspector.ORDER)
 public class CloudXxlJobInspector
 {
-    public static final int ORDER = XxlJobInspector.ORDER + 30;
+    public static final int ORDER = XxlJobInspector.ORDER + 10;
     
     public static final String POINTCUT_PATTERN = XxlJobInspector.POINTCUT_PATTERN;
     

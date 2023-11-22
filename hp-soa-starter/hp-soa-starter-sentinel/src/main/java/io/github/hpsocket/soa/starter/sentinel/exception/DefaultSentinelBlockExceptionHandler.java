@@ -8,6 +8,7 @@ import com.alibaba.fastjson2.JSON;
 
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.web.model.Response;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,10 @@ public class DefaultSentinelBlockExceptionHandler implements BlockExceptionHandl
         
         try(PrintWriter out = response.getWriter())
         {
-            out.print(JSON.toJSONString(new Response<>(se)));
+            Response<?> resp = new Response<>(se);
+            resp.setCostTime(WebServerHelper.calcTimestamp());
+            
+            out.print(JSON.toJSONString(resp));
             out.flush();
         }
     }

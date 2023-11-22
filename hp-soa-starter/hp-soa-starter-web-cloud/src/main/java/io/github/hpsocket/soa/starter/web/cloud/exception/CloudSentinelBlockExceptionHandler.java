@@ -17,10 +17,11 @@ public class CloudSentinelBlockExceptionHandler extends DefaultSentinelBlockExce
     {
         if(TracingHelper.isEntry())
             super.handle(request, response, e);
-        
-        log.warn(e.getMessage());
-        
-        throw e;
+        else
+        {
+            log.warn(e.getMessage());
+            throw e;
+        }
     }
 
 }

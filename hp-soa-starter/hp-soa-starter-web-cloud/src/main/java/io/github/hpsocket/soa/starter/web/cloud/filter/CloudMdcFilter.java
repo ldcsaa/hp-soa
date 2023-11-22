@@ -9,6 +9,7 @@ import org.slf4j.MDC;
 
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -53,7 +54,7 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
                 super.doFilter(request, response, chain);
             else
             {
-                TracingHelper.StartTiming();
+                WebServerHelper.StartTiming();
                 TracingHelper.fillMdcAttrByBaggage();
                 chain.doFilter(request, response);
             }

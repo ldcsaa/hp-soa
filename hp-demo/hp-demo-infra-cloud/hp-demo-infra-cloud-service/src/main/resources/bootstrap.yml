@@ -1,0 +1,66 @@
+# app
+hp.soa.web:
+  app:
+    id: "0010100018"
+    name: ${project.artifactId}
+    version: ${project.version}
+    organization: HP-Socket
+    owner: Kingfisher
+  # spring bean scan packages
+  component-scan:
+    base-package: ${project.groupId}
+  access-verification:
+    enabled: false
+    default-access-policy: maybe_login
+hp.soa.data.mysql:
+  # mybatis mapper scan packages
+  mapper-scan:
+    base-package: ${project.groupId}.infra.cloud.mapper
+hp.soa.web.cloud:
+  # feign clients scan packages
+  feign-clients:
+    base-package: ${project.groupId}.infra.cloud.client
+
+# logging
+logging.config: classpath:log4j2-kafka.xml
+
+spring.cloud.nacos.config:
+  #server-addr: 192.168.56.23:8848
+  #username: nacos
+  #password: 123456
+  #namespace: DEV
+  group: DEMO_GROUP
+  name: ${hp.soa.web.app.name}
+  file-extension: yml
+  refresh-enabled: true
+  shared-configs:
+    - group: GLOBAL_GROUP
+      data-id: hp-soa.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: spring-boot.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: spring-cloud.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: mysql.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: rabbitmq.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: sentinel.yml
+      refresh: true
+
+# dubbo
+dubbo.protocols:
+  #dubbo:
+  #  name: dubbo
+  #  port: 5018
+  tri:
+    name: tri
+    port: 6018
+
+# server
+server.port: 9018
