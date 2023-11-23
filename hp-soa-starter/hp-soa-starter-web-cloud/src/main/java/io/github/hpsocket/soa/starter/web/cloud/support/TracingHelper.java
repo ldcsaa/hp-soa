@@ -4,6 +4,7 @@ import static io.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 
 import java.util.Map;
 
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.jboss.logging.MDC;
 
 import brave.baggage.BaggageField;
@@ -13,19 +14,25 @@ import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 
 public class TracingHelper
 {
-    public static final String SLEUTH_IS_ENTRY_KEY  = "__isEntry";
-    
-    private static ThreadLocal<Boolean> ENTRY  = new ThreadLocal<>();
+    public static final String TRACING_IS_ENTRY_KEY = "__isEntry";
+    private static final ThreadLocal<Boolean> ENTRY = new ThreadLocal<>();
     
     public static final boolean checkEntry()
     {
-        BaggageField bf = BaggageField.getByName(SLEUTH_IS_ENTRY_KEY);
-        boolean entry = (bf == null || Boolean.TRUE.toString().equals(bf.getValue()));
+        boolean isEntry = false;
+        BaggageField bf = BaggageField.getByName(TRACING_IS_ENTRY_KEY);
         
-        MDC.put(SLEUTH_IS_ENTRY_KEY, entry);
+        if(bf == null)
+        {
+            isEntry = true;
+            bf      = BaggageField.create(TRACING_IS_ENTRY_KEY);
+        }
         
-        ENTRY.set(entry);
-        return entry;
+        bf.updateValue(Boolean.valueOf(isEntry).toString());
+        MDC.put(TRACING_IS_ENTRY_KEY, isEntry);
+        ENTRY.set(isEntry);
+        
+        return isEntry;
     }
     
     public static final boolean isEntry()
@@ -33,12 +40,12 @@ public class TracingHelper
         return ENTRY.get();
     }
     
-    public static final void fillBaggageByMdcAttr()
+    public static final void removeEntry()
     {
-        fillBaggageByMdcAttr(true);
+        ENTRY.set(null);
     }
-
-    public static final void fillBaggageByMdcAttr(boolean resetEntry)
+    
+    public static final void fillBaggageByMdcAttr()
     {
         for(String key : MdcAttr.TRANSFER_MDC_ALL_KEYS)
         {
@@ -47,19 +54,6 @@ public class TracingHelper
             if(GeneralHelper.isStrNotEmpty(value))
                 BaggageField.create(key).updateValue(value);
         }
-        
-        if(resetEntry)
-            setEntry(false);
-    }
-
-    private static final void setEntry(boolean isEntry)
-    {
-        BaggageField entry = BaggageField.getByName(SLEUTH_IS_ENTRY_KEY);
-
-        if(entry == null)
-            entry = BaggageField.create(SLEUTH_IS_ENTRY_KEY);
-        
-        entry.updateValue(Boolean.valueOf(isEntry).toString());
     }
 
     public static final void fillMdcAttrByBaggage()
@@ -97,6 +91,7 @@ public class TracingHelper
             
             MDC.put(MDC_APP_ID_KEY, appId);
             MDC.put(MDC_APP_NAME_KEY, appName);
+            
             BaggageField.create(MDC_APP_ID_KEY).updateValue(appId);
             BaggageField.create(MDC_APP_NAME_KEY).updateValue(appName);
         }
@@ -115,6 +110,21 @@ public class TracingHelper
         fromServiceId.updateValue(AppConfigHolder.getAppId());
         fromServiceName.updateValue(AppConfigHolder.getAppName());
         fromServiceAddr.updateValue(AppConfigHolder.getAppAddress());
+    }
+    
+    public static final Object aspectInspect(ProceedingJoinPoint joinPoint) throws Throwable
+    {
+        try
+        {
+            TracingHelper.checkEntry();
+            TracingHelper.fillBaggageByMdcAttr();
+            
+            return joinPoint.proceed();
+        }
+        finally
+        {
+            TracingHelper.removeEntry();
+        }
     }
     
 }

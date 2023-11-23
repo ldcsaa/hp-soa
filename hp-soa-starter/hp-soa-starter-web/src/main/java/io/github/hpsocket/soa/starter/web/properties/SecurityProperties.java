@@ -13,7 +13,7 @@ import lombok.Setter;
 @ConfigurationProperties
 public class SecurityProperties implements IServletPathsPropertries
 {
-    public static final String ANY_PATH_PATTERN = "/**";
+    //public static final String ANY_PATH_PATTERN = "/**";
 
     @Value("${server.servlet.context-path:/}")
     private String servletContextPath;

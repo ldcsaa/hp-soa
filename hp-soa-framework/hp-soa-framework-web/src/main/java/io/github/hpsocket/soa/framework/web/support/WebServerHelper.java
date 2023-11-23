@@ -73,15 +73,15 @@ public class WebServerHelper
     public static final String DEFAULT_REQUEST_CHARSET  = DEFAULT_CHARSET;
     public static final String DEFAULT_REQUEST_FORMAT   = REQUEST_FORMAT_JSON;
     public static final String RESPONSE_CONTENT_TYPE    = "application/json;charset=" + DEFAULT_REQUEST_CHARSET.toLowerCase();
-    public static final Pattern DOMAIN_PATTERN      = Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
-    public static final Pattern SPIDER_PATTERN      = Pattern.compile(".*(Googlebot|Baiduspider|iaskspider|YodaoBot|msnbot|\\ Crawler|\\ Slurp|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
-    public static final Pattern FILTER_SKIP_PATTERN = Pattern.compile("/api-docs.*|/swagger.*|.*\\.png|.*\\.css|.*\\.js|.*\\.html|/favicon.ico|/hystrix.stream");
+    public static final Pattern DOMAIN_PATTERN          = Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
+    public static final Pattern SPIDER_PATTERN          = Pattern.compile(".*(Googlebot|Baiduspider|iaskspider|YodaoBot|msnbot|\\ Crawler|\\ Slurp|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
+    public static final Pattern FILTER_SKIP_PATTERN     = Pattern.compile("/api-docs.*|/swagger.*|.*\\.png|.*\\.css|.*\\.js|.*\\.html|/favicon.ico|/hystrix.stream");
     
-    public static final String MONITOR_LOGGER_NAME  = "SOA-MONITOR";
-    public static final String MONITOR_INGRESS      = "MONITOR-INGRESS";
-    public static final String MONITOR_EGRESS       = "MONITOR-EGRESS";
+    public static final String MONITOR_LOGGER_NAME      = "SOA-MONITOR";
+    public static final String MONITOR_INGRESS          = "MONITOR-INGRESS";
+    public static final String MONITOR_EGRESS           = "MONITOR-EGRESS";
 
-    private static ThreadLocal<Long> TIMESTAMP      = new ThreadLocal<>();
+    private static final ThreadLocal<Long> TIMESTAMP    = new ThreadLocal<>();
     
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT        = {WriteByteArrayAsBase64, WriteNonStringKeyAsString, WriteMapNullValue};
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL    = {WriteByteArrayAsBase64, WriteNonStringKeyAsString};

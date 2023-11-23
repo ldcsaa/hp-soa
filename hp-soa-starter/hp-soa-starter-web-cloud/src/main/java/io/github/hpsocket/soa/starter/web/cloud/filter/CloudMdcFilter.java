@@ -63,6 +63,8 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
         {
             if(!isEntry)
                 Arrays.stream(TRANSFER_MDC_ALL_KEYS).forEach((key) -> MDC.remove(key));
+            
+            TracingHelper.removeEntry();
         }
     }
     

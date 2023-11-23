@@ -3,6 +3,7 @@ package io.github.hpsocket.soa.starter.web.cloud.config;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import brave.baggage.BaggagePropagation.FactoryBuilder;
 import brave.baggage.BaggagePropagationConfig.SingleBaggageField;
 import brave.handler.SpanHandler;
 import brave.propagation.B3Propagation;
+import brave.propagation.Propagation;
 import brave.sampler.Sampler;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
@@ -53,23 +55,30 @@ public class SoaCloudConfig
     }
     
     @Bean
-    Tracing tracing()
+    Propagation.Factory baggagePropagationFactory()
     {
         FactoryBuilder fb = BaggagePropagation.newFactoryBuilder(B3Propagation.FACTORY);
         
         for(String key : MdcAttr.TRANSFER_MDC_ALL_KEYS)
             fb.add(SingleBaggageField.remote(BaggageField.create(key)));
         
-        fb.add(SingleBaggageField.remote(BaggageField.create(TracingHelper.SLEUTH_IS_ENTRY_KEY)));
+        fb.add(SingleBaggageField.remote(BaggageField.create(TracingHelper.TRACING_IS_ENTRY_KEY)));
         
+        return fb.build();
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(Tracing.class)
+    Tracing tracing(Propagation.Factory baggagePropagationFactory)
+    {
         return Tracing.newBuilder()
                 .clearSpanHandlers()
                 .addSpanHandler(new SpanHandler() {})
-                .sampler(Sampler.ALWAYS_SAMPLE)
+                .sampler(Sampler.NEVER_SAMPLE)
                 .localIp(AppConfigHolder.getAppAddress())
                 .localPort(AppConfigHolder.getAppPort())
                 .localServiceName(AppConfigHolder.getAppName())
-                .propagationFactory(fb.build())
+                .propagationFactory(baggagePropagationFactory)
                 .build();
     }
     

@@ -36,6 +36,7 @@ import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageC
 import io.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
+import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.json.FastJsonExcludePropertyFilter;
 import io.github.hpsocket.soa.framework.web.listener.ReadOnlyContextRefreshedEventListener;
@@ -62,12 +63,10 @@ public class WebConfig implements WebMvcConfigurer
     public static final String httpMdcFilterRegistrationBeanName = "httpMdcFilterRegistration";
     
     private final WebProperties webProperties;
-    private final SecurityProperties securityProperties;
     
-    public WebConfig(WebProperties webProperties, SecurityProperties securityProperties, SpringContextHolder springContextHolder)
+    public WebConfig(WebProperties webProperties, SpringContextHolder springContextHolder)
     {
         this.webProperties = webProperties;
-        this.securityProperties = securityProperties;
         
         AppProperties app = webProperties.getApp();
         
@@ -110,32 +109,23 @@ public class WebConfig implements WebMvcConfigurer
     
     /** {@linkplain SecurityFilterChain} 安全过滤器链配置 */
     @Bean
+    @DependsOn(springContextHolderBeanName)
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
-        String endpointsWebBasePath = securityProperties.getManagementEndpointsBasePath();
+        String endpointsWebBasePath = AppConfigHolder.getManagementEndpointsBasePath();
         
-        if(GeneralHelper.isStrEmpty(endpointsWebBasePath) || endpointsWebBasePath.equals("/"))
+        if(GeneralHelper.isStrEmpty(endpointsWebBasePath) || endpointsWebBasePath.equals(AppConfigHolder.REQUEST_PATH_SEPARATOR))
             http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.anyRequest().permitAll());
         else
         {
-            String servletContextPath = securityProperties.getServletContextPath();
-            String mvcServletPath = securityProperties.getSpringMvcServletPath();
-            
-            StringBuilder sb = new StringBuilder();
-            
-            if(GeneralHelper.isStrNotEmpty(servletContextPath) && !servletContextPath.equals("/"))
-                sb.append(servletContextPath);
-            if(GeneralHelper.isStrNotEmpty(mvcServletPath) && !mvcServletPath.equals("/"))
-                sb.append(mvcServletPath);
-            
-            sb.append(endpointsWebBasePath);
-        
-            String managementBasePath = sb.append(SecurityProperties.ANY_PATH_PATTERN).toString();
+            String mvcServletPath = AppConfigHolder.getSpringMvcServletPath();
+            String prefix = (GeneralHelper.isStrNotEmpty(mvcServletPath) && !mvcServletPath.equals(AppConfigHolder.REQUEST_PATH_SEPARATOR)) ? mvcServletPath : "";
+            String managementBasePath = prefix + endpointsWebBasePath + AppConfigHolder.ANT_PATH_WILDCARD;
             
             http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers(AntPathRequestMatcher.antMatcher(managementBasePath)).authenticated()
-                .requestMatchers(AntPathRequestMatcher.antMatcher(SecurityProperties.ANY_PATH_PATTERN)).permitAll())
+                .requestMatchers(AntPathRequestMatcher.antMatcher(AppConfigHolder.ANT_PATH_WILDCARD)).permitAll())
             .formLogin(Customizer.withDefaults())
             .httpBasic(Customizer.withDefaults());
         }

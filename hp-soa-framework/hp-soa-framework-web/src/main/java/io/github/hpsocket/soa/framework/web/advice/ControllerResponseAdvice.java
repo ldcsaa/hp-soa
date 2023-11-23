@@ -61,14 +61,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             return false;
         
         String requestUri = attr.getRequestUri();
-        
-        for(String ignoreLogPath : AppConfigHolder.getExcludedLogPaths())
-        {
-            if(requestUri.startsWith(ignoreLogPath))
-                return false;
-        }
-        
-        return true;
+        return !AppConfigHolder.excludedPath(requestUri);
     }
 
     @Override
@@ -186,7 +179,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
 
                 reqAttr.forEach((k, v) -> {
                     if(v != null && !k.equals("body"))
-                        jsonLog.put(k, v.toString());
+                        jsonLog.put(k, v);
                 });
                 
                 jsonLog.put("apiName", rt.getDeclaringClass().getSimpleName().concat("#").concat(rt.getMethod().getName()));

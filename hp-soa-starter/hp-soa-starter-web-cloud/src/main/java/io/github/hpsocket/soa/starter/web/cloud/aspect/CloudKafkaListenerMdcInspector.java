@@ -26,10 +26,7 @@ public class CloudKafkaListenerMdcInspector
     @Around(value = "aroundMethod()")
     public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
     {
-        TracingHelper.checkEntry();
-        TracingHelper.fillBaggageByMdcAttr();
-        
-        return joinPoint.proceed();
+        return TracingHelper.aspectInspect(joinPoint);
     }
 
 }
