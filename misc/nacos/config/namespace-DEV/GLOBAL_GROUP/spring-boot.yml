@@ -68,7 +68,7 @@ management:
     shutdown.enabled: false
   endpoints:
     enabled-by-default: true
-    jmx.exposure.include: "*"
+    jmx.exposure.exclude: "*"
     web.base-path: /__admin
     web.exposure.include: "*"
   metrics:
@@ -85,7 +85,7 @@ springdoc:
     # 是否开启（生成环境应设置为 false）
     enabled: true
     path: /swagger-ui
-  packagesToScan: com.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}
+  packages-to-scan: com.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}
   api-infos:
     group-name: ${hp.soa.web.app.name}
     title: ${hp.soa.web.app.name}

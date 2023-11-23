@@ -7,12 +7,12 @@ spring.data.redis:
   clientName: ${spring.application.name}
 
 ## （默认 Redis 之外）第一个 Redis 配置
-spring.data.redis-first:
-  host: 192.168.56.23
-  port: 6379
-  #username: 
-  #password: 
-  clientName: ${spring.application.name}
+#spring.data.redis-first:
+#  host: 192.168.56.23
+#  port: 6379
+#  #username: 
+#  #password: 
+#  clientName: ${spring.application.name}
 
 ## （默认 Redis 之外）第二个 Redis 配置
 #spring.data.redis-second:
