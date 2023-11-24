@@ -57,8 +57,6 @@ public class HttpMdcFilter implements Filter
         {            
             fillMdcAttr(mdcAttr, reqAttr);
             mdcAttr.putMdc();
-            
-            processMdcAttr(mdcAttr, request, response);
 
             chain.doFilter(request, response);
         }
@@ -66,11 +64,6 @@ public class HttpMdcFilter implements Filter
         {
             mdcAttr.removeMdc();
         }
-    }
-    
-    protected void processMdcAttr(MdcAttr mdcAttr, ServletRequest request, ServletResponse response)
-    {
-        
     }
 
     private void fillMdcAttr(MdcAttr mdcAttr, RequestAttribute reqAttr)

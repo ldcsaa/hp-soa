@@ -287,12 +287,6 @@ public class WebServerHelper
             return infos;
         
         infos = new HashMap<>();
-        
-        String encoding = request.getCharacterEncoding();
-        
-        if(GeneralHelper.isStrEmpty(encoding))
-            encoding = DEFAULT_REQUEST_CHARSET;
-        
         String header = getHeader(request, HEADER_REQUEST_INFO);
         
         if(GeneralHelper.isStrNotEmpty(header))

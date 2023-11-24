@@ -1,13 +1,9 @@
-    package io.github.hpsocket.soa.starter.web.cloud.filter;
-
-import static io.github.hpsocket.soa.framework.core.mdc.MdcAttr.TRANSFER_MDC_ALL_KEYS;
+package io.github.hpsocket.soa.starter.web.cloud.filter;
 
 import java.io.IOException;
-import java.util.Arrays;
-
-import org.slf4j.MDC;
 
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
@@ -17,6 +13,7 @@ import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 /** <b>Spring Cloud HTTP 请求 MDC 过滤器</b><br>
@@ -46,7 +43,10 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
-        boolean isEntry = TracingHelper.checkEntry();
+        String tracingInfo = WebServerHelper.getHeader((HttpServletRequest)request, TracingHelper.HEADER_TRACING_INFO);
+        boolean isEntry    = GeneralHelper.isStrEmpty(tracingInfo);
+        
+        TracingHelper.setEntry(isEntry);
         
         try
         {
@@ -55,22 +55,25 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
             else
             {
                 WebServerHelper.StartTiming();
-                TracingHelper.fillMdcAttrByBaggage();
-                chain.doFilter(request, response);
+                MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false);
+                
+                try
+                {            
+                    TracingHelper.fillMdcAttr(mdcAttr, tracingInfo);
+                    mdcAttr.putMdc();
+    
+                    chain.doFilter(request, response);
+                }
+                finally
+                {
+                    mdcAttr.removeMdc();
+                }
             }
         }
         finally
         {
-            if(!isEntry)
-                Arrays.stream(TRANSFER_MDC_ALL_KEYS).forEach((key) -> MDC.remove(key));
-            
             TracingHelper.removeEntry();
         }
     }
     
-    @Override
-    protected void processMdcAttr(MdcAttr mdcAttr, ServletRequest request, ServletResponse response)
-    {
-        TracingHelper.fillBaggageByMdcAttr();
-    }
 }

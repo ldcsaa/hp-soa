@@ -4,10 +4,13 @@ import feign.Response;
 import feign.Response.Body;
 import feign.codec.ErrorDecoder;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
+
+import org.apache.commons.io.IOUtils;
 
 import com.alibaba.fastjson2.JSON;
 
@@ -29,22 +32,29 @@ public class CloudErrorDecoder implements ErrorDecoder
             
             try
             {
-                info = JSON.parseObject(body.asReader(WebServerHelper.DEFAULT_CHARSET_OBJ), CloudExceptionInfo.class);
-                Class<?> clazz = Class.forName(info.getException());
+                String str = IOUtils.toString(body.asReader(WebServerHelper.DEFAULT_CHARSET_OBJ));
                 
-                if(info.getStatusCode() != null)
-                {
-                    ex = (Exception)clazz
-                            .getDeclaredConstructor(String.class, Integer.class, Integer.class)
-                            .newInstance(info.getMessage(), info.getStatusCode(), info.getResultCode());
-                }
+                if(!str.startsWith("{"))
+                    ex = new ServiceException(GeneralHelper.isStrNotEmpty(str) ? str : "未知异常", INNER_API_CALL_EXCEPTION);
                 else
                 {
-                    ex = (Exception)clazz
-                            .getDeclaredConstructor(String.class)
-                            .newInstance(info.getMessage());
-                }
-                
+                    info = JSON.parseObject(str, CloudExceptionInfo.class);
+                    Class<?> clazz = Class.forName(info.getException());
+                    
+                    if(info.getStatusCode() != null)
+                    {
+                        ex = (Exception)clazz
+                                .getDeclaredConstructor(String.class, Integer.class, Integer.class)
+                                .newInstance(info.getMessage(), info.getStatusCode(), info.getResultCode());
+                    }
+                    else
+                    {
+                        ex = (Exception)clazz
+                                .getDeclaredConstructor(String.class)
+                                .newInstance(info.getMessage());
+                    }
+            
+                }        
             }
             catch(Exception e)
             {

@@ -25,7 +25,12 @@ public class CloudControllerResponseAdvice extends ControllerResponseAdvice
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response)
     {
-        if(TracingHelper.isEntry())
+        Boolean isEntry = TracingHelper.isEntryOrNull();
+        
+        if(isEntry == null)
+            return body;
+        
+        if(isEntry)
             return super.beforeBodyWrite(body, returnType, selectedContentType, selectedConverterType, request, response);
         
         if(body instanceof Response<?> respBody)

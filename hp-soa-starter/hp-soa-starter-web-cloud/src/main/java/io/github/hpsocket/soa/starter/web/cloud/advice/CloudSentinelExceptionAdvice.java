@@ -26,10 +26,11 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
     {
         if(TracingHelper.isEntry())
             return super.handleBlockException(request, response, e);
-        
-        log.warn(e.getMessage());
-        
-        throw e;
+        else
+        {
+            log.warn(e.getMessage());
+            throw e;
+        }
     }
 
     /** {@linkplain UndeclaredThrowableException} 异常处理器 */
@@ -39,10 +40,11 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
     {
         if(TracingHelper.isEntry())
             return super.handleUndeclaredThrowableException(request, response, e);
-        
-        log.warn(e.getMessage());
-        
-        throw e;
+        else
+        {
+            log.warn(e.getMessage());
+            throw e;
+        }
     }
     
     /** {@linkplain RuntimeException} 异常处理器 */
@@ -52,10 +54,11 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
     {
         if(TracingHelper.isEntry())
             return super.handleRuntimeException(request, response, e);
-        
-        log.warn(e.getMessage());
-        
-        throw e;
+        else
+        {
+            log.warn(e.getMessage());
+            throw e;
+        }
     }
 
 }

@@ -14,6 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @SuppressWarnings("serial")
+@Schema(description = "用户业务对象")
 public class UserBo implements Serializable
 {
     @Schema(description = "id", example = "123", requiredMode = RequiredMode.NOT_REQUIRED, nullable = true)
@@ -24,6 +25,6 @@ public class UserBo implements Serializable
     @NotNull
     @Min(1)
     @Max(150)
-    @Schema(description = "年龄", example = "23", requiredMode = RequiredMode.NOT_REQUIRED, nullable = false)
+    @Schema(description = "年龄", example = "23", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private Integer age;
 }

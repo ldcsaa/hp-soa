@@ -23,10 +23,11 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
     {
         if(TracingHelper.isEntry())
             return super.handleMethodArgumentNotValidException(request, response, e);
-        
-        log.error(e.getMessage(), e);
-        
-        throw e;
+        else
+        {
+            log.error(e.getMessage());
+            throw e;
+        }
     }
 
     /** {@linkplain Exception} 异常处理器 */
@@ -35,11 +36,12 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e) throws Exception
     {
         if(TracingHelper.isEntry())
-            super.handleException(request, response, e);
-        
-        log.error(e.getMessage(), e);
-        
-        throw e;
+            return super.handleException(request, response, e);
+        else
+        {
+            log.error(e.getMessage());
+            throw e;
+        }
     }
 
 }
