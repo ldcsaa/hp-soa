@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import feign.FeignException;
+import feign.FeignException.FeignServerException;
+import feign.RetryableException;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.web.advice.ControllerGlobalExceptionAdvice;
 import io.github.hpsocket.soa.framework.web.model.Response;
@@ -28,7 +30,13 @@ public class CloudControllerSpecificExceptionAdvice implements Ordered
     {
         if(TracingHelper.isEntry())
         {
-            ServiceException se = wrapServiceException(INNER_API_CALL_EXCEPTION, e);
+            ServiceException se = null;
+            
+            if(e instanceof RetryableException || e instanceof FeignServerException.GatewayTimeout)
+                se = new ServiceException("服务调用超时", INNER_API_CALL_FAIL, e);
+            else
+                se = wrapServiceException(INNER_API_CALL_EXCEPTION, e);
+            
             logServiceException(log, se.getMessage(), se);
             
             return new Response<>(se);

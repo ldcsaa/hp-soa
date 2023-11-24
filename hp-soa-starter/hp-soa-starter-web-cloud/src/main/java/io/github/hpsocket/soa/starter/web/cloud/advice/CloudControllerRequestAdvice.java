@@ -25,7 +25,8 @@ public class CloudControllerRequestAdvice extends ControllerRequestAdvice
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType)
     {
-        return TracingHelper.isEntry() ? super.afterBodyRead(body, inputMessage, parameter, targetType, converterType) : body;
+        Boolean isEntry = TracingHelper.isEntryOrNull();
+        return Boolean.TRUE.equals(isEntry) ? super.afterBodyRead(body, inputMessage, parameter, targetType, converterType) : body;
     }
 
 }

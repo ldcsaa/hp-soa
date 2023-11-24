@@ -17,9 +17,11 @@ public class MdcAttr
     public static final String MDC_TOKEN_KEY        = "__token";
     public static final String MDC_USER_ID_KEY      = "__userId";
     public static final String MDC_GROUP_ID_KEY     = "__groupId";
-    public static final String MDC_EXTRA_KEY        = "__extra";
     public static final String MDC_APP_ID_KEY       = "__appId";
     public static final String MDC_APP_NAME_KEY     = "__appName";
+
+    public static final String MDC_VERSION_KEY      = "__version";
+    public static final String MDC_EXTRA_KEY        = "__extra";
     
     public static final String MDC_SERVICE_ID_KEY   = "__serviceId";
     public static final String MDC_SERVICE_NAME_KEY = "__serviceName";
@@ -46,9 +48,10 @@ public class MdcAttr
                                                         MDC_TOKEN_KEY,
                                                         MDC_USER_ID_KEY,
                                                         MDC_GROUP_ID_KEY,
-                                                        MDC_EXTRA_KEY,
                                                         MDC_APP_ID_KEY,
-                                                        MDC_APP_NAME_KEY
+                                                        MDC_APP_NAME_KEY,
+                                                        MDC_VERSION_KEY,
+                                                        MDC_EXTRA_KEY
                                                     };
     
     public static final String TRANSFER_MDC_ALL_KEYS[] = {
@@ -63,9 +66,10 @@ public class MdcAttr
                                                             MDC_TOKEN_KEY,
                                                             MDC_USER_ID_KEY,
                                                             MDC_GROUP_ID_KEY,
-                                                            MDC_EXTRA_KEY,
                                                             MDC_APP_ID_KEY,
                                                             MDC_APP_NAME_KEY,
+                                                            MDC_VERSION_KEY,
+                                                            MDC_EXTRA_KEY,
                                                             MDC_FROM_SERVICE_ID_KEY,
                                                             MDC_FROM_SERVICE_NAME_KEY,
                                                             MDC_FROM_SERVICE_ADDR_KEY
@@ -226,6 +230,16 @@ public class MdcAttr
         set(MDC_GROUP_ID_KEY, groupId);
     }
 
+    public String getVersion()
+    {
+        return get(MDC_VERSION_KEY);
+    }
+
+    public void setVersion(String version)
+    {
+        set(MDC_VERSION_KEY, version);
+    }
+
     public String getExtra()
     {
         return get(MDC_EXTRA_KEY);
@@ -244,6 +258,11 @@ public class MdcAttr
     public void setAppCode(String appCode)
     {
         set(MDC_APP_CODE_KEY, appCode);
+    }
+
+    public String getSrcAppCode()
+    {
+        return get(MDC_SRC_APP_CODE_KEY);
     }
 
     public void setSrcAppCode(String srcAppCode)

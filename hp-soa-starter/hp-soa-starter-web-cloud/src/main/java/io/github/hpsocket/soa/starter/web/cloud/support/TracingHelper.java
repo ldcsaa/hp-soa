@@ -7,7 +7,11 @@ import org.slf4j.MDC;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.CryptHelper;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import jakarta.servlet.http.HttpServletRequest;
 
 import static io.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 
@@ -61,6 +65,28 @@ public class TracingHelper
         }
     }
     
+    public static final void setRequestAttribute(MdcAttr mdcAttr, HttpServletRequest request)
+    {
+        String requestUri    = WebServerHelper.getRequestUri(request);
+        String requestPath   = WebServerHelper.getRequestPath(request);
+        String requestMethod = WebServerHelper.getRequestMethod(request);
+        String clientAddr    = WebServerHelper.getRequestAddr(request);
+        
+        RequestAttribute reqAttr = new RequestAttribute(mdcAttr.getAppCode(), mdcAttr.getSrcAppCode(), mdcAttr.getToken(),
+                                                        mdcAttr.getClientId(), mdcAttr.getRequestId(), mdcAttr.getSessionId(),
+                                                        GeneralHelper.str2Long(mdcAttr.getGroupId()));
+        
+        reqAttr.setUserId(GeneralHelper.str2Long(mdcAttr.getUserId()));
+        reqAttr.setVersion(mdcAttr.getVersion());
+        reqAttr.setExtra(mdcAttr.getExtra());
+        reqAttr.setClientAddr(clientAddr);
+        reqAttr.setRequestUri(requestUri);
+        reqAttr.setRequestPath(requestPath);
+        reqAttr.setRequestMethod(requestMethod);
+        
+        RequestContext.setRequestAttribute(reqAttr);
+    }
+
     public static final boolean isEntry()
     {
         return ENTRY.get();

@@ -40,12 +40,12 @@ public class RequestContext
         return getAttribute(REQUEST_ATTRIBUTE_CONTEXT);
     }
     
-    static final void setRequestAttribute(RequestAttribute attribute)
+    public static final void setRequestAttribute(RequestAttribute attribute)
     {
         setAttribute(REQUEST_ATTRIBUTE_CONTEXT, attribute);
     }
     
-    static final void removeRequestAttribute()
+    public static final void removeRequestAttribute()
     {
         removeAttribute(REQUEST_ATTRIBUTE_CONTEXT);
     }
@@ -191,13 +191,14 @@ public class RequestContext
         String requestUri    = WebServerHelper.getRequestUri(request);
         String requestPath   = WebServerHelper.getRequestPath(request);
         String requestMethod = WebServerHelper.getRequestMethod(request);
+        String clientAddr    = WebServerHelper.getRequestAddr(request);
         
         RequestAttribute reqAttr = new RequestAttribute(appCode, srcAppCode, token,
                                                         clientId, requestId, sessionId,
                                                         GeneralHelper.str2Long(groupId));
         reqAttr.setVersion(version);
         reqAttr.setExtra(extra);
-        reqAttr.setClientAddr(WebServerHelper.getRequestAddr(request));
+        reqAttr.setClientAddr(clientAddr);
         reqAttr.setRequestUri(requestUri);
         reqAttr.setRequestPath(requestPath);
         reqAttr.setRequestMethod(requestMethod);

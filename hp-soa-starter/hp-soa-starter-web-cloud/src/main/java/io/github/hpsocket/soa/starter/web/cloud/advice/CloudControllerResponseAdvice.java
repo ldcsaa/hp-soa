@@ -27,10 +27,7 @@ public class CloudControllerResponseAdvice extends ControllerResponseAdvice
     {
         Boolean isEntry = TracingHelper.isEntryOrNull();
         
-        if(isEntry == null)
-            return body;
-        
-        if(isEntry)
+        if(Boolean.TRUE.equals(isEntry))
             return super.beforeBodyWrite(body, returnType, selectedContentType, selectedConverterType, request, response);
         
         if(body instanceof Response<?> respBody)

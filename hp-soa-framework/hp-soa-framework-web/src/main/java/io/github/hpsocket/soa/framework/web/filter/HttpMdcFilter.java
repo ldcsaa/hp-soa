@@ -62,6 +62,8 @@ public class HttpMdcFilter implements Filter
         }
         finally
         {
+            RequestContext.removeRequestAttribute();
+            
             mdcAttr.removeMdc();
         }
     }
@@ -84,6 +86,8 @@ public class HttpMdcFilter implements Filter
             mdcAttr.setUserId(reqAttr.getUserId().toString());
         if(reqAttr.getGroupId() != null)
             mdcAttr.setGroupId(reqAttr.getGroupId().toString());
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getVersion()))
+            mdcAttr.setVersion(reqAttr.getVersion());
         if(GeneralHelper.isStrNotEmpty(reqAttr.getExtra()))
             mdcAttr.setExtra(reqAttr.getExtra());
     }

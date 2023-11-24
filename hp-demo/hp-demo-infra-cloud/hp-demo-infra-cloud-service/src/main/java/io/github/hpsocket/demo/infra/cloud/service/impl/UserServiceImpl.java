@@ -52,6 +52,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, id));
         log.info("get user: {}", user);
         
+        //if(user == null)
+        //    throw new RuntimeException("test ~~~~~~~~~~~~~~~~", 404);
+        
         return userConverter.toBo(user);
     }
 

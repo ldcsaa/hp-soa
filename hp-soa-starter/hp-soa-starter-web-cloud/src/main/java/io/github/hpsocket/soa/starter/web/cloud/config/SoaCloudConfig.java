@@ -10,6 +10,7 @@ import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerGlobalExce
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerRequestAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerResponseAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerSpecificExceptionAdvice;
+import io.github.hpsocket.soa.starter.web.cloud.exception.CloudErrorAttributes;
 import io.github.hpsocket.soa.starter.web.cloud.exception.CloudErrorDecoder;
 import io.github.hpsocket.soa.starter.web.cloud.filter.CloudMdcFilter;
 import io.github.hpsocket.soa.starter.web.cloud.interceptor.FeignTracingInterceptor;
@@ -35,9 +36,15 @@ public class SoaCloudConfig
     }
     
     @Bean
-    CloudErrorDecoder errorDecoder()
+    CloudErrorDecoder cloudErrorDecoder()
     {
         return new CloudErrorDecoder();
+    }
+    
+    @Bean
+    CloudErrorAttributes cloudErrorAttributes()
+    {
+        return new CloudErrorAttributes();
     }
     
     @Bean(httpMdcFilterRegistrationBeanName)

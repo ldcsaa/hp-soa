@@ -39,19 +39,26 @@ public class CloudErrorDecoder implements ErrorDecoder
                 else
                 {
                     info = JSON.parseObject(str, CloudExceptionInfo.class);
-                    Class<?> clazz = Class.forName(info.getException());
+                    String exp = info.getException();
                     
-                    if(info.getStatusCode() != null)
-                    {
-                        ex = (Exception)clazz
-                                .getDeclaredConstructor(String.class, Integer.class, Integer.class)
-                                .newInstance(info.getMessage(), info.getStatusCode(), info.getResultCode());
-                    }
+                    if(GeneralHelper.isStrEmpty(exp))
+                        ex = new ServiceException(String.format("服务调用失败 (%d) - %s", info.getStatus(), info.getPath()), INNER_API_CALL_EXCEPTION);
                     else
                     {
-                        ex = (Exception)clazz
-                                .getDeclaredConstructor(String.class)
-                                .newInstance(info.getMessage());
+                        Class<?> clazz = Class.forName(info.getException());
+                        
+                        if(info.getStatusCode() != null)
+                        {
+                            ex = (Exception)clazz
+                                    .getDeclaredConstructor(String.class, Integer.class, Integer.class)
+                                    .newInstance(info.getMessage(), info.getStatusCode(), info.getResultCode());
+                        }
+                        else
+                        {
+                            ex = (Exception)clazz
+                                    .getDeclaredConstructor(String.class)
+                                    .newInstance(info.getMessage());
+                        }
                     }
             
                 }        
@@ -62,7 +69,7 @@ public class CloudErrorDecoder implements ErrorDecoder
             }
         }
         
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
         
         return ex;
     }

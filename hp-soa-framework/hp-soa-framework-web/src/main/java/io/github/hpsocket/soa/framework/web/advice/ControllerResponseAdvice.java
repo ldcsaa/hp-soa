@@ -82,8 +82,6 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
         
         logResponse(body, returnType, req);
         
-        RequestContext.removeRequestAttribute();
-
         return body;
     }
 

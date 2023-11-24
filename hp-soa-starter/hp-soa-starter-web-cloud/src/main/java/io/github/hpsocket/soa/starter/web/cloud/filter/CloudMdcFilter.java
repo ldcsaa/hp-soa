@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
@@ -60,12 +61,16 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
                 try
                 {            
                     TracingHelper.fillMdcAttr(mdcAttr, tracingInfo);
+                    TracingHelper.setRequestAttribute(mdcAttr, (HttpServletRequest)request);
+                    
                     mdcAttr.putMdc();
     
                     chain.doFilter(request, response);
                 }
                 finally
                 {
+                    RequestContext.removeRequestAttribute();
+                    
                     mdcAttr.removeMdc();
                 }
             }
