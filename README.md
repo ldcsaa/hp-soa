@@ -12,6 +12,7 @@
 
 ### 技术集成
 - Web服务框架：spring-boot 3.x
+- 微服务框架：spring-cloud 4.x
 - 微服务框架：Dubbo 3.x
 - 服务注册中心：Nacos
 - 配置中心：Nacos
@@ -39,6 +40,7 @@
 - **[hp-soa-framework-leaf](hp-soa-framework/hp-soa-framework-leaf)** Leaf全局ID模块，基于Leaf，提供分布式全局ID功能
 - **[hp-soa-framework-util](hp-soa-framework/hp-soa-framework-util)** 工具包模块，提供文件处理、邮件、远程访问等组件和工具
 - **[hp-soa-starter-web](hp-soa-starter/hp-soa-starter-web)** Web应用启动器，配置并启动应用服务，所有 HP-SOA 项目都必须引入该启动器
+- **[hp-soa-starter-web-cloud](hp-soa-starter/hp-soa-starter-web-cloud)** Spring Cloud 启动器，开启 Spring Cloud 微服务功能，所有 Spring Cloud 微服务项目都必须引入该启动器
 - **[hp-soa-starter-web-dubbo](hp-soa-starter/hp-soa-starter-web-dubbo)** Dubbo启动器，开启Dubbo微服务功能，所有 Dubbo 微服务项目都必须引入该启动器
 - **[hp-soa-starter-task](hp-soa-starter/hp-soa-starter-task)** Task启动器，开启 Spring Task 功能，并为 Spring Task 提供日志关联和调用链跟踪能力
 - **[hp-soa-starter-nacos](hp-soa-starter/hp-soa-starter-nacos)** Nacos配置中心启动器，开启配置中心功能，应用程序可以从远程配置中心加载配置
@@ -78,6 +80,13 @@
         <groupId>io.github.hpsocket</groupId>
         <artifactId>hp-soa-starter-web</artifactId>
     </dependency>
+    <!-- Spring Cloud 项目引用 hp-soa-starter-web-cloud -->
+    <!--
+    <dependency>
+        <groupId>io.github.hpsocket</groupId>
+        <artifactId>hp-soa-starter-web-cloud</artifactId>
+    </dependency>
+    -->
     <!-- Dubbo项目引用 hp-soa-starter-web-dubbo -->
     <!--
     <dependency>
