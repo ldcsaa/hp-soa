@@ -15,6 +15,7 @@ import io.github.hpsocket.demo.infra.cloud.converter.UserConverter;
 import io.github.hpsocket.demo.infra.cloud.entity.User;
 import io.github.hpsocket.demo.infra.cloud.mapper.UserMapper;
 import io.github.hpsocket.demo.infra.cloud.service.UserService;
+import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -49,11 +50,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @DS("slave")
     public UserBo getUser(Long id)
     {
+        if(id == 2)
+            throw new RuntimeException("test 2 ~~~~~~~~~~~~~~~~");
+        if(id == 3)
+            throw new ServiceException("test 3 ~~~~~~~~~~~~~~~~", 555);
+        
         User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, id));
         log.info("get user: {}", user);
-        
-        //if(user == null)
-        //    throw new RuntimeException("test ~~~~~~~~~~~~~~~~", 404);
         
         return userConverter.toBo(user);
     }

@@ -21,7 +21,7 @@ public class SaveUserReuqest
     private String name;
     @NotNull
     @Min(1)
-    @Max(100)
+    @Max(150)
     @Schema(description = "年龄", example = "23", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private Integer age;
 

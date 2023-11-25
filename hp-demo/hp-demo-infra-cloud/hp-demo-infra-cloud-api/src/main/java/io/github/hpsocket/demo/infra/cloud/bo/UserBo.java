@@ -24,7 +24,7 @@ public class UserBo implements Serializable
     private String name;
     @NotNull
     @Min(1)
-    @Max(150)
+    @Max(100)
     @Schema(description = "年龄", example = "23", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private Integer age;
 }

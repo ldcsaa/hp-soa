@@ -3,14 +3,18 @@ package io.github.hpsocket.soa.starter.web.cloud.support;
 import java.util.StringTokenizer;
 
 import org.slf4j.MDC;
+import org.springframework.http.HttpStatus;
 
+import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.CryptHelper;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
+import io.github.hpsocket.soa.framework.web.model.Response;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.web.cloud.exception.CloudExceptionInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
 import static io.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
@@ -85,6 +89,37 @@ public class TracingHelper
         reqAttr.setRequestMethod(requestMethod);
         
         RequestContext.setRequestAttribute(reqAttr);
+    }
+    
+    public static final Response<CloudExceptionInfo> createExceptionResponse(Exception e)
+    {
+        return createExceptionResponse(e, HttpStatus.EXPECTATION_FAILED);
+    }
+    
+    public static final Response<CloudExceptionInfo> createExceptionResponse(Exception e, HttpStatus httpStatus)
+    {
+        return createExceptionResponse(e, httpStatus.value());
+    }
+    
+    public static final Response<CloudExceptionInfo> createExceptionResponse(Exception e, Integer status)
+    {
+        CloudExceptionInfo info = new CloudExceptionInfo();
+        
+        info.setTimestamp(System.currentTimeMillis());
+        info.setStatus(status);
+        info.setException(e.getClass().getName());
+        info.setMessage(e.getMessage());
+        
+        if(e instanceof ServiceException se)
+        {
+            info.setStatusCode(se.getStatusCode());
+            info.setResultCode(se.getResultCode());
+        }
+        
+        Response<CloudExceptionInfo> resp = new Response<>(ServiceException.INNER_API_CALL_EXCEPTION);
+        resp.setResult(info);
+        
+        return resp;
     }
 
     public static final boolean isEntry()

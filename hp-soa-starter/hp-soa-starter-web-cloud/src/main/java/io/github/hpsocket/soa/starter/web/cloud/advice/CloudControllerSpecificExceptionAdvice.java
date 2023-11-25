@@ -1,7 +1,9 @@
 package io.github.hpsocket.soa.starter.web.cloud.advice;
 
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import feign.FeignException;
@@ -25,6 +27,7 @@ public class CloudControllerSpecificExceptionAdvice implements Ordered
     public static final int ORDER = ControllerGlobalExceptionAdvice.ORDER - 200;
     
     /** {@linkplain FeignException} 异常处理器 */
+    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
     @ExceptionHandler({FeignException.class})
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, FeignException e) throws FeignException
     {
@@ -43,8 +46,8 @@ public class CloudControllerSpecificExceptionAdvice implements Ordered
         }
         else
         {
-            log.error(e.getMessage());
-            throw e;
+            log.error(e.getMessage(), e);
+            return TracingHelper.createExceptionResponse(e, HttpStatus.EXPECTATION_FAILED);
         }
     }
 
