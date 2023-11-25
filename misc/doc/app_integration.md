@@ -39,6 +39,13 @@
         <groupId>io.github.hpsocket</groupId>
         <artifactId>hp-soa-starter-web</artifactId>
     </dependency>
+    <!-- Spring Cloud 项目引用 hp-soa-starter-web-cloud -->
+    <!--
+    <dependency>
+        <groupId>io.github.hpsocket</groupId>
+        <artifactId>hp-soa-starter-web-cloud</artifactId>
+    </dependency>
+    -->
     <!-- Dubbo项目引用 hp-soa-starter-web-dubbo -->
     <!--
     <dependency>
@@ -105,6 +112,47 @@ hp.soa.web:
     default-access-policy: maybe_login
 ```
 &nbsp;&nbsp;HTTP请求鉴权相关内容将在下文详述。
+
+- **spring-cloud**（Spring Cloud 项目）
+```yaml
+## Spring Cloud 配置
+spring.cloud:
+  loadbalancer:
+    enabled: true
+    retry:
+      # 该参数用来开启或关闭重试机制，默认是开启
+      enabled: false
+      # 对当前实例重试的次数，默认值: 0
+      max-retries-on-same-service-instance: 0
+      # 切换实例进行重试的次数，默认值: 1
+      max-retries-on-next-service-instance: 1
+      # 对所有操作请求都进行重试（false: 只对 GET 请求重试）
+      retry-on-all-operations: true
+      # 对所有异常请求都进行重试（false: 只对 retryable-exceptions 指定的异常进行重试）
+      retry-on-all-exceptions: true
+      retryable-exceptions: 
+  openfeign:
+    client:
+      config:
+        default:
+          # 连接超时时间
+          connect-timeout: 3000
+          # 读超时时间
+          read-timeout: 5000
+          # 日志级别（可选值：NONE、BASIC、HEADERS、FULL）
+          logger-level: NONE
+      compression:
+        request:
+          # 开启请求压缩支持
+          enabled: true
+          # 压缩支持的 MIME TYPE
+          mime-types: text/xml,application/xml,text/json,application/json
+          # 压缩数据大小的下限
+          min-request-size: 4096
+        response:
+          # 开启响应压缩支持
+          enabled: true
+```
 
 - **dubbo**（Dubbo项目）
 ```yaml

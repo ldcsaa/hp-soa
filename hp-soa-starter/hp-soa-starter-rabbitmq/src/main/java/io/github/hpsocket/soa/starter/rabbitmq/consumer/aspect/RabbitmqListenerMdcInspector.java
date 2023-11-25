@@ -29,21 +29,22 @@ import java.util.Map;
  */
 @Slf4j
 @Aspect
-@Order(0)
+@Order(RabbitmqListenerMdcInspector.ORDER)
 public class RabbitmqListenerMdcInspector
 {
-    static final String INSPECTOR_POINTCUT_PATTERN  = "execution (public void *.*(..)) && "
-                                                    + "("
-                                                    + "     @annotation(org.springframework.amqp.rabbit.annotation.RabbitListener) || "
-                                                    + "     ("
-                                                    + "         @target(org.springframework.amqp.rabbit.annotation.RabbitListener) &&"
-                                                    + "         @annotation(org.springframework.amqp.rabbit.annotation.RabbitHandler)"
-                                                    + "     )"
-                                                    + ")";
+    public static final int ORDER               = 0;
+    public static final String POINTCUT_PATTERN = "execution (public void *.*(..)) && "
+                                                + "("
+                                                + "     @annotation(org.springframework.amqp.rabbit.annotation.RabbitListener) || "
+                                                + "     ("
+                                                + "         @target(org.springframework.amqp.rabbit.annotation.RabbitListener) &&"
+                                                + "         @annotation(org.springframework.amqp.rabbit.annotation.RabbitHandler)"
+                                                + "     )"
+                                                + ")";
 
     private static final AspectHelper.AnnotationHolder<RabbitListener> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
 
-    @Pointcut(INSPECTOR_POINTCUT_PATTERN)
+    @Pointcut(POINTCUT_PATTERN)
     protected void aroundMethod() {}
     
     @Around(value = "aroundMethod()")

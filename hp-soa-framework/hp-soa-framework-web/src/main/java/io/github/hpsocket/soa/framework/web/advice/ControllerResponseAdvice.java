@@ -9,6 +9,7 @@ import io.github.hpsocket.soa.framework.core.util.Pair;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import io.github.hpsocket.soa.framework.web.model.Response;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,20 +61,13 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             return false;
         
         String requestUri = attr.getRequestUri();
-        
-        for(String ignoreLogPath : AppConfigHolder.getExcludedLogPaths())
-        {
-            if(requestUri.startsWith(ignoreLogPath))
-                return false;
-        }
-        
-        return true;
+        return !AppConfigHolder.excludedPath(requestUri);
     }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response)
     {
-        HttpServletRequest req     = ((ServletServerHttpRequest)request).getServletRequest();
+        HttpServletRequest req   = ((ServletServerHttpRequest)request).getServletRequest();
         HttpServletResponse resp = ((ServletServerHttpResponse)response).getServletResponse();
         
         if(body instanceof Response<?> respBody)
@@ -83,13 +77,11 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             
             checkToken(respBody, req, resp);
 
-            respBody.calcCostTime(RequestContext.getTimestamp());
+            respBody.setCostTime(WebServerHelper.calcTimestamp());
         }
         
         logResponse(body, returnType, req);
         
-        RequestContext.removeRequestAttribute();
-
         return body;
     }
 
@@ -185,7 +177,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
 
                 reqAttr.forEach((k, v) -> {
                     if(v != null && !k.equals("body"))
-                        jsonLog.put(k, v.toString());
+                        jsonLog.put(k, v);
                 });
                 
                 jsonLog.put("apiName", rt.getDeclaringClass().getSimpleName().concat("#").concat(rt.getMethod().getName()));

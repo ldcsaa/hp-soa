@@ -9,11 +9,18 @@ import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 import io.github.hpsocket.soa.framework.web.propertries.IAppProperties;
 import io.github.hpsocket.soa.framework.web.propertries.IServletPathsPropertries;
 
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
+
 /** <b>应用程序 Web 基本配置持有者</b> */
 public class AppConfigHolder
 {
     public static final String REQUEST_PATH_SEPARATOR   = "/";
+    public static final String ANT_PATH_WILDCARD        = "/**";
+    public static final String LOGIN_PATH               = "/login";
     public static final String FAVICON_PATH             = "/favicon.ico";
+    
+    private static final PathMatcher PATH_MATCHER       = new AntPathMatcher("/");
     
     private static boolean readOnly;
 
@@ -23,6 +30,7 @@ public class AppConfigHolder
     private static String appOrganization;
     private static String appOwner;
     private static String appAddress;
+    private static int appPort;
     
     private static int cookieMaxAge;
     private static String servletContextPath;
@@ -35,11 +43,11 @@ public class AppConfigHolder
     private static String springdocApiDocsFullPath;
     private static String springdocSwaggerUiFullPath;
     
-    private static Set<String> excludedLogPaths = new HashSet<>(); 
+    private static Set<String> excludedPaths = new HashSet<>(); 
     
     private static boolean initialized;
     
-    public static final void init(IAppProperties appProperties, IServletPathsPropertries servletProperties)
+    public static final void init(IAppProperties appProperties, IServletPathsPropertries servletProperties, int serverPort)
     {
         if(!initialized)
         {
@@ -55,6 +63,7 @@ public class AppConfigHolder
                     appOwner        = appProperties.getOwner();
                     cookieMaxAge    = appProperties.getCookieMaxAge();
                     appAddress      = SystemUtil.getAddress();
+                    appPort         = serverPort;
                     
                     servletContextPath          = servletProperties.getServletContextPath();
                     springMvcServletPath        = servletProperties.getSpringMvcServletPath();
@@ -75,11 +84,12 @@ public class AppConfigHolder
                     springdocSwaggerUiFullPath      = servletUriPrefix + springdocSwaggerUiPath;
                     
                     
-                    excludedLogPaths.add(managementEndpointsBaseFullPath);
+                    excludedPaths.add(managementEndpointsBaseFullPath + ANT_PATH_WILDCARD);
                     /*
-                    excludedLogPaths.add(springdocApiDocsFullPath);
-                    excludedLogPaths.add(springdocSwaggerUiFullPath);
-                    excludedLogPaths.add(FAVICON_PATH);
+                    excludedPaths.add(springdocApiDocsFullPath + ANT_PATH_WILDCARD);
+                    excludedPaths.add(springdocSwaggerUiFullPath + ANT_PATH_WILDCARD);
+                    excludedPaths.add(servletUriPrefix + LOGIN_PATH);
+                    excludedPaths.add(FAVICON_PATH);
                     */
                     
                     initialized = true;
@@ -87,103 +97,119 @@ public class AppConfigHolder
             }
         }
     }
+    
+    public static final boolean excludedPath(String path)
+    {
+        for(String pattern : excludedPaths)
+        {
+            if(PATH_MATCHER.match(pattern, path))
+                return true;
+        }
+        
+        return false;
+    }
 
-    public static boolean isReadOnly()
+    public static final boolean isReadOnly()
     {
         return readOnly;
     }
 
-    public static void setReadOnly(boolean readOnly)
+    public static final void setReadOnly(boolean readOnly)
     {
         AppConfigHolder.readOnly = readOnly;
     }
 
-    public static String getAppId()
+    public static final String getAppId()
     {
         return appId;
     }
 
-    public static String getAppName()
+    public static final String getAppName()
     {
         return appName;
     }
 
-    public static String getAppVersion()
+    public static final String getAppVersion()
     {
         return appVersion;
     }
 
-    public static String getAppOrganization()
+    public static final String getAppOrganization()
     {
         return appOrganization;
     }
 
-    public static String getAppOwner()
+    public static final String getAppOwner()
     {
         return appOwner;
     }
 
-    public static String getAppAddress()
+    public static final String getAppAddress()
     {
         return appAddress;
     }
+    
+    public static final int getAppPort()
+    {
+        return appPort;
+    }
 
-    public static int getCookieMaxAge()
+    public static final int getCookieMaxAge()
     {
         return cookieMaxAge;
     }
 
-    public static String getServletContextPath()
+    public static final String getServletContextPath()
     {
         return servletContextPath;
     }
 
-    public static String getSpringMvcServletPath()
+    public static final String getSpringMvcServletPath()
     {
         return springMvcServletPath;
     }
 
-    public static String getServletUriPrefix()
+    public static final String getServletUriPrefix()
     {
         return servletUriPrefix;
     }
 
-    public static String getManagementEndpointsBasePath()
+    public static final String getManagementEndpointsBasePath()
     {
         return managementEndpointsBasePath;
     }
 
-    public static String getSpringdocApiDocsPath()
+    public static final String getSpringdocApiDocsPath()
     {
         return springdocApiDocsPath;
     }
 
-    public static String getSpringdocSwaggerUiPath()
+    public static final String getSpringdocSwaggerUiPath()
     {
         return springdocSwaggerUiPath;
     }
 
-    public static String getManagementEndpointsBaseFullPath()
+    public static final String getManagementEndpointsBaseFullPath()
     {
         return managementEndpointsBaseFullPath;
     }
 
-    public static String getSpringdocApiDocsFullPath()
+    public static final String getSpringdocApiDocsFullPath()
     {
         return springdocApiDocsFullPath;
     }
 
-    public static String getSpringdocSwaggerUiFullPath()
+    public static final String getSpringdocSwaggerUiFullPath()
     {
         return springdocSwaggerUiFullPath;
     }
 
-    public static Set<String> getExcludedLogPaths()
+    public static final Set<String> getExcludedPaths()
     {
-        return excludedLogPaths;
+        return excludedPaths;
     }
 
-    public static boolean isInitialized()
+    public static final boolean isInitialized()
     {
         return initialized;
     }

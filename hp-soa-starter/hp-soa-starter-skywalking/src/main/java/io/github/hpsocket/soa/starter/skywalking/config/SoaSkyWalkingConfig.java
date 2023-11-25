@@ -11,13 +11,14 @@ import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingSender
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.service.TracingContext;
-
 import io.micrometer.core.instrument.observation.MeterObservationHandler;
 import io.micrometer.observation.ObservationHandler;
+import io.micrometer.observation.ObservationPredicate;
 import io.micrometer.observation.ObservationRegistry;
 
 /** <b>HP-SOA Skywalking 基本配置</b> */
@@ -48,22 +49,45 @@ public class SoaSkyWalkingConfig
             }
         };
     }
-
+    
     @Bean
-    ObservationRegistry observationRegistry(List<MeterObservationHandler<?>> handlers)
+    @ConditionalOnMissingBean(ObservationPredicate.class)
+    ObservationPredicate observationPredicate()
+    {
+        return (name, context) -> 
+        {
+            if(name.startsWith("spring.security."))
+                return false;
+            
+            /*
+            if(context instanceof ServerRequestObservationContext observationContext)
+            {
+                String uri = observationContext.getCarrier().getRequestURI();
+                return !AppConfigHolder.excludedPath(uri);
+            }
+            */
+            
+            return true;
+        };
+    }
+    
+    @Bean
+    ObservationRegistry observationRegistry(List<MeterObservationHandler<?>> handlers, ObservationPredicate predicate)
     {
         ObservationRegistry registry = ObservationRegistry.create();
 
-        registry.observationConfig().observationHandler(
-            new ObservationHandler.FirstMatchingCompositeObservationHandler(
-                new SkywalkingMeterHandler(new SkywalkingMeterRegistry())));
-        registry.observationConfig().observationHandler(
-            new ObservationHandler.FirstMatchingCompositeObservationHandler(handlers));
-        registry.observationConfig().observationHandler(
-            new ObservationHandler.FirstMatchingCompositeObservationHandler(
-                new SkywalkingSenderTracingHandler(),
-                new SkywalkingReceiverTracingHandler(),
-                new SkywalkingDefaultTracingHandler()));
+        registry.observationConfig()
+            .observationHandler(
+                new ObservationHandler.FirstMatchingCompositeObservationHandler(
+                    new SkywalkingMeterHandler(new SkywalkingMeterRegistry())))
+            .observationHandler(
+                new ObservationHandler.FirstMatchingCompositeObservationHandler(handlers))
+            .observationHandler(
+                new ObservationHandler.FirstMatchingCompositeObservationHandler(
+                    new SkywalkingSenderTracingHandler(),
+                    new SkywalkingReceiverTracingHandler(),
+                    new SkywalkingDefaultTracingHandler()))
+            .observationPredicate(predicate);
         
         return registry;
     }

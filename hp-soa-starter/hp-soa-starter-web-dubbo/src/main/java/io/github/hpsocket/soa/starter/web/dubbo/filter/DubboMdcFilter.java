@@ -48,9 +48,8 @@ public class DubboMdcFilter implements Filter, Filter.Listener
         {
             if(isConsumer)
             {
-                for(int i = 0; i < TRANSFER_MDC_KEYS.length; i++)
+                for(String key : TRANSFER_MDC_KEYS)
                 {
-                    String key = TRANSFER_MDC_KEYS[i];
                     String val = MDC.get(key);
                     
                     if(GeneralHelper.isStrNotEmpty(val))
@@ -65,9 +64,8 @@ public class DubboMdcFilter implements Filter, Filter.Listener
             }
             else
             {
-                for(int i = 0; i < TRANSFER_MDC_KEYS.length; i++)
+                for(String key : TRANSFER_MDC_ALL_KEYS)
                 {
-                    String key = TRANSFER_MDC_KEYS[i];
                     String val = ctxAttach.getAttachment(key);
                     
                     if(GeneralHelper.isStrNotEmpty(val))
@@ -84,16 +82,12 @@ public class DubboMdcFilter implements Filter, Filter.Listener
                     MDC.put(MDC_ORG_KEY, AppConfigHolder.getAppOrganization());
                 if(GeneralHelper.isStrNotEmpty(AppConfigHolder.getAppOwner()))
                     MDC.put(MDC_OWNER_KEY, AppConfigHolder.getAppOwner());
-                
-                MDC.put(MDC_FROM_SERVICE_ID_KEY, ctxAttach.getAttachment(MDC_FROM_SERVICE_ID_KEY));
-                MDC.put(MDC_FROM_SERVICE_NAME_KEY, ctxAttach.getAttachment(MDC_FROM_SERVICE_NAME_KEY));
-                MDC.put(MDC_FROM_SERVICE_ADDR_KEY, ctxAttach.getAttachment(MDC_FROM_SERVICE_ADDR_KEY));
             }
             
             if(GEN_APP_ID.get())
             {
                 String appId    = AppConfigHolder.getAppId();
-                String appName    = AppConfigHolder.getAppName();
+                String appName  = AppConfigHolder.getAppName();
                 
                 MDC.put(MDC_APP_ID_KEY, appId);
                 MDC.put(MDC_APP_NAME_KEY, appName);

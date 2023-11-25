@@ -54,7 +54,7 @@ public class WebServerHelper
 
     public static final int DEFAULT_COOKIE_MAX_AGE  = 10 * 365 * 24 * 60 * 60;
     public static final String DEFAULT_CHARSET      = GeneralHelper.DEFAULT_CHARSET;
-    public static final Charset DEFAULT_CHARSET_OBJ = Charset.forName(DEFAULT_CHARSET);
+    public static final Charset DEFAULT_CHARSET_OBJ = GeneralHelper.DEFAULT_CHARSET_OBJ;
     
     public static final boolean HTTP_ONLY_COOKIE    = false;
     
@@ -73,13 +73,16 @@ public class WebServerHelper
     public static final String DEFAULT_REQUEST_CHARSET  = DEFAULT_CHARSET;
     public static final String DEFAULT_REQUEST_FORMAT   = REQUEST_FORMAT_JSON;
     public static final String RESPONSE_CONTENT_TYPE    = "application/json;charset=" + DEFAULT_REQUEST_CHARSET.toLowerCase();
-    public static final Pattern DOMAIN_PATTERN    = Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
-    public static final Pattern SPIDER_PATTERN    = Pattern.compile(".*(Googlebot|Baiduspider|iaskspider|YodaoBot|msnbot|\\ Crawler|\\ Slurp|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
+    public static final Pattern DOMAIN_PATTERN          = Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
+    public static final Pattern SPIDER_PATTERN          = Pattern.compile(".*(Googlebot|Baiduspider|iaskspider|YodaoBot|msnbot|\\ Crawler|\\ Slurp|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
+    public static final Pattern FILTER_SKIP_PATTERN     = Pattern.compile("/api-docs.*|/swagger.*|.*\\.png|.*\\.css|.*\\.js|.*\\.html|/favicon.ico|/hystrix.stream");
     
-    public static final String MONITOR_LOGGER_NAME  = "SOA-MONITOR";
-    public static final String MONITOR_INGRESS      = "MONITOR-INGRESS";
-    public static final String MONITOR_EGRESS       = "MONITOR-EGRESS";
+    public static final String MONITOR_LOGGER_NAME      = "SOA-MONITOR";
+    public static final String MONITOR_INGRESS          = "MONITOR-INGRESS";
+    public static final String MONITOR_EGRESS           = "MONITOR-EGRESS";
 
+    private static final ThreadLocal<Long> TIMESTAMP    = new ThreadLocal<>();
+    
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT        = {WriteByteArrayAsBase64, WriteNonStringKeyAsString, WriteMapNullValue};
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL    = {WriteByteArrayAsBase64, WriteNonStringKeyAsString};
     
@@ -91,6 +94,16 @@ public class WebServerHelper
                                                                                         new ThreadPoolExecutor.CallerRunsPolicy());
     
     private static ObjectMapper jacksonObjectMapper;
+    
+    public static final void StartTiming()
+    {
+        TIMESTAMP.set(System.currentTimeMillis());
+    }
+    
+    public static final long calcTimestamp()
+    {
+        return System.currentTimeMillis() - TIMESTAMP.get();
+    }
 
     /** 检测 HTTP 请求的 User-Agent 是否合法 */
     public static final boolean checkUserAgent(String ua)
@@ -274,12 +287,6 @@ public class WebServerHelper
             return infos;
         
         infos = new HashMap<>();
-        
-        String encoding = request.getCharacterEncoding();
-        
-        if(GeneralHelper.isStrEmpty(encoding))
-            encoding = DEFAULT_REQUEST_CHARSET;
-        
         String header = getHeader(request, HEADER_REQUEST_INFO);
         
         if(GeneralHelper.isStrNotEmpty(header))

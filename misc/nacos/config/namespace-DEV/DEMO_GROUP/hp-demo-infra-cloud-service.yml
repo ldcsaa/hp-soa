@@ -1,0 +1,34 @@
+spring.datasource.dynamic.datasource:
+  master:
+    url: "jdbc:mysql://192.168.56.23:3306/soa-demo_db?serverTimezone=Asia/Shanghai&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false&failOverReadOnly=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true"
+    username: soa
+    # encrypt password by druid public-key
+    #password: "Vt4ZT5CSHb9wpO4b0fx7uSX8UxGkyTEc3ycZZhWZcz++Ehkg0Dtzhi7s2XB8fLFAcjgKilUv0iN5Fasb4dNQ1w=="
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  slave_01:
+    url: "jdbc:mysql://192.168.56.23:3306/soa-demo-1_db?serverTimezone=Asia/Shanghai&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false&failOverReadOnly=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true"
+    username: soa
+    # encrypt password by druid public-key
+    #password: "Vt4ZT5CSHb9wpO4b0fx7uSX8UxGkyTEc3ycZZhWZcz++Ehkg0Dtzhi7s2XB8fLFAcjgKilUv0iN5Fasb4dNQ1w=="
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  slave_02:
+    url: "jdbc:mysql://192.168.56.23:3306/soa-demo-2_db?serverTimezone=Asia/Shanghai&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false&failOverReadOnly=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true"
+    username: soa
+    # encrypt password by druid public-key
+    #password: "Vt4ZT5CSHb9wpO4b0fx7uSX8UxGkyTEc3ycZZhWZcz++Ehkg0Dtzhi7s2XB8fLFAcjgKilUv0iN5Fasb4dNQ1w=="
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+hp.soa.data.mysql.global-transaction-management:
+  enabled: true
+  #timeout: 3000
+  #isolation: ISOLATION_READ_COMMITTED
+  #propagation: PROPAGATION_REQUIRED
+  #rollback-for: java.lang.Exception
+  #read-only-timeout: 3000
+  #read-only-isolation: ISOLATION_READ_COMMITTED
+  #read-only-propagation: PROPAGATION_REQUIRED
+  #pointcut-expression: "execution(* ${hp.soa.web.component-scan.base-package}..service..*.*(..))"
+  

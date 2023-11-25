@@ -14,7 +14,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Order(Integer.MIN_VALUE)
 public class KafkaListenerTracingInspector
 {
-    @Pointcut(KafkaListenerMdcInspector.INSPECTOR_POINTCUT_PATTERN)
+    @Pointcut(KafkaListenerMdcInspector.POINTCUT_PATTERN)
     protected void aroundMethod() {}
     
     @Trace

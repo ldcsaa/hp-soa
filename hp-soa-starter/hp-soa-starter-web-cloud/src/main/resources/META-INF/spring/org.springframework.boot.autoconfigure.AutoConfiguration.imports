@@ -1,0 +1,3 @@
+io.github.hpsocket.soa.starter.web.cloud.config.SoaCloudConfig
+io.github.hpsocket.soa.starter.web.cloud.config.SoaClouldSentinelConfig
+io.github.hpsocket.soa.starter.web.cloud.config.SoaFeignClientsScanConfig

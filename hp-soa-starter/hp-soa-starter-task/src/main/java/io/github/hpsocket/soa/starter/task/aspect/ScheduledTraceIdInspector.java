@@ -5,6 +5,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.Ordered;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
@@ -17,10 +18,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Aspect
-@Order(Integer.MIN_VALUE)
+@Order(ScheduledTraceIdInspector.ORDER)
 public class ScheduledTraceIdInspector
 {
-    private static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
+    public static final int ORDER = Ordered.HIGHEST_PRECEDENCE;
+    
+    public static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
                                                  + "@annotation(org.springframework.scheduling.annotation.Scheduled)";
 
     @Pointcut(POINTCUT_PATTERN)

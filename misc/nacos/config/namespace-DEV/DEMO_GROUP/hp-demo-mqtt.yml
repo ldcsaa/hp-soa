@@ -1,5 +1,5 @@
 # 应用程序只读时会关闭所有 mqtt 连接
-#hp.soa.web.app.read-only: true
+hp.soa.web.app.read-only: true
 
 ## 默认 mqtt 配置
 # 完整配置可参考以下配置类：

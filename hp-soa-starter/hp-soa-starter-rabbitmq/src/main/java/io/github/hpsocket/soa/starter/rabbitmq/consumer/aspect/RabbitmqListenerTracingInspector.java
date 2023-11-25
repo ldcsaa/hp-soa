@@ -14,7 +14,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Order(Integer.MIN_VALUE)
 public class RabbitmqListenerTracingInspector
 {
-    @Pointcut(RabbitmqListenerMdcInspector.INSPECTOR_POINTCUT_PATTERN)
+    @Pointcut(RabbitmqListenerMdcInspector.POINTCUT_PATTERN)
     protected void aroundMethod() {}
     
     @Trace

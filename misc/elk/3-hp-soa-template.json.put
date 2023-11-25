@@ -157,7 +157,7 @@ PUT _index_template/hp-soa-template
                     "type": "text"
                 },
                 "groupId": {
-                    "type": "keyword"
+                    "type": "long"
                 },
                 "level": {
                     "type": "keyword"
@@ -197,9 +197,6 @@ PUT _index_template/hp-soa-template
                         "__fromServiceName": {
                             "type": "keyword"
                         },
-                        "__groupId": {
-                            "type": "keyword"
-                        },
                         "__organization": {
                             "type": "keyword"
                         },
@@ -215,7 +212,16 @@ PUT _index_template/hp-soa-template
                         "__sourceRequestId": {
                             "type": "keyword"
                         },
+                        "__version": {
+                            "type": "keyword"
+                        },
+                        "__extra": {
+                            "type": "keyword"
+                        },
                         "__traceId": {
+                            "type": "keyword"
+                        },
+                        "__spanId": {
                             "type": "keyword"
                         },
                         "__serviceAddr": {
@@ -228,6 +234,12 @@ PUT _index_template/hp-soa-template
                             "type": "keyword"
                         },
                         "__token": {
+                            "type": "keyword"
+                        },
+                        "__isEntry": {
+                            "type": "keyword"
+                        },
+                        "__groupId": {
                             "type": "keyword"
                         },
                         "__userId": {
