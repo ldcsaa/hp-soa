@@ -375,7 +375,6 @@ public class WebServerHelper
         
         MdcAttr mdcAttr = new MdcAttr();
         
-        mdcAttr.setIsEntry(Boolean.toString(isEntry));
         mdcAttr.setAppId(AppConfigHolder.getAppId());
         mdcAttr.setAppName(AppConfigHolder.getAppName());
         mdcAttr.setServiceId(AppConfigHolder.getAppId());
