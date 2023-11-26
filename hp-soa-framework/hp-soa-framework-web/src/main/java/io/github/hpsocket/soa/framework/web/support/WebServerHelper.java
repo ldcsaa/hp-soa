@@ -93,6 +93,7 @@ public class WebServerHelper
                                                                                         new LinkedBlockingDeque<>(2000),
                                                                                         new ThreadPoolExecutor.CallerRunsPolicy());
     
+    private static Boolean entry;
     private static ObjectMapper jacksonObjectMapper;
     
     public static final void StartTiming()
@@ -358,14 +359,23 @@ public class WebServerHelper
     /** 创建调用链 MDC 相关属性 */
     public static final MdcAttr createMdcAttr()
     {
-        return createMdcAttr(true);
+        return createMdcAttr(true, true);
     }
-    
+
     /** 创建调用链 MDC 相关属性 */
     public static final MdcAttr createMdcAttr(boolean generateRequestId)
     {
+        return createMdcAttr(generateRequestId, true);
+    }
+    
+    /** 创建调用链 MDC 相关属性 */
+    public static final MdcAttr createMdcAttr(boolean generateRequestId, boolean isEntry)
+    {
+        entry = isEntry;
+        
         MdcAttr mdcAttr = new MdcAttr();
         
+        mdcAttr.setIsEntry(Boolean.toString(isEntry));
         mdcAttr.setAppId(AppConfigHolder.getAppId());
         mdcAttr.setAppName(AppConfigHolder.getAppName());
         mdcAttr.setServiceId(AppConfigHolder.getAppId());
@@ -459,6 +469,19 @@ public class WebServerHelper
     public static final boolean isAppReadOnly()
     {
         return AppConfigHolder.isReadOnly();
+    }
+    
+    public static final boolean isEntry()
+    {       
+        if(entry == null)
+            throw new RuntimeException("unable to determine current application is entry or not");
+        
+        return entry;
+    }
+    
+    public static final Boolean isEntryOrNull()
+    {
+        return entry;
     }
     
     /** 创建随机 UUID */

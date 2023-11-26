@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.github.hpsocket.soa.framework.web.advice.ControllerGlobalExceptionAdvice;
 import io.github.hpsocket.soa.framework.web.model.Response;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +25,7 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e) throws MethodArgumentNotValidException
     {
-        if(TracingHelper.isEntry())
+        if(WebServerHelper.isEntry())
             return super.handleMethodArgumentNotValidException(request, response, e);
         else
         {
@@ -39,7 +40,7 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
     @ExceptionHandler({Exception.class})
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e) throws Exception
     {
-        if(TracingHelper.isEntry())
+        if(WebServerHelper.isEntry())
             return super.handleException(request, response, e);
         else
         {

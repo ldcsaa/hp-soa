@@ -9,7 +9,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.github.hpsocket.soa.framework.web.advice.ControllerRequestAdvice;
-import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 /** <b>Spring Cloud HTTP 请求拦截器</b> */
 @Aspect
@@ -25,7 +25,7 @@ public class CloudControllerRequestAdvice extends ControllerRequestAdvice
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType)
     {
-        Boolean isEntry = TracingHelper.isEntryOrNull();
+        Boolean isEntry = WebServerHelper.isEntryOrNull();
         return Boolean.TRUE.equals(isEntry) ? super.afterBodyRead(body, inputMessage, parameter, targetType, converterType) : body;
     }
 

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import io.github.hpsocket.soa.framework.web.advice.ControllerResponseAdvice;
 import io.github.hpsocket.soa.framework.web.model.Response;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 
 /** <b>Spring Cloud HTTP 响应拦截器</b> */
 @RestControllerAdvice
@@ -25,7 +24,7 @@ public class CloudControllerResponseAdvice extends ControllerResponseAdvice
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response)
     {
-        Boolean isEntry = TracingHelper.isEntryOrNull();
+        Boolean isEntry = WebServerHelper.isEntryOrNull();
         
         if(Boolean.TRUE.equals(isEntry))
             return super.beforeBodyWrite(body, returnType, selectedContentType, selectedConverterType, request, response);
