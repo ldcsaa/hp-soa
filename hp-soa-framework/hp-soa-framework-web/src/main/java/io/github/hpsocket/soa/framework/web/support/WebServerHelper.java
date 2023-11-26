@@ -93,7 +93,7 @@ public class WebServerHelper
                                                                                         new LinkedBlockingDeque<>(2000),
                                                                                         new ThreadPoolExecutor.CallerRunsPolicy());
     
-    private static Boolean entry;
+    private static boolean entry;
     private static ObjectMapper jacksonObjectMapper;
     
     public static final void StartTiming()
@@ -471,16 +471,9 @@ public class WebServerHelper
         return AppConfigHolder.isReadOnly();
     }
     
+    /** 检查是否是调用链入口 */
     public static final boolean isEntry()
     {       
-        if(entry == null)
-            throw new RuntimeException("unable to determine current application is entry or not");
-        
-        return entry;
-    }
-    
-    public static final Boolean isEntryOrNull()
-    {
         return entry;
     }
     
