@@ -33,6 +33,8 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbi
 @ConditionalOnBean({SoaRabbitmqConsumerConfig.class, SoaDefaultRabbitmqProperties.class})
 public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerConfig
 {
+    public static final String defaultRabbitListenerContainerFactoryBeanName = "rabbitListenerContainerFactory";
+
     public static final String simpleRabbitListenerContainerFactoryConfigurerBeanName = "defaultSimpleRabbitListenerContainerFactoryConfigurer";
     public static final String simpleRabbitListenerContainerFactoryBeanName = "defaultSimpleRabbitListenerContainerFactory";
     public static final String rabbitCachingConnectionFactoryBeanName = "defaultRabbitCachingConnectionFactory";
@@ -65,7 +67,7 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
     
     @Primary
     @Override
-    @Bean(simpleRabbitListenerContainerFactoryBeanName)
+    @Bean({simpleRabbitListenerContainerFactoryBeanName, defaultRabbitListenerContainerFactoryBeanName})
     @ConditionalOnProperty(prefix = "spring.rabbitmq.listener", name = "type", havingValue = "simple", matchIfMissing = true)
     public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
         @Qualifier(simpleRabbitListenerContainerFactoryConfigurerBeanName) SimpleRabbitListenerContainerFactoryConfigurer configurer,

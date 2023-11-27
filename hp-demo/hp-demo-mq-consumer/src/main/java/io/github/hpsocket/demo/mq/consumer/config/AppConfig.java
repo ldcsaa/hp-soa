@@ -23,7 +23,7 @@ public class AppConfig
 {
     public static final String DOMAIN_NAME                = "demo.order";
     public static final String CREATE_ORDER_EVENT_NAME    = "createOrder";
-    public static final String CREATE_ORDER_ROUTING_KEY    = "order.create.*";
+    public static final String CREATE_ORDER_ROUTING_KEY    = "order.*";
     
     public static final String QUE_REGION_0                = "QUE_REGION_0";
     public static final String QUE_REGION_1                = "QUE_REGION_1";

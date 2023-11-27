@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.starter.web.cloud.support;
 
+import java.time.LocalDateTime;
 import java.util.StringTokenizer;
 
 import org.slf4j.MDC;
@@ -25,7 +26,7 @@ public class TracingHelper
     
     public static final String createTracingInfoHeader()
     {
-        StringBuilder sb = new StringBuilder(200);
+        StringBuilder sb = new StringBuilder(500);
         
         for(String key : TRANSFER_MDC_KEYS)
         {
@@ -103,10 +104,10 @@ public class TracingHelper
     {
         CloudExceptionInfo info = new CloudExceptionInfo();
         
-        info.setTimestamp(System.currentTimeMillis());
         info.setStatus(status);
-        info.setException(e.getClass().getName());
         info.setMessage(e.getMessage());
+        info.setException(e.getClass().getName());
+        info.setTimestamp(LocalDateTime.now());
         
         if(e instanceof ServiceException se)
         {
