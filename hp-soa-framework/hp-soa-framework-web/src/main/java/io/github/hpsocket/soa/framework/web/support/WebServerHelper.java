@@ -93,7 +93,6 @@ public class WebServerHelper
                                                                                         new LinkedBlockingDeque<>(2000),
                                                                                         new ThreadPoolExecutor.CallerRunsPolicy());
     
-    private static boolean entry;
     private static ObjectMapper jacksonObjectMapper;
     
     public static final void StartTiming()
@@ -371,10 +370,9 @@ public class WebServerHelper
     /** 创建调用链 MDC 相关属性 */
     public static final MdcAttr createMdcAttr(boolean generateRequestId, boolean isEntry)
     {
-        entry = isEntry;
-        
         MdcAttr mdcAttr = new MdcAttr();
         
+        mdcAttr.setIsEntry(Boolean.toString(isEntry));
         mdcAttr.setAppId(AppConfigHolder.getAppId());
         mdcAttr.setAppName(AppConfigHolder.getAppName());
         mdcAttr.setServiceId(AppConfigHolder.getAppId());
@@ -472,8 +470,24 @@ public class WebServerHelper
     
     /** 检查是否是调用链入口 */
     public static final boolean isEntry()
-    {       
-        return entry;
+    {
+        Boolean isEntry = isEntryOrNull();
+        
+        if(isEntry == null)
+            throw new RuntimeException("unable to determine current application is entry or not");
+        
+        return isEntry;
+    }
+    
+    /** 检查是否是调用链入口 */
+    public static final Boolean isEntryOrNull()
+    {
+        String isEntry = MDC.get(MdcAttr.MDC_IS_ENTRY_KEY);
+        
+        if(GeneralHelper.isStrEmpty(isEntry))
+            return null;
+        
+        return Boolean.valueOf(isEntry);
     }
     
     /** 创建随机 UUID */

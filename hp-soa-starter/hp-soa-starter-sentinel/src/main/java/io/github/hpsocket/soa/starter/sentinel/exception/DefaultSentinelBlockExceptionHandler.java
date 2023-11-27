@@ -1,8 +1,10 @@
 package io.github.hpsocket.soa.starter.sentinel.exception;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
+import com.alibaba.csp.sentinel.slots.block.AbstractRule;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson2.JSON;
 
@@ -20,9 +22,10 @@ public class DefaultSentinelBlockExceptionHandler implements BlockExceptionHandl
 {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, BlockException e) throws Exception
+    public void handle(HttpServletRequest request, HttpServletResponse response, BlockException e) throws IOException
     {
-        ServiceException se = wrapServiceException(FREQUENCY_LIMIT_EXCEPTION, e);
+        AbstractRule rule   = e.getRule();
+        ServiceException se = wrapUnimportantException("接口繁忙" + ((rule != null) ? (": " + rule.getResource()) : ""), FREQUENCY_LIMIT_ERROR, e);
 
         logServiceException(log, se, false);
 
@@ -31,12 +34,17 @@ public class DefaultSentinelBlockExceptionHandler implements BlockExceptionHandl
         
         try(PrintWriter out = response.getWriter())
         {
-            Response<?> resp = new Response<>(se);
+            Response<?> resp = createBlockExceptionResponse(se);
             resp.setCostTime(WebServerHelper.calcTimestamp());
             
             out.print(JSON.toJSONString(resp));
             out.flush();
         }
+    }
+    
+    protected Response<?> createBlockExceptionResponse(ServiceException se)
+    {
+        return new Response<>(se);
     }
 
 }

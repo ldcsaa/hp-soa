@@ -30,7 +30,7 @@ public class CloudControllerSpecificExceptionAdvice implements Ordered
     /** {@linkplain FeignException} 异常处理器 */
     @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
     @ExceptionHandler({FeignException.class})
-    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, FeignException e) throws FeignException
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, FeignException e)
     {
         if(WebServerHelper.isEntry())
         {

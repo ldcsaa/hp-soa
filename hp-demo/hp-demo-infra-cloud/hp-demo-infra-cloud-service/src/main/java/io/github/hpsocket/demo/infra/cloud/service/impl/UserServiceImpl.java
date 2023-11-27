@@ -15,7 +15,7 @@ import io.github.hpsocket.demo.infra.cloud.converter.UserConverter;
 import io.github.hpsocket.demo.infra.cloud.entity.User;
 import io.github.hpsocket.demo.infra.cloud.mapper.UserMapper;
 import io.github.hpsocket.demo.infra.cloud.service.UserService;
-import io.github.hpsocket.soa.framework.core.exception.ServiceException;
+import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -50,10 +50,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @DS("slave")
     public UserBo getUser(Long id)
     {
-        if(id == 2)
-            throw new RuntimeException("test 2 ~~~~~~~~~~~~~~~~");
-        if(id == 3)
-            throw new ServiceException("test 3 ~~~~~~~~~~~~~~~~", 555);
+        /* 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
+        System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
+        
+        /*
+        if(id == 200)
+            throw new RuntimeException("test RuntimeException");
+        if(id == 300)
+            throw new ServiceException("test ServiceException", 555);
+        */
         
         User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, id));
         log.info("get user: {}", user);

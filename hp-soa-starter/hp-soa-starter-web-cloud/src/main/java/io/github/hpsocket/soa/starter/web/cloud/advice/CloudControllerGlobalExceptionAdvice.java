@@ -23,7 +23,7 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
     @Override
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e) throws MethodArgumentNotValidException
+    public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e)
     {
         if(WebServerHelper.isEntry())
             return super.handleMethodArgumentNotValidException(request, response, e);
@@ -38,7 +38,7 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
     @Override
     @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
     @ExceptionHandler({Exception.class})
-    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e) throws Exception
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
     {
         if(WebServerHelper.isEntry())
             return super.handleException(request, response, e);

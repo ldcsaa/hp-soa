@@ -88,12 +88,12 @@ public class ServiceException extends RuntimeException
     public static final ServiceException INNER_API_CALL_EXCEPTION   = new ServiceException("内部服务调用失败", INNER_API_CALL_FAIL);
     public static final ServiceException SIGN_VERIFY_EXCEPTION      = new ServiceException("签名验证失败", SIGN_VERIFY_ERROR);
 
-    public static final ServiceException FREQUENCY_LIMIT_EXCEPTION  = new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
-    public static final ServiceException FORBID_EXCEPTION           = new UnimportantException("拒绝访问", FORBID_ERROR);
-    public static final ServiceException TRAFFIC_LIMIT_EXCEPTION    = new UnimportantException("系统繁忙", TRAFFIC_LIMIT_ERROR);
-    public static final ServiceException READ_ONLY_EXCEPTION        = new UnimportantException("拒绝写入", READ_ONLY_ERROR);
-    public static final ServiceException LOGIN_INVALID_EXCEPTION    = new UnimportantException("登录已失效", LOGIN_INVALID);
-    public static final ServiceException NOT_LOGGED_IN_EXCEPTION    = new UnimportantException("未登录", NOT_LOGGED_IN);
+    public static final UnimportantException FREQUENCY_LIMIT_EXCEPTION  = new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
+    public static final UnimportantException FORBID_EXCEPTION           = new UnimportantException("拒绝访问", FORBID_ERROR);
+    public static final UnimportantException TRAFFIC_LIMIT_EXCEPTION    = new UnimportantException("系统繁忙", TRAFFIC_LIMIT_ERROR);
+    public static final UnimportantException READ_ONLY_EXCEPTION        = new UnimportantException("拒绝写入", READ_ONLY_ERROR);
+    public static final UnimportantException LOGIN_INVALID_EXCEPTION    = new UnimportantException("登录已失效", LOGIN_INVALID);
+    public static final UnimportantException NOT_LOGGED_IN_EXCEPTION    = new UnimportantException("未登录", NOT_LOGGED_IN);
     
     /** 状态码：{@linkplain ServiceException#OK OK} - 成功，其它 - 失败 */
     private Integer statusCode;
@@ -174,6 +174,19 @@ public class ServiceException extends RuntimeException
             e = new ServiceException(message, statusCode, e);
 
         return (ServiceException)e;
+    }
+
+    public static final UnimportantException wrapUnimportantException(UnimportantException se, Throwable e)
+    {
+        return wrapUnimportantException(se.getMessage(), se.getStatusCode(), e);
+    }
+
+    public static final UnimportantException wrapUnimportantException(String message, Integer statusCode, Throwable e)
+    {
+        if(!(e instanceof UnimportantException))
+            e = new UnimportantException(message, statusCode, e);
+
+        return (UnimportantException)e;
     }
 
     public static final void throwServiceException(Throwable e)
@@ -288,7 +301,7 @@ public class ServiceException extends RuntimeException
         else
         {
             if(e instanceof UnimportantException)
-                logger.info(FORMAT, statusCode, resultCode, msg);
+                logger.warn(FORMAT, statusCode, resultCode, msg);
             else
             {
                 if(printWarnStackTrace)
