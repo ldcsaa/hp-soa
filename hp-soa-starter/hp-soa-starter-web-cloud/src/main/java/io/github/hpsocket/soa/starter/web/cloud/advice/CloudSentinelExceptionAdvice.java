@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 
 import io.github.hpsocket.soa.framework.web.model.Response;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.sentinel.advice.SentinelExceptionAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,9 +26,9 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
     @Override
     @ResponseStatus(value = HttpStatus.TOO_MANY_REQUESTS)
     @ExceptionHandler({BlockException.class})
-    public Response<?> handleBlockException(HttpServletRequest request, HttpServletResponse response, BlockException e) throws BlockException
+    public Response<?> handleBlockException(HttpServletRequest request, HttpServletResponse response, BlockException e)
     {
-        if(TracingHelper.isEntry())
+        if(WebServerHelper.isEntry())
             return super.handleBlockException(request, response, e);
         else
         {
@@ -40,9 +41,9 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
     @Override
     @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
     @ExceptionHandler({UndeclaredThrowableException.class})
-    public Response<?> handleUndeclaredThrowableException(HttpServletRequest request, HttpServletResponse response, UndeclaredThrowableException e) throws UndeclaredThrowableException, Exception
+    public Response<?> handleUndeclaredThrowableException(HttpServletRequest request, HttpServletResponse response, UndeclaredThrowableException e)
     {
-        if(TracingHelper.isEntry())
+        if(WebServerHelper.isEntry())
             return super.handleUndeclaredThrowableException(request, response, e);
         else
         {
@@ -55,9 +56,9 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
     @Override
     @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
     @ExceptionHandler({RuntimeException.class})
-    public Response<?> handleRuntimeException(HttpServletRequest request, HttpServletResponse response, RuntimeException e) throws Exception
+    public Response<?> handleRuntimeException(HttpServletRequest request, HttpServletResponse response, RuntimeException e)
     {
-        if(TracingHelper.isEntry())
+        if(WebServerHelper.isEntry())
             return super.handleRuntimeException(request, response, e);
         else
         {

@@ -38,7 +38,9 @@ public class DemoControllerImpl implements DemoController
         UserBo userBo = userServiceClient.getUser(request.getId());
         
         QueryUserResponse resp = userConverter.toQueryUserResponse(userBo);
-        resp.setToken(IdGenerator.nextCompactUUID());
+        
+        if(resp != null)
+            resp.setToken(IdGenerator.nextCompactUUID());
 
         return new Response<>(resp);
     }

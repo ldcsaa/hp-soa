@@ -39,9 +39,9 @@ public class SentinelExceptionAdvice implements Ordered
 
     /** {@linkplain BlockException} 异常处理器 */
     @ExceptionHandler({BlockException.class})
-    public Response<?> handleBlockException(HttpServletRequest request, HttpServletResponse response, BlockException e) throws BlockException
+    public Response<?> handleBlockException(HttpServletRequest request, HttpServletResponse response, BlockException e)
     {
-        ServiceException se = wrapServiceException(FORBID_EXCEPTION, e);;
+        ServiceException se = wrapUnimportantException(FREQUENCY_LIMIT_EXCEPTION, e);
         logServiceException(log, se.getMessage(), se);
         
         return new Response<>(se);            
@@ -49,7 +49,7 @@ public class SentinelExceptionAdvice implements Ordered
 
     /** {@linkplain UndeclaredThrowableException} 异常处理器 */
     @ExceptionHandler({UndeclaredThrowableException.class})
-    public Response<?> handleUndeclaredThrowableException(HttpServletRequest request, HttpServletResponse response, UndeclaredThrowableException e) throws UndeclaredThrowableException, Exception
+    public Response<?> handleUndeclaredThrowableException(HttpServletRequest request, HttpServletResponse response, UndeclaredThrowableException e)
     {
         Throwable t = e.getCause();
         
@@ -61,7 +61,7 @@ public class SentinelExceptionAdvice implements Ordered
     
     /** {@linkplain RuntimeException} 异常处理器 */
     @ExceptionHandler({RuntimeException.class})
-    public Response<?> handleRuntimeException(HttpServletRequest request, HttpServletResponse response, RuntimeException e) throws Exception
+    public Response<?> handleRuntimeException(HttpServletRequest request, HttpServletResponse response, RuntimeException e)
     {
         ServiceException se = null;
         String message = e.getMessage();
@@ -69,7 +69,7 @@ public class SentinelExceptionAdvice implements Ordered
         if(GeneralHelper.isStrNotEmpty(message))
         {
             if(message.startsWith(BLOCK_EXCEPTION_MESSAGE_PREFIX))
-                se = wrapServiceException(FORBID_EXCEPTION, e);
+                se = wrapUnimportantException(FREQUENCY_LIMIT_EXCEPTION, e);
         }
         
         if(se == null)

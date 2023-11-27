@@ -50,7 +50,7 @@ public class HttpMdcFilter implements Filter
     {
         WebServerHelper.StartTiming();
         
-        MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false);
+        MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false, true);
         RequestAttribute reqAttr = RequestContext.parseRequestAttribute((HttpServletRequest)request, (HttpServletResponse)response);
         
         try

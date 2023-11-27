@@ -358,14 +358,21 @@ public class WebServerHelper
     /** 创建调用链 MDC 相关属性 */
     public static final MdcAttr createMdcAttr()
     {
-        return createMdcAttr(true);
+        return createMdcAttr(true, true);
     }
-    
+
     /** 创建调用链 MDC 相关属性 */
     public static final MdcAttr createMdcAttr(boolean generateRequestId)
     {
+        return createMdcAttr(generateRequestId, true);
+    }
+    
+    /** 创建调用链 MDC 相关属性 */
+    public static final MdcAttr createMdcAttr(boolean generateRequestId, boolean isEntry)
+    {
         MdcAttr mdcAttr = new MdcAttr();
         
+        mdcAttr.setIsEntry(Boolean.toString(isEntry));
         mdcAttr.setAppId(AppConfigHolder.getAppId());
         mdcAttr.setAppName(AppConfigHolder.getAppName());
         mdcAttr.setServiceId(AppConfigHolder.getAppId());
@@ -459,6 +466,28 @@ public class WebServerHelper
     public static final boolean isAppReadOnly()
     {
         return AppConfigHolder.isReadOnly();
+    }
+    
+    /** 检查是否是调用链入口 */
+    public static final boolean isEntry()
+    {
+        Boolean isEntry = isEntryOrNull();
+        
+        if(isEntry == null)
+            throw new RuntimeException("unable to determine current application is entry or not");
+        
+        return isEntry;
+    }
+    
+    /** 检查是否是调用链入口 */
+    public static final Boolean isEntryOrNull()
+    {
+        String isEntry = MDC.get(MdcAttr.MDC_IS_ENTRY_KEY);
+        
+        if(GeneralHelper.isStrEmpty(isEntry))
+            return null;
+        
+        return Boolean.valueOf(isEntry);
     }
     
     /** 创建随机 UUID */

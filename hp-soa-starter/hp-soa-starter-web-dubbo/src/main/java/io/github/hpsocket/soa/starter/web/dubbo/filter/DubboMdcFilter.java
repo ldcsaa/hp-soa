@@ -74,6 +74,7 @@ public class DubboMdcFilter implements Filter, Filter.Listener
                         GEN_APP_ID.set(Boolean.TRUE);
                 }
                 
+                MDC.put(MDC_IS_ENTRY_KEY, Boolean.toString(false));
                 MDC.put(MDC_SERVICE_ID_KEY, AppConfigHolder.getAppId());
                 MDC.put(MDC_SERVICE_NAME_KEY, AppConfigHolder.getAppName());
                 MDC.put(MDC_SERVICE_ADDR_KEY, AppConfigHolder.getAppAddress());

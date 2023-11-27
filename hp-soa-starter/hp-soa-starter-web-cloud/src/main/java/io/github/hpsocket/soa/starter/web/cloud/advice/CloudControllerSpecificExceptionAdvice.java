@@ -12,6 +12,7 @@ import feign.RetryableException;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.web.advice.ControllerGlobalExceptionAdvice;
 import io.github.hpsocket.soa.framework.web.model.Response;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,9 +30,9 @@ public class CloudControllerSpecificExceptionAdvice implements Ordered
     /** {@linkplain FeignException} 异常处理器 */
     @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
     @ExceptionHandler({FeignException.class})
-    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, FeignException e) throws FeignException
+    public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, FeignException e)
     {
-        if(TracingHelper.isEntry())
+        if(WebServerHelper.isEntry())
         {
             ServiceException se = null;
             

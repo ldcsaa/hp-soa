@@ -22,7 +22,7 @@ spring.cloud:
           # 读超时时间
           read-timeout: 5000
           # 日志级别（可选值：NONE、BASIC、HEADERS、FULL）
-          logger-level: FULL
+          logger-level: NONE
       compression:
         request:
           # 开启请求压缩支持

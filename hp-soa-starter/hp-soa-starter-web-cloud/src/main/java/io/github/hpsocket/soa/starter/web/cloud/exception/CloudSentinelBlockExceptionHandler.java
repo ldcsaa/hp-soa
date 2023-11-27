@@ -1,27 +1,22 @@
 package io.github.hpsocket.soa.starter.web.cloud.exception;
 
-import com.alibaba.csp.sentinel.slots.block.BlockException;
+import org.springframework.http.HttpStatus;
 
+import io.github.hpsocket.soa.framework.core.exception.ServiceException;
+import io.github.hpsocket.soa.framework.web.model.Response;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.sentinel.exception.DefaultSentinelBlockExceptionHandler;
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class CloudSentinelBlockExceptionHandler extends DefaultSentinelBlockExceptionHandler
-{
-
+{    
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, BlockException e) throws Exception
+    protected Response<?> createBlockExceptionResponse(ServiceException se)
     {
-        if(TracingHelper.isEntry())
-            super.handle(request, response, e);
-        else
-        {
-            log.warn(e.getMessage());
-            throw e;
-        }
+        if(WebServerHelper.isEntry())
+            return super.createBlockExceptionResponse(se);
+        
+        return TracingHelper.createExceptionResponse(se, HttpStatus.TOO_MANY_REQUESTS);
     }
 
 }

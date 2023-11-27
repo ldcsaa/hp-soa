@@ -47,37 +47,28 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
         String tracingInfo = WebServerHelper.getHeader((HttpServletRequest)request, TracingHelper.HEADER_TRACING_INFO);
         boolean isEntry    = GeneralHelper.isStrEmpty(tracingInfo);
         
-        TracingHelper.setEntry(isEntry);
-        
-        try
+        if(isEntry)
+            super.doFilter(request, response, chain);
+        else
         {
-            if(isEntry)
-                super.doFilter(request, response, chain);
-            else
-            {
-                WebServerHelper.StartTiming();
-                MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false);
+            WebServerHelper.StartTiming();
+            MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false, isEntry);
+            
+            try
+            {            
+                TracingHelper.fillMdcAttr(mdcAttr, tracingInfo);
+                TracingHelper.setRequestAttribute(mdcAttr, (HttpServletRequest)request);
                 
-                try
-                {            
-                    TracingHelper.fillMdcAttr(mdcAttr, tracingInfo);
-                    TracingHelper.setRequestAttribute(mdcAttr, (HttpServletRequest)request);
-                    
-                    mdcAttr.putMdc();
-    
-                    chain.doFilter(request, response);
-                }
-                finally
-                {
-                    RequestContext.removeRequestAttribute();
-                    
-                    mdcAttr.removeMdc();
-                }
+                mdcAttr.putMdc();
+
+                chain.doFilter(request, response);
             }
-        }
-        finally
-        {
-            TracingHelper.removeEntry();
+            finally
+            {
+                RequestContext.removeRequestAttribute();
+                
+                mdcAttr.removeMdc();
+            }
         }
     }
     

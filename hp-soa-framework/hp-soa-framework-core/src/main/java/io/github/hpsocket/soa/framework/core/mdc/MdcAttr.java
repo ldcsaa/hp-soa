@@ -36,6 +36,8 @@ public class MdcAttr
     public static final String MDC_FROM_SERVICE_NAME_KEY    = "__fromServiceName";
     public static final String MDC_FROM_SERVICE_ADDR_KEY    = "__fromServiceAddr";
     
+    public static final String MDC_IS_ENTRY_KEY             = "__isEntry";
+    
     public static final String TRANSFER_MDC_KEYS[] = {
                                                         MDC_TRACE_ID_KEY,
                                                         MDC_REQUEST_ID_KEY,
@@ -368,6 +370,16 @@ public class MdcAttr
     public void setOwner(String ownerName)
     {
         set(MDC_OWNER_KEY, ownerName);
+    }
+
+    public String getIsEntry()
+    {
+        return get(MDC_IS_ENTRY_KEY);
+    }
+
+    public void setIsEntry(String isEntry)
+    {
+        set(MDC_IS_ENTRY_KEY, isEntry);
     }
 
 }

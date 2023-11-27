@@ -22,8 +22,6 @@ import static io.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 public class TracingHelper
 {
     public static final String HEADER_TRACING_INFO  = "X-Tracing-Info";
-    public static final String TRACING_IS_ENTRY_KEY = "__isEntry";
-    private static final ThreadLocal<Boolean> ENTRY = new ThreadLocal<>();
     
     public static final String createTracingInfoHeader()
     {
@@ -121,25 +119,5 @@ public class TracingHelper
         
         return resp;
     }
-
-    public static final boolean isEntry()
-    {
-        return ENTRY.get();
-    }
     
-    public static final Boolean isEntryOrNull()
-    {
-        return ENTRY.get();
-    }
-    
-    public static final void setEntry(Boolean entry)
-    {
-        ENTRY.set(entry);
-    }
-    
-    public static final void removeEntry()
-    {
-        setEntry(null);
-    }
-
 }
