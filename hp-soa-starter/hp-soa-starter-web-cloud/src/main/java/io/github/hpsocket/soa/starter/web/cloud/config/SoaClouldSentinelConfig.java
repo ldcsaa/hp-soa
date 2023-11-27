@@ -12,6 +12,7 @@ import io.github.hpsocket.soa.starter.sentinel.config.SoaSentinelConfig;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudSentinelExceptionAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.exception.CloudSentinelBlockExceptionHandler;
 
+/** <b>HP-SOA Spring Cloud Sentinel 配置</b> */
 @AutoConfiguration(before = SoaSentinelConfig.class)
 @ConditionalOnClass(SoaSentinelConfig.class)
 public class SoaClouldSentinelConfig

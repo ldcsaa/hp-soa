@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** <b>Spring Cloud 异常信息</b> */
 @Getter
 @Setter
 @NoArgsConstructor

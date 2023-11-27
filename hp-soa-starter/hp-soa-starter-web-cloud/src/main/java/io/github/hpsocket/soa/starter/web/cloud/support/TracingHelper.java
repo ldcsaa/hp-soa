@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import static io.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 
+/** <b>调用链跟踪辅助类</b> */
 public class TracingHelper
 {
     public static final String HEADER_TRACING_INFO  = "X-Tracing-Info";

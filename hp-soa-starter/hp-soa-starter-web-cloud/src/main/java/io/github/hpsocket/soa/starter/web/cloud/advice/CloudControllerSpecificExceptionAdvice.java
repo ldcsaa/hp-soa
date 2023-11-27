@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 
-/** <b>Spring Cloud HTTP 请求全局异常拦截器</b> */
+/** <b>Spring Cloud 特定异常拦截器</b> */
 @Slf4j
 @RestControllerAdvice
 public class CloudControllerSpecificExceptionAdvice implements Ordered

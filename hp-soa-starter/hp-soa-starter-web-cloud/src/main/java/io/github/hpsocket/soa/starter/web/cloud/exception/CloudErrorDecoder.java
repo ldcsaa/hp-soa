@@ -17,6 +17,7 @@ import org.apache.commons.io.IOUtils;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.TypeReference;
 
+/** <b>Spring Cloud 异常解析器</b> */
 @Slf4j
 public class CloudErrorDecoder implements ErrorDecoder
 {
