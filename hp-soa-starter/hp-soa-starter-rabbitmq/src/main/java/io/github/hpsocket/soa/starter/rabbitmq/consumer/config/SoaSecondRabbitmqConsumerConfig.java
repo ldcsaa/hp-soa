@@ -90,7 +90,7 @@ public class SoaSecondRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumer
         return super.directRabbitListenerContainerFactory(configurer, connectionFactory, directContainerCustomizer);
     }
     
-    @Bean(name = rabbitStreamConsumerCustomizerBeanName)
+    @Bean(rabbitStreamConsumerCustomizerBeanName)
     @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
     @ConditionalOnMissingBean(name = rabbitStreamConsumerCustomizerBeanName)
     @ConditionalOnProperty(prefix = "spring.rabbitmq-second.listener", name = "type", havingValue = "stream")
@@ -100,7 +100,7 @@ public class SoaSecondRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumer
     }
     
     @Override
-    @Bean(name = streamRabbitListenerContainerFactoryBeanName)
+    @Bean(streamRabbitListenerContainerFactoryBeanName)
     @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
     @ConditionalOnProperty(prefix = "spring.rabbitmq-second.listener", name = "type", havingValue = "stream")
     public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(

@@ -33,7 +33,7 @@ import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbi
 @ConditionalOnBean({SoaRabbitmqConsumerConfig.class, SoaDefaultRabbitmqProperties.class})
 public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerConfig
 {
-    public static final String defaultRabbitListenerContainerFactoryBeanName = "rabbitListenerContainerFactory";
+    public static final String rabbitListenerContainerFactoryBeanName = "rabbitListenerContainerFactory";
 
     public static final String simpleRabbitListenerContainerFactoryConfigurerBeanName = "defaultSimpleRabbitListenerContainerFactoryConfigurer";
     public static final String simpleRabbitListenerContainerFactoryBeanName = "defaultSimpleRabbitListenerContainerFactory";
@@ -67,7 +67,7 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
     
     @Primary
     @Override
-    @Bean({simpleRabbitListenerContainerFactoryBeanName, defaultRabbitListenerContainerFactoryBeanName})
+    @Bean({simpleRabbitListenerContainerFactoryBeanName, rabbitListenerContainerFactoryBeanName})
     @ConditionalOnProperty(prefix = "spring.rabbitmq.listener", name = "type", havingValue = "simple", matchIfMissing = true)
     public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
         @Qualifier(simpleRabbitListenerContainerFactoryConfigurerBeanName) SimpleRabbitListenerContainerFactoryConfigurer configurer,
@@ -87,7 +87,7 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
 
     @Primary
     @Override
-    @Bean(directRabbitListenerContainerFactoryBeanName)
+    @Bean({directRabbitListenerContainerFactoryBeanName, rabbitListenerContainerFactoryBeanName})
     @ConditionalOnProperty(prefix = "spring.rabbitmq.listener", name = "type", havingValue = "direct")
     public DirectRabbitListenerContainerFactory directRabbitListenerContainerFactory(
         @Qualifier(directRabbitListenerContainerFactoryConfigurerBeanName) DirectRabbitListenerContainerFactoryConfigurer configurer,
@@ -98,7 +98,7 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
     }
     
     @Primary
-    @Bean(name = rabbitStreamConsumerCustomizerBeanName)
+    @Bean(rabbitStreamConsumerCustomizerBeanName)
     @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
     @ConditionalOnMissingBean(name = rabbitStreamConsumerCustomizerBeanName)
     @ConditionalOnProperty(prefix = "spring.rabbitmq.listener", name = "type", havingValue = "stream")
@@ -109,7 +109,7 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
     
     @Primary
     @Override
-    @Bean(name = streamRabbitListenerContainerFactoryBeanName)
+    @Bean({streamRabbitListenerContainerFactoryBeanName, rabbitListenerContainerFactoryBeanName})
     @ConditionalOnClass(StreamRabbitListenerContainerFactory.class)
     @ConditionalOnProperty(prefix = "spring.rabbitmq.listener", name = "type", havingValue = "stream")
     public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
