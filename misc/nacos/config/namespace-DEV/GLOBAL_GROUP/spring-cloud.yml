@@ -3,7 +3,7 @@ spring.cloud:
     enabled: true
     retry:
       # 该参数用来开启或关闭重试机制，默认是开启
-      enabled: false
+      enabled: true
       # 对当前实例重试的次数，默认值: 0
       max-retries-on-same-service-instance: 0
       # 切换实例进行重试的次数，默认值: 1
