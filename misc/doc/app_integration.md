@@ -143,15 +143,15 @@ spring.cloud:
           read-timeout: 5000
           # 日志级别（可选值：NONE、BASIC、HEADERS、FULL）
           logger-level: NONE
-      compression:
-        request:
+      compression:
+        request:
           # 开启请求压缩支持
-          enabled: true
-          # 压缩支持的 MIME TYPE
-          mime-types: text/xml,application/xml,text/json,application/json
-          # 压缩数据大小的下限
-          min-request-size: 4096
-        response:
+          enabled: true
+          # 压缩支持的 MIME TYPE
+          mime-types: text/xml,application/xml,text/json,application/json
+          # 压缩数据大小的下限
+          min-request-size: 4096
+        response:
           # 开启响应压缩支持
           enabled: true
 ```
