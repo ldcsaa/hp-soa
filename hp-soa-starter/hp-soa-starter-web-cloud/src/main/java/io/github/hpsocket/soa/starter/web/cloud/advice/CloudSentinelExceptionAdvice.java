@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
-/** <b>Sentinel 全局异常拦截器</b> */
+/** <b>Spring Cloud Sentinel 异常拦截器</b> */
 @Slf4j
 @RestControllerAdvice
 public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice

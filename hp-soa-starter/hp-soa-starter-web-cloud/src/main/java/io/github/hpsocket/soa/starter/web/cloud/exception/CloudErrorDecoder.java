@@ -6,6 +6,7 @@ import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.model.Response;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import lombok.extern.slf4j.Slf4j;
 
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 
@@ -13,9 +14,11 @@ import java.lang.reflect.Constructor;
 
 import org.apache.commons.io.IOUtils;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.TypeReference;
 
+/** <b>Spring Cloud 异常解析器</b> */
+@Slf4j
 public class CloudErrorDecoder implements ErrorDecoder
 {
 
@@ -28,27 +31,29 @@ public class CloudErrorDecoder implements ErrorDecoder
             return INNER_API_CALL_EXCEPTION;
         
         CloudExceptionInfo info = null;
+        String desc = INNER_API_CALL_EXCEPTION.getMessage();
         
         try
         {
             String str = IOUtils.toString(body.asReader(WebServerHelper.DEFAULT_CHARSET_OBJ));
             
             if(!str.startsWith("{"))
-                return new ServiceException(GeneralHelper.isStrNotEmpty(str) ? str : "未知异常", INNER_API_CALL_EXCEPTION);
-
-            Response<CloudExceptionInfo> resp = JSON.parseObject(str, new TypeReference<Response<CloudExceptionInfo>>() {});
-            Integer statusCode = resp.getStatusCode();
+                return new ServiceException(GeneralHelper.isStrNotEmpty(str) ? str : desc, INNER_API_CALL_EXCEPTION);
             
-            if(statusCode == null || (statusCode == 0 && resp.getResult() == null))
+            JSONObject json   = JSONObject.parse(str);
+            String statusCode = json.getString("statusCode");
+
+            if(GeneralHelper.isStrEmpty(statusCode))
             {
-                info = JSON.parseObject(str, CloudExceptionInfo.class);
-                return new ServiceException(String.format("服务调用失败 (status: %d) %s -> %s", info.getStatus(), info.getError(), info.getPath()), INNER_API_CALL_EXCEPTION);
+                info = json.to(CloudExceptionInfo.class);
+                return new ServiceException(String.format("%s (status: %d) %s -> %s", desc, info.getStatus(), info.getError(), info.getPath()), INNER_API_CALL_EXCEPTION);
             }
             
+            Response<CloudExceptionInfo> resp = json.to(new TypeReference<Response<CloudExceptionInfo>>() {});
             info = resp.getResult();
             
             if(info == null)
-                return new ServiceException(String.format("服务调用失败 (statusCode: %d) -> %s", resp.getStatusCode(), resp.getMsg()), INNER_API_CALL_EXCEPTION);
+                return new ServiceException(String.format("%s (statusCode: %d) -> %s", desc, resp.getStatusCode(), resp.getMsg()), INNER_API_CALL_EXCEPTION);
             
             Class<?> clazz = null;
             
@@ -62,7 +67,7 @@ public class CloudErrorDecoder implements ErrorDecoder
             }
             
             if(clazz == null)
-                return new ServiceException(String.format("服务调用失败: %s -> %s", info.getException(), info.getMessage()), INNER_API_CALL_EXCEPTION);
+                return new ServiceException(String.format("%s: %s -> %s", desc, info.getException(), info.getMessage()), INNER_API_CALL_EXCEPTION);
 
             Constructor<?> cstor = null;
             
@@ -76,7 +81,7 @@ public class CloudErrorDecoder implements ErrorDecoder
             }
             
             if(cstor == null)
-                return new ServiceException(String.format("服务调用失败: %s -> %s", info.getException(), info.getMessage()), INNER_API_CALL_EXCEPTION);
+                return new ServiceException(String.format("%s: %s -> %s", desc, info.getException(), info.getMessage()), INNER_API_CALL_EXCEPTION);
 
             Exception ex = (Exception)cstor.newInstance(info.getMessage());
             
@@ -90,7 +95,9 @@ public class CloudErrorDecoder implements ErrorDecoder
         }
         catch(Exception e)
         {
-            String msg = "未知异常";
+            log.error(e.getMessage(), e);
+            
+            String msg = desc;
             
             if(info != null)
             {

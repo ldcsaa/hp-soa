@@ -10,6 +10,9 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 
+/** <b>Rest Template 请求拦截器</b><p>
+ * 注入调用链跟踪信息
+ */
 public class RestTracingInterceptor implements ClientHttpRequestInterceptor, Ordered
 {
 

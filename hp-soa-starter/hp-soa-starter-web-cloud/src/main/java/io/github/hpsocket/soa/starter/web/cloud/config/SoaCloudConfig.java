@@ -17,7 +17,7 @@ import io.github.hpsocket.soa.starter.web.cloud.interceptor.FeignTracingIntercep
 import io.github.hpsocket.soa.starter.web.config.ControllerAdviceConfig;
 import io.github.hpsocket.soa.starter.web.config.WebConfig;
 
-/** <b>HP-SOA Spring Cloud 配置</b> */
+/** <b>HP-SOA Spring Cloud 基本配置</b> */
 @EnableDiscoveryClient
 @AutoConfiguration(before = {WebConfig.class, ControllerAdviceConfig.class})
 public class SoaCloudConfig

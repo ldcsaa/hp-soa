@@ -18,16 +18,15 @@
     <properties>
         <dubbo.version>3.2.7</dubbo.version>
         <nacos-client.version>2.2.4</nacos-client.version>
-        <nacos-config-spring-boot-starter.version>0.2.12</nacos-config-spring-boot-starter.version>
-        <netty.version>4.1.100.Final</netty.version>
+        <netty.version>4.1.101.Final</netty.version>
         <zookeeper.version>3.9.1</zookeeper.version>
         <kryo.version>5.5.0</kryo.version>
         <fst.version>3.0.4-jdk17</fst.version>
         <xxl-job.version>2.4.0</xxl-job.version>
         <sentinel.version>1.8.6</sentinel.version>
         
-        <spring.version>6.0.13</spring.version>
-        <spring-boot.version>3.1.5</spring-boot.version>
+        <spring.version>6.0.14</spring.version>
+        <spring-boot.version>3.1.6</spring-boot.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <caffeine.version>3.1.8</caffeine.version>
@@ -36,19 +35,19 @@
         <spring-security-rsa.version>1.1.1</spring-security-rsa.version>
         <spring-retry.version>2.0.4</spring-retry.version>
         <spring-amqp.version>3.0.10</spring-amqp.version>
-        <spring-kafka.version>3.0.12</spring-kafka.version>
+        <spring-kafka.version>3.0.13</spring-kafka.version>
         <kafka-clients.version>3.6.0</kafka-clients.version>
         <feign.version>13.1</feign.version>
         <druid.version>1.2.20</druid.version>
-        <jedis.version>5.0.2</jedis.version>
-        <lettuce.version>6.2.6.RELEASE</lettuce.version>
+        <jedis.version>5.1.0</jedis.version>
+        <lettuce.version>6.3.0.RELEASE</lettuce.version>
         <redisson.version>3.24.3</redisson.version>
-        <amqp-client.version>5.19.0</amqp-client.version>
+        <amqp-client.version>5.20.0</amqp-client.version>
         <stream-client.version>0.14.0</stream-client.version>
         <mysql-connector-j.version>8.2.0</mysql-connector-j.version>
-        <mybatis-spring.version>3.0.2</mybatis-spring.version>
+        <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis.version>3.5.14</mybatis.version>
-        <mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
+        <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
         <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.2.0</dynamic-datasource-spring-boot3-starter.version>
         <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
@@ -58,12 +57,12 @@
         <commons-io.version>2.15.0</commons-io.version>
         <commons-net.version>3.10.0</commons-net.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <commons-lang3.version>3.13.0</commons-lang3.version>
+        <commons-lang3.version>3.14.0</commons-lang3.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-codec.version>1.16.0</commons-codec.version>
-        <commons-pool.version>1.5.4.0</commons-pool.version>
+        <commons-pool.version>1.6</commons-pool.version>
         <commons-pool2.version>2.12.0</commons-pool2.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
 
@@ -86,20 +85,20 @@
         <jsr305.version>3.0.2</jsr305.version>
         
         <mqttv5.client.version>1.2.5</mqttv5.client.version>
-        <bcpkix.version>1.76</bcpkix.version>
+        <bcpkix.version>1.77</bcpkix.version>
 
         <slf4j.version>2.0.9</slf4j.version>
-        <log4j.version>2.21.1</log4j.version>
+        <log4j.version>2.22.0</log4j.version>
         <disruptor.version>4.0.0</disruptor.version>
         <skywalking.apm-toolkit.version>9.0.0</skywalking.apm-toolkit.version>
         <junit.version>4.13.2</junit.version>
-        <junit5.version>5.10.0</junit5.version>
+        <junit5.version>5.10.1</junit5.version>
 
         <fastjson.version>2.0.42</fastjson.version>
-        <protobuf-java.version>3.24.4</protobuf-java.version>
+        <protobuf-java.version>3.25.1</protobuf-java.version>
         <quartz.version>2.3.2</quartz.version>
         <httpclient.version>4.5.14</httpclient.version>
-        <httpclient5.version>5.2.1</httpclient5.version>
+        <httpclient5.version>5.2.2</httpclient5.version>
         <browscap-java.version>1.4.1</browscap-java.version>
         <xstream.version>1.4.20</xstream.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
@@ -109,7 +108,7 @@
 
         <geoip2.version>4.1.0</geoip2.version>
         <gson.version>2.10.1</gson.version>
-        <jackson.version>2.15.3</jackson.version>
+        <jackson.version>2.16.0</jackson.version>
         <hessian.version>4.0.66</hessian.version>
         <zxing-javase.version>3.5.2</zxing-javase.version>
         <okhttp2.version>2.7.5</okhttp2.version>
@@ -119,17 +118,17 @@
         <jsoup.version>1.16.2</jsoup.version>
         <selenium.version>4.15.0</selenium.version>
 
-        <poi.version>5.2.4</poi.version>
+        <poi.version>5.2.5</poi.version>
         <easyexcel.version>3.3.2</easyexcel.version>
         <xerces.version>2.12.2</xerces.version>
         <aviator.version>5.4.1</aviator.version>
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
         
         <curator.version>5.5.0</curator.version>
-        <hutool.version>5.8.22</hutool.version>
+        <hutool.version>5.8.23</hutool.version>
         <jjwt.version>0.12.3</jjwt.version>
         
-        <seata.version>1.8.0</seata.version>
+        <seata.version>2.0.0</seata.version>
         
         <micrometer-jvm-extras.version>0.2.2</micrometer-jvm-extras.version>
         <micrometer-tracing.version>1.2.0</micrometer-tracing.version>
@@ -314,12 +313,6 @@
                 <groupId>com.alibaba.nacos</groupId>
                 <artifactId>nacos-client</artifactId>
                 <version>${nacos-client.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>com.alibaba.boot</groupId>
-                <artifactId>nacos-config-spring-boot-starter</artifactId>
-                <version>${nacos-config-spring-boot-starter.version}</version>
             </dependency>
             
             <dependency>
@@ -925,7 +918,7 @@
             </dependency>
             
             <dependency>
-                <groupId>org.apache.commons</groupId>
+                <groupId>commons-pool</groupId>
                 <artifactId>commons-pool</artifactId>
                 <version>${commons-pool.version}</version>
             </dependency>

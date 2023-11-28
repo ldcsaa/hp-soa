@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 
+/** <b>Sentinel 限流处理器</b> */
 @Slf4j
 public class DefaultSentinelBlockExceptionHandler implements BlockExceptionHandler
 {

@@ -8,6 +8,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 
+/** <b>Spring Cloud 异常属性</b> */
 public class CloudErrorAttributes extends DefaultErrorAttributes
 {
     @Override
