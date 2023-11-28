@@ -13,7 +13,8 @@
 
 &nbsp;&nbsp;对于HP-SOA，这三种应用程序类型的接入方式是一致的，只是配置上有细微差别：
 - **Gateway/BFF应用** 开启HTTP鉴权`hp.soa.web.access-verification.enabled = true`，并实现鉴权接口 [AccessVerificationService](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/service/AccessVerificationService.java)。
-- **微服务应用** 配置Dubbo服务提供者的协议和端口。
+- **Dubbo微服务应用** 配置Dubbo服务提供者的协议和端口。
+- **Spring Cloud 微服务应用** 配置 Spring Cloud 客户端的 Feign Client 和 Load Balancer。
 - **Job应用** 引入 [hp-soa-starter-job-exclusive](../../hp-soa-starter/hp-soa-starter-job-exclusive) 轻量级Job启动器或 [hp-soa-starter-job-xxljob](../../hp-soa-starter/hp-soa-starter-job-xxljob) Xxl-Job 启动器，并配置 Job Handler 相关属性。
 
 ## 应用接入步骤
