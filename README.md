@@ -103,6 +103,7 @@
 ```
 2. 修改应用配置（参考 Demo [hp-demo-bff-basic](hp-demo/hp-demo-bff-basic) 的[本地配置文件](hp-demo/hp-demo-bff-basic/src/main/resources/bootstrap.yml) ，配置中心的[远程配置文件](misc/nacos/config/namespace-DEV/GLOBAL_GROUP)），主要配置项：
     - hp.soa.web
+    - spring.cloud (Spring Cloud 项目)
     - dubbo (Dubbo项目)
     - server
     - spring
