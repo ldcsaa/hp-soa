@@ -117,11 +117,12 @@ hp.soa.web:
 ```yaml
 ## Spring Cloud 配置
 spring.cloud:
+  # 负载均衡
   loadbalancer:
     enabled: true
     retry:
       # 该参数用来开启或关闭重试机制，默认是开启
-      enabled: false
+      enabled: true
       # 对当前实例重试的次数，默认值: 0
       max-retries-on-same-service-instance: 0
       # 切换实例进行重试的次数，默认值: 1
@@ -131,6 +132,7 @@ spring.cloud:
       # 对所有异常请求都进行重试（false: 只对 retryable-exceptions 指定的异常进行重试）
       retry-on-all-exceptions: true
       retryable-exceptions: 
+  # Feign 客户端
   openfeign:
     client:
       config:
