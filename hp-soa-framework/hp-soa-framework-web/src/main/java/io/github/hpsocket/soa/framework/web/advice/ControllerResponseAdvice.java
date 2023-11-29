@@ -88,38 +88,37 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
     private void checkToken(Response<?> respBody, HttpServletRequest request, HttpServletResponse response)
     {
         Pair<Integer, String> tokenCookieAttr = null;
-        
         Integer statusCode = respBody.getStatusCode();
         
         if(GeneralHelper.equals(statusCode, ServiceException.OK))
         {
             Integer rt = respBody.getRespType();
             
-            if(rt != null)
+            if(rt == null)
+                return;
+            
+            if(rt == Response.RT_LOGIN)
             {
-                if(rt == Response.RT_LOGIN)
+                Object result = respBody.getResult();
+                
+                if(result != null)
                 {
-                    Object result = respBody.getResult();
+                    String token = null;
                     
-                    if(result != null)
+                    if(result instanceof Map<?, ?> map)
+                        token = (String)map.get(RESPONSE_TOKEN);
+                    else
                     {
-                        String token = null;
-                        
-                        if(result instanceof Map<?, ?> map)
-                            token = (String)map.get(RESPONSE_TOKEN);
-                        else
-                        {
-                            BeanMap map = BeanMap.create(result);
-                            token = (String)map.get(RESPONSE_TOKEN);
-                        }
-                        
-                        if(GeneralHelper.isStrNotEmpty(token))
-                            tokenCookieAttr = new Pair<Integer, String>(AppConfigHolder.getCookieMaxAge(), token);
+                        BeanMap map = BeanMap.create(result);
+                        token = (String)map.get(RESPONSE_TOKEN);
                     }
+                    
+                    if(GeneralHelper.isStrNotEmpty(token))
+                        tokenCookieAttr = new Pair<Integer, String>(AppConfigHolder.getCookieMaxAge(), token);
                 }
-                else if(rt == Response.RT_LOGOUT)
-                    tokenCookieAttr = new Pair<Integer, String>(0, "");                        
             }
+            else if(rt == Response.RT_LOGOUT)
+                tokenCookieAttr = new Pair<Integer, String>(0, "");
         }
         else if(GeneralHelper.equals(statusCode, ServiceException.LOGIN_INVALID))
             tokenCookieAttr = new Pair<Integer, String>(0, "");
