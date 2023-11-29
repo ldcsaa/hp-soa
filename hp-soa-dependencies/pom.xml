@@ -37,6 +37,7 @@
         <spring-amqp.version>3.0.10</spring-amqp.version>
         <spring-kafka.version>3.0.13</spring-kafka.version>
         <kafka-clients.version>3.6.0</kafka-clients.version>
+        <zstd-jni.version>1.5.5-10</zstd-jni.version>
         <feign.version>13.1</feign.version>
         <druid.version>1.2.20</druid.version>
         <jedis.version>5.1.0</jedis.version>
@@ -623,6 +624,12 @@
                 <groupId>org.apache.kafka</groupId>
                 <artifactId>kafka-log4j-appender</artifactId>
                 <version>${kafka-clients.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.github.luben</groupId>
+                <artifactId>zstd-jni</artifactId>
+                <version>${zstd-jni.version}</version>
             </dependency>
             
             <dependency>

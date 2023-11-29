@@ -164,8 +164,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             @Override
             protected void doRun()
             {
-                JSONObject json        = JSONObject.from(requestAttribute.getBody());
-                JSONObject jsonLog    = new JSONObject();
+                JSONObject json     = JSONObject.from(requestAttribute.getBody());
+                JSONObject jsonLog  = new JSONObject();
                 
                 if(json == null)
                     json = new JSONObject();

@@ -156,6 +156,7 @@ spring.cloud:
           # 开启响应压缩支持
           enabled: true
 ```
+&nbsp;&nbsp;Spring Cloud 注册中心在扩展配置文件中配置，将在下文详述。
 
 - **dubbo**（Dubbo项目）
 ```yaml
