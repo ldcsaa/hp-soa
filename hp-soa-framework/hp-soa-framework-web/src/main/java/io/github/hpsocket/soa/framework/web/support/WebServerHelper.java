@@ -51,6 +51,8 @@ public class WebServerHelper
     public static final String HEADER_GROUP_ID              = "X-Group-Id";
     public static final String HEADER_VERSION               = "X-Version";
     public static final String HEADER_EXTRA                 = "X-Extra";
+    
+    public static final String RESPONSE_TOKEN               = "token";
 
     public static final int DEFAULT_COOKIE_MAX_AGE  = 10 * 365 * 24 * 60 * 60;
     public static final String DEFAULT_CHARSET      = GeneralHelper.DEFAULT_CHARSET;

@@ -85,7 +85,6 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
         return body;
     }
 
-    @SuppressWarnings("unchecked")
     private void checkToken(Response<?> respBody, HttpServletRequest request, HttpServletResponse response)
     {
         Pair<Integer, String> tokenCookieAttr = null;
@@ -106,12 +105,12 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                     {
                         String token = null;
                         
-                        if(result instanceof Map<?, ?>)
-                            token = ((Map<String, String>)result).get(HEADER_TOKEN);
+                        if(result instanceof Map<?, ?> map)
+                            token = (String)map.get(RESPONSE_TOKEN);
                         else
                         {
                             BeanMap map = BeanMap.create(result);
-                            token = (String)map.get(HEADER_TOKEN);
+                            token = (String)map.get(RESPONSE_TOKEN);
                         }
                         
                         if(GeneralHelper.isStrNotEmpty(token))
