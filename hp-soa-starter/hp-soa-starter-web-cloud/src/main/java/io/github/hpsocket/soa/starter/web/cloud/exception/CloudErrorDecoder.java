@@ -12,10 +12,10 @@ import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*
 
 import java.lang.reflect.Constructor;
 
-import org.apache.commons.io.IOUtils;
-
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.TypeReference;
+
+import cn.hutool.core.io.IoUtil;
 
 /** <b>Spring Cloud 异常解析器</b> */
 @Slf4j
@@ -35,7 +35,7 @@ public class CloudErrorDecoder implements ErrorDecoder
         
         try
         {
-            String str = IOUtils.toString(body.asReader(WebServerHelper.DEFAULT_CHARSET_OBJ));
+            String str = IoUtil.read(body.asReader(WebServerHelper.DEFAULT_CHARSET_OBJ), false);
             
             if(!str.startsWith("{"))
                 return new ServiceException(GeneralHelper.isStrNotEmpty(str) ? str : desc, INNER_API_CALL_EXCEPTION);
