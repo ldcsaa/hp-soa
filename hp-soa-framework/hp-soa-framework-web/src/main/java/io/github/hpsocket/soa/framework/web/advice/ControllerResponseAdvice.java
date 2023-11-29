@@ -116,6 +116,9 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                     if(GeneralHelper.isStrNotEmpty(token))
                         tokenCookieAttr = new Pair<Integer, String>(AppConfigHolder.getCookieMaxAge(), token);
                 }
+                
+                if(tokenCookieAttr == null)
+                    log.warn("response type is Response.RT_LOGIN but there is no token");
             }
             else if(rt == Response.RT_LOGOUT)
                 tokenCookieAttr = new Pair<Integer, String>(0, "");
