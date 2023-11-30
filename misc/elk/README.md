@@ -1,4 +1,4 @@
-[[用户指南](user_guide.md)]
+[[用户指南](../doc/user_guide.md)]
 
 ---
 
@@ -7,4 +7,4 @@
 
 ---
 
-[[用户指南](user_guide.md)]
+[[用户指南](../doc/user_guide.md)]
