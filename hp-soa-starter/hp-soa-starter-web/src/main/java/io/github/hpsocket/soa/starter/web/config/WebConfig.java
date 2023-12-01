@@ -1,6 +1,9 @@
 
 package io.github.hpsocket.soa.starter.web.config;
 
+import static io.github.hpsocket.soa.starter.web.config.ContextConfig.springContextHolderBeanName;
+
+import java.lang.reflect.Field;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.Arrays;
@@ -24,7 +27,10 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -49,8 +55,6 @@ import io.github.hpsocket.soa.starter.web.properties.SecurityProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties.ProxyProperties;
-
-import static io.github.hpsocket.soa.starter.web.config.ContextConfig.*;
 
 /** <b>HP-SOA Web 基础配置</b> */
 @AutoConfiguration
@@ -115,7 +119,7 @@ public class WebConfig implements WebMvcConfigurer
         String endpointsWebBasePath = AppConfigHolder.getManagementEndpointsBasePath();
         
         if(GeneralHelper.isStrEmpty(endpointsWebBasePath) || endpointsWebBasePath.equals(AppConfigHolder.REQUEST_PATH_SEPARATOR))
-            http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.anyRequest().permitAll());
+            http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.anyRequest().permitAll()).build();
         else
         {
             String mvcServletPath = AppConfigHolder.getSpringMvcServletPath();
@@ -126,11 +130,33 @@ public class WebConfig implements WebMvcConfigurer
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers(AntPathRequestMatcher.antMatcher(managementBasePath)).authenticated()
                 .requestMatchers(AntPathRequestMatcher.antMatcher(AppConfigHolder.ANT_PATH_WILDCARD)).permitAll())
-            .formLogin(Customizer.withDefaults())
-            .httpBasic(Customizer.withDefaults());
+            .csrf((csrf) -> csrf.disable())
+            .httpBasic(Customizer.withDefaults())
+            .formLogin(new Customizer<FormLoginConfigurer<HttpSecurity>>()
+            {
+                @Override
+                public void customize(FormLoginConfigurer<HttpSecurity> cfg)
+                {
+                    if(GeneralHelper.isStrEmpty(prefix))
+                        return;
+                    
+                    cfg.loginPage(prefix + DefaultLoginPageGeneratingFilter.DEFAULT_LOGIN_PAGE_URL);
+                    
+                    try
+                    {
+                        final String FIELD_NAME = "customLoginPage";
+                        Field customLoginPage   = AbstractAuthenticationFilterConfigurer.class.getDeclaredField(FIELD_NAME);
+                        
+                        customLoginPage.setAccessible(true);
+                        customLoginPage.set(cfg, false);
+                    }
+                    catch(Exception e)
+                    {
+                        throw new RuntimeException("set actuator login page fail", e);
+                    }
+                }
+            });
         }
-        
-        http.csrf((csrf) -> csrf.disable());
         
         return http.build();
     }
