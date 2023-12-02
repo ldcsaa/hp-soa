@@ -62,8 +62,6 @@ public class WebConfig implements WebMvcConfigurer
     public static final String readOnlyRefreshEventListenerBeanName = "readOnlyRefreshEventListener";
     public static final String asyncThreadPoolExecutorBeanName = "asyncThreadPoolExecutor";
     public static final String httpMdcFilterRegistrationBeanName = "httpMdcFilterRegistration";
-    public static final String securityFilterChainBeanName = "securityFilterChain";
-    public static final String webSecurityCustomizerBeanName = "webSecurityCustomizer";
    
     private final WebProperties webProperties;
     
@@ -109,9 +107,9 @@ public class WebConfig implements WebMvcConfigurer
     }
     
     /** {@linkplain SecurityFilterChain} 安全过滤器链配置 */
-    @Bean(securityFilterChainBeanName)
+    @Bean
     @DependsOn(springContextHolderBeanName)
-    @ConditionalOnMissingBean(name = securityFilterChainBeanName)
+    @ConditionalOnMissingBean(SecurityFilterChain.class)
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         String endpointsWebBasePath = AppConfigHolder.getManagementEndpointsBasePath();
@@ -160,8 +158,8 @@ public class WebConfig implements WebMvcConfigurer
     }
     
     /** {@linkplain WebSecurityCustomizer} Web 安全定制器配置 */
-    @Bean(webSecurityCustomizerBeanName)
-    @ConditionalOnMissingBean(name = webSecurityCustomizerBeanName)
+    @Bean
+    @ConditionalOnMissingBean(WebSecurityCustomizer.class)
     public WebSecurityCustomizer webSecurityCustomizer()
     {
        return ((web) -> {});
