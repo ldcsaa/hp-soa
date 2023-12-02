@@ -42,7 +42,7 @@ spring:
     servlet:
       load-on-startup: 1
       path: /
-    throw-exception-if-no-hand1ler-found: true
+    throw-exception-if-no-handler-found: false
   # Spring Web
   web:
     resources:

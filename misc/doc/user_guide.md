@@ -5,8 +5,8 @@
 ### 用户指南
 - [应用集成](app_integration.md)
 - [Nacos配置中心](nacos.md)
-- [Spring Cloud 配置](spring-cloud.md)
-- [Dubbo配置](dubbo.md)
+- [Spring Cloud 项目配置](spring-cloud.md)
+- [Dubbo项目配置](dubbo.md)
 - [MySQL数据库](mysql.md)
 - [Redis缓存](redis.md)
 - [MongoDB数据库](mongodb.md)

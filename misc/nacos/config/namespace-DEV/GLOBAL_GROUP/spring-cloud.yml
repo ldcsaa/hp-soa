@@ -1,4 +1,6 @@
+## Spring Cloud 配置
 spring.cloud:
+  # 负载均衡
   loadbalancer:
     enabled: true
     retry:
@@ -13,6 +15,7 @@ spring.cloud:
       # 对所有异常请求都进行重试（false: 只对 retryable-exceptions 指定的异常进行重试）
       retry-on-all-exceptions: true
       retryable-exceptions: 
+  # Feign 客户端
   openfeign:
     client:
       config:

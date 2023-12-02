@@ -92,7 +92,7 @@ spring:
     servlet:
       load-on-startup: 1
       path: /
-    throw-exception-if-no-handler-found: true
+    throw-exception-if-no-handler-found: false
   # Spring Web
   web:
     resources:
@@ -118,7 +118,7 @@ management:
     shutdown.enabled: false
   endpoints:
     enabled-by-default: true
-    jmx.exposure.include: "*"
+    jmx.exposure.exclude: "*"
     web.base-path: /__admin
     web.exposure.include: "*"
   metrics:

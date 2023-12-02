@@ -85,42 +85,43 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
         return body;
     }
 
-    @SuppressWarnings("unchecked")
     private void checkToken(Response<?> respBody, HttpServletRequest request, HttpServletResponse response)
     {
         Pair<Integer, String> tokenCookieAttr = null;
-        
         Integer statusCode = respBody.getStatusCode();
         
         if(GeneralHelper.equals(statusCode, ServiceException.OK))
         {
             Integer rt = respBody.getRespType();
             
-            if(rt != null)
+            if(rt == null)
+                return;
+            
+            if(rt == Response.RT_LOGIN)
             {
-                if(rt == Response.RT_LOGIN)
+                Object result = respBody.getResult();
+                
+                if(result != null)
                 {
-                    Object result = respBody.getResult();
+                    String token = null;
                     
-                    if(result != null)
+                    if(result instanceof Map<?, ?> map)
+                        token = (String)map.get(RESPONSE_TOKEN);
+                    else
                     {
-                        String token = null;
-                        
-                        if(result instanceof Map<?, ?>)
-                            token = ((Map<String, String>)result).get(HEADER_TOKEN);
-                        else
-                        {
-                            BeanMap map = BeanMap.create(result);
-                            token = (String)map.get(HEADER_TOKEN);
-                        }
-                        
-                        if(GeneralHelper.isStrNotEmpty(token))
-                            tokenCookieAttr = new Pair<Integer, String>(AppConfigHolder.getCookieMaxAge(), token);
+                        BeanMap map = BeanMap.create(result);
+                        token = (String)map.get(RESPONSE_TOKEN);
                     }
+                    
+                    if(GeneralHelper.isStrNotEmpty(token))
+                        tokenCookieAttr = new Pair<Integer, String>(AppConfigHolder.getCookieMaxAge(), token);
                 }
-                else if(rt == Response.RT_LOGOUT)
-                    tokenCookieAttr = new Pair<Integer, String>(0, "");                        
+                
+                if(tokenCookieAttr == null)
+                    log.warn("response type is Response.RT_LOGIN but there is no token");
             }
+            else if(rt == Response.RT_LOGOUT)
+                tokenCookieAttr = new Pair<Integer, String>(0, "");
         }
         else if(GeneralHelper.equals(statusCode, ServiceException.LOGIN_INVALID))
             tokenCookieAttr = new Pair<Integer, String>(0, "");
@@ -164,8 +165,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             @Override
             protected void doRun()
             {
-                JSONObject json        = JSONObject.from(requestAttribute.getBody());
-                JSONObject jsonLog    = new JSONObject();
+                JSONObject json     = JSONObject.from(requestAttribute.getBody());
+                JSONObject jsonLog  = new JSONObject();
                 
                 if(json == null)
                     json = new JSONObject();
