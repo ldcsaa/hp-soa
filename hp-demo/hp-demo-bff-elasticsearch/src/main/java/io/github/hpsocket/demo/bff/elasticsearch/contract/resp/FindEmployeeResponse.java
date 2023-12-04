@@ -41,7 +41,7 @@ public class FindEmployeeResponse
     public static class Item
     {
         private String jobNumber;
-        private String name;       
+        private String name;
         private String photoUri;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate birthday;

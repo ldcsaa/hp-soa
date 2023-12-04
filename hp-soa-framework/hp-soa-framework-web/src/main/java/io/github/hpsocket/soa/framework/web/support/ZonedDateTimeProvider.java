@@ -7,8 +7,9 @@ import java.util.Optional;
 import org.springframework.data.auditing.DateTimeProvider;
 
 /** <b>{@linkplain ZonedDateTime} 日期时间提供者<b> */
-public class ZonedDateTimeProvider implements DateTimeProvider
+public enum ZonedDateTimeProvider implements DateTimeProvider
 {
+    INSTANCE;
 
     @Override
     public Optional<TemporalAccessor> getNow()
