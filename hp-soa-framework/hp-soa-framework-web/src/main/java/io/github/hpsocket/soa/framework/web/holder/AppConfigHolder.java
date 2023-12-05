@@ -33,6 +33,9 @@ public class AppConfigHolder
     private static int appPort;
     
     private static int cookieMaxAge;
+    private static boolean cookieSecure;
+    private static boolean cookieHttpOnly;
+    private static String cookieSameSite;
     private static String servletContextPath;
     private static String springMvcServletPath;
     private static String servletUriPrefix;
@@ -62,6 +65,9 @@ public class AppConfigHolder
                     appOrganization = appProperties.getOrganization();
                     appOwner        = appProperties.getOwner();
                     cookieMaxAge    = appProperties.getCookieMaxAge();
+                    cookieSecure    = appProperties.isCookieSecure();
+                    cookieHttpOnly  = appProperties.isCookieHttpOnly();
+                    cookieSameSite  = appProperties.getCookieSameSite();
                     appAddress      = SystemUtil.getAddress();
                     appPort         = serverPort;
                     
@@ -157,6 +163,21 @@ public class AppConfigHolder
     public static final int getCookieMaxAge()
     {
         return cookieMaxAge;
+    }
+    
+    public static final boolean isCookieSecure()
+    {
+        return cookieSecure;
+    }
+    
+    public static final boolean isCookieHttpOnly()
+    {
+        return cookieHttpOnly;
+    }
+    
+    public static final String getCookieSameSite()
+    {
+        return cookieSameSite;
     }
 
     public static final String getServletContextPath()

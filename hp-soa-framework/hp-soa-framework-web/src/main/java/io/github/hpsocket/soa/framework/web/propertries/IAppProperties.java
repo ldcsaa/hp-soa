@@ -16,8 +16,14 @@ public interface IAppProperties
     /** 获取应用程序拥有者 */
     String getOwner();
     
-    /** 获取应用程序默认 Cookie 最大生命周期 */
+    /** 获取应用程序默认 Cookie Max-Age */
     int getCookieMaxAge();
+    /** 获取应用程序默认 Cookie Secure */
+    boolean isCookieSecure();
+    /** 获取应用程序默认 Cookie HttpOnly */
+    boolean isCookieHttpOnly();
+    /** 获取应用程序默认 Cookie SameSite */
+    String getCookieSameSite();
     
     /** 检测应用程序是否只读 */
     boolean isReadOnly();

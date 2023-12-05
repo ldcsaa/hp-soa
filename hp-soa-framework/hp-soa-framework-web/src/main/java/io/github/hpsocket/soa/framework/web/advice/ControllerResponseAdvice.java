@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -34,7 +36,6 @@ import cn.hutool.http.useragent.UserAgentParser;
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -118,7 +119,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                 }
                 
                 if(tokenCookieAttr == null)
-                    log.warn("response type is Response.RT_LOGIN but there is no token");
+                    log.warn("response type is 'Response.RT_LOGIN' but there is no token");
             }
             else if(rt == Response.RT_LOGOUT)
                 tokenCookieAttr = new Pair<Integer, String>(0, "");
@@ -128,8 +129,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
         
         if(tokenCookieAttr != null)
         {
-            Cookie cookie = createCookie(request, HEADER_TOKEN, tokenCookieAttr.getSecond(), tokenCookieAttr.getFirst());
-            response.addCookie(cookie);
+            ResponseCookie cookie = createCookie(request, HEADER_TOKEN, tokenCookieAttr.getSecond(), tokenCookieAttr.getFirst());
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         }        
     }
 

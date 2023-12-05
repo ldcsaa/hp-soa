@@ -4,11 +4,11 @@ import java.util.concurrent.CompletableFuture;
 
 import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 import io.github.hpsocket.demo.infra.skywalking.service.DemoService;
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.starter.skywalking.async.TracingSupplierWrapper;
 
@@ -25,8 +25,7 @@ public class DemoServiceImpl implements DemoService
     @Override
     public String sayHello(String name)
     {
-        MdcAttr mdc = MdcAttr.fromMdc();
-        log.info("MDC: {}", mdc.getCtxMap());
+        log.info("MDC: {}", MDC.getCopyOfContextMap());
         log.info("Trace: {}, {}, {}", TraceContext.traceId(), TraceContext.segmentId(), TraceContext.spanId());
         
         if(name.length() < 4)
@@ -34,7 +33,7 @@ public class DemoServiceImpl implements DemoService
         
         CompletableFuture.supplyAsync(TracingSupplierWrapper.of(() -> {
             GeneralHelper.waitFor(500);
-            log.info("Async MDC: {}", mdc.getCtxMap());
+            log.info("Async MDC: {}", MDC.getCopyOfContextMap());
             log.info("Async Trace: {}, {}, {}", TraceContext.traceId(), TraceContext.segmentId(), TraceContext.spanId());            
             return "OK";
         }));

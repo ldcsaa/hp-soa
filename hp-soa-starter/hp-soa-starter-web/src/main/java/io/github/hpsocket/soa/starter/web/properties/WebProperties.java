@@ -63,8 +63,18 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     {
         public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
         
-        private int cookieMaxAge = WebServerHelper.DEFAULT_COOKIE_MAX_AGE;
-        private String dateTimeFormat = DEFAULT_DATE_TIME_FORMAT;
+        private String dateTimeFormat   = DEFAULT_DATE_TIME_FORMAT;
+        private CookieProperties cookie = new CookieProperties();
+        
+        @Getter
+        @Setter
+        public static class CookieProperties
+        {
+            private int maxAge       = WebServerHelper.DEFAULT_COOKIE_MAX_AGE;
+            private boolean httpOnly = WebServerHelper.DEFAULT_COOKIE_HTTP_ONLY;
+            private boolean secure   = WebServerHelper.DEFAULT_COOKIE_SECURE;
+            private String sameSite  = WebServerHelper.DEFAULT_COOKIE_SAME_SITE;
+        }
     }
     
     @Getter
@@ -159,7 +169,25 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     @Override
     public int getCookieMaxAge()
     {
-        return http.getCookieMaxAge();
+        return http.cookie.getMaxAge();
+    }
+    
+    @Override
+    public boolean isCookieSecure()
+    {
+        return http.cookie.isSecure();
+    }
+    
+    @Override
+    public boolean isCookieHttpOnly()
+    {
+        return http.cookie.isHttpOnly();
+    }
+    
+    @Override
+    public String getCookieSameSite()
+    {
+        return http.cookie.getSameSite();
     }
     
     @Override
