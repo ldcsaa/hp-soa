@@ -129,6 +129,10 @@
         <hutool.version>5.8.23</hutool.version>
         <jjwt.version>0.12.3</jjwt.version>
         
+        <log4j-1.version>1.2.17</log4j-1.version>
+        <jboss-logmanager.version>3.0.2.Final</jboss-logmanager.version>
+        <logstash-gelf.version>1.15.1</logstash-gelf.version>
+        
         <seata.version>2.0.0</seata.version>
         
         <micrometer-tracing.version>1.2.0</micrometer-tracing.version>
@@ -1371,6 +1375,25 @@
                 <artifactId>seata-dubbo</artifactId>
                 <version>${seata.version}</version>
                 <type>pom</type>
+            </dependency>
+            
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j-1.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.logmanager</groupId>
+                <artifactId>jboss-logmanager</artifactId>
+                <version>${jboss-logmanager.version}</version>
+            </dependency>
+            
+            <!-- gelf -->
+            <dependency>
+                <groupId>biz.paluch.logging</groupId>
+                <artifactId>logstash-gelf</artifactId>
+                <version>${logstash-gelf.version}</version>
             </dependency>
 
         </dependencies>

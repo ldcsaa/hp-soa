@@ -26,8 +26,6 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     @NestedConfigurationProperty
     private HttpProperties http     = new HttpProperties();
     @NestedConfigurationProperty
-    private CorsProperties cors     = new CorsProperties();    
-    @NestedConfigurationProperty
     private ProxyProperties proxy   = new ProxyProperties();    
     @NestedConfigurationProperty
     private AccessVerificationProperties accessVerification = new AccessVerificationProperties();
@@ -64,7 +62,10 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
         public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
         
         private String dateTimeFormat   = DEFAULT_DATE_TIME_FORMAT;
+        @NestedConfigurationProperty
         private CookieProperties cookie = new CookieProperties();
+        @NestedConfigurationProperty
+        private CorsProperties cors     = new CorsProperties();    
         
         @Getter
         @Setter
@@ -74,20 +75,32 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
             private boolean httpOnly = WebServerHelper.DEFAULT_COOKIE_HTTP_ONLY;
             private boolean secure   = WebServerHelper.DEFAULT_COOKIE_SECURE;
             private String sameSite  = WebServerHelper.DEFAULT_COOKIE_SAME_SITE;
+            
+            public void setSameSite(String sameSite)
+            {
+                if(GeneralHelper.isStrNotEmpty(sameSite)
+                    && !WebServerHelper.COOKIE_SAME_SITE_STRICT.equalsIgnoreCase(sameSite)
+                    && !WebServerHelper.COOKIE_SAME_SITE_LAX.equalsIgnoreCase(sameSite)
+                    && !WebServerHelper.COOKIE_SAME_SITE_NONE.equalsIgnoreCase(sameSite))
+                    throw new RuntimeException(String.format("invalid config value for property 'hp.soa.http.cookie.same-site' -> '%s'", sameSite));
+                
+                this.sameSite = sameSite;
+            }
         }
-    }
-    
-    @Getter
-    @Setter
-    public static class CorsProperties
-    {
-        private String mapping = "/**";
-        private String[] allowedOrigins = {"*"};
-        private String[] allowedHeaders = {"*"};
-        private String[] allowedMethods = {"*"};
-        private String[] exposedHeaders = {};
-        private boolean allowCredentials = true;
-        private int maxAge = 3600;
+        
+        @Getter
+        @Setter
+        public static class CorsProperties
+        {
+            private String mapping = "/**";
+            private String[] allowedOrigins = {"*"};
+            private String[] allowedHeaders = {"*"};
+            private String[] allowedMethods = {"*"};
+            private String[] exposedHeaders = {};
+            private boolean allowCredentials = true;
+            private int maxAge = 3600;
+        }
+        
     }
     
     @Getter

@@ -177,7 +177,7 @@ public class WebServerHelper
         if(clientCookie != null)
             exists = true;
         else
-            clientCookie = createCookie(req, HEADER_CLIENT_ID, randomUUID(), getCookieMaxAge(), false, false, COOKIE_SAME_SITE_NONE);
+            clientCookie = createCookie(req, HEADER_CLIENT_ID, randomUUID(), getCookieMaxAge(), false, false, COOKIE_SAME_SITE_LAX);
 
         return new Result<>(exists, clientCookie);
     }

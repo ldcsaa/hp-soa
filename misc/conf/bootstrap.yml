@@ -22,17 +22,17 @@ hp.soa.web:
       secure: false
       # （默认值：false）
       http-only: false
-      # （默认值：Lax）
+      # （可选值：Strict、Lax、None，默认值：Lax）
       same-site: Lax
-  # 跨域访问配置
-  cors:
-    mapping: "/**"
-    allowed-origins: "*"
-    allowed-headers: "*"
-    allowed-methods: "*"
-    exposed-headers: 
-    allow-credentials: false
-    max-age: 3600
+    # 跨域访问配置
+    cors:
+      mapping: "/**"
+      allowed-origins: "*"
+      allowed-headers: "*"
+      allowed-methods: "*"
+      exposed-headers: 
+      allow-credentials: false
+      max-age: 3600
   # HTTP请求鉴权
   access-verification:
     # 是否开启 HTTP 请求鉴权（默认：true，通常 Gateway/BFF 应用设置为 true，其它应用设置为 false）

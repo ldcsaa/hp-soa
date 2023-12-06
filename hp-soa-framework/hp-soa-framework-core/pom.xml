@@ -57,6 +57,13 @@
             <optional>true</optional>
         </dependency>
         
+        <!-- support log4j gelf appender -->
+        <dependency>
+            <groupId>biz.paluch.logging</groupId>
+            <artifactId>logstash-gelf</artifactId>
+            <optional>true</optional>
+        </dependency>
+        
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

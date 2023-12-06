@@ -240,7 +240,7 @@ public class WebConfig implements WebMvcConfigurer
     @Override
     public void addCorsMappings(CorsRegistry registry)
     {
-        WebProperties.CorsProperties crosProperties = webProperties.getCors();
+        WebProperties.HttpProperties.CorsProperties crosProperties = webProperties.getHttp().getCors();
         
         CorsRegistration mapping = registry.addMapping(crosProperties.getMapping());
         

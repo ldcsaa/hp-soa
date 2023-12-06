@@ -3,7 +3,6 @@
 
     <Properties>
         <Property name="base.package">${project.groupId}</Property>
-        <Property name="logger.dao.pattern">io\.github\.hpsocket\.demo\..*\.dao\..+</Property>
         <Property name="log.include.location">${sys:log4j.include.location:-true}</Property>
         <Property name="log.level">${sys:log4j.log.level:-DEBUG}</Property>
         <Property name="kafka.bootstrap.servers">${sys:log4j.kafka.bootstrap.servers:-192.168.56.23:9092}</Property>
@@ -87,7 +86,6 @@
         </Root>
         <!-- Service Logger -->
         <Logger name="${base.package}" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
-            <LoggerNameFilter name="${logger.dao.pattern}" level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>

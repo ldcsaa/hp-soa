@@ -3,7 +3,6 @@
 
     <Properties>
         <Property name="base.package">${project.groupId}</Property>
-        <Property name="logger.dao.pattern">io\.github\.hpsocket\.demo\..*\.dao\..+</Property>
         <Property name="log.include.location">${sys:log4j.include.location:-true}</Property>
         <Property name="log.level">${sys:log4j.log.level:-DEBUG}</Property>
         <Property name="logfile.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}</Property>
@@ -51,7 +50,6 @@
         </Root>
         <!-- Service Logger -->
         <Logger name="${base.package}" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
-            <LoggerNameFilter name="${logger.dao.pattern}" level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Logger>
