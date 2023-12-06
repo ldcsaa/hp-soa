@@ -84,7 +84,7 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
         String filter = propertyProvider.getProperty(PropertyProvider.PROPERTY_FILTER);
         try {
             if (null != filter) {
-                final Class clazz = ClassLoader.getSystemClassLoader().loadClass(filter);
+                final Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(filter);
                 setFilter((Filter) clazz.getDeclaredConstructor().newInstance());
             }
         } catch (final Exception e) {

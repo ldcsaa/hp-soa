@@ -156,6 +156,7 @@ public class StackTraceFilter {
         loadSetttings(FILTER_SETTINGS);
     }
 
+    @SuppressWarnings("unchecked")
     public static void loadSetttings(String resourceName) {
         InputStream is = null;
         try {
@@ -166,7 +167,7 @@ public class StackTraceFilter {
             } else {
                 Properties p = new Properties();
                 p.load(is);
-                suppressedPackages = (Set) p.keySet();
+                suppressedPackages = (Set<String>)(Set<?>) p.keySet();
             }
 
         } catch (IOException e) {

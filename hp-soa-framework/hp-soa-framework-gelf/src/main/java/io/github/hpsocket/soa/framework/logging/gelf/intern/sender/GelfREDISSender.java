@@ -29,6 +29,7 @@ public class GelfREDISSender<T> implements GelfSender {
         this.redisKey = redisKey;
     }
 
+    @Override
     public boolean sendMessage(GelfMessage message) {
 
         // prevent recursive self calls caused by the Redis driver since it
@@ -53,6 +54,7 @@ public class GelfREDISSender<T> implements GelfSender {
         }
     }
 
+    @Override
     public void close() {
         callers.clear();
         jedisPool.destroy();

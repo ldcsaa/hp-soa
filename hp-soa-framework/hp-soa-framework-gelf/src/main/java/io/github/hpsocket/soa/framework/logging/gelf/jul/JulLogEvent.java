@@ -99,16 +99,16 @@ public class JulLogEvent implements LogEvent {
 
     private String getThreadName(LogRecord record) {
 
-        String cacheKey = "" + record.getThreadID();
+        String cacheKey = "" + record.getLongThreadID();
         if (threadNameCache.containsKey(cacheKey)) {
             return threadNameCache.get(cacheKey);
         }
 
-        long threadId = record.getThreadID();
+        long threadId = record.getLongThreadID();
         String threadName = cacheKey;
 
         Thread currentThread = Thread.currentThread();
-        if (record.getThreadID() == currentThread.getId()) {
+        if (record.getLongThreadID() == currentThread.getId()) {
             threadName = currentThread.getName();
         } else {
             Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
@@ -150,6 +150,7 @@ public class JulLogEvent implements LogEvent {
         return GelfMessage.DEFAUL_LEVEL;
     }
 
+    @Override
     public Values getValues(MessageField field) {
         if (field instanceof LogMessageField) {
             return new Values(field.getName(), getValue((LogMessageField) field));
@@ -173,6 +174,8 @@ public class JulLogEvent implements LogEvent {
                 return GelfUtil.getSimpleClassName(logRecord.getSourceClassName());
             case LoggerName:
                 return logRecord.getLoggerName();
+            default:
+                ;
         }
 
         throw new UnsupportedOperationException("Cannot provide value for " + field);

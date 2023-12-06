@@ -23,19 +23,19 @@ class Log4jLogEvent implements LogEvent {
     private static final Field mdcCopy = getMdcCopyField();
 
     private final LoggingEvent loggingEvent;
-    private final Map mdc;
+    private final Map<?, ?> mdc;
 
     public Log4jLogEvent(LoggingEvent loggingEvent) {
         this.loggingEvent = loggingEvent;
         this.mdc = getMdc(loggingEvent);
     }
 
-    private Map getMdc(LoggingEvent loggingEvent) {
-        Map mdc = null;
+    private Map<?, ?> getMdc(LoggingEvent loggingEvent) {
+        Map<?, ?> mdc = null;
 
         try {
             if (mdcCopy != null) {
-                mdc = (Map) mdcCopy.get(loggingEvent);
+                mdc = (Map<?, ?>) mdcCopy.get(loggingEvent);
             }
         } catch (IllegalAccessException e) {
             // ignore, return null
@@ -149,6 +149,8 @@ class Log4jLogEvent implements LogEvent {
                     return ndc;
                 }
                 return null;
+            default:
+                ;
         }
 
         throw new UnsupportedOperationException("Cannot provide value for " + field);
@@ -210,11 +212,12 @@ class Log4jLogEvent implements LogEvent {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     private Set<String> getAllMdcNames() {
         Set<String> mdcNames = new HashSet<>();
 
         if (mdc != null) {
-            mdcNames.addAll(mdc.keySet());
+            mdcNames.addAll((Set<String>)mdc.keySet());
         }
         return mdcNames;
     }

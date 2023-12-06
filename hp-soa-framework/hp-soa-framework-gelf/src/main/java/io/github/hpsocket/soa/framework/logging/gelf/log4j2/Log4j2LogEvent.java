@@ -110,6 +110,8 @@ class Log4j2LogEvent implements LogEvent {
                     return logEvent.getMarker().toString();
                 }
                 return null;
+            default:
+                ;
         }
 
         throw new UnsupportedOperationException("Cannot provide value for " + field);

@@ -113,6 +113,7 @@ abstract class PoolHolder {
         /**
          * @return the {@link OutputAccessor.OutputAccessorPoolHolder}.
          */
+        @Override
         public OutputAccessor.OutputAccessorPoolHolder getOutputAccessorPoolHolder() {
             return outputAccessorPoolHolder;
         }
@@ -120,6 +121,7 @@ abstract class PoolHolder {
         /**
          * @return a pooled {@link ReusableGzipOutputStream} instance.
          */
+        @Override
         public ReusableGzipOutputStream getReusableGzipOutputStream() {
             return streamPool.get();
         }
@@ -127,6 +129,7 @@ abstract class PoolHolder {
         /**
          * @return a pooled {@link ByteBuffer}-array instance.
          */
+        @Override
         public ByteBuffer[] getSingleBuffer() {
             return singleBufferPool.get();
         }
@@ -134,6 +137,7 @@ abstract class PoolHolder {
         /**
          * @return a pooled byte-array instance.
          */
+        @Override
         public byte[] getByteArray() {
             return byteArrayPool.get();
         }

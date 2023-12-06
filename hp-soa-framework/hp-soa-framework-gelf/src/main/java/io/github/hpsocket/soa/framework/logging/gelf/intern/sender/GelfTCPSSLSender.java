@@ -226,8 +226,9 @@ public class GelfTCPSSLSender extends GelfTCPSender {
                             break;
 
                         case BUFFER_UNDERFLOW:
-
                             break;
+                        default:
+                            continue;
                     }
                     break;
 
@@ -283,6 +284,9 @@ public class GelfTCPSSLSender extends GelfTCPSender {
 
                 case FINISHED:
                     return;
+                    
+                default:
+                    continue;
             }
         }
     }

@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Marker;
+
 import io.github.hpsocket.soa.framework.logging.gelf.*;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 import ch.qos.logback.classic.Level;
@@ -156,10 +158,14 @@ class LogbackLogEvent implements LogEvent {
             case LoggerName:
                 return loggingEvent.getLoggerName();
             case Marker:
-                if (loggingEvent.getMarker() != null && !"".equals(loggingEvent.getMarker().toString())) {
-                    return loggingEvent.getMarker().toString();
+                @SuppressWarnings("deprecation")
+                Marker marker = loggingEvent.getMarker();
+                if (marker != null && !"".equals(marker.toString())) {
+                    return marker.toString();
                 }
                 return null;
+            default:
+                ;
         }
 
         throw new UnsupportedOperationException("Cannot provide value for " + field);

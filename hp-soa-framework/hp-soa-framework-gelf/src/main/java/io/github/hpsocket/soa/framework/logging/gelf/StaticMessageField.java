@@ -13,6 +13,7 @@ public class StaticMessageField implements MessageField {
         this.value = value;
     }
 
+    @Override
     public String getName() {
         return name;
     }

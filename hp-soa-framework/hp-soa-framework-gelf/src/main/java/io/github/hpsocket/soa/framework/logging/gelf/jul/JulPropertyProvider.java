@@ -10,13 +10,10 @@ import io.github.hpsocket.soa.framework.logging.gelf.PropertyProvider;
  */
 public class JulPropertyProvider implements PropertyProvider {
 
-    private final Class<?> configurationBase;
     private final String prefix;
     private final LogManager logManager;
 
     public JulPropertyProvider(Class<?> configurationBase) {
-        this.configurationBase = configurationBase;
-
         prefix = configurationBase.getName();
         logManager = LogManager.getLogManager();
 

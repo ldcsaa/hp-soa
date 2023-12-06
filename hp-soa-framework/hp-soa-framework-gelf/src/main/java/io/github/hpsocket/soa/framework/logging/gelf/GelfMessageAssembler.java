@@ -79,6 +79,7 @@ public class GelfMessageAssembler implements HostAndPortProvider {
      *
      * @param propertyProvider property provider to obtain configuration properties
      */
+    @SuppressWarnings("deprecation")
     public void initialize(PropertyProvider propertyProvider) {
 
         host = propertyProvider.getProperty(PropertyProvider.PROPERTY_HOST);
@@ -313,6 +314,7 @@ public class GelfMessageAssembler implements HostAndPortProvider {
         this.fields.addAll(fields);
     }
 
+    @Override
     public String getHost() {
         return host;
     }
@@ -332,6 +334,7 @@ public class GelfMessageAssembler implements HostAndPortProvider {
         this.originHost = originHost;
     }
 
+    @Override
     public int getPort() {
         return port;
     }
@@ -439,8 +442,8 @@ public class GelfMessageAssembler implements HostAndPortProvider {
     static class StackTraceExtraction {
 
         private static final StackTraceExtraction OFF = new StackTraceExtraction(false, false, 0);
-        private static final StackTraceExtraction ON = new StackTraceExtraction(true, false, 0);
-        private static final StackTraceExtraction FILTERED = new StackTraceExtraction(true, true, 0);
+        //private static final StackTraceExtraction ON = new StackTraceExtraction(true, false, 0);
+        //private static final StackTraceExtraction FILTERED = new StackTraceExtraction(true, true, 0);
         private final boolean enabled;
         private final boolean filter;
         private final int ref;

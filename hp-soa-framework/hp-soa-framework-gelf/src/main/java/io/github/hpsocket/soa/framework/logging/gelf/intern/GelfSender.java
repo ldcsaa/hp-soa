@@ -20,5 +20,6 @@ public interface GelfSender extends Closeable {
     /**
      * Close the sender and free resources.
      */
+    @Override
     void close();
 }

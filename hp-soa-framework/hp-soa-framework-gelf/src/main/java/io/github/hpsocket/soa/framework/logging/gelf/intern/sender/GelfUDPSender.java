@@ -37,6 +37,7 @@ public class GelfUDPSender extends AbstractNioSender<DatagramChannel> implements
         super(errorReporter, host, port);
     }
 
+    @Override
     public boolean sendMessage(GelfMessage message) {
 
         if (INITIAL_BUFFER_SIZE == 0) {

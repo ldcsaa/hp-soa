@@ -1,18 +1,20 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-import redis.clients.jedis.*;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisSentinelPool;
+import redis.clients.jedis.Protocol;
 import redis.clients.jedis.util.Pool;
 
 /**
@@ -27,7 +29,7 @@ class RedisPoolHolder {
 
     private final static RedisPoolHolder INSTANCE = new RedisPoolHolder();
 
-    private final Map<String, JedisPoolProxy> standalonePools = new ConcurrentHashMap<>();
+    private final Map<String, Pool<Jedis>> standalonePools = new HashMap<>();
 
     private final Object mutex = new Object();
 
@@ -43,27 +45,16 @@ class RedisPoolHolder {
             final String cleanConnectionString = hostURI.getFragment() != null ? lowerCasedConnectionString.substring(0,
                     lowerCasedConnectionString.length() - hostURI.getFragment().length()) : lowerCasedConnectionString;
 
-            if (standalonePools.containsKey(cleanConnectionString)) {
-
-                JedisPoolProxy poolProxy = standalonePools.get(cleanConnectionString);
-                poolProxy.incrementRefCnt();
-                return poolProxy;
+            Pool<Jedis> pool = standalonePools.get(cleanConnectionString);
+            if (pool != null) {
+                ((RefCount)pool).incrementRefCnt();
+                return pool;
             }
 
-            Pool<Jedis> jedisPool = JedisPoolFactory.createJedisPool(hostURI, configuredPort, Protocol.DEFAULT_TIMEOUT);
+            pool = JedisPoolFactory.createJedisPool(cleanConnectionString, hostURI, configuredPort, Protocol.DEFAULT_TIMEOUT);
+            standalonePools.put(cleanConnectionString, pool);
 
-            JedisPoolProxy proxy = new JedisPoolProxy(jedisPool, new Runnable() {
-
-                @Override
-                public void run() {
-                    standalonePools.remove(cleanConnectionString);
-                }
-
-            });
-
-            standalonePools.put(cleanConnectionString, proxy);
-
-            return proxy;
+            return pool;
         }
     }
 
@@ -91,7 +82,7 @@ class RedisPoolHolder {
              * @return Pool of Jedis
              */
             @Override
-            public redis.clients.jedis.util.Pool<Jedis> createPool(URI hostURI, int configuredPort, int timeoutMs) {
+            public Pool<Jedis> createPool(String poolName, URI hostURI, int configuredPort, int timeoutMs) {
 
                 String password = (hostURI.getUserInfo() != null) ? hostURI.getUserInfo().split(":", 2)[1] : null;
                 int database = Protocol.DEFAULT_DATABASE;
@@ -100,7 +91,7 @@ class RedisPoolHolder {
                 }
 
                 int port = hostURI.getPort() > 0 ? hostURI.getPort() : configuredPort;
-                return new JedisPool(new JedisPoolConfig(), hostURI.getHost(), port, timeoutMs, password, database);
+                return INSTANCE.new MyJedisPool(poolName, new JedisPoolConfig(), hostURI.getHost(), port, timeoutMs, password, database);
             }
 
         },
@@ -124,7 +115,7 @@ class RedisPoolHolder {
              * @return Pool of Jedis
              */
             @Override
-            public redis.clients.jedis.util.Pool<Jedis> createPool(URI hostURI, int configuredPort, int timeoutMs) {
+            public Pool<Jedis> createPool(String poolName, URI hostURI, int configuredPort, int timeoutMs) {
 
                 Set<String> sentinels = getSentinels(hostURI);
                 String masterName = getMasterName(hostURI);
@@ -138,7 +129,7 @@ class RedisPoolHolder {
                     database = Integer.parseInt(hostURI.getPath().split("/", 2)[1]);
                 }
 
-                return new JedisSentinelPool(masterName, sentinels, new JedisPoolConfig(), timeoutMs, password, database);
+                return INSTANCE.new MyJedisSentinelPool(poolName, masterName, sentinels, new JedisPoolConfig(), timeoutMs, password, database);
             }
 
             protected String getMasterName(URI hostURI) {
@@ -178,13 +169,13 @@ class RedisPoolHolder {
 
         public abstract String getScheme();
 
-        abstract redis.clients.jedis.util.Pool<Jedis> createPool(URI hostURI, int configuredPort, int timeoutMs);
+        abstract Pool<Jedis> createPool(String poolName, URI hostURI, int configuredPort, int timeoutMs);
 
-        public static redis.clients.jedis.util.Pool<Jedis> createJedisPool(URI hostURI, int configuredPort, int timeoutMs) {
+        public static Pool<Jedis> createJedisPool(String poolName, URI hostURI, int configuredPort, int timeoutMs) {
 
             for (JedisPoolFactory provider : JedisPoolFactory.values()) {
                 if (provider.getScheme().equals(hostURI.getScheme())) {
-                    return provider.createPool(hostURI, configuredPort, timeoutMs);
+                    return provider.createPool(poolName, hostURI, configuredPort, timeoutMs);
                 }
 
             }
@@ -193,93 +184,74 @@ class RedisPoolHolder {
         }
 
     }
-
-    private class JedisPoolProxy extends Pool<Jedis> {
-
-        private final AtomicLong refCnt = new AtomicLong(1);
-
-        private final Runnable onDestroy;
-
-        private final Pool<Jedis> delegate;
-
-        private JedisPoolProxy(Pool<Jedis> delegate, Runnable onDestroy) {
-            this.onDestroy = onDestroy;
-            this.delegate = delegate;
+    
+    private interface RefCount {
+        int incrementRefCnt();
+        int decrementRefCnt();
+    }
+    
+    private class MyJedisPool extends JedisPool implements RefCount {
+        private final String poolName;
+        private int refCnt = 1;
+        
+        MyJedisPool(String poolName, final GenericObjectPoolConfig<Jedis> poolConfig, final String host, int port, int timeout, final String password, final int database) {
+            super(poolConfig, host, port, timeout, password, database, null);
+            this.poolName = poolName;
         }
-
+        
         @Override
-        public void close() {
-            delegate.close();
+        public int incrementRefCnt() {
+            return ++refCnt;
         }
-
-        public void incrementRefCnt() {
-            refCnt.incrementAndGet();
-        }
-
+        
         @Override
-        public boolean isClosed() {
-            return delegate.isClosed();
+        public int decrementRefCnt() {
+            return --refCnt;
         }
-
+        
         @Override
-        public void initPool(GenericObjectPoolConfig<Jedis> poolConfig, PooledObjectFactory<Jedis> factory) {
-            delegate.initPool(poolConfig, factory);
-        }
-
-        @Override
-        public Jedis getResource() {
-            return delegate.getResource();
-        }
-
-        @Override
-        public void returnResourceObject(Jedis resource) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void destroy() {
-
+        public void destroy()
+        {
             synchronized (mutex) {
-
-                long val = refCnt.decrementAndGet();
-
-                if (val == 0) {
-                    onDestroy.run();
-                    delegate.destroy();
+                
+                if(decrementRefCnt() == 0) {
+                    standalonePools.remove(this.poolName);
+                    super.destroy();
                 }
             }
         }
+    }
 
-        @Override
-        public int getNumActive() {
-            return delegate.getNumActive();
+    private class MyJedisSentinelPool extends JedisSentinelPool implements RefCount {
+        private final String poolName;
+        private int refCnt = 1;
+        
+        MyJedisSentinelPool(String poolName, String masterName, Set<String> sentinels, final GenericObjectPoolConfig<Jedis> poolConfig, int timeout, final String password, final int database) {
+            super(masterName, sentinels, poolConfig, timeout, password, database);
+            this.poolName = poolName;
         }
-
+        
         @Override
-        public int getNumIdle() {
-            return delegate.getNumIdle();
+        public int incrementRefCnt() {
+            return ++refCnt;
         }
-
+        
         @Override
-        public int getNumWaiters() {
-            return delegate.getNumWaiters();
+        public int decrementRefCnt() {
+            return --refCnt;
         }
-
+        
         @Override
-        public long getMeanBorrowWaitTimeMillis() {
-            return delegate.getMeanBorrowWaitTimeMillis();
+        public void destroy()
+        {
+            synchronized (mutex) {
+                
+                if(decrementRefCnt() == 0) {
+                    standalonePools.remove(this.poolName);
+                    super.destroy();
+                }
+            }
         }
-
-        @Override
-        public long getMaxBorrowWaitTimeMillis() {
-            return delegate.getMaxBorrowWaitTimeMillis();
-        }
-
-        @Override
-        public void addObjects(int count) {
-            throw new UnsupportedOperationException();
-        }
-
     }
 
 }

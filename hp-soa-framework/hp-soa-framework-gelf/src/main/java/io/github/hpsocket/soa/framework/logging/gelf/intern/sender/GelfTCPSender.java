@@ -117,6 +117,7 @@ public class GelfTCPSender extends AbstractNioSender<SocketChannel> implements G
      * @param message the message
      * @return {@literal true} if message was sent.
      */
+    @Override
     public boolean sendMessage(GelfMessage message) {
 
         if (isShutdown()) {
