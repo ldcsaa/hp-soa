@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration packages="io.github.hpsocket.soa.framework.core.log,biz.paluch.logging.gelf.log4j2" shutdownHook="disable" strict="true">
+
+    <Properties>
+        <Property name="base.package">${project.groupId}</Property>
+        <Property name="log.include.location">${sys:log4j.include.location:-true}</Property>
+        <Property name="log.level">${sys:log4j.log.level:-DEBUG}</Property>
+        <Property name="gelf.host">${sys:log4j.gelf.host:-udp:localhost}</Property>
+        <Property name="gelf.port">${sys:log4j.gelf.port:-12201}</Property>
+        <Property name="gelf.logType">${sys:log4j.gelf.logType:-hp-soa}</Property>
+        <Property name="gelf.maxMsgSize">${sys:log4j.gelf.maxMsgSize:-8192}</Property>
+        <Property name="timestamp.pattern">%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}</Property>
+        <Property name="logfile.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}</Property>
+        <Property name="logfile.max.size">100 MB</Property>
+        <Property name="logfile.max.count">10</Property>
+        <Property name="logfile.archive.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}/${date:yyyy-MM}</Property>
+        <Property name="logfile.archive.suffix">%d{yyyy-MM-dd}-%i.log.gz</Property>
+        <Property name="logfile.stacktrace.filters">org.springframework.security.web,org.apache.catalina,org.apache.coyote,org.apache.tomcat,org.hibernate,org.apache.el,org.apache.cxf,org.junit,junit.framework,org.jboss,org.h2,org.eclipse,org.richfaces,java.lang.reflect,java.base/java.lang.reflect,jdk.internal.reflect,java.base/jdk.internal.reflect,com.sun,javax.servlet,jakarta.servlet,io.netty.handler.codec,org.apache.dubbo.rpc.cluster.filter</Property>
+        <Property name="logfile.pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{1.1.1.*}#%M\(L:%L\) -&gt; %m%xEx{filters(${logfile.stacktrace.filters})}%n</Property>
+        <Property name="json.template.layout">classpath:log4j2-default-template.json</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="${logfile.pattern}"/>
+        </Console>
+        <Console name="STDERR" target="SYSTEM_ERR">
+            <PatternLayout pattern="${logfile.pattern}"/>
+        </Console>
+        
+        <RollingRandomAccessFile name="MONITOR_LOG_FILE" fileName="${logfile.path}/monitor.log"
+                                 filePattern="${logfile.archive.path}/monitor-${logfile.archive.suffix}">
+            <PatternLayout pattern="${logfile.pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${logfile.max.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${logfile.max.count}"/>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="SERVICE_LOG_FILE" fileName="${logfile.path}/service.log"
+                                 filePattern="${logfile.archive.path}/service-${logfile.archive.suffix}">
+            <PatternLayout pattern="${logfile.pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${logfile.max.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${logfile.max.count}"/>
+        </RollingRandomAccessFile>
+        
+        <Gelf name="GELF_MONITOR" facility="SOA-MONITOR" host="${gelf.host}" port="${gelf.port}" version="1.1" extractStackTrace="true"
+              filterStackTrace="true" mdcProfiling="true" includeFullMdc="true" maximumMessageSize="${gelf.maxMsgSize}" originHost="%host{fqdn}">
+            <Field name="log_time" pattern="${timestamp.pattern}"/>
+            <Field name="level" pattern="%p"/>
+            <Field name="thread_name" pattern="%t"/>
+            <Field name="logger_name" pattern="%c"/>
+            <Field name="file" pattern="%F"/>
+            <Field name="class" pattern="%C"/>
+            <Field name="method" pattern="%M"/>
+            <Field name="line_number" pattern="%L"/>
+            <Field name="source_host" pattern="%host{simple}"/>
+            <Field name="source_ip" pattern="%host{address}"/>
+            <Field name="log_type" literal="${gelf.logType}" />
+            <Field name="@version" literal="${project.version}" />
+            <DynamicMdcFields regex="mdc.*"/>
+            <DynamicMdcFields regex="(mdc|MDC)fields"/>
+        </Gelf>
+        
+        <Gelf name="GELF_SERVICE" facility="SOA-SERVICE" host="${gelf.host}" port="${gelf.port}" version="1.1" extractStackTrace="true"
+              filterStackTrace="true" mdcProfiling="true" includeFullMdc="true" maximumMessageSize="${gelf.maxMsgSize}" originHost="%host{fqdn}">
+            <Field name="log_time" pattern="${timestamp.pattern}"/>
+            <Field name="level" pattern="%p"/>
+            <Field name="thread_name" pattern="%t"/>
+            <Field name="logger_name" pattern="%c"/>
+            <Field name="file" pattern="%F"/>
+            <Field name="class" pattern="%C"/>
+            <Field name="method" pattern="%M"/>
+            <Field name="line_number" pattern="%L"/>
+            <Field name="source_host" pattern="%host{simple}"/>
+            <Field name="source_ip" pattern="%host{address}"/>
+            <Field name="log_type" literal="${gelf.logType}" />
+            <Field name="@version" literal="${project.version}" />
+            <DynamicMdcFields regex="mdc.*"/>
+            <DynamicMdcFields regex="(mdc|MDC)fields"/>
+        </Gelf>
+    </Appenders>
+
+    <Loggers>
+        <!-- Root Logger -->
+        <Root level="INFO" includeLocation="${log.include.location}">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Root>
+        <!-- Service Logger -->
+        <Logger name="${base.package}" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDERR"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Logger>
+        <!-- SOA-MONITOR Logger -->
+        <Logger name="SOA-MONITOR" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="MONITOR_LOG_FILE"/>
+            <AppenderRef ref="GELF_MONITOR"/>
+        </Logger>
+        <!-- HP-SOA Logger -->
+        <Logger name="io.github.hpsocket" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Logger>
+        <!-- Dubbo Logger -->
+        <Logger name="org.apache.dubbo" level="INFO" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Logger>
+        <!-- XXL-JOB Logger -->
+        <Logger name="com.xxl.job" level="INFO" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Logger>
+        <!-- Kafka Logger -->
+        <Logger name="org.apache.kafka" level="INFO" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Logger>
+        <!-- MyBatis Logger -->
+        <Logger name="org.apache.ibatis" level="WARN" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Logger>
+        <!-- JDBC Logger -->
+        <Logger name="java.sql" level="WARN" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Logger>
+        <!-- Spring JDBC Logger -->
+        <Logger name="org.springframework.jdbc" level="WARN" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Logger>
+        <!-- MongoDB -->
+        <Logger name="com.mongodb" level="WARN" includeLocation="${log.include.location}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="GELF_SERVICE"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>
