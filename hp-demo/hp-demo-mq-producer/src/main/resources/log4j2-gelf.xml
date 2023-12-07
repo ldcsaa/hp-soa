@@ -7,7 +7,7 @@
         <Property name="log.level">${sys:log4j.log.level:-DEBUG}</Property>
         <Property name="gelf.host">${sys:log4j.gelf.host:-udp:localhost}</Property>
         <Property name="gelf.port">${sys:log4j.gelf.port:-12201}</Property>
-        <Property name="gelf.logType">${sys:log4j.gelf.logType:-hp-soa}</Property>
+        <Property name="gelf.logType">${sys:log4j.logType:-hp-soa}</Property>
         <Property name="gelf.maxMsgSize">${sys:log4j.gelf.maxMsgSize:-8192}</Property>
         <Property name="timestamp.pattern">%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}{GMT+0}</Property>
         <Property name="logfile.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}</Property>

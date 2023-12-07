@@ -10,7 +10,7 @@
         <Property name="kafka.sasl.mechanism">${sys:log4j.sasl.mechanism:-PLAIN}</Property>
         <Property name="kafka.sasl.jaas.config">${sys:log4j.kafka.sasl.jaas.config:-}</Property>
         <Property name="kafka.topic">${sys:log4j.kafka.topic:-hp-soa}</Property>
-        <Property name="kafka.logType">${sys:log4j.kafka.logType:-hp-soa}</Property>
+        <Property name="kafka.logType">${sys:log4j.logType:-hp-soa}</Property>
         <Property name="kafka.ignoreExceptions">${sys:log4j.kafka.ignoreExceptions:-true}</Property>
         <Property name="kafka.syncSend">${sys:log4j.kafka.syncSend:-false}</Property>
         <Property name="kafka.max.block.ms">${sys:log4j.kafka.max.block.ms:-5000}</Property>
