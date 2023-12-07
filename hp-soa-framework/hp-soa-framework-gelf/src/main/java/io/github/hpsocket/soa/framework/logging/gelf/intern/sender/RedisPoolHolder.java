@@ -46,13 +46,14 @@ class RedisPoolHolder {
                     lowerCasedConnectionString.length() - hostURI.getFragment().length()) : lowerCasedConnectionString;
 
             Pool<Jedis> pool = standalonePools.get(cleanConnectionString);
+            
             if (pool != null) {
                 ((RefCount)pool).incrementRefCnt();
-                return pool;
             }
-
-            pool = JedisPoolFactory.createJedisPool(cleanConnectionString, hostURI, configuredPort, Protocol.DEFAULT_TIMEOUT);
-            standalonePools.put(cleanConnectionString, pool);
+            else {
+                pool = JedisPoolFactory.createJedisPool(cleanConnectionString, hostURI, configuredPort, Protocol.DEFAULT_TIMEOUT);
+                standalonePools.put(cleanConnectionString, pool);
+            }
 
             return pool;
         }
@@ -95,10 +96,9 @@ class RedisPoolHolder {
             }
 
         },
-        SENTINEL
-
-        {
-
+        
+        SENTINEL {
+            
             public static final String MASTER_ID = "masterId";
 
             @Override

@@ -47,7 +47,7 @@ public class MdcGelfMessageAssembler extends GelfMessageAssembler {
 
                 String mdcValue = logEvent.getMdcValue(mdcName);
                 if (mdcValue != null) {
-                    gelfMessage.addField(mdcName, mdcValue);
+                    gelfMessage.addField("mdc." + mdcName, mdcValue);
                 }
             }
         }

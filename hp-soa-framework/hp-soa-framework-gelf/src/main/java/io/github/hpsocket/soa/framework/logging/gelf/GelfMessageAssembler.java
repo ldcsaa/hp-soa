@@ -25,16 +25,16 @@ import io.github.hpsocket.soa.framework.logging.gelf.intern.PoolingGelfMessageBu
  */
 public class GelfMessageAssembler implements HostAndPortProvider {
 
-    /**
-     * @deprecated see {@link PoolingGelfMessageBuilder#PROPERTY_USE_POOLING}.
-     */
-    @Deprecated
-    public static final String PROPERTY_USE_POOLING = "logstash-gelf.message.pooling";
+    ///**
+    // * @deprecated see {@link PoolingGelfMessageBuilder#PROPERTY_USE_POOLING}.
+    // */
+    //@Deprecated
+    //public static final String PROPERTY_USE_POOLING = "logstash-gelf.message.pooling";
 
-    public static final String FIELD_MESSAGE_PARAM = "MessageParam";
-    public static final String FIELD_STACK_TRACE = "StackTrace";
+    public static final String FIELD_MESSAGE_PARAM = "message_param";
+    public static final String FIELD_STACK_TRACE = "exception.stacktrace";
 
-    private static final int MAX_SHORT_MESSAGE_LENGTH = 250;
+    //private static final int MAX_SHORT_MESSAGE_LENGTH = 250;
     private static final int MAX_PORT_NUMBER = 65535;
     private static final int MAX_MESSAGE_SIZE = Integer.MAX_VALUE;
     private static final Set<NamedLogField> SOURCE_FIELDS = EnumSet.of(NamedLogField.SourceClassName,
@@ -144,16 +144,21 @@ public class GelfMessageAssembler implements HostAndPortProvider {
             message = throwable.toString();
         }
 
+        /*
         String shortMessage = message;
         if (message.length() > MAX_SHORT_MESSAGE_LENGTH) {
             shortMessage = message.substring(0, MAX_SHORT_MESSAGE_LENGTH - 1);
         }
+        */
 
-        builder.withShortMessage(shortMessage).withFullMessage(message).withJavaTimestamp(logEvent.getLogTimestamp());
-        builder.withLevel(logEvent.getSyslogLevel());
-        builder.withVersion(getVersion());
-        builder.withAdditionalFieldTypes(additionalFieldTypes);
-        builder.withDynamicMdcFieldTypes(dynamicMdcFieldTypes);
+        builder
+        //.withShortMessage(shortMessage)
+        .withFullMessage(message)
+        .withJavaTimestamp(logEvent.getLogTimestamp())
+        //.withLevel(logEvent.getSyslogLevel())
+        //.withVersion(getVersion())
+        .withAdditionalFieldTypes(additionalFieldTypes)
+        .withDynamicMdcFieldTypes(dynamicMdcFieldTypes);
 
         for (MessageField field : fields) {
 

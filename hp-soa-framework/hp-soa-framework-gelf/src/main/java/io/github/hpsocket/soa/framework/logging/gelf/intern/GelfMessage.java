@@ -33,7 +33,7 @@ public class GelfMessage {
 
     public static final String FIELD_HOST = "host";
     public static final String FIELD_SHORT_MESSAGE = "short_message";
-    public static final String FIELD_FULL_MESSAGE = "full_message";
+    public static final String FIELD_FULL_MESSAGE = "message";
     public static final String FIELD_TIMESTAMP = "timestamp";
     public static final String FIELD_LEVEL = "level";
     public static final String FIELD_FACILITY = "facility";
@@ -153,18 +153,24 @@ public class GelfMessage {
 
         JsonWriter.writeObjectStart(out);
 
-        boolean hasFields = writeIfNotEmpty(out, false, FIELD_HOST, getHost());
+        boolean hasFields = false;
+        
+        /*
+        hasFields = writeIfNotEmpty(out, hasFields, FIELD_HOST, getHost());
 
         if (!isEmpty(version) && !GELF_VERSION_1_0.equals(version)) {
             hasFields = writeIfNotEmpty(out, hasFields, FIELD_VERSION, version);
         }
 
+        
         if (!isEmpty(shortMessage)) {
             hasFields = writeIfNotEmpty(out, hasFields, FIELD_SHORT_MESSAGE, getShortMessage());
         }
-
+        */
+        
         hasFields = writeIfNotEmpty(out, hasFields, FIELD_FULL_MESSAGE, getFullMessage());
 
+        /*
         if (getJavaTimestamp() != 0) {
             if (GELF_VERSION_1_1.equals(version)) {
                 hasFields = writeIfNotEmpty(out, hasFields, FIELD_TIMESTAMP, getTimestampAsBigDecimal().doubleValue());
@@ -187,6 +193,7 @@ public class GelfMessage {
                 hasFields = writeIfNotEmpty(out, hasFields, FIELD_LEVEL, getLevel());
             }
         }
+        */
 
         if (!isEmpty(getFacility())) {
             hasFields = writeIfNotEmpty(out, hasFields, FIELD_FACILITY, getFacility());
@@ -581,7 +588,7 @@ public class GelfMessage {
     }
 
     public boolean isValid() {
-        return isShortOrFullMessagesExists() && !isEmpty(version) && !isEmpty(host);
+        return isShortOrFullMessagesExists(); // && !isEmpty(version) && !isEmpty(host);
     }
 
     private boolean isShortOrFullMessagesExists() {
@@ -589,7 +596,7 @@ public class GelfMessage {
     }
 
     public static boolean isEmpty(String str) {
-        return str == null || "".equals(str.trim());
+        return str == null || str.isBlank();
     }
 
     public int getMaximumMessageSize() {

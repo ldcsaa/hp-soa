@@ -15,10 +15,6 @@
     <description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
     <url>https://github.com/ldcsaa/hp-soa</url>
 
-    <properties>
-        <jedis.version>3.10.0</jedis.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
@@ -58,20 +54,14 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Kafka Client -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
         <!--JBoss Logging -->
@@ -82,4 +72,31 @@
         </dependency>
 
     </dependencies>
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.yaml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.conf</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.json</include>
+                    <include>**/*.imports</include>
+                    <include>**/*.factories</include>
+                    <include>**/*.Filter</include>
+                    <include>**/*.packages</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>

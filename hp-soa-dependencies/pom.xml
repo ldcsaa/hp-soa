@@ -90,7 +90,7 @@
 
         <slf4j.version>2.0.9</slf4j.version>
         <log4j.version>2.22.0</log4j.version>
-        <disruptor.version>4.0.0</disruptor.version>
+        <disruptor.version>3.4.4</disruptor.version>
         <skywalking.apm-toolkit.version>9.0.0</skywalking.apm-toolkit.version>
         <junit.version>4.13.2</junit.version>
         <junit5.version>5.10.1</junit5.version>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration packages="io.github.hpsocket.soa.framework.core.log,biz.paluch.logging.gelf.log4j2" shutdownHook="disable" strict="true">
+<Configuration packages="io.github.hpsocket.soa.framework.logging.gelf.log4j2" shutdownHook="disable" strict="true">
 
     <Properties>
         <Property name="base.package">${project.groupId}</Property>
@@ -9,15 +9,17 @@
         <Property name="gelf.port">${sys:log4j.gelf.port:-12201}</Property>
         <Property name="gelf.logType">${sys:log4j.gelf.logType:-hp-soa}</Property>
         <Property name="gelf.maxMsgSize">${sys:log4j.gelf.maxMsgSize:-8192}</Property>
-        <Property name="timestamp.pattern">%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}</Property>
+        <Property name="timestamp.pattern">%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}{GMT+0}</Property>
         <Property name="logfile.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}</Property>
-        <Property name="logfile.max.size">100 MB</Property>
-        <Property name="logfile.max.count">10</Property>
+        <Property name="logfile.max.size">${sys:log4j.logfile.maxSize:-100 MB}</Property>
+        <Property name="logfile.max.count">${sys:log4j.logfile.maxCount:-10}</Property>
+        <Property name="logfile.immediateFlush">${sys:log4j.logfile.immediateFlush:-false}</Property>
+        <Property name="logfile.serviceLogFileName">${sys:log4j.logfile.serviceLogFileName:-service}</Property>
+        <Property name="logfile.monitorLogFileName">${sys:log4j.logfile.monitorLogFileName:-monitor}</Property>
         <Property name="logfile.archive.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}/${date:yyyy-MM}</Property>
         <Property name="logfile.archive.suffix">%d{yyyy-MM-dd}-%i.log.gz</Property>
-        <Property name="logfile.stacktrace.filters">org.springframework.security.web,org.apache.catalina,org.apache.coyote,org.apache.tomcat,org.hibernate,org.apache.el,org.apache.cxf,org.junit,junit.framework,org.jboss,org.h2,org.eclipse,org.richfaces,java.lang.reflect,java.base/java.lang.reflect,jdk.internal.reflect,java.base/jdk.internal.reflect,com.sun,javax.servlet,jakarta.servlet,io.netty.handler.codec,org.apache.dubbo.rpc.cluster.filter</Property>
+        <Property name="logfile.stacktrace.filters">org.springframework.security.web,org.apache.catalina,org.apache.coyote,org.apache.tomcat,org.hibernate,org.apache.el,org.apache.cxf,org.junit,junit.framework,org.jboss,org.h2,org.eclipse,org.richfaces,java.lang.reflect,java.base/java.lang.reflect,jdk.internal.reflect,java.base/jdk.internal.reflect,com.sun,javax.servlet,jakarta.servlet,io.netty.handler.codec,org.apache.dubbo.rpc.cluster.filter,org.springframework.security.web,org.springframework.web.servlet.DispatcherServlet,org.springframework.web.filter.OncePerRequestFilter,org.springframework.aop.framework.ReflectiveMethodInvocation,org.springframework.aop.framework.CglibAopProxy</Property>
         <Property name="logfile.pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{1.1.1.*}#%M\(L:%L\) -&gt; %m%xEx{filters(${logfile.stacktrace.filters})}%n</Property>
-        <Property name="json.template.layout">classpath:log4j2-default-template.json</Property>
     </Properties>
 
     <Appenders>
@@ -28,8 +30,8 @@
             <PatternLayout pattern="${logfile.pattern}"/>
         </Console>
         
-        <RollingRandomAccessFile name="MONITOR_LOG_FILE" fileName="${logfile.path}/monitor.log"
-                                 filePattern="${logfile.archive.path}/monitor-${logfile.archive.suffix}">
+        <RollingRandomAccessFile name="MONITOR_LOG_FILE" immediateFlush="${logfile.immediateFlush}" fileName="${logfile.path}/${logfile.monitorLogFileName}.log"
+                                 filePattern="${logfile.archive.path}/${logfile.monitorLogFileName}-${logfile.archive.suffix}">
             <PatternLayout pattern="${logfile.pattern}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -37,8 +39,8 @@
             </Policies>
             <DefaultRolloverStrategy max="${logfile.max.count}"/>
         </RollingRandomAccessFile>
-        <RollingRandomAccessFile name="SERVICE_LOG_FILE" fileName="${logfile.path}/service.log"
-                                 filePattern="${logfile.archive.path}/service-${logfile.archive.suffix}">
+        <RollingRandomAccessFile name="SERVICE_LOG_FILE" immediateFlush="${logfile.immediateFlush}" fileName="${logfile.path}/${logfile.serviceLogFileName}.log"
+                                 filePattern="${logfile.archive.path}/${logfile.serviceLogFileName}-${logfile.archive.suffix}">
             <PatternLayout pattern="${logfile.pattern}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -57,6 +59,8 @@
             <Field name="class" pattern="%C"/>
             <Field name="method" pattern="%M"/>
             <Field name="line_number" pattern="%L"/>
+            <Field name="exception.exception_class" pattern="%throwable{short.className}"/>
+            <Field name="exception.exception_message" pattern="%throwable{short.message}"/>
             <Field name="source_host" pattern="%host{simple}"/>
             <Field name="source_ip" pattern="%host{address}"/>
             <Field name="log_type" literal="${gelf.logType}" />
@@ -75,6 +79,8 @@
             <Field name="class" pattern="%C"/>
             <Field name="method" pattern="%M"/>
             <Field name="line_number" pattern="%L"/>
+            <Field name="exception.exception_class" pattern="%throwable{short.className}"/>
+            <Field name="exception.exception_message" pattern="%throwable{short.message}"/>
             <Field name="source_host" pattern="%host{simple}"/>
             <Field name="source_ip" pattern="%host{address}"/>
             <Field name="log_type" literal="${gelf.logType}" />

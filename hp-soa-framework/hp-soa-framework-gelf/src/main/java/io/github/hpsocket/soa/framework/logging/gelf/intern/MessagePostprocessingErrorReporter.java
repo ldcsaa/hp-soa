@@ -25,15 +25,14 @@ public class MessagePostprocessingErrorReporter implements ErrorReporter {
 
     private static String postProcessMessage(String message, Exception e) {
 
-        if ((message == null || "null".equalsIgnoreCase(message)) && e != null) {
-
-            if (e.getMessage() != null) {
-                return e.getMessage();
+        if(message == null || message.isBlank() || "null".equalsIgnoreCase(message)) {
+            if(e == null) {
+                return "unknown send message error";
             }
-
-            return e.getClass().getSimpleName();
+            
+            return e.getMessage();
         }
-
-        return message;
+        
+        return message + (e != null ? " - " + e.getMessage() : "");
     }
 }

@@ -33,11 +33,11 @@ public class KafkaGelfSender implements GelfSender {
     @Override
     public boolean sendMessage(GelfMessage message) {
         ProducerRecord<byte[], byte[]> record = new ProducerRecord<>(topicName,
-                message.toJson().getBytes(StandardCharsets.UTF_8));
+                message.toJson("").getBytes(StandardCharsets.UTF_8));
         boolean hasOffset;
         try {
             Future<RecordMetadata> metadata = kafkaProducer.send(record);
-            hasOffset = metadata.get(30, TimeUnit.SECONDS).hasOffset();
+            hasOffset = metadata.get(5L, TimeUnit.SECONDS).hasOffset();
         } catch (Exception e) {
             errorReporter.reportError("Error sending log to kafka", e);
             return false;

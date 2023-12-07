@@ -70,8 +70,8 @@
         </dependency>
         <!-- log4j2 gelf appender supported -->
         <dependency>
-            <groupId>biz.paluch.logging</groupId>
-            <artifactId>logstash-gelf</artifactId>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-framework-gelf</artifactId>
         </dependency>
         <dependency>
             <groupId>redis.clients</groupId>
