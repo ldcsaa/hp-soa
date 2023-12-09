@@ -24,7 +24,7 @@
 
 #### 2. API接口子项目：定义服务接口及相关BO
 ```java
-// API接口定义
+/* API接口定义 */
 public interface UserService
 {
     @GetMapping(value = "/user/{id}")
@@ -38,7 +38,7 @@ public interface UserService
 &nbsp;&nbsp;*注意：如果服务接口需要共享给服务消费的 Feign Client 使用，由于 Feign Client 的检查规则限制，不能在服务接口类中声明 `@XxxMapping` 注解，否则服务消费者不能启动。因此 `@XxxMapping` 注解只能声明在接口方法中。*
 
 ```java
-// BO定义
+/* BO定义 */
 @Getter
 @Setter
 @SuppressWarnings("serial")
@@ -95,7 +95,7 @@ public class UserBo implements Serializable
 
 3. 实现服务接口
 ```java
-// API接口实现
+/* API接口实现 */
 @Slf4j
 @Service
 @RestController
@@ -182,7 +182,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 #### 2. 定义 Feign Client 接口
 ```java
-// Feign Client接口定义
+/* Feign Client接口定义 */
 @FeignClient(UserServiceClient.SERVICE_NAME)
 // 继承于API接口
 public interface UserServiceClient extends UserService
@@ -193,7 +193,7 @@ public interface UserServiceClient extends UserService
 
 #### 3. 调用服务
 ```java
-// 定义Controller接口
+/* 定义Controller接口 */
 @RequestMapping(value = "/demo", method = {RequestMethod.POST})
 @Tag(name = "示例Demo接口")
 public interface DemoController
@@ -209,7 +209,7 @@ public interface DemoController
 
 ```
 ```java
-// 实现Controller接口
+/* 实现Controller接口 */
 @RestController
 @AccessVerification(Type.MAYBE_LOGIN)
 public class DemoControllerImpl implements DemoController
