@@ -23,21 +23,21 @@ public class AppConfig
 {
     public static final String DOMAIN_NAME                = "demo.order";
     public static final String CREATE_ORDER_EVENT_NAME    = "createOrder";
-    public static final String CREATE_ORDER_ROUTING_KEY    = "order.*";
+    public static final String CREATE_ORDER_ROUTING_KEY   = "order.*";
     
-    public static final String QUE_REGION_0                = "QUE_REGION_0";
-    public static final String QUE_REGION_1                = "QUE_REGION_1";
-    public static final String QUE_REGION_2                = "QUE_REGION_2";
-    public static final String QUE_REGION_3                = "QUE_REGION_3";
+    public static final String QUE_REGION_0               = "QUE_REGION_0";
+    public static final String QUE_REGION_1               = "QUE_REGION_1";
+    public static final String QUE_REGION_2               = "QUE_REGION_2";
+    public static final String QUE_REGION_3               = "QUE_REGION_3";
     
-    public static final String STM_REGION_0                = "default-stream";
-    public static final String STM_REGION_1                = "first-stream";
-    public static final String STM_REGION_2                = "second-stream";
-    public static final String STM_REGION_3                = "third-stream";
+    public static final String STM_REGION_0               = "default-stream";
+    public static final String STM_REGION_1               = "first-stream";
+    public static final String STM_REGION_2               = "second-stream";
+    public static final String STM_REGION_3               = "third-stream";
     
-    public static final String[] REGION_EXCHANGES        = {"EXC_REGION_0", "EXC_REGION_1", "EXC_REGION_2", "EXC_REGION_3"};
+    public static final String[] REGION_EXCHANGES         = {"EXC_REGION_0", "EXC_REGION_1", "EXC_REGION_2", "EXC_REGION_3"};
     public static final String[] REGION_QUEUES            = {QUE_REGION_0, QUE_REGION_1, QUE_REGION_2, QUE_REGION_3};
-    public static final String[] REGION_STREAMS            = {STM_REGION_0, STM_REGION_1, STM_REGION_2, STM_REGION_3};
+    public static final String[] REGION_STREAMS           = {STM_REGION_0, STM_REGION_1, STM_REGION_2, STM_REGION_3};
 
     
     @Autowired
