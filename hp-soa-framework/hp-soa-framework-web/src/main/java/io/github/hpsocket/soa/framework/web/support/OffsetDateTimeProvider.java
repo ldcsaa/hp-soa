@@ -7,8 +7,9 @@ import java.util.Optional;
 import org.springframework.data.auditing.DateTimeProvider;
 
 /** <b>{@linkplain OffsetDateTime} 日期时间提供者<b> */
-public class OffsetDateTimeProvider implements DateTimeProvider
+public enum OffsetDateTimeProvider implements DateTimeProvider
 {
+    INSTANCE;
 
     @Override
     public Optional<TemporalAccessor> getNow()

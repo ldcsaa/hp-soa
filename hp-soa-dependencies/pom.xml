@@ -90,12 +90,13 @@
 
         <slf4j.version>2.0.9</slf4j.version>
         <log4j.version>2.22.0</log4j.version>
-        <disruptor.version>4.0.0</disruptor.version>
+        <disruptor.version>3.4.4</disruptor.version>
+        <log4j2-redis-appender.version>0.14.0</log4j2-redis-appender.version>
         <skywalking.apm-toolkit.version>9.0.0</skywalking.apm-toolkit.version>
         <junit.version>4.13.2</junit.version>
         <junit5.version>5.10.1</junit5.version>
 
-        <fastjson.version>2.0.42</fastjson.version>
+        <fastjson.version>2.0.43</fastjson.version>
         <protobuf-java.version>3.25.1</protobuf-java.version>
         <quartz.version>2.3.2</quartz.version>
         <httpclient.version>4.5.14</httpclient.version>
@@ -106,6 +107,7 @@
         <velocity.version>2.3</velocity.version>
         <freemarker.version>2.3.32</freemarker.version>
         <beetl.version>3.15.10.RELEASE</beetl.version>
+        <resilience4j.version>2.1.0</resilience4j.version>
 
         <geoip2.version>4.1.0</geoip2.version>
         <gson.version>2.10.1</gson.version>
@@ -129,6 +131,9 @@
         <hutool.version>5.8.23</hutool.version>
         <jjwt.version>0.12.3</jjwt.version>
         
+        <log4j-1.version>1.2.17</log4j-1.version>
+        <jboss-logmanager.version>3.0.2.Final</jboss-logmanager.version>
+        
         <seata.version>2.0.0</seata.version>
         
         <micrometer-tracing.version>1.2.0</micrometer-tracing.version>
@@ -150,6 +155,11 @@
             <dependency>
                 <groupId>io.github.hpsocket</groupId>
                 <artifactId>hp-soa-framework-leaf</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.hpsocket</groupId>
+                <artifactId>hp-soa-framework-gelf</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -867,6 +877,25 @@
             </dependency>
             
             <dependency>
+                <groupId>com.vlkan.log4j2</groupId>
+                <artifactId>log4j2-redis-appender</artifactId>
+                <version>${log4j2-redis-appender.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vlkan.log4j2</groupId>
+                <artifactId>log4j2-redis-appender-fatjar</artifactId>
+                <version>${log4j2-redis-appender.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-bom</artifactId>
+                <version>${resilience4j.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+           
+            <dependency>
                 <groupId>org.apache.skywalking</groupId>
                 <artifactId>apm-toolkit-log4j-2.x</artifactId>
                 <version>${skywalking.apm-toolkit.version}</version>
@@ -985,35 +1014,11 @@
 
             <!-- jackson-2 -->
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
                 <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-dataformat-xaml</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-dataformat-yaml</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-all</artifactId>
-                <version>${jackson-all.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <dependency>
@@ -1371,6 +1376,18 @@
                 <artifactId>seata-dubbo</artifactId>
                 <version>${seata.version}</version>
                 <type>pom</type>
+            </dependency>
+            
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j-1.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.logmanager</groupId>
+                <artifactId>jboss-logmanager</artifactId>
+                <version>${jboss-logmanager.version}</version>
             </dependency>
 
         </dependencies>

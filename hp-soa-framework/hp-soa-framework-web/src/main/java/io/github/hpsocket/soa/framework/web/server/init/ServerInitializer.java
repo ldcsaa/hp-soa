@@ -15,7 +15,6 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 
 /** <b>应用服务初始化器</b><br>
  * <ol>
@@ -32,16 +31,9 @@ import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 public class ServerInitializer
 {
     /** 系统属性配置文件 Key */
-    public static final String SYSTEM_PROPERTIES_FILE_KEY                           = "hp.soa.system.properties.file";
+    public static final String SYSTEM_PROPERTIES_FILE_KEY           = "hp.soa.system.properties.file";
     /** 默认系统属性配置文件 */
-    public static final String DEFAULT_SYSTEM_PROPERTIES_FILE_PATH                  = "/opt/hp-soa/config/system-config.properties";
-    
-    private static final String LOCAL_IP_ADDRESS                                    = "local.ip.address";
-    private static final String LOG4J2_CONTEXT_SELECTOR                             = "log4j2.contextSelector";
-    private static final String LOG4J2_CONTEXT_SELECTOR_VALUE                       = "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector";
-    private static final String LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP              = "log4j2.garbagefreeThreadContextMap";
-    private static final String LOG4J2_IS_THREAD_CONTEXT_MAP_INHERITABLE            = "log4j2.isThreadContextMapInheritable";
-    private static final String LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED   = "log4j.layout.jsonTemplate.locationInfoEnabled";
+    public static final String DEFAULT_SYSTEM_PROPERTIES_FILE_PATH  = "/opt/hp-soa/config/system-config.properties";
     
     private static final DeferredLogs LOG_FACTORY = new DeferredLogs();
     private static final Log LOGGER = LOG_FACTORY.getLog(ServerInitializer.class);
@@ -49,12 +41,6 @@ public class ServerInitializer
     public static final void initSystemProperties()
     {
         loadExternalSystemProperties();
-
-        GeneralHelper.setSystemPropertyIfAbsent(LOCAL_IP_ADDRESS, SystemUtil.getAddress());
-        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_CONTEXT_SELECTOR, LOG4J2_CONTEXT_SELECTOR_VALUE);
-        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_GARBAGE_FREE_THREAD_CONTEXT_MAP, Boolean.TRUE);
-        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_IS_THREAD_CONTEXT_MAP_INHERITABLE, Boolean.TRUE);
-        GeneralHelper.setSystemPropertyIfAbsent(LOG4J2_LAYOUT_JSON_TEMPLATE_LOCATION_INFO_ENABLED, Boolean.TRUE);
     }
     
     private static void loadExternalSystemProperties()

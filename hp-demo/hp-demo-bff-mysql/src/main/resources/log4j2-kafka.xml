@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration  packages="io.github.hpsocket.soa.framework.core.log" shutdownHook="disable" strict="true">
+<Configuration shutdownHook="disable" strict="true">
 
     <Properties>
         <Property name="base.package">${project.groupId}</Property>
-        <Property name="logger.dao.pattern">io\.github\.hpsocket\.demo\..*\.dao\..+</Property>
-        <Property name="log.include.location">${sys:log4j.include.location:-true}</Property>
-        <Property name="log.level">${sys:log4j.log.level:-DEBUG}</Property>
-        <Property name="kafka.bootstrap.servers">${sys:log4j.kafka.bootstrap.servers:-192.168.56.23:9092}</Property>
-        <Property name="kafka.security.protocol">${sys:log4j.security.protocol:-PLAINTEXT}</Property>
-        <Property name="kafka.sasl.mechanism">${sys:log4j.sasl.mechanism:-PLAIN}</Property>
-        <Property name="kafka.sasl.jaas.config">${sys:log4j.kafka.sasl.jaas.config:-}</Property>
-        <Property name="kafka.topic">${sys:log4j.kafka.topic:-hp-soa}</Property>
-        <Property name="kafka.logType">${sys:log4j.kafka.logType:-hp-soa}</Property>
-        <Property name="kafka.ignoreExceptions">${sys:log4j.kafka.ignoreExceptions:-true}</Property>
-        <Property name="kafka.syncSend">${sys:log4j.kafka.syncSend:-true}</Property>
-        <Property name="logfile.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}</Property>
-        <Property name="logfile.max.size">100 MB</Property>
-        <Property name="logfile.max.count">10</Property>
-        <Property name="logfile.archive.path">${sys:log4j.logfile.path:-/data/logs/access}/${project.artifactId}/${date:yyyy-MM}</Property>
+        <Property name="log.type">${sys:hpsoa.log4j.logType:-hp-soa}</Property>
+        <Property name="log.level">${sys:hpsoa.log4j.logLevel:-DEBUG}</Property>
+        <Property name="log.includeLocation">${sys:hpsoa.log4j.includeLcation:-true}</Property>
+        <Property name="kafka.bootstrap.servers">${sys:hpsoa.log4j.kafka.bootstrap.servers:-192.168.56.23:9092}</Property>
+        <Property name="kafka.security.protocol">${sys:hpsoa.log4j.security.protocol:-PLAINTEXT}</Property>
+        <Property name="kafka.sasl.mechanism">${sys:hpsoa.log4j.sasl.mechanism:-PLAIN}</Property>
+        <Property name="kafka.sasl.jaas.config">${sys:hpsoa.log4j.kafka.sasl.jaas.config:-}</Property>
+        <Property name="kafka.topic">${sys:hpsoa.log4j.kafka.topic:-hp-soa}</Property>
+        <Property name="kafka.ignoreExceptions">${sys:hpsoa.log4j.kafka.ignoreExceptions:-true}</Property>
+        <Property name="kafka.syncSend">${sys:hpsoa.log4j.kafka.syncSend:-false}</Property>
+        <Property name="kafka.max.block.ms">${sys:hpsoa.log4j.kafka.max.block.ms:-5000}</Property>
+        <Property name="logfile.path">${sys:hpsoa.log4j.logfile.path:-/data/logs/access}/${project.artifactId}</Property>
+        <Property name="logfile.max.size">${sys:hpsoa.log4j.logfile.maxSize:-100 MB}</Property>
+        <Property name="logfile.max.count">${sys:hpsoa.log4j.logfile.maxCount:-10}</Property>
+        <Property name="logfile.immediateFlush">${sys:hpsoa.log4j.logfile.immediateFlush:-false}</Property>
+        <Property name="logfile.serviceLogFileName">${sys:hpsoa.log4j.logfile.serviceLogFileName:-service}</Property>
+        <Property name="logfile.monitorLogFileName">${sys:hpsoa.log4j.logfile.monitorLogFileName:-monitor}</Property>
+        <Property name="logfile.archive.path">${sys:hpsoa.log4j.logfile.path:-/data/logs/access}/${project.artifactId}/${date:yyyy-MM}</Property>
         <Property name="logfile.archive.suffix">%d{yyyy-MM-dd}-%i.log.gz</Property>
-        <Property name="logfile.stacktrace.filters">org.springframework.security.web,org.apache.catalina,org.apache.coyote,org.apache.tomcat,org.hibernate,org.apache.el,org.apache.cxf,org.junit,junit.framework,org.jboss,org.h2,org.eclipse,org.richfaces,java.lang.reflect,java.base/java.lang.reflect,jdk.internal.reflect,java.base/jdk.internal.reflect,com.sun,javax.servlet,jakarta.servlet,io.netty.handler.codec,org.apache.dubbo.rpc.cluster.filter</Property>
-        <Property name="logfile.pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{1.1.1.*}#%M\(L:%L\) -&gt; %m%xEx{filters(${logfile.stacktrace.filters})}%n</Property>
-        <Property name="json.template.layout">classpath:log4j2-default-template.json</Property>
+        <Property name="logfile.stacktrace.filters">${sys:hpsoa.log4j.logfile.stacktrace.filters:-org.springframework.security.web,org.apache.catalina,org.apache.coyote,org.apache.tomcat,org.hibernate,org.apache.el,org.apache.cxf,org.junit,junit.framework,org.jboss,org.h2,org.eclipse,org.richfaces,java.lang.reflect,java.base/java.lang.reflect,jdk.internal.reflect,java.base/jdk.internal.reflect,com.sun,javax.servlet,jakarta.servlet,io.netty.handler.codec,org.apache.dubbo.rpc.cluster.filter,org.springframework.security.web,org.springframework.web.servlet.DispatcherServlet,org.springframework.web.filter.OncePerRequestFilter,org.springframework.aop.framework.ReflectiveMethodInvocation,org.springframework.aop.framework.CglibAopProxy}</Property>
+        <Property name="logfile.pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{1.1.1.*}#%M\(L:%L\) -&gt; %m%n%xEx{filters(${logfile.stacktrace.filters})}</Property>
+        <Property name="json.template.layout">${sys:hpsoa.log4j.json.template.layout:-classpath:log4j2-default-template.json}</Property>
     </Properties>
 
     <Appenders>
@@ -32,8 +35,8 @@
             <PatternLayout pattern="${logfile.pattern}"/>
         </Console>
         
-        <RollingRandomAccessFile name="MONITOR_LOG_FILE" fileName="${logfile.path}/monitor.log"
-                                 filePattern="${logfile.archive.path}/monitor-${logfile.archive.suffix}">
+        <RollingRandomAccessFile name="MONITOR_LOG_FILE" immediateFlush="${logfile.immediateFlush}" fileName="${logfile.path}/${logfile.monitorLogFileName}.log"
+                                 filePattern="${logfile.archive.path}/${logfile.monitorLogFileName}-${logfile.archive.suffix}">
             <PatternLayout pattern="${logfile.pattern}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -41,8 +44,8 @@
             </Policies>
             <DefaultRolloverStrategy max="${logfile.max.count}"/>
         </RollingRandomAccessFile>
-        <RollingRandomAccessFile name="SERVICE_LOG_FILE" fileName="${logfile.path}/service.log"
-                                 filePattern="${logfile.archive.path}/service-${logfile.archive.suffix}">
+        <RollingRandomAccessFile name="SERVICE_LOG_FILE" immediateFlush="${logfile.immediateFlush}" fileName="${logfile.path}/${logfile.serviceLogFileName}.log"
+                                 filePattern="${logfile.archive.path}/${logfile.serviceLogFileName}-${logfile.archive.suffix}">
             <PatternLayout pattern="${logfile.pattern}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -57,8 +60,9 @@
             <Property name="security.protocol">${kafka.security.protocol}</Property>
             <Property name="sasl.mechanism">${kafka.sasl.mechanism}</Property>
             <Property name="sasl.jaas.config">${kafka.sasl.jaas.config}</Property>
+            <Property name="max.block.m">${kafka.max.block.ms}</Property>
             <JsonTemplateLayout eventTemplateUri="${json.template.layout}">
-                <EventTemplateAdditionalField key="log_type" value="${kafka.logType}"/>
+                <EventTemplateAdditionalField key="log_type" value="${log.type}"/>
                 <EventTemplateAdditionalField key="facility" value="SOA-MONITOR"/>
                 <EventTemplateAdditionalField key="@version" value="${project.version}"/>
             </JsonTemplateLayout>
@@ -70,8 +74,9 @@
             <Property name="security.protocol">${kafka.security.protocol}</Property>
             <Property name="sasl.mechanism">${kafka.sasl.mechanism}</Property>
             <Property name="sasl.jaas.config">${kafka.sasl.jaas.config}</Property>
+            <Property name="max.block.m">${kafka.max.block.ms}</Property>
             <JsonTemplateLayout eventTemplateUri="${json.template.layout}">
-                <EventTemplateAdditionalField key="log_type" value="${kafka.logType}"/>
+                <EventTemplateAdditionalField key="log_type" value="${log.type}"/>
                 <EventTemplateAdditionalField key="facility" value="SOA-SERVICE"/>
                 <EventTemplateAdditionalField key="@version" value="${project.version}"/>
             </JsonTemplateLayout>
@@ -80,68 +85,67 @@
 
     <Loggers>
         <!-- Root Logger -->
-        <Root level="INFO" includeLocation="${log.include.location}">
+        <Root level="INFO" includeLocation="${log.includeLocation}">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Root>
         <!-- Service Logger -->
-        <Logger name="${base.package}" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
-            <LoggerNameFilter name="${logger.dao.pattern}" level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+        <Logger name="${base.package}" level="${log.level}" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDERR"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- SOA-MONITOR Logger -->
-        <Logger name="SOA-MONITOR" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
+        <Logger name="SOA-MONITOR" level="${log.level}" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="MONITOR_LOG_FILE"/>
             <AppenderRef ref="KAFKA_MONITOR"/>
         </Logger>
         <!-- HP-SOA Logger -->
-        <Logger name="io.github.hpsocket" level="${log.level}" includeLocation="${log.include.location}" additivity="false">
+        <Logger name="io.github.hpsocket" level="${log.level}" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- Dubbo Logger -->
-        <Logger name="org.apache.dubbo" level="INFO" includeLocation="${log.include.location}" additivity="false">
+        <Logger name="org.apache.dubbo" level="INFO" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- XXL-JOB Logger -->
-        <Logger name="com.xxl.job" level="INFO" includeLocation="${log.include.location}" additivity="false">
+        <Logger name="com.xxl.job" level="INFO" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- Kafka Logger -->
-        <Logger name="org.apache.kafka" level="INFO" includeLocation="${log.include.location}" additivity="false">
+        <Logger name="org.apache.kafka" level="INFO" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- MyBatis Logger -->
-        <Logger name="org.apache.ibatis" level="WARN" includeLocation="${log.include.location}" additivity="false">
+        <Logger name="org.apache.ibatis" level="WARN" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- JDBC Logger -->
-        <Logger name="java.sql" level="WARN" includeLocation="${log.include.location}" additivity="false">
+        <Logger name="java.sql" level="WARN" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- Spring JDBC Logger -->
-        <Logger name="org.springframework.jdbc" level="WARN" includeLocation="${log.include.location}" additivity="false">
+        <Logger name="org.springframework.jdbc" level="WARN" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- MongoDB -->
-        <Logger name="com.mongodb" level="WARN" includeLocation="${log.include.location}" additivity="false">
+        <Logger name="com.mongodb" level="WARN" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>

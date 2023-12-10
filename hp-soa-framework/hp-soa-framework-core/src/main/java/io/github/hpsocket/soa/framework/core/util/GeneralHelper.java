@@ -47,7 +47,7 @@ public class GeneralHelper
     
     private static final Pattern PATTERN_NUMERIC    = Pattern.compile("^0$|^\\-?[1-9]+[0-9]*$");
     private static final Pattern PATTERN_EMAIL_ADDR = Pattern.compile("^[a-z0-9_\\-]+(\\.[_a-z0-9\\-]+)*@([_a-z0-9\\-]+\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)$");
-    private static final Pattern PATTERN_IP_ADDR    = Pattern.compile("^([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$");
+    private static final Pattern PATTERN_IPV4_ADDR  = Pattern.compile("^([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$");
     private static final Pattern PATTERN_LINK       = Pattern.compile("<a[^>]*href=\\\"[^\\s\\\"]+\\\"[^>]*>[^<]*<\\/a>");
     private static final Pattern PATTERN_HTTP_URL   = Pattern.compile("^(https?:\\/\\/)?([a-z]([a-z0-9\\-]*\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))(\\/[a-z0-9_\\-\\.~]+)*(\\/([a-z0-9_\\-\\.]*)(\\?[a-z0-9+_\\-\\.%=&amp;]*)?)?(#[a-z][a-z0-9_]*)?$");
     private static final Pattern PATTERN_XML_ESCAPES= Pattern.compile(".*[&|\"|\'|<|>].*");
@@ -280,9 +280,9 @@ public class GeneralHelper
     }
 
     /** 检查字符串是否符合 IP 地址格式 */
-    public final static boolean isStrIPAddress(String str)
+    public final static boolean isStrIPv4Address(String str)
     {
-        return PATTERN_IP_ADDR.matcher(safeString(str)).matches();
+        return PATTERN_IPV4_ADDR.matcher(safeString(str)).matches();
     }
 
     /** 检查字符串是否符合 HTML 超链接元素格式 */

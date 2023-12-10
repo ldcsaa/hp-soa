@@ -31,6 +31,7 @@ public class DemoControllerImpl implements DemoController
     {
         /* 通过 RequestContext.getXxx() 获取 Request Context 相关信息 */
         System.out.printf("HAPI-INS - clientId: %s, requestId: %s\n", RequestContext.getClientId(), RequestContext.getRequestId());
+        log.info("Trace: {}, {}, {}", TraceContext.traceId(), TraceContext.segmentId(), TraceContext.spanId());
         
         String name = demoService.sayHello(request.getName());
 
@@ -39,8 +40,6 @@ public class DemoControllerImpl implements DemoController
         resp.setName(name);
         resp.setAge(request.getAge());
         resp.setToken("41784a5039322bbe55a8bf8ce29b9280");
-
-        log.info("Trace: {}, {}, {}", TraceContext.traceId(), TraceContext.segmentId(), TraceContext.spanId());
 
         log.debug(resp.toString());
 

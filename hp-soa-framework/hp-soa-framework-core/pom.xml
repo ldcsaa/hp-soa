@@ -50,13 +50,6 @@
             <artifactId>disruptor</artifactId>
         </dependency>
         
-        <!-- support log4j kafka appender -->
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <optional>true</optional>
-        </dependency>
-        
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

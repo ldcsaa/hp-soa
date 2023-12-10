@@ -64,9 +64,26 @@
             <artifactId>jakarta.validation-api</artifactId>
         </dependency>
         <!-- log4j2 kafka appender supported -->
+        <!-- log4j2 gelf-kafka appender supported -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
+        </dependency>
+        <!-- log4j2 redis appender supported -->
+        <dependency>
+            <groupId>com.vlkan.log4j2</groupId>
+            <artifactId>log4j2-redis-appender</artifactId>
+        </dependency>
+        <!-- log4j2 gelf appender supported -->
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-framework-gelf</artifactId>
+        </dependency>
+        <!-- log4j2 redis appender supported -->
+        <!-- log4j2 gelf-redis appender supported -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
         </dependency>
         <!-- prometheus metrics supported -->
         <dependency>

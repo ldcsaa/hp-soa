@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.MDC;
+import org.springframework.http.ResponseCookie;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,11 +55,16 @@ public class WebServerHelper
     
     public static final String RESPONSE_TOKEN               = "token";
 
-    public static final int DEFAULT_COOKIE_MAX_AGE  = 10 * 365 * 24 * 60 * 60;
-    public static final String DEFAULT_CHARSET      = GeneralHelper.DEFAULT_CHARSET;
-    public static final Charset DEFAULT_CHARSET_OBJ = GeneralHelper.DEFAULT_CHARSET_OBJ;
+    public static final String DEFAULT_CHARSET              = GeneralHelper.DEFAULT_CHARSET;
+    public static final Charset DEFAULT_CHARSET_OBJ         = GeneralHelper.DEFAULT_CHARSET_OBJ;
     
-    public static final boolean HTTP_ONLY_COOKIE    = false;
+    public static final String COOKIE_SAME_SITE_STRICT      = "Strict";
+    public static final String COOKIE_SAME_SITE_LAX         = "Lax";
+    public static final String COOKIE_SAME_SITE_NONE        = "None";
+    public static final int DEFAULT_COOKIE_MAX_AGE          = 10 * 365 * 24 * 60 * 60;
+    public static final boolean DEFAULT_COOKIE_HTTP_ONLY    = false;
+    public static final boolean DEFAULT_COOKIE_SECURE       = false;
+    public static final String DEFAULT_COOKIE_SAME_SITE     = COOKIE_SAME_SITE_LAX;
     
     public static final String GET      = "GET";
     public static final String PUT      = "PUT";
@@ -75,7 +81,7 @@ public class WebServerHelper
     public static final String DEFAULT_REQUEST_CHARSET  = DEFAULT_CHARSET;
     public static final String DEFAULT_REQUEST_FORMAT   = REQUEST_FORMAT_JSON;
     public static final String RESPONSE_CONTENT_TYPE    = "application/json;charset=" + DEFAULT_REQUEST_CHARSET.toLowerCase();
-    public static final Pattern DOMAIN_PATTERN          = Pattern.compile("[0-9a-zA-Z]+((\\.com\\.cn)|(\\.com)|(\\.cn)|(\\.net)|(\\.org)|(\\.edu))$");
+    public static final Pattern DOMAIN_PATTERN          = Pattern.compile("[0-9a-zA-Z]+((\\.com(\\.[0-9a-zA-Z]+)?)|(\\.net(\\.[0-9a-zA-Z]+)?)|(\\.gov(\\.[0-9a-zA-Z]+)?)|(\\.org)|(\\.edu)|(\\.int)|(\\.biz)|(\\.info))$");
     public static final Pattern SPIDER_PATTERN          = Pattern.compile(".*(Googlebot|Baiduspider|iaskspider|YodaoBot|msnbot|\\ Crawler|\\ Slurp|\\ spider)([\\/\\+\\ \\;]).*", Pattern.CASE_INSENSITIVE);
     public static final Pattern FILTER_SKIP_PATTERN     = Pattern.compile("/api-docs.*|/swagger.*|.*\\.png|.*\\.css|.*\\.js|.*\\.html|/favicon.ico|/hystrix.stream");
     
@@ -137,12 +143,21 @@ public class WebServerHelper
     /** 解析 HTTP 响应 Cookie 的 Domain */
     public static final String retriveHostDomain(String host)
     {
-        int index = host.indexOf(':');
+        int index  = host.lastIndexOf(':');
 
         if(index != -1)
-            host = host.substring(0, index);
-
-        if(!GeneralHelper.isStrIPAddress(host))
+        {
+            int index2 = host.lastIndexOf(']');
+            
+            if(index2 == -1 || index2 < index)
+                host = host.substring(0, index);
+        }
+        
+        if(GeneralHelper.isStrIPv4Address(host))
+            return host;
+        else if(host.startsWith("[") && host.endsWith("]") && host.length() >= 4)
+            return host.substring(1, host.length() - 1);
+        else
         {
             Matcher m = DOMAIN_PATTERN.matcher(host);
 
@@ -154,38 +169,41 @@ public class WebServerHelper
     }
     
     /** 检测 HTTP 请求 Cookie */
-    public static final Result<Boolean, Cookie> checkClientCookie(HttpServletRequest req)
+    public static final Result<Boolean, ?> checkClientCookie(HttpServletRequest req)
     {
-        boolean exists        = false;
-        Cookie clientCookie    = getCookie(req, HEADER_CLIENT_ID);
+        boolean exists      = false;
+        Object clientCookie = getCookie(req, HEADER_CLIENT_ID);
         
         if(clientCookie != null)
             exists = true;
-
-        if(!exists)
-            clientCookie = createCookie(req, HEADER_CLIENT_ID, randomUUID(), getCookieMaxAge());
+        else
+            clientCookie = createCookie(req, HEADER_CLIENT_ID, randomUUID(), getCookieMaxAge(), false, false, COOKIE_SAME_SITE_LAX);
 
         return new Result<>(exists, clientCookie);
     }
     
     /** 创建 HTTP 响应 Cookie */
-    public static final Cookie createCookie(HttpServletRequest req, String name, String value, int maxAge)
+    public static final ResponseCookie createCookie(HttpServletRequest req, String name, String value, int maxAge)
     {
-        Cookie cookie = new Cookie(name, value);
+        return createCookie(req, name, value, maxAge, isCookieSecure(), isCookieHttpOnly(), getCookieSameSite());
+    }
 
-        cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        cookie.setHttpOnly(HTTP_ONLY_COOKIE);
+    /** 创建 HTTP 响应 Cookie */
+    public static final ResponseCookie createCookie(HttpServletRequest req, String name, String value, int maxAge, boolean secure, boolean httpOnly, String sameSite)
+    {
+        String domain = getHeader(req, "Host");
 
-        String host = getHeader(req, "Host");
+        if(GeneralHelper.isStrNotEmpty(domain))
+            domain = retriveHostDomain(domain);
 
-        if(GeneralHelper.isStrNotEmpty(host))
-        {        
-            host = retriveHostDomain(host);
-            cookie.setDomain(host);
-        }
-        
-        return cookie;
+        return ResponseCookie.from(name, value)
+                        .path("/")
+                        .maxAge(maxAge)
+                        .domain(domain)
+                        .secure(secure)
+                        .httpOnly(httpOnly)
+                        .sameSite(sameSite)
+                        .build();
     }
 
     /** 获取 HTTP 请求 Cookie */
@@ -476,7 +494,7 @@ public class WebServerHelper
         Boolean isEntry = isEntryOrNull();
         
         if(isEntry == null)
-            throw new RuntimeException("unable to determine current application is entry or not");
+            throw new RuntimeException("unable to determine if current application is entry or not");
         
         return isEntry;
     }

@@ -21,6 +21,7 @@
         <module>hp-soa-framework-core</module>
         <module>hp-soa-framework-web</module>
         <module>hp-soa-framework-leaf</module>
+        <module>hp-soa-framework-gelf</module>
         <module>hp-soa-framework-util</module>
     </modules>
 

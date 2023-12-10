@@ -11,6 +11,9 @@ import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.Result;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -174,14 +177,19 @@ public class RequestContext
         {
             if(checkUserAgent(getUserAgent(request)))
             {
-                Result<Boolean, Cookie> clientCookieRS = checkClientCookie(request);
-                Cookie cookie = clientCookieRS.getValue();
-                String cookieValue = cookie.getValue();
+                Result<Boolean, ?> clientCookieRS = checkClientCookie(request);
                 
-                clientId = cookieValue;
-                
-                if(!clientCookieRS.getFlag())
-                    response.addCookie(cookie);            
+                if(clientCookieRS.getFlag())
+                {
+                    clientId = ((Cookie)clientCookieRS.getValue()).getValue();
+                }
+                else
+                {
+                    ResponseCookie cookie = ((ResponseCookie)clientCookieRS.getValue());
+                    clientId = cookie.getValue();
+                    
+                    response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+                }          
             }
         }
         
