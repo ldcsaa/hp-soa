@@ -15,6 +15,7 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 
 /** <b>应用服务初始化器</b><br>
  * <ol>
@@ -34,12 +35,16 @@ public class ServerInitializer
     public static final String SYSTEM_PROPERTIES_FILE_KEY           = "hp.soa.system.properties.file";
     /** 默认系统属性配置文件 */
     public static final String DEFAULT_SYSTEM_PROPERTIES_FILE_PATH  = "/opt/hp-soa/config/system-config.properties";
+    /** 本机 IP 地址 Key */
+    public static final String LOCAL_IP_ADDRESS_KEY                 = "local.ip.address";
     
     private static final DeferredLogs LOG_FACTORY = new DeferredLogs();
     private static final Log LOGGER = LOG_FACTORY.getLog(ServerInitializer.class);
     
     public static final void initSystemProperties()
     {
+        GeneralHelper.setSystemPropertyIfAbsent(LOCAL_IP_ADDRESS_KEY, SystemUtil.getAddress());
+
         loadExternalSystemProperties();
     }
     
