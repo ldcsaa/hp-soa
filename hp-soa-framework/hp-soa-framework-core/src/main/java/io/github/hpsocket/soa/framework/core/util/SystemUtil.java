@@ -23,35 +23,35 @@ public class SystemUtil
         public Set<String> ips = new LinkedHashSet<String>();
     }
 
-    public static String getPid()
+    public static final String getPid()
     {
         checkPid();
         
         return pid;
     }
 
-    public static String getHosName()
+    public static final String getHosName()
     {
         checkAddr();
         
         return addr.host;
     }
 
-    public static String getAddress()
+    public static final String getAddress()
     {
         checkAddr();
         
         return addr.ip;
     }
 
-    public static Set<String> getAddresses()
+    public static final Set<String> getAddresses()
     {
         checkAddr();
         
         return addr.ips;
     }
 
-    private static void checkPid()
+    private static final void checkPid()
     {
         if(pid == null)
         {
@@ -68,7 +68,7 @@ public class SystemUtil
         }
     }
 
-    private static void checkAddr()
+    private static final void checkAddr()
     {
         if(addr == null)
         {
@@ -82,7 +82,7 @@ public class SystemUtil
         }
     }
 
-    public static Addr getNetworkAddress()
+    public static final Addr getNetworkAddress()
     {
         Addr addr = new Addr();
 
@@ -99,7 +99,7 @@ public class SystemUtil
                 {
                     InetAddress ia = addresses.nextElement();
 
-                    if(ia.isSiteLocalAddress())
+                    if(isValidUnicastAddress(ia))
                     {
                         addr.ips.add(ia.getHostAddress());
                     }
@@ -107,16 +107,14 @@ public class SystemUtil
             }
 
             InetAddress localAddr = InetAddress.getLocalHost();
-
-            if(!addr.ips.isEmpty())
-                addr.ip = addr.ips.iterator().next();
-            else
+            
+            if(isValidUnicastAddress(localAddr))
             {
                 addr.ip = localAddr.getHostAddress();
-
-                if(GeneralHelper.isStrNotEmpty(addr.ip))
-                    addr.ips.add(addr.ip);
+                addr.ips.add(addr.ip);
             }
+            else if(!addr.ips.isEmpty())
+                addr.ip = addr.ips.iterator().next();
 
             addr.host = localAddr.getHostName();
         }
@@ -128,7 +126,7 @@ public class SystemUtil
         return addr;
     }
 
-    public static boolean isLocalNetwork(String ip)
+    public static final boolean isLocalNetworkAddress(String ip)
     {
         if(GeneralHelper.isStrEmpty(ip))
             return false;
@@ -136,12 +134,44 @@ public class SystemUtil
         try
         {
             InetAddress addr = InetAddress.getByName(ip);
-            return addr.isSiteLocalAddress() || addr.isLoopbackAddress();
+            return isLocalNetworkAddress(addr);
         }
         catch(UnknownHostException e)
         {
             throw new RuntimeException(e);
         }
+    }
+    
+    public static final boolean isLocalNetworkAddress(InetAddress addr)
+    {
+        return addr != null && (addr.isSiteLocalAddress() || addr.isLoopbackAddress());
+    }
+    
+    public static final boolean isValidUnicastAddress(String ip)
+    {
+        if(GeneralHelper.isStrEmpty(ip))
+            return false;
+        
+        try
+        {
+            InetAddress addr = InetAddress.getByName(ip);
+            return isValidUnicastAddress(addr);
+        }
+        catch(UnknownHostException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static final boolean isValidUnicastAddress(InetAddress addr)
+    {
+        return  (addr != null && 
+                !(
+                    addr.isAnyLocalAddress()  ||
+                    addr.isLoopbackAddress()  ||
+                    addr.isLinkLocalAddress() ||
+                    addr.isMulticastAddress()
+                ));
     }
 
 }

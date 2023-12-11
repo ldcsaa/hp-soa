@@ -314,7 +314,11 @@ public class Sequence
 
     private static boolean isValidAddress(InetAddress address)
     {
-        if(address == null || address.isLoopbackAddress() || address.isAnyLocalAddress() || address.isMulticastAddress())
+        if( address == null              ||
+            address.isLoopbackAddress()  ||
+            address.isAnyLocalAddress()  ||
+            address.isLinkLocalAddress() ||
+            address.isMulticastAddress() )
         {
             return false;
         }
