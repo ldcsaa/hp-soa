@@ -207,6 +207,7 @@
                     <include>**/*.imports</include>
                     <include>**/*.factories</include>
                     <include>**/*.Filter</include>
+                    <include>**/*.txt</include>
                 </includes>
             </resource>
             <resource>

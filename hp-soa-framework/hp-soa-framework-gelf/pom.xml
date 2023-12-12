@@ -72,7 +72,7 @@
         </dependency>
 
     </dependencies>
-    
+
     <build>
         <resources>
             <resource>
@@ -98,5 +98,31 @@
                 </includes>
             </resource>
         </resources>
+        <!--
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <executions>
+                    <execution>
+                        <id>log4j-plugin-processor</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <proc>only</proc>
+                            <annotationProcessors>
+                                <annotationProcessor>
+                                    org.apache.logging.log4j.core.config.plugins.processor.PluginProcessor
+                                </annotationProcessor>
+                            </annotationProcessors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        -->
     </build>
 </project>

@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Core;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
@@ -168,7 +170,7 @@ import io.github.hpsocket.soa.framework.logging.gelf.intern.*;
  * @author Mark Paluch
  * @author Thomas Herzog
  */
-@Plugin(name = "Gelf", category = "Core", elementType = "appender", printObject = true)
+@Plugin(name = "Gelf", category = Core.CATEGORY_NAME, elementType = Appender.ELEMENT_TYPE, printObject = true)
 public class GelfLogAppender extends AbstractAppender {
 
     private static final Logger LOGGER = StatusLogger.getLogger();
