@@ -12,7 +12,8 @@
     <artifactId>hp-soa-framework-gelf</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
+    <description>hp-soa: a fully functional, easy-to-use, and highly scalable
+        microservice framework</description>
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <dependencies>
@@ -73,31 +74,31 @@
     </dependencies>
 
     <build>
-        <!--
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <configuration>
+                    <annotationProcessorPaths combine.self="override" />
+                </configuration>
                 <executions>
+                    <!-- do a processing-only pass to generate plugins .dat file -->
                     <execution>
-                        <id>log4j-plugin-processor</id>
+                        <id>process-plugins</id>
                         <goals>
                             <goal>compile</goal>
                         </goals>
                         <phase>process-classes</phase>
                         <configuration>
-                            <proc>only</proc>
                             <annotationProcessors>
-                                <annotationProcessor>
-                                    org.apache.logging.log4j.core.config.plugins.processor.PluginProcessor
-                                </annotationProcessor>
+                                <processor>org.apache.logging.log4j.core.config.plugins.processor.PluginProcessor</processor>
                             </annotationProcessors>
+                            <compilerArgs combine.self="override" />
+                            <proc>only</proc>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-        -->
     </build>
 </project>

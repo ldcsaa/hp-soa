@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration packages="io.github.hpsocket.soa.framework.logging.gelf.log4j2" shutdownHook="disable" strict="true">
+<Configuration shutdownHook="disable" strict="true">
 
     <Properties>
         <Property name="base.package">${project.groupId}</Property>
