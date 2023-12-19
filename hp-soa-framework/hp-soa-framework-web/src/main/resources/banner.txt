@@ -1,0 +1,10 @@
+     __  ______       _____ ____  ___
+    / / / / __ \     / ___// __ \/   |
+   / /_/ / /_/ /_____\__ \/ / / / /| |
+  / __  / ____//____/__/ / /_/ / ___ |
+ /_/ /_/_/         /____/\____/_/  |_|
+
+          OS : ${os.name} ${os.arch}
+        Java : ${java.version}
+ Spring Boot : ${spring-boot.version}
+      HP-SOA : ${hpsoa.version}

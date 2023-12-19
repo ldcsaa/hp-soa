@@ -12,7 +12,8 @@
     <artifactId>hp-soa-framework-gelf</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
+    <description>hp-soa: a fully functional, easy-to-use, and highly scalable
+        microservice framework</description>
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <dependencies>
@@ -70,33 +71,34 @@
             <artifactId>jboss-logmanager</artifactId>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
-    
+
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.yml</include>
-                    <include>**/*.yaml</include>
-                    <include>**/*.properties</include>
-                    <include>**/*.conf</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*.json</include>
-                    <include>**/*.imports</include>
-                    <include>**/*.factories</include>
-                    <include>**/*.Filter</include>
-                    <include>**/*.packages</include>
-                </includes>
-            </resource>
-        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths combine.self="override" />
+                </configuration>
+                <executions>
+                    <!-- do a processing-only pass to generate plugins .dat file -->
+                    <execution>
+                        <id>process-plugins</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <annotationProcessors>
+                                <processor>org.apache.logging.log4j.core.config.plugins.processor.PluginProcessor</processor>
+                            </annotationProcessors>
+                            <compilerArgs combine.self="override" />
+                            <proc>only</proc>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>

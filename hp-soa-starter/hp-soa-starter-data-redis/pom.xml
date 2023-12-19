@@ -47,9 +47,5 @@
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-data-31</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.esotericsoftware</groupId>
-            <artifactId>kryo</artifactId>
-        </dependency>
     </dependencies>
 </project>

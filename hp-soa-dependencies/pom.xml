@@ -26,18 +26,16 @@
         <sentinel.version>1.8.6</sentinel.version>
         
         <spring.version>6.0.14</spring.version>
+        <spring-security.version>6.1.5</spring-security.version>
         <spring-boot.version>3.1.6</spring-boot.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <caffeine.version>3.1.8</caffeine.version>
-        <spring-security-oauth.version>2.5.2.RELEASE</spring-security-oauth.version>
-        <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
-        <spring-security-rsa.version>1.1.1</spring-security-rsa.version>
         <spring-retry.version>2.0.4</spring-retry.version>
         <spring-amqp.version>3.0.10</spring-amqp.version>
         <spring-kafka.version>3.0.13</spring-kafka.version>
-        <kafka-clients.version>3.6.0</kafka-clients.version>
-        <zstd-jni.version>1.5.5-10</zstd-jni.version>
+        <kafka-clients.version>3.6.1</kafka-clients.version>
+        <zstd-jni.version>1.5.5-11</zstd-jni.version>
         <feign.version>13.1</feign.version>
         <druid.version>1.2.20</druid.version>
         <jedis.version>5.1.0</jedis.version>
@@ -55,7 +53,7 @@
         <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
         <ehcache.version>3.10.8</ehcache.version>
 
-        <commons-io.version>2.15.0</commons-io.version>
+        <commons-io.version>2.15.1</commons-io.version>
         <commons-net.version>3.10.0</commons-net.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-lang3.version>3.14.0</commons-lang3.version>
@@ -92,7 +90,7 @@
         <log4j.version>2.22.0</log4j.version>
         <disruptor.version>3.4.4</disruptor.version>
         <log4j2-redis-appender.version>0.14.0</log4j2-redis-appender.version>
-        <skywalking.apm-toolkit.version>9.0.0</skywalking.apm-toolkit.version>
+        <skywalking.apm-toolkit.version>9.1.0</skywalking.apm-toolkit.version>
         <junit.version>4.13.2</junit.version>
         <junit5.version>5.10.1</junit5.version>
 
@@ -100,16 +98,16 @@
         <protobuf-java.version>3.25.1</protobuf-java.version>
         <quartz.version>2.3.2</quartz.version>
         <httpclient.version>4.5.14</httpclient.version>
-        <httpclient5.version>5.2.2</httpclient5.version>
-        <browscap-java.version>1.4.1</browscap-java.version>
+        <httpclient5.version>5.3</httpclient5.version>
+        <browscap-java.version>1.4.3</browscap-java.version>
         <xstream.version>1.4.20</xstream.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
         <velocity.version>2.3</velocity.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <beetl.version>3.15.10.RELEASE</beetl.version>
+        <beetl.version>3.15.12.RELEASE</beetl.version>
         <resilience4j.version>2.1.0</resilience4j.version>
 
-        <geoip2.version>4.1.0</geoip2.version>
+        <geoip2.version>4.2.0</geoip2.version>
         <gson.version>2.10.1</gson.version>
         <jackson.version>2.16.0</jackson.version>
         <hessian.version>4.0.66</hessian.version>
@@ -118,14 +116,14 @@
         <okhttp3.version>4.12.0</okhttp3.version>
         <guava.version>32.1.3-jre</guava.version>
         
-        <jsoup.version>1.16.2</jsoup.version>
-        <selenium.version>4.15.0</selenium.version>
+        <jsoup.version>1.17.1</jsoup.version>
+        <selenium.version>4.16.1</selenium.version>
 
         <poi.version>5.2.5</poi.version>
-        <easyexcel.version>3.3.2</easyexcel.version>
+        <easyexcel.version>3.3.3</easyexcel.version>
         <xerces.version>2.12.2</xerces.version>
         <aviator.version>5.4.1</aviator.version>
-        <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
+        <springdoc-openapi.version>2.3.0</springdoc-openapi.version>
         
         <curator.version>5.5.0</curator.version>
         <hutool.version>5.8.23</hutool.version>
@@ -136,8 +134,8 @@
         
         <seata.version>2.0.0</seata.version>
         
-        <micrometer-tracing.version>1.2.0</micrometer-tracing.version>
-        <micrometer-bom.version>1.12.0</micrometer-bom.version>
+        <micrometer-tracing.version>1.2.1</micrometer-tracing.version>
+        <micrometer-bom.version>1.12.1</micrometer-bom.version>
     </properties>
     
     <dependencyManagement>
@@ -284,63 +282,10 @@
 
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo</artifactId>
+                <artifactId>dubbo-bom</artifactId>
                 <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-qos</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-spring-boot-starter</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-spring-boot-observability-starter</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-spring-boot-tracing-otel-zipkin-starter</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-spring-boot-actuator</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-registry-nacos</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-configcenter-nacos</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-metadata-report-nacos</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-registry-zookeeper</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-configcenter-zookeeper</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-metadata-report-zookeeper</artifactId>
-                <version>${dubbo.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             
             <dependency>
@@ -383,8 +328,10 @@
 
             <dependency>
                 <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
+                <artifactId>netty-bom</artifactId>
                 <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             
             <dependency>
@@ -779,22 +726,6 @@
                 <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
                 <version>${shardingsphere-jdbc-core-spring-boot-starter.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.springframework.security.oauth</groupId>
-                <artifactId>spring-security-oauth2</artifactId>
-                <version>${spring-security-oauth.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-jwt</artifactId>
-                <version>${spring-security-jwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-rsa</artifactId>
-                <version>${spring-security-rsa.version}</version>
-            </dependency>
             
             <dependency>
                 <groupId>com.mysql</groupId>
@@ -1095,89 +1026,18 @@
 
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
+                <artifactId>spring-framework-bom</artifactId>
                 <version>${spring.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
+            
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${spring.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-oxm</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-orm</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aspects</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-messaging</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-instrument</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jdbc</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context-support</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-expression</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-tx</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jcl</artifactId>
-                <version>${spring.version}</version>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-bom</artifactId>
+                <version>${spring-security.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             
             <dependency>

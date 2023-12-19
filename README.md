@@ -38,6 +38,7 @@
 - **[hp-soa-framework-core](hp-soa-framework/hp-soa-framework-core)** 基础模块，定义 HP-SOA 基础组件和工具
 - **[hp-soa-framework-web](hp-soa-framework/hp-soa-framework-web)** Web应用模块，集成 spring-boot，提供核心Web服务功能
 - **[hp-soa-framework-leaf](hp-soa-framework/hp-soa-framework-leaf)** Leaf全局ID模块，基于Leaf，提供分布式全局ID功能
+- **[hp-soa-framework-gelf](hp-soa-framework/hp-soa-framework-gelf)** GELF日志模块，提供TCP、UDP、HTTP、Redis、Kafka等远程日志传输功能
 - **[hp-soa-framework-util](hp-soa-framework/hp-soa-framework-util)** 工具包模块，提供文件处理、邮件、远程访问等组件和工具
 - **[hp-soa-starter-web](hp-soa-starter/hp-soa-starter-web)** Web应用启动器，配置并启动应用服务，所有 HP-SOA 项目都必须引入该启动器
 - **[hp-soa-starter-web-cloud](hp-soa-starter/hp-soa-starter-web-cloud)** Spring Cloud 启动器，开启 Spring Cloud 微服务功能，所有 Spring Cloud 微服务项目都必须引入该启动器

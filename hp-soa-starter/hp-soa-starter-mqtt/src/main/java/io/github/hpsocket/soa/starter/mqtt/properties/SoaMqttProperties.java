@@ -14,7 +14,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.SystemUtil;
-import io.github.hpsocket.soa.framework.util.sstl.SSLUtil;
+import io.github.hpsocket.soa.framework.util.ssl.SSLUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;

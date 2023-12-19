@@ -215,6 +215,7 @@ public abstract class SoaAbstractRedisConfig
         cfgs.put("6h", createRedisCacheConfiguration(21600));
         cfgs.put("12h", createRedisCacheConfiguration(43200));
         cfgs.put("1d", createRedisCacheConfiguration(86400));
+        cfgs.put("3d", createRedisCacheConfiguration(259200));
         cfgs.put("7d", createRedisCacheConfiguration(604800));
         cfgs.put("15d", createRedisCacheConfiguration(1296000));
         cfgs.put("30d", createRedisCacheConfiguration(2592000));

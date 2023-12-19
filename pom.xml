@@ -202,12 +202,13 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
-                <includes>
-                    <include>**/*.json</include>
-                    <include>**/*.imports</include>
-                    <include>**/*.factories</include>
-                    <include>**/*.Filter</include>
-                </includes>
+                <excludes>
+                    <exclude>**/*.xml</exclude>
+                    <exclude>**/*.yml</exclude>
+                    <exclude>**/*.yaml</exclude>
+                    <exclude>**/*.properties</exclude>
+                    <exclude>**/*.conf</exclude>
+                </excludes>
             </resource>
             <resource>
                 <directory>src/main/java</directory>

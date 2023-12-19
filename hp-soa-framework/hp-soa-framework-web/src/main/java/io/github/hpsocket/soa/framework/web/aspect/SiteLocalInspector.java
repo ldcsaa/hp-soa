@@ -29,7 +29,7 @@ public class SiteLocalInspector
     {
         String ip = RequestContext.getClientAddr();
         
-        if(!SystemUtil.isLocalNetwork(ip))
+        if(!SystemUtil.isLocalNetworkAddress(ip))
             throw FORBID_EXCEPTION;
     }
 

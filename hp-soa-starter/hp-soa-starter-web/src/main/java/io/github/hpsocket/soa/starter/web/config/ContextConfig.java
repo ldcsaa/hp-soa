@@ -39,7 +39,7 @@ public class ContextConfig
         if(!proxy.isEnabled())
             return;
         
-        String lcScheme = GeneralHelper.safeTrimString(proxy.getScheme()).toLowerCase();
+        String scheme = GeneralHelper.safeTrimString(proxy.getScheme()).toLowerCase();
         String host = GeneralHelper.safeTrimString(proxy.getHost());
         String userName = GeneralHelper.safeTrimString(proxy.getUserName());
         String password = GeneralHelper.safeTrimString(proxy.getPassword());
@@ -49,16 +49,16 @@ public class ContextConfig
         if(GeneralHelper.isStrEmpty(proxy.getHost()) || proxy.getPort() <= 0)
             throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.proxy.host' or 'hp.soa.web.proxy.port' property is empty or invalid", WebConfig.class.getSimpleName()));
         
-        if(GeneralHelper.isStrNotEmpty(lcScheme)
-            && !lcScheme.equalsIgnoreCase("http")
-            && !lcScheme.equalsIgnoreCase("https")
-            && !lcScheme.equalsIgnoreCase("socks")
-            && !lcScheme.equalsIgnoreCase("sock4")
-            && !lcScheme.equalsIgnoreCase("sock5")
+        if(GeneralHelper.isStrNotEmpty(scheme)
+            && !scheme.equalsIgnoreCase("http")
+            && !scheme.equalsIgnoreCase("https")
+            && !scheme.equalsIgnoreCase("socks")
+            && !scheme.equalsIgnoreCase("sock4")
+            && !scheme.equalsIgnoreCase("sock5")
         )
             throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.proxy.scheme' property is invalid", WebConfig.class.getSimpleName()));
         
-        if(lcScheme.isEmpty() || lcScheme.startsWith("http"))
+        if(scheme.isEmpty() || scheme.startsWith("http"))
         {
             System.setProperty("http.proxySet", "true");
             System.setProperty("http.proxyHost", host);
@@ -82,12 +82,12 @@ public class ContextConfig
                 System.setProperty("https.proxyPassword", password);
             }
         }
-        else if(lcScheme.startsWith("sock"))
+        else if(scheme.startsWith("sock"))
         {
             System.setProperty("proxySet", "true");
             System.setProperty("socksProxyHost", host);
             System.setProperty("socksProxyPort", String.valueOf(port));
-            System.setProperty("socksProxyVersion", String.valueOf(lcScheme.equals("sock4") ? 4 : 5));
+            System.setProperty("socksProxyVersion", String.valueOf(scheme.equals("sock4") ? 4 : 5));
             
             if(GeneralHelper.isStrNotEmpty(userName))
             {

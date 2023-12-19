@@ -35,6 +35,8 @@ public class ServerInitializer
     public static final String SYSTEM_PROPERTIES_FILE_KEY           = "hp.soa.system.properties.file";
     /** 默认系统属性配置文件 */
     public static final String DEFAULT_SYSTEM_PROPERTIES_FILE_PATH  = "/opt/hp-soa/config/system-config.properties";
+    /** HP-SOA 内部属性配置文件 */
+    public static final String HP_SOA_INTERNAL_PROPERTIES_FILE_PATH = "classpath:hp-soa.properties";
     /** 本机 IP 地址 Key */
     public static final String LOCAL_IP_ADDRESS_KEY                 = "local.ip.address";
     
@@ -45,12 +47,25 @@ public class ServerInitializer
     {
         GeneralHelper.setSystemPropertyIfAbsent(LOCAL_IP_ADDRESS_KEY, SystemUtil.getAddress());
 
-        loadExternalSystemProperties();
+        StandardEnvironment environment = new StandardEnvironment();
+
+        loadInternalSystemProperties(environment);
+        loadExternalSystemProperties(environment);
     }
     
-    private static void loadExternalSystemProperties()
+    private static void loadInternalSystemProperties(StandardEnvironment environment)
     {
-        StandardEnvironment environment = new StandardEnvironment();
+        String filePath = HP_SOA_INTERNAL_PROPERTIES_FILE_PATH;
+        
+        LOGGER.info("hp-soa load internal properties file -> " + filePath);
+
+        String resolvedLocation = environment.resolveRequiredPlaceholders(filePath);
+        
+        loadProperties(filePath, resolvedLocation);
+    }
+    
+    private static void loadExternalSystemProperties(StandardEnvironment environment)
+    {
         String filePath = environment.getProperty(SYSTEM_PROPERTIES_FILE_KEY);
         
         if(GeneralHelper.isStrEmpty(filePath))
@@ -65,6 +80,12 @@ public class ServerInitializer
         LOGGER.info("hp-soa load system properties file -> " + filePath);
 
         String resolvedLocation = "file:" + environment.resolveRequiredPlaceholders(filePath);
+        
+        loadProperties(filePath, resolvedLocation);
+    }
+
+    private static void loadProperties(String filePath, String resolvedLocation)
+    {
         PropertySourceFactory factory = new DefaultPropertySourceFactory();
         Resource resource = new DefaultResourceLoader().getResource(resolvedLocation);
         

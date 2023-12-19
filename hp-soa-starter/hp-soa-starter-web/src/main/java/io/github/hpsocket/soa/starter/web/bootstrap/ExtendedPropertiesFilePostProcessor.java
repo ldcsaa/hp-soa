@@ -64,6 +64,15 @@ public class ExtendedPropertiesFilePostProcessor implements EnvironmentPostProce
             logger.info("hp-soa load extended properties file -> " + filePath);
 
         String resolvedLocation = "file:" + environment.resolveRequiredPlaceholders(filePath);
+        
+        loadProperties(environment, filePath, resolvedLocation);
+        
+        if(!hasPrintLog)
+            hasPrintLog = true;
+    }
+
+    private void loadProperties(ConfigurableEnvironment environment, String filePath, String resolvedLocation)
+    {
         PropertySourceFactory factory = new DefaultPropertySourceFactory();
         Resource resource = new DefaultResourceLoader().getResource(resolvedLocation);
         
@@ -82,9 +91,6 @@ public class ExtendedPropertiesFilePostProcessor implements EnvironmentPostProce
             
             throw new RuntimeException(msg, e);
         }
-        
-        if(!hasPrintLog)
-            hasPrintLog = true;
     }
 
     @Override

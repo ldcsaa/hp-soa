@@ -1,4 +1,4 @@
-package io.github.hpsocket.soa.framework.util.sstl;
+package io.github.hpsocket.soa.framework.util.ssl;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMKeyPair;
