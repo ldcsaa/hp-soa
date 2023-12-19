@@ -17,8 +17,12 @@ hp.soa.data.mysql:
   mapper-scan:
     base-package: ${project.groupId}.infra.mysql.mapper
 
-# logging
-logging.config: classpath:log4j2-kafka.xml
+## Log4J 配置文件（默认：log4j2.xml）
+#logging.config: classpath:log4j2.xml
+#logging.config: classpath:log4j2-json.xml
+#logging.config: classpath:log4j2-kafka.xml
+#logging.config: classpath:log4j2-redis.xml
+#logging.config: classpath:log4j2-gelf.xml
 
 spring.cloud.nacos.config:
   #server-addr: 192.168.56.23:8848

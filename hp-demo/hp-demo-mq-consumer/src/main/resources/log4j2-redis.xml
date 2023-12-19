@@ -9,7 +9,7 @@
         <Property name="redis.host">${sys:hpsoa.log4j.redis.host:-localhost}</Property>
         <Property name="redis.port">${sys:hpsoa.log4j.redis.port:-6379}</Property>
         <Property name="redis.key">${sys:hpsoa.log4j.redis.key:-hp-soa}</Property>
-        <Property name="redis.pool.testWhileIdle">${sys:hpsoa.log4j.pool.redistestWhileIdle:-true}</Property>
+        <Property name="redis.pool.testWhileIdle">${sys:hpsoa.log4j.redis.pool.redistestWhileIdle:-true}</Property>
         <Property name="redis.pool.minEvictableIdleTimeMillis">${sys:hpsoa.log4j.redis.pool.minEvictableIdleTimeMillis:-60000}</Property>
         <Property name="redis.pool.timeBetweenEvictionRunsMillis">${sys:hpsoa.log4j.redis.pool.timeBetweenEvictionRunsMillis:-30000}</Property>
         <Property name="redis.pool.numTestsPerEvictionRun">${sys:hpsoa.log4j.redis.pool.numTestsPerEvictionRun:--1}</Property>
