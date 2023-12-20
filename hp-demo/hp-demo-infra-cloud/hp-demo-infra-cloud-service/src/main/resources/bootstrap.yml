@@ -59,12 +59,12 @@ spring.cloud.nacos.config:
 
 # dubbo
 dubbo.protocols:
-  #dubbo:
-  #  name: dubbo
-  #  port: 5018
-  tri:
-    name: tri
-    port: 6018
+  dubbo:
+    name: dubbo
+    port: 5018
+  #tri:
+  #  name: tri
+  #  port: 6018
 
 # server
 server.port: 9018
