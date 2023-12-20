@@ -44,12 +44,12 @@ spring.cloud.nacos.config:
 
 # dubbo
 dubbo.protocols:
-  #dubbo:
-  #  name: dubbo
-  #  port: 5007
-  tri:
-    name: tri
-    port: 6007
+  dubbo:
+    name: dubbo
+    port: 5007
+  #tri:
+  #  name: tri
+  #  port: 6007
 
 # server
 server.port: 9007

@@ -16,22 +16,22 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <dubbo.version>3.2.7</dubbo.version>
+        <dubbo.version>3.2.10</dubbo.version>
         <nacos-client.version>2.2.4</nacos-client.version>
-        <netty.version>4.1.101.Final</netty.version>
+        <netty.version>4.1.104.Final</netty.version>
         <zookeeper.version>3.9.1</zookeeper.version>
         <kryo.version>5.5.0</kryo.version>
         <fst.version>3.0.4-jdk17</fst.version>
         <xxl-job.version>2.4.0</xxl-job.version>
         <sentinel.version>1.8.6</sentinel.version>
         
-        <spring.version>6.0.14</spring.version>
-        <spring-security.version>6.1.5</spring-security.version>
+        <spring.version>6.0.15</spring.version>
+        <spring-security.version>6.1.6</spring-security.version>
         <spring-boot.version>3.1.6</spring-boot.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <caffeine.version>3.1.8</caffeine.version>
-        <spring-retry.version>2.0.4</spring-retry.version>
+        <spring-retry.version>2.0.5</spring-retry.version>
         <spring-amqp.version>3.0.10</spring-amqp.version>
         <spring-kafka.version>3.0.13</spring-kafka.version>
         <kafka-clients.version>3.6.1</kafka-clients.version>
@@ -45,7 +45,7 @@
         <stream-client.version>0.14.0</stream-client.version>
         <mysql-connector-j.version>8.2.0</mysql-connector-j.version>
         <mybatis-spring.version>3.0.3</mybatis-spring.version>
-        <mybatis.version>3.5.14</mybatis.version>
+        <mybatis.version>3.5.15</mybatis.version>
         <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
         <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.2.0</dynamic-datasource-spring-boot3-starter.version>
@@ -105,7 +105,7 @@
         <velocity.version>2.3</velocity.version>
         <freemarker.version>2.3.32</freemarker.version>
         <beetl.version>3.15.12.RELEASE</beetl.version>
-        <resilience4j.version>2.1.0</resilience4j.version>
+        <resilience4j.version>2.2.0</resilience4j.version>
 
         <geoip2.version>4.2.0</geoip2.version>
         <gson.version>2.10.1</gson.version>
@@ -130,7 +130,7 @@
         <jjwt.version>0.12.3</jjwt.version>
         
         <log4j-1.version>1.2.17</log4j-1.version>
-        <jboss-logmanager.version>3.0.2.Final</jboss-logmanager.version>
+        <jboss-logmanager.version>3.0.3.Final</jboss-logmanager.version>
         
         <seata.version>2.0.0</seata.version>
         
