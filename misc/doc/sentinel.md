@@ -10,7 +10,7 @@
 ## 二、安装启动 Sentinel Dashboard
 
 1. 把 [misc/sentinel](../../misc/sentinel) 目录下的文件拷贝到目标目录。
-2. 修改`start-sendinel-dashboard.sh (.bat)`启动脚本，调整 Sentinel Dashboard 配置。
+2. 修改`start-sendinel-dashboard.sh (.bat)`启动脚本，调整 Sentinel Dashboard 配置（详细配置参考：[Sentinel控制台文档](https://sentinelguard.io/zh-cn/docs/dashboard.html)）。
 3. 执行`start-sendinel-dashboard.sh (.bat)`启动脚本，启动 Sentinel Dashboard 应用程序。
 
 - [start-sendinel-dashboard.sh](../../misc/sentinel/start-sendinel-dashboard.sh) 启动脚本示例：
