@@ -27,7 +27,7 @@
 
 #### 2. 接入 Skywalking Agent
 
-&nbsp;&nbsp;应用程序启动时，通过`-javaagent` JVM 参数接入 Skywalking Agent：
+&nbsp;&nbsp;应用程序启动时，通过 `-javaagent` JVM 参数接入 Skywalking Agent：
 
 ```shell
 java\
