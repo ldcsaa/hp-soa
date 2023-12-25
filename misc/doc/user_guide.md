@@ -23,7 +23,6 @@
 - [Skywalking调用链跟踪](skywalking.md)
 - [ELK统一日志](elk.md)
 - [打包发布](deploy.md)
-- [最佳实践](best-practices.md)
 
 ### 技术交流
 - [怪兽乐园①群](https://jq.qq.com/?_wv=1027&k=3UAbrhTG)
