@@ -53,12 +53,12 @@ dubbo:
   scan.base-packages: ${hp.soa.web.component-scan.base-package}
   # Dubbo 服务协议和端口
   protocols:
-    #dubbo:
-    #  name: dubbo
-    #  port: 5001
-    tri:
-      name: tri
-      port: 6001
+    dubbo:
+      name: dubbo
+      port: 5001
+    #tri:
+    #  name: tri
+    #  port: 6001
   # 注册中心缓存文件
   registry:
     file: "/opt/hp-soa/.cache/dubbo-registry_${hp.soa.web.app.name}.properties"

@@ -15,7 +15,8 @@ PUT _index_template/hp-soa-template
         "settings": {
             "number_of_shards": 3,
             "number_of_replicas": 0,
-            "index.lifecycle.name": "hp-soa-lifecycle-policy"
+            "index.lifecycle.name": "hp-soa-lifecycle-policy",
+            "index.default_pipeline": "hp-soa-geoip-pipeline"
         },
         "mappings": {
             "_source": {
