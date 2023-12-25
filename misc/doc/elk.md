@@ -42,9 +42,9 @@
     - ***geoip.**** - 客户端地理位置信息
     - ***ua.**** - 客户端浏览器信息
 
-3. 日志跟踪字段（HP-SOA自动添加）：
+3. 日志跟踪字段：
 
-    - ***mdc.__traceId*** - AMP系统（如：Skywalking）的traceId
+    - ***mdc.__traceId*** - AMP组件（如：Skywalking）的traceId
     - ***mdc.__requestId*** - 调用链请求ID
     - ***mdc.__clientId*** - 调用链客户端ID（客户端ID标识一个客户，跨多个调用链）
     - ***mdc.__sessionId*** - 调用链会话ID（会话ID跨多个调用链，由调用方传入）
@@ -556,6 +556,7 @@ PUT _index_template/hp-soa-template
 2. ***[log4j2-redis.xml](../conf/log4j2-redis.xml)*** 通过 [Redis Appender](https://github.com/vy/log4j2-redis-appender) 把日志推送到Redis。
 3. ***[log4j2-gelf.xml](../conf/log4j2-gelf.xml)*** 通过 [Gelf Appender](../../hp-soa-framework/hp-soa-framework-gelf) 把日志推送到Kafka或Redis。
 4. ***[log4j2-json.xml](../conf/log4j2-json.xml)*** 日志以JSON格式写到本地文件，可以通过Filebeat等日志收集器把本地文件日志推送到Kafka、Redis或Logstash。
+
 ---
 
 [[用户指南](user_guide.md)]
