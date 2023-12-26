@@ -9,13 +9,11 @@ import lombok.Setter;
 /** <b>HP-SOA XxlJob 属性</b> */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "xxl.job")
-@ConditionalOnProperty(name = "xxl.job.enabled", matchIfMissing = true)
+@ConfigurationProperties(prefix = "hp.soa.job.xxl")
+@ConditionalOnProperty(name = "hp.soa.job.xxl.enabled", matchIfMissing = true)
 public class SoaXxlJobProperties
 {
     private boolean enabled = true;
-
-    private String accessToken;
 
     Admin admin = new Admin();
     Executor executor = new Executor();
@@ -25,6 +23,7 @@ public class SoaXxlJobProperties
     public static class Admin
     {
         private String addresses;        
+        private String accessToken;
     }
     
     @Getter
