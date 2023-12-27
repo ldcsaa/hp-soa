@@ -61,4 +61,4 @@ dubbo.protocols:
 server.port: 9101
 
 # xxl-job
-xxl.job.executor.port: 7101
+hp.soa.job.xxl.executor.port: 7101

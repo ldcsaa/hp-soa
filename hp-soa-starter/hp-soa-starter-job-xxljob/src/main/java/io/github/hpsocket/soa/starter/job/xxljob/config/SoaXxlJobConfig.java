@@ -17,7 +17,7 @@ import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 @Import(XxlJobInspector.class)
 @ConditionalOnClass(XxlJobSpringExecutor.class)
 @EnableConfigurationProperties({SoaXxlJobProperties.class})
-@ConditionalOnProperty(name = "xxl.job.enabled", matchIfMissing = true)
+@ConditionalOnProperty(name = "hp.soa.job.xxl.enabled", matchIfMissing = true)
 public class SoaXxlJobConfig
 {
     private SoaXxlJobProperties soaXxlJobProperties;
@@ -33,13 +33,13 @@ public class SoaXxlJobConfig
         XxlJobSpringExecutor executor = new XxlJobSpringExecutor();
         
         executor.setAdminAddresses(soaXxlJobProperties.getAdmin().getAddresses());
+        executor.setAccessToken(soaXxlJobProperties.getAdmin().getAccessToken());
         executor.setAppname(soaXxlJobProperties.getExecutor().getAppname());
         executor.setAddress(soaXxlJobProperties.getExecutor().getAddress());
         executor.setIp(soaXxlJobProperties.getExecutor().getIp());
         executor.setPort(soaXxlJobProperties.getExecutor().getPort());
         executor.setLogPath(soaXxlJobProperties.getExecutor().getLogPath());
         executor.setLogRetentionDays(soaXxlJobProperties.getExecutor().getLogRetentionDays());
-        executor.setAccessToken(soaXxlJobProperties.getAccessToken());
 
         return executor;
     }

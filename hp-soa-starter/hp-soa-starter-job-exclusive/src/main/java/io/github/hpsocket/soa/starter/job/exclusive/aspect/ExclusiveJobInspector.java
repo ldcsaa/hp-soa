@@ -156,8 +156,6 @@ public class ExclusiveJobInspector
         if(asyncService == null)
             exceptionHandler.handleException(prefix, jobName, timestamp, e);
         else
-        {
             asyncService.execute(() -> exceptionHandler.handleException(prefix, jobName, timestamp, e));
-        }
     }
 }

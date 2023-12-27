@@ -133,8 +133,6 @@ public class XxlJobInspector
         if(asyncService == null)
             exceptionHandler.handleException(jobName, jobId, param, timestamp, e);
         else
-        {
             asyncService.execute(() -> exceptionHandler.handleException(jobName, jobId, param, timestamp, e));
-        }
     }
 }
