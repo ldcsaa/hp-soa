@@ -27,7 +27,7 @@ import io.micrometer.observation.ObservationRegistry;
 @ConditionalOnClass(TraceContext.class)
 public class SoaSkyWalkingConfig
 {
-    private static final String skyWalkingObservationPredicateBeanName = "skyWalkingObservationPredicate";
+    public static final String skyWalkingObservationPredicateBeanName = "skyWalkingObservationPredicate";
     
     /** 调用链上下文服务 */
     @Bean
