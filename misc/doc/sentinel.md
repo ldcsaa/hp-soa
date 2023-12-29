@@ -39,6 +39,7 @@ java \
 
 #### 1. 引入 [hp-soa-starter-sendinel](../../hp-soa-starter/hp-soa-starter-sendinel) 依赖
 - pom.xml 中添加 [hp-soa-starter-nacos](../../hp-soa-starter/hp-soa-starter-nacos) 和 [hp-soa-starter-sendinel](../../hp-soa-starter/hp-soa-starter-sendinel) 依赖：
+
 ```xml
 <!-- 引用 hp-soa-starter-nacos-->
 <dependency>
