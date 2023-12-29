@@ -12,7 +12,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <revision>1.0.7-SNAPSHOT</revision>
+        <revision>1.1.0-SNAPSHOT</revision>
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -44,7 +44,7 @@
         <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
         <docker-maven-plugin.version>0.43.4</docker-maven-plugin.version>
-        <spring-boot-maven-plugin.version>3.1.7</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>3.2.1</spring-boot-maven-plugin.version>
 
         <maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
         <maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>

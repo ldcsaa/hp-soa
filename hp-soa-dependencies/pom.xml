@@ -25,29 +25,29 @@
         <xxl-job.version>2.4.0</xxl-job.version>
         <sentinel.version>1.8.6</sentinel.version>
         
-        <spring.version>6.0.15</spring.version>
+        <spring.version>6.1.2</spring.version>
         <spring-security.version>6.1.6</spring-security.version>
-        <spring-boot.version>3.1.7</spring-boot.version>
-        <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <spring-boot.version>3.2.1</spring-boot.version>
+        <spring-cloud.version>2023.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <caffeine.version>3.1.8</caffeine.version>
         <spring-retry.version>2.0.5</spring-retry.version>
-        <spring-amqp.version>3.0.10</spring-amqp.version>
-        <spring-kafka.version>3.0.13</spring-kafka.version>
+        <spring-amqp.version>3.1.1</spring-amqp.version>
+        <spring-kafka.version>3.1.1</spring-kafka.version>
         <kafka-clients.version>3.6.1</kafka-clients.version>
         <zstd-jni.version>1.5.5-11</zstd-jni.version>
         <feign.version>13.1</feign.version>
         <druid.version>1.2.20</druid.version>
         <jedis.version>5.1.0</jedis.version>
         <lettuce.version>6.3.0.RELEASE</lettuce.version>
-        <redisson.version>3.24.3</redisson.version>
+        <redisson.version>3.25.2</redisson.version>
         <amqp-client.version>5.20.0</amqp-client.version>
         <stream-client.version>0.15.0</stream-client.version>
         <mysql-connector-j.version>8.2.0</mysql-connector-j.version>
         <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis.version>3.5.15</mybatis.version>
         <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
-        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.2.0</dynamic-datasource-spring-boot3-starter.version>
         <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
         <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
@@ -65,13 +65,13 @@
         <commons-pool2.version>2.12.0</commons-pool2.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
 
-        <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
-        <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
-        <jakarta.el-api.version>5.0.1</jakarta.el-api.version>
-        <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
+        <jakarta.servlet-api.version>6.1.0-M1</jakarta.servlet-api.version>
+        <jakarta.validation-api.version>3.1.0-M1</jakarta.validation-api.version>
+        <jakarta.el-api.version>6.0.0-M1</jakarta.el-api.version>
+        <jakarta.annotation-api.version>3.0.0-M1</jakarta.annotation-api.version>
         <jakarta.activation-api.version>2.1.2</jakarta.activation-api.version>
         <jakarta.xml.bind-api.version>4.0.1</jakarta.xml.bind-api.version>
-        <jakarta.persistence-api.version>3.1.0</jakarta.persistence-api.version>
+        <jakarta.persistence-api.version>3.2.0-M1</jakarta.persistence-api.version>
         <jakarta.mail-api.version>2.1.2</jakarta.mail-api.version>
 
         <javax-javaee-api.version>8.0.1</javax-javaee-api.version>
@@ -750,7 +750,7 @@
             </dependency>
             <dependency>
                 <groupId>org.redisson</groupId>
-                <artifactId>redisson-spring-data-31</artifactId>
+                <artifactId>redisson-spring-data-32</artifactId>
                 <version>${redisson.version}</version>
             </dependency>
             <dependency>
