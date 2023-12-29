@@ -40,14 +40,14 @@
         <druid.version>1.2.20</druid.version>
         <jedis.version>5.1.0</jedis.version>
         <lettuce.version>6.3.0.RELEASE</lettuce.version>
-        <redisson.version>3.24.3</redisson.version>
+        <redisson.version>3.25.2</redisson.version>
         <amqp-client.version>5.20.0</amqp-client.version>
         <stream-client.version>0.15.0</stream-client.version>
         <mysql-connector-j.version>8.2.0</mysql-connector-j.version>
         <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis.version>3.5.15</mybatis.version>
         <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
-        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.2.0</dynamic-datasource-spring-boot3-starter.version>
         <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
         <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
