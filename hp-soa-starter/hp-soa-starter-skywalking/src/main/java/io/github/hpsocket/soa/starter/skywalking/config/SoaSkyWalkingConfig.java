@@ -10,10 +10,12 @@ import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingReceiv
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingSenderTracingHandler;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.service.TracingContext;
@@ -23,13 +25,14 @@ import io.micrometer.observation.ObservationPredicate;
 import io.micrometer.observation.ObservationRegistry;
 
 /** <b>HP-SOA Skywalking 基本配置</b> */
-@AutoConfiguration
+@AutoConfiguration(before = ObservationAutoConfiguration.class)
 @ConditionalOnClass(TraceContext.class)
 public class SoaSkyWalkingConfig
 {
     public static final String skyWalkingObservationPredicateBeanName = "skyWalkingObservationPredicate";
+    public static final String skyWalkingObservationRegistryBeanName = "skyWalkingObservationRegistry";
     
-    /** 调用链上下文服务 */
+   /** 调用链上下文服务 */
     @Bean
     public TracingContext tracingContext()
     {
@@ -53,6 +56,7 @@ public class SoaSkyWalkingConfig
         };
     }
     
+    @Primary
     @Bean(skyWalkingObservationPredicateBeanName)
     @ConditionalOnMissingBean(name = skyWalkingObservationPredicateBeanName)
     ObservationPredicate observationPredicate()
@@ -74,7 +78,9 @@ public class SoaSkyWalkingConfig
         };
     }
     
-    @Bean
+    @Primary
+    @Bean(skyWalkingObservationRegistryBeanName)
+    @ConditionalOnMissingBean(name = skyWalkingObservationRegistryBeanName)
     ObservationRegistry observationRegistry(
         List<MeterObservationHandler<?>> handlers,
         @Qualifier(skyWalkingObservationPredicateBeanName) ObservationPredicate predicate)
