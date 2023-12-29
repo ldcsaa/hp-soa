@@ -9,6 +9,7 @@ import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingMeterH
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingReceiverTracingHandler;
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingSenderTracingHandler;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -26,6 +27,8 @@ import io.micrometer.observation.ObservationRegistry;
 @ConditionalOnClass(TraceContext.class)
 public class SoaSkyWalkingConfig
 {
+    private static final String skyWalkingObservationPredicateBeanName = "skyWalkingObservationPredicate";
+    
     /** 调用链上下文服务 */
     @Bean
     public TracingContext tracingContext()
@@ -50,8 +53,8 @@ public class SoaSkyWalkingConfig
         };
     }
     
-    @Bean
-    @ConditionalOnMissingBean(ObservationPredicate.class)
+    @Bean(skyWalkingObservationPredicateBeanName)
+    @ConditionalOnMissingBean(name = skyWalkingObservationPredicateBeanName)
     ObservationPredicate observationPredicate()
     {
         return (name, context) -> 
@@ -72,7 +75,9 @@ public class SoaSkyWalkingConfig
     }
     
     @Bean
-    ObservationRegistry observationRegistry(List<MeterObservationHandler<?>> handlers, ObservationPredicate predicate)
+    ObservationRegistry observationRegistry(
+        List<MeterObservationHandler<?>> handlers,
+        @Qualifier(skyWalkingObservationPredicateBeanName) ObservationPredicate predicate)
     {
         ObservationRegistry registry = ObservationRegistry.create();
 
