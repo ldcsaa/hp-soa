@@ -9,7 +9,6 @@ import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingMeterH
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingReceiverTracingHandler;
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingSenderTracingHandler;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.observation.ObservationAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -29,9 +28,6 @@ import io.micrometer.observation.ObservationRegistry;
 @ConditionalOnClass(TraceContext.class)
 public class SoaSkyWalkingConfig
 {
-    public static final String skyWalkingObservationPredicateBeanName = "skyWalkingObservationPredicate";
-    public static final String skyWalkingObservationRegistryBeanName = "skyWalkingObservationRegistry";
-    
    /** 调用链上下文服务 */
     @Bean
     public TracingContext tracingContext()
@@ -56,9 +52,9 @@ public class SoaSkyWalkingConfig
         };
     }
     
+    @Bean
     @Primary
-    @Bean(skyWalkingObservationPredicateBeanName)
-    @ConditionalOnMissingBean(name = skyWalkingObservationPredicateBeanName)
+    @ConditionalOnMissingBean
     ObservationPredicate observationPredicate()
     {
         return (name, context) -> 
@@ -78,12 +74,10 @@ public class SoaSkyWalkingConfig
         };
     }
     
+    @Bean
     @Primary
-    @Bean("skyWalkingObservationRegistryBeanName")
-    @ConditionalOnMissingBean(name = skyWalkingObservationRegistryBeanName)
-    ObservationRegistry observationRegistry(
-        List<MeterObservationHandler<?>> handlers,
-        @Qualifier(skyWalkingObservationPredicateBeanName) ObservationPredicate predicate)
+    @ConditionalOnMissingBean
+    ObservationRegistry observationRegistry(List<MeterObservationHandler<?>> handlers, ObservationPredicate predicate)
     {
         ObservationRegistry registry = ObservationRegistry.create();
 
