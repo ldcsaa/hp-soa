@@ -54,7 +54,7 @@ public class SoaSkyWalkingConfig
     
     @Bean
     @Primary
-    @ConditionalOnMissingBean(ObservationPredicate.class)
+    @ConditionalOnMissingBean
     ObservationPredicate observationPredicate()
     {
         return (name, context) -> 
@@ -76,7 +76,7 @@ public class SoaSkyWalkingConfig
     
     @Bean
     @Primary
-    @ConditionalOnMissingBean(ObservationRegistry.class)
+    @ConditionalOnMissingBean
     ObservationRegistry observationRegistry(List<MeterObservationHandler<?>> handlers, ObservationPredicate predicate)
     {
         ObservationRegistry registry = ObservationRegistry.create();
