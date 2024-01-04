@@ -32,7 +32,8 @@ public class SoaSkyWalkingConfig
     @Bean
     public TracingContext tracingContext()
     {
-        return new TracingContext() {
+        return new TracingContext()
+        {
             @Override
             public String getTraceId()
             {
