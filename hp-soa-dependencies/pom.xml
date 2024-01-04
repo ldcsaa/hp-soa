@@ -37,7 +37,7 @@
         <kafka-clients.version>3.6.1</kafka-clients.version>
         <zstd-jni.version>1.5.5-11</zstd-jni.version>
         <feign.version>13.1</feign.version>
-        <druid.version>1.2.20</druid.version>
+        <druid.version>1.2.21</druid.version>
         <jedis.version>5.1.0</jedis.version>
         <lettuce.version>6.3.0.RELEASE</lettuce.version>
         <redisson.version>3.25.2</redisson.version>
@@ -48,7 +48,7 @@
         <mybatis.version>3.5.15</mybatis.version>
         <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
-        <dynamic-datasource-spring-boot3-starter.version>4.2.0</dynamic-datasource-spring-boot3-starter.version>
+        <dynamic-datasource-spring-boot3-starter.version>4.3.0</dynamic-datasource-spring-boot3-starter.version>
         <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
         <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
         <ehcache.version>3.10.8</ehcache.version>
@@ -86,8 +86,8 @@
         <mqttv5.client.version>1.2.5</mqttv5.client.version>
         <bcpkix.version>1.77</bcpkix.version>
 
-        <slf4j.version>2.0.9</slf4j.version>
-        <log4j.version>2.22.0</log4j.version>
+        <slf4j.version>2.0.10</slf4j.version>
+        <log4j.version>2.22.1</log4j.version>
         <disruptor.version>3.4.4</disruptor.version>
         <log4j2-redis-appender.version>0.14.0</log4j2-redis-appender.version>
         <skywalking.apm-toolkit.version>9.1.0</skywalking.apm-toolkit.version>
@@ -104,19 +104,19 @@
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
         <velocity.version>2.3</velocity.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <beetl.version>3.15.12.RELEASE</beetl.version>
+        <beetl.version>3.15.13.RELEASE</beetl.version>
         <resilience4j.version>2.2.0</resilience4j.version>
 
         <geoip2.version>4.2.0</geoip2.version>
         <gson.version>2.10.1</gson.version>
-        <jackson.version>2.16.0</jackson.version>
+        <jackson.version>2.16.1</jackson.version>
         <hessian.version>4.0.66</hessian.version>
         <zxing-javase.version>3.5.2</zxing-javase.version>
         <okhttp2.version>2.7.5</okhttp2.version>
         <okhttp3.version>4.12.0</okhttp3.version>
         <guava.version>33.0.0-jre</guava.version>
         
-        <jsoup.version>1.17.1</jsoup.version>
+        <jsoup.version>1.17.2</jsoup.version>
         <selenium.version>4.16.1</selenium.version>
 
         <poi.version>5.2.5</poi.version>
