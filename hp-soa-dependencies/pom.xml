@@ -28,7 +28,7 @@
         <spring.version>6.0.16</spring.version>
         <spring-boot.version>3.1.8</spring-boot.version>
         <spring-security.version>6.1.6</spring-security.version>
-        <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <spring-cloud.version>2022.0.5</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <caffeine.version>3.1.8</caffeine.version>
         <spring-retry.version>2.0.5</spring-retry.version>
@@ -94,11 +94,11 @@
         <junit.version>4.13.2</junit.version>
         <junit5.version>5.10.1</junit5.version>
 
-        <fastjson.version>2.0.45</fastjson.version>
+        <fastjson.version>2.0.46</fastjson.version>
         <protobuf-java.version>3.25.2</protobuf-java.version>
         <quartz.version>2.3.2</quartz.version>
         <httpclient.version>4.5.14</httpclient.version>
-        <httpclient5.version>5.3</httpclient5.version>
+        <httpclient5.version>5.3.1</httpclient5.version>
         <browscap-java.version>1.4.3</browscap-java.version>
         <xstream.version>1.4.20</xstream.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
