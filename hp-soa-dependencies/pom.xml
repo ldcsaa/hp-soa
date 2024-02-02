@@ -16,7 +16,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <dubbo.version>3.2.10</dubbo.version>
+        <dubbo.version>3.2.11</dubbo.version>
         <nacos-client.version>2.2.4</nacos-client.version>
         <netty.version>4.1.106.Final</netty.version>
         <zookeeper.version>3.9.1</zookeeper.version>
