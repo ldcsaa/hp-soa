@@ -125,7 +125,7 @@ public class ExclusiveJobInspector
                     {
                         sw.stop();
                         
-                        log.trace("end exclusive job -> {} (costTime: {})", fullJobName, sw.getLastTaskTimeMillis());
+                        log.trace("end exclusive job -> {} (costTime: {})", fullJobName, sw.lastTaskInfo().getTimeMillis());
                     }
                 }
             }

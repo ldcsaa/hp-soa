@@ -107,7 +107,7 @@ public class XxlJobInspector
                 {
                     sw.stop();
                     
-                    log.trace("end xxl-job -> {} (id: {}, costTime: {})", jobName, jobId, sw.getLastTaskTimeMillis());
+                    log.trace("end xxl-job -> {} (id: {}, costTime: {})", jobName, jobId, sw.lastTaskInfo().getTimeMillis());
                 }
             }
         }
