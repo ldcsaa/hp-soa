@@ -24,7 +24,7 @@ public class ScheduledTraceIdInspector
     public static final int ORDER = Ordered.HIGHEST_PRECEDENCE;
     
     public static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
-                                                 + "@annotation(org.springframework.scheduling.annotation.Scheduled)";
+                                                + "@annotation(org.springframework.scheduling.annotation.Scheduled)";
 
     @Pointcut(POINTCUT_PATTERN)
     protected void aroundMethod() {}

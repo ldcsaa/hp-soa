@@ -16,19 +16,19 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <dubbo.version>3.2.10</dubbo.version>
+        <dubbo.version>3.2.11</dubbo.version>
         <nacos-client.version>2.2.4</nacos-client.version>
-        <netty.version>4.1.104.Final</netty.version>
+        <netty.version>4.1.106.Final</netty.version>
         <zookeeper.version>3.9.1</zookeeper.version>
-        <kryo.version>5.5.0</kryo.version>
+        <kryo.version>5.6.0</kryo.version>
         <fst.version>3.0.4-jdk17</fst.version>
         <xxl-job.version>2.4.0</xxl-job.version>
-        <sentinel.version>1.8.6</sentinel.version>
+        <sentinel.version>1.8.7</sentinel.version>
         
-        <spring.version>6.0.15</spring.version>
+        <spring.version>6.0.16</spring.version>
+        <spring-boot.version>3.1.8</spring-boot.version>
         <spring-security.version>6.1.6</spring-security.version>
-        <spring-boot.version>3.1.7</spring-boot.version>
-        <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <spring-cloud.version>2022.0.5</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <caffeine.version>3.1.8</caffeine.version>
         <spring-retry.version>2.0.5</spring-retry.version>
@@ -37,18 +37,18 @@
         <kafka-clients.version>3.6.1</kafka-clients.version>
         <zstd-jni.version>1.5.5-11</zstd-jni.version>
         <feign.version>13.1</feign.version>
-        <druid.version>1.2.20</druid.version>
+        <druid.version>1.2.21</druid.version>
         <jedis.version>5.1.0</jedis.version>
-        <lettuce.version>6.3.0.RELEASE</lettuce.version>
-        <redisson.version>3.24.3</redisson.version>
+        <lettuce.version>6.3.1.RELEASE</lettuce.version>
+        <redisson.version>3.26.0</redisson.version>
         <amqp-client.version>5.20.0</amqp-client.version>
         <stream-client.version>0.15.0</stream-client.version>
-        <mysql-connector-j.version>8.2.0</mysql-connector-j.version>
+        <mysql-connector-j.version>8.3.0</mysql-connector-j.version>
         <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis.version>3.5.15</mybatis.version>
         <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
-        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
-        <dynamic-datasource-spring-boot3-starter.version>4.2.0</dynamic-datasource-spring-boot3-starter.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <dynamic-datasource-spring-boot3-starter.version>4.3.0</dynamic-datasource-spring-boot3-starter.version>
         <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
         <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
         <ehcache.version>3.10.8</ehcache.version>
@@ -86,38 +86,38 @@
         <mqttv5.client.version>1.2.5</mqttv5.client.version>
         <bcpkix.version>1.77</bcpkix.version>
 
-        <slf4j.version>2.0.9</slf4j.version>
-        <log4j.version>2.22.0</log4j.version>
+        <slf4j.version>2.0.11</slf4j.version>
+        <log4j.version>2.22.1</log4j.version>
         <disruptor.version>3.4.4</disruptor.version>
         <log4j2-redis-appender.version>0.14.0</log4j2-redis-appender.version>
         <skywalking.apm-toolkit.version>9.1.0</skywalking.apm-toolkit.version>
         <junit.version>4.13.2</junit.version>
         <junit5.version>5.10.1</junit5.version>
 
-        <fastjson.version>2.0.43</fastjson.version>
-        <protobuf-java.version>3.25.1</protobuf-java.version>
+        <fastjson.version>2.0.46</fastjson.version>
+        <protobuf-java.version>3.25.2</protobuf-java.version>
         <quartz.version>2.3.2</quartz.version>
         <httpclient.version>4.5.14</httpclient.version>
-        <httpclient5.version>5.3</httpclient5.version>
+        <httpclient5.version>5.3.1</httpclient5.version>
         <browscap-java.version>1.4.3</browscap-java.version>
         <xstream.version>1.4.20</xstream.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
         <velocity.version>2.3</velocity.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <beetl.version>3.15.12.RELEASE</beetl.version>
+        <beetl.version>3.15.13.RELEASE</beetl.version>
         <resilience4j.version>2.2.0</resilience4j.version>
 
         <geoip2.version>4.2.0</geoip2.version>
         <gson.version>2.10.1</gson.version>
-        <jackson.version>2.16.0</jackson.version>
+        <jackson.version>2.16.1</jackson.version>
         <hessian.version>4.0.66</hessian.version>
         <zxing-javase.version>3.5.2</zxing-javase.version>
         <okhttp2.version>2.7.5</okhttp2.version>
         <okhttp3.version>4.12.0</okhttp3.version>
         <guava.version>33.0.0-jre</guava.version>
         
-        <jsoup.version>1.17.1</jsoup.version>
-        <selenium.version>4.16.1</selenium.version>
+        <jsoup.version>1.17.2</jsoup.version>
+        <selenium.version>4.17.0</selenium.version>
 
         <poi.version>5.2.5</poi.version>
         <easyexcel.version>3.3.3</easyexcel.version>
@@ -125,8 +125,8 @@
         <aviator.version>5.4.1</aviator.version>
         <springdoc-openapi.version>2.3.0</springdoc-openapi.version>
         
-        <curator.version>5.5.0</curator.version>
-        <hutool.version>5.8.24</hutool.version>
+        <curator.version>5.6.0</curator.version>
+        <hutool.version>5.8.25</hutool.version>
         <jjwt.version>0.12.3</jjwt.version>
         
         <log4j-1.version>1.2.17</log4j-1.version>
@@ -134,8 +134,8 @@
         
         <seata.version>2.0.0</seata.version>
         
-        <micrometer-tracing.version>1.2.1</micrometer-tracing.version>
-        <micrometer-bom.version>1.12.1</micrometer-bom.version>
+        <micrometer-tracing.version>1.2.2</micrometer-tracing.version>
+        <micrometer-bom.version>1.12.2</micrometer-bom.version>
     </properties>
     
     <dependencyManagement>
