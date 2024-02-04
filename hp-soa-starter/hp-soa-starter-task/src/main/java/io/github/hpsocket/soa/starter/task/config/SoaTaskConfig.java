@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.task.TaskExecutorCustomizer;
+import org.springframework.boot.task.ThreadPoolTaskExecutorCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.task.TaskDecorator;
@@ -79,9 +79,9 @@ public class SoaTaskConfig
     }
     
     @Bean
-    TaskExecutorCustomizer taskExecutorCustomizer()
+    ThreadPoolTaskExecutorCustomizer taskExecutorCustomizer()
     {
-        return new TaskExecutorCustomizer()
+        return new ThreadPoolTaskExecutorCustomizer()
         {
             @Override
             public void customize(ThreadPoolTaskExecutor taskExecutor)

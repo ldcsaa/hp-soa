@@ -80,7 +80,7 @@ public class AppConfig
     @Bean
     Queue region0Queue()
     {
-        Queue queue = QueueBuilder.durable(REGION_QUEUES[0]).maxLength(1000000).maxLengthBytes(300485760).build();
+        Queue queue = QueueBuilder.durable(REGION_QUEUES[0]).maxLength(1000000L).maxLengthBytes(300485760).build();
         queue.setAdminsThatShouldDeclare(defaultRabbitAmqpAdmin);
         
         return queue;
@@ -89,7 +89,7 @@ public class AppConfig
     @Bean
     Queue region1Queue()
     {
-        Queue queue = QueueBuilder.durable(REGION_QUEUES[1]).maxLength(1000000).maxLengthBytes(300485760).build();
+        Queue queue = QueueBuilder.durable(REGION_QUEUES[1]).maxLength(1000000L).maxLengthBytes(300485760).build();
         queue.setAdminsThatShouldDeclare(firstRabbitAmqpAdmin);
         
         return queue;
@@ -98,7 +98,7 @@ public class AppConfig
     @Bean
     Queue region2Queue()
     {
-        Queue queue = QueueBuilder.durable(REGION_QUEUES[2]).maxLength(1000000).maxLengthBytes(300485760).build();
+        Queue queue = QueueBuilder.durable(REGION_QUEUES[2]).maxLength(1000000L).maxLengthBytes(300485760).build();
         queue.setAdminsThatShouldDeclare(secondRabbitAmqpAdmin);
         
         return queue;
@@ -107,7 +107,7 @@ public class AppConfig
     @Bean
     Queue region3Queue()
     {
-        Queue queue = QueueBuilder.durable(REGION_QUEUES[3]).maxLength(1000000).maxLengthBytes(300485760).build();
+        Queue queue = QueueBuilder.durable(REGION_QUEUES[3]).maxLength(1000000L).maxLengthBytes(300485760).build();
         queue.setAdminsThatShouldDeclare(thirdRabbitAmqpAdmin);
         
         return queue;

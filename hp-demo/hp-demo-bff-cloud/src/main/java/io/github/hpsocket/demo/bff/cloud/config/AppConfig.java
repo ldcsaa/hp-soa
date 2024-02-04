@@ -37,7 +37,7 @@ public class AppConfig
     @Bean
     Queue userQueue()
     {
-        Queue queue = QueueBuilder.durable(USER_QUEUE).maxLength(1000000).maxLengthBytes(300485760).build();
+        Queue queue = QueueBuilder.durable(USER_QUEUE).maxLength(1000000L).maxLengthBytes(300485760).build();
         queue.setAdminsThatShouldDeclare(rabbitAmqpAdmin);
         
         return queue;
