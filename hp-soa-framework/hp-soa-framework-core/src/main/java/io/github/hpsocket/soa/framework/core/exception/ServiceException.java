@@ -20,10 +20,10 @@ public class ServiceException extends RuntimeException
     public static final int NOT_EXIST               = 404;
     /** 参数校验失败 */
     public static final int PARAM_VERIFY_ERROR      = 409;
+    /** 参数验证错误 */
+    public static final int PARAM_VALIDATION_ERROR  = 410;
     /** 服务器内部错误 */
     public static final int GENERAL_ERROR           = 500;
-    /** 参数验证错误 */
-    public static final int PARAM_VALIDATION_ERROR  = 501;
     /** 接口未实现 */
     public static final int NOT_IMPLEMENTED         = 502;
     /** 频次超限 */
@@ -70,8 +70,8 @@ public class ServiceException extends RuntimeException
     public static final ServiceException BAD_REQUEST_EXCEPTION      = new ServiceException("非法请求", BAD_REQUEST);
     public static final ServiceException NOT_EXIST_EXCEPTION        = new ServiceException("目标不存在", NOT_EXIST);
     public static final ServiceException PARAM_VERIFY_EXCEPTION     = new ServiceException("参数校验失败", PARAM_VERIFY_ERROR);
-    public static final ServiceException GENERAL_EXCEPTION          = new ServiceException("服务器内部错误", GENERAL_ERROR);
     public static final ServiceException PARAM_VALIDATION_EXCEPTION = new ServiceException("参数验证错误", PARAM_VALIDATION_ERROR);
+    public static final ServiceException GENERAL_EXCEPTION          = new ServiceException("服务器内部错误", GENERAL_ERROR);
     public static final ServiceException NOT_IMPLEMENTED_EXCEPTION  = new ServiceException("接口未实现", NOT_IMPLEMENTED);
     public static final ServiceException NOT_SUPPORTED_EXCEPTION    = new ServiceException("接口不支持", NOT_SUPPORTED);
     public static final ServiceException FORBID_SERVICE_EXCEPTION   = new ServiceException("禁止更新", FORBID_UPDATE_ERROR);
