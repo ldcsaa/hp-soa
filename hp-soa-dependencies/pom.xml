@@ -612,13 +612,13 @@
                 <version>${zstd-jni.version}</version>
             </dependency>
             
-			<dependency>
-			    <groupId>io.github.openfeign</groupId>
-			    <artifactId>feign-bom</artifactId>
-			    <version>${feign.version}</version>
-			    <type>pom</type>
-			    <scope>import</scope>
-			</dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-bom</artifactId>
+                <version>${feign.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <dependency>
                 <groupId>org.mybatis</groupId>
