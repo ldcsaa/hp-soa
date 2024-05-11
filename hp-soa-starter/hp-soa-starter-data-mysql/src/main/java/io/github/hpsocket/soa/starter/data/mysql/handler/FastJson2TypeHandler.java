@@ -20,12 +20,14 @@ public class FastJson2TypeHandler extends AbstractJsonTypeHandler<Object>
 
     public FastJson2TypeHandler(Class<?> type)
     {
+        super(type);
+        
         this.type = type;
         this.jsonObjecct = (JSONObject.class.isAssignableFrom(type));
     }
 
     @Override
-    protected Object parse(String json)
+    public Object parse(String json)
     {
         if(jsonObjecct)
             return JSONObject.parse(json);
@@ -34,7 +36,7 @@ public class FastJson2TypeHandler extends AbstractJsonTypeHandler<Object>
     }
 
     @Override
-    protected String toJson(Object obj)
+    public String toJson(Object obj)
     {
         if(jsonObjecct)
             return ((JSONObject)(obj)).toString(JSONWriter.Feature.WriteNonStringKeyAsString);
