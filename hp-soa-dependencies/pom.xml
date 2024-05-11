@@ -40,7 +40,7 @@
         <druid.version>1.2.21</druid.version>
         <jedis.version>5.1.2</jedis.version>
         <lettuce.version>6.3.2.RELEASE</lettuce.version>
-        <redisson.version>3.29.0</redisson.version>
+        <redisson.version>3.30.0</redisson.version>
         <amqp-client.version>5.21.0</amqp-client.version>
         <stream-client.version>0.15.0</stream-client.version>
         <mysql-connector-j.version>8.4.0</mysql-connector-j.version>

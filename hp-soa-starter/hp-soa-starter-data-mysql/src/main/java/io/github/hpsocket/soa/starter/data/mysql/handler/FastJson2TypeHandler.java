@@ -16,13 +16,11 @@ import com.baomidou.mybatisplus.extension.handlers.AbstractJsonTypeHandler;
 public class FastJson2TypeHandler extends AbstractJsonTypeHandler<Object>
 {
     boolean jsonObjecct;
-    private final Class<?> type;
 
     public FastJson2TypeHandler(Class<?> type)
     {
         super(type);
         
-        this.type = type;
         this.jsonObjecct = (JSONObject.class.isAssignableFrom(type));
     }
 
