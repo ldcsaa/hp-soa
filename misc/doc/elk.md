@@ -159,7 +159,8 @@ PUT _ingest/pipeline/hp-soa-geoip-pipeline
   "processors" : [
     {
       "geoip" : {
-        "field" : "clientAddr"
+        "field" : "clientAddr",
+        "ignore_failure": true
       }
     }
   ]
