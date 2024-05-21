@@ -128,7 +128,7 @@ public class AppConfigHolder
         AppConfigHolder.readOnly = readOnly;
     }
     
-    public static Map<String, LogLevel> getDynamicLogLevels()
+    public static final Map<String, LogLevel> getDynamicLogLevels()
     {
         return dynamicLogLevels;
     }
