@@ -1,8 +1,6 @@
 
 package io.github.hpsocket.soa.starter.web.config;
 
-import static io.github.hpsocket.soa.starter.web.config.ContextConfig.springContextHolderBeanName;
-
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
@@ -43,6 +42,8 @@ import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.json.FastJsonExcludePropertyFilter;
+import io.github.hpsocket.soa.framework.web.listener.DynamicLogLevelContextRefreshedEventListener;
+import io.github.hpsocket.soa.framework.web.listener.DynamicLogLevelRefreshEventListener;
 import io.github.hpsocket.soa.framework.web.listener.ReadOnlyContextRefreshedEventListener;
 import io.github.hpsocket.soa.framework.web.listener.ReadOnlyRefreshEventListener;
 import io.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
@@ -53,6 +54,8 @@ import io.github.hpsocket.soa.starter.web.properties.SecurityProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
 
+import static io.github.hpsocket.soa.starter.web.config.ContextConfig.springContextHolderBeanName;
+
 /** <b>HP-SOA Web 基础配置</b> */
 @AutoConfiguration
 @EnableConfigurationProperties({WebProperties.class, SecurityProperties.class})
@@ -60,6 +63,8 @@ public class WebConfig implements WebMvcConfigurer
 {
     public static final String readOnlyContextRefreshedEventListenerBeanName = "readOnlyContextRefreshedEventListener";
     public static final String readOnlyRefreshEventListenerBeanName = "readOnlyRefreshEventListener";
+    public static final String dynamicLogLevelContextRefreshedEventListenerBeanName = "dynamicLogLevelContextRefreshedEventListener";
+    public static final String dynamicLogLevelRefreshEventListenerBeanName = "dynamicLogLevelRefreshEventListener";
     public static final String asyncThreadPoolExecutorBeanName = "asyncThreadPoolExecutor";
     public static final String httpMdcFilterRegistrationBeanName = "httpMdcFilterRegistration";
    
@@ -74,7 +79,7 @@ public class WebConfig implements WebMvcConfigurer
         if(GeneralHelper.isStrEmpty(app.getId()) || GeneralHelper.isStrEmpty(app.getName()))
             throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.app.id' or 'hp.soa.web.app.name' property is empty", WebConfig.class.getSimpleName()));        
     }
-    
+
     /** {@linkplain ReadOnlyContextRefreshedEventListener} 应用程序监听器配置 */
     @DependsOn(springContextHolderBeanName)
     @Bean(readOnlyContextRefreshedEventListenerBeanName)
@@ -84,11 +89,29 @@ public class WebConfig implements WebMvcConfigurer
     }
 
     /** {@linkplain ReadOnlyRefreshEventListener} 应用程序监听器配置 */
+    @RefreshScope
     @DependsOn(springContextHolderBeanName)
     @Bean(readOnlyRefreshEventListenerBeanName)
     public ReadOnlyRefreshEventListener readOnlyRefreshEventListener()
     {
         return new ReadOnlyRefreshEventListener();
+    }
+
+    /** {@linkplain DynamicLogLevelContextRefreshedEventListener} 应用程序监听器配置 */
+    @DependsOn(springContextHolderBeanName)
+    @Bean(dynamicLogLevelContextRefreshedEventListenerBeanName)
+    public DynamicLogLevelContextRefreshedEventListener dynamicLogLevelContextRefreshedEventListener()
+    {
+        return new DynamicLogLevelContextRefreshedEventListener();
+    }
+
+    /** {@linkplain DynamicLogLevelRefreshEventListener} 应用程序监听器配置 */
+    @RefreshScope
+    @DependsOn(springContextHolderBeanName)
+    @Bean(dynamicLogLevelRefreshEventListenerBeanName)
+    public DynamicLogLevelRefreshEventListener dynamicLogLevelRefreshEventListener()
+    {
+        return new DynamicLogLevelRefreshEventListener();
     }
 
     /** {@linkplain HttpMdcFilter} 过滤器配置 */
