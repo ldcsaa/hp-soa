@@ -268,7 +268,6 @@
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
                         <compilerVersion>${maven.compiler.compilerVersion}</compilerVersion>
-
                         <compilerArgs>
                             <arg>-parameters</arg>
                         </compilerArgs>
