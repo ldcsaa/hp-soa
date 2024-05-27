@@ -265,6 +265,10 @@
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <encoding>${project.build.sourceEncoding}</encoding>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                        <compilerVersion>${maven.compiler.compilerVersion}</compilerVersion>
+
                         <compilerArgs>
                             <arg>-parameters</arg>
                         </compilerArgs>
