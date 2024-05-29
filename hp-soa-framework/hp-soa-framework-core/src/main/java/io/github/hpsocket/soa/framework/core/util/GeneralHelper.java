@@ -40,6 +40,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
+
 /** <b>通用方法帮助类</b> */
 public class GeneralHelper
 {
@@ -1925,4 +1927,26 @@ public class GeneralHelper
             ? stream.filter((e) -> e.name().equalsIgnoreCase(name)).findFirst().orElse(null)
             : stream.filter((e) -> e.name().equals(name)).findFirst().orElse(null);
     }
+    
+    public static void asynRun(Runnable runnable)
+    {
+        asynRun(runnable, false, null);
+    }
+    
+    public static void asynRun(Runnable runnable, boolean daemon)
+    {
+        asynRun(runnable, daemon, null);
+    }
+    
+    public static void asynRun(Runnable runnable, boolean daemon, String threadName)
+    {
+        Thread t = new Thread(runnable);
+        t.setDaemon(daemon);
+        
+        if(isStrNotEmpty(threadName))
+            t.setName(threadName);
+        
+        t.start();
+    }
+    
 }
