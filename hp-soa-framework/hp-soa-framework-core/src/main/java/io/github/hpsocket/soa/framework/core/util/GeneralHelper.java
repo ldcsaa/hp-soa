@@ -241,8 +241,8 @@ public class GeneralHelper
         if(chars == null)
             chars = "";
         
-        int len    = str.length();
-        int st    = 0;
+        int len = str.length();
+        int st  = 0;
         
         while(st < len)
         {
@@ -430,7 +430,7 @@ public class GeneralHelper
     {
         Integer returnVal;
         try {
-            returnVal = Integer.valueOf(safeString(s));
+            returnVal = Integer.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -442,7 +442,7 @@ public class GeneralHelper
     {
         int returnVal;
         try {
-            returnVal = Integer.parseInt(safeString(s));
+            returnVal = Integer.parseInt(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -460,7 +460,7 @@ public class GeneralHelper
     {
         Short returnVal;
         try {
-            returnVal = Short.valueOf(safeString(s));
+            returnVal = Short.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -472,7 +472,7 @@ public class GeneralHelper
     {
         short returnVal;
         try {
-            returnVal = Short.parseShort(safeString(s));
+            returnVal = Short.parseShort(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -490,7 +490,7 @@ public class GeneralHelper
     {
         Long returnVal;
         try {
-            returnVal = Long.valueOf(safeString(s));
+            returnVal = Long.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -502,7 +502,7 @@ public class GeneralHelper
     {
         long returnVal;
         try {
-            returnVal = Long.parseLong(safeString(s));
+            returnVal = Long.parseLong(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -520,7 +520,7 @@ public class GeneralHelper
     {
         Float returnVal;
         try {
-            returnVal = Float.valueOf(safeString(s));
+            returnVal = Float.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -532,7 +532,7 @@ public class GeneralHelper
     {
         float returnVal;
         try {
-            returnVal = Float.parseFloat(safeString(s));
+            returnVal = Float.parseFloat(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -550,7 +550,7 @@ public class GeneralHelper
     {
         Double returnVal;
         try {
-            returnVal = Double.valueOf(safeString(s));
+            returnVal = Double.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -562,7 +562,7 @@ public class GeneralHelper
     {
         double returnVal;
         try {
-            returnVal = Double.parseDouble(safeString(s));
+            returnVal = Double.parseDouble(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -580,7 +580,7 @@ public class GeneralHelper
     {
         Byte returnVal;
         try {
-            returnVal = Byte.valueOf(safeString(s));
+            returnVal = Byte.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -592,7 +592,7 @@ public class GeneralHelper
     {
         byte returnVal;
         try {
-            returnVal = Byte.parseByte(safeString(s));
+            returnVal = Byte.parseByte(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -610,7 +610,7 @@ public class GeneralHelper
     {
         Character returnVal;
         try {
-            returnVal = safeString(s).charAt(0);
+            returnVal = s.charAt(0);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -622,7 +622,7 @@ public class GeneralHelper
     {
         char returnVal;
         try {
-            returnVal = safeString(s).charAt(0);
+            returnVal = s.charAt(0);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -638,17 +638,15 @@ public class GeneralHelper
     /** String -> Boolean，如果转换不成功则返回 null */
     public final static Boolean str2Boolean(String s)
     {
-        return Boolean.valueOf(safeString(s));
+        return Boolean.valueOf(s);
     }
 
     /** String -> boolean，如果转换不成功则返回默认值 d */
     public final static boolean str2Boolean(String s, boolean d)
     {
-        s = safeString(s);
-        
-        if(s.equalsIgnoreCase("true"))
+        if("true".equalsIgnoreCase(s))
             return true;
-        else if(s.equalsIgnoreCase("false"))
+        else if("false".equalsIgnoreCase(s))
             return false;
         
         return d;
@@ -668,7 +666,7 @@ public class GeneralHelper
         try
         {
             DateFormat df = new SimpleDateFormat(format);
-            date = df.parse(safeString(str));
+            date = df.parse(str);
         }
         catch(Exception e)
         {
@@ -847,7 +845,7 @@ public class GeneralHelper
             return handler.handle(v);
         
         if(type == String.class)
-            param =  safeString(v);
+            param =  v;
         else if(type == int.class)
             param =  str2Int_0(v);
         else if(type == long.class)
