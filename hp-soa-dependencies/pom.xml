@@ -16,7 +16,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <dubbo.version>3.2.12</dubbo.version>
+        <dubbo.version>3.2.13</dubbo.version>
         <nacos-client.version>2.3.2</nacos-client.version>
         <netty.version>4.1.109.Final</netty.version>
         <zookeeper.version>3.9.2</zookeeper.version>
@@ -25,27 +25,26 @@
         <xxl-job.version>2.4.1</xxl-job.version>
         <sentinel.version>1.8.7</sentinel.version>
         
-        <spring.version>6.1.6</spring.version>
-        <spring-boot.version>3.2.5</spring-boot.version>
+        <spring-boot.version>3.2.6</spring-boot.version>
         <spring-security.version>6.2.4</spring-security.version>
-        <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <spring-cloud.version>2023.0.2</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
         <caffeine.version>3.1.8</caffeine.version>
-        <spring-retry.version>2.0.5</spring-retry.version>
-        <spring-amqp.version>3.1.4</spring-amqp.version>
-        <spring-kafka.version>3.1.4</spring-kafka.version>
+        <spring-retry.version>2.0.6</spring-retry.version>
+        <spring-amqp.version>3.1.5</spring-amqp.version>
+        <spring-kafka.version>3.2.0</spring-kafka.version>
         <kafka-clients.version>3.7.0</kafka-clients.version>
         <zstd-jni.version>1.5.6-3</zstd-jni.version>
         <feign.version>13.2.1</feign.version>
-        <druid.version>1.2.21</druid.version>
-        <jedis.version>5.1.2</jedis.version>
+        <druid.version>1.2.23</druid.version>
+        <jedis.version>5.1.3</jedis.version>
         <lettuce.version>6.3.2.RELEASE</lettuce.version>
-        <redisson.version>3.30.0</redisson.version>
+        <redisson.version>3.31.0</redisson.version>
         <amqp-client.version>5.21.0</amqp-client.version>
-        <stream-client.version>0.15.0</stream-client.version>
+        <stream-client.version>0.16.0</stream-client.version>
         <mysql-connector-j.version>8.4.0</mysql-connector-j.version>
-        <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis.version>3.5.16</mybatis.version>
+        <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
         <mybatis-plus.version>3.5.6</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.3.0</dynamic-datasource-spring-boot3-starter.version>
@@ -54,7 +53,7 @@
         <ehcache.version>3.10.8</ehcache.version>
 
         <commons-io.version>2.16.1</commons-io.version>
-        <commons-net.version>3.10.0</commons-net.version>
+        <commons-net.version>3.11.0</commons-net.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
@@ -65,12 +64,12 @@
         <commons-pool2.version>2.12.0</commons-pool2.version>
 
         <jakarta.servlet-api.version>6.1.0-M2</jakarta.servlet-api.version>
-        <jakarta.validation-api.version>3.1.0-M2</jakarta.validation-api.version>
+        <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
         <jakarta.el-api.version>6.0.0</jakarta.el-api.version>
         <jakarta.annotation-api.version>3.0.0</jakarta.annotation-api.version>
         <jakarta.activation-api.version>2.1.3</jakarta.activation-api.version>
         <jakarta.xml.bind-api.version>4.0.2</jakarta.xml.bind-api.version>
-        <jakarta.persistence-api.version>3.2.0-M2</jakarta.persistence-api.version>
+        <jakarta.persistence-api.version>3.2.0</jakarta.persistence-api.version>
         <jakarta.mail-api.version>2.1.3</jakarta.mail-api.version>
 
         <javax-javaee-api.version>8.0.1</javax-javaee-api.version>
@@ -93,8 +92,8 @@
         <junit.version>4.13.2</junit.version>
         <junit5.version>5.10.2</junit5.version>
 
-        <fastjson.version>2.0.49</fastjson.version>
-        <protobuf-java.version>4.26.1</protobuf-java.version>
+        <fastjson.version>2.0.51</fastjson.version>
+        <protobuf-java.version>4.27.0</protobuf-java.version>
         <quartz.version>2.3.2</quartz.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpclient5.version>5.3.1</httpclient5.version>
@@ -107,16 +106,16 @@
         <resilience4j.version>2.2.0</resilience4j.version>
 
         <geoip2.version>4.2.0</geoip2.version>
-        <gson.version>2.10.1</gson.version>
+        <gson.version>2.11.0</gson.version>
         <jackson.version>2.17.1</jackson.version>
         <hessian.version>4.0.66</hessian.version>
         <zxing-javase.version>3.5.3</zxing-javase.version>
         <okhttp2.version>2.7.5</okhttp2.version>
         <okhttp3.version>4.12.0</okhttp3.version>
-        <guava.version>33.2.0-jre</guava.version>
+        <guava.version>33.2.1-jre</guava.version>
         
         <jsoup.version>1.17.2</jsoup.version>
-        <selenium.version>4.20.0</selenium.version>
+        <selenium.version>4.21.0</selenium.version>
 
         <poi.version>5.2.5</poi.version>
         <easyexcel.version>3.3.4</easyexcel.version>
@@ -125,7 +124,7 @@
         <springdoc-openapi.version>2.5.0</springdoc-openapi.version>
         
         <curator.version>5.6.0</curator.version>
-        <hutool.version>5.8.27</hutool.version>
+        <hutool.version>5.8.28</hutool.version>
         <jjwt.version>0.12.5</jjwt.version>
         
         <log4j-1.version>1.2.17</log4j-1.version>
@@ -133,8 +132,8 @@
         
         <seata.version>2.0.0</seata.version>
         
-        <micrometer-tracing.version>1.2.5</micrometer-tracing.version>
-        <micrometer-bom.version>1.12.5</micrometer-bom.version>
+        <micrometer-tracing.version>1.3.0</micrometer-tracing.version>
+        <micrometer-bom.version>1.13.0</micrometer-bom.version>
     </properties>
     
     <dependencyManagement>
@@ -973,15 +972,6 @@
                 <artifactId>hessian</artifactId>
                 <version>${hessian.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-framework-bom</artifactId>
-                <version>${spring.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-bom</artifactId>
