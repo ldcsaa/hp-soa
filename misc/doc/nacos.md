@@ -138,7 +138,26 @@ public class MyService
 }
 ```
 
-&nbsp;&nbsp;HP-SOA 的“应用程序只读”配置就是一个典型的动态更新配置示例，只读应用程序会暂停执行Job，暂停接收MQ消息，禁止数据库更新等可能导致数据变更的操作。当`hp.soa.web.app-read-only`设置为`true`时，应用程序变为只读并发布[ReadOnlyEvent(true)](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/event/ReadOnlyEvent.java)事件；当`hp.soa.web.app-read-only`设置为`false`时，应用程序恢复为可读写并发布[ReadOnlyEvent(false)](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/event/ReadOnlyEvent.java)事件。
+#### 1. 应用程序只读
+&nbsp;&nbsp;HP-SOA 的“应用程序只读”配置是一个典型的动态更新配置例子，只读应用程序会暂停执行Job，暂停接收MQ消息，禁止数据库更新等可能导致数据变更的操作。
+  - 当`hp.soa.web.app.read-only`配置为`true`时，应用程序变为只读并发布[ReadOnlyEvent(true)](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/event/ReadOnlyEvent.java)事件；
+  - 当`hp.soa.web.app.read-only`配置为`false`时，应用程序恢复为可读写并发布[ReadOnlyEvent(false)](../../hp-soa-framework/hp-soa-framework-web/src/main/java/io/github/hpsocket/soa/framework/web/event/ReadOnlyEvent.java)事件。
+  - 当删除`hp.soa.web.app.read-only`配置时，恢复默认值：`false`。
+
+#### 2. 动态修改日志级别
+&nbsp;&nbsp;HP-SOA 支持通过`hp.soa.web.app.dynamic-log-levels`动态修改日志级别。如：
+```
+hp.soa:
+  web:
+    app:
+      dynamic-log-levels: '{"io.github.hpsocket.demo.mq.producer.controller": "debug", "ROOT": "info"}'
+```
+
+&nbsp;&nbsp; **注意事项：** 
+  - `hp.soa.web.app.dynamic-log-levels`的配置值为JSON字符串格式（配置值必须写在单引号内）。
+  - 日志名称（JSON Key）大小写敏感。
+  - 日志级别（JSON Value）大小写不敏感，支持日志级别：`TRACE`、`DEBUG`、`INFO`、`WARN`、`ERROR`、`FATAL`、`OFF`。
+  - 当删除`hp.soa.web.app.dynamic-log-levels`配置时，恢复日志配置文件的默认配置。
 
 ---
 

@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.MDC;
+import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.http.ResponseCookie;
 
 import jakarta.servlet.http.Cookie;
@@ -102,6 +103,7 @@ public class WebServerHelper
                                                                                         new ThreadPoolExecutor.CallerRunsPolicy());
     
     private static ObjectMapper jacksonObjectMapper;
+    private static LoggingSystem loggingSystem;
     
     public static final void StartTiming()
     {
@@ -516,12 +518,12 @@ public class WebServerHelper
         return IdGenerator.nextCompactUUID();
     }
     
-    /** 获取默认 Jackson {@linkplain ObjectMapper} */
+    /** 获取内置 Jackson {@linkplain ObjectMapper} Bean */
     public static final ObjectMapper getJacksonObjectMapper()
     {
         if(jacksonObjectMapper == null)
         {
-            synchronized(WebServerHelper.class)
+            synchronized(ObjectMapper.class)
             {
                 if(jacksonObjectMapper == null)
                 {
@@ -532,4 +534,22 @@ public class WebServerHelper
         
         return jacksonObjectMapper;
     }
+    
+    /** 获取内置 {@linkplain LoggingSystem} Bean */
+    public static final LoggingSystem getLoggingSystem()
+    {
+        if(loggingSystem == null)
+        {
+            synchronized(LoggingSystem.class)
+            {
+                if(loggingSystem == null)
+                {
+                    loggingSystem = SpringContextHolder.getBean(LoggingSystem.class);
+                }
+            }
+        }
+        
+        return loggingSystem;
+    }
+
 }

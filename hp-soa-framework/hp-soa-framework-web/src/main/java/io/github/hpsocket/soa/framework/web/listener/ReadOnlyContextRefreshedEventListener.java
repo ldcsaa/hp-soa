@@ -18,7 +18,9 @@ public class ReadOnlyContextRefreshedEventListener implements ApplicationListene
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event)
     {
-        boolean readOnly = AppConfigHolder.isReadOnly();
+        boolean readOnly = SpringContextHolder.getBean(ReadOnlyRefreshEventListener.class).isReadOnly();
+        
+        AppConfigHolder.setReadOnly(readOnly);
         
         if(readOnly)
             log.info("application initial state -> (read-only: {})", readOnly);
@@ -31,4 +33,5 @@ public class ReadOnlyContextRefreshedEventListener implements ApplicationListene
     {
         return Ordered.LOWEST_PRECEDENCE;
     }
+    
 }

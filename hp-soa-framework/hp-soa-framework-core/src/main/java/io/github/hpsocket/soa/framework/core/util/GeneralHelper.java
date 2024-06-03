@@ -241,8 +241,8 @@ public class GeneralHelper
         if(chars == null)
             chars = "";
         
-        int len    = str.length();
-        int st    = 0;
+        int len = str.length();
+        int st  = 0;
         
         while(st < len)
         {
@@ -430,7 +430,7 @@ public class GeneralHelper
     {
         Integer returnVal;
         try {
-            returnVal = Integer.decode(safeTrimString(s));
+            returnVal = Integer.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -442,7 +442,7 @@ public class GeneralHelper
     {
         int returnVal;
         try {
-            returnVal = Integer.parseInt(safeTrimString(s));
+            returnVal = Integer.parseInt(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -460,7 +460,7 @@ public class GeneralHelper
     {
         Short returnVal;
         try {
-            returnVal = Short.decode(safeTrimString(s));
+            returnVal = Short.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -472,7 +472,7 @@ public class GeneralHelper
     {
         short returnVal;
         try {
-            returnVal = Short.parseShort(safeTrimString(s));
+            returnVal = Short.parseShort(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -490,7 +490,7 @@ public class GeneralHelper
     {
         Long returnVal;
         try {
-            returnVal = Long.decode(safeTrimString(s));
+            returnVal = Long.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -502,7 +502,7 @@ public class GeneralHelper
     {
         long returnVal;
         try {
-            returnVal = Long.parseLong(safeTrimString(s));
+            returnVal = Long.parseLong(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -520,7 +520,7 @@ public class GeneralHelper
     {
         Float returnVal;
         try {
-            returnVal = Float.valueOf(safeTrimString(s));
+            returnVal = Float.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -532,7 +532,7 @@ public class GeneralHelper
     {
         float returnVal;
         try {
-            returnVal = Float.parseFloat(safeTrimString(s));
+            returnVal = Float.parseFloat(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -550,7 +550,7 @@ public class GeneralHelper
     {
         Double returnVal;
         try {
-            returnVal = Double.valueOf(safeTrimString(s));
+            returnVal = Double.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -562,7 +562,7 @@ public class GeneralHelper
     {
         double returnVal;
         try {
-            returnVal = Double.parseDouble(safeTrimString(s));
+            returnVal = Double.parseDouble(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -580,7 +580,7 @@ public class GeneralHelper
     {
         Byte returnVal;
         try {
-            returnVal = Byte.decode(safeTrimString(s));
+            returnVal = Byte.valueOf(s);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -592,7 +592,7 @@ public class GeneralHelper
     {
         byte returnVal;
         try {
-            returnVal = Byte.parseByte(safeTrimString(s));
+            returnVal = Byte.parseByte(s);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -610,7 +610,7 @@ public class GeneralHelper
     {
         Character returnVal;
         try {
-            returnVal = safeTrimString(s).charAt(0);
+            returnVal = s.charAt(0);
         } catch(Exception e) {
             returnVal = null;
         }
@@ -622,7 +622,7 @@ public class GeneralHelper
     {
         char returnVal;
         try {
-            returnVal = safeTrimString(s).charAt(0);
+            returnVal = s.charAt(0);
         } catch(Exception e) {
             returnVal = d;
         }
@@ -638,17 +638,15 @@ public class GeneralHelper
     /** String -> Boolean，如果转换不成功则返回 null */
     public final static Boolean str2Boolean(String s)
     {
-        return Boolean.valueOf(safeTrimString(s));
+        return Boolean.valueOf(s);
     }
 
     /** String -> boolean，如果转换不成功则返回默认值 d */
     public final static boolean str2Boolean(String s, boolean d)
     {
-        s = safeTrimString(s);
-        
-        if(s.equalsIgnoreCase("true"))
+        if("true".equalsIgnoreCase(s))
             return true;
-        else if(s.equalsIgnoreCase("false"))
+        else if("false".equalsIgnoreCase(s))
             return false;
         
         return d;
@@ -668,7 +666,7 @@ public class GeneralHelper
         try
         {
             DateFormat df = new SimpleDateFormat(format);
-            date = df.parse(safeTrimString(str));
+            date = df.parse(str);
         }
         catch(Exception e)
         {
@@ -687,7 +685,7 @@ public class GeneralHelper
         {
             final char SEPARATOR    = '-';
             final String[] PATTERN  = {"yyyy", "MM", "dd", "HH", "mm", "ss", "SSS"};
-            String[] values         = safeTrimString(str).split("\\D");
+            String[] values         = safeString(str).split("\\D");
             String[] element        = new String[values.length];
             
             int length = 0;
@@ -847,7 +845,7 @@ public class GeneralHelper
             return handler.handle(v);
         
         if(type == String.class)
-            param =  safeTrimString(v);
+            param =  v;
         else if(type == int.class)
             param =  str2Int_0(v);
         else if(type == long.class)
@@ -1925,4 +1923,26 @@ public class GeneralHelper
             ? stream.filter((e) -> e.name().equalsIgnoreCase(name)).findFirst().orElse(null)
             : stream.filter((e) -> e.name().equals(name)).findFirst().orElse(null);
     }
+
+    public static void asynRun(Runnable runnable)
+    {
+        asynRun(runnable, false, null);
+    }
+    
+    public static void asynRun(Runnable runnable, boolean daemon)
+    {
+        asynRun(runnable, daemon, null);
+    }
+    
+    public static void asynRun(Runnable runnable, boolean daemon, String threadName)
+    {
+        Thread t = new Thread(runnable);
+        t.setDaemon(daemon);
+        
+        if(isStrNotEmpty(threadName))
+            t.setName(threadName);
+        
+        t.start();
+    }
+    
 }
