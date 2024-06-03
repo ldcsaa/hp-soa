@@ -30,5 +30,6 @@ hp.soa.web:
     max-pool-size: 16
     keep-alive-seconds: 30
     queue-capacity: 2000
+    # CALLER_RUNS, ABORT, DISCARD, DISCARD_OLDEST, SYNC
     rejection-policy: CALLER_RUNS
     allow-core-thread-time-out: true

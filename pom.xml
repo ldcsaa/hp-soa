@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.hpsocket</groupId>
@@ -12,39 +12,39 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <revision>1.1.0</revision>
+        <revision>1.1.1</revision>
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>17</maven.compiler.source>       
-        <maven.compiler.target>17</maven.compiler.target>       
+        <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.compilerVersion>17</maven.compiler.compilerVersion>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.assembly.descriptor>/opt/deploy/assembly/assembly.xml</maven.assembly.descriptor>
 
+        <spring-boot-maven-plugin.version>3.2.6</spring-boot-maven-plugin.version>
         <spring-boot.main_class>io.github.hpsocket.soa.framework.web.server.main.AppStarter</spring-boot.main_class>
         <spring-boot.jvm_arguments>${env.MAVEN_FORK_JVM_ARGS}</spring-boot.jvm_arguments>
 
-        <lombok.version>1.18.30</lombok.version>
+        <lombok.version>1.18.32</lombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
 
-        <git-commit-id-maven-plugin.version>7.0.0</git-commit-id-maven-plugin.version>
+        <git-commit-id-maven-plugin.version>8.0.2</git-commit-id-maven-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
         <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
-        <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
+        <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
-        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-        <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
+        <maven-gpg-plugin.version>3.2.4</maven-gpg-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.14</nexus-staging-maven-plugin.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
-        <docker-maven-plugin.version>0.43.4</docker-maven-plugin.version>
-        <spring-boot-maven-plugin.version>3.2.2</spring-boot-maven-plugin.version>
+        <docker-maven-plugin.version>0.44.0</docker-maven-plugin.version>
 
         <maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
         <maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
@@ -62,7 +62,7 @@
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -137,7 +137,7 @@
             </snapshots>
             <id>alimaven</id>
             <name>aliyun maven</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <url>https://maven.aliyun.com/repository/public/</url>
         </repository>
 
         <repository>
@@ -146,12 +146,12 @@
             </snapshots>
             <id>central</id>
             <name>Maven Repository Switchboard</name>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2/</url>
         </repository>
 
         <repository>
             <id>JBoss repository public</id>
-            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 
@@ -265,6 +265,9 @@
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <encoding>${project.build.sourceEncoding}</encoding>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                        <compilerVersion>${maven.compiler.compilerVersion}</compilerVersion>
                         <compilerArgs>
                             <arg>-parameters</arg>
                         </compilerArgs>

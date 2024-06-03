@@ -82,7 +82,9 @@ public class ControllerGlobalExceptionAdvice implements Ordered
     {
         ServiceException se = null;
         
-        if(e instanceof NoHandlerFoundException)
+        if(e instanceof IllegalArgumentException)
+            se = wrapServiceException(PARAM_VALIDATION_EXCEPTION, e);
+        else if(e instanceof NoHandlerFoundException)
             se = wrapServiceException(NOT_EXIST_EXCEPTION, e);
         else if(e instanceof HttpRequestMethodNotSupportedException)
             se = wrapServiceException(NOT_IMPLEMENTED_EXCEPTION, e);

@@ -1,7 +1,9 @@
 
 package io.github.hpsocket.soa.framework.web.holder;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
@@ -9,6 +11,7 @@ import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 import io.github.hpsocket.soa.framework.web.propertries.IAppProperties;
 import io.github.hpsocket.soa.framework.web.propertries.IServletPathsPropertries;
 
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
@@ -22,7 +25,8 @@ public class AppConfigHolder
     
     private static final PathMatcher PATH_MATCHER       = new AntPathMatcher("/");
     
-    private static boolean readOnly;
+    private static boolean readOnly                       = false;
+    private static Map<String, LogLevel> dynamicLogLevels = Collections.emptyMap();
 
     private static String appId;
     private static String appName;
@@ -58,18 +62,17 @@ public class AppConfigHolder
             {
                 if(!initialized)
                 {
-                    readOnly        = appProperties.isReadOnly();
-                    appId           = appProperties.getId();
-                    appName         = appProperties.getName();
-                    appVersion      = appProperties.getVersion();
-                    appOrganization = appProperties.getOrganization();
-                    appOwner        = appProperties.getOwner();
-                    cookieMaxAge    = appProperties.getCookieMaxAge();
-                    cookieSecure    = appProperties.isCookieSecure();
-                    cookieHttpOnly  = appProperties.isCookieHttpOnly();
-                    cookieSameSite  = appProperties.getCookieSameSite();
-                    appAddress      = SystemUtil.getAddress();
-                    appPort         = serverPort;
+                    appId            = appProperties.getId();
+                    appName          = appProperties.getName();
+                    appVersion       = appProperties.getVersion();
+                    appOrganization  = appProperties.getOrganization();
+                    appOwner         = appProperties.getOwner();
+                    cookieMaxAge     = appProperties.getCookieMaxAge();
+                    cookieSecure     = appProperties.isCookieSecure();
+                    cookieHttpOnly   = appProperties.isCookieHttpOnly();
+                    cookieSameSite   = appProperties.getCookieSameSite();
+                    appAddress       = SystemUtil.getAddress();
+                    appPort          = serverPort;
                     
                     servletContextPath          = servletProperties.getServletContextPath();
                     springMvcServletPath        = servletProperties.getSpringMvcServletPath();
@@ -123,6 +126,16 @@ public class AppConfigHolder
     public static final void setReadOnly(boolean readOnly)
     {
         AppConfigHolder.readOnly = readOnly;
+    }
+    
+    public static final Map<String, LogLevel> getDynamicLogLevels()
+    {
+        return dynamicLogLevels;
+    }
+
+    public static final void setDynamicLogLevels(Map<String, LogLevel> dynamicLogLevels)
+    {
+        AppConfigHolder.dynamicLogLevels = dynamicLogLevels;
     }
 
     public static final String getAppId()

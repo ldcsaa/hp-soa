@@ -26,5 +26,8 @@ public interface IAppProperties
     String getCookieSameSite();
     
     /** 检测应用程序是否只读 */
-    boolean isReadOnly();
+    //boolean isReadOnly();
+    
+    /** 获取应用程序动态日志配置项目 */
+    //Map<String, LogLevel> getDynamicLogLevels();
 }

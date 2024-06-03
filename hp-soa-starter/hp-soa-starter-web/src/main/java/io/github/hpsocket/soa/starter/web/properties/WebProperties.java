@@ -39,7 +39,6 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
         private String version;
         private String organization;
         private String owner;
-        private boolean readOnly;
     }
     
     @Getter
@@ -171,12 +170,6 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     public String getOwner()
     {
         return app.getOwner();
-    }
-    
-    @Override
-    public boolean isReadOnly()
-    {
-        return app.isReadOnly();
     }
 
     @Override
