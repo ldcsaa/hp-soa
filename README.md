@@ -128,3 +128,8 @@
 ---
 
 [[用户指南](misc/doc/user_guide.md)]
+
+#### 技术交流
+
+- *[怪兽乐园①群](https://jq.qq.com/?_wv=1027&k=3UAbrhTG)*
+- *[怪兽乐园②群](https://jq.qq.com/?_wv=1027&k=uYBpc6bG)*
