@@ -27,6 +27,10 @@
             <groupId>io.github.hpsocket</groupId>
             <artifactId>hp-soa-starter-nacos</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-starter-skywalking</artifactId>
+        </dependency>
     </dependencies>
     
     <build>

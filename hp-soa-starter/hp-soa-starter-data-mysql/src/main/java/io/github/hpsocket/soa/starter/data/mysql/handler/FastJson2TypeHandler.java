@@ -16,16 +16,16 @@ import com.baomidou.mybatisplus.extension.handlers.AbstractJsonTypeHandler;
 public class FastJson2TypeHandler extends AbstractJsonTypeHandler<Object>
 {
     boolean jsonObjecct;
-    private final Class<?> type;
 
     public FastJson2TypeHandler(Class<?> type)
     {
-        this.type = type;
+        super(type);
+        
         this.jsonObjecct = (JSONObject.class.isAssignableFrom(type));
     }
 
     @Override
-    protected Object parse(String json)
+    public Object parse(String json)
     {
         if(jsonObjecct)
             return JSONObject.parse(json);
@@ -34,7 +34,7 @@ public class FastJson2TypeHandler extends AbstractJsonTypeHandler<Object>
     }
 
     @Override
-    protected String toJson(Object obj)
+    public String toJson(Object obj)
     {
         if(jsonObjecct)
             return ((JSONObject)(obj)).toString(JSONWriter.Feature.WriteNonStringKeyAsString);
