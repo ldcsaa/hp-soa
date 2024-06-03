@@ -90,7 +90,7 @@
         <artifactId>hp-soa-starter-web-cloud</artifactId>
     </dependency>
     -->
-    <!-- Dubbo项目引用 hp-soa-starter-web-dubbo -->
+    <!-- Dubbo 项目引用 hp-soa-starter-web-dubbo -->
     <!--
     <dependency>
         <groupId>io.github.hpsocket</groupId>
