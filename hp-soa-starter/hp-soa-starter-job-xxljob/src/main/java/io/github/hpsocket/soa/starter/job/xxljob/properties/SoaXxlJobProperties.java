@@ -1,6 +1,5 @@
 package io.github.hpsocket.soa.starter.job.xxljob.properties;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "hp.soa.job.xxl")
-@ConditionalOnProperty(name = "hp.soa.job.xxl.enabled", matchIfMissing = true)
 public class SoaXxlJobProperties
 {
     private boolean enabled = true;
