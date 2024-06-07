@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -1839,9 +1840,19 @@ public class GeneralHelper
         return !isNullOrZero(n);
     }
     
+    public static final boolean isNullOrZero(Float n)
+    {
+        return n == null || new BigDecimal(n).equals(BigDecimal.ZERO);
+    }
+    
     public static final boolean isNullOrNan(Float n)
     {
         return n == null || n.equals(Float.NaN);
+    }
+    
+    public static final boolean isNullOrZero(Double n)
+    {
+        return n == null || new BigDecimal(n).equals(BigDecimal.ZERO);
     }
     
     public static final boolean isNullOrNan(Double n)
@@ -1849,16 +1860,25 @@ public class GeneralHelper
         return n == null || n.equals(Double.NaN);
     }
     
+    public static final boolean isNotNullAndZero(Float n)
+    {
+        return !isNullOrZero(n);
+    }
+    
     public static final boolean isNotNullAndNan(Float n)
     {
         return !isNullOrNan(n);
+    }
+    
+    public static final boolean isNotNullAndZero(Double n)
+    {
+        return !isNullOrZero(n);
     }
     
     public static final boolean isNotNullAndNan(Double n)
     {
         return !isNullOrNan(n);
     }
-    
     public static final boolean isNull(Object o)
     {
         return (o == null);
