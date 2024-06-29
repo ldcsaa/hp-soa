@@ -17,7 +17,12 @@ def parse_conf():
         conf_file = sys.argv[2]
 
     conf = yaml.safe_load(open(conf_file, encoding='utf-8'))
-    hp_soa_web = get_conf(None, 'hp.soa.web', False, conf)
+    hp_soa_web = get_conf(None, 'hp.soa.web', True, conf)
+    
+    if not hp_soa_web:
+        hp_soa = get_conf(None, 'hp.soa', True, conf) 
+        hp_soa_web = get_conf('hp.soa', 'web', False, hp_soa)
+    
     app = get_conf('hp.soa.web', 'app', True, hp_soa_web)
 
     if app:
@@ -38,18 +43,24 @@ def parse_conf():
         if startup:
             startup_max_wait_seconds_val = get_conf('startup', 'max-wait-seconds', True, startup)
 
-    jvm_options_env_val = get_conf(None, 'jvm.options' + '.' + env_name, True, conf)
+    remote_debug_port_val = get_conf(None, 'remote-debug.port', True, conf)
+
+    if not remote_debug_port_val:
+        remote_debug = get_conf(None, 'remote-debug', True, conf)
+        if remote_debug:
+            remote_debug_port_val = get_conf('remote-debug', 'port', True, remote_debug)
+            
+    jvm_options_env_val = get_conf(None, 'jvm-options' + '.' + env_name, True, conf)
 
     if not jvm_options_env_val:
-        jvm_options = get_conf(None, 'jvm.options', True, conf)
+        jvm_options = get_conf(None, 'jvm-options', True, conf)
         if jvm_options:
             if isinstance(jvm_options, str):
                 jvm_options_env_val = jvm_options
             else:
-                jvm_options_env_val = get_conf('jvm.options', env_name, True, jvm_options)
+                jvm_options_env_val = get_conf('jvm-options', env_name, True, jvm_options)
 
-    print(('hp.soa.web.app.name={}#server.port={}#startup.max-wait-seconds={}#jvm.options' + '.' + env_name + '={}').format(hp_soa_web_app_name_val, server_port_val, (startup_max_wait_seconds_val if startup_max_wait_seconds_val else ''), (jvm_options_env_val if jvm_options_env_val else '')))
-
+    print(('hp.soa.web.app.name={}#server.port={}#startup.max-wait-seconds={}#remote-debug.port={}#jvm-options' + '.' + env_name + '={}').format(hp_soa_web_app_name_val, server_port_val, (startup_max_wait_seconds_val if startup_max_wait_seconds_val else ''), (remote_debug_port_val if remote_debug_port_val else ''), (jvm_options_env_val if jvm_options_env_val else '')))
 
 def get_conf(prefix, name, optional, conf):
     val = conf.get(name)
