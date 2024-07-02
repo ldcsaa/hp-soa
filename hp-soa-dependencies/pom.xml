@@ -16,16 +16,16 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <spring-boot.version>3.2.6</spring-boot.version>
-        <spring-security.version>6.2.4</spring-security.version>
+        <spring-boot.version>3.2.7</spring-boot.version>
+        <spring-security.version>6.2.5</spring-security.version>
         <spring-cloud.version>2023.0.2</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
-        <spring-amqp.version>3.1.5</spring-amqp.version>
-        <spring-kafka.version>3.1.5</spring-kafka.version>
+        <spring-amqp.version>3.1.6</spring-amqp.version>
+        <spring-kafka.version>3.1.6</spring-kafka.version>
         <spring-retry.version>2.0.6</spring-retry.version>
 
-        <dubbo.version>3.2.13</dubbo.version>
-        <nacos-client.version>2.3.2</nacos-client.version>
+        <dubbo.version>3.2.14</dubbo.version>
+        <nacos-client.version>2.3.3</nacos-client.version>
         <netty.version>4.1.110.Final</netty.version>
         <zookeeper.version>3.9.2</zookeeper.version>
         <kryo.version>5.6.0</kryo.version>

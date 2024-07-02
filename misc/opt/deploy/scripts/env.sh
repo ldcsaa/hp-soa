@@ -66,8 +66,12 @@ if [[ -z "$REMOTE_DEBUG_PORT" || "$REMOTE_DEBUG_PORT" -le 0 ]]; then
     REMOTE_DEBUG_PORT=$((SERVER_PORT + 10000))
 fi
 
+if [[ -z "$REMOTE_DEBUG_ADDR" ]]; then
+    REMOTE_DEBUG_ADDR="0.0.0.0"
+fi
+
 if [[ "${RUNTIME_ENV,,}" == "dev" || "${RUNTIME_ENV,,}" == "test" || "${RUNTIME_ENV,,}" == "qa" ]]; then
-    REMOTE_DEBUG_OPTIONS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$REMOTE_DEBUG_PORT"
+    REMOTE_DEBUG_OPTIONS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$REMOTE_DEBUG_ADDR:$REMOTE_DEBUG_PORT"
 fi
 
 if [ -z "$LOG_LEVEL" ]; then
