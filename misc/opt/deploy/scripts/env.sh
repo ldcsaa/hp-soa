@@ -22,7 +22,8 @@ JAVA_AGENT_FILE=${JAVA_AGENT_FILE:-/opt/hp-soa/config/java-agent.config}
 
 APP_NAME_KEY='hp.soa.web.app.name'
 SERVER_PORT_KEY='server.port'
-JVM_OPTIONS_KEY="jvm.options.${RUNTIME_ENV}"
+REMOTE_DEBUG_PORT_KEY='remote-debug.port'
+JVM_OPTIONS_KEY="jvm-options.${RUNTIME_ENV}"
 STARTUP_WAIT_SECONDS_KEY="startup.max-wait-seconds"
 
 OLD_IFS="$IFS"
@@ -43,6 +44,8 @@ for i in "${CONF[@]}"; do
         APP_NAME=$val
     elif [ "$key" == "$SERVER_PORT_KEY" ]; then
         SERVER_PORT=$val
+    elif [ "$key" == "$REMOTE_DEBUG_PORT_KEY" ]; then
+        REMOTE_DEBUG_PORT=$val
     elif [ "$key" == "$JVM_OPTIONS_KEY" ]; then
         JVM_OPTIONS=$val
     elif [ "$key" == "$STARTUP_WAIT_SECONDS_KEY" ]; then
@@ -59,8 +62,16 @@ if [[ -z "$STARTUP_WAIT_SECONDS" || "$STARTUP_WAIT_SECONDS" -le 0 ]]; then
     STARTUP_WAIT_SECONDS=$DEFAULT_STARTUP_WAIT_SECONDS
 fi
 
+if [[ -z "$REMOTE_DEBUG_PORT" || "$REMOTE_DEBUG_PORT" -le 0 ]]; then
+    REMOTE_DEBUG_PORT=$((SERVER_PORT + 10000))
+fi
+
+if [[ "${RUNTIME_ENV,,}" == "dev" || "${RUNTIME_ENV,,}" == "test" || "${RUNTIME_ENV,,}" == "qa" ]]; then
+    REMOTE_DEBUG_OPTIONS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$REMOTE_DEBUG_PORT"
+fi
+
 if [ -z "$LOG_LEVEL" ]; then
-    if [ "$RUNTIME_ENV" == "prod" ]; then
+    if [[ "${RUNTIME_ENV,,}" == "pro" || "${RUNTIME_ENV,,}" == "prod" || "${RUNTIME_ENV,,}" == "product" ]]; then
         LOG_LEVEL="INFO"
     else
         LOG_LEVEL="DEBUG"
@@ -145,6 +156,10 @@ fi
 
 if [ -n "$JVM_OPTIONS" ]; then
     JAVA_OPTS="$JAVA_OPTS $JVM_OPTIONS"
+fi
+
+if [ -n "$REMOTE_DEBUG_OPTIONS" ]; then
+    JAVA_OPTS="$JAVA_OPTS $REMOTE_DEBUG_OPTIONS"
 fi
 
 if [ -n "$JAVA_AGENT" ]; then
