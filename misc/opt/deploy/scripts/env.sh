@@ -71,7 +71,7 @@ if [[ "${RUNTIME_ENV,,}" == "dev" || "${RUNTIME_ENV,,}" == "test" || "${RUNTIME_
 fi
 
 if [ -z "$LOG_LEVEL" ]; then
-    if [ "${RUNTIME_ENV,,}" == "pro" || "${RUNTIME_ENV,,}" == "prod" || "${RUNTIME_ENV,,}" == "product"]; then
+    if [[ "${RUNTIME_ENV,,}" == "pro" || "${RUNTIME_ENV,,}" == "prod" || "${RUNTIME_ENV,,}" == "product" ]]; then
         LOG_LEVEL="INFO"
     else
         LOG_LEVEL="DEBUG"
