@@ -10,7 +10,7 @@
     <fileSets>
         <fileSet>
             <directory>/opt/deploy/scripts</directory>
-            <outputDirectory>bin</outputDirectory>
+            <outputDirectory>/</outputDirectory>
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
             <filtered>true</filtered>
@@ -19,19 +19,19 @@
     <files>
         <file>
             <source>target/classes/bootstrap.yml</source>
-            <outputDirectory>deploy</outputDirectory>
+            <outputDirectory>/</outputDirectory>
             <fileMode>0644</fileMode>
             <lineEnding>unix</lineEnding>
         </file>
         <file>
             <source>target/classes/git.properties</source>
-            <outputDirectory>deploy</outputDirectory>
+            <outputDirectory>/</outputDirectory>
             <fileMode>0644</fileMode>
             <lineEnding>unix</lineEnding>
         </file>
         <file>
             <source>target/${project.artifactId}-${project.version}.jar</source>
-            <outputDirectory>deploy</outputDirectory>
+            <outputDirectory>/</outputDirectory>
             <fileMode>0644</fileMode>
         </file>
     </files>

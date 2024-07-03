@@ -2,10 +2,10 @@
 
 BIN_DIR=$(cd $(dirname $0); pwd)
 
-source $BIN_DIR/env.sh
+source $BIN_DIR/env.sh $@
 
 if [ $? -ne 0 ]; then
-    exit 1
+    exit 2
 fi
 
 LINE=$(netstat -ntlp | awk '{print $7,$4}' | grep -E ':'$SERVER_PORT'$')

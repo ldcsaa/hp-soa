@@ -1,8 +1,29 @@
 #!/bin/bash
 
 BIN_DIR=$(cd $(dirname $0); pwd)
-DEPLOY_DIR=$BIN_DIR/../deploy
-CONF_FILE="$DEPLOY_DIR/bootstrap.yml"
+PRG_HOME=$BIN_DIR
+PRG_JAR=$1
+
+if [[ -f "$PRG_JAR" ]]; then
+    PRG_HOME=$(cd $(dirname $PRG_JAR); pwd)
+elif [[ -d "$PRG_JAR" ]]; then
+    PRG_HOME=$(cd $PRG_JAR; pwd)
+    PRG_JAR=
+fi
+
+if [[ -z "$PRG_JAR" && -d "$PRG_HOME" ]]; then
+    for i in $PRG_HOME/*.jar; do
+        PRG_JAR=$i
+        break
+    done
+fi
+
+if [[ -z "$PRG_JAR" || ! -f "$PRG_JAR" ]]; then
+    echo "  > check environment failed -> (main jar file '$PRG_JAR' not exists)"
+    exit 1
+fi
+
+CONF_FILE="$PRG_HOME/bootstrap.yml"
 
 if [ ! -f "$CONF_FILE" ]; then
     echo "  > environment check failed -> (config file '$CONF_FILE' not exists)"
@@ -170,6 +191,8 @@ if [ -n "$JAVA_AGENT" ]; then
     JAVA_OPTS="$JAVA_OPTS $JAVA_AGENT"
 fi
 
+export PRG_HOME
+export PRG_JAR
 export APP_NAME
 export SERVER_PORT
 export STARTUP_WAIT_SECONDS

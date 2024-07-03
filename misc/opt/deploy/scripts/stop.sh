@@ -2,10 +2,10 @@
 
 BIN_DIR=$(cd $(dirname $0); pwd)
 
-source $BIN_DIR/env.sh
+source $BIN_DIR/env.sh $@
 
 if [ $? -ne 0 ]; then
-    exit 1
+    exit 2
 fi
 
 LINE=
@@ -29,7 +29,7 @@ check_pid()
 
 if ! check_pid "$SERVER_PORT"; then
     echo "  > skip stop -> no process running with (SERVER_PORT: $PORT)"
-    exit 1
+    exit 3
 fi
 
 echo "  > stopping ... (SERVER_PORT: $PORT)"

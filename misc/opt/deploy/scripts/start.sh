@@ -1,27 +1,14 @@
 #!/bin/bash
 
 BIN_DIR=$(cd $(dirname $0); pwd)
-PRG_HOME=$(cd $(dirname $BIN_DIR); pwd)
 
-source $BIN_DIR/env.sh
+source $BIN_DIR/env.sh $@
 
 if [ $? -ne 0 ]; then
-    exit 1
-fi
-
-PRG_JAR=
-
-for i in $PRG_HOME/deploy/*.jar; do
-    if [ -z "$PRG_JAR" ]; then
-        PRG_JAR=$i
-        break
-    fi
-done
-
-if [[ -z "$PRG_JAR" || ! -f "$PRG_JAR" ]]; then
-    echo "  > start failed -> (main jar file '$PRG_JAR' not exists)"
     exit 2
 fi
+
+JAVA_OPTS="-Duser.dir=$PRG_HOME $JAVA_OPTS"
 
 check_port()
 {
