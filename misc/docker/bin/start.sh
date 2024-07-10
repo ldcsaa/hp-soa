@@ -2,7 +2,7 @@
 
 BIN_DIR=$(cd $(dirname $0); pwd)
 
-source $BIN_DIR/env.sh $@
+source $BIN_DIR/env.sh "$@"
 
 if [ $? -ne 0 ]; then
     exit 2
@@ -39,7 +39,7 @@ fi
 tail -0f "$LOG_FILE" 2>/dev/null &
 trap "kill $! > /dev/null 2>&1" EXIT
 
-nohup java $JAVA_OPTS -jar $PRG_JAR $@ > /dev/null 2>&1 &
+nohup java $JAVA_OPTS -jar $PRG_JAR > /dev/null 2>&1 &
 
 PID=$!
 RS=5

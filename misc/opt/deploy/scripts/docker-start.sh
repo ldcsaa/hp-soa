@@ -2,7 +2,7 @@
 
 BIN_DIR=$(cd $(dirname $0); pwd)
 
-source $BIN_DIR/env.sh $@
+source $BIN_DIR/env.sh "$@"
 
 if [ $? -ne 0 ]; then
     exit 2
@@ -31,4 +31,4 @@ fi
 
 echo "\$JAVA_OPTS: $JAVA_OPTS"
 
-java $JAVA_OPTS -jar $PRG_JAR $@
+java $JAVA_OPTS -jar $PRG_JAR

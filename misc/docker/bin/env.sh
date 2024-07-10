@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /etc/profile
+
 BIN_DIR=$(cd $(dirname $0); pwd)
 PRG_HOME=$BIN_DIR
 PRG_JAR=$1
@@ -25,20 +27,24 @@ if [[ -z "$PRG_JAR" || ! -f "$PRG_JAR" ]]; then
     exit 1
 fi
 
-CONF_FILE="$PRG_HOME/bootstrap.yml"
+CONF_FILE=${CONF_FILE-$PRG_HOME/bootstrap.yml}
 
 if [ ! -f "$CONF_FILE" ]; then
     echo "  > environment check failed -> (config file '$CONF_FILE' not exists)"
     exit 1
 fi
 
-source /etc/profile
+shift
+
+for exp in "$@"; do
+    eval "$exp"
+done
 
 DEFAULT_JVM_MEMORY_OPTIONS=${DEFAULT_JVM_MEMORY_OPTIONS:--Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m}
-DEFAULT_STARTUP_WAIT_SECONDS=${DEFAULT_STARTUP_WAIT_SECONDS:-90}
+DEFAULT_STARTUP_WAIT_SECONDS=${DEFAULT_STARTUP_WAIT_SECONDS:-180}
 
 RUNTIME_ENV=${RUNTIME_ENV:-local}
-CONFIG_FILE_BASE_PATH=/opt/hp-soa/config
+CONFIG_FILE_BASE_PATH=${CONFIG_FILE_BASE_PATH:-/opt/hp-soa/config}
 CONFIG_FILE_PATH=$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV
 
 if [[ ! -d "$CONFIG_FILE_PATH" || "$(ls -A $CONFIG_FILE_PATH)" == "" ]]; then
@@ -102,35 +108,6 @@ get_yaml_property()
         fi  
     done
 }
-
-: <<'COMMENT'
-OLD_IFS="$IFS"
-IFS="#"
-CONF=($(python3 $BIN_DIR/conf_parser.py $RUNTIME_ENV $CONF_FILE))
-RS=$?
-IFS="$OLD_IFS"
-
-if [ $RS -ne 0 ]; then
-  exit 1
-fi
-
-for i in "${CONF[@]}"; do
-    key=${i%=*}
-    val=${i##*=}
-    
-    if [ "$key" == "$APP_NAME_KEY" ]; then
-        APP_NAME=$val
-    elif [ "$key" == "$SERVER_PORT_KEY" ]; then
-        SERVER_PORT=$val
-    elif [ "$key" == "$REMOTE_DEBUG_PORT_KEY" ]; then
-        REMOTE_DEBUG_PORT=$val
-    elif [ "$key" == "$JVM_OPTIONS_KEY" ]; then
-        JVM_OPTIONS=$val
-    elif [ "$key" == "$STARTUP_WAIT_SECONDS_KEY" ]; then
-        STARTUP_WAIT_SECONDS=$val
-    fi
-done
-COMMENT
 
 APP_NAME=$(get_yaml_property $CONF_FILE "$APP_NAME_KEY")
 SERVER_PORT=$(get_yaml_property $CONF_FILE "$SERVER_PORT_KEY")
