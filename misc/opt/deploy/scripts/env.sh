@@ -3,10 +3,19 @@
 source /etc/profile
 
 BIN_DIR=$(cd $(dirname $0); pwd)
+PATH=$BIN_DIR:$PATH
 PRG_HOME=$BIN_DIR
 PRG_JAR=$1
 
-PATH=$BIN_DIR:$PATH
+# eval program variables from command line arguments
+
+shift
+
+for exp in "$@"; do
+    eval "$exp"
+done
+
+# check program home and program main jar file
 
 if [[ -f "$PRG_JAR" ]]; then
     PRG_HOME=$(cd $(dirname $PRG_JAR); pwd)
@@ -23,22 +32,18 @@ if [[ -z "$PRG_JAR" && -d "$PRG_HOME" ]]; then
 fi
 
 if [[ -z "$PRG_JAR" || ! -f "$PRG_JAR" ]]; then
-    echo "  > check environment failed -> (main jar file '$PRG_JAR' not exists)"
+    echo "  > environment check failed -> (main jar file '$PRG_JAR' not exists)"
     exit 1
 fi
 
-CONF_FILE=${CONF_FILE-$PRG_HOME/bootstrap.yml}
+# check bootstrap yaml file
 
-if [ ! -f "$CONF_FILE" ]; then
-    echo "  > environment check failed -> (config file '$CONF_FILE' not exists)"
+BOOTSTRAP_YAML_FILE=${BOOTSTRAP_YAML_FILE-$PRG_HOME/bootstrap.yml}
+
+if [ ! -f "$BOOTSTRAP_YAML_FILE" ]; then
+    echo "  > environment check failed -> (bootstrap yaml file '$BOOTSTRAP_YAML_FILE' not exists)"
     exit 1
 fi
-
-shift
-
-for exp in "$@"; do
-    eval "$exp"
-done
 
 DEFAULT_JVM_MEMORY_OPTIONS=${DEFAULT_JVM_MEMORY_OPTIONS:--Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m}
 DEFAULT_STARTUP_WAIT_SECONDS=${DEFAULT_STARTUP_WAIT_SECONDS:-180}
@@ -109,14 +114,14 @@ get_yaml_property()
     done
 }
 
-APP_NAME=$(get_yaml_property $CONF_FILE "$APP_NAME_KEY")
-SERVER_PORT=$(get_yaml_property $CONF_FILE "$SERVER_PORT_KEY")
-REMOTE_DEBUG_PORT=$(get_yaml_property $CONF_FILE "$REMOTE_DEBUG_PORT_KEY")
-JVM_OPTIONS=$(get_yaml_property $CONF_FILE "$JVM_OPTIONS_KEY")
-STARTUP_WAIT_SECONDS=$(get_yaml_property $CONF_FILE "$STARTUP_WAIT_SECONDS_KEY")
+APP_NAME=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$APP_NAME_KEY")
+SERVER_PORT=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$SERVER_PORT_KEY")
+REMOTE_DEBUG_PORT=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$REMOTE_DEBUG_PORT_KEY")
+JVM_OPTIONS=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$JVM_OPTIONS_KEY")
+STARTUP_WAIT_SECONDS=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$STARTUP_WAIT_SECONDS_KEY")
 
 if [[ -z "$APP_NAME" || -z "$SERVER_PORT"  ]]; then
-    echo "  > environment check failed -> (can't find '$APP_NAME_KEY' / '$SERVER_PORT_KEY' property in config file '$CONF_FILE')"
+    echo "  > environment check failed -> (can't find '$APP_NAME_KEY' / '$SERVER_PORT_KEY' property in bootstrap yaml file '$BOOTSTRAP_YAML_FILE')"
     exit 1
 fi
 
