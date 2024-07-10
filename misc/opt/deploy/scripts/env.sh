@@ -4,6 +4,8 @@ BIN_DIR=$(cd $(dirname $0); pwd)
 PRG_HOME=$BIN_DIR
 PRG_JAR=$1
 
+PATH=$BIN_DIR:$PATH
+
 if [[ -f "$PRG_JAR" ]]; then
     PRG_HOME=$(cd $(dirname $PRG_JAR); pwd)
 elif [[ -d "$PRG_JAR" ]]; then
@@ -36,10 +38,17 @@ DEFAULT_JVM_MEMORY_OPTIONS=${DEFAULT_JVM_MEMORY_OPTIONS:--Xms256m -Xmx256m -Xss2
 DEFAULT_STARTUP_WAIT_SECONDS=${DEFAULT_STARTUP_WAIT_SECONDS:-90}
 
 RUNTIME_ENV=${RUNTIME_ENV:-local}
-SYSTEM_PROPERTIES_FILE=${SYSTEM_PROPERTIES_FILE:-/opt/hp-soa/config/system-config.properties}
-EXTENDED_PROPERTIES_FILE=${EXTENDED_PROPERTIES_FILE:-/opt/hp-soa/config/extended-config.properties}
-DUBBO_RESOLVE_FILE=${DUBBO_RESOLVE_FILE:-/opt/hp-soa/config/dubbo-resolve.properties}
-JAVA_AGENT_FILE=${JAVA_AGENT_FILE:-/opt/hp-soa/config/java-agent.config}
+CONFIG_FILE_BASE_PATH=/opt/hp-soa/config
+CONFIG_FILE_PATH=$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV
+
+if [[ ! -d "$CONFIG_FILE_PATH" || "$(ls -A $CONFIG_FILE_PATH)" == "" ]]; then
+    CONFIG_FILE_PATH=$CONFIG_FILE_BASE_PATH
+fi
+
+SYSTEM_PROPERTIES_FILE=${SYSTEM_PROPERTIES_FILE:-$CONFIG_FILE_PATH/system-config.properties}
+EXTENDED_PROPERTIES_FILE=${EXTENDED_PROPERTIES_FILE:-$CONFIG_FILE_PATH/extended-config.properties}
+DUBBO_RESOLVE_PROPERTIES_FILE=${DUBBO_RESOLVE_PROPERTIES_FILE:-$CONFIG_FILE_PATH/dubbo-resolve.properties}
+JAVA_AGENT_CONFIG_FILE=${JAVA_AGENT_CONFIG_FILE:-$CONFIG_FILE_PATH/java-agent.config}
 
 APP_NAME_KEY='hp.soa.web.app.name'
 SERVER_PORT_KEY='server.port'
@@ -47,6 +56,54 @@ REMOTE_DEBUG_PORT_KEY='remote-debug.port'
 JVM_OPTIONS_KEY="jvm-options.${RUNTIME_ENV}"
 STARTUP_WAIT_SECONDS_KEY="startup.max-wait-seconds"
 
+ENABLE_REMOTE_DEBUG_ENVS=("dev" "test" "qa")
+PRODUCTION_ENVS=("pro" "prod" "product" "production")
+
+get_yaml_property()
+{
+    local arr=(${2//./ })
+    local keys=()
+    local succ=0
+    local cur_key=
+    local new_key=
+    local str=
+    local val=
+    local i=0
+
+    for var in ${arr[@]}; do
+        i=$((i+1))
+        new_key=$cur_key
+        str="."
+
+        for n in ${keys[@]}; do
+            str=$str'["'$n'"]'
+        done
+
+        if [ -z $cur_key ]; then
+            new_key=$var
+        else
+            new_key=$cur_key'.'$var
+        fi  
+
+        str=$str'["'$new_key'"]'
+
+        val=$(yq "$str" $1)
+
+        if [[ -z "$val" || "${val,,}" == "null" ]]; then
+            cur_key=$new_key
+            val=
+        else
+            keys+=($new_key)
+            cur_key=
+        fi  
+
+        if [[ "$i" -eq ${#arr[@]} ]]; then
+            echo $val
+        fi  
+    done
+}
+
+: <<'COMMENT'
 OLD_IFS="$IFS"
 IFS="#"
 CONF=($(python3 $BIN_DIR/conf_parser.py $RUNTIME_ENV $CONF_FILE))
@@ -73,6 +130,13 @@ for i in "${CONF[@]}"; do
         STARTUP_WAIT_SECONDS=$val
     fi
 done
+COMMENT
+
+APP_NAME=$(get_yaml_property $CONF_FILE "$APP_NAME_KEY")
+SERVER_PORT=$(get_yaml_property $CONF_FILE "$SERVER_PORT_KEY")
+REMOTE_DEBUG_PORT=$(get_yaml_property $CONF_FILE "$REMOTE_DEBUG_PORT_KEY")
+JVM_OPTIONS=$(get_yaml_property $CONF_FILE "$JVM_OPTIONS_KEY")
+STARTUP_WAIT_SECONDS=$(get_yaml_property $CONF_FILE "$STARTUP_WAIT_SECONDS_KEY")
 
 if [[ -z "$APP_NAME" || -z "$SERVER_PORT"  ]]; then
     echo "  > environment check failed -> (can't find '$APP_NAME_KEY' / '$SERVER_PORT_KEY' property in config file '$CONF_FILE')"
@@ -91,24 +155,24 @@ if [[ -z "$REMOTE_DEBUG_ADDR" ]]; then
     REMOTE_DEBUG_ADDR="0.0.0.0"
 fi
 
-if [[ "${RUNTIME_ENV,,}" == "dev" || "${RUNTIME_ENV,,}" == "test" || "${RUNTIME_ENV,,}" == "qa" ]]; then
+if [[ ${ENABLE_REMOTE_DEBUG_ENVS[@]/${RUNTIME_ENV,,}/} != ${ENABLE_REMOTE_DEBUG_ENVS[@]} ]]; then
     REMOTE_DEBUG_OPTIONS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$REMOTE_DEBUG_ADDR:$REMOTE_DEBUG_PORT"
-fi
-
-if [ -z "$LOG_LEVEL" ]; then
-    if [[ "${RUNTIME_ENV,,}" == "pro" || "${RUNTIME_ENV,,}" == "prod" || "${RUNTIME_ENV,,}" == "product" ]]; then
-        LOG_LEVEL="INFO"
-    else
-        LOG_LEVEL="DEBUG"
-    fi
 fi
 
 LOG_FILE_PATH=${LOG_FILE_PATH:-/data/logs/access}
 LOG_FILE="${LOG_FILE_PATH}/${APP_NAME}/service.log"
 HEAP_DUMP_PATH="${LOG_FILE_PATH}/${APP_NAME}"
 
+if [ -z "$LOG_LEVEL" ]; then
+    if [[ ${PRODUCTION_ENVS[@]/${RUNTIME_ENV,,}/} != ${PRODUCTION_ENVS[@]} ]]; then
+        LOG_LEVEL="INFO"
+    else
+        LOG_LEVEL="DEBUG"
+    fi
+fi
+
 if [ -z "$JAVA_AGENT"]; then
-    if [ -f "$JAVA_AGENT_FILE" ]; then
+    if [ -f "$JAVA_AGENT_CONFIG_FILE" ]; then
         while read LINE
         do
             if [[ -n "$LINE" && ${LINE:0:1} != "#" ]]; then
@@ -121,7 +185,7 @@ if [ -z "$JAVA_AGENT"]; then
                     JAVA_AGENT="$JAVA_AGENT $LINE"
                 fi
             fi
-        done < $JAVA_AGENT_FILE
+        done < $JAVA_AGENT_CONFIG_FILE
     fi
 fi
 
@@ -156,22 +220,22 @@ $DEFAULT_JVM_MEMORY_OPTIONS \
 --add-opens=java.base/sun.util.calendar=ALL-UNNAMED"
 
 if [ -n "$LOG_LEVEL" ]; then
-    JAVA_OPTS="-Dlog4j.log.level=$LOG_LEVEL $JAVA_OPTS"
+    JAVA_OPTS="-Dhpsoa.log4j.log.level=$LOG_LEVEL $JAVA_OPTS"
 fi
 
 if [ -n "$LOG_FILE_PATH" ]; then
-    JAVA_OPTS="-Dlog4j.logfile.path=$LOG_FILE_PATH $JAVA_OPTS"
+    JAVA_OPTS="-Dhpsoa.log4j.logfile.path=$LOG_FILE_PATH $JAVA_OPTS"
 fi
 
-if [ -n "$DUBBO_RESOLVE_FILE" ]; then
-    JAVA_OPTS="-Ddubbo.resolve.file=$DUBBO_RESOLVE_FILE $JAVA_OPTS"
+if [ -f "$DUBBO_RESOLVE_PROPERTIES_FILE" ]; then
+    JAVA_OPTS="-Ddubbo.resolve.file=$DUBBO_RESOLVE_PROPERTIES_FILE $JAVA_OPTS"
 fi
 
-if [ -n "$EXTENDED_PROPERTIES_FILE" ]; then
+if [ -f "$EXTENDED_PROPERTIES_FILE" ]; then
     JAVA_OPTS="-Dhp.soa.extended.properties.file=$EXTENDED_PROPERTIES_FILE $JAVA_OPTS"
 fi
 
-if [ -n "$SYSTEM_PROPERTIES_FILE" ]; then
+if [ -f "$SYSTEM_PROPERTIES_FILE" ]; then
     JAVA_OPTS="-Dhp.soa.system.properties.file=$SYSTEM_PROPERTIES_FILE $JAVA_OPTS"
 fi
 
