@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [[ $1 == '-h' || $1 == '--help' || $# -lt 3 || $# -gt 6 ]]; then
-	echo " > Usage: $(basename $0) \$PROJECT \$VERSION \$RUNTIME_ENV [\$EXPORT_PORTS=P1,P2,Px:P3,Py:P4,...] [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [\$NETWORK=]"
+if [[ $1 == '-h' || $1 == '--help' || $# -lt 3 ]]; then
+	echo " > Usage: $(basename $0) \$PROJECT \$VERSION \$RUNTIME_ENV [\$EXPORT_PORTS=P1,P2,Px:P3,Py:P4,...] [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [\$NETWORK=] [ENV_VARIABLE_X=VALUE_X]*"
 	exit 0
 fi
 
@@ -43,7 +43,13 @@ if [[ -n "$EXPORT_PORTS" ]]; then
 	done
 fi
 
-CMD="$CMD $IMAGE_ID"
+CMD="$CMD $IMAGE_ID ./start-foreground.sh"
+
+shift 6
+
+if [[ $# -gt 0 ]]; then
+    CMD="$CMD '' $@"
+fi
 
 echo " > try stop and remove old container '$CONTAINER_NAME' and rerun with image '$IMAGE_ID'"
 
