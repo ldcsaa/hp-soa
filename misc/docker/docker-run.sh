@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $1 == '-h' || $1 == '--help' || $# -lt 3 || $# -gt 6 ]]; then
-	echo " > Usage: docker-run.sh \$PROJECT \$VERSION \$RUNTIME_ENV [\$EXPORT_PORTS=P1,P2,Px:P3,Py:P4,...] [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [\$NETWORK=]"
+	echo " > Usage: $(basename $0) \$PROJECT \$VERSION \$RUNTIME_ENV [\$EXPORT_PORTS=P1,P2,Px:P3,Py:P4,...] [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [\$NETWORK=]"
 	exit 0
 fi
 

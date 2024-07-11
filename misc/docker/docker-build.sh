@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ "$1" == '-h' || "$1" == '--help' || $# -lt 2 || $# -gt 3 ]]; then
-	echo "Usage: docker-build.sh {\$PROJECT_PATH} {\$VERSION} {\$REPO_GROUP}"
+	echo "Usage: $(basename $0) {\$PROJECT_PATH} {\$VERSION} {\$REPO_GROUP}"
 	exit 0
 fi
 
