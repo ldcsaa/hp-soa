@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $1 == '-h' || $1 == '--help' || $# -lt 3 ]]; then
-	echo " > Usage: $(basename $0) \$PROJECT \$VERSION \$RUNTIME_ENV [\$EXPORT_PORTS=P1,P2,Px:P3,Py:P4,...] [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [\$NETWORK=] [ENV_VARIABLE_X=VALUE_X]*"
+	echo " > Usage: $(basename $0) \$PROJECT \$VERSION \$RUNTIME_ENV [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [OTHER_OPTIONS]*"
 	exit 0
 fi
 
@@ -11,9 +11,7 @@ FULL_PROJECT=$1
 PROJECT=${1##*/}
 VERSION=$2
 RUNTIME_ENV=$3
-EXPORT_PORTS=$4
-CONTAINER_NAME=${5:-$PROJECT-$VERSION-$RUNTIME_ENV-$(echo $RANDOM |md5sum |head -c 10)}
-NETWORK=$6
+CONTAINER_NAME=${4:-$PROJECT-$VERSION-$RUNTIME_ENV-$(echo $RANDOM |md5sum |head -c 10)}
 
 if [[ -z "$PROJECT" || -z "$VERSION" || -z "$RUNTIME_ENV" ]]; then
     echo " > ERROR: '\$PROJECT', '\$VERSION' and '\$RUNTIME_ENV' parameters must be specified"
@@ -30,26 +28,14 @@ fi
 
 CMD="docker run -d -e RUNTIME_ENV=$RUNTIME_ENV --name $CONTAINER_NAME"
 
-if [[ -n "$NETWORK" ]]; then
-    CMD="$CMD --network $NETWORK"
+if [[ $# -gt 4 ]]; then
+    shift 4
+    if [[ $# -gt 0 ]]; then
+        CMD="$CMD $@"
+    fi
 fi
 
-if [[ -n "$EXPORT_PORTS" ]]; then
-    ports=(${EXPORT_PORTS//,/ })
-	for port in ${ports[@]}; do
-	    if [ -n "$port" ]; then
-		    CMD="$CMD -p ${port%:*}:${port##*:}"
-		fi
-	done
-fi
-
-CMD="$CMD $IMAGE_ID ./start-foreground.sh"
-
-shift 6
-
-if [[ $# -gt 0 ]]; then
-    CMD="$CMD '' $@"
-fi
+CMD="$CMD $IMAGE_ID"
 
 echo " > try stop and remove old container '$CONTAINER_NAME' and rerun with image '$IMAGE_ID'"
 
