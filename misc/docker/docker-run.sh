@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [[ $1 == '-h' || $1 == '--help' || $# -lt 3 ]]; then
-	echo " > Usage: $(basename $0) \$PROJECT \$VERSION \$RUNTIME_ENV [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [OTHER_OPTIONS]*"
-	exit 0
+    echo " > Usage: $(basename $0) \$PROJECT \$VERSION \$RUNTIME_ENV [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [OTHER_OPTIONS]*"
+    exit 0
 fi
 
 CUR_DIR=$(cd $(dirname $0); pwd)
@@ -15,15 +15,15 @@ CONTAINER_NAME=${4:-$PROJECT-$VERSION-$RUNTIME_ENV-$(echo $RANDOM |md5sum |head 
 
 if [[ -z "$PROJECT" || -z "$VERSION" || -z "$RUNTIME_ENV" ]]; then
     echo " > ERROR: '\$PROJECT', '\$VERSION' and '\$RUNTIME_ENV' parameters must be specified"
-	eval "$0 -h"
-	exit 1
+    eval "$0 -h"
+    exit 1
 fi
 
 IMAGE_ID=$(docker images | grep -E "(^|\/)$FULL_PROJECT\s" |  grep -E "\s$VERSION\s" | grep -v '<none>' | sort -r | head -1 | awk '{print $3}')
 
 if [[ -z "$IMAGE_ID" ]]; then
     echo " > ERROR: docker image not found ($PROJECT:$VERSION)"
-	exit 2
+    exit 2
 fi
 
 CMD="docker run -d -e RUNTIME_ENV=$RUNTIME_ENV --name $CONTAINER_NAME"

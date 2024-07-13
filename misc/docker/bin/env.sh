@@ -38,7 +38,12 @@ fi
 
 # check bootstrap yaml file
 
-BOOTSTRAP_YAML_FILE=${BOOTSTRAP_YAML_FILE-$PRG_HOME/bootstrap.yml}
+if [ -z "$BOOTSTRAP_YAML_FILE" ]; then
+    BOOTSTRAP_YAML_FILE=$PRG_HOME/bootstrap.yml
+    if [[ ! -f "$BOOTSTRAP_YAML_FILE" && -f "$PRG_HOME/bootstrap.yaml" ]]; then
+        BOOTSTRAP_YAML_FILE=$PRG_HOME/bootstrap.yaml
+    fi
+fi
 
 if [ ! -f "$BOOTSTRAP_YAML_FILE" ]; then
     echo "  > environment check failed -> (bootstrap yaml file '$BOOTSTRAP_YAML_FILE' not exists)"
@@ -61,11 +66,11 @@ EXTENDED_PROPERTIES_FILE=${EXTENDED_PROPERTIES_FILE:-$CONFIG_FILE_PATH/extended-
 DUBBO_RESOLVE_PROPERTIES_FILE=${DUBBO_RESOLVE_PROPERTIES_FILE:-$CONFIG_FILE_PATH/dubbo-resolve.properties}
 JAVA_AGENT_CONFIG_FILE=${JAVA_AGENT_CONFIG_FILE:-$CONFIG_FILE_PATH/java-agent.config}
 
-APP_NAME_KEY='hp.soa.web.app.name'
 SERVER_PORT_KEY='server.port'
-REMOTE_DEBUG_PORT_KEY='remote-debug.port'
-JVM_OPTIONS_KEY="jvm-options.${RUNTIME_ENV}"
-STARTUP_WAIT_SECONDS_KEY="startup.max-wait-seconds"
+APP_NAME_KEY='hp.soa.web.app.name'
+REMOTE_DEBUG_PORT_KEY='hp.soa.special.remote-debug.port'
+JVM_OPTIONS_KEY="hp.soa.special.jvm-options.${RUNTIME_ENV}"
+STARTUP_WAIT_SECONDS_KEY="hp.soa.special.startup.max-wait-seconds"
 
 ENABLE_REMOTE_DEBUG_ENVS=("dev" "test" "qa")
 PRODUCTION_ENVS=("pro" "prod" "product" "production")

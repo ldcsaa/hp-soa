@@ -15,20 +15,19 @@
             <lineEnding>unix</lineEnding>
             <filtered>true</filtered>
         </fileSet>
+        <fileSet>
+            <directory>target/classes</directory>
+            <outputDirectory>/</outputDirectory>
+            <fileMode>0644</fileMode>
+            <lineEnding>unix</lineEnding>
+            <includes>
+                <include>bootstrap.yml</include>
+                <include>bootstrap.yaml</include>
+                <include>git.properties</include>
+            </includes>
+        </fileSet>
     </fileSets>
     <files>
-        <file>
-            <source>target/classes/bootstrap.yml</source>
-            <outputDirectory>/</outputDirectory>
-            <fileMode>0644</fileMode>
-            <lineEnding>unix</lineEnding>
-        </file>
-        <file>
-            <source>target/classes/git.properties</source>
-            <outputDirectory>/</outputDirectory>
-            <fileMode>0644</fileMode>
-            <lineEnding>unix</lineEnding>
-        </file>
         <file>
             <source>target/${project.artifactId}-${project.version}.jar</source>
             <outputDirectory>/</outputDirectory>
