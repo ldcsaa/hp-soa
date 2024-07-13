@@ -32,7 +32,7 @@
 hp.soa.special:
   # 应用程序启动等待秒数（默认：180 秒）
   startup.max-wait-seconds: 90
-  # 远程调试端口（默认：server.port + 10000）
+  # 远程调试端口（默认：${server.port} + 10000）
   remote-debug.port: 19002
   # 各运行环境下自定义 JVM 参数（默认：空）
   jvm-options:
