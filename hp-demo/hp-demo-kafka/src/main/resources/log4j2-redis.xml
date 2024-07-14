@@ -3,7 +3,9 @@
 
     <Properties>
         <Property name="base.package">${project.groupId}</Property>
-        <Property name="app.name">${sys:hp.soa.web.app.name:-${project.groupId}}</Property>
+        <Property name="project.name">${project.artifactId}</Property>
+        <Property name="app.name">${sys:hp.soa.web.app.name:-${project.name}}</Property>
+        <Property name="app.version">${project.version}</Property>
         <Property name="log.type">${sys:hpsoa.log4j.logType:-hp-soa}</Property>
         <Property name="log.level">${sys:hpsoa.log4j.logLevel:-DEBUG}</Property>
         <Property name="log.includeLocation">${sys:hpsoa.log4j.includeLcation:-true}</Property>
@@ -77,7 +79,7 @@
             <JsonTemplateLayout eventTemplateUri="${json.template.layout}">
                 <EventTemplateAdditionalField key="log_type" value="${log.type}"/>
                 <EventTemplateAdditionalField key="facility" value="SOA-MONITOR"/>
-                <EventTemplateAdditionalField key="@version" value="${project.version}"/>
+                <EventTemplateAdditionalField key="@version" value="${app.version}"/>
             </JsonTemplateLayout>
         </RedisAppender>
         
@@ -98,7 +100,7 @@
             <JsonTemplateLayout eventTemplateUri="${json.template.layout}">
                 <EventTemplateAdditionalField key="log_type" value="${log.type}"/>
                 <EventTemplateAdditionalField key="facility" value="SOA-SERVICE"/>
-                <EventTemplateAdditionalField key="@version" value="${project.version}"/>
+                <EventTemplateAdditionalField key="@version" value="${app.version}"/>
             </JsonTemplateLayout>
         </RedisAppender>
         
