@@ -119,11 +119,11 @@ get_yaml_property()
     done
 }
 
-APP_NAME=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$APP_NAME_KEY")
-SERVER_PORT=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$SERVER_PORT_KEY")
-REMOTE_DEBUG_PORT=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$REMOTE_DEBUG_PORT_KEY")
-JVM_OPTIONS=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$JVM_OPTIONS_KEY")
-STARTUP_WAIT_SECONDS=$(get_yaml_property $BOOTSTRAP_YAML_FILE "$STARTUP_WAIT_SECONDS_KEY")
+APP_NAME=${APP_NAME:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$APP_NAME_KEY")}
+SERVER_PORT=${SERVER_PORT:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$SERVER_PORT_KEY")}
+REMOTE_DEBUG_PORT=${REMOTE_DEBUG_PORT:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$REMOTE_DEBUG_PORT_KEY")}
+JVM_OPTIONS=${JVM_OPTIONS:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$JVM_OPTIONS_KEY")}
+STARTUP_WAIT_SECONDS=${STARTUP_WAIT_SECONDS:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$STARTUP_WAIT_SECONDS_KEY")}
 
 if [[ -z "$APP_NAME" || -z "$SERVER_PORT"  ]]; then
     echo "  > environment check failed -> (can't find '$APP_NAME_KEY' / '$SERVER_PORT_KEY' property in bootstrap yaml file '$BOOTSTRAP_YAML_FILE')"
@@ -177,6 +177,8 @@ if [ -z "$JAVA_AGENT"]; then
 fi
 
 JAVA_OPTS="\
+-D$APP_NAME_KEY=$APP_NAME \
+-D$SERVER_PORT_KEY=$SERVER_PORT \
 -DskipTests=true \
 -Dfile.encoding=UTF-8 \
 -Djava.awt.headless=true \

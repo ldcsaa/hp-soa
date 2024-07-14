@@ -4,10 +4,10 @@
 
 ## 一、概述
 &nbsp;&nbsp;微服务应用开发声明周期中应用发布是一个重要环节，好的应用发布机制与流程能大大提高测试效率，加快投产速度，同时也能提升线上问题处理和修复效率。HP-SOA 为应用程序打包发布提供了以下支持：
-- 应用配置与代码分离，一次打包可以部署到所有环境。
-- 提供 [start.sh](../../misc/docker/bin/start.sh)、[stop.sh](../../misc/docker/bin/stop.sh)、[status.sh](../../misc/docker/bin/status.sh) 等通用运行脚本，并支持参数化执行。所有应用可以共用一套运行脚本，不必在不同应用中来回拷贝修改。
+- 应用配置与代码分离，一次打包可以部署到所有运行环境。
+- 提供 [start.sh](../../misc/opt/deploy/scripts/start.sh) 、[stop.sh](../../misc/opt/deploy/scripts/stop.sh) 、[status.sh](../../misc/opt/deploy/scripts/status.sh) 等通用运行脚本，并支持参数化执行。所有应用可以共用一套运行脚本，不必在不同应用中来回拷贝修改。
 - 提供通用打包描述文件 [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml)，规范发布包格式。
-- Docker 发布支持：提供通用 [Dockerfile](../../misc/docker/Dockerfile)、镜像创建脚本 [docker-build.sh](../../misc/docker/docker-build.sh) 和容器启动脚本 [docker-run.sh](../../misc/docker/docker-run.sh)，所有应用可以共用一套 Docker 发布文件，不必在不同应用中来回拷贝修改。
+- Docker 发布支持：提供通用 [Dockerfile](../../misc/docker/Dockerfile) 、镜像创建脚本 [docker-build.sh](../../misc/docker/docker-build.sh) 和容器启动脚本 [docker-run.sh](../../misc/docker/docker-run.sh) ，所有应用可以共用一套 Docker 发布文件，不必在不同应用中来回拷贝修改。
 
 ## 二、应用配置与代码分离
 
@@ -20,12 +20,12 @@
   - Java Agent 配置文件：运行脚本会解析 Java Agent 配置文件并转换为 JVM 命令行参数，从而注入 Java Agent，默认配置文件：`/opt/hp-soa/config/${RUNTIME_ENV}/java-agent.config`，如果`${RUNTIME_ENV}`为空或该默认配置文件所在目录为空则尝试加载`/opt/hp-soa/config/java-agent.config`，可通过JVM启动参数`-Dhp.soa.extended.properties.file`修改 Java Agent 配置文件路径。（参考：[java-agent.config](../../misc/opt/hp-soa/config/java-agent.config)）
   - Dubbo 接口直连配置文件（用于 Dubbo 项目调试）：默认配置文件：`/opt/hp-soa/config/${RUNTIME_ENV}/dubbo-resolve.properties`，如果`${RUNTIME_ENV}`为空或该默认配置文件所在目录为空则尝试加载`/opt/hp-soa/config/dubbo-resolve.properties`，可通过JVM启动参数`-Ddubbo.resolve.file`修改 Dubbo 接口直连配置文件路径。（参考：[dubbo-resolve.properties](../../misc/opt/hp-soa/config/dubbo-resolve.properties)）
 
-&nbsp;&nbsp;除此以外，还有一些与应用和运行环境有关，但不能分离到配置管理系的统特殊配置，如：
-- 应用程序启动等待时间（超过这个时间则认为启动失败）
-- 应用程序在不同环境下的内存配置
-- 应用程序的远程调试端口
+&nbsp;&nbsp;除此以外，有些与具体应用发布部署有关的特殊配置无法分离到配置管理系，如：
+- 应用程序启动等待时间：`STARTUP_WAIT_SECONDS`，超过这个时间则认为启动失败
+- 应用程序在不同环境下特定的 JVM 参数：`JVM_OPTIONS`，如：不同运行环境的内存配置
+- 应用程序的远程调试端口：`REMOTE_DEBUG_PORT`
 
-&nbsp;&nbsp;HP-SOA 对上述这些配置进行了特殊处理：把上述配置项配置在应用程序的`bootstrap.yml`配置文件，由运行脚本解析这些配置，如：
+&nbsp;&nbsp;上述这些配置可以以命令行参数的方式传入运行脚本，如：`start.sh "" "STARTUP_WAIT_SECONDS=90"`，设置应用程序启动等待时间为 90 秒。HP-SOA 同时提供了另一种方式处理上述特殊配置：把上述配置项配置在应用程序的`bootstrap.yml`配置文件，由运行脚本解析这些配置，如：
 
 ```yml
 ## 特殊配置
@@ -36,251 +36,81 @@ hp.soa.special:
   remote-debug.port: 19002
   # 各运行环境下自定义 JVM 参数（默认：空）
   jvm-options:
-  # 本地
-  local: -Xms256m -Xmx256m
-  # 开发
-  dev: -Xms256m -Xmx256m
-  # 测试
-  test: -Xms256m -Xmx512m
-  # 生产
-  prod: -Xms1g -Xmx1g
+    # 本地
+    local: -Xms256m -Xmx256m
+    # 开发
+    dev: -Xms256m -Xmx256m
+    # 测试
+    test: -Xms256m -Xmx512m
+    # 生产
+    prod: -Xms1g -Xmx1g
 ```
 
-#### 1. 创建项目
-&nbsp;&nbsp;创建父项目[hp-demo-infra-cloud](../../hp-demo/hp-demo-infra-cloud)及其API接口子项目[hp-demo-infra-cloud-api](../../hp-demo/hp-demo-infra-cloud/hp-demo-infra-cloud-api)和服务提供者子项目[hp-demo-infra-cloud-service](../../hp-demo/hp-demo-infra-cloud/hp-demo-infra-cloud-service)，子项目作为父项目的Sub Module：
-```xml
-<modules>
-    <!-- API Module -->
-    <module>hp-demo-infra-cloud-api</module>
-    <!-- Service Module -->
-    <module>hp-demo-infra-cloud-service</module>
-</modules>
+## 二、通用运行脚本
+&nbsp;&nbsp;HP-SOA 提供以下通用运行脚本执行应用程序启停操作：
+- [start.sh](../../misc/opt/deploy/scripts/start.sh) ：以后台方式启动应用程序。
+- [start-foreground.sh](../../misc/opt/deploy/scripts/start-foreground.sh) ：以前台方式启动应用程序，主要用作 Docker 容器的启动命令，也可以用于跟踪调试应用程序的启动过程。
+- [stop.sh](../../misc/opt/deploy/scripts/stop.sh) ：停止应用程序。
+- [restart.sh](../../misc/opt/deploy/scripts/restart.sh) ：重启应用程序。
+- [status.sh](../../misc/opt/deploy/scripts/status.sh) ：查看启动应用程序状态。
+
+#### 1. 启动应用程序：[start.sh](../../misc/opt/deploy/scripts/start.sh) / [start-foreground.sh](../../misc/opt/deploy/scripts/start-foreground.sh)
+
+```shell
+$ start.sh -h
+Usage: start.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
+&nbsp;&nbsp;命令参数：
+- 第一个参数：应用程序 jar 文件或 jar 文件所在目录路径。可选，默认值：空，表示 [start.sh](../../misc/opt/deploy/scripts/start.sh) 文件所在目录路径。
+- 其它参数：执行环境参数，可选，可以设置多个。
 
-#### 2. API接口子项目：定义服务接口及相关BO
-```java
-/* API接口定义 */
-public interface UserService
-{
-    @GetMapping(value = "/user/{id}")
-    UserBo getUser(@PathVariable Long id);
-    
-    @PostMapping(value = "/user/save")
-    boolean saveUser(@RequestBody @Valid UserBo userBo);
-}
+&nbsp;&nbsp;***执行环境参数：***
+- `DEFAULT_JVM_MEMORY_OPTIONS`：默认 JVM 内存选项，默认值：`-Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m`
+- `DEFAULT_STARTUP_WAIT_SECONDS`：默认应用程序启动等待秒数，默认值：180 秒
+- `RUNTIME_ENV`：运行环境，默认值：`local`，根据实际需要设置，如：`dev`、`test`、`qa`、`production` 等
+- `CONFIG_FILE_BASE_PATH`：系统级公共配置配置文件父目录，默认值：`/opt/hp-soa/config`
+- `SYSTEM_PROPERTIES_FILE`：系统配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/system-config.properties`
+- `EXTENDED_PROPERTIES_FILE`：扩展配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/extended-config.properties`
+- `DUBBO_RESOLVE_PROPERTIES_FILE`：Dubbo 接口直连配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/dubbo-resolve.properties`
+- `JAVA_AGENT_CONFIG_FILE`：Java Agent 配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/java-agent.config`
+- `JAVA_AGENT`：Java Agent JVM 参数，默认值：从`$JAVA_AGENT_CONFIG_FILE`Java Agent 配置文件读取
+- `APP_NAME`：应用程序名称，默认值：`bootstrap.yml`的`hp.soa.web.app.name`配置值
+- `SERVER_PORT`：应用程序服务端口，默认值：`bootstrap.yml`的`server.port`配置值
+- `REMOTE_DEBUG_PORT`：远程调试端口，默认值：`$SERVER_PORT+10000`。当`$RUNTIME_ENV`为 `dev` / `test` / `qa` 时会开启远程调试功能
+- `JVM_OPTIONS`：额外 JVM 选项，默认值：`bootstrap.yml`的`hp.soa.special.jvm-options.$RUNTIME_ENV`配置值
+- `STARTUP_WAIT_SECONDS`：应用程序启动等待秒数，默认值：`$DEFAULT_STARTUP_WAIT_SECONDS`
+- `LOG_FILE_PATH`：应用程序日志目录，默认值：`/data/logs/access`
+- `LOG_FILE`：应用程序日志文件，默认值：`$LOG_FILE_PATH/$APP_NAME/service.log`
+- `LOG_LEVEL`：应用程序日志级别，当`$RUNTIME_ENV`为 `pro` / `prod` / `product` / `production` 时默认值为`INFO`，当`$RUNTIME_ENV`为其它值时默认值为`DEBUG`
+- `HEAP_DUMP_PATH`：堆转存文件目录，默认值：`$LOG_FILE_PATH/$APP_NAME`
+
+#### 2. 停止应用程序：[stop.sh](../../misc/opt/deploy/scripts/stop.sh)
+
+```shell
+$ stop.sh -h
+Usage: stop.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
+&nbsp;&nbsp;命令参数与 [start.sh](../../misc/opt/deploy/scripts/start.sh) 一致。
 
-&nbsp;&nbsp;*注意：如果服务接口需要共享给服务消费的 Feign Client 使用，由于 Feign Client 的检查规则限制，不能在服务接口类中声明 `@XxxMapping` 注解，否则服务消费者不能启动。因此 `@XxxMapping` 注解只能声明在接口方法中。*
+#### 3. 停止应用程序：[restart.sh](../../misc/opt/deploy/scripts/restart.sh)
 
-```java
-/* BO定义 */
-@Getter
-@Setter
-@SuppressWarnings("serial")
-@Schema(description = "用户业务对象")
-public class UserBo implements Serializable
-{
-    @Schema(description = "id", example = "123", requiredMode = RequiredMode.NOT_REQUIRED, nullable = true)
-    private Long id;
-    @NotBlank(message = "name is empty")
-    @Schema(description = "姓名", example = "my name", requiredMode = RequiredMode.REQUIRED, minLength = 1, nullable = false)
-    private String name;
-    @NotNull
-    @Min(1)
-    @Max(100)
-    @Schema(description = "年龄", example = "23", requiredMode = RequiredMode.REQUIRED, nullable = false)
-    private Integer age;
-}
+```shell
+$ restart.sh -h
+Usage: restart.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
+&nbsp;&nbsp;命令参数与 [start.sh](../../misc/opt/deploy/scripts/start.sh) 一致。
 
-#### 3. 服务提供者子项目：实现服务接口
-1. pom.xml 中添加 [hp-soa-starter-web-cloud](../../hp-soa-starter/hp-soa-starter-web-cloud) 和API接口依赖：
-```xml
-<dependencyManagement>
-    <dependencies>
-        <!-- 添加 hp-soa 依赖管理 -->
-        <dependency>
-            <groupId>io.github.hpsocket</groupId>
-            <artifactId>hp-soa-dependencies</artifactId>
-            <version>${hp-soa.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
+#### 4. 查看启动应用程序状态：[status.sh](../../misc/opt/deploy/scripts/status.sh)
 
-<dependencies>
-    <!-- 引用 hp-soa-starter-web-cloud -->
-    <dependency>
-        <groupId>io.github.hpsocket</groupId>
-        <artifactId>hp-soa-starter-web-cloud</artifactId>
-    </dependency>
-    <!-- 引用 API 接口 -->
-    <dependency>
-        <groupId>io.github.hpsocket.demo</groupId>
-        <artifactId>hp-demo-infra-cloud-api</artifactId>
-        <version>${project.version}</version>
-    </dependency>
-</dependencies>
+```shell
+$ status.sh -h
+Usage: status.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
+&nbsp;&nbsp;命令参数与 [start.sh](../../misc/opt/deploy/scripts/start.sh) 一致。
 
-2. 修改应用配置
+## 三、通用打包描述文件
 
-&nbsp;&nbsp;（参考：[应用集成](app_integration.md)）
 
-3. 实现服务接口
-```java
-/* API接口实现 */
-@Slf4j
-@Service
-@RestController
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService
-{
-    @Autowired
-    private UserConverter userConverter;
-    
-    @Autowired
-    private DomainEventService<DemoEvent> demoEventService;
-        
-    @Override
-    @DS("slave")
-    public UserBo getUser(Long id)
-    {
-        User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getId, id));
-        return userConverter.toBo(user);
-    }
-
-    @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
-    public boolean saveUser(UserBo userBo)
-    {
-        User user = userConverter.fromBo(userBo);
-        boolean isOK = saveOrUpdate(user);
-        
-        if(isOK)
-        {
-            raiseSaveUserEvent(user);
-        }
-        
-        return isOK;
-    }
-
-    private void raiseSaveUserEvent(User user)
-    {
-        DemoEvent event = new DemoEvent(user.getId(), 0);
-        
-        event.setDomainName(AppConfig.DOMAIN_NAME);
-        event.setEventName(AppConfig.SAVE_USER_EVENT_NAME);
-        event.setExchange(AppConfig.USER_EXCHANGE);
-        event.setRoutingKey(AppConfig.SAVE_USER_ROUTING_KEY);
-        event.setMsg(JSONObject.toJSONString(user));
-        
-        demoEventService.save(event);
-    }
-}
-```
-
-## 三、服务消费者接入步骤
-
-(以 [hp-demo-bff-cloud](../../hp-demo/hp-demo-bff-cloud) Demo 为例)
-
-#### 1. 创建项目并引用API接口
-&nbsp;&nbsp;pom.xml 中添加 [hp-soa-starter-web-cloud](../../hp-soa-starter/hp-soa-starter-web-cloud) 和API接口依赖：
-```xml
-<dependencyManagement>
-    <dependencies>
-        <!-- 添加 hp-soa 依赖管理 -->
-        <dependency>
-            <groupId>io.github.hpsocket</groupId>
-            <artifactId>hp-soa-dependencies</artifactId>
-            <version>${hp-soa.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-
-<dependencies>
-    <!-- 引用 hp-soa-starter-web-cloud -->
-    <dependency>
-        <groupId>io.github.hpsocket</groupId>
-        <artifactId>hp-soa-starter-web-cloud</artifactId>
-    </dependency>
-    <!-- 引用 API 接口 -->
-    <dependency>
-        <groupId>io.github.hpsocket.demo</groupId>
-        <artifactId>hp-demo-infra-cloud-api</artifactId>
-        <version>${project.version}</version>
-    </dependency>
-</dependencies>
-```
-
-#### 2. 定义 Feign Client 接口
-```java
-/* Feign Client接口定义 */
-@FeignClient(UserServiceClient.SERVICE_NAME)
-// 继承于API接口
-public interface UserServiceClient extends UserService
-{
-    String SERVICE_NAME = "hp-demo-infra-cloud-service";
-}
-```
-
-#### 3. 调用服务
-```java
-/* 定义Controller接口 */
-@RequestMapping(value = "/demo", method = {RequestMethod.POST})
-@Tag(name = "示例Demo接口")
-public interface DemoController
-{
-    @PostMapping(value = "/queryUser")
-    @Operation(summary = "查询用户", description = "通过 ID 查询用户")
-    Response<QueryUserResponse> queryUser(@RequestBody @Valid QueryUserReuqest request);
-
-    @PostMapping(value = "/saveUser")
-    @Operation(summary = "保存用户", description = "新增或更新用户")
-    Response<Boolean> saveUser(@RequestBody @Valid SaveUserReuqest request);
-}
-
-```
-```java
-/* 实现Controller接口 */
-@RestController
-@AccessVerification(Type.MAYBE_LOGIN)
-public class DemoControllerImpl implements DemoController
-{
-    // 注入 Feign Client
-    @Autowired
-    UserServiceClient userServiceClient;
-    
-    @Autowired
-    UserConverter userConverter;
-
-    @Override
-    public Response<QueryUserResponse> queryUser(@RequestBody @Valid QueryUserReuqest request)
-    {
-        // 调用API接口
-        UserBo userBo = userServiceClient.getUser(request.getId());
-        QueryUserResponse resp = userConverter.toQueryUserResponse(userBo);
-        
-        if(resp != null)
-            resp.setToken(IdGenerator.nextCompactUUID());
-
-        return new Response<>(resp);
-    }
-
-    @Override
-    @AccessVerification(Type.REQUIRE_LOGIN)
-    public Response<Boolean> saveUser(@RequestBody @Valid SaveUserReuqest request)
-    {
-        UserBo userBo = userConverter.fromSaveUserReuqest(request);
-        // 调用API接口
-        boolean rs = userServiceClient.saveUser(userBo);
-
-        return new Response<>(rs);
-    }
-}
-```
 
 ---
 
