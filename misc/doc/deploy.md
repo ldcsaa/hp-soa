@@ -60,11 +60,13 @@ hp.soa.special:
 $ start.sh -h
 Usage: start.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
-&nbsp;&nbsp;命令参数：
+&nbsp;&nbsp;*命令参数：*
+
 - 第一个参数：应用程序 jar 文件或 jar 文件所在目录路径。可选，默认值：空，表示 [start.sh](../../misc/opt/deploy/scripts/start.sh) 文件所在目录路径。
 - 其它参数：执行环境参数，可选，可以设置多个。
 
-&nbsp;&nbsp;**执行环境参数：**
+&nbsp;&nbsp;*执行环境参数：*
+
 - `DEFAULT_JVM_MEMORY_OPTIONS`：默认 JVM 内存选项，默认值：`-Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m`
 - `DEFAULT_STARTUP_WAIT_SECONDS`：默认应用程序启动等待秒数，默认值：180 秒
 - `RUNTIME_ENV`：运行环境，默认值：`local`，根据实际需要设置，如：`dev`、`test`、`qa`、`production` 等
@@ -83,6 +85,14 @@ Usage: start.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 - `LOG_FILE`：应用程序日志文件，默认值：`$LOG_FILE_PATH/$APP_NAME/service.log`
 - `LOG_LEVEL`：应用程序日志级别，当`$RUNTIME_ENV`为 `pro` / `prod` / `product` / `production` 时默认值为`INFO`，当`$RUNTIME_ENV`为其它值时默认值为`DEBUG`
 - `HEAP_DUMP_PATH`：堆转存文件目录，默认值：`$LOG_FILE_PATH/$APP_NAME`
+
+&nbsp;&nbsp;*运行示例：*
+
+- `start.sh`：运行 *start.sh* 脚本所在目录下的第一个 jar 文件
+- `start.sh "" SERVER_PORT=9876`：运行 *start.sh* 脚本所在目录的第一个 jar 文件，并设置应用程序服务端口为 *9876*
+- `start.sh  /path/to/app`：运行 */path/to/app* 目录的第一个 jar 文件
+- `start.sh  /path/to/app RUNTIME_ENV=qa LOG_LEVEL=WARN`：运行 */path/to/app* 目录的第一个 jar 文件，并设置运行环境为 *qa*
+- `start.sh  /path/to/app/service.jar RUNTIME_ENV=qa LOG_LEVEL=WARN`：运行 */path/to/app/service.jar* ，并设置运行环境为 *qa*，应用程序日志级别为 *WARN*
 
 #### 2. 停止应用程序：[stop.sh](../../misc/opt/deploy/scripts/stop.sh)
 
@@ -162,7 +172,7 @@ Usage: status.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 - git 信息文件：`classes/git.properties`*（由 [git-commit-id-maven-plugin](https://github.com/git-commit-id/git-commit-id-maven-plugin) Maven 插件创建）*
 - 运行脚本文件：假设运行脚本目录为 `/opt/deploy/scripts`
 
-&nbsp;&nbsp;**打包结果示例：**
+&nbsp;&nbsp;*打包结果示例：*
 
 ```shell
 # 查看打包结果
