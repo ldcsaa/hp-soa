@@ -7,7 +7,7 @@
 - 应用配置与代码分离，一次打包可以部署到所有运行环境。
 - 提供 [start.sh](../../misc/opt/deploy/scripts/start.sh) 、[stop.sh](../../misc/opt/deploy/scripts/stop.sh) 、[status.sh](../../misc/opt/deploy/scripts/status.sh) 等通用运行脚本，并支持参数化执行。所有应用可以共用一套运行脚本，不必在不同应用中来回拷贝修改。
 - 提供通用打包描述文件 [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml)，规范发布包格式。
-- Docker 发布支持：提供通用 [Dockerfile](../../misc/docker/Dockerfile) 、镜像创建脚本 [docker-build.sh](../../misc/docker/docker-build.sh) 和容器启动脚本 [docker-run.sh](../../misc/docker/docker-run.sh) ，所有应用可以共用一套 Docker 发布文件，不必在不同应用中来回拷贝修改。
+- Docker 发布支持：提供通用 [Dockerfile](../../misc/docker/Dockerfile) 、镜像创建脚本 [docker-build.sh](../../misc/docker/docker-build.sh) 和容器运行脚本 [docker-run.sh](../../misc/docker/docker-run.sh) ，所有应用可以共用一套 Docker 发布文件，不必在不同应用中来回拷贝修改。
 
 ## 二、应用配置与代码分离
 
@@ -67,32 +67,32 @@ Usage: start.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 
 &nbsp;&nbsp;*执行环境参数：*
 
-- `DEFAULT_JVM_MEMORY_OPTIONS`：默认 JVM 内存选项，默认值：`-Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m`
-- `DEFAULT_STARTUP_WAIT_SECONDS`：默认应用程序启动等待秒数，默认值：180 秒
-- `RUNTIME_ENV`：运行环境，默认值：`local`，根据实际需要设置，如：`dev`、`test`、`qa`、`production` 等
-- `CONFIG_FILE_BASE_PATH`：系统级公共配置配置文件父目录，默认值：`/opt/hp-soa/config`
-- `SYSTEM_PROPERTIES_FILE`：系统配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/system-config.properties`
-- `EXTENDED_PROPERTIES_FILE`：扩展配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/extended-config.properties`
-- `DUBBO_RESOLVE_PROPERTIES_FILE`：Dubbo 接口直连配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/dubbo-resolve.properties`
-- `JAVA_AGENT_CONFIG_FILE`：Java Agent 配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/java-agent.config`
-- `JAVA_AGENT`：Java Agent JVM 参数，默认值：从`$JAVA_AGENT_CONFIG_FILE`Java Agent 配置文件读取
-- `APP_NAME`：应用程序名称，默认值：`bootstrap.yml`的`hp.soa.web.app.name`配置值
-- `SERVER_PORT`：应用程序服务端口，默认值：`bootstrap.yml`的`server.port`配置值
-- `REMOTE_DEBUG_PORT`：远程调试端口，默认值：`$SERVER_PORT+10000`。当`$RUNTIME_ENV`为 `dev` / `test` / `qa` 时会开启远程调试功能
-- `JVM_OPTIONS`：额外 JVM 选项，默认值：`bootstrap.yml`的`hp.soa.special.jvm-options.$RUNTIME_ENV`配置值
-- `STARTUP_WAIT_SECONDS`：应用程序启动等待秒数，默认值：`$DEFAULT_STARTUP_WAIT_SECONDS`
-- `LOG_FILE_PATH`：应用程序日志目录，默认值：`/data/logs/access`
-- `LOG_FILE`：应用程序日志文件，默认值：`$LOG_FILE_PATH/$APP_NAME/service.log`
-- `LOG_LEVEL`：应用程序日志级别，当`$RUNTIME_ENV`为 `pro` / `prod` / `product` / `production` 时默认值为`INFO`，当`$RUNTIME_ENV`为其它值时默认值为`DEBUG`
-- `HEAP_DUMP_PATH`：堆转存文件目录，默认值：`$LOG_FILE_PATH/$APP_NAME`
+- `DEFAULT_JVM_MEMORY_OPTIONS` ：默认 JVM 内存选项，默认值：`-Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m`
+- `DEFAULT_STARTUP_WAIT_SECONDS` ：默认应用程序启动等待秒数，默认值：180 秒
+- `RUNTIME_ENV` ：运行环境，默认值：`local`，根据实际需要设置，如：`dev`、`test`、`qa`、`production` 等
+- `CONFIG_FILE_BASE_PATH` ：系统级公共配置配置文件父目录，默认值：`/opt/hp-soa/config`
+- `SYSTEM_PROPERTIES_FILE` ：系统配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/system-config.properties`
+- `EXTENDED_PROPERTIES_FILE` ：扩展配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/extended-config.properties`
+- `DUBBO_RESOLVE_PROPERTIES_FILE` ：Dubbo 接口直连配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/dubbo-resolve.properties`
+- `JAVA_AGENT_CONFIG_FILE` ：Java Agent 配置文件，默认值：`$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV/java-agent.config`
+- `JAVA_AGENT` ：Java Agent JVM 参数，默认值：从`$JAVA_AGENT_CONFIG_FILE`Java Agent 配置文件读取
+- `APP_NAME` ：应用程序名称，默认值：`bootstrap.yml`的`hp.soa.web.app.name`配置值
+- `SERVER_PORT` ：应用程序服务端口，默认值：`bootstrap.yml`的`server.port`配置值
+- `REMOTE_DEBUG_PORT` ：远程调试端口，默认值：`$SERVER_PORT+10000`。当`$RUNTIME_ENV`为 `dev` / `test` / `qa` 时会开启远程调试功能
+- `JVM_OPTIONS` ：额外 JVM 选项，默认值：`bootstrap.yml`的`hp.soa.special.jvm-options.$RUNTIME_ENV`配置值
+- `STARTUP_WAIT_SECONDS` ：应用程序启动等待秒数，默认值：`$DEFAULT_STARTUP_WAIT_SECONDS`
+- `LOG_FILE_PATH` ：应用程序日志目录，默认值：`/data/logs/access`
+- `LOG_FILE` ：应用程序日志文件，默认值：`$LOG_FILE_PATH/$APP_NAME/service.log`
+- `LOG_LEVEL` ：应用程序日志级别，当`$RUNTIME_ENV`为 `pro` / `prod` / `product` / `production` 时默认值为`INFO`，当`$RUNTIME_ENV`为其它值时默认值为`DEBUG`
+- `HEAP_DUMP_PATH` ：堆转存文件目录，默认值：`$LOG_FILE_PATH/$APP_NAME`
 
 &nbsp;&nbsp;*运行示例：*
 
-- `start.sh`：运行 *start.sh* 脚本所在目录下的第一个 jar 文件
-- `start.sh "" SERVER_PORT=9876`：运行 *start.sh* 脚本所在目录的第一个 jar 文件，并设置应用程序服务端口为 *9876*
-- `start.sh  /path/to/app`：运行 */path/to/app* 目录的第一个 jar 文件
-- `start.sh  /path/to/app RUNTIME_ENV=qa LOG_LEVEL=WARN`：运行 */path/to/app* 目录的第一个 jar 文件，并设置运行环境为 *qa*
-- `start.sh  /path/to/app/service.jar RUNTIME_ENV=qa LOG_LEVEL=WARN`：运行 */path/to/app/service.jar* ，并设置运行环境为 *qa*，应用程序日志级别为 *WARN*
+- `start.sh` ：运行 *start.sh* 脚本所在目录下的第一个 jar 文件
+- `start.sh "" SERVER_PORT=9876` ：运行 *start.sh* 脚本所在目录的第一个 jar 文件，并设置应用程序服务端口为 *9876*
+- `start.sh  /path/to/app` ：运行 */path/to/app* 目录的第一个 jar 文件
+- `start.sh  /path/to/app RUNTIME_ENV=dev` ：运行 */path/to/app* 目录的第一个 jar 文件，并设置运行环境为 *dev*
+- `start.sh  /path/to/app/service.jar RUNTIME_ENV=qa LOG_LEVEL=WARN` ：运行 */path/to/app/service.jar* ，并设置运行环境为 *qa*，应用程序日志级别为 *WARN*
 
 #### 2. 停止应用程序：[stop.sh](../../misc/opt/deploy/scripts/stop.sh)
 
@@ -124,7 +124,8 @@ Usage: status.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 - [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml)
 - [assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml)
 
-&nbsp;&nbsp;[assembly.xml](../../misc/opt/deploy/assembly/assembly.xml) 与 [assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml) 的区别是，打包出来的目标文件名后者比前者多了 *'git commit-id'* 和 *'git 提交时间'* 标识，文件名格式为：`${project.artifactId}-${project.version}-${git.commit.id.abbrev}-${git.commit.time}.tar.gz`。如：'*hp-demo-infra-basic-service-1.1.2-8fdda412-20240703221616.tar.gz*'  
+&nbsp;&nbsp;[assembly.xml](../../misc/opt/deploy/assembly/assembly.xml) 与 [assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml) 的区别是，打包出来的目标文件名后者比前者多了 *'git commit-id'* 和 *'git 提交时间'* 标识，文件名格式为：`${project.artifactId}-${project.version}-${git.commit.id.abbrev}-${git.commit.time}.tar.gz`。如：'*hp-demo-infra-basic-service-1.1.2-8fdda412-20240703221616.tar.gz*'
+
 &nbsp;&nbsp;*（注：如果要使用 [assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml)，应用程序项目需要引入 [git-commit-id-maven-plugin](https://github.com/git-commit-id/git-commit-id-maven-plugin) Maven 插件。）*
 
 #### 1. 打包配置
@@ -182,17 +183,43 @@ drwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/           
 -rw-r--r-- hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/bootstrap.yml                          # 应用程序 bootstrap 资源文件
 -rw-r--r-- hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/git.properties                         # git 信息文件
 -rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/env.sh                                 # 运行脚本
--rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/restart.sh                             # 运行脚本
--rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/start-foreground.sh                    # 运行脚本
 -rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/start.sh                               # 运行脚本
--rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/status.sh                              # 运行脚本
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/start-foreground.sh                    # 运行脚本
 -rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/stop.sh                                # 运行脚本
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/restart.sh                             # 运行脚本
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/status.sh                              # 运行脚本
 -rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/yq                                     # 运行脚本（YAML 解析器）
 ```
 
+## 四、Docker 发布
 
+&nbsp;&nbsp;HP-SOA 提供了一套通用 Docker 发布脚本，支持为所有应用项目创建 Docker 镜像和容器。主要包括：
 
-&nbsp;&nbsp;***执行环境参数：***
+- [Dockerfile](../../misc/docker/Dockerfile) ： 通用 Docker 镜像模版
+- [docker-build.sh](../../misc/docker/docker-build.sh) ：通用 Docker 镜像创建脚本
+- [docker-run.sh](../../misc/docker/docker-run.sh) ：通用 Docker 容器运行脚本
+
+#### 1. 创建 Docker 镜像：[docker-build.sh](../../misc/docker/docker-build.sh)
+
+&nbsp;&nbsp;*注：创建 Docker 镜像前需要先打包应用程序，生成应用程序目标文件。（参考：[上一节](## 三、通用打包描述文件)）*
+
+```shell
+$ docker-build.sh -h
+Usage: docker-build.sh {$PROJECT_PATH} {$VERSION} [{$REPO_GROUP}]
+```
+&nbsp;&nbsp;*命令参数：*
+
+- `PROJECT_PATH` ：应用程序 jar 文件或 jar 文件所在目录路径。可选，默认值：空，表示 [start.sh](../../misc/opt/deploy/scripts/start.sh) 文件所在目录路径。
+- 其它参数：执行环境参数，可选，可以设置多个。
+
+&nbsp;&nbsp;*运行示例：*
+
+- `start.sh` ：运行 *start.sh* 脚本所在目录下的第一个 jar 文件
+- `start.sh "" SERVER_PORT=9876` ：运行 *start.sh* 脚本所在目录的第一个 jar 文件，并设置应用程序服务端口为 *9876*
+- `start.sh  /path/to/app` ：运行 */path/to/app* 目录的第一个 jar 文件
+- `start.sh  /path/to/app RUNTIME_ENV=dev` ：运行 */path/to/app* 目录的第一个 jar 文件，并设置运行环境为 *dev*
+- `start.sh  /path/to/app/service.jar RUNTIME_ENV=qa LOG_LEVEL=WARN` ：运行 */path/to/app/service.jar* ，并设置运行环境为 *qa*，应用程序日志级别为 *WARN*
+
 
 
 
