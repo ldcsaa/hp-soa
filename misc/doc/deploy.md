@@ -201,7 +201,7 @@ drwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/           
 
 #### 1. 创建 Docker 镜像：[docker-build.sh](../../misc/docker/docker-build.sh)
 
-&nbsp;&nbsp;*注：创建 Docker 镜像前需要先打包应用程序，生成应用程序目标文件。（参考：[上一节](##_三、通用打包描述文件)）*
+&nbsp;&nbsp;*注：创建 Docker 镜像前需要先打包应用程序，生成应用程序目标文件。（参考：[上一节](#_三、通用打包描述文件)）*
 
 ```shell
 $ docker-build.sh -h
