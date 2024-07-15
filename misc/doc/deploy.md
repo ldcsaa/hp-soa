@@ -3,11 +3,11 @@
 ---
 
 ## 一、概述
-&nbsp;&nbsp;微服务应用开发声明周期中应用发布是一个重要环节，好的应用发布机制与流程能大大提高测试效率，加快投产速度，同时也能提升线上问题处理和修复效率。HP-SOA 为应用程序打包发布提供了以下支持：
+&nbsp;&nbsp;微服务应用开发声明周期中应用发布是一个重要环节，好的应用发布机制与流程能大大提高测试效率，加快投产速度，同时也能提升线上问题处理和修复效率。HP-SOA 为应用程序打包发布提供了强大支持：
 - 应用配置与代码分离，一次打包可以部署到所有运行环境。
 - 提供 [start.sh](../../misc/opt/deploy/scripts/start.sh) 、[stop.sh](../../misc/opt/deploy/scripts/stop.sh) 、[status.sh](../../misc/opt/deploy/scripts/status.sh) 等通用运行脚本，并支持参数化执行。所有应用可以共用一套运行脚本，不必在不同应用中来回拷贝修改。
-- 提供通用打包描述文件 [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml)，规范发布包格式。
-- Docker 发布支持：提供通用 [Dockerfile](../../misc/docker/Dockerfile) 、镜像创建脚本 [docker-build.sh](../../misc/docker/docker-build.sh) 和容器运行脚本 [docker-run.sh](../../misc/docker/docker-run.sh) ，所有应用可以共用一套 Docker 发布文件，不必在不同应用中来回拷贝修改。
+- 提供通用打包描述文件 [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml) 、[assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml)，规范发布包格式。
+- Docker 发布支持：提供通用镜像模版 [Dockerfile](../../misc/docker/Dockerfile) 、镜像创建脚本 [docker-build.sh](../../misc/docker/docker-build.sh) 和容器运行脚本 [docker-run.sh](../../misc/docker/docker-run.sh) ，所有应用可以共用一套 Docker 发布文件，不必在不同应用中来回拷贝修改。
 
 ## 二、应用配置与代码分离
 
@@ -46,7 +46,7 @@ hp.soa.special:
     prod: -Xms1g -Xmx1g
 ```
 
-## 三、通用运行脚本
+## 三、运行脚本
 &nbsp;&nbsp;HP-SOA 提供以下通用运行脚本执行应用程序启停操作：
 - [start.sh](../../misc/opt/deploy/scripts/start.sh) ：以后台方式启动应用程序。
 - [start-foreground.sh](../../misc/opt/deploy/scripts/start-foreground.sh) ：以前台方式启动应用程序，主要用作 Docker 容器的启动命令，也可以用于跟踪调试应用程序的启动过程。
@@ -58,7 +58,7 @@ hp.soa.special:
 
 ```shell
 $ start.sh -h
-Usage: start.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
+  > Usage: start.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
 &nbsp;&nbsp;*命令参数：*
 
@@ -98,7 +98,7 @@ Usage: start.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 
 ```shell
 $ stop.sh -h
-Usage: stop.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
+  > Usage: stop.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
 &nbsp;&nbsp;命令参数与 [start.sh](../../misc/opt/deploy/scripts/start.sh) 一致。
 
@@ -106,7 +106,7 @@ Usage: stop.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 
 ```shell
 $ restart.sh -h
-Usage: restart.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
+  > Usage: restart.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
 &nbsp;&nbsp;命令参数与 [start.sh](../../misc/opt/deploy/scripts/start.sh) 一致。
 
@@ -114,11 +114,11 @@ Usage: restart.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 
 ```shell
 $ status.sh -h
-Usage: status.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
+  > Usage: status.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
 &nbsp;&nbsp;命令参数与 [start.sh](../../misc/opt/deploy/scripts/start.sh) 一致。
 
-## <span id="package">四、通用打包描述文件</span>
+## <span id="package">四、打包描述文件</span>
 
 &nbsp;&nbsp;HP-SOA 提供以下 2 个通用打包描述文件：
 - [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml)
@@ -171,7 +171,7 @@ Usage: status.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 - 应用程序 jar：`target/${project.artifactId}-${project.version}.jar`
 - 应用程序 *bootstrap* 资源文件：`classes/bootstrap.yml` 或 `classes/bootstrap.yaml`
 - git 信息文件：`classes/git.properties`*（由 [git-commit-id-maven-plugin](https://github.com/git-commit-id/git-commit-id-maven-plugin) Maven 插件创建）*
-- 运行脚本文件：假设运行脚本目录为 `/opt/deploy/scripts`
+- 运行脚本文件：默认运行脚本目录为 `/opt/deploy/scripts`
 
 &nbsp;&nbsp;*打包结果示例：*
 
@@ -193,35 +193,55 @@ drwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/           
 
 ## 五、Docker 发布
 
-&nbsp;&nbsp;HP-SOA 提供了一套通用 Docker 发布脚本，支持为所有应用项目创建 Docker 镜像和容器。主要包括：
+&nbsp;&nbsp;HP-SOA 提供了一套通用 Docker 发布脚本，可以为所有应用程序项目创建 Docker 镜像，运行 Docker 容器。主要包括：
 
-- [Dockerfile](../../misc/docker/Dockerfile) ： 通用 Docker 镜像模版
-- [docker-build.sh](../../misc/docker/docker-build.sh) ：通用 Docker 镜像创建脚本
-- [docker-run.sh](../../misc/docker/docker-run.sh) ：通用 Docker 容器运行脚本
+- [Dockerfile](../../misc/docker/Dockerfile) ： Docker 镜像模版
+- [docker-build.sh](../../misc/docker/docker-build.sh) ：Docker 镜像创建脚本
+- [docker-run.sh](../../misc/docker/docker-run.sh) ：Docker 容器运行脚本
 
 #### 1. 创建 Docker 镜像：[docker-build.sh](../../misc/docker/docker-build.sh)
 
-&nbsp;&nbsp;*注：创建 Docker 镜像前需要先打包应用程序，生成应用程序目标文件。（参考：<a href="#package">上一节</a>）*
-
 ```shell
 $ docker-build.sh -h
-Usage: docker-build.sh {$PROJECT_PATH} {$VERSION} [{$REPO_GROUP}]
+ > Usage: docker-build.sh {$PROJECT_PATH} {$VERSION} [{$REPO_GROUP}]
 ```
 &nbsp;&nbsp;*命令参数：*
 
-- `PROJECT_PATH` ：应用程序 jar 文件或 jar 文件所在目录路径。可选，默认值：空，表示 [start.sh](../../misc/opt/deploy/scripts/start.sh) 文件所在目录路径。
-- 其它参数：执行环境参数，可选，可以设置多个。
+- `PROJECT_PATH` ：应用程序项目路径。
+- `VERSION` ：应用程序版本。
+- `REPO_GROUP` ：镜像仓库名称，可选。如果 `REPO_GROUP` 不为空，生成的目标镜像标签会加上 `$REPO_GROUP/` 前缀。
 
 &nbsp;&nbsp;*运行示例：*
 
-- `start.sh` ：运行 *start.sh* 脚本所在目录下的第一个 jar 文件
-- `start.sh "" SERVER_PORT=9876` ：运行 *start.sh* 脚本所在目录的第一个 jar 文件，并设置应用程序服务端口为 *9876*
-- `start.sh  /path/to/app` ：运行 */path/to/app* 目录的第一个 jar 文件
-- `start.sh  /path/to/app RUNTIME_ENV=dev` ：运行 */path/to/app* 目录的第一个 jar 文件，并设置运行环境为 *dev*
-- `start.sh  /path/to/app/service.jar RUNTIME_ENV=qa LOG_LEVEL=WARN` ：运行 */path/to/app/service.jar* ，并设置运行环境为 *qa*，应用程序日志级别为 *WARN*
+- `docker-build.sh /my/app/app-any-service 1.2.3` ：创建的目标镜像为 *app-any-service:1.2.3*
+- `docker-build.sh /my/app/app-any-service 1.2.3 my-repo` ：创建的目标镜像为 *my-repo/app-any-service:1.2.3*
+- `docker-build.sh /my/app/app-any-service 1.2.3 my-registry.com/my-repo` ：创建的目标镜像为 *my-registry.com/my-repo/app-any-service:1.2.3*
 
+&nbsp;&nbsp;*注意事项：*
+1. 镜像创建脚本会把应用程序文件复制到镜像的 */opt/app/$PROJECT* 目录，因此创建镜像前需要先打包应用程序，生成应用程序目标文件。（参考：<a href="#package">上一节</a>）*
+2. 镜像创建脚本会把 Docker 上下文的 *opt/hp-soa/config* 目录复制到镜像的 */opt/hp-soa/config* 目录，因此创建镜像前需要先准备好所有运行环境的配置文件。
+3. 镜像创建脚本会把 Docker 上下文的 *skywalking-agent* 目录复制到镜像的 */opt/skywalking-agent* 目录，如果需要接入 Skywalking APM 监控，则需要把 Skywalking Java Agent 相关文件放入该目录。
 
+#### 2. 运行 Docker 容器：[docker-run.sh](../../misc/docker/docker-run.sh)
 
+```shell
+$ docker-run.sh -h
+ > Usage: docker-run.sh {$PROJECT} {$VERSION} {$RUNTIME_ENV} [$CONTAINER_NAME=<$PROJECT-$VERSION-$RUNTIME_ENV-$RANDOM>] [OTHER_DOCKER_RUN_OPTIONS]*
+```
+&nbsp;&nbsp;*命令参数：*
+
+- `PROJECT` ：应用程序项目名称，可以是单独名称，也可以是加上仓库前缀的名称，如：*app-any-service* / *my-repo/app-any-service*。
+- `VERSION` ：应用程序版本，即镜像版本。
+- `RUNTIME_ENV` ：运行环境，需要与 *opt/hp-soa/config* 中创建的运行环境子目录匹配。如： *dev* / *test* / *prod*。
+- `CONTAINER_NAME` ：创建的容器名称，可选。默认值为： `$PROJECT-$VERSION-$RUNTIME_ENV-{10位随机字符}`。
+- `OTHER_DOCKER_RUN_OPTIONS` ：传递给 `docker run` 命令的额外命令行参数，可选，可以设置多个。
+
+&nbsp;&nbsp;*运行示例：*
+
+- `docker-run.sh app-any-service 1.2.3 dev` ：通过 *[\*/]app-any-service:1.2.3* 镜像创建 Docker 容器 `app-any-service-1.2.3-dev-{10位随机字符}`
+- `docker-run.sh my-repo/app-any-service 1.2.3 test` ：通过 *[\*/]my-repo/app-any-service:1.2.3* 镜像创建 Docker 容器 `app-any-service-1.2.3-test-{10位随机字符}`
+- `docker-run.sh app-any-service 1.2.3 prod my-container-name` ：通过 *[\*/]app-any-service:1.2.3* 镜像创建 Docker 容器 `my-container-name`
+- `docker-run.sh my-repo/app-any-service 1.2.3 prod "" "-p 1001:1001 -p 1002:1002" "--restart=always" ` ：通过 *[\*/]my-repo/app-any-service:1.2.3* 镜像创建 Docker 容器 `app-any-service-1.2.3-prod-{10位随机字符}`，并传递 *-p 1001:1001 -p 1002:1002 --restart=always* 命令行参数给 `docker run` 命令
 
 ---
 

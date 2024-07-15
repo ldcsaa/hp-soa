@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $1 == '-h' || $1 == '--help' || $# -lt 3 ]]; then
-    echo " > Usage: $(basename $0) \$PROJECT \$VERSION \$RUNTIME_ENV [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [OTHER_OPTIONS]*"
+    echo " > Usage: $(basename $0) {\$PROJECT} {\$VERSION} {\$RUNTIME_ENV} [\$CONTAINER_NAME=<\$PROJECT-\$VERSION-\$RUNTIME_ENV-\$RANDOM>] [OTHER_DOCKER_RUN_OPTIONS]*"
     exit 0
 fi
 
@@ -30,9 +30,7 @@ CMD="docker run -d -e RUNTIME_ENV=$RUNTIME_ENV --name $CONTAINER_NAME"
 
 if [[ $# -gt 4 ]]; then
     shift 4
-    if [[ $# -gt 0 ]]; then
-        CMD="$CMD $@"
-    fi
+    CMD="$CMD $@"
 fi
 
 CMD="$CMD $IMAGE_ID"
