@@ -118,7 +118,7 @@ Usage: status.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
 &nbsp;&nbsp;命令参数与 [start.sh](../../misc/opt/deploy/scripts/start.sh) 一致。
 
-## 三、通用打包描述文件
+## <div id="package">三、通用打包描述文件</div>
 
 &nbsp;&nbsp;HP-SOA 提供以下 2 个通用打包描述文件：
 - [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml)
@@ -201,7 +201,7 @@ drwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/           
 
 #### 1. 创建 Docker 镜像：[docker-build.sh](../../misc/docker/docker-build.sh)
 
-&nbsp;&nbsp;*注：创建 Docker 镜像前需要先打包应用程序，生成应用程序目标文件。（参考：[上一节](#_三、通用打包描述文件)）*
+&nbsp;&nbsp;*注：创建 Docker 镜像前需要先打包应用程序，生成应用程序目标文件。（参考：<a href="#package">上一节</a>）*
 
 ```shell
 $ docker-build.sh -h
