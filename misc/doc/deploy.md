@@ -27,7 +27,7 @@
 
 &nbsp;&nbsp;上述这些配置可以以命令行参数的方式传入运行脚本，如：`start.sh "" "STARTUP_WAIT_SECONDS=90"`，设置应用程序启动等待时间为 90 秒。HP-SOA 同时提供了另一种方式处理上述特殊配置：把上述配置项配置在应用程序的`bootstrap.yml`配置文件，由运行脚本解析这些配置，如：
 
-```yml
+```yaml
 ## 特殊配置
 hp.soa.special:
   # 应用程序启动等待秒数（默认：180 秒）
@@ -64,7 +64,7 @@ Usage: start.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 - 第一个参数：应用程序 jar 文件或 jar 文件所在目录路径。可选，默认值：空，表示 [start.sh](../../misc/opt/deploy/scripts/start.sh) 文件所在目录路径。
 - 其它参数：执行环境参数，可选，可以设置多个。
 
-&nbsp;&nbsp;***执行环境参数：***
+&nbsp;&nbsp;**执行环境参数：**
 - `DEFAULT_JVM_MEMORY_OPTIONS`：默认 JVM 内存选项，默认值：`-Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m`
 - `DEFAULT_STARTUP_WAIT_SECONDS`：默认应用程序启动等待秒数，默认值：180 秒
 - `RUNTIME_ENV`：运行环境，默认值：`local`，根据实际需要设置，如：`dev`、`test`、`qa`、`production` 等
@@ -109,6 +109,80 @@ Usage: status.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 &nbsp;&nbsp;命令参数与 [start.sh](../../misc/opt/deploy/scripts/start.sh) 一致。
 
 ## 三、通用打包描述文件
+
+&nbsp;&nbsp;HP-SOA 提供以下 2 个通用打包描述文件：
+- [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml)
+- [assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml)
+
+&nbsp;&nbsp;[assembly.xml](../../misc/opt/deploy/assembly/assembly.xml) 与 [assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml) 的区别是，打包出来的目标文件名后者比前者多了 *'git commit-id'* 和 *'git 提交时间'* 标识，文件名格式为：`${project.artifactId}-${project.version}-${git.commit.id.abbrev}-${git.commit.time}.tar.gz`。如：'*hp-demo-infra-basic-service-1.1.2-8fdda412-20240703221616.tar.gz*'  
+&nbsp;&nbsp;*（注：如果要使用 [assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml)，应用程序项目需要引入 [git-commit-id-maven-plugin](https://github.com/git-commit-id/git-commit-id-maven-plugin) Maven 插件。）*
+
+#### 1. 打包配置
+&nbsp;&nbsp;应用程序项目 `pom.xml` 文件引入 `maven-assembly-plugin` Maven 插件，并指定打包描述文件路径，即可通过 `maven package` 命令进行打包，如：
+```xml
+<properties>
+    <!-- 定义打包描述文件路径 -->
+    <maven.assembly.descriptor>/opt/deploy/assembly/assembly-with-git.xml</maven.assembly.descriptor>
+</properties>
+
+<build>
+    <plugins>
+        <!-- 引入 `maven-assembly-plugin` Maven 插件 -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>${maven-assembly-plugin.version}</version>
+            <configuration>
+            <descriptors>
+                <!-- 指定打包描述文件路径 -->
+                <descriptor>${maven.assembly.descriptor}</descriptor>
+            </descriptors>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                    <configuration>
+                        <tarLongFileMode>gnu</tarLongFileMode>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    <plugins>
+</build>
+```
+
+#### 2. 打包内容
+&nbsp;&nbsp;[assembly.xml](../../misc/opt/deploy/assembly/assembly.xml) 或 [assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml) 会把以下文件打包在同一个目录，并压缩为 *.tar.gz* 文件。
+- 应用程序 jar：`target/${project.artifactId}-${project.version}.jar`
+- 应用程序 *bootstrap* 资源文件：`classes/bootstrap.yml` 或 `classes/bootstrap.yaml`
+- git 信息文件：`classes/git.properties`*（由 [git-commit-id-maven-plugin](https://github.com/git-commit-id/git-commit-id-maven-plugin) Maven 插件创建）*
+- 运行脚本文件：假设运行脚本目录为 `/opt/deploy/scripts`
+
+&nbsp;&nbsp;**打包结果示例：**
+
+```shell
+# 查看打包结果
+$ tar tvf hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346.tar.gz
+drwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/                                       # 包目录
+-rw-r--r-- hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/hp-demo-infra-nacos-service-1.1.2.jar  # 应用程序 jar
+-rw-r--r-- hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/bootstrap.yml                          # 应用程序 bootstrap 资源文件
+-rw-r--r-- hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/git.properties                         # git 信息文件
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/env.sh                                 # 运行脚本
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/restart.sh                             # 运行脚本
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/start-foreground.sh                    # 运行脚本
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/start.sh                               # 运行脚本
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/status.sh                              # 运行脚本
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/stop.sh                                # 运行脚本
+-rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/yq                                     # 运行脚本（YAML 解析器）
+```
+
+
+
+&nbsp;&nbsp;***执行环境参数：***
 
 
 
