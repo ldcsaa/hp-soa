@@ -46,7 +46,7 @@ hp.soa.special:
     prod: -Xms1g -Xmx1g
 ```
 
-## 二、通用运行脚本
+## 三、通用运行脚本
 &nbsp;&nbsp;HP-SOA 提供以下通用运行脚本执行应用程序启停操作：
 - [start.sh](../../misc/opt/deploy/scripts/start.sh) ：以后台方式启动应用程序。
 - [start-foreground.sh](../../misc/opt/deploy/scripts/start-foreground.sh) ：以前台方式启动应用程序，主要用作 Docker 容器的启动命令，也可以用于跟踪调试应用程序的启动过程。
@@ -118,7 +118,7 @@ Usage: status.sh [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*
 ```
 &nbsp;&nbsp;命令参数与 [start.sh](../../misc/opt/deploy/scripts/start.sh) 一致。
 
-## <div id="package">三、通用打包描述文件</div>
+## <span id="package">四、通用打包描述文件</span>
 
 &nbsp;&nbsp;HP-SOA 提供以下 2 个通用打包描述文件：
 - [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml)
@@ -191,7 +191,7 @@ drwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/           
 -rwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/yq                                     # 运行脚本（YAML 解析器）
 ```
 
-## 四、Docker 发布
+## 五、Docker 发布
 
 &nbsp;&nbsp;HP-SOA 提供了一套通用 Docker 发布脚本，支持为所有应用项目创建 Docker 镜像和容器。主要包括：
 
