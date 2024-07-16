@@ -18,11 +18,11 @@
     <properties>
         <spring-boot.version>3.2.7</spring-boot.version>
         <spring-security.version>6.2.5</spring-security.version>
-        <spring-cloud.version>2023.0.2</spring-cloud.version>
-        <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
+        <spring-cloud-alibaba.version>2023.0.1.2</spring-cloud-alibaba.version>
         <spring-amqp.version>3.1.6</spring-amqp.version>
         <spring-kafka.version>3.1.6</spring-kafka.version>
-        <spring-retry.version>2.0.6</spring-retry.version>
+        <spring-retry.version>2.0.7</spring-retry.version>
 
         <dubbo.version>3.2.14</dubbo.version>
         <nacos-client.version>2.3.3</nacos-client.version>
@@ -101,14 +101,14 @@
 
         <geoip2.version>4.2.0</geoip2.version>
         <gson.version>2.11.0</gson.version>
-        <jackson.version>2.17.1</jackson.version>
+        <jackson.version>2.17.2</jackson.version>
         <hessian.version>4.0.66</hessian.version>
-        <zxing-javase.version>3.5.3</zxing-javase.version>
+        <zxing.javase.version>3.5.3</zxing.javase.version>
         <okhttp2.version>2.7.5</okhttp2.version>
         <okhttp3.version>4.12.0</okhttp3.version>
         <guava.version>33.2.1-jre</guava.version>
         
-        <jsoup.version>1.17.2</jsoup.version>
+        <jsoup.version>1.18.1</jsoup.version>
         <selenium.version>4.22.0</selenium.version>
 
         <poi.version>5.2.5</poi.version>
@@ -118,16 +118,16 @@
         <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
         
         <curator.version>5.7.0</curator.version>
-        <hutool.version>5.8.28</hutool.version>
-        <jjwt.version>0.12.5</jjwt.version>
+        <hutool.version>5.8.29</hutool.version>
+        <jjwt.version>0.12.6</jjwt.version>
         
         <log4j-1.version>1.2.17</log4j-1.version>
         <jboss-logmanager.version>3.0.6.Final</jboss-logmanager.version>
         
         <seata.version>2.0.0</seata.version>
         
-        <micrometer-tracing.version>1.2.7</micrometer-tracing.version>
-        <micrometer-bom.version>1.12.7</micrometer-bom.version>
+        <micrometer-tracing.version>1.2.8</micrometer-tracing.version>
+        <micrometer-bom.version>1.12.8</micrometer-bom.version>
     </properties>
     
     <dependencyManagement>
@@ -481,7 +481,7 @@
             <dependency>
                 <groupId>com.google.zxing</groupId>
                 <artifactId>javase</artifactId>
-                <version>${zxing-javase.version}</version>
+                <version>${zxing.javase.version}</version>
             </dependency>
 
             <dependency>
