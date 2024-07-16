@@ -43,11 +43,11 @@ public class SoaKafkaConfig
     {
         return new KafkaListenerMdcInspector();
     }
-    
+
     /** 默认 Kafka Template，在事务环境下支持以非事方式务发送消息。 */
     @Bean
     @ConditionalOnMissingBean(KafkaTemplate.class)
-    public KafkaTemplate<?, ?> allowNonTransactionalKafkaTemplate(
+    KafkaTemplate<?, ?> allowNonTransactionalKafkaTemplate(
         KafkaProperties properties,
         ProducerFactory<Object, Object> kafkaProducerFactory,
         ProducerListener<Object, Object> kafkaProducerListener,

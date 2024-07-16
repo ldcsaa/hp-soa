@@ -26,12 +26,12 @@ public class SoaClouldSentinelConfig
     {
         return new CloudSentinelExceptionAdvice();
     }
-    
+
     /** 限流处理器 */
     @Bean(sentinelBlockExceptionHandlerBeanName)
     @ConditionalOnMissingBean(name = sentinelBlockExceptionHandlerBeanName)
     @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
-    public BlockExceptionHandler sentinelBlockExceptionHandler()
+    BlockExceptionHandler sentinelBlockExceptionHandler()
     {
         return new CloudSentinelBlockExceptionHandler();
     }
