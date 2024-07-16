@@ -112,10 +112,6 @@ class LogbackLogEvent implements LogEvent {
             return 3;
         }
 
-        if (intLevel < Level.ERROR_INT) {
-            return 2;
-        }
-
         return GelfMessage.DEFAUL_LEVEL;
     }
 

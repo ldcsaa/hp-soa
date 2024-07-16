@@ -77,7 +77,7 @@ public class WebConfig implements WebMvcConfigurer
         AppProperties app = webProperties.getApp();
         
         if(GeneralHelper.isStrEmpty(app.getId()) || GeneralHelper.isStrEmpty(app.getName()))
-            throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.app.id' or 'hp.soa.web.app.name' property is empty", WebConfig.class.getSimpleName()));        
+            throw new RuntimeException(String.format("(%s) init fail -> 'hp.soa.web.app.id' or 'hp.soa.web.app.name' property is empty", WebConfig.class.getSimpleName()));        
     }
 
     /** {@linkplain ReadOnlyContextRefreshedEventListener} 应用程序监听器配置 */

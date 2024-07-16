@@ -254,6 +254,9 @@ public class SpringContextHolder
         
         Method method = ReflectionUtils.findMethod(bean.getClass(), methodName, paramClasses);
         
+        if(method == null)
+            throw new RuntimeException(String.format("method not found '%s#%s'", bean.getClass().getName(), methodName));
+        
         return ReflectionUtils.invokeMethod(method, bean, params);
     }
 

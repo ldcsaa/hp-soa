@@ -26,7 +26,11 @@ public class ContextConfig
     @Bean(springContextHolderBeanName)
     SpringContextHolder springContextHolder(ApplicationContext applicationContext, WebProperties webProperties, SecurityProperties securityProperties)
     {
-        int serverPort = Integer.valueOf(applicationContext.getEnvironment().getProperty(SERVER_PORT_KEY));
+        Integer serverPort = GeneralHelper.str2Int(applicationContext.getEnvironment().getProperty(SERVER_PORT_KEY));
+        
+        if(serverPort == null)
+            throw new RuntimeException(String.format("(%s) init fail -> '%s' property is empty or invalid", ContextConfig.class.getSimpleName(), SERVER_PORT_KEY));
+            
         AppConfigHolder.init(webProperties, securityProperties, serverPort);
         
         checkProxy(webProperties.getProxy());
@@ -47,7 +51,7 @@ public class ContextConfig
         int port = proxy.getPort();
         
         if(GeneralHelper.isStrEmpty(proxy.getHost()) || proxy.getPort() <= 0)
-            throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.proxy.host' or 'hp.soa.web.proxy.port' property is empty or invalid", WebConfig.class.getSimpleName()));
+            throw new RuntimeException(String.format("(%s) init fail -> 'hp.soa.web.proxy.host' or 'hp.soa.web.proxy.port' property is empty or invalid", ContextConfig.class.getSimpleName()));
         
         if(GeneralHelper.isStrNotEmpty(scheme)
             && !scheme.equalsIgnoreCase("http")
@@ -56,7 +60,7 @@ public class ContextConfig
             && !scheme.equalsIgnoreCase("sock4")
             && !scheme.equalsIgnoreCase("sock5")
         )
-            throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.proxy.scheme' property is invalid", WebConfig.class.getSimpleName()));
+            throw new RuntimeException(String.format("(%s) init fail -> 'hp.soa.web.proxy.scheme' property is invalid", ContextConfig.class.getSimpleName()));
         
         if(scheme.isEmpty() || scheme.startsWith("http"))
         {
