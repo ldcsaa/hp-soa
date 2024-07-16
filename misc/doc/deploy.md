@@ -7,7 +7,7 @@
 - 应用配置与代码分离，一次打包可以部署到所有运行环境。
 - 提供 [start.sh](../../misc/opt/deploy/scripts/start.sh) 、[stop.sh](../../misc/opt/deploy/scripts/stop.sh) 、[status.sh](../../misc/opt/deploy/scripts/status.sh) 等通用运行脚本，并支持参数化执行。所有应用可以共用一套运行脚本，不必在不同应用中来回拷贝修改。
 - 提供通用打包描述文件 [assembly.xml](../../misc/opt/deploy/assembly/assembly.xml) 、[assembly-with-git.xml](../../misc/opt/deploy/assembly/assembly-with-git.xml)，规范发布包格式。
-- Docker 发布支持：提供通用镜像模版 [Dockerfile](../../misc/docker/Dockerfile) 、镜像创建脚本 [docker-build.sh](../../misc/docker/docker-build.sh) 和容器运行脚本 [docker-run.sh](../../misc/docker/docker-run.sh) ，所有应用可以共用一套 Docker 发布文件，不必在不同应用中来回拷贝修改。
+- Docker 发布支持：提供通用镜像模版 [Dockerfile](../../misc/docker/Dockerfile) 、镜像构建脚本 [docker-build.sh](../../misc/docker/docker-build.sh) 和容器运行脚本 [docker-run.sh](../../misc/docker/docker-run.sh) ，所有应用可以共用一套 Docker 发布文件，不必在不同应用中来回拷贝修改。
 
 ## 二、应用配置与代码分离
 
@@ -196,7 +196,7 @@ drwxr-xr-x hp-demo-infra-nacos-service-1.1.2-db56f3a7-20240715112346/           
 &nbsp;&nbsp;HP-SOA 提供了一套通用 Docker 发布脚本，可以为所有应用程序项目创建 Docker 镜像，运行 Docker 容器。主要包括：
 
 - [Dockerfile](../../misc/docker/Dockerfile) ： Docker 镜像模版
-- [docker-build.sh](../../misc/docker/docker-build.sh) ：Docker 镜像创建脚本
+- [docker-build.sh](../../misc/docker/docker-build.sh) ：Docker 镜像构建脚本
 - [docker-run.sh](../../misc/docker/docker-run.sh) ：Docker 容器运行脚本
 
 #### 1. 创建 Docker 镜像：[docker-build.sh](../../misc/docker/docker-build.sh)
@@ -218,9 +218,9 @@ $ docker-build.sh -h
 - `docker-build.sh /my/app/app-any-service 1.2.3 my-registry.com/my-repo` ：创建的目标镜像为 *my-registry.com/my-repo/app-any-service:1.2.3*
 
 &nbsp;&nbsp;*注意事项：*
-1. 镜像创建脚本会把应用程序文件复制到镜像的 */opt/app/$PROJECT* 目录，因此创建镜像前需要先打包应用程序，生成应用程序目标文件。（参考：<a href="#package">上一节</a>）*
-2. 镜像创建脚本会把 Docker 上下文的 *opt/hp-soa/config* 目录复制到镜像的 */opt/hp-soa/config* 目录，因此创建镜像前需要先准备好所有运行环境的配置文件。
-3. 镜像创建脚本会把 Docker 上下文的 *skywalking-agent* 目录复制到镜像的 */opt/skywalking-agent* 目录，如果需要接入 Skywalking APM 监控，则需要把 Skywalking Java Agent 相关文件放入该目录。
+1. 镜像构建脚本会把应用程序文件复制到镜像的 */opt/app/$PROJECT* 目录，因此创建镜像前需要先打包应用程序，生成应用程序目标文件。（参考：<a href="#package">上一节</a>）*
+2. 镜像构建脚本会把 Docker 构建上下文的 *opt/hp-soa/config* 目录复制到镜像的 */opt/hp-soa/config* 目录，因此创建镜像前需要先准备好所有运行环境的配置文件。
+3. 镜像构建脚本会把 Docker 构建上下文的 *skywalking-agent* 目录复制到镜像的 */opt/skywalking-agent* 目录，如果需要接入 Skywalking APM 监控，则需要把 Skywalking Java Agent 相关文件放入该目录。
 
 #### 2. 运行 Docker 容器：[docker-run.sh](../../misc/docker/docker-run.sh)
 

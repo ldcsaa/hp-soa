@@ -22,7 +22,7 @@
 - [Sentinel流量控制](sentinel.md)
 - [Skywalking调用链跟踪](skywalking.md)
 - [ELK统一日志](elk.md)
-- [应用发布](deploy.md)
+- [应用打包部署](deploy.md)
 
 ### 技术交流
 - [怪兽乐园①群](https://jq.qq.com/?_wv=1027&k=3UAbrhTG)
