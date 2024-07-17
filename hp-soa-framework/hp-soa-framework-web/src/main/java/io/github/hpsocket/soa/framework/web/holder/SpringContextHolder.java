@@ -1,9 +1,14 @@
 
 package io.github.hpsocket.soa.framework.web.holder;
 
+import java.lang.reflect.Method;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.util.ReflectionUtils;
 
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.service.TracingContext;
 
 /** <b>Spring 上下文持有者</b> */
@@ -206,6 +211,53 @@ public class SpringContextHolder
         }
 
         return obj;
+    }
+
+    public static final void close()
+    {
+        ((ConfigurableApplicationContext)getApplicationContext()).close();
+    }
+    
+    public static final Object invokeBeanMethod(Class<?> clazz, String methodName, Object ... params)
+    {
+        return invokeBeanMethod(null, clazz, methodName, params);
+    }
+    
+    public static final Object invokeBeanMethod(String beanId, String methodName, Object ... params)
+    {
+        return invokeBeanMethod(beanId, null, methodName, params);
+    }
+    
+    public static final Object invokeBeanMethod(String beanId, Class<?> clazz, String methodName, Object ... params)
+    {
+        Object bean = null;
+        
+        if(GeneralHelper.isStrEmpty(beanId))
+            bean = getBean(clazz);
+        else if(clazz == null)
+            bean = getBean(beanId);
+        else
+            bean = getBean(beanId, clazz);
+        
+        return invokeBeanMethod(bean, methodName, params);
+    }
+    
+    public static final Object invokeBeanMethod(Object bean, String methodName, Object ... params)
+    {
+        Class<?>[] paramClasses = new Class[params.length];
+        
+        if (params.length > 0)
+        {
+            for(int i = 0; i < params.length; i++)
+                paramClasses[i] = params[i].getClass();
+        }
+        
+        Method method = ReflectionUtils.findMethod(bean.getClass(), methodName, paramClasses);
+        
+        if(method == null)
+            throw new RuntimeException(String.format("method not found '%s#%s'", bean.getClass().getName(), methodName));
+        
+        return ReflectionUtils.invokeMethod(method, bean, params);
     }
 
 }

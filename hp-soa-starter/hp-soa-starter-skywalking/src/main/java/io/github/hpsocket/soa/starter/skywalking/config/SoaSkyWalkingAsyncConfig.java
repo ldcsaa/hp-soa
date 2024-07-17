@@ -26,11 +26,11 @@ import io.github.hpsocket.soa.starter.web.config.WebConfig;
 public class SoaSkyWalkingAsyncConfig
 {
     public static final String asyncThreadPoolExecutorBeanName = WebConfig.asyncThreadPoolExecutorBeanName;
-    
+
     /** 异步线程池（注入 traceId） */
     @Bean(asyncThreadPoolExecutorBeanName)
-    @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
-    public TracingAsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
+    @ConditionalOnProperty(name = "hp.soa.web.async.enabled", havingValue = "true", matchIfMissing = true)
+    TracingAsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
     {
         RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
         BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 

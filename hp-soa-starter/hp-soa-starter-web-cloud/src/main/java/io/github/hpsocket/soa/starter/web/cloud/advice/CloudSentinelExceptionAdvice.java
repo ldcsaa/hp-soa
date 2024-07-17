@@ -39,7 +39,7 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
 
     /** {@linkplain UndeclaredThrowableException} 异常处理器 */
     @Override
-    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
+    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler({UndeclaredThrowableException.class})
     public Response<?> handleUndeclaredThrowableException(HttpServletRequest request, HttpServletResponse response, UndeclaredThrowableException e)
     {
@@ -48,13 +48,13 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
         else
         {
             log.error(e.getMessage(), e);
-            return TracingHelper.createExceptionResponse(e, HttpStatus.EXPECTATION_FAILED);
+            return TracingHelper.createExceptionResponse(e, HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
     
     /** {@linkplain RuntimeException} 异常处理器 */
     @Override
-    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
+    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler({RuntimeException.class})
     public Response<?> handleRuntimeException(HttpServletRequest request, HttpServletResponse response, RuntimeException e)
     {
@@ -63,7 +63,7 @@ public class CloudSentinelExceptionAdvice extends SentinelExceptionAdvice
         else
         {
             log.error(e.getMessage(), e);
-            return TracingHelper.createExceptionResponse(e, HttpStatus.EXPECTATION_FAILED);
+            return TracingHelper.createExceptionResponse(e, HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 

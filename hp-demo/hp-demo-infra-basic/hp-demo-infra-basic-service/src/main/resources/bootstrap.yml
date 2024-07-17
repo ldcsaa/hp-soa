@@ -122,9 +122,8 @@ management:
     jmx.exposure.include: "*"
     web.base-path: /__admin
     web.exposure.include: "*"
-  metrics:
-    export.influx.enabled: false
-    tags.application: ${hp.soa.web.app.name}
+  influx.metrics.export.enabled: false
+  metrics.tags.application: ${hp.soa.web.app.name}
 
 ## Spring-Doc 配置
 springdoc:

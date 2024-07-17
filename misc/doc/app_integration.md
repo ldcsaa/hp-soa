@@ -292,7 +292,7 @@ logging.config: classpath:log4j2-kafka.xml
 
 &nbsp;&nbsp;HP-SOA 应用启动时，会查找并加载下列共享配置文件：
 - 系统配置文件：启动 spring-boot 前由Java系统加载，用于配置那些需要在 spring-boot 启动前已配置好的系统属性（如：lo4j日志相关配置）。默认配置文件：`/opt/hp-soa/config/system-config.properties`，可通过JVM启动参数`-Dhp.soa.system.properties.file`修改系统配置文件路径。参考：[system-config.properties](../../misc/opt/hp-soa/config/system-config.properties)
-- 扩展配置文件：由 spring-boot 加载，用于配置注册中心地址、配置中心地址和系统全局设置等公共应用属性，默认配置文件：`/opt/hp-soa/config/extended-config.properties`，，可通过JVM启动参数`-Dhp.soa.extended.properties.file`修改扩展配置文件路径。参考：[extended-config.properties](../../misc/opt/hp-soa/config/extended-config.properties)
+- 扩展配置文件：由 spring-boot 加载，用于配置注册中心地址、配置中心地址和系统全局设置等公共应用属性，默认配置文件：`/opt/hp-soa/config/extended-config.properties`，可通过JVM启动参数`-Dhp.soa.extended.properties.file`修改扩展配置文件路径。参考：[extended-config.properties](../../misc/opt/hp-soa/config/extended-config.properties)
 
 #### 4. 实现 HTTP 鉴权接口（Gateway/BFF应用）
 &nbsp;&nbsp;Gateway/BFF应用作为系统访问入口接收外部HTTP请求，通常需要对请求执行认证和授权。HP-SOA 通过以下3个步骤实现HTTP请求鉴权：

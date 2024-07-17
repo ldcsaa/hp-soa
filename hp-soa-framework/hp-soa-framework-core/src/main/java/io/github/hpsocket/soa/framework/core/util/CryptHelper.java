@@ -500,9 +500,6 @@ public class CryptHelper
             charset  = safeCharset(charset);
             password = GeneralHelper.safeString(password);
             
-            SecureRandom secure = new SecureRandom();
-            secure.setSeed(password.getBytes());
-
             SecretKeySpec key = genMySQLAESKey(password, charset);
             byte[] bytes = content.getBytes(charset);
 
@@ -529,9 +526,6 @@ public class CryptHelper
             charset  = safeCharset(charset);
             password = GeneralHelper.safeString(password);
                         
-            SecureRandom secure = new SecureRandom();
-            secure.setSeed(password.getBytes());
-
             SecretKeySpec key = genMySQLAESKey(password, charset);
             byte[] bytes = hexStr2Bytes(content);
 

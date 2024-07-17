@@ -59,15 +59,15 @@ public class SoaGlobalTransactionConfig
 
     @Value("${hp.soa.data.mysql.global-transaction-management.pointcut-expression:}")
     private String pointcutExpression;
-    
+
     /** 全局事务的默认 Advice */
     @Primary
     @Bean(dynamicRoutingTransactionAdviceBeanName)
     @ConditionalOnMissingBean(name = dynamicRoutingTransactionAdviceBeanName)
-    public TransactionInterceptor dynamicRoutingTransactionAdvice(
+    TransactionInterceptor dynamicRoutingTransactionAdvice(
         @Qualifier(dynamicRoutingTransactionManagerBeanName) TransactionManager transactionManager,
         @Qualifier(soaTransactionAttributeSourceNameMapProviderBeanName) SoaTransactionAttributeSourceNameMapProvider nameMapProvider,
-        @Qualifier(requiredRuleBasedTransactionAttributeBeanName) RuleBasedTransactionAttribute required, 
+        @Qualifier(requiredRuleBasedTransactionAttributeBeanName) RuleBasedTransactionAttribute required,
         @Qualifier(readOnlyRuleBasedTransactionAttributeBeanName) RuleBasedTransactionAttribute readOnly)
     {
         NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
@@ -125,7 +125,7 @@ public class SoaGlobalTransactionConfig
     @Bean(dynamicRoutingTransactionAdvisorBeanName)
     @ConditionalOnMissingBean(name = dynamicRoutingTransactionAdvisorBeanName)
     @ConditionalOnExpression("'${hp.soa.data.mysql.global-transaction-management.pointcut-expression:}' != ''")
-    public Advisor dynamicRoutingTransactionAdvisor(@Qualifier(dynamicRoutingTransactionAdviceBeanName) TransactionInterceptor txAdvice)
+    Advisor dynamicRoutingTransactionAdvisor(@Qualifier(dynamicRoutingTransactionAdviceBeanName) TransactionInterceptor txAdvice)
     {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
         pointcut.setExpression(pointcutExpression);

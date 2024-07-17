@@ -1,14 +1,16 @@
 package io.github.hpsocket.soa.starter.sentinel.exception;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
+import org.springframework.http.HttpStatus;
+
+import com.alibaba.csp.sentinel.adapter.spring.webmvc_v6x.callback.BlockExceptionHandler;
 import com.alibaba.csp.sentinel.slots.block.AbstractRule;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson2.JSON;
 
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
+import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.model.Response;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,14 +25,15 @@ public class DefaultSentinelBlockExceptionHandler implements BlockExceptionHandl
 {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, BlockException e) throws IOException
+    public void handle(HttpServletRequest request, HttpServletResponse response, String resourceName, BlockException e) throws Exception
     {
         AbstractRule rule   = e.getRule();
-        ServiceException se = wrapUnimportantException("接口繁忙" + ((rule != null) ? (": " + rule.getResource()) : ""), FREQUENCY_LIMIT_ERROR, e);
+        String msg          = String.format("接口繁忙 - %s:%s", AppConfigHolder.getAppName(), (rule != null) ? rule.getResource() : "");
+        ServiceException se = wrapUnimportantException(msg, FREQUENCY_LIMIT_ERROR, e);
 
         logServiceException(log, se, false);
 
-        response.setStatus(FREQUENCY_LIMIT_ERROR);
+        response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         response.setContentType("application/json; charset=utf-8");
         
         try(PrintWriter out = response.getWriter())
