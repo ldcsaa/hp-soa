@@ -29,7 +29,7 @@ public class SoaMybatisPlusConfig
     /** mybatis-plus 默认加载的 {@linkplain MybatisPlusInterceptor} */
     @Bean
     @ConditionalOnMissingBean(MybatisPlusInterceptor.class)
-    public MybatisPlusInterceptor mybatisPlusInterceptor()
+    MybatisPlusInterceptor mybatisPlusInterceptor()
     {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
 

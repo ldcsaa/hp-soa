@@ -1,7 +1,7 @@
 ## Log4J 配置文件（默认：log4j2.xml）
 #logging.config: classpath:log4j2.xml
 #logging.config: classpath:log4j2-json.xml
-#logging.config: classpath:log4j2-kafka.xml
+logging.config: classpath:log4j2-kafka.xml
 #logging.config: classpath:log4j2-redis.xml
 #logging.config: classpath:log4j2-gelf.xml
 
@@ -75,9 +75,8 @@ management:
     jmx.exposure.exclude: "*"
     web.base-path: /__admin
     web.exposure.include: "*"
-  metrics:
-    export.influx.enabled: false
-    tags.application: ${hp.soa.web.app.name}
+  influx.metrics.export.enabled: false
+  metrics.tags.application: ${hp.soa.web.app.name}
 
 ## Spring-Doc 配置
 springdoc:

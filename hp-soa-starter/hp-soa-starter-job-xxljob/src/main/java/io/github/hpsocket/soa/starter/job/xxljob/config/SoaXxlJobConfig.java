@@ -26,9 +26,9 @@ public class SoaXxlJobConfig
     {
         this.soaXxlJobProperties = soaXxlJobProperties;
     }
-    
+
     @Bean
-    public XxlJobSpringExecutor xxlJobSpringExecutor()
+    XxlJobSpringExecutor xxlJobSpringExecutor()
     {
         XxlJobSpringExecutor executor = new XxlJobSpringExecutor();
         

@@ -31,12 +31,12 @@ public class SoaSentinelConfig
     {
         return new SentinelExceptionAdvice();
     }
-    
+
     /** 默认限流处理器 */
     @Bean(sentinelBlockExceptionHandlerBeanName)
     @ConditionalOnMissingBean(name = sentinelBlockExceptionHandlerBeanName)
     @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
-    public BlockExceptionHandler sentinelBlockExceptionHandler()
+    BlockExceptionHandler sentinelBlockExceptionHandler()
     {
         return new DefaultSentinelBlockExceptionHandler();
     }
@@ -45,7 +45,7 @@ public class SoaSentinelConfig
     @Bean
     @ConditionalOnMissingBean(UrlCleaner.class)
     @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
-    public UrlCleaner urlCleaner()
+    UrlCleaner urlCleaner()
     {
         final Set<String> suffixSet = new HashSet<>(Arrays.asList(".js", ".css", ".html", ".ico", ".txt", ".md", ".jpg", ".png"));
         

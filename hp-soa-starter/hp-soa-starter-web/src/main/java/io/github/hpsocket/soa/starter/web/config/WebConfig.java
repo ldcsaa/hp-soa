@@ -77,13 +77,13 @@ public class WebConfig implements WebMvcConfigurer
         AppProperties app = webProperties.getApp();
         
         if(GeneralHelper.isStrEmpty(app.getId()) || GeneralHelper.isStrEmpty(app.getName()))
-            throw new RuntimeException(String.format("({}) init fail -> 'hp.soa.web.app.id' or 'hp.soa.web.app.name' property is empty", WebConfig.class.getSimpleName()));        
+            throw new RuntimeException(String.format("(%s) init fail -> 'hp.soa.web.app.id' or 'hp.soa.web.app.name' property is empty", WebConfig.class.getSimpleName()));        
     }
 
     /** {@linkplain ReadOnlyContextRefreshedEventListener} 应用程序监听器配置 */
     @DependsOn(springContextHolderBeanName)
     @Bean(readOnlyContextRefreshedEventListenerBeanName)
-    public ReadOnlyContextRefreshedEventListener readOnlyContextRefreshedEventListener()
+    ReadOnlyContextRefreshedEventListener readOnlyContextRefreshedEventListener()
     {
         return new ReadOnlyContextRefreshedEventListener();
     }
@@ -92,7 +92,7 @@ public class WebConfig implements WebMvcConfigurer
     @RefreshScope
     @DependsOn(springContextHolderBeanName)
     @Bean(readOnlyRefreshEventListenerBeanName)
-    public ReadOnlyRefreshEventListener readOnlyRefreshEventListener()
+    ReadOnlyRefreshEventListener readOnlyRefreshEventListener()
     {
         return new ReadOnlyRefreshEventListener();
     }
@@ -100,7 +100,7 @@ public class WebConfig implements WebMvcConfigurer
     /** {@linkplain DynamicLogLevelContextRefreshedEventListener} 应用程序监听器配置 */
     @DependsOn(springContextHolderBeanName)
     @Bean(dynamicLogLevelContextRefreshedEventListenerBeanName)
-    public DynamicLogLevelContextRefreshedEventListener dynamicLogLevelContextRefreshedEventListener()
+    DynamicLogLevelContextRefreshedEventListener dynamicLogLevelContextRefreshedEventListener()
     {
         return new DynamicLogLevelContextRefreshedEventListener();
     }
@@ -109,7 +109,7 @@ public class WebConfig implements WebMvcConfigurer
     @RefreshScope
     @DependsOn(springContextHolderBeanName)
     @Bean(dynamicLogLevelRefreshEventListenerBeanName)
-    public DynamicLogLevelRefreshEventListener dynamicLogLevelRefreshEventListener()
+    DynamicLogLevelRefreshEventListener dynamicLogLevelRefreshEventListener()
     {
         return new DynamicLogLevelRefreshEventListener();
     }
@@ -117,7 +117,7 @@ public class WebConfig implements WebMvcConfigurer
     /** {@linkplain HttpMdcFilter} 过滤器配置 */
     @Bean(httpMdcFilterRegistrationBeanName)
     @ConditionalOnMissingBean(name = httpMdcFilterRegistrationBeanName)
-    public FilterRegistrationBean<HttpMdcFilter> httpMdcFilterRegistration()
+    FilterRegistrationBean<HttpMdcFilter> httpMdcFilterRegistration()
     {
         FilterRegistrationBean<HttpMdcFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new HttpMdcFilter());
@@ -179,20 +179,20 @@ public class WebConfig implements WebMvcConfigurer
         
         return http.build();
     }
-    
+
     /** {@linkplain WebSecurityCustomizer} Web 安全定制器配置 */
     @Bean
     @ConditionalOnMissingBean(WebSecurityCustomizer.class)
-    public WebSecurityCustomizer webSecurityCustomizer()
+    WebSecurityCustomizer webSecurityCustomizer()
     {
        return ((web) -> {});
     }
-    
+
     /** {@linkplain AsyncThreadPoolExecutor} 异步线程池配置 */
     @Bean(asyncThreadPoolExecutorBeanName)
     @ConditionalOnMissingBean(name = asyncThreadPoolExecutorBeanName)
-    @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
-    public AsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
+    @ConditionalOnProperty(name = "hp.soa.web.async.enabled", havingValue = "true", matchIfMissing = true)
+    AsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
     {
         RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
         BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 
@@ -211,11 +211,11 @@ public class WebConfig implements WebMvcConfigurer
         
         return executor;
     }
-    
+
     /** {@linkplain AsyncService} 异步服务配置 */
     @Bean
-    @ConditionalOnProperty(name="hp.soa.web.async.enabled", havingValue="true", matchIfMissing = true)
-    public AsyncService asyncService(AsyncThreadPoolExecutor asyncThreadPoolExecutor)
+    @ConditionalOnProperty(name = "hp.soa.web.async.enabled", havingValue = "true", matchIfMissing = true)
+    AsyncService asyncService(AsyncThreadPoolExecutor asyncThreadPoolExecutor)
     {
         return new AsyncServiceImpl(asyncThreadPoolExecutor);
     }
