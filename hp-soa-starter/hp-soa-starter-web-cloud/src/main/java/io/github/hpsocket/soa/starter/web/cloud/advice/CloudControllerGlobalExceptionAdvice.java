@@ -36,7 +36,7 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
 
     /** {@linkplain Exception} 异常处理器 */
     @Override
-    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
+    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler({Exception.class})
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
     {
@@ -45,7 +45,7 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
         else
         {
             log.error(e.getMessage(), e);
-            return TracingHelper.createExceptionResponse(e, HttpStatus.EXPECTATION_FAILED);
+            return TracingHelper.createExceptionResponse(e, HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
