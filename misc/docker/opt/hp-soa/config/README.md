@@ -1,0 +1,2 @@
+#### 配置文件
+&nbsp;&nbsp;&nbsp;&nbsp;[docker-build.sh](../../../docker-build.sh) 会把此目录打包到 Docker 镜像。启动 Docker 容器时根据`$RUNTIME_ENV`环境变量参数加载相应环境子目录的配置文件。如果该环境子目录不存在或目录中没有任何文件，则加载`opt/hp-soa/config`目录中的默认配置文件。

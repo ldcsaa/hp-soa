@@ -44,6 +44,15 @@ logging.max_history_files=10\
 
 &nbsp;&nbsp;上例中，`collector.backend_service` 参数设置 Skywalking OAP Server 地址，`agent.service_name` 参数设置应用程序名称，`logging.*` 参数设置日志相关信息。详细配置参考 Skywalking Agent 安装目录下的 [config/agent.config](https://github.com/apache/skywalking-java/blob/main/apm-sniffer/config/agent.config)。
 
+## 四、Docker 接入支持
+
+&nbsp;&nbsp;Docker 容器的应用程序要支持 Skywalking APM 监控需要执行以下操作：
+
+1. **Skywalking Java Agent 部署到镜像：** 把 Skywalking Java Agent 相关文件复制到 Docker 构建上下文的 *skywalking-agent* 目录，[docker-build.sh](../../misc/docker/docker-build.sh) 镜像构建脚本会把该目录复制到镜像的 */opt/skywalking-agent* 目录。
+2. **应用程序注入 Skywalking javaagent：** 把 Skywalking javaagent 配置写入 Docker 构建上下文的 [opt/hp-soa/config/$RUNTIME_ENV/java-agent.config](../../misc/docker/opt/hp-soa/config/java-agent.config)，该文件会在镜像构建时复制到目标镜像，并在容器启动时由 [start-foreground.sh](../../misc/docker/bin/start-foreground.sh) 容器运行脚本处理并加载相应 javaagent。
+
+（详细内容请参考：[应用打包部署](../../misc/doc/deploy.md)）
+
 ---
 
 [[用户指南](user_guide.md)]

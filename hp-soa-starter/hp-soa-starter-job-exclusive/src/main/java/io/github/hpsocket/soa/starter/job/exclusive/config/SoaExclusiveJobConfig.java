@@ -23,10 +23,10 @@ public class SoaExclusiveJobConfig
 {
     @Value("${hp.soa.job.exclusive.redisson-client-name:}")
     private String redissonClientName;
-    
+
     @Bean
     @DependsOn("springContextHolder")
-    public ExclusiveJobInspector exclusiveJobInspector()
+    ExclusiveJobInspector exclusiveJobInspector()
     {
         RedissonClient redissonClient = null;
         

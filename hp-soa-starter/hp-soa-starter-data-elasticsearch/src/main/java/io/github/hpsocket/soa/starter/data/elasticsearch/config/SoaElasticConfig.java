@@ -37,7 +37,7 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
     /** {@linkplain ZonedDateTime} 时间日期提供者 */
     @Bean(zonedDateTimeProviderBeanName)
     @ConditionalOnMissingBean(name = zonedDateTimeProviderBeanName)
-    public ZonedDateTimeProvider zonedDateTimeProvider()
+    ZonedDateTimeProvider zonedDateTimeProvider()
     {
         return ZonedDateTimeProvider.INSTANCE;
     }
@@ -45,7 +45,7 @@ public class SoaElasticConfig extends ElasticsearchConfigurationSupport
     /** {@linkplain OffsetDateTime} 时间日期提供者 */
     @Bean(offsetDateTimeProviderBeanName)
     @ConditionalOnMissingBean(name = offsetDateTimeProviderBeanName)
-    public OffsetDateTimeProvider offsetDateTimeProvider()
+    OffsetDateTimeProvider offsetDateTimeProvider()
     {
         return OffsetDateTimeProvider.INSTANCE;
     }

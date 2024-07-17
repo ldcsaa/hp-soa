@@ -34,7 +34,7 @@ public class SoaDruidConfig
 
     /** <b>Druid 监控页面广告屏蔽 {@linkplain Filter} */
     @Bean
-    public FilterRegistrationBean<Filter> druidAdFilterRegistrationBean(DruidStatProperties properties)
+    FilterRegistrationBean<Filter> druidAdFilterRegistrationBean(DruidStatProperties properties)
     {
         DruidStatProperties.StatViewServlet config = properties.getStatViewServlet();
         String pattern = config.getUrlPattern() != null ? config.getUrlPattern() : "/druid/*";

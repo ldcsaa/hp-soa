@@ -46,10 +46,10 @@ public class SwaggerConfig implements WebMvcConfigurer
     {
         this.swaggerProperties = swaggerProperties;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(OpenAPI.class)
-    public OpenAPI springDocOpenAPI()
+    OpenAPI springDocOpenAPI()
     {
         return new OpenAPI()
                 .info(new Info()
@@ -68,7 +68,7 @@ public class SwaggerConfig implements WebMvcConfigurer
 
     @Bean
     @ConditionalOnMissingBean(OpenApiCustomizer.class)
-    public OpenApiCustomizer customerGlobalHeaderOpenApiCustomiser()
+    OpenApiCustomizer customerGlobalHeaderOpenApiCustomiser()
     {
         return openApi -> openApi.getPaths().values().stream().flatMap(pathItem -> pathItem.readOperations().stream())
                 .forEach(operation -> operation

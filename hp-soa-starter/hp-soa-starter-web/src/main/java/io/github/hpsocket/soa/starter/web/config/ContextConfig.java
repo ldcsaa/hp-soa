@@ -21,10 +21,10 @@ public class ContextConfig
     public static final String springContextHolderBeanName = "springContextHolder";
     
     private static final String SERVER_PORT_KEY = "server.port";
-    
+
     /** {@linkplain SpringContextHolder} Spring 上下文持有者配置 */
     @Bean(springContextHolderBeanName)
-    public SpringContextHolder springContextHolder(ApplicationContext applicationContext, WebProperties webProperties, SecurityProperties securityProperties)
+    SpringContextHolder springContextHolder(ApplicationContext applicationContext, WebProperties webProperties, SecurityProperties securityProperties)
     {
         int serverPort = Integer.valueOf(applicationContext.getEnvironment().getProperty(SERVER_PORT_KEY));
         AppConfigHolder.init(webProperties, securityProperties, serverPort);

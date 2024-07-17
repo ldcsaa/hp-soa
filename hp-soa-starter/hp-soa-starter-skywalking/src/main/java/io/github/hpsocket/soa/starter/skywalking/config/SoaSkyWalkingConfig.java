@@ -28,9 +28,9 @@ import io.micrometer.observation.ObservationRegistry;
 @ConditionalOnClass(TraceContext.class)
 public class SoaSkyWalkingConfig
 {
-   /** 调用链上下文服务 */
+    /** 调用链上下文服务 */
     @Bean
-    public TracingContext tracingContext()
+    TracingContext tracingContext()
     {
         return new TracingContext()
         {

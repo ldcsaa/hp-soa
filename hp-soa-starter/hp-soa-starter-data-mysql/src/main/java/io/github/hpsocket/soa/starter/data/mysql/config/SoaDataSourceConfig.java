@@ -31,12 +31,12 @@ public class SoaDataSourceConfig
 {
     public static final String dynamicRoutingDataSourceBeanName = "dynamicRoutingDataSource";
     public static final String dynamicRoutingTransactionManagerBeanName = "dynamicRoutingTransactionManager";
-    
+
     /** 默认动态数据源 */
     @Primary
     @Bean(dynamicRoutingDataSourceBeanName)
     @ConditionalOnMissingBean(name = dynamicRoutingDataSourceBeanName)
-    public DataSource dynamicRoutingDataSource(
+    DataSource dynamicRoutingDataSource(
         DynamicDataSourceProperties properties,
         ObjectProvider<List<DynamicDataSourcePropertiesCustomizer>> dataSourcePropertiesCustomizers,
         List<DynamicDataSourceProvider> providers)

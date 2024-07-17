@@ -1,27 +1,19 @@
 #!/bin/bash
 
-BIN_DIR=$(cd $(dirname $0); pwd)
-PRG_HOME=$(cd $(dirname $BIN_DIR); pwd)
+if [[ "$1" == '-h' || "$1" == '--help' ]]; then
+	echo "  > Usage: $(basename $0) [PROGRAM_PATH or PROGRAM_JAR] [ENV_VARIABLE_X=VALUE_X]*"
+	exit 0
+fi
 
-source $BIN_DIR/env.sh
+BIN_DIR=$(cd $(dirname $0); pwd)
+
+source $BIN_DIR/env.sh "$@"
 
 if [ $? -ne 0 ]; then
-    exit 1
-fi
-
-PRG_JAR=
-
-for i in $PRG_HOME/deploy/*.jar; do
-    if [ -z "$PRG_JAR" ]; then
-        PRG_JAR=$i
-        break
-    fi
-done
-
-if [[ -z "$PRG_JAR" || ! -f "$PRG_JAR" ]]; then
-    echo "  > start failed -> (main jar file '$PRG_JAR' not exists)"
     exit 2
 fi
+
+JAVA_OPTS="-Duser.dir=$PRG_HOME $JAVA_OPTS"
 
 check_port()
 {
@@ -43,6 +35,11 @@ if check_port $SERVER_PORT; then
 fi
 
 echo "\$JAVA_OPTS: $JAVA_OPTS"
+
+if [ ! -f $LOG_FILE ]; then
+    mkdir -p $(dirname $LOG_FILE)
+	touch $LOG_FILE
+fi
 
 tail -0f "$LOG_FILE" 2>/dev/null &
 trap "kill $! > /dev/null 2>&1" EXIT
