@@ -41,7 +41,7 @@ public class SoaMongoConfig
     /** {@linkplain ZonedDateTime} 时间日期提供者 */
     @Bean(zonedDateTimeProviderBeanName)
     @ConditionalOnMissingBean(name = zonedDateTimeProviderBeanName)
-    public ZonedDateTimeProvider zonedDateTimeProvider()
+    ZonedDateTimeProvider zonedDateTimeProvider()
     {
         return ZonedDateTimeProvider.INSTANCE;
     }
@@ -49,7 +49,7 @@ public class SoaMongoConfig
     /** {@linkplain OffsetDateTime} 时间日期提供者 */
     @Bean(offsetDateTimeProviderBeanName)
     @ConditionalOnMissingBean(name = offsetDateTimeProviderBeanName)
-    public OffsetDateTimeProvider offsetDateTimeProvider()
+    OffsetDateTimeProvider offsetDateTimeProvider()
     {
         return OffsetDateTimeProvider.INSTANCE;
     }
@@ -58,7 +58,7 @@ public class SoaMongoConfig
      * 处理 Java Bean 的日期时间类型字段与 MongoDB Date 类型字段映射。
      */
     @Bean
-    public MongoCustomConversions customConversions()
+    MongoCustomConversions customConversions()
     {
         List<Converter<?, ?>> converters = new ArrayList<>();
         

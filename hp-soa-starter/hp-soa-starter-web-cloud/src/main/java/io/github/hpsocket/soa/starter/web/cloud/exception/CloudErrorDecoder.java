@@ -57,28 +57,14 @@ public class CloudErrorDecoder implements ErrorDecoder
             
             Class<?> clazz = null;
             
-            try
-            {
-                clazz = Class.forName(info.getException());
-            }
-            catch(Exception e)
-            {
-            
-            }
+            try {clazz = Class.forName(info.getException());} catch(Exception e) {}
             
             if(clazz == null)
                 return new ServiceException(String.format("%s: %s -> %s", desc, info.getException(), info.getMessage()), INNER_API_CALL_EXCEPTION);
 
             Constructor<?> cstor = null;
             
-            try
-            {
-                cstor = clazz.getDeclaredConstructor(String.class);
-            }
-            catch(Exception e)
-            {
-                
-            }
+            try {cstor = clazz.getDeclaredConstructor(String.class);} catch(Exception e) {}
             
             if(cstor == null)
                 return new ServiceException(String.format("%s: %s -> %s", desc, info.getException(), info.getMessage()), INNER_API_CALL_EXCEPTION);

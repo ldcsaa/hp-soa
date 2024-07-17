@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 
-import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
+import com.alibaba.csp.sentinel.adapter.spring.webmvc_v6x.callback.BlockExceptionHandler;
 
 import io.github.hpsocket.soa.starter.sentinel.config.SoaSentinelConfig;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudSentinelExceptionAdvice;
@@ -26,12 +26,12 @@ public class SoaClouldSentinelConfig
     {
         return new CloudSentinelExceptionAdvice();
     }
-    
+
     /** 限流处理器 */
     @Bean(sentinelBlockExceptionHandlerBeanName)
     @ConditionalOnMissingBean(name = sentinelBlockExceptionHandlerBeanName)
     @ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
-    public BlockExceptionHandler sentinelBlockExceptionHandler()
+    BlockExceptionHandler sentinelBlockExceptionHandler()
     {
         return new CloudSentinelBlockExceptionHandler();
     }

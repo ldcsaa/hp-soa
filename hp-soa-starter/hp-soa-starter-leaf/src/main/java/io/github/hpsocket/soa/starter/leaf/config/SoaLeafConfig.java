@@ -42,11 +42,11 @@ public class SoaLeafConfig
     
     @Value("${hp.soa.gid.leaf.segment.data-source:" + DEFAULT_LEAF_SEGMENT_DATA_SOURCE + "}")
     private String leafSegmentDataSource;
-    
+
     /** 雪花 ID 生成器 */
     @Bean(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN)
     @ConditionalOnProperty(name = "hp.soa.gid.leaf.snowflake.enabled", havingValue = "true", matchIfMissing = true)
-    public IdGen snowflakeIdGen()
+    IdGen snowflakeIdGen()
     {
         if(GeneralHelper.isStrEmpty(leafName))
             throw new BeanCreationException(GlobalIdService.LEAF_SNOWFLAKE_ID_GENERATOR_BEAN, "property 'hp.soa.gid.leaf.snowflake.name' not config");
@@ -62,11 +62,11 @@ public class SoaLeafConfig
         
         return idGen;
     }
-    
+
     /** 段号 ID 生成器 */
     @Bean(GlobalIdService.LEAF_SEGMENT_ID_GENERATOR_BEAN)
     @ConditionalOnProperty(name = "hp.soa.gid.leaf.segment.enabled", havingValue = "true", matchIfMissing = false)
-    public IdGen segmentIdGen()
+    IdGen segmentIdGen()
     {
         DataSource dataSource   = findLeafSegmentDataSource();
         IdAllocDaoImpl dao      = new IdAllocDaoImpl(dataSource);

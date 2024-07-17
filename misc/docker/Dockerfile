@@ -1,0 +1,48 @@
+# https://hub.docker.com/_/eclipse-temurin
+
+FROM eclipse-temurin:17-jre-jammy
+
+ARG PROJECT_BASE_PATH=
+ARG PROJECT=
+ARG VERSION=
+
+ARG CUR_USER=root
+ARG DEPLOY_BASE_PATH=/opt/app
+ARG DEPLOY_PATH=$DEPLOY_BASE_PATH/$PROJECT
+ARG DATA_PATH=/data
+ARG LOG_FILES_BASE_PATH=$DATA_PATH/logs
+ARG SOURCE_CONFIG_FILES_PATH=opt/hp-soa/config
+ARG CONTAINER_CONFIG_FILES_PATH=/opt/hp-soa/config
+ARG SOURCE_APM_AGENT_PATH=skywalking-agent
+ARG CONTAINER_APM_AGENT_PATH=/opt/skywalking-agent
+ARG SOURCE_SCRIPT_FILES_PATH=bin
+ARG CONTAINER_SCRIPT_FILES_PATH=$DEPLOY_PATH
+ARG PROJECT_PATH=$PROJECT_BASE_PATH/$PROJECT
+ARG NET_TOOLS_VERSION=2.10-0.1ubuntu3_amd64
+
+ENV RUNTIME_ENV=dev
+ENV TZ=Asia/Shanghai
+
+USER $CUR_USER
+
+WORKDIR ${DEPLOY_PATH}
+
+RUN mkdir -p $DATA_PATH && \
+    chown -R $CUR_USER:$CUR_USER $DATA_PATH && \
+    mkdir -p $LOG_FILES_BASE_PATH && \
+    chown -R $CUR_USER:$CUR_USER $LOG_FILES_BASE_PATH
+
+ADD --link --chown=$CUR_USER:$CUR_USER --chmod=644 $PROJECT_PATH/* $DEPLOY_PATH/
+
+ADD --link --chown=$CUR_USER:$CUR_USER --chmod=755 $SOURCE_SCRIPT_FILES_PATH/* $DEPLOY_PATH/
+
+ADD --link --chown=$CUR_USER:$CUR_USER $SOURCE_CONFIG_FILES_PATH/ $CONTAINER_CONFIG_FILES_PATH/
+
+ADD --link --chown=$CUR_USER:$CUR_USER $SOURCE_APM_AGENT_PATH/ $CONTAINER_APM_AGENT_PATH/
+
+ADD --link net-tools/net-tools_$NET_TOOLS_VERSION.deb /tmp/
+
+RUN dpkg -i /tmp/net-tools_$NET_TOOLS_VERSION.deb && rm -rf /tmp/net-tools_$NET_TOOLS_VERSION.deb
+
+#ENTRYPOINT [ "./docker-start.sh" ]
+CMD [ "./start-foreground.sh" ]

@@ -32,6 +32,10 @@ class RedisPoolHolder {
     private final Map<String, Pool<Jedis>> standalonePools = new HashMap<>();
 
     private final Object mutex = new Object();
+    
+    private RedisPoolHolder() {
+        
+    }
 
     public static RedisPoolHolder getInstance() {
         return INSTANCE;

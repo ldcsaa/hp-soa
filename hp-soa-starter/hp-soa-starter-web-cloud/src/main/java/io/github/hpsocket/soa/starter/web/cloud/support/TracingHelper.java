@@ -63,7 +63,7 @@ public class TracingHelper
                 if(GeneralHelper.isStrNotEmpty(key))
                 {
                     String value = CryptHelper.urlDecode(field.substring(i + 1).trim());                
-                    mdcAttr.set(key, value);;
+                    mdcAttr.set(key, value);
                 }
             }
         }
@@ -93,7 +93,7 @@ public class TracingHelper
     
     public static final Response<CloudExceptionInfo> createExceptionResponse(Exception e)
     {
-        return createExceptionResponse(e, HttpStatus.EXPECTATION_FAILED);
+        return createExceptionResponse(e, HttpStatus.SERVICE_UNAVAILABLE);
     }
     
     public static final Response<CloudExceptionInfo> createExceptionResponse(Exception e, HttpStatus httpStatus)
