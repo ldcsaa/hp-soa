@@ -20,30 +20,30 @@ public class ServiceException extends RuntimeException
     public static final int NOT_EXIST               = 404;
     /** 参数校验失败 */
     public static final int PARAM_VERIFY_ERROR      = 409;
+    /** 参数验证错误 */
+    public static final int PARAM_VALIDATION_ERROR  = 410;
+    /** 请求参数非法 */
+    public static final int PARAMS_ERROR            = 411;
+    /** 重复请求 */
+    public static final int REPEATED_REQ_ERROR      = 412;
     /** 服务器内部错误 */
     public static final int GENERAL_ERROR           = 500;
-    /** 参数验证错误 */
-    public static final int PARAM_VALIDATION_ERROR  = 501;
     /** 接口未实现 */
-    public static final int NOT_IMPLEMENTED         = 502;
+    public static final int NOT_IMPLEMENTED         = 513;
     /** 频次超限 */
-    public static final int FREQUENCY_LIMIT_ERROR   = 503;
+    public static final int FREQUENCY_LIMIT_ERROR   = 514;
     /** 拒绝访问 */
-    public static final int FORBID_ERROR            = 504;
-    /** 请求参数非法 */
-    public static final int PARAMS_ERROR            = 505;
-    /** 重复请求 */
-    public static final int REPEATED_REQ_ERROR      = 506;
+    public static final int FORBID_ERROR            = 515;
     /** 访问被限流 */
-    public static final int TRAFFIC_LIMIT_ERROR     = 507;
+    public static final int TRAFFIC_LIMIT_ERROR     = 516;
     /** 接口不支持 */
-    public static final int NOT_SUPPORTED           = 508;
+    public static final int NOT_SUPPORTED           = 517;
     /** 禁止更新 */
-    public static final int FORBID_UPDATE_ERROR     = 509;
+    public static final int FORBID_UPDATE_ERROR     = 518;
     /** 拒绝写入 */
-    public static final int READ_ONLY_ERROR         = 510;
+    public static final int READ_ONLY_ERROR         = 519;
     /** 调用超时 */
-    public static final int TIMEOUT_ERROR           = 511;
+    public static final int TIMEOUT_ERROR           = 520;
     /** 应用程序编号验证错误 */
     public static final int APPCODE_CHECK_ERROR     = 601;
     /** 应用程序编号不存在 */
@@ -70,8 +70,10 @@ public class ServiceException extends RuntimeException
     public static final ServiceException BAD_REQUEST_EXCEPTION      = new ServiceException("非法请求", BAD_REQUEST);
     public static final ServiceException NOT_EXIST_EXCEPTION        = new ServiceException("目标不存在", NOT_EXIST);
     public static final ServiceException PARAM_VERIFY_EXCEPTION     = new ServiceException("参数校验失败", PARAM_VERIFY_ERROR);
-    public static final ServiceException GENERAL_EXCEPTION          = new ServiceException("服务器内部错误", GENERAL_ERROR);
     public static final ServiceException PARAM_VALIDATION_EXCEPTION = new ServiceException("参数验证错误", PARAM_VALIDATION_ERROR);
+    public static final ServiceException PARAMS_EXCEPTION           = new ServiceException("请求参数非法", PARAMS_ERROR);
+    public static final ServiceException REPEATED_REQ_EXCEPTION     = new ServiceException("重复请求", REPEATED_REQ_ERROR);
+    public static final ServiceException GENERAL_EXCEPTION          = new ServiceException("服务器内部错误", GENERAL_ERROR);
     public static final ServiceException NOT_IMPLEMENTED_EXCEPTION  = new ServiceException("接口未实现", NOT_IMPLEMENTED);
     public static final ServiceException NOT_SUPPORTED_EXCEPTION    = new ServiceException("接口不支持", NOT_SUPPORTED);
     public static final ServiceException FORBID_SERVICE_EXCEPTION   = new ServiceException("禁止更新", FORBID_UPDATE_ERROR);
@@ -81,8 +83,6 @@ public class ServiceException extends RuntimeException
     public static final ServiceException AUTHEN_EXCEPTION           = new ServiceException("用户认证失败", AUTHEN_ERROR);
     public static final ServiceException AUTHOR_EXCEPTION           = new ServiceException("授权验证失败", AUTHOR_ERROR);
     public static final ServiceException NETWORK_EXCEPTION          = new ServiceException("网络错误", NETWORK_ERROR);
-    public static final ServiceException PARAMS_EXCEPTION           = new ServiceException("请求参数非法", PARAMS_ERROR);
-    public static final ServiceException REPEATED_REQ_EXCEPTION     = new ServiceException("请勿重复请求", REPEATED_REQ_ERROR);
     public static final ServiceException TIMEOUT_EXCEPTION          = new ServiceException("调用超时", TIMEOUT_ERROR);
     public static final ServiceException OUTER_API_CALL_EXCEPTION   = new ServiceException("外部服务调用失败", OUTER_API_CALL_FAIL);
     public static final ServiceException INNER_API_CALL_EXCEPTION   = new ServiceException("内部服务调用失败", INNER_API_CALL_FAIL);
