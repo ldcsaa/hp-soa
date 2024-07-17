@@ -37,7 +37,7 @@ public class CloudControllerSpecificExceptionAdvice implements Ordered
             ServiceException se = null;
             
             if(e instanceof RetryableException || e instanceof FeignServerException.GatewayTimeout)
-                se = new ServiceException("服务调用超时", INNER_API_CALL_FAIL, e);
+                se = new ServiceException("内部服务不可用", INNER_API_CALL_FAIL, e);
             else
                 se = wrapServiceException(INNER_API_CALL_EXCEPTION, e);
             
