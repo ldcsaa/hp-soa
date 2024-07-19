@@ -71,15 +71,22 @@ public class RabbitmqListenerMdcInspector
             if(obj instanceof Message msg)
             {
                 MessageProperties properties = msg.getMessageProperties();
+                
                 messageId       = properties.getMessageId();
                 correlationId   = properties.getCorrelationId();
                 sourceRequestId = properties.getHeader(HEADER_SOURCE_REQUEST_ID);
                 domainName      = properties.getHeader(HEADER_DOMAIN_NAME);
-                eventName       = properties.getHeader(HEADER_EVENT_NAME);                
+                eventName       = properties.getHeader(HEADER_EVENT_NAME);
+                
+                if(GeneralHelper.isStrEmpty(messageId))
+                    messageId = properties.getHeader(HEADER_MSG_ID);
+                if(GeneralHelper.isStrEmpty(correlationId))
+                    correlationId = properties.getHeader(HEADER_CORRELA_DATA_ID);
             }
             else if(obj instanceof org.springframework.messaging.Message msg)
             {
                 MessageHeaders headers = msg.getHeaders();
+                
                 messageId       = (String)headers.get(HEADER_MSG_ID);
                 correlationId   = (String)headers.get(HEADER_CORRELA_DATA_ID);
                 sourceRequestId = (String)headers.get(HEADER_SOURCE_REQUEST_ID);
@@ -93,9 +100,18 @@ public class RabbitmqListenerMdcInspector
 
                 messageId       = props.getMessageIdAsString();
                 correlationId   = props.getCorrelationIdAsString();
-                sourceRequestId = (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
-                domainName      = (String)appProps.get(HEADER_DOMAIN_NAME);
-                eventName       = (String)appProps.get(HEADER_EVENT_NAME);                
+                
+                if(appProps != null)
+                {
+                    sourceRequestId = (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
+                    domainName      = (String)appProps.get(HEADER_DOMAIN_NAME);
+                    eventName       = (String)appProps.get(HEADER_EVENT_NAME);
+                    
+                    if(GeneralHelper.isStrEmpty(messageId))
+                        messageId = (String)appProps.get(HEADER_MSG_ID);
+                    if(GeneralHelper.isStrEmpty(correlationId))
+                        correlationId = (String)appProps.get(HEADER_CORRELA_DATA_ID);
+                }
             }
             
             if(GeneralHelper.isStrNotEmpty(messageId))

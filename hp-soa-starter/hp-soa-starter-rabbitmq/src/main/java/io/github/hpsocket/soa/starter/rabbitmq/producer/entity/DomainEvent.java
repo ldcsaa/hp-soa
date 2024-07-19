@@ -118,7 +118,11 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
             builder.andProperties(messageProperties);
         
         if(GeneralHelper.isStrNotEmpty(correlationId))
-            builder.setCorrelationId(correlationId);
+        {
+            builder
+                .setCorrelationId(correlationId)
+                .setHeader(HEADER_CORRELA_DATA_ID, correlationId);
+        }
         
         return builder
             .setContentEncoding(WebServerHelper.DEFAULT_CHARSET)
@@ -158,7 +162,11 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
         builder.andProperties(streamMessageProperties);
         
         if(GeneralHelper.isStrNotEmpty(correlationId))
-            builder.setCorrelationId(correlationId);
+        {
+            builder
+                .setCorrelationId(correlationId)
+                .setHeader(HEADER_CORRELA_DATA_ID, correlationId);
+        }
         
         return builder
             .setContentEncoding(WebServerHelper.DEFAULT_CHARSET)

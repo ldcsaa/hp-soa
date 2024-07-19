@@ -26,5 +26,5 @@ public interface DemoController
     Response<DemoCreateOrderResponse> sendDirect(@RequestBody @Valid DemoCreateOrderReuqest request);
 
     @PostMapping(value = "/sendText")
-    Response<Boolean> sendTest(@Valid @NotBlank String text);
+    Response<Boolean> sendText(@Valid @NotBlank String text);
 }

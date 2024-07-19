@@ -64,7 +64,7 @@ public class DemoControllerImpl implements DemoController
     }
     
     @Override
-    public Response<Boolean> sendTest(@RequestBody @Valid @NotBlank String text)
+    public Response<Boolean> sendText(@RequestBody @Valid @NotBlank String text)
     {
         kafkaSender.getKafkaTemplate().send(new ProducerRecord<>(AppConfig.TOPIC_TEXT, "txt-msg", text));
         return new Response<>(Boolean.TRUE);

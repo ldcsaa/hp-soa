@@ -31,9 +31,9 @@ public class ProducerMdcInterceptor<K, V> implements ProducerInterceptor<K, V>
             byte[] messageId       = KafkaHelper.getHeaderRowValue(headers, KafkaConstant.HEADER_MSG_ID);
             byte[] sourceRequestId = KafkaHelper.getHeaderRowValue(headers, KafkaConstant.HEADER_SOURCE_REQUEST_ID);
             
-            if(messageId == null)
+            if(messageId == null || messageId.length == 0)
                 KafkaHelper.addHeader(headers, KafkaConstant.HEADER_MSG_ID, IdGenerator.nextIdStr());
-            if(sourceRequestId == null)
+            if(sourceRequestId == null || sourceRequestId.length == 0)
                 KafkaHelper.addHeader(headers, KafkaConstant.HEADER_SOURCE_REQUEST_ID, MDC.get(MdcAttr.MDC_REQUEST_ID_KEY));
         }
         
