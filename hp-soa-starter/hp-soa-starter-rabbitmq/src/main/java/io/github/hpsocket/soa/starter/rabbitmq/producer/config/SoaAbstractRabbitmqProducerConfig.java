@@ -154,7 +154,7 @@ public abstract class SoaAbstractRabbitmqProducerConfig
         return template;
     }
     
-    class RabbitMdcStreamTemplate extends RabbitStreamTemplate
+    public static class RabbitMdcStreamTemplate extends RabbitStreamTemplate
     {
         public RabbitMdcStreamTemplate(Environment environment, String streamName)
         {
@@ -179,7 +179,7 @@ public abstract class SoaAbstractRabbitmqProducerConfig
 
     }
     
-    private void injectMdcProperties(Message message)
+    protected static void injectMdcProperties(Message message)
     {
         MessageProperties messageProperties = message.getMessageProperties();
         String msgId1 = messageProperties.getMessageId();
@@ -195,7 +195,7 @@ public abstract class SoaAbstractRabbitmqProducerConfig
             messageProperties.setHeader(HEADER_SOURCE_REQUEST_ID, MDC.get(MdcAttr.MDC_REQUEST_ID_KEY));
     }
     
-    private void injectMdcProperties(com.rabbitmq.stream.Message message)
+    protected static void injectMdcProperties(com.rabbitmq.stream.Message message)
     {
         Properties props = message.getProperties();
         Map<String, Object> appProps = message.getApplicationProperties();

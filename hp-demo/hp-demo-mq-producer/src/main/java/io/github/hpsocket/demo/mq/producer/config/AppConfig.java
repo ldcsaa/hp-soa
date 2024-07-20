@@ -27,8 +27,7 @@ public class AppConfig
     public static final String[] REGION_EXCHANGES       = {"EXC_REGION_0", "EXC_REGION_1", "EXC_REGION_2", "EXC_REGION_3"};
     public static final String[] REGION_QUEUES          = {"QUE_REGION_0", "QUE_REGION_1", "QUE_REGION_2", "QUE_REGION_3"};
     
-    public static final String TOPIC_TEXT               = "TOPIC_TEXT";
-    public static final String TOPIC_STREAM_TEXT        = "TOPIC_STREAM_TEXT";
+    public static final String EXC_TEXT                 = "EXC_TEXT";
 
     
     @Autowired
@@ -71,12 +70,6 @@ public class AppConfig
     @Bean
     TopicExchange textTopicExchange()
     {
-        return ExchangeBuilder.topicExchange(TOPIC_TEXT).durable(true).admins(defaultRabbitAmqpAdmin).build();
-    }
-    
-    @Bean
-    TopicExchange streamTextTopicExchange()
-    {
-        return ExchangeBuilder.topicExchange(TOPIC_STREAM_TEXT).durable(true).admins(defaultRabbitAmqpAdmin).build();
+        return ExchangeBuilder.topicExchange(EXC_TEXT).durable(true).admins(defaultRabbitAmqpAdmin).build();
     }
 }

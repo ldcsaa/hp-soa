@@ -1,5 +1,6 @@
 package io.github.hpsocket.demo.mq.producer.controller.impl;
 
+import io.github.hpsocket.demo.mq.producer.config.AppConfig;
 import io.github.hpsocket.demo.mq.producer.contract.req.DemoCreateOrderReuqest;
 import io.github.hpsocket.demo.mq.producer.contract.resp.DemoCreateOrderResponse;
 import io.github.hpsocket.demo.mq.producer.controller.DemoController;
@@ -20,6 +21,7 @@ import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +45,8 @@ public class DemoControllerImpl implements DemoController
     @Autowired
     private RabbitTemplate defaultRabbitTemplate;
     @Autowired
-    private RabbitStreamTemplate defaultRabbitStreamTemplate;
+    @Qualifier("secondRabbitStreamTemplate")
+    private RabbitStreamTemplate secondRabbitStreamTemplate;
     
     @Override
     @AccessVerification(Type.REQUIRE_LOGIN)
@@ -79,7 +82,7 @@ public class DemoControllerImpl implements DemoController
         builder .setContentType(MessageProperties.CONTENT_TYPE_TEXT_PLAIN)
                 .setContentEncoding(WebServerHelper.DEFAULT_CHARSET);
         
-        defaultRabbitTemplate.send(builder.build());
+        defaultRabbitTemplate.send(AppConfig.EXC_TEXT, "text.any", builder.build());
         
         return new Response<>(Boolean.TRUE);
     }
@@ -93,7 +96,7 @@ public class DemoControllerImpl implements DemoController
                     .contentType(MessageProperties.CONTENT_TYPE_TEXT_PLAIN)
                     .contentEncoding(WebServerHelper.DEFAULT_CHARSET);
         
-        defaultRabbitStreamTemplate.send(builder.build());
+        secondRabbitStreamTemplate.send(builder.build());
         
         return new Response<>(Boolean.TRUE);
     }
