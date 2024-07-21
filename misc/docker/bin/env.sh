@@ -179,6 +179,7 @@ fi
 JAVA_OPTS="\
 -D$APP_NAME_KEY=$APP_NAME \
 -D$SERVER_PORT_KEY=$SERVER_PORT \
+-Duser.dir=$PRG_HOME \
 -DskipTests=true \
 -Dfile.encoding=UTF-8 \
 -Djava.awt.headless=true \
