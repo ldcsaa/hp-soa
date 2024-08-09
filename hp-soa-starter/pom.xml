@@ -33,6 +33,7 @@
         <module>hp-soa-starter-job-exclusive</module>
         <module>hp-soa-starter-job-xxljob</module>
         <module>hp-soa-starter-rabbitmq</module>
+        <module>hp-soa-starter-rocketmq</module>
         <module>hp-soa-starter-kafka</module>
         <module>hp-soa-starter-seata</module>
         <module>hp-soa-starter-mqtt</module>
