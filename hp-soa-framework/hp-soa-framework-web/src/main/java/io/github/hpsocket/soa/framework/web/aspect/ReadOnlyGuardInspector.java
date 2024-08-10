@@ -7,14 +7,10 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.util.Assert;
 
-import io.github.hpsocket.soa.framework.core.exception.UnimportantException;
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.annotation.ReadOnlyGuard;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
-
-import static io.github.hpsocket.soa.framework.core.exception.ServiceException.READ_ONLY_ERROR;
-import static io.github.hpsocket.soa.framework.core.exception.ServiceException.READ_ONLY_EXCEPTION;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 /** <b>只读保护请求拦截器</b><p>
  * 处理 {@linkplain ReadOnlyGuard} 注解
@@ -43,12 +39,7 @@ public class ReadOnlyGuardInspector
         if(!guard.enabled())
             return;
         
-        String desc = guard.desc();
-        
-        if(GeneralHelper.isStrEmpty(desc))
-            throw READ_ONLY_EXCEPTION;
-        
-        throw new UnimportantException(desc, READ_ONLY_ERROR);
+        WebServerHelper.assertAppIsNotReadOnly(guard.desc());
     }
 
 }

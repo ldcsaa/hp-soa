@@ -1,10 +1,8 @@
 
 package io.github.hpsocket.soa.starter.rocketmq.config;
 
-import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.rocketmq.client.autoconfigure.RocketMQAutoConfiguration;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

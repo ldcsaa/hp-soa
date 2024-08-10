@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.starter.rocketmq.consumer.listener;
 
+import org.apache.rocketmq.client.core.RocketMQClientTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
@@ -16,7 +17,7 @@ public class RocketmqReadOnlyEventListener implements ApplicationListener<ReadOn
     @Override
     public void onApplicationEvent(ReadOnlyEvent event)
     {
-
+        RocketMQClientTemplate tpl;tpl
     }
 
     @Override

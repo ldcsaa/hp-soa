@@ -10,6 +10,7 @@ import org.slf4j.MDC;
 
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.kafka.util.KafkaConstant;
 import io.github.hpsocket.soa.starter.kafka.util.KafkaHelper;
 
@@ -24,6 +25,8 @@ public class ProducerMdcInterceptor<K, V> implements ProducerInterceptor<K, V>
     @Override
     public ProducerRecord<K, V> onSend(ProducerRecord<K, V> rc)
     {
+        WebServerHelper.assertAppIsNotReadOnly();
+        
         Headers headers = rc.headers();
         
         if(headers != null)

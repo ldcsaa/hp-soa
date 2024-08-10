@@ -33,6 +33,7 @@ import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.BeanHelper;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
 
@@ -181,6 +182,8 @@ public abstract class SoaAbstractRabbitmqProducerConfig
     
     protected static void injectMdcProperties(Message message)
     {
+        WebServerHelper.assertAppIsNotReadOnly();
+        
         MessageProperties messageProperties = message.getMessageProperties();
         String msgId1 = messageProperties.getMessageId();
         String msgId2 = messageProperties.getHeader(HEADER_MSG_ID);
@@ -197,6 +200,8 @@ public abstract class SoaAbstractRabbitmqProducerConfig
     
     protected static void injectMdcProperties(com.rabbitmq.stream.Message message)
     {
+        WebServerHelper.assertAppIsNotReadOnly();
+        
         Properties props = message.getProperties();
         Map<String, Object> appProps = message.getApplicationProperties();
         
