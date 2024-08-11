@@ -25,7 +25,7 @@ public class SoaExclusiveJobConfig
     private String redissonClientName;
 
     @Bean
-    @DependsOn("springContextHolder")
+    @DependsOn(SpringContextHolder.springContextHolderBeanName)
     ExclusiveJobInspector exclusiveJobInspector()
     {
         RedissonClient redissonClient = null;

@@ -14,6 +14,8 @@ import io.github.hpsocket.soa.framework.web.service.TracingContext;
 /** <b>Spring 上下文持有者</b> */
 public class SpringContextHolder
 {
+    public static final String springContextHolderBeanName = "springContextHolder";
+    
     private static ApplicationContext applicationContext;
     private static TracingContext tracingContext;
 

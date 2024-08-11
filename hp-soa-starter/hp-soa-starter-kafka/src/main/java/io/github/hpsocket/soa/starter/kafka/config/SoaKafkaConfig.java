@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.ProducerListener;
@@ -55,6 +56,7 @@ public class SoaKafkaConfig
 
     /** 默认 Kafka Template，在事务环境下支持以非事方式务发送消息。 */
     @Bean
+    @Primary
     @ConditionalOnMissingBean(KafkaTemplate.class)
     KafkaTemplate<?, ?> allowNonTransactionalKafkaTemplate(
         KafkaProperties properties,

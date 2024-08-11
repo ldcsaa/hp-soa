@@ -54,7 +54,7 @@ import io.github.hpsocket.soa.starter.web.properties.SecurityProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
 
-import static io.github.hpsocket.soa.starter.web.config.ContextConfig.springContextHolderBeanName;
+import static io.github.hpsocket.soa.framework.web.holder.SpringContextHolder.springContextHolderBeanName;
 
 /** <b>HP-SOA Web 基础配置</b> */
 @AutoConfiguration
