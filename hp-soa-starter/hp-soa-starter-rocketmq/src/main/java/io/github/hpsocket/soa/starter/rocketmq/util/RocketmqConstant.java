@@ -14,4 +14,13 @@ public class RocketmqConstant
     /** 消息头：关联数据 ID */
     public static final String HEADER_CORRELA_DATA_ID   = "x-correlation-id";
 
+    
+    /** 消息发送状态：未发送 */
+    public static final int SF_NOT_SEND     = 0;
+    /** 消息发送状态：正在发送 */
+    public static final int SF_SENDING      = 1;
+    /** 消息发送状态：发送成功 */
+    public static final int SF_SEND_SUCC    = 2;
+    /** 消息发送状态：发送失败 */
+    public static final int SF_SEND_FAIL    = 3;
 }

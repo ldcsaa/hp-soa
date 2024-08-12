@@ -18,7 +18,6 @@ public class RabbitmqConstant
     /** 消息头：AMQP 消息投递标签 */
     public static final String HEADER_AMQP_DELIVERY_TAG = "amqp_deliveryTag";
     
-    
     /** 消息发送状态：未发送 */
     public static final int SF_NOT_SEND     = 0;
     /** 消息发送状态：正在发送 */
@@ -27,6 +26,5 @@ public class RabbitmqConstant
     public static final int SF_SEND_SUCC    = 2;
     /** 消息发送状态：发送失败 */
     public static final int SF_SEND_FAIL    = 3;
-
 
 }

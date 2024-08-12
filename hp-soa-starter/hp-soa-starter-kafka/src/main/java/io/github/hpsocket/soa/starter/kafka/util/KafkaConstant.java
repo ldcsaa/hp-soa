@@ -16,7 +16,6 @@ public class KafkaConstant
     /** 消息头：关联数据 ID */
     public static final String HEADER_CORRELA_DATA_ID   = KafkaHeaders.CORRELATION_ID;
     
-    
     /** 消息发送状态：未发送 */
     public static final int SF_NOT_SEND     = 0;
     /** 消息发送状态：正在发送 */

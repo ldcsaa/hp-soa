@@ -111,13 +111,14 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate
             
             if(id != null)
                 messageId = id.toString();
-            else messageId = IdGenerator.nextIdStr();
+            else
+                messageId = IdGenerator.nextIdStr();
             
             headers.put(RocketmqConstant.HEADER_MSG_ID, messageId);
         }
         
         if(GeneralHelper.isStrEmpty(sourceRequestId))
-            headers.put(RocketmqConstant.HEADER_MSG_ID, MDC.get(MdcAttr.MDC_REQUEST_ID_KEY));
+            headers.put(RocketmqConstant.HEADER_SOURCE_REQUEST_ID, MDC.get(MdcAttr.MDC_REQUEST_ID_KEY));
         
         return headers;
     }
