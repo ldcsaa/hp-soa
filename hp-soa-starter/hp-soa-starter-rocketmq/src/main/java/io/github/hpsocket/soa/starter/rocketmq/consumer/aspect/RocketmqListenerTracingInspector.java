@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-/** <b>Kafka Listener Tracing 拦截器</b><br>
+/** <b>RocketMQ Listener Tracing 拦截器</b><br>
  * 用于注入 traceId
  */
 @Aspect

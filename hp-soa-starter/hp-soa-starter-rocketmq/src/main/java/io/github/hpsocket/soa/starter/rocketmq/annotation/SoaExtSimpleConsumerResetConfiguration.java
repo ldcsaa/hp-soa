@@ -5,7 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.apache.rocketmq.client.annotation.ExtConsumerResetConfiguration;
-import org.springframework.stereotype.Component;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -18,17 +17,17 @@ import cn.hutool.core.annotation.AliasFor;
 @Target(TYPE)
 @Retention(RUNTIME)
 @ExtConsumerResetConfiguration
-public @interface SoaExtConsumerResetConfiguration
+public @interface SoaExtSimpleConsumerResetConfiguration
 {
-    String AUTO_CONSUME_PLACEHOLDER             = "${rocketmq.simple-consumer.auto-consume:}";
-    String CONSUMPTION_THREAD_COUNT_PLACEHOLDER = "${rocketmq.simple-consumer.consumption-thread-count:}";
-    String MAX_MESSAGE_NUM_PLACEHOLDER          = "${rocketmq.simple-consumer.max-message-num:}";
-    String INVISIBLE_DURATION_PLACEHOLDER       = "${rocketmq.simple-consumer.invisible-duration:}";
+    String AUTO_START_PLACEHOLDER               = "${rocketmq.simple-consumer.receive.auto-start:}";
+    String CONSUMPTION_THREAD_COUNT_PLACEHOLDER = "${rocketmq.simple-consumer.receive.consumption-thread-count:}";
+    String MAX_MESSAGE_NUM_PLACEHOLDER          = "${rocketmq.simple-consumer.receive.max-message-num:}";
+    String INVISIBLE_DURATION_PLACEHOLDER       = "${rocketmq.simple-consumer.receive.invisible-duration:}";
     
-    boolean autoConsume() default true;
-    int consumptionThreadCount() default 1;
-    int maxMessageNum() default 16;
-    int invisibleDuration() default 15;
+    String autoStart() default AUTO_START_PLACEHOLDER;
+    String consumptionThreadCount() default CONSUMPTION_THREAD_COUNT_PLACEHOLDER;
+    String maxMessageNum() default MAX_MESSAGE_NUM_PLACEHOLDER;
+    String invisibleDuration() default INVISIBLE_DURATION_PLACEHOLDER;
 
     /**
      * The component name of the Consumer configuration.

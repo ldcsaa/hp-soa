@@ -9,16 +9,17 @@ import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
-import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaRocketMQSimpleMessageListener;
+import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleMessageListener;
 import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate;
-import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQSimpleConsumerListener;
+import io.github.hpsocket.soa.starter.rocketmq.support.SoaSimpleConsumerListener;
 
 @AutoConfiguration
-public class SoaRocketMQSimpleConsumerConfig implements SmartInitializingSingleton
+public class SoaSimpleConsumerConfig implements SmartInitializingSingleton
 {
-    SoaRocketMQSimpleConsumerConfig(SpringContextHolder springContextHolder)
+    SoaSimpleConsumerConfig(SpringContextHolder springContextHolder)
     {
         
     }
@@ -27,7 +28,7 @@ public class SoaRocketMQSimpleConsumerConfig implements SmartInitializingSinglet
     public void afterSingletonsInstantiated()
     {
         Map<String, Object> beans = SpringContextHolder.getApplicationContext()
-                                        .getBeansWithAnnotation(SoaRocketMQSimpleMessageListener.class)
+                                        .getBeansWithAnnotation(SoaSimpleMessageListener.class)
                                         .entrySet().stream().filter(entry -> !ScopedProxyUtils.isScopedTarget(entry.getKey()))
                                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         
@@ -38,20 +39,21 @@ public class SoaRocketMQSimpleConsumerConfig implements SmartInitializingSinglet
     {
         Class<?> clazz = AopProxyUtils.ultimateTargetClass(bean);
         
-        if(!SoaRocketMQSimpleConsumerListener.class.isAssignableFrom(bean.getClass()))
+        if(!SoaSimpleConsumerListener.class.isAssignableFrom(bean.getClass()))
         {
-            throw new IllegalStateException(clazz + " is not instance of " + SoaRocketMQSimpleConsumerListener.class.getName());
+            throw new IllegalStateException(clazz + " is not instance of " + SoaSimpleConsumerListener.class.getName());
         }
         
-        SoaRocketMQSimpleMessageListener annotation = clazz.getAnnotation(SoaRocketMQSimpleMessageListener.class);
+        SoaSimpleMessageListener annotation = AnnotationUtils.findAnnotation(clazz, SoaSimpleMessageListener.class);
         
         if(Objects.isNull(annotation))
         {
-            throw new IllegalStateException("The SoaRocketMQSimpleMessageListener annotation is missing");
+            throw new IllegalStateException("The SoaSimpleMessageListener annotation is missing");
         }
         
         SoaRocketMQClientTemplate rocketMQTemplate = SpringContextHolder.getBean(annotation.rocketMQTemplateBeanName());
-        rocketMQTemplate.setSimpleConsumerListener((SoaRocketMQSimpleConsumerListener)bean);
+        rocketMQTemplate.setSimpleConsumerListener((SoaSimpleConsumerListener)bean);
+        rocketMQTemplate.setAutoAck(annotation.autoAck());
     }
 
 }

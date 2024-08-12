@@ -1,6 +1,6 @@
 package io.github.hpsocket.soa.starter.rocketmq.util;
 
-/** <b>HP-SOA  常量</b> */
+/** <b>HP-SOA RocketMQ 常量</b> */
 public class RocketmqConstant
 {
     /** 消息头：领域名称 */

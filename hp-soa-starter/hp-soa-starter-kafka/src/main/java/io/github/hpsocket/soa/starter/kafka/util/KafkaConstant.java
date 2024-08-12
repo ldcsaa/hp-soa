@@ -2,7 +2,7 @@ package io.github.hpsocket.soa.starter.kafka.util;
 
 import org.springframework.kafka.support.KafkaHeaders;
 
-/** <b>HP-SOA  常量</b> */
+/** <b>HP-SOA Kafka 常量</b> */
 public class KafkaConstant
 {
     /** 消息头：领域名称 */

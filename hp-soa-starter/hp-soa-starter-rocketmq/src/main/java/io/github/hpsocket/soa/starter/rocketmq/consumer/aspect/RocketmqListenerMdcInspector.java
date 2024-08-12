@@ -1,18 +1,11 @@
 package io.github.hpsocket.soa.starter.rocketmq.consumer.aspect;
 
-import java.util.Iterator;
+import java.util.Map;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.common.header.Headers;
 import org.apache.logging.log4j.core.config.Order;
+import org.apache.rocketmq.client.apis.message.MessageView;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
-import org.springframework.util.Assert;
+import org.aspectj.lang.annotation.*;
 import org.springframework.util.StopWatch;
 
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
@@ -20,10 +13,9 @@ import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
-import io.github.hpsocket.soa.starter.rocketmq.util.KafkaHelper;
 import lombok.extern.slf4j.Slf4j;
 
-/** <b>Kafka Listener MDC 拦截器</b><br>
+/** <b>RocketMQ Listener MDC 拦截器</b><br>
  * 用于注入 MDC 调用链跟踪信息
  */
 @Slf4j
@@ -32,16 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 public class RocketmqListenerMdcInspector
 {
     public static final int ORDER               = 0;
-    public static final String POINTCUT_PATTERN = "execution (public void *.*(..)) && "
-                                                + "("
-                                                + "     @annotation(org.springframework.kafka.annotation.KafkaListener) || "
-                                                + "     ("
-                                                + "         @target(org.springframework.kafka.annotation.KafkaListener) &&"
-                                                + "         @annotation(org.springframework.kafka.annotation.KafkaHandler)"
-                                                + "     )"
-                                                + ")";
-
-    private static final AspectHelper.AnnotationHolder<KafkaListener> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
+    public static final String POINTCUT_PATTERN = "(execution (public org.apache.rocketmq.client.apis.consumer.ConsumeResult *.consume(org.apache.rocketmq.client.apis.message.MessageView)) && @target(org.apache.rocketmq.client.annotation.RocketMQMessageListener)) ||"
+                                                + "(execution (public void *.consume(org.apache.rocketmq.client.apis.message.MessageView, io.github.hpsocket.soa.starter.rocketmq.suppor.SoaRocketMQClientTemplate)) && @target(io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleMessageListener)) ||"
+                                                + "(execution (public org.apache.rocketmq.client.apis.producer.TransactionResolution *.check(org.apache.rocketmq.client.apis.message.MessageView)) && @target(org.apache.rocketmq.client.annotation.RocketMQTransactionListener))"
+                                                ;
 
     @Pointcut(POINTCUT_PATTERN)
     protected void aroundMethod() {}
@@ -51,45 +37,27 @@ public class RocketmqListenerMdcInspector
     {
         MdcAttr mdcAttr = WebServerHelper.createMdcAttr();        
 
-        KafkaListener listener = ANNOTATION_HOLDER.findAnnotationByMethodOrClass(joinPoint);
-        Assert.notNull(listener, "@KafkaListener annotation not found");
-        
-        String listenerId       = listener.id();
         String correlationId    = null;
         String messageId        = null;
         String sourceRequestId  = null;
         String domainName       = null;
         String eventName        = null;
+        String topic            = null;
         
-        Object obj = AspectHelper.findFirstArgByTypes(joinPoint, ConsumerRecord.class, Message.class, Iterable.class);
+        MessageView msg = (MessageView)AspectHelper.findFirstArgByTypes(joinPoint, MessageView.class);
         
-        if(obj != null)
+        if(msg != null)
         {
-            if(obj instanceof Iterable<?> itb)
-            {
-                Iterator<?> it = itb.iterator();
-                obj = it.hasNext() ? it.next() : null;
-            }
+            topic = msg.getTopic();
+            Map<String, String> properties = msg.getProperties();
             
-            if(obj instanceof Message msg)
+            if(GeneralHelper.isNotNullOrEmpty(properties))
             {
-                MessageHeaders headers = msg.getHeaders();
-                
-                messageId       = GeneralHelper.bytes2Str((byte[])headers.get(RocketmqConstant.HEADER_MSG_ID));
-                sourceRequestId = GeneralHelper.bytes2Str((byte[])headers.get(RocketmqConstant.HEADER_SOURCE_REQUEST_ID));
-                domainName      = GeneralHelper.bytes2Str((byte[])headers.get(RocketmqConstant.HEADER_DOMAIN_NAME));
-                eventName       = GeneralHelper.bytes2Str((byte[])headers.get(RocketmqConstant.HEADER_EVENT_NAME));
-                correlationId   = GeneralHelper.bytes2Str((byte[])headers.get(RocketmqConstant.HEADER_CORRELA_DATA_ID));                    
-            }
-            else if(obj instanceof ConsumerRecord crc)
-            {
-                Headers headers = crc.headers();
-
-                messageId       = KafkaHelper.getHeaderValue(headers, RocketmqConstant.HEADER_MSG_ID);
-                sourceRequestId = KafkaHelper.getHeaderValue(headers, RocketmqConstant.HEADER_SOURCE_REQUEST_ID);
-                domainName      = KafkaHelper.getHeaderValue(headers, RocketmqConstant.HEADER_DOMAIN_NAME);
-                eventName       = KafkaHelper.getHeaderValue(headers, RocketmqConstant.HEADER_EVENT_NAME);
-                correlationId   = KafkaHelper.getHeaderValue(headers, RocketmqConstant.HEADER_CORRELA_DATA_ID);
+                messageId       = properties.get(RocketmqConstant.HEADER_MSG_ID);
+                sourceRequestId = properties.get(RocketmqConstant.HEADER_SOURCE_REQUEST_ID);
+                domainName      = properties.get(RocketmqConstant.HEADER_DOMAIN_NAME);
+                eventName       = properties.get(RocketmqConstant.HEADER_EVENT_NAME);
+                correlationId   = properties.get(RocketmqConstant.HEADER_CORRELA_DATA_ID);                    
             }
             
             if(GeneralHelper.isStrNotEmpty(messageId))
@@ -106,10 +74,10 @@ public class RocketmqListenerMdcInspector
         {
             if(log.isTraceEnabled())
             {
-                log.trace("kafka listener start consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
-                    , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName);
+                log.trace("start process message -> (topic: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
+                    , topic, correlationId, messageId, sourceRequestId, domainName, eventName);
                 
-                sw = new StopWatch(listenerId);
+                sw = new StopWatch();
                 sw.start();
             }
             
@@ -122,8 +90,8 @@ public class RocketmqListenerMdcInspector
             {
                 sw.stop();
 
-                log.trace("kafka listener end consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
-                    , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.lastTaskInfo().getTimeMillis());
+                log.trace("end process message -> (topic: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
+                    , topic, correlationId, messageId, sourceRequestId, domainName, eventName, sw.lastTaskInfo().getTimeMillis());
             }
 
             mdcAttr.removeMdc();
