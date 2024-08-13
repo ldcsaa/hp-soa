@@ -27,8 +27,6 @@ rocketmq:
       invisible-duration: 10
 
 rocketmq-fifo:
-  producer:
-    topic: test-fifo-topic-001
   simple-consumer: 
     topic: test-fifo-topic-001
     consumer-group: fifo-group-001

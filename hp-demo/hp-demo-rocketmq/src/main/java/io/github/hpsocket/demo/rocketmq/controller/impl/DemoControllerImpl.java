@@ -1,6 +1,10 @@
 package io.github.hpsocket.demo.rocketmq.controller.impl;
 
+import java.time.Duration;
+
 import org.apache.rocketmq.client.apis.producer.SendReceipt;
+import org.apache.rocketmq.client.apis.producer.Transaction;
+import org.apache.rocketmq.client.common.Pair;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +15,7 @@ import io.github.hpsocket.demo.rocketmq.controller.DemoController;
 import io.github.hpsocket.demo.rocketmq.converter.OrderConverter;
 import io.github.hpsocket.demo.rocketmq.entity.Order;
 import io.github.hpsocket.demo.rocketmq.listener.TransCheckerListener;
+import io.github.hpsocket.demo.rocketmq.template.FifoPruducerTemplate;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
 import io.github.hpsocket.soa.framework.web.model.Response;
@@ -26,11 +31,11 @@ public class DemoControllerImpl implements DemoController
 {
     @Value("${rocketmq.producer.topic}")
     private String normalTopic;
-    @Value("${rocketmq-fifo.producer.topic}")
+    @Value("${rocketmq-fifo.simple-consumer.topic}")
     private String fifoTopic;
-    @Value("${rocketmq-delay.producer.topic}")
+    @Value("${rocketmq-delay.push-consumer.topic}")
     private String delayTopic;
-    @Value("${rocketmq-trans.producer.topic}")
+    @Value("${rocketmq-trans.push-consumer.topic}")
     private String transTopic;
     @Value("${rocketmq-fifo.simple-consumer.consumer-group}")
     private String fifoGroup;
@@ -39,8 +44,8 @@ public class DemoControllerImpl implements DemoController
     private SoaRocketMQClientTemplate defaultTemplate;
     
     @Autowired
-    @Qualifier("fifoPruducerTemplate")
-    private SoaRocketMQClientTemplate fifoPruducerTemplate;
+    @Qualifier(FifoPruducerTemplate.BEAN_NAME)
+    private FifoPruducerTemplate fifoPruducerTemplate;
     
     @Autowired
     TransCheckerListener transCheckerListener;
@@ -72,15 +77,23 @@ public class DemoControllerImpl implements DemoController
     @Override
     public Response<CreateOrderResponse> delayCreateOrder(@Valid CreateOrderReuqest request)
     {
-        // TODO Auto-generated method stub
-        return null;
+        DomainEvent<Order> event = createEvent(request, delayTopic);
+        
+        SendReceipt receipt = defaultTemplate.syncSendDelayMessage(event.getDestination(), event.toMessage(), Duration.ofSeconds(10));
+        
+        return response(receipt, request.getOrderNumber());
     }
 
     @Override
     public Response<CreateOrderResponse> transCreateOrder(@Valid CreateOrderReuqest request)
     {
-        // TODO Auto-generated method stub
-        return null;
+        DomainEvent<Order> event = createEvent(request, transTopic);
+        
+        Pair<SendReceipt, Transaction> pair = defaultTemplate.sendTransactionMessage(event.getDestination(), event.toMessage());
+        SendReceipt receipt = pair.getSendReceipt();
+        Transaction transaction = pair.getTransaction();
+        
+        return response(receipt, request.getOrderNumber());
     }
 
     private DomainEvent<Order> createEvent(CreateOrderReuqest request, String topic)

@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import cn.hutool.core.annotation.AliasFor;
-
 @Component
 @Documented
 @Target(TYPE)
@@ -19,8 +17,5 @@ import cn.hutool.core.annotation.AliasFor;
 public @interface SoaSimpleMessageListener
 {
     boolean autoAck() default true;
-    @AliasFor(attribute = "value")
     String rocketMQTemplateBeanName() default RocketMQAutoConfiguration.ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME;
-    @AliasFor(attribute = "rocketMQTemplateBeanName")
-    String value() default RocketMQAutoConfiguration.ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME;
 }

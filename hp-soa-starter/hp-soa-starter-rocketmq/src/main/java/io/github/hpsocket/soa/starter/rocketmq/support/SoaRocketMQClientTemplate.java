@@ -10,6 +10,7 @@ import org.apache.rocketmq.client.apis.message.MessageView;
 import org.apache.rocketmq.client.core.RocketMQClientTemplate;
 import org.slf4j.MDC;
 import org.springframework.aop.framework.AopProxyUtils;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -29,7 +30,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SoaRocketMQClientTemplate extends RocketMQClientTemplate
+public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements BeanNameAware
 {
     public static final int DEFAULT_CONSUMPTION_THREAD_COUNT = 1;
     public static final int DEFAULT_MAX_MESSAGE_NUM          = 16;
@@ -38,8 +39,6 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate
     private static final int RETRY_WAIT_TIME                 = 5;
     public static final int AWAIT_TERMINATION_TIME           = 15;
     
-    @Autowired
-    private String beanName;
     @Autowired
     private ConfigurableEnvironment environment;
     @Autowired
@@ -54,6 +53,14 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate
     
     private ExecutorService executorService;
     private volatile boolean stopped;
+
+    private String beanName;
+
+    @Override
+    public void setBeanName(String beanName)
+    {
+        this.beanName = beanName;
+    }
     
     @EventListener
     public void onApplicationContextRefreshedEvent(ContextRefreshedEvent event)

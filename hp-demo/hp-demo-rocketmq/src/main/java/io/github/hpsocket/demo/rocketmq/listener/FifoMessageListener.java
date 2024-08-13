@@ -10,7 +10,7 @@ import io.github.hpsocket.soa.starter.rocketmq.support.SoaSimpleConsumerListener
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@SoaSimpleMessageListener(autoAck = false, value = FifoConsumerTemplate.BEAN_NAME)
+@SoaSimpleMessageListener(autoAck = false, rocketMQTemplateBeanName = FifoConsumerTemplate.BEAN_NAME)
 public class FifoMessageListener implements SoaSimpleConsumerListener
 {
 

@@ -8,7 +8,7 @@ import org.apache.rocketmq.client.core.RocketMQListener;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RocketMQMessageListener(topic = "${rocketmq-delay.push-consumer.topic:}")
+@RocketMQMessageListener(topic = "${rocketmq-delay.push-consumer.topic}")
 public class DelayMessageListener implements RocketMQListener
 {
 
