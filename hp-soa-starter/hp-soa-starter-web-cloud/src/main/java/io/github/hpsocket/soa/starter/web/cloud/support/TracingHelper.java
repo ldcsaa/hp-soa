@@ -81,6 +81,8 @@ public class TracingHelper
                                                         GeneralHelper.str2Long(mdcAttr.getGroupId()));
         
         reqAttr.setUserId(GeneralHelper.str2Long(mdcAttr.getUserId()));
+        reqAttr.setRegion(mdcAttr.getRegion());
+        reqAttr.setLanguage(mdcAttr.getLanguage());
         reqAttr.setVersion(mdcAttr.getVersion());
         reqAttr.setExtra(mdcAttr.getExtra());
         reqAttr.setClientAddr(clientAddr);

@@ -4,6 +4,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apache.rocketmq.client.autoconfigure.RocketMQAutoConfiguration;
 import org.springframework.stereotype.Component;
 
 import static java.lang.annotation.ElementType.TYPE;
@@ -19,7 +20,7 @@ public @interface SoaSimpleMessageListener
 {
     boolean autoAck() default true;
     @AliasFor(attribute = "value")
-    String rocketMQTemplateBeanName() default "rocketMQClientTemplate";
+    String rocketMQTemplateBeanName() default RocketMQAutoConfiguration.ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME;
     @AliasFor(attribute = "rocketMQTemplateBeanName")
-    String value() default  "rocketMQClientTemplate";
+    String value() default RocketMQAutoConfiguration.ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME;
 }

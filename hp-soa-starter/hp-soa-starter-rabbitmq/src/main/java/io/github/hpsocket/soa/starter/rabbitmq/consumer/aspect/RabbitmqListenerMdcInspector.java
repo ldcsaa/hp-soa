@@ -81,14 +81,14 @@ public class RabbitmqListenerMdcInspector
                 if(GeneralHelper.isStrEmpty(messageId))
                     messageId = properties.getHeader(HEADER_MSG_ID);
                 if(GeneralHelper.isStrEmpty(correlationId))
-                    correlationId = properties.getHeader(HEADER_CORRELA_DATA_ID);
+                    correlationId = properties.getHeader(HEADER_CORRELATION_ID);
             }
             else if(obj instanceof org.springframework.messaging.Message msg)
             {
                 MessageHeaders headers = msg.getHeaders();
                 
                 messageId       = (String)headers.get(HEADER_MSG_ID);
-                correlationId   = (String)headers.get(HEADER_CORRELA_DATA_ID);
+                correlationId   = (String)headers.get(HEADER_CORRELATION_ID);
                 sourceRequestId = (String)headers.get(HEADER_SOURCE_REQUEST_ID);
                 domainName      = (String)headers.get(HEADER_DOMAIN_NAME);
                 eventName       = (String)headers.get(HEADER_EVENT_NAME);
@@ -110,7 +110,7 @@ public class RabbitmqListenerMdcInspector
                     if(GeneralHelper.isStrEmpty(messageId))
                         messageId = (String)appProps.get(HEADER_MSG_ID);
                     if(GeneralHelper.isStrEmpty(correlationId))
-                        correlationId = (String)appProps.get(HEADER_CORRELA_DATA_ID);
+                        correlationId = (String)appProps.get(HEADER_CORRELATION_ID);
                 }
             }
             

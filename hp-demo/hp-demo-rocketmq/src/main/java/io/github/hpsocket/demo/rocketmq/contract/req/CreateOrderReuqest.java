@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "请求对象示例")
-public class DemoCreateOrderReuqest
+public class CreateOrderReuqest
 {
     @NotNull(message = "区域不能为空")
     @Range(min = 0, max = 2, message = "区域超出范围 [0 ~ 2]")

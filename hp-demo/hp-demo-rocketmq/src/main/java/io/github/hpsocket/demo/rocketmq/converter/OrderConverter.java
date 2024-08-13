@@ -5,8 +5,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-import io.github.hpsocket.demo.rocketmq.contract.req.DemoCreateOrderReuqest;
-import io.github.hpsocket.demo.rocketmq.contract.resp.DemoCreateOrderResponse;
+import io.github.hpsocket.demo.rocketmq.contract.req.CreateOrderReuqest;
 import io.github.hpsocket.demo.rocketmq.entity.Order;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -14,6 +13,5 @@ public interface OrderConverter
 {
     OrderConverter INSTANCE = Mappers.getMapper(OrderConverter.class);
     
-    DemoCreateOrderResponse toResponse(Order order);
-    Order fromRequest(DemoCreateOrderReuqest req);
+    Order fromRequest(CreateOrderReuqest req);
 }

@@ -26,6 +26,8 @@ public class RequestAttribute
     private String requestPath;
     private String requestMethod;
     
+    private String region;
+    private String language;
     private String version;
     private String extra;
     

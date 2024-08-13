@@ -1,13 +1,14 @@
 package io.github.hpsocket.demo.rocketmq.entity;
 
-import io.github.hpsocket.soa.starter.data.mysql.entity.BaseLogicDeleteEntity;
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @SuppressWarnings("serial")
-public class Order extends BaseLogicDeleteEntity
+public class Order implements Serializable
 {
     private Integer regionId;
     private String orderNumber;

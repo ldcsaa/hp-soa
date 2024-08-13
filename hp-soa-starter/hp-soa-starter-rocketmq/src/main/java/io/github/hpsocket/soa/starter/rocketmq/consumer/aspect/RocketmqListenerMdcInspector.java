@@ -57,7 +57,7 @@ public class RocketmqListenerMdcInspector
                 sourceRequestId = properties.get(RocketmqConstant.HEADER_SOURCE_REQUEST_ID);
                 domainName      = properties.get(RocketmqConstant.HEADER_DOMAIN_NAME);
                 eventName       = properties.get(RocketmqConstant.HEADER_EVENT_NAME);
-                correlationId   = properties.get(RocketmqConstant.HEADER_CORRELA_DATA_ID);                    
+                correlationId   = properties.get(RocketmqConstant.HEADER_CORRELATION_ID);                    
             }
             
             if(GeneralHelper.isStrNotEmpty(messageId))

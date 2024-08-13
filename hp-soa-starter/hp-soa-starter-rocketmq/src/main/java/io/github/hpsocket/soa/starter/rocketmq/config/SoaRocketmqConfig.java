@@ -4,7 +4,6 @@ package io.github.hpsocket.soa.starter.rocketmq.config;
 import org.apache.rocketmq.client.apis.consumer.SimpleConsumerBuilder;
 import org.apache.rocketmq.client.apis.producer.ProducerBuilder;
 import org.apache.rocketmq.client.autoconfigure.RocketMQAutoConfiguration;
-import org.apache.rocketmq.client.core.RocketMQClientTemplate;
 import org.apache.rocketmq.client.support.RocketMQMessageConverter;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -53,8 +52,8 @@ public class SoaRocketmqConfig
     @Conditional(SoaProducerOrConsumerPropertyCondition.class)
     @ConditionalOnMissingBean(name = ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME)
     @Bean(name = ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME, destroyMethod = "destroy")
-    RocketMQClientTemplate rocketMQClientTemplate(RocketMQMessageConverter rocketMQMessageConverter) {
-        RocketMQClientTemplate rocketMQClientTemplate = new SoaRocketMQClientTemplate();
+    SoaRocketMQClientTemplate rocketMQClientTemplate(RocketMQMessageConverter rocketMQMessageConverter) {
+        SoaRocketMQClientTemplate rocketMQClientTemplate = new SoaRocketMQClientTemplate();
 
         if(SpringContextHolder.getApplicationContext().containsBean(PRODUCER_BUILDER_BEAN_NAME)) {
             rocketMQClientTemplate.setProducerBuilder((ProducerBuilder) SpringContextHolder.getBean(PRODUCER_BUILDER_BEAN_NAME));

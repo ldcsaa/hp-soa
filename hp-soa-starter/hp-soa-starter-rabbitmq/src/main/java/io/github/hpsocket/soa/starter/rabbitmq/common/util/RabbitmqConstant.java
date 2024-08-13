@@ -12,7 +12,7 @@ public class RabbitmqConstant
     /** 消息头：源请求 ID */
     public static final String HEADER_SOURCE_REQUEST_ID = "x-source-request-id";
     /** 消息头：AMQP 关联数据 ID */
-    public static final String HEADER_CORRELA_DATA_ID   = "amqp_correlationId";
+    public static final String HEADER_CORRELATION_ID    = "amqp_correlationId";
     /** 消息头：AMQP 消息 ID */
     public static final String HEADER_AMQP_MESSAGE_ID   = "amqp_messageId";
     /** 消息头：AMQP 消息投递标签 */

@@ -100,7 +100,7 @@ public class MqListenerHandler
         json.put("sourceRequestId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_SOURCE_REQUEST_ID)));
         json.put("domainName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_DOMAIN_NAME)));
         json.put("eventName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_EVENT_NAME)));
-        json.put("correlationId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELA_DATA_ID)));                    
+        json.put("correlationId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELATION_ID)));                    
 
         json.put("msg", JSONObject.parseObject(msg.getPayload()));
         
@@ -157,7 +157,7 @@ public class MqListenerHandler
         json.put("sourceRequestId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_SOURCE_REQUEST_ID)));
         json.put("domainName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_DOMAIN_NAME)));
         json.put("eventName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_EVENT_NAME)));
-        json.put("correlationId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELA_DATA_ID)));                    
+        json.put("correlationId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELATION_ID)));                    
 
         json.put("msg", msg.getPayload());
         

@@ -2,19 +2,15 @@
 package io.github.hpsocket.soa.starter.rocketmq.producer.entity;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.util.Map;
 
 import org.slf4j.MDC;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
-
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @SuppressWarnings("serial")
-public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
+public class DomainEvent<T> implements Serializable
 {
     /**
      * 领域名称
@@ -55,12 +51,12 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
     /**
      * 消息键
      */
-    private String msgKey;
+    private String keys;
 
     /**
      * 消息头
      */
-    private String msgHeaders;
+    private Map<String, Object> msgHeaders;
 
     /**
      * 事件唯一Id
@@ -70,7 +66,7 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
     /**
      * 消息体
      */
-    private String msg;
+    private T msg;
 
     /**
      * 关联请求Id
@@ -78,19 +74,14 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
     private String sourceRequestId;
 
     /**
-     * 发送标记（{@linkplain RocketmqConstant#SF_NOT_SEND SF_NOT_SEND} - 未发送，{@linkplain RocketmqConstant#SF_SENDING SF_SENDING} - 正在发送，{@linkplain RocketmqConstant#SF_SEND_SUCC SF_SEND_SUCC} - 发送成功，{@linkplain RocketmqConstant#SF_SEND_FAIL SF_SEND_FAIL} - 发送失败）
-     */
-    private Integer sendFlag;
-
-    /**
      * 重试次数
      */
     private Integer retries;
 
     /**
-     * 最后发送时间
+     * 关联数据ID
      */
-    private OffsetDateTime lastSendTime;
+    private String correlationId;
 
     public DomainEvent()
     {
@@ -108,6 +99,24 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
         this.sourceRequestId = sourceRequestId;
     }
     
+    public DomainEvent(T msg)
+    {
+        this();
+        this.msg = msg;
+    }
+    
+    public DomainEvent(String msgId, T msg)
+    {
+        this(msgId);
+        this.msg = msg;
+    }
+    
+    public DomainEvent(String msgId, String sourceRequestId, T msg)
+    {
+        this(msgId, sourceRequestId);
+        this.msg = msg;
+    }
+    
     public String getDestination()
     {
         StringBuilder sb = new StringBuilder(topic);
@@ -118,33 +127,42 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
         return sb.toString();
     }
     
-    public Message<? extends DomainEvent> toMessage()
+    public Message<? extends T> toMessage()
     {
-        return toMessage(null);
-    }
-    
-    public Message<? extends DomainEvent> toMessage(String correlationId)
-    {
-        MessageBuilder  .withPayload(this)
-                        .setHeader(correlationId, correlationId)
-        ProducerRecord<String, String> rc = new ProducerRecord<>(topic, topicPartition, msgTimestamp, msgKey, msg);
-        Headers rcHeaders = rc.headers();
+        MessageBuilder<? extends T> builder = MessageBuilder.withPayload(msg);
         
-        KafkaHelper.addHeader(rcHeaders, KafkaConstant.HEADER_DOMAIN_NAME, domainName);
-        KafkaHelper.addHeader(rcHeaders, KafkaConstant.HEADER_EVENT_NAME, eventName);
-        KafkaHelper.addHeader(rcHeaders, KafkaConstant.HEADER_MSG_ID, msgId);
-        KafkaHelper.addHeader(rcHeaders, KafkaConstant.HEADER_SOURCE_REQUEST_ID, sourceRequestId);
-        
+        if(GeneralHelper.isStrNotEmpty(domainName))
+            builder.setHeader(RocketmqConstant.HEADER_DOMAIN_NAME, domainName);
+        if(GeneralHelper.isStrNotEmpty(eventName))
+            builder.setHeader(RocketmqConstant.HEADER_EVENT_NAME, eventName);
+        if(GeneralHelper.isStrNotEmpty(msgId))
+            builder.setHeader(RocketmqConstant.HEADER_MSG_ID, msgId);
+        if(GeneralHelper.isStrNotEmpty(sourceRequestId))
+            builder.setHeader(RocketmqConstant.HEADER_SOURCE_REQUEST_ID, sourceRequestId);
+        if(GeneralHelper.isStrNotEmpty(keys))
+            builder.setHeader(RocketmqConstant.HEADER_KEYS, keys);  
         if(GeneralHelper.isStrNotEmpty(correlationId))
-            rcHeaders.add(KafkaConstant.HEADER_CORRELA_DATA_ID, correlationId.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
+            builder.setHeader(RocketmqConstant.HEADER_CORRELATION_ID, correlationId);
+        if(msgTimestamp != null)
+            builder.setHeader(RocketmqConstant.HEADER_MSG_TIMESTAMP, msgTimestamp);  
+        if(retries != null)
+            builder.setHeader(RocketmqConstant.HEADER_RETRIES, retries);  
         
-        if(GeneralHelper.isStrNotEmpty(msgHeaders))
+        if(GeneralHelper.isNotNullOrEmpty(msgHeaders))
         {
-            JSONObject json = JSON.parseObject(msgHeaders);
-            json.forEach((k, v) -> KafkaHelper.addHeader(rcHeaders, k, v));
+            msgHeaders.forEach((k, v) ->
+            {
+                if(v != null)
+                {
+                    String value = String.valueOf(v);
+                    
+                    if(GeneralHelper.isStrNotEmpty(value))
+                        builder.setHeader(k, value);
+                }
+            });
         }
         
-        return rc;
+        return builder.build();
     }
     
 }

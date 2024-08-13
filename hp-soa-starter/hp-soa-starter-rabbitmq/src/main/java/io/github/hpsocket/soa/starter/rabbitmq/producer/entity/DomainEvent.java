@@ -121,7 +121,7 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
         {
             builder
                 .setCorrelationId(correlationId)
-                .setHeader(HEADER_CORRELA_DATA_ID, correlationId);
+                .setHeader(HEADER_CORRELATION_ID, correlationId);
         }
         
         return builder
@@ -165,7 +165,7 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
         {
             builder
                 .setCorrelationId(correlationId)
-                .setHeader(HEADER_CORRELA_DATA_ID, correlationId);
+                .setHeader(HEADER_CORRELATION_ID, correlationId);
         }
         
         return builder

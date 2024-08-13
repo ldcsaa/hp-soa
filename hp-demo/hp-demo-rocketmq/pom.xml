@@ -30,10 +30,6 @@
             <groupId>io.github.hpsocket</groupId>
             <artifactId>hp-soa-starter-rocketmq</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.github.hpsocket</groupId>
-            <artifactId>hp-soa-starter-data-mysql</artifactId>
-        </dependency>
     </dependencies>    
     
     <build>

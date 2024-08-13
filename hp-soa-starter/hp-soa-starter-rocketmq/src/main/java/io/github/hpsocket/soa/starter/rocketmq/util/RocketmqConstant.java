@@ -1,5 +1,7 @@
 package io.github.hpsocket.soa.starter.rocketmq.util;
 
+import org.apache.rocketmq.client.support.RocketMQHeaders;
+
 /** <b>HP-SOA RocketMQ 常量</b> */
 public class RocketmqConstant
 {
@@ -11,16 +13,13 @@ public class RocketmqConstant
     public static final String HEADER_MSG_ID            = "x-msg-id";
     /** 消息头：源请求 ID */
     public static final String HEADER_SOURCE_REQUEST_ID = "x-source-request-id";
+    /** 消息头：消息时间戳 */
+    public static final String HEADER_MSG_TIMESTAMP     = "x-msg-timestamp";
+    /** 消息头：重试次数 */
+    public static final String HEADER_RETRIES           = "x-retries";
     /** 消息头：关联数据 ID */
-    public static final String HEADER_CORRELA_DATA_ID   = "x-correlation-id";
+    public static final String HEADER_CORRELATION_ID    = "x-correlation-id";
+    /** 消息头：RocketMQ Keys */
+    public static final String HEADER_KEYS              = RocketMQHeaders.PREFIX + RocketMQHeaders.KEYS;
 
-    
-    /** 消息发送状态：未发送 */
-    public static final int SF_NOT_SEND     = 0;
-    /** 消息发送状态：正在发送 */
-    public static final int SF_SENDING      = 1;
-    /** 消息发送状态：发送成功 */
-    public static final int SF_SEND_SUCC    = 2;
-    /** 消息发送状态：发送失败 */
-    public static final int SF_SEND_FAIL    = 3;
 }

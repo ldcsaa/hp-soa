@@ -14,7 +14,7 @@ public class KafkaConstant
     /** 消息头：源请求 ID */
     public static final String HEADER_SOURCE_REQUEST_ID = "x-source-request-id";
     /** 消息头：关联数据 ID */
-    public static final String HEADER_CORRELA_DATA_ID   = KafkaHeaders.CORRELATION_ID;
+    public static final String HEADER_CORRELATION_ID    = KafkaHeaders.CORRELATION_ID;
     
     /** 消息发送状态：未发送 */
     public static final int SF_NOT_SEND     = 0;

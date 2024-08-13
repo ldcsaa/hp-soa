@@ -39,19 +39,10 @@ spring.cloud.nacos.config:
       data-id: spring-boot.yml
       refresh: true
     - group: GLOBAL_GROUP
-      data-id: spring-task.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: kafka.yml
+      data-id: rocketmq.yml
       refresh: true
     - group: GLOBAL_GROUP
       data-id: dubbo.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: mysql.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: redis.yml
       refresh: true
 
 # dubbo

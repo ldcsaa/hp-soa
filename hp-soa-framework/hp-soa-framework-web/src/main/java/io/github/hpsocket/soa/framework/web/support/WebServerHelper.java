@@ -53,6 +53,8 @@ public class WebServerHelper
     public static final String HEADER_APP_CODE              = "X-App-Code";
     public static final String HEADER_SRC_APP_CODE          = "X-Src-App-Code";
     public static final String HEADER_GROUP_ID              = "X-Group-Id";
+    public static final String HEADER_REGION                = "X-Region";
+    public static final String HEADER_LANGUAGE              = "X-Language";
     public static final String HEADER_VERSION               = "X-Version";
     public static final String HEADER_EXTRA                 = "X-Extra";
     

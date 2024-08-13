@@ -193,7 +193,7 @@ public class MqListenerHandler
         MessageHeaders headers = message.getHeaders();
 
         String msgId        = (String)headers.get(HEADER_MSG_ID);
-        String corId        = (String)headers.get(HEADER_CORRELA_DATA_ID);
+        String corId        = (String)headers.get(HEADER_CORRELATION_ID);
         String domainName   = (String)headers.get(HEADER_DOMAIN_NAME);
         String eventName    = (String)headers.get(HEADER_EVENT_NAME);
         
