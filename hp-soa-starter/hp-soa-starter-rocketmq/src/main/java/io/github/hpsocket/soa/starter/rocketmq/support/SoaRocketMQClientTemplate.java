@@ -164,12 +164,18 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements
         @Override
         public void run()
         {
+            int maxMessageNum       = receiveProperties.getMaxMessageNum();
+            int invisibleDuration   = receiveProperties.getInvisibleDuration();
+            String consumerGroup    = SoaRocketMQClientTemplate.this.getSimpleConsumer().getConsumerGroup();
+            
+            log.info("({}) start receive -> (consumerGroup: {}, maxMessageNum: {}, invisibleDuration: {})", beanName, consumerGroup, maxMessageNum, invisibleDuration);
+            
             while(!stopped)
             {
                 try
                 {
-                    final List<MessageView> messages = receive( receiveProperties.getMaxMessageNum(),
-                                                                Duration.ofSeconds(receiveProperties.getInvisibleDuration()));
+                    final List<MessageView> messages = receive(maxMessageNum, Duration.ofSeconds(invisibleDuration));
+                    
                     for(MessageView message : messages)
                     {
                         try
@@ -179,11 +185,8 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements
                         }
                         catch(Exception e)
                         {
-                            log.error("exception occur while process message (beanName: {}, topic: {}, consumerGroup: {}, messageId: {}) -> {}", 
-                                        beanName, message.getTopic(),
-                                        SoaRocketMQClientTemplate.this.getSimpleConsumer().getConsumerGroup(),
-                                        message.getMessageId(),
-                                        e.getMessage(), e);
+                            log.error(  "exception occur while process message (beanName: {}, topic: {}, consumerGroup: {}, messageId: {}) -> {}", 
+                                        beanName, message.getTopic(), consumerGroup, message.getMessageId(), e.getMessage(), e);
 
                             if(e instanceof ClientException)
                                 throw e;
@@ -198,6 +201,8 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements
                     GeneralHelper.waitFor(Duration.ofSeconds(RETRY_WAIT_TIME));
                 }
             }
+            
+            log.info("({}) end receive -> (consumerGroup: {}, maxMessageNum: {}, invisibleDuration: {})", beanName, consumerGroup, maxMessageNum, invisibleDuration);
         }
     }
     

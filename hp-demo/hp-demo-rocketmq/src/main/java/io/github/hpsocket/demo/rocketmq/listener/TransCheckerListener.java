@@ -2,6 +2,7 @@ package io.github.hpsocket.demo.rocketmq.listener;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.rocketmq.client.annotation.RocketMQTransactionListener;
 import org.apache.rocketmq.client.apis.message.MessageView;
@@ -31,7 +32,9 @@ public class TransCheckerListener implements RocketMQTransactionChecker
             return TransactionResolution.ROLLBACK;
         }
         
-        return TransactionResolution.COMMIT;
+        int val = ThreadLocalRandom.current().nextInt(10);
+        
+        return ((val & 0x1) == 0) ? TransactionResolution.COMMIT : TransactionResolution.UNKNOWN;
     }
     
     public void addBizId(String bizId)

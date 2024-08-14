@@ -1,12 +1,11 @@
 package io.github.hpsocket.demo.rocketmq.contract.req;
 
-import org.hibernate.validator.constraints.Range;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,11 +15,11 @@ import lombok.Setter;
 public class CreateOrderReuqest
 {
     @NotNull(message = "区域不能为空")
-    @Range(min = 0, max = 2, message = "区域超出范围 [0 ~ 2]")
     @Schema(description = "区域", example = "1", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private Integer regionId;
 
     @NotBlank(message = "订单号不能为空")
+    @Size(min = 6, message = "订单号不能小于6位")
     @Schema(description = "订单号", example = "1234567890987654", requiredMode = RequiredMode.REQUIRED, minLength = 16, nullable = false)
     private String orderNumber;
 

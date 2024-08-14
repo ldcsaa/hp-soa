@@ -2,6 +2,7 @@ package io.github.hpsocket.demo.rocketmq.controller.impl;
 
 import java.time.Duration;
 
+import org.apache.rocketmq.client.apis.ClientException;
 import org.apache.rocketmq.client.apis.producer.SendReceipt;
 import org.apache.rocketmq.client.apis.producer.Transaction;
 import org.apache.rocketmq.client.common.Pair;
@@ -16,6 +17,7 @@ import io.github.hpsocket.demo.rocketmq.converter.OrderConverter;
 import io.github.hpsocket.demo.rocketmq.entity.Order;
 import io.github.hpsocket.demo.rocketmq.listener.TransCheckerListener;
 import io.github.hpsocket.demo.rocketmq.template.FifoPruducerTemplate;
+import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
 import io.github.hpsocket.soa.framework.web.model.Response;
@@ -29,7 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 @AccessVerification(Type.NO_LOGIN)
 public class DemoControllerImpl implements DemoController
 {
-    @Value("${rocketmq.producer.topic}")
+    private static final String FIFO_MESSAGE_GROUP = "fifo-message-group-001";
+    
+    @Value("${rocketmq.simple-consumer.topic}")
     private String normalTopic;
     @Value("${rocketmq-fifo.simple-consumer.topic}")
     private String fifoTopic;
@@ -37,8 +41,6 @@ public class DemoControllerImpl implements DemoController
     private String delayTopic;
     @Value("${rocketmq-trans.push-consumer.topic}")
     private String transTopic;
-    @Value("${rocketmq-fifo.simple-consumer.consumer-group}")
-    private String fifoGroup;
 
     @Autowired
     private SoaRocketMQClientTemplate defaultTemplate;
@@ -69,7 +71,7 @@ public class DemoControllerImpl implements DemoController
     {
         DomainEvent<Order> event = createEvent(request, fifoTopic);
         
-        SendReceipt receipt = fifoPruducerTemplate.syncSendFifoMessage(event.getDestination(), event.toMessage(), fifoGroup);
+        SendReceipt receipt = fifoPruducerTemplate.syncSendFifoMessage(event.getDestination(), event.toMessage(), FIFO_MESSAGE_GROUP);
         
         return response(receipt, request.getOrderNumber());
     }
@@ -115,14 +117,31 @@ public class DemoControllerImpl implements DemoController
     }
 
     private void doInLocalTransaction(Transaction transaction, String orderNumber)
-    {
-        /* 1 - ROLLBACK, 2 - IGNORE, OTHER - COMMIT */
-        
-        
-        if(orderNumber.endsWith("1"))
-            transaction.rollback();
-        else if(!orderNumber.endsWith("2"))
-            transaction.commit();
+    {        
+        try
+        {
+            /* 2 - ROLLBACK, 3 - IGNORE, OTHER - COMMIT */
+            
+            if(orderNumber.endsWith("2"))
+                transaction.rollback();
+            else if(orderNumber.endsWith("3"))
+            {
+                char c = orderNumber.charAt(orderNumber.length() - 2);
+                
+                if(c >= '0' && c <= '4')
+                    transCheckerListener.getBizIds().add(orderNumber);
+            }
+            else
+            {
+                transaction.commit();
+                transCheckerListener.getBizIds().add(orderNumber);
+            }
+        }
+        catch(ClientException e)
+        {
+            log.error("Do in local transaction exception -> {}", e.getMessage(), e);
+            ServiceException.throwServiceException(e);
+        }
         
     }
 

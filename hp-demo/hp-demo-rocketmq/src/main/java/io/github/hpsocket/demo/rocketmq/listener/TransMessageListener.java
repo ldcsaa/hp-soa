@@ -8,7 +8,11 @@ import org.apache.rocketmq.client.core.RocketMQListener;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RocketMQMessageListener(topic = "${rocketmq-trans.push-consumer.topic}")
+@RocketMQMessageListener
+(
+    topic = "${rocketmq-trans.push-consumer.topic}", 
+    consumerGroup = "rocketmq-trans.push-consumer.consumer-group}"
+)
 public class TransMessageListener implements RocketMQListener
 {
 

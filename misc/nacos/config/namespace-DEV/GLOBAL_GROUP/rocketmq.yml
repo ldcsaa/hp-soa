@@ -39,7 +39,9 @@ rocketmq-fifo:
 rocketmq-delay:
   push-consumer:
     topic: test-delay-topic-001
+    consumer-group: delay-group-001
       
 rocketmq-trans:
   push-consumer:
     topic: test-trans-topic-001
+    consumer-group: trans-group-001

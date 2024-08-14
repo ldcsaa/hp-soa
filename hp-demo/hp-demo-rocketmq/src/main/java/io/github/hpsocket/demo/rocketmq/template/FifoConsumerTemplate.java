@@ -8,7 +8,8 @@ import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate
 @ExtConsumerResetConfiguration
 (
     //value = FifoConsumerTemplate.BEAN_NAME,
-    topic = "${rocketmq-fifo.simple-consumer.topic}"
+    topic = "${rocketmq-fifo.simple-consumer.topic}",
+    consumerGroup = "${rocketmq-fifo.simple-consumer.consumer-group}"
 )
 @SoaSimpleConsumerReceiveConfiguration
 (
