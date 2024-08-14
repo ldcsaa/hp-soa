@@ -15,7 +15,7 @@ import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate
     autoStart = "${rocketmq-fifo.simple-consumer.receive.auto-start}",
     consumptionThreadCount = "${rocketmq-fifo.simple-consumer.receive.consumption-thread-count}",
     maxMessageNum = "${rocketmq-fifo.simple-consumer.receive.max-message-num}",
-    invisibleDuration = "${rocketmq-fifo.simple-consumer.receive.invisible-duration}",
+    invisibleDuration = "${rocketmq-fifo.simple-consumer.receive.invisible-duration}"
 )
 public class FifoConsumerTemplate extends SoaRocketMQClientTemplate
 {
