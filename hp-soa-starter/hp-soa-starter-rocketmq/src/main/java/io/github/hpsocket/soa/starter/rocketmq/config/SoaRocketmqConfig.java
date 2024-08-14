@@ -49,7 +49,7 @@ public class SoaRocketmqConfig
     /** 默认 RocketMQ Template */
     @Primary
     @DependsOn(SpringContextHolder.springContextHolderBeanName)
-    @Conditional(SoaProducerOrConsumerPropertyCondition.class)
+    //@Conditional(SoaProducerOrConsumerPropertyCondition.class)
     @ConditionalOnMissingBean(name = ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME)
     @Bean(name = ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME, destroyMethod = "destroy")
     SoaRocketMQClientTemplate rocketMQClientTemplate(RocketMQMessageConverter rocketMQMessageConverter) {

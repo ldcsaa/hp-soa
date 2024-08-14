@@ -23,7 +23,7 @@ import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaExtSimpleConsumerResetConfiguration;
+import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleConsumerReceiveConfiguration;
 import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
 import lombok.Getter;
 import lombok.Setter;
@@ -133,7 +133,7 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements
     private SoaSimpleConsumerReceiveProperties parseReceiveProperties()
     {
         Class<?> clazz = AopProxyUtils.ultimateTargetClass(this);
-        SoaExtSimpleConsumerResetConfiguration annotation = AnnotationUtils.findAnnotation(clazz, SoaExtSimpleConsumerResetConfiguration.class);
+        SoaSimpleConsumerReceiveConfiguration annotation = AnnotationUtils.findAnnotation(clazz, SoaSimpleConsumerReceiveConfiguration.class);
         
         if(annotation == null)
             return defaultReceiveProperties;

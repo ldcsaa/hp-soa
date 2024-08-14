@@ -17,7 +17,7 @@ import cn.hutool.core.annotation.AliasFor;
 @Target(TYPE)
 @Retention(RUNTIME)
 @ExtConsumerResetConfiguration
-public @interface SoaExtSimpleConsumerResetConfiguration
+public @interface SoaSimpleConsumerReceiveConfiguration
 {
     String AUTO_START_PLACEHOLDER               = "${rocketmq.simple-consumer.receive.auto-start:}";
     String CONSUMPTION_THREAD_COUNT_PLACEHOLDER = "${rocketmq.simple-consumer.receive.consumption-thread-count:}";

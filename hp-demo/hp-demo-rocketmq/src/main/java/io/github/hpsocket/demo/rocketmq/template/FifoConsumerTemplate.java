@@ -1,16 +1,21 @@
 package io.github.hpsocket.demo.rocketmq.template;
 
-import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaExtSimpleConsumerResetConfiguration;
+import org.apache.rocketmq.client.annotation.ExtConsumerResetConfiguration;
+
+import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleConsumerReceiveConfiguration;
 import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate;
 
-@SoaExtSimpleConsumerResetConfiguration
+@ExtConsumerResetConfiguration
 (
-    value = FifoConsumerTemplate.BEAN_NAME,
+    //value = FifoConsumerTemplate.BEAN_NAME,
+    topic = "${rocketmq-fifo.simple-consumer.topic}"
+)
+@SoaSimpleConsumerReceiveConfiguration
+(
     autoStart = "${rocketmq-fifo.simple-consumer.receive.auto-start}",
     consumptionThreadCount = "${rocketmq-fifo.simple-consumer.receive.consumption-thread-count}",
     maxMessageNum = "${rocketmq-fifo.simple-consumer.receive.max-message-num}",
-    invisibleDuration = "${rocketmq-fifo.simple-consumer.invisible-duration}",
-    topic = "${rocketmq-fifo.simple-consumer.topic}"
+    invisibleDuration = "${rocketmq-fifo.simple-consumer.receive.invisible-duration}",
 )
 public class FifoConsumerTemplate extends SoaRocketMQClientTemplate
 {

@@ -44,7 +44,7 @@ public class DemoControllerImpl implements DemoController
     private SoaRocketMQClientTemplate defaultTemplate;
     
     @Autowired
-    @Qualifier(FifoPruducerTemplate.BEAN_NAME)
+    //@Qualifier(FifoPruducerTemplate.BEAN_NAME)
     private FifoPruducerTemplate fifoPruducerTemplate;
     
     @Autowired
@@ -93,6 +93,8 @@ public class DemoControllerImpl implements DemoController
         SendReceipt receipt = pair.getSendReceipt();
         Transaction transaction = pair.getTransaction();
         
+        doInLocalTransaction(transaction, request.getOrderNumber());
+        
         return response(receipt, request.getOrderNumber());
     }
 
@@ -110,6 +112,18 @@ public class DemoControllerImpl implements DemoController
         event.setCorrelationId(order.getOrderNumber());
         
         return event;
+    }
+
+    private void doInLocalTransaction(Transaction transaction, String orderNumber)
+    {
+        /* 1 - ROLLBACK, 2 - IGNORE, OTHER - COMMIT */
+        
+        
+        if(orderNumber.endsWith("1"))
+            transaction.rollback();
+        else if(!orderNumber.endsWith("2"))
+            transaction.commit();
+        
     }
 
     private Response<CreateOrderResponse> response(SendReceipt receipt, String orderNumber)
