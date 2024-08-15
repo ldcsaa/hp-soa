@@ -28,13 +28,16 @@ public class TransCheckerListener implements RocketMQTransactionChecker
         
         if(!bizIds.contains(bizId))
         {
-            log.warn("invalid bizId: {}", bizId);
+            log.warn("bizId ({}) NOT found, then ROLLBACK transaction", bizId);
             return TransactionResolution.ROLLBACK;
         }
         
         int val = ThreadLocalRandom.current().nextInt(10);
+        TransactionResolution rs = ((val & 0x1) == 0) ? TransactionResolution.COMMIT : TransactionResolution.UNKNOWN;;
+                
+        log.info("{} transaction", rs.name());
         
-        return ((val & 0x1) == 0) ? TransactionResolution.COMMIT : TransactionResolution.UNKNOWN;
+        return rs;
     }
     
     public void addBizId(String bizId)

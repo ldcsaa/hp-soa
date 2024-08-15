@@ -20,9 +20,10 @@ public class NormalMessageListener implements SoaSimpleConsumerListener
     @Override
     public void consume(MessageView messageView, SoaRocketMQClientTemplate rocketMQClientTemplate) throws ClientException
     {
-        log.info("Consumer Normal Massage: {}", messageView);
         JSONObject json = JSON.parseObject(RocketmqHelper.getMessageViewBody(messageView));
-        System.out.println(json);
+
+        log.info("Consumer Normal Massage: {}", messageView);
+        log.info("Normal Massage Body: {}", json);
     }
 
 }
