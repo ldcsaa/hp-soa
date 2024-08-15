@@ -4,14 +4,18 @@ import org.apache.rocketmq.client.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.client.apis.consumer.ConsumeResult;
 import org.apache.rocketmq.client.apis.message.MessageView;
 import org.apache.rocketmq.client.core.RocketMQListener;
+import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Component
 @RocketMQMessageListener
 (
+    endpoints = "${rocketmq-trans.push-consumer.endpoints}",
     topic = "${rocketmq-trans.push-consumer.topic}", 
-    consumerGroup = "rocketmq-trans.push-consumer.consumer-group}"
+    tag = "${rocketmq-trans.push-consumer.tag}",
+    consumerGroup = "${rocketmq-trans.push-consumer.consumer-group}"
 )
 public class TransMessageListener implements RocketMQListener
 {

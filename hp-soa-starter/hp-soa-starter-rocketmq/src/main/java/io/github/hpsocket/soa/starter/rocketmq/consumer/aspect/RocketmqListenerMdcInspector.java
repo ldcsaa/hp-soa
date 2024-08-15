@@ -24,9 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 public class RocketmqListenerMdcInspector
 {
     public static final int ORDER               = 0;
-    public static final String POINTCUT_PATTERN = "(execution (public org.apache.rocketmq.client.apis.consumer.ConsumeResult *.consume(org.apache.rocketmq.client.apis.message.MessageView)) && @target(org.apache.rocketmq.client.annotation.RocketMQMessageListener)) ||"
-                                                + "(execution (public void *.consume(org.apache.rocketmq.client.apis.message.MessageView, io.github.hpsocket.soa.starter.rocketmq.suppor.SoaRocketMQClientTemplate)) && @target(io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleMessageListener)) ||"
-                                                + "(execution (public org.apache.rocketmq.client.apis.producer.TransactionResolution *.check(org.apache.rocketmq.client.apis.message.MessageView)) && @target(org.apache.rocketmq.client.annotation.RocketMQTransactionListener))"
+    public static final String POINTCUT_PATTERN = "(execution (public org.apache.rocketmq.client.apis.consumer.ConsumeResult *.consume(org.apache.rocketmq.client.apis.message.MessageView+)) && @within(org.apache.rocketmq.client.annotation.RocketMQMessageListener)) ||"
+                                                + "(execution (public void *.consume(org.apache.rocketmq.client.apis.message.MessageView+, io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate+)) && @within(io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleMessageListener)) ||"
+                                                + "(execution (public org.apache.rocketmq.client.apis.producer.TransactionResolution *.check(org.apache.rocketmq.client.apis.message.MessageView+)) && @within(org.apache.rocketmq.client.annotation.RocketMQTransactionListener))"
                                                 ;
 
     @Pointcut(POINTCUT_PATTERN)
