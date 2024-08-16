@@ -24,11 +24,24 @@ import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleConsumerReceiveConfiguration;
+import io.github.hpsocket.soa.starter.rocketmq.consumer.listener.RocketmqReadOnlyEventListener;
 import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+/** <b>{@linkplain org.apache.rocketmq.client.core.RocketMQClientTemplate RocketMQClientTemplate} 增强类</b><br>
+ * {@linkplain RocketmqReadOnlyEventListener} 是 HP-SOA 的默认 Template<p>
+ * <b>Producer 增强：</b>
+ * <ol>
+ * <li>自动注入 messageId、sourceRequestId 等调用链跟踪信息</li>
+ * <li>当应用程序只读时，拦截消息发送</li>
+ * </ol>
+ * <b>Consumer 增强：</b>
+ * <ol>
+ * <li>为 Simple Consumer 自动启动消息接收，参考 {@linkplain SoaSimpleConsumerReceiveConfiguration} 和 {@linkplain SoaSimpleConsumerReceiveProperties}
+ * </ol>
+ */
 @Slf4j
 public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements BeanNameAware
 {

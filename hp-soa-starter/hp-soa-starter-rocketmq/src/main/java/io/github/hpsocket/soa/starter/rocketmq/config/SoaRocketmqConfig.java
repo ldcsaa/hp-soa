@@ -50,7 +50,7 @@ public class SoaRocketmqConfig
     }
     
 
-    /** 默认 RocketMQ Template */
+    /** 默认 RocketMQ Client Template */
     @Primary
     @ConditionalOnMissingBean(name = ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME)
     @Bean(name = ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME, destroyMethod = "destroy")

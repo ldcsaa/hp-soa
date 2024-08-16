@@ -5,6 +5,7 @@ import org.apache.rocketmq.client.annotation.ExtConsumerResetConfiguration;
 import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleConsumerReceiveConfiguration;
 import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate;
 
+/** Simple Consumer Template */
 @ExtConsumerResetConfiguration
 (
     //value = FifoConsumerTemplate.BEAN_NAME,

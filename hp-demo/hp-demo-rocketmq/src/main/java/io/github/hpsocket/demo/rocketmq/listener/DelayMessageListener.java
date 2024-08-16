@@ -12,6 +12,7 @@ import com.alibaba.fastjson2.JSONObject;
 import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqHelper;
 import lombok.extern.slf4j.Slf4j;
 
+/** Delay 消息 Push Consumer 监听器 */
 @Slf4j
 @Component
 @RocketMQMessageListener

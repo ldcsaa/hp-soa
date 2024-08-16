@@ -16,6 +16,10 @@ import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleMessageListen
 import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate;
 import io.github.hpsocket.soa.starter.rocketmq.support.SoaSimpleConsumerListener;
 
+/** <b>Simple Consumer 配置</b><br>
+ * 用于粘合 {@linkplain org.apache.rocketmq.client.core.RocketMQClientTemplate RocketMQClientTemplate} 与 {@linkplain SoaSimpleMessageListener}，
+ * 让 {@linkplain SoaSimpleMessageListener} 注解的消息监听器来处理 {@linkplain org.apache.rocketmq.client.core.RocketMQClientTemplate#receive(int, java.time.Duration) RocketMQClientTemplate.receive(int maxMessageNum, Duration invisibleDuration)} 接收到的消息
+ */
 @AutoConfiguration
 public class SoaSimpleConsumerConfig implements SmartInitializingSingleton
 {

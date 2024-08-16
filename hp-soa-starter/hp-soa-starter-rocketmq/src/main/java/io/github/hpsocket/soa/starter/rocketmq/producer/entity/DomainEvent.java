@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /** <b>领域事件实体</b><br>
- * 对应领域事件数据库表，应用程序可以继承该实体，扩展自定义字段
+ * 通用领域时间封装类，应用程序可以继承该实体，扩展自定义字段
  */
 @Getter
 @Setter

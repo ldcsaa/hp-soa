@@ -14,6 +14,7 @@ import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+/** 事务检查监听器 */
 @Slf4j
 @Getter
 @RocketMQTransactionListener(rocketMQTemplateBeanName = RocketMQAutoConfiguration.ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME)

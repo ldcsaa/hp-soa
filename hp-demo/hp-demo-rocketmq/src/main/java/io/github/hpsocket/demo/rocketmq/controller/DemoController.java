@@ -17,20 +17,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Tag(name = "示例Demo接口")
 public interface DemoController
 {
+    /** 发送普通消息 */
     @PostMapping(value = "/normal/createOrder")
-    @Operation(summary = "创建订单", description = "创建订单")
+    @Operation(summary = "发送普通消息", description = "发送普通消息")
     Response<CreateOrderResponse> normalCreateOrder(@RequestBody @Valid CreateOrderReuqest request);
     
+    /** 发送fifo消息 */
     @PostMapping(value = "/fifo/createOrder")
-    @Operation(summary = "创建订单", description = "创建订单")
+    @Operation(summary = "发送fifo消息", description = "发送fifo消息")
     Response<CreateOrderResponse> fifoCreateOrder(@RequestBody @Valid CreateOrderReuqest request);
     
+    /** 发送delay消息 */
     @PostMapping(value = "/delay/createOrder")
-    @Operation(summary = "创建订单", description = "创建订单")
+    @Operation(summary = "发送delay消息", description = "发送delay消息")
     Response<CreateOrderResponse> delayCreateOrder(@RequestBody @Valid CreateOrderReuqest request);
     
+    /** 发送事务消息 */
     @PostMapping(value = "/trans/createOrder")
-    @Operation(summary = "创建订单", description = "创建订单")
+    @Operation(summary = "发送事务消息", description = "发送事务消息")
     Response<CreateOrderResponse> transCreateOrder(@RequestBody @Valid CreateOrderReuqest request);
     
 }
