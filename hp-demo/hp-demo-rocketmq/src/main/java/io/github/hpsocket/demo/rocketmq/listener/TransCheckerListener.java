@@ -33,11 +33,11 @@ public class TransCheckerListener implements RocketMQTransactionChecker
         }
         
         int val = ThreadLocalRandom.current().nextInt(10);
-        TransactionResolution rs = ((val & 0x1) == 0) ? TransactionResolution.COMMIT : TransactionResolution.UNKNOWN;;
+        boolean rs = ((val & 0x1) == 0);
                 
-        log.info("{} transaction", rs.name());
+        log.info("{} transaction", rs ? "COMMIT" : "IGNORE");
         
-        return rs;
+        return rs ? TransactionResolution.COMMIT : TransactionResolution.UNKNOWN;
     }
     
     public void addBizId(String bizId)

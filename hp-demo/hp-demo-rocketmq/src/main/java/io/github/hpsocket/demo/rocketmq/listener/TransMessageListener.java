@@ -29,7 +29,7 @@ public class TransMessageListener implements RocketMQListener
     {
         JSONObject json = JSON.parseObject(RocketmqHelper.getMessageViewBody(messageView));
 
-        log.info("Consumer Trans Massage: {}", messageView);
+        log.info("Consume Trans Massage: {}", messageView);
         log.info("Trans Massage Body: {}", json);
         
         return ConsumeResult.SUCCESS;

@@ -22,7 +22,7 @@ public class NormalMessageListener implements SoaSimpleConsumerListener
     {
         JSONObject json = JSON.parseObject(RocketmqHelper.getMessageViewBody(messageView));
 
-        log.info("Consumer Normal Massage: {}", messageView);
+        log.info("Consume Normal Massage: {}", messageView);
         log.info("Normal Massage Body: {}", json);
     }
 

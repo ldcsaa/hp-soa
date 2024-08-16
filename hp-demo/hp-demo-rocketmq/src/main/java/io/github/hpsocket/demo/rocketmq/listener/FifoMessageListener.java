@@ -25,7 +25,7 @@ public class FifoMessageListener implements SoaSimpleConsumerListener
     {
         JSONObject json = JSON.parseObject(RocketmqHelper.getMessageViewBody(messageView));
 
-        log.info("Consumer Fifo Massage: {}", messageView);
+        log.info("Consume Fifo Massage: {}", messageView);
         log.info("Fifo Massage Body: {}", json);
         
         int val = ThreadLocalRandom.current().nextInt(10);

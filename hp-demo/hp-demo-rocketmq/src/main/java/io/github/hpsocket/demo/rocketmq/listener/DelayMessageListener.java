@@ -29,9 +29,8 @@ public class DelayMessageListener implements RocketMQListener
     {
         JSONObject json = JSON.parseObject(RocketmqHelper.getMessageViewBody(messageView));
 
-        log.info("Consumer Delay Massage: {}", messageView);
+        log.info("Consume Delay Massage: {}", messageView);
         log.info("Delay Massage Body: {}", json);
-
         
         return ConsumeResult.SUCCESS;
     }
