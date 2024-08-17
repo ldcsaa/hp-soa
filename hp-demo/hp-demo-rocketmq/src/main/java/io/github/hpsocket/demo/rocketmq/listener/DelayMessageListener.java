@@ -6,7 +6,6 @@ import org.apache.rocketmq.client.apis.message.MessageView;
 import org.apache.rocketmq.client.core.RocketMQListener;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 
 import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqHelper;
@@ -28,7 +27,7 @@ public class DelayMessageListener implements RocketMQListener
     @Override
     public ConsumeResult consume(MessageView messageView)
     {
-        JSONObject json = JSON.parseObject(RocketmqHelper.getMessageViewBody(messageView));
+        JSONObject json = RocketmqHelper.getMessageViewBodyAsJsonObject(messageView);
 
         log.info("Consume Delay Massage: {}", messageView);
         log.info("Delay Massage Body: {}", json);

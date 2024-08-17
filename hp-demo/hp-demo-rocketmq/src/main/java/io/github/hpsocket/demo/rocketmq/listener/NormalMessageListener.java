@@ -3,7 +3,6 @@ package io.github.hpsocket.demo.rocketmq.listener;
 import org.apache.rocketmq.client.apis.ClientException;
 import org.apache.rocketmq.client.apis.message.MessageView;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 
 import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleMessageListener;
@@ -21,7 +20,7 @@ public class NormalMessageListener implements SoaSimpleConsumerListener
     @Override
     public void consume(MessageView messageView, SoaRocketMQClientTemplate rocketMQClientTemplate) throws ClientException
     {
-        JSONObject json = JSON.parseObject(RocketmqHelper.getMessageViewBody(messageView));
+        JSONObject json = RocketmqHelper.getMessageViewBodyAsJsonObject(messageView);
 
         log.info("Consume Normal Massage: {}", messageView);
         log.info("Normal Massage Body: {}", json);

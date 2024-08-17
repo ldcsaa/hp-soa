@@ -5,7 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.apache.rocketmq.client.apis.ClientException;
 import org.apache.rocketmq.client.apis.message.MessageView;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 
 import io.github.hpsocket.demo.rocketmq.template.FifoConsumerTemplate;
@@ -24,7 +23,7 @@ public class FifoMessageListener implements SoaSimpleConsumerListener
     @Override
     public void consume(MessageView messageView, SoaRocketMQClientTemplate rocketMQClientTemplate) throws ClientException
     {
-        JSONObject json = JSON.parseObject(RocketmqHelper.getMessageViewBody(messageView));
+        JSONObject json = RocketmqHelper.getMessageViewBodyAsJsonObject(messageView);
 
         log.info("Consume Fifo Massage: {}", messageView);
         log.info("Fifo Massage Body: {}", json);
