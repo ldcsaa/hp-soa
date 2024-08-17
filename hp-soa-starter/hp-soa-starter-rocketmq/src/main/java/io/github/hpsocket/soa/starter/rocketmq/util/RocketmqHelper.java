@@ -6,6 +6,9 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.rocketmq.client.apis.message.MessageView;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
+
 /** <b>RocketMQ 通用辅助类</b> */
 public class RocketmqHelper
 {
@@ -24,4 +27,17 @@ public class RocketmqHelper
     {
         return StandardCharsets.UTF_8.decode(messageView.getBody()).toString();
     }
+    
+    /** {@linkplain MessageView} 消息内容转为 {@linkplain JSONObject} */
+    public static final JSONObject getMessageViewBodyAsJsonObject(MessageView messageView)
+    {
+        return JSON.parseObject(getMessageViewBody(messageView));
+    }
+    
+    /** {@linkplain MessageView} 消息内容转为指定类型对象 */
+    public static final<T> T getMessageViewBodyAsObject(MessageView messageView, Class<T> clazz)
+    {
+        return JSON.parseObject(getMessageViewBody(messageView), clazz);
+    }
+    
 }
