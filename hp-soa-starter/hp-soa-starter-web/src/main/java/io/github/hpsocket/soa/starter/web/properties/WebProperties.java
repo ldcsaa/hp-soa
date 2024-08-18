@@ -61,6 +61,9 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
         public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
         
         private String dateTimeFormat   = DEFAULT_DATE_TIME_FORMAT;
+        
+        private boolean returnRequestId = false;
+        
         @NestedConfigurationProperty
         private CookieProperties cookie = new CookieProperties();
         @NestedConfigurationProperty
@@ -172,6 +175,12 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
         return app.getOwner();
     }
 
+    @Override
+    public boolean isReturnRequestId()
+    {
+        return http.isReturnRequestId();
+    }
+    
     @Override
     public int getCookieMaxAge()
     {

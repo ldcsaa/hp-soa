@@ -76,6 +76,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
         {            
             if(respBody.getResultCode() == null)
                 respBody.setResultCode(respBody.getStatusCode());
+            if(AppConfigHolder.isReturnRequestId())
+                respBody.setRequestId(RequestContext.getRequestAttribute().getRequestId());
             
             checkToken(respBody, req, resp);
 
