@@ -18,6 +18,9 @@ public class CreateOrderResponse
     @Schema(description = "messageId", example = "123", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private String messageId;
 
+    @Schema(description = "internalMessageId", example = "999", requiredMode = RequiredMode.REQUIRED, nullable = false)
+    private String internalMessageId;
+
     @Schema(description = "订单号", example = "1234567890987654", requiredMode = RequiredMode.REQUIRED, minLength = 16, nullable = false)
     private String orderNumber;
 
@@ -25,9 +28,9 @@ public class CreateOrderResponse
     @Schema(description = "创建时间", example = "2023-11-22 12:34:56.789", requiredMode = RequiredMode.REQUIRED, nullable = false)
     private OffsetDateTime createTime;
 
-    public CreateOrderResponse(String messageId, String orderNumber)
+    public CreateOrderResponse(String messageId, String internalMessageId, String orderNumber)
     {
-        this(messageId, orderNumber, OffsetDateTime.now());
+        this(messageId, internalMessageId, orderNumber, OffsetDateTime.now());
     }
 
     @Override

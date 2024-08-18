@@ -3,6 +3,7 @@ package io.github.hpsocket.demo.rocketmq.controller.impl;
 import java.time.Duration;
 
 import org.apache.rocketmq.client.apis.ClientException;
+import org.apache.rocketmq.client.apis.message.MessageId;
 import org.apache.rocketmq.client.apis.producer.SendReceipt;
 import org.apache.rocketmq.client.apis.producer.Transaction;
 import org.apache.rocketmq.client.common.Pair;
@@ -63,7 +64,7 @@ public class DemoControllerImpl implements DemoController
         
         SendReceipt receipt = defaultTemplate.syncSendNormalMessage(event.getDestination(), event.toMessage());
         
-        return response(receipt, request.getOrderNumber());
+        return response(event.getMsgId(), receipt.getMessageId(), request.getOrderNumber());
     }
 
     @Override
@@ -73,7 +74,7 @@ public class DemoControllerImpl implements DemoController
         
         SendReceipt receipt = fifoPruducerTemplate.syncSendFifoMessage(event.getDestination(), event.toMessage(), FIFO_MESSAGE_GROUP);
         
-        return response(receipt, request.getOrderNumber());
+        return response(event.getMsgId(), receipt.getMessageId(), request.getOrderNumber());
     }
 
     @Override
@@ -83,7 +84,7 @@ public class DemoControllerImpl implements DemoController
         
         SendReceipt receipt = defaultTemplate.syncSendDelayMessage(event.getDestination(), event.toMessage(), Duration.ofSeconds(10));
         
-        return response(receipt, request.getOrderNumber());
+        return response(event.getMsgId(), receipt.getMessageId(), request.getOrderNumber());
     }
 
     @Override
@@ -97,7 +98,7 @@ public class DemoControllerImpl implements DemoController
         
         doInLocalTransaction(transaction, request.getOrderNumber());
         
-        return response(receipt, request.getOrderNumber());
+        return response(event.getMsgId(), receipt.getMessageId(), request.getOrderNumber());
     }
 
     private DomainEvent<Order> createEvent(CreateOrderReuqest request, String topic)
@@ -145,10 +146,10 @@ public class DemoControllerImpl implements DemoController
         
     }
 
-    private Response<CreateOrderResponse> response(SendReceipt receipt, String orderNumber)
+    private Response<CreateOrderResponse> response(String messageId, MessageId internalMessageId, String orderNumber)
     {
-        String messageId = receipt.getMessageId().toString();
-        CreateOrderResponse resp = new CreateOrderResponse(messageId, orderNumber);
+        String strInternalMessageId = internalMessageId == null ? null : internalMessageId.toString();
+        CreateOrderResponse resp = new CreateOrderResponse(messageId, strInternalMessageId, orderNumber);
         
         log.debug(resp.toString());
 
