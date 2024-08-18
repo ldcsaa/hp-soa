@@ -44,7 +44,7 @@ public class RocketmqListenerMdcInspector
         String eventName        = null;
         String topic            = null;
         
-        MessageView msg = (MessageView)AspectHelper.findFirstArgByTypes(joinPoint, MessageView.class);
+        MessageView msg = AspectHelper.findFirstArgByType(joinPoint, MessageView.class);
         
         if(msg != null)
         {
