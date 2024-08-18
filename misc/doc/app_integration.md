@@ -94,6 +94,8 @@ hp.soa.web:
   http:
     # 日期时间序列化格式（默认："yyyy-MM-dd'T'HH:mm:ss.SSSXXX"）
     date-time-format: "yyyy-MM-dd HH:mm:ss.SSS"
+    # 请求响应中是否返回请求 ID（默认：false）
+    return-request-id: true
     # 默认 Cookie 属性
     cookie:
       # （默认值：10年）
