@@ -37,7 +37,7 @@ public class FifoMessageListener2 implements RocketMQListener
         int val = ThreadLocalRandom.current().nextInt(10);
         ConsumeResult rs = ((val & 0x1) == 0) ? ConsumeResult.SUCCESS : ConsumeResult.FAILURE;
         
-        log.info("{} Fifo Massage", rs.name());
+        log.info("{} Fifo Massage (internalMessageId: {})", rs.name(), messageView.getMessageId().toString());
 
         return rs;
     }

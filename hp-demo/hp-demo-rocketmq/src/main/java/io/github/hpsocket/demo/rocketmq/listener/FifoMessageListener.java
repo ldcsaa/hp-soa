@@ -31,7 +31,7 @@ public class FifoMessageListener implements SoaSimpleConsumerListener
         int val = ThreadLocalRandom.current().nextInt(10);
         boolean ack = ((val & 0x1) == 0);
         
-        log.info("{} Fifo Massage", ack ? "ACK" : "UNACK");
+        log.info("{} Fifo Massage (internalMessageId: {})", ack ? "ACK" : "UNACK", messageView.getMessageId().toString());
         
         if(ack) rocketMQClientTemplate.ack(messageView);
     }
