@@ -23,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
 
 import java.util.Map;
-import java.util.UUID;
 
 /** <b>Rabbitmq Listener MDC 拦截器</b><br>
  * 用于注入 MDC 调用链跟踪信息
@@ -93,10 +92,11 @@ public class RabbitmqListenerMdcInspector
                 domainName        = (String)headers.get(HEADER_DOMAIN_NAME);
                 eventName         = (String)headers.get(HEADER_EVENT_NAME);
                 correlationId     = (String)headers.get(HEADER_CORRELATION_ID);
-                UUID uuid         = (UUID)headers.get(MessageHeaders.ID);
+                internalMessageId = (String)headers.get(HEADER_AMQP_MESSAGE_ID);
                 
-                if(uuid != null)
-                    internalMessageId = uuid.toString();
+                if(GeneralHelper.isStrEmpty(correlationId))
+                    correlationId = (String)headers.get(HEADER_CORRELATION_ID);
+
             }
             else if(obj instanceof com.rabbitmq.stream.Message msg)
             {
