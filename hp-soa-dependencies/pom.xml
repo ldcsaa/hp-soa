@@ -24,7 +24,7 @@
         <spring-kafka.version>3.1.6</spring-kafka.version>
         <spring-retry.version>2.0.7</spring-retry.version>
 
-        <dubbo.version>3.2.14</dubbo.version>
+        <dubbo.version>3.2.15</dubbo.version>
         <nacos-client.version>2.3.3</nacos-client.version>
         <netty.version>4.1.111.Final</netty.version>
         <zookeeper.version>3.9.2</zookeeper.version>
