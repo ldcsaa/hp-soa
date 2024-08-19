@@ -96,7 +96,6 @@ public class RabbitmqListenerMdcInspector
                 
                 if(GeneralHelper.isStrEmpty(correlationId))
                     correlationId = (String)headers.get(HEADER_CORRELATION_ID);
-
             }
             else if(obj instanceof com.rabbitmq.stream.Message msg)
             {
