@@ -55,11 +55,11 @@ public class KafkaListenerMdcInspector
         Assert.notNull(listener, "@KafkaListener annotation not found");
         
         String listenerId       = listener.id();
-        String correlationId    = null;
         String messageId        = null;
         String sourceRequestId  = null;
         String domainName       = null;
         String eventName        = null;
+        String correlationId    = null;
         
         Object obj = AspectHelper.findFirstArgByTypes(joinPoint, ConsumerRecord.class, Message.class, Iterable.class);
         

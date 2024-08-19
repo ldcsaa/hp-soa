@@ -32,6 +32,7 @@ public class MdcAttr
     public static final String MDC_OWNER_KEY        = "__owner";
 
     public static final String MDC_MESSAGE_ID_KEY           = "__messageId";
+    public static final String MDC_INTERNAL_MESSAGE_ID_KEY  = "__internalMessageId";
     public static final String MDC_SOURCE_REQUEST_ID_KEY    = "__sourceRequestId";
 
     public static final String MDC_FROM_SERVICE_ID_KEY      = "__fromServiceId";
@@ -46,6 +47,7 @@ public class MdcAttr
                                                         MDC_CLIENT_ID_KEY,
                                                         MDC_SESSION_ID_KEY,
                                                         MDC_MESSAGE_ID_KEY,
+                                                        MDC_INTERNAL_MESSAGE_ID_KEY,
                                                         MDC_SOURCE_REQUEST_ID_KEY,
                                                         MDC_APP_CODE_KEY,
                                                         MDC_SRC_APP_CODE_KEY,
@@ -66,6 +68,7 @@ public class MdcAttr
                                                             MDC_CLIENT_ID_KEY,
                                                             MDC_SESSION_ID_KEY,
                                                             MDC_MESSAGE_ID_KEY,
+                                                            MDC_INTERNAL_MESSAGE_ID_KEY,
                                                             MDC_SOURCE_REQUEST_ID_KEY,
                                                             MDC_APP_CODE_KEY,
                                                             MDC_SRC_APP_CODE_KEY,
@@ -196,6 +199,16 @@ public class MdcAttr
     public void setMessageId(String messageId)
     {
         set(MDC_MESSAGE_ID_KEY, messageId);
+    }
+
+    public String getInternalMessageId()
+    {
+        return get(MDC_INTERNAL_MESSAGE_ID_KEY);
+    }
+
+    public void setInternalMessageId(String internalMessageId)
+    {
+        set(MDC_INTERNAL_MESSAGE_ID_KEY, internalMessageId);
     }
 
     public String getSourceRequestId()

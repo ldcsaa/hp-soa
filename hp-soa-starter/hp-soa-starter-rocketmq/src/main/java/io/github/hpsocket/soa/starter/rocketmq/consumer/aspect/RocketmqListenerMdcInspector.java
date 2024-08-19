@@ -37,18 +37,20 @@ public class RocketmqListenerMdcInspector
     {
         MdcAttr mdcAttr = WebServerHelper.createMdcAttr();        
 
-        String correlationId    = null;
-        String messageId        = null;
-        String sourceRequestId  = null;
-        String domainName       = null;
-        String eventName        = null;
-        String topic            = null;
+        String correlationId     = null;
+        String messageId         = null;
+        String internalMessageId = null;
+        String sourceRequestId   = null;
+        String domainName        = null;
+        String eventName         = null;
+        String topic             = null;
         
         MessageView msg = AspectHelper.findFirstArgByType(joinPoint, MessageView.class);
         
         if(msg != null)
         {
             topic = msg.getTopic();
+            internalMessageId = msg.getMessageId().toString();
             Map<String, String> properties = msg.getProperties();
             
             if(GeneralHelper.isNotNullOrEmpty(properties))
@@ -57,11 +59,16 @@ public class RocketmqListenerMdcInspector
                 sourceRequestId = properties.get(RocketmqConstant.HEADER_SOURCE_REQUEST_ID);
                 domainName      = properties.get(RocketmqConstant.HEADER_DOMAIN_NAME);
                 eventName       = properties.get(RocketmqConstant.HEADER_EVENT_NAME);
-                correlationId   = properties.get(RocketmqConstant.HEADER_CORRELATION_ID);                    
-            }
+                correlationId   = properties.get(RocketmqConstant.HEADER_CORRELATION_ID);
+           }
+            
+            if(GeneralHelper.isStrEmpty(messageId))
+                messageId = internalMessageId;
             
             if(GeneralHelper.isStrNotEmpty(messageId))
                 mdcAttr.setMessageId(messageId);
+            if(GeneralHelper.isStrNotEmpty(internalMessageId))
+                mdcAttr.setInternalMessageId(internalMessageId);
             if(GeneralHelper.isStrNotEmpty(sourceRequestId))
                 mdcAttr.setSourceRequestId(sourceRequestId);
         }
