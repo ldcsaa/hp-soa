@@ -49,7 +49,6 @@ public class SoaRocketmqConfig
         return new RocketmqListenerMdcInspector();
     }
     
-
     /** 默认 RocketMQ Client Template */
     @Primary
     @ConditionalOnMissingBean(name = ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME)

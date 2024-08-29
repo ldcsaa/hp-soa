@@ -1,5 +1,9 @@
 package io.github.hpsocket.soa.starter.mqtt.support;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+
 import org.eclipse.paho.mqttv5.client.IMqttMessageListener;
 import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttClient;
@@ -11,7 +15,14 @@ import org.eclipse.paho.mqttv5.common.MqttPersistenceException;
 import org.eclipse.paho.mqttv5.common.MqttSecurityException;
 import org.eclipse.paho.mqttv5.common.MqttSubscription;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
+import org.eclipse.paho.mqttv5.common.packet.UserProperty;
+import org.slf4j.MDC;
 
+import io.github.hpsocket.soa.framework.core.id.IdGenerator;
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.mqtt.util.MqttConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +47,18 @@ public class ExtMqttClient extends MqttClient
         this.setManualAcks(manualAcks);
     }
     
-    @Override
+    public ExtMqttClient(String serverURI, String clientId, MqttClientPersistence persistence, ScheduledExecutorService executorService) throws MqttException
+    {
+        super(serverURI, clientId, persistence, executorService);
+    }
+    
+    public ExtMqttClient(String serverURI, String clientId, MqttClientPersistence persistence, ScheduledExecutorService executorService, boolean manualAcks) throws MqttException
+    {
+        this(serverURI, clientId, persistence, executorService);
+        this.setManualAcks(manualAcks);
+    }
+    
+   @Override
     public void setManualAcks(boolean manualAcks)
     {
         super.setManualAcks(manualAcks);
@@ -83,6 +105,18 @@ public class ExtMqttClient extends MqttClient
         return token;
     }
     
+    @Override
+    public void publish(String topic, byte[] payload, int qos, boolean retained) throws MqttException, MqttPersistenceException
+    {
+        publish2(topic, payload, qos, retained);
+    }
+    
+    @Override
+    public void publish(String topic, MqttMessage message) throws MqttException, MqttPersistenceException
+    {
+        publish2(topic, message);
+    }
+
     public IMqttToken publish2(String topic, byte[] payload, int qos, boolean retained) throws MqttException, MqttPersistenceException
     {
         MqttMessage message = new MqttMessage(payload);
@@ -91,15 +125,60 @@ public class ExtMqttClient extends MqttClient
         
         return publish2(topic, message);
     }
-
+    
     public IMqttToken publish2(String topic, MqttMessage message) throws MqttException, MqttPersistenceException
     {
+        injectMdcProperties(message);
+
         IMqttToken token = aClient.publish(topic, message, null, null);
         token.waitForCompletion(getTimeToWait());
         
         return token;
     }
     
+    private void injectMdcProperties(MqttMessage message)
+    {
+        WebServerHelper.assertAppIsNotReadOnly();
+        
+        MqttProperties props = message.getProperties();
+        
+        if(props == null)
+        {
+            props = new MqttProperties();
+            message.setProperties(props);
+        }
+        
+        List<UserProperty> userProps = props.getUserProperties();
+        
+        if(userProps == null)
+        {
+            userProps = new ArrayList<>();
+            props.setUserProperties(userProps);
+        }
+        
+        String messageId         = null;
+        String sourceRequestId   = null;
+
+        for(UserProperty p : userProps)
+        {
+            String key = p.getKey();
+            String val = p.getValue();
+            
+            if(MqttConstant.HEADER_MSG_ID.equalsIgnoreCase(key))
+                messageId = val;
+            else if(MqttConstant.HEADER_SOURCE_REQUEST_ID.equalsIgnoreCase(key))
+                sourceRequestId = val;
+            
+            if(GeneralHelper.isStrNotEmpty(messageId) && GeneralHelper.isStrNotEmpty(sourceRequestId))
+                break;
+        }
+        
+        if(GeneralHelper.isStrEmpty(messageId))
+            userProps.add(new UserProperty(MqttConstant.HEADER_MSG_ID, IdGenerator.nextIdStr()));
+        if(GeneralHelper.isStrEmpty(sourceRequestId))
+            userProps.add(new UserProperty(MqttConstant.HEADER_SOURCE_REQUEST_ID, MDC.get(MdcAttr.MDC_REQUEST_ID_KEY)));
+    }
+
     @Override
     public void connect() throws MqttSecurityException, MqttException
     {

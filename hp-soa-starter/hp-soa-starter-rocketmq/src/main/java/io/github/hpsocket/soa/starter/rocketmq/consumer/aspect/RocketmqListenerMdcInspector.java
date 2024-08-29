@@ -35,7 +35,7 @@ public class RocketmqListenerMdcInspector
     @Around(value = "aroundMethod()")
     public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
     {
-        MdcAttr mdcAttr = WebServerHelper.createMdcAttr();        
+        MdcAttr mdcAttr = WebServerHelper.createMdcAttr();
 
         String correlationId     = null;
         String messageId         = null;
