@@ -2,7 +2,12 @@ package io.github.hpsocket.soa.framework.core.exception;
 
 import org.slf4j.Logger;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /** <b>HP-SOA 统一异常</b> */
+@Getter
+@Setter
 @SuppressWarnings("serial")
 public class ServiceException extends RuntimeException
 {
@@ -136,26 +141,6 @@ public class ServiceException extends RuntimeException
         super(message, cause);
         setStatusCode(statusCode);
         setResultCode(statusCode);
-    }
-
-    public Integer getResultCode()
-    {
-        return resultCode;
-    }
-
-    public void setResultCode(Integer resultCode)
-    {
-        this.resultCode = resultCode;
-    }
-
-    public Integer getStatusCode()
-    {
-        return statusCode;
-    }
-
-    public void setStatusCode(Integer statusCode)
-    {
-        this.statusCode = statusCode;
     }
 
     public static final ServiceException wrapServiceException(Throwable e)
