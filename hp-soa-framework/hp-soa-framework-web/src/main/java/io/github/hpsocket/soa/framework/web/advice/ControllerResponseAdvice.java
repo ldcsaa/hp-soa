@@ -84,7 +84,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             respBody.setCostTime(WebServerHelper.calcTimestamp());
         }
         
-        logResponse(body, returnType, req);
+        if(WebServerHelper.isEntryOrNull())
+            logResponse(body, returnType, req);
         
         return body;
     }
