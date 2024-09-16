@@ -51,7 +51,7 @@ public class MqListenerHandler
     //////////////////////////////////////////////////
     // 批量消费配置：spring.kafka.listener.type=batch ///
     //////////////////////////////////////////////////
-    
+        
     /** 批量消费 */
     @KafkaListener(topics = TOPIC_0, groupId = "GROUP_BATCH", batch = "true", autoStartup = "false")
     public void onBatchMessage0(List<Message<String>> msgs/*, Acknowledgment ack, Consumer<String, String> consumer*/)
@@ -73,6 +73,17 @@ public class MqListenerHandler
         msgs.forEach(msg -> logMessage(msg));
     }
 
+    //////////////////////////////////////////////////
+    // 纯文本消息                                    ///
+    //////////////////////////////////////////////////
+    
+    /** 单条消费 */
+    @KafkaListener(topics = TOPIC_TEXT, groupId = "GROUP_SINGLE", batch = "false", autoStartup = "false")
+    public void onSingleTextMessage0(Message<String> msg/*, Acknowledgment ack, Consumer<String, String> consumer*/)
+    {
+        logTextMessage(msg);
+    }
+
     private void logMessage(Message<String> msg)
     {
         JSONObject json = new JSONObject();
@@ -89,7 +100,7 @@ public class MqListenerHandler
         json.put("sourceRequestId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_SOURCE_REQUEST_ID)));
         json.put("domainName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_DOMAIN_NAME)));
         json.put("eventName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_EVENT_NAME)));
-        json.put("correlationId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELA_DATA_ID)));                    
+        json.put("correlationId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELATION_ID)));                    
 
         json.put("msg", JSONObject.parseObject(msg.getPayload()));
         
@@ -129,5 +140,29 @@ public class MqListenerHandler
     {
         log.info("receive message -> {}", json.toJSONString());
     }
+
+    private void logTextMessage(Message<String> msg)
+    {
+        JSONObject json = new JSONObject();
+        MessageHeaders headers = msg.getHeaders();
+        
+        json.put("topic", headers.get(KafkaHeaders.RECEIVED_TOPIC));
+        json.put("partition", headers.get(KafkaHeaders.RECEIVED_PARTITION));
+        json.put("timestampType", headers.get(KafkaHeaders.TIMESTAMP_TYPE));
+        json.put("timestamp", headers.get(KafkaHeaders.RECEIVED_TIMESTAMP));
+        json.put("groupId", headers.get(KafkaHeaders.GROUP_ID));
+        json.put("key", headers.get(KafkaHeaders.RECEIVED_KEY));
+        
+        json.put("messageId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_MSG_ID)));
+        json.put("sourceRequestId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_SOURCE_REQUEST_ID)));
+        json.put("domainName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_DOMAIN_NAME)));
+        json.put("eventName", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_EVENT_NAME)));
+        json.put("correlationId", GeneralHelper.bytes2Str((byte[])headers.get(KafkaConstant.HEADER_CORRELATION_ID)));                    
+
+        json.put("msg", msg.getPayload());
+        
+        logMessage(json);
+    }
+    
 
 }

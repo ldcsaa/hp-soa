@@ -20,6 +20,8 @@ public class MdcAttr
     public static final String MDC_APP_ID_KEY       = "__appId";
     public static final String MDC_APP_NAME_KEY     = "__appName";
 
+    public static final String MDC_REGION_KEY       = "__region";
+    public static final String MDC_LANGUAGE_KEY     = "__language";
     public static final String MDC_VERSION_KEY      = "__version";
     public static final String MDC_EXTRA_KEY        = "__extra";
     
@@ -30,6 +32,7 @@ public class MdcAttr
     public static final String MDC_OWNER_KEY        = "__owner";
 
     public static final String MDC_MESSAGE_ID_KEY           = "__messageId";
+    public static final String MDC_INTERNAL_MESSAGE_ID_KEY  = "__internalMessageId";
     public static final String MDC_SOURCE_REQUEST_ID_KEY    = "__sourceRequestId";
 
     public static final String MDC_FROM_SERVICE_ID_KEY      = "__fromServiceId";
@@ -44,6 +47,7 @@ public class MdcAttr
                                                         MDC_CLIENT_ID_KEY,
                                                         MDC_SESSION_ID_KEY,
                                                         MDC_MESSAGE_ID_KEY,
+                                                        MDC_INTERNAL_MESSAGE_ID_KEY,
                                                         MDC_SOURCE_REQUEST_ID_KEY,
                                                         MDC_APP_CODE_KEY,
                                                         MDC_SRC_APP_CODE_KEY,
@@ -52,6 +56,8 @@ public class MdcAttr
                                                         MDC_GROUP_ID_KEY,
                                                         MDC_APP_ID_KEY,
                                                         MDC_APP_NAME_KEY,
+                                                        MDC_REGION_KEY,
+                                                        MDC_LANGUAGE_KEY,
                                                         MDC_VERSION_KEY,
                                                         MDC_EXTRA_KEY
                                                     };
@@ -62,6 +68,7 @@ public class MdcAttr
                                                             MDC_CLIENT_ID_KEY,
                                                             MDC_SESSION_ID_KEY,
                                                             MDC_MESSAGE_ID_KEY,
+                                                            MDC_INTERNAL_MESSAGE_ID_KEY,
                                                             MDC_SOURCE_REQUEST_ID_KEY,
                                                             MDC_APP_CODE_KEY,
                                                             MDC_SRC_APP_CODE_KEY,
@@ -70,6 +77,8 @@ public class MdcAttr
                                                             MDC_GROUP_ID_KEY,
                                                             MDC_APP_ID_KEY,
                                                             MDC_APP_NAME_KEY,
+                                                            MDC_REGION_KEY,
+                                                            MDC_LANGUAGE_KEY,
                                                             MDC_VERSION_KEY,
                                                             MDC_EXTRA_KEY,
                                                             MDC_FROM_SERVICE_ID_KEY,
@@ -192,6 +201,16 @@ public class MdcAttr
         set(MDC_MESSAGE_ID_KEY, messageId);
     }
 
+    public String getInternalMessageId()
+    {
+        return get(MDC_INTERNAL_MESSAGE_ID_KEY);
+    }
+
+    public void setInternalMessageId(String internalMessageId)
+    {
+        set(MDC_INTERNAL_MESSAGE_ID_KEY, internalMessageId);
+    }
+
     public String getSourceRequestId()
     {
         return get(MDC_SOURCE_REQUEST_ID_KEY);
@@ -230,6 +249,26 @@ public class MdcAttr
     public void setGroupId(String groupId)
     {
         set(MDC_GROUP_ID_KEY, groupId);
+    }
+    
+    public String getRegion()
+    {
+        return get(MDC_REGION_KEY);
+    }
+
+    public void setRegion(String region)
+    {
+        set(MDC_REGION_KEY, region);
+    }
+
+    public String getLanguage()
+    {
+        return get(MDC_LANGUAGE_KEY);
+    }
+
+    public void setLanguage(String language)
+    {
+        set(MDC_LANGUAGE_KEY, language);
     }
 
     public String getVersion()

@@ -14,9 +14,10 @@ public class AppConfig
     public static final String DOMAIN_NAME              = "demo.order";
     public static final String CREATE_ORDER_EVENT_NAME  = "createOrder";
     
-    public static final String TOPIC_0  = "TOPIC_0";
-    public static final String TOPIC_1  = "TOPIC_1";
-    public static final String TOPIC_2  = "TOPIC_2";
+    public static final String TOPIC_0      = "TOPIC_0";
+    public static final String TOPIC_1      = "TOPIC_1";
+    public static final String TOPIC_2      = "TOPIC_2";
+    public static final String TOPIC_TEXT   = "TOPIC_TEXT";
 
     public static final String[] TOPICS = {TOPIC_0, TOPIC_1, TOPIC_2};
     
@@ -39,6 +40,12 @@ public class AppConfig
     NewTopic topic2()
     {
         return new NewTopic(TOPICS[2], partitions, (short)1);
+    }
+
+    @Bean
+    NewTopic topicText()
+    {
+        return new NewTopic(TOPIC_TEXT, partitions, (short)1);
     }
 
 }

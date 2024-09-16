@@ -39,6 +39,10 @@ public class AppConfig
     public static final String[] REGION_QUEUES            = {QUE_REGION_0, QUE_REGION_1, QUE_REGION_2, QUE_REGION_3};
     public static final String[] REGION_STREAMS           = {STM_REGION_0, STM_REGION_1, STM_REGION_2, STM_REGION_3};
 
+    public static final String EXC_TEXT                 = "EXC_TEXT";
+    public static final String QUE_TEXT                 = "QUE_TEXT";
+    public static final String TEXT_ROUTING_KEY         = "text.#";
+
     
     @Autowired
     @Qualifier("defaultRabbitAmqpAdmin")
@@ -148,4 +152,29 @@ public class AppConfig
         
         return binding;
     }
+    
+    @Bean
+    TopicExchange textTopicExchange()
+    {
+        return ExchangeBuilder.topicExchange(EXC_TEXT).durable(true).admins(defaultRabbitAmqpAdmin).build();
+    }
+    
+    @Bean
+    Queue textQueue()
+    {
+        Queue queue = QueueBuilder.durable(QUE_TEXT).maxLength(1000000).maxLengthBytes(300485760).build();
+        queue.setAdminsThatShouldDeclare(defaultRabbitAmqpAdmin);
+        
+        return queue;
+    }
+    
+    @Bean
+    Binding textBinding(@Qualifier("textQueue") Queue queue, @Qualifier("textTopicExchange") TopicExchange exchange)
+    {
+        Binding binding = BindingBuilder.bind(queue).to(exchange).with(TEXT_ROUTING_KEY);
+        binding.setAdminsThatShouldDeclare(defaultRabbitAmqpAdmin);
+        
+        return binding;
+    }
+    
 }

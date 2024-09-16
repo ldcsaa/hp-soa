@@ -8,11 +8,13 @@ import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
 import io.github.hpsocket.soa.framework.web.model.Response;
-
+import io.github.hpsocket.soa.framework.web.service.AsyncService;
+import io.github.hpsocket.soa.framework.web.support.I18nHelper;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +25,8 @@ public class DemoControllerImpl implements DemoController
 {
     @DubboReference
     DemoService demoService;
+    @Autowired
+    AsyncService asyncService;
 
     @Override
     @AccessVerification(Type.REQUIRE_LOGIN)
@@ -39,10 +43,17 @@ public class DemoControllerImpl implements DemoController
         resp.setAge(request.getAge());
         resp.setToken("41784a5039322bbe55a8bf8ce29b9280");
 
-        log.debug(resp.toString());
+        logmsg(resp);
+        asyncService.runAsync(() -> logmsg(resp));
 
         Response<DemoResponse> response = new Response<>(resp);
         return response;
+    }
+
+    private void logmsg(DemoResponse resp)
+    {
+        log.debug(I18nHelper.getMessage("resp.tips"));
+        log.debug(I18nHelper.getMessage("resp.info"), resp.getId(), resp.getName(), resp.getAge());
     }
     
     @Override

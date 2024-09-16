@@ -13,12 +13,14 @@ import io.github.hpsocket.demo.kafka.config.AppConfig;
 import io.github.hpsocket.demo.kafka.entity.DemoEvent;
 import io.github.hpsocket.demo.kafka.entity.Order;
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class KafkaSender
 {
+    @Getter
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
     

@@ -18,6 +18,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 
@@ -50,7 +51,8 @@ public class ControllerRequestAdvice extends RequestBodyAdviceAdapter implements
     {
         RequestContext.setBody(body);
         
-        logRequest();
+        if(WebServerHelper.isEntryOrNull())
+            logRequest();
         
         return body;
     }

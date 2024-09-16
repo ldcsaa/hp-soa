@@ -64,6 +64,12 @@ spring:
       enabled: false
       max-file-size: 10MB
       max-request-size: 10MB
+  # Spring Message
+  messages:
+    basename: i18n.messages
+    cache-duration: -1
+    encoding: UTF-8
+    fallback-to-system-locale: true
 
 ## Spring-Boot Management 配置
 management:

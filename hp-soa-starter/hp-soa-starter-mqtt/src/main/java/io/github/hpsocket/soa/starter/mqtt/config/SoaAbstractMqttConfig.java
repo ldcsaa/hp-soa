@@ -1,6 +1,7 @@
 package io.github.hpsocket.soa.starter.mqtt.config;
 
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.HostnameVerifier;
@@ -27,12 +28,12 @@ public abstract class SoaAbstractMqttConfig
     
     protected SoaMqttProperties mqttProperties;
     
-    public SoaAbstractMqttConfig(SoaMqttProperties mqttProperties)
+    protected SoaAbstractMqttConfig(SoaMqttProperties mqttProperties)
     {
         this.mqttProperties = mqttProperties;
     }
     
-    public MqttClientPersistence mqttClientPersistence()
+    protected MqttClientPersistence mqttClientPersistence()
     {
         String dataDir = mqttProperties.getDataDir();
         
@@ -42,16 +43,17 @@ public abstract class SoaAbstractMqttConfig
         return new MqttDefaultFilePersistence(dataDir);
     }
 
-    public MqttCallback mqttCallback()
+    protected MqttCallback mqttCallback()
     {
         return new DefaultMqttCallback();
     }
 
-    public ExtMqttClient mqttClient(
+    protected ExtMqttClient mqttClient(
         MqttClientPersistence mqttClientPersistence,
         ObjectProvider<MqttMessageListener> messageListenerProvider,
         ObjectProvider<MqttCallback> mqttCallbackProvider,
         ObjectProvider<List<MqttPropertiesCustomizer>> mqttPropertiesCustomizerProviders,
+        ObjectProvider<ScheduledExecutorService> executorServiceProvider,
         ObjectProvider<SocketFactory> socketFactoryProvider,
         ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
@@ -66,8 +68,9 @@ public abstract class SoaAbstractMqttConfig
         if(hostnameVerifier != null)
             mqttProperties.setSSLHostnameVerifier(hostnameVerifier);
         
+        ScheduledExecutorService executorService = executorServiceProvider.getIfUnique();
         MqttMessageListener listener = parseMessageListener(messageListenerProvider);
-        ExtMqttClient mqttClient     = new ExtMqttClient(mqttProperties.getServerURIs()[0], mqttProperties.getClientId(), mqttClientPersistence);
+        ExtMqttClient mqttClient     = new ExtMqttClient(mqttProperties.getServerURIs()[0], mqttProperties.getClientId(), mqttClientPersistence, executorService);
         MqttCallback callBack        = mqttCallbackProvider.getIfUnique();
         
         if(callBack == null)
@@ -88,7 +91,7 @@ public abstract class SoaAbstractMqttConfig
         return mqttClient;
     }
 
-    public MqttMessagePublisher mqttMessagePublisher(ExtMqttClient mqttClient)
+    protected MqttMessagePublisher mqttMessagePublisher(ExtMqttClient mqttClient)
     {
         return new MqttMessagePublisherImpl(mqttClient , mqttProperties);
     }
