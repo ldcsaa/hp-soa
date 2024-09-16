@@ -94,6 +94,8 @@ hp.soa.web:
   http:
     # 日期时间序列化格式（默认："yyyy-MM-dd'T'HH:mm:ss.SSSXXX"）
     date-time-format: "yyyy-MM-dd HH:mm:ss.SSS"
+    # 请求响应中是否返回请求 ID（默认：false）
+    return-request-id: true
     # 默认 Cookie 属性
     cookie:
       # （默认值：10年）
@@ -451,6 +453,8 @@ java \
 | X-Client-Id    | 客户端 ID | √ | √ | 标识一个客户端，通常由服务端系统自动生成，用于客户行为跟踪 |
 | X-Session-Id   | 会话 ID | √ | √ | 标识一个会话，通常由调用方创建，用于业务会话跟踪 |
 | X-Request-Id   | 请求 ID | √ | × | 标识一个请求，可以由调用方创建或由后端系统自动生成，用于调用链跟踪 |
+| X-Region      | 区域 | √ | × | 由调用方创建，应用程序自行解析 |
+| X-Languag      | 语言 | √ | × | 由调用方创建，应用程序自行解析 |
 | X-Version      | 版本号 | √ | × | 由调用方创建，应用程序自行解析 |
 | X-Extra        | 附加信息 | √ | × | 由调用方创建，应用程序自行解析 |
 | X-Request-Info | 组合属性 | √ | × | 组合属性 X-Request-Info 可以把上述属性组合到一个请求头，例如<br>**X-Request-Info:** X-App-Code=001;X-Group-Id=999;X-Version=2.3.4 |
@@ -476,6 +480,8 @@ public class Response<T> implements Serializable
     private long costTime;
     /** 参数校验错误列表 */
     private Map<String, List<String>> validationErrors;
+    /** 请求ID */
+    private String requestId;
     /** 业务模型对象 */
     private T result;
     /** 响应类型（目前仅用于登录登出操作：{@linkplain #RT_LOGIN} - 登录，{@linkplain #RT_LOGOUT} - 登出） */

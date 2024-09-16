@@ -14,6 +14,18 @@
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
             <filtered>true</filtered>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>/opt/deploy/scripts</directory>
+            <outputDirectory>/</outputDirectory>
+            <fileMode>0755</fileMode>
+            <filtered>false</filtered>
+            <includes>
+                <include>yq</include>
+            </includes>
         </fileSet>
         <fileSet>
             <directory>target/classes</directory>

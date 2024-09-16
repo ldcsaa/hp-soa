@@ -84,6 +84,16 @@ public class RequestContext
         return getRequestAttribute().getToken();
     }
 
+    public static final String getRegion()
+    {
+        return getRequestAttribute().getRegion();
+    }
+
+    public static final String getLanguage()
+    {
+        return getRequestAttribute().getLanguage();
+    }
+
     public static final String getVersion()
     {
         return getRequestAttribute().getVersion();
@@ -165,6 +175,8 @@ public class RequestContext
         
         String appCode      = parseRequestField(request, reqInfos, HEADER_APP_CODE, false);
         String srcAppCode   = parseRequestField(request, reqInfos, HEADER_SRC_APP_CODE, false);
+        String region       = parseRequestField(request, reqInfos, HEADER_REGION, false);
+        String language     = parseRequestField(request, reqInfos, HEADER_LANGUAGE, false);
         String version      = parseRequestField(request, reqInfos, HEADER_VERSION, false);
         String extra        = parseRequestField(request, reqInfos, HEADER_EXTRA, false);
         String token        = parseRequestField(request, reqInfos, HEADER_TOKEN, true);
@@ -204,6 +216,8 @@ public class RequestContext
         RequestAttribute reqAttr = new RequestAttribute(appCode, srcAppCode, token,
                                                         clientId, requestId, sessionId,
                                                         GeneralHelper.str2Long(groupId));
+        reqAttr.setRegion(region);
+        reqAttr.setLanguage(language);
         reqAttr.setVersion(version);
         reqAttr.setExtra(extra);
         reqAttr.setClientAddr(clientAddr);

@@ -13,8 +13,6 @@ if [ $? -ne 0 ]; then
     exit 2
 fi
 
-JAVA_OPTS="-Duser.dir=$PRG_HOME $JAVA_OPTS"
-
 check_port()
 {
     rs=0

@@ -28,7 +28,7 @@ public class CloudControllerSpecificExceptionAdvice implements Ordered
     public static final int ORDER = ControllerGlobalExceptionAdvice.ORDER - 200;
     
     /** {@linkplain FeignException} 异常处理器 */
-    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
+    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler({FeignException.class})
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, FeignException e)
     {
@@ -37,7 +37,7 @@ public class CloudControllerSpecificExceptionAdvice implements Ordered
             ServiceException se = null;
             
             if(e instanceof RetryableException || e instanceof FeignServerException.GatewayTimeout)
-                se = new ServiceException("服务调用超时", INNER_API_CALL_FAIL, e);
+                se = new ServiceException("内部服务不可用", INNER_API_CALL_FAIL, e);
             else
                 se = wrapServiceException(INNER_API_CALL_EXCEPTION, e);
             
@@ -48,7 +48,7 @@ public class CloudControllerSpecificExceptionAdvice implements Ordered
         else
         {
             log.error(e.getMessage(), e);
-            return TracingHelper.createExceptionResponse(e, HttpStatus.EXPECTATION_FAILED);
+            return TracingHelper.createExceptionResponse(e, HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 

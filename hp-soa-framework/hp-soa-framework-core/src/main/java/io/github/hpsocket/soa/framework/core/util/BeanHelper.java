@@ -191,7 +191,7 @@ public class BeanHelper
     /** 检查成员变量是否可以联级装配 */
     public static final boolean isCascadableField(Field f)
     {
-        return (f != null && isInstanceNotFinalField(f) && isCascadable(f.getType()));
+        return (f != null && isInstanceField(f) && isCascadable(f.getType()));
     }
     
     /** 检查类是否可以联级装配 */
@@ -689,9 +689,9 @@ public class BeanHelper
      */
     public static final <T> boolean setFieldValue(Object bean, Field field, T value)
     {
-        if(field != null && isInstanceNotFinalField(field))
+        if(field != null && isInstanceField(field))
         {
-            Class<?> clazz     = field.getType();
+            Class<?> clazz   = field.getType();
             Type genericType = field.getGenericType();
             
             Result<Boolean, Object> result = parseValue(value, clazz, genericType);

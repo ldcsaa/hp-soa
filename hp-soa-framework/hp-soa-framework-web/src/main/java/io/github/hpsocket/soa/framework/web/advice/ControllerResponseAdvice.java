@@ -27,6 +27,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 
 import cn.hutool.http.useragent.Browser;
@@ -75,13 +76,16 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
         {            
             if(respBody.getResultCode() == null)
                 respBody.setResultCode(respBody.getStatusCode());
+            if(AppConfigHolder.isReturnRequestId())
+                respBody.setRequestId(RequestContext.getRequestAttribute().getRequestId());
             
             checkToken(respBody, req, resp);
 
             respBody.setCostTime(WebServerHelper.calcTimestamp());
         }
         
-        logResponse(body, returnType, req);
+        if(WebServerHelper.isEntryOrNull())
+            logResponse(body, returnType, req);
         
         return body;
     }
@@ -165,25 +169,24 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
         {
             @Override
             protected void doRun()
-            {
-                JSONObject json     = JSONObject.from(requestAttribute.getBody());
-                JSONObject jsonLog  = new JSONObject();
-                
-                if(json == null)
-                    json = new JSONObject();
+            {                
+                JSONObject jsonLog = new JSONObject();
             
-                jsonLog.put("monitor_type", MONITOR_INGRESS);
-
                 @SuppressWarnings("unchecked")
-                final Map<String, ?> reqAttr = BeanMap.create(requestAttribute);;
+                final Map<String, ?> reqAttr = BeanMap.create(requestAttribute);
 
                 reqAttr.forEach((k, v) -> {
                     if(v != null && !k.equals("body"))
                         jsonLog.put(k, v);
                 });
                 
+                Object reqBody = JSON.toJSON(requestAttribute.getBody());
+                
+                if(reqBody != null)
+                    jsonLog.put("request", reqBody.toString());
+                
+                jsonLog.put("monitor_type", MONITOR_INGRESS);
                 jsonLog.put("apiName", rt.getDeclaringClass().getSimpleName().concat("#").concat(rt.getMethod().getName()));
-                jsonLog.put("request", json.toString());
                 jsonLog.put("response", JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_DEFAULT));
                 
                 if(body instanceof Response<?> respBody)

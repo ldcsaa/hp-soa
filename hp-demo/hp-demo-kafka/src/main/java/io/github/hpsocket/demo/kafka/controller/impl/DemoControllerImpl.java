@@ -1,5 +1,6 @@
 package io.github.hpsocket.demo.kafka.controller.impl;
 
+import io.github.hpsocket.demo.kafka.config.AppConfig;
 import io.github.hpsocket.demo.kafka.contract.req.DemoCreateOrderReuqest;
 import io.github.hpsocket.demo.kafka.contract.resp.DemoCreateOrderResponse;
 import io.github.hpsocket.demo.kafka.controller.DemoController;
@@ -13,8 +14,10 @@ import io.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
 import io.github.hpsocket.soa.framework.web.model.Response;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +32,7 @@ public class DemoControllerImpl implements DemoController
     
     @Autowired
     KafkaSender kafkaSender;
-    
+
     @Autowired
     private OrderConverter orderConverter;
     
@@ -58,5 +61,12 @@ public class DemoControllerImpl implements DemoController
 
         Response<DemoCreateOrderResponse> response = new Response<>(resp);
         return response;
+    }
+    
+    @Override
+    public Response<Boolean> sendText(@RequestBody @Valid @NotBlank String text)
+    {
+        kafkaSender.getKafkaTemplate().send(new ProducerRecord<>(AppConfig.TOPIC_TEXT, "txt-msg", text));
+        return new Response<>(Boolean.TRUE);
     }
 }

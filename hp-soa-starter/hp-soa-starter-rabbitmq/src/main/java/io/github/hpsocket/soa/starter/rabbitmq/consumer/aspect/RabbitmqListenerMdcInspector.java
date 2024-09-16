@@ -55,12 +55,13 @@ public class RabbitmqListenerMdcInspector
         RabbitListener listener = ANNOTATION_HOLDER.findAnnotationByMethodOrClass(joinPoint);
         Assert.notNull(listener, "@RabbitListener annotation not found");
         
-        String listenerId       = listener.id();
-        String correlationId    = null;
-        String messageId        = null;
-        String sourceRequestId  = null;
-        String domainName       = null;
-        String eventName        = null;
+        String listenerId        = listener.id();
+        String messageId         = null;
+        String internalMessageId = null;
+        String sourceRequestId   = null;
+        String domainName        = null;
+        String eventName         = null;
+        String correlationId     = null;
         
         Object obj = AspectHelper.findFirstArgByTypes(joinPoint, Message.class
                                                     , org.springframework.messaging.Message.class
@@ -71,35 +72,60 @@ public class RabbitmqListenerMdcInspector
             if(obj instanceof Message msg)
             {
                 MessageProperties properties = msg.getMessageProperties();
-                messageId       = properties.getMessageId();
-                correlationId   = properties.getCorrelationId();
-                sourceRequestId = properties.getHeader(HEADER_SOURCE_REQUEST_ID);
-                domainName      = properties.getHeader(HEADER_DOMAIN_NAME);
-                eventName       = properties.getHeader(HEADER_EVENT_NAME);                
+                
+                messageId         = properties.getHeader(HEADER_MSG_ID);
+                sourceRequestId   = properties.getHeader(HEADER_SOURCE_REQUEST_ID);
+                domainName        = properties.getHeader(HEADER_DOMAIN_NAME);
+                eventName         = properties.getHeader(HEADER_EVENT_NAME);
+                correlationId     = properties.getHeader(HEADER_CORRELATION_ID);
+                internalMessageId = properties.getMessageId();
+                
+                if(GeneralHelper.isStrEmpty(correlationId))
+                    correlationId = properties.getCorrelationId();
             }
             else if(obj instanceof org.springframework.messaging.Message msg)
             {
                 MessageHeaders headers = msg.getHeaders();
-                messageId       = (String)headers.get(HEADER_MSG_ID);
-                correlationId   = (String)headers.get(HEADER_CORRELA_DATA_ID);
-                sourceRequestId = (String)headers.get(HEADER_SOURCE_REQUEST_ID);
-                domainName      = (String)headers.get(HEADER_DOMAIN_NAME);
-                eventName       = (String)headers.get(HEADER_EVENT_NAME);
+                
+                messageId         = (String)headers.get(HEADER_MSG_ID);
+                sourceRequestId   = (String)headers.get(HEADER_SOURCE_REQUEST_ID);
+                domainName        = (String)headers.get(HEADER_DOMAIN_NAME);
+                eventName         = (String)headers.get(HEADER_EVENT_NAME);
+                correlationId     = (String)headers.get(HEADER_CORRELATION_ID);
+                internalMessageId = (String)headers.get(HEADER_AMQP_MESSAGE_ID);
+                
+                if(GeneralHelper.isStrEmpty(correlationId))
+                    correlationId = (String)headers.get(HEADER_CORRELATION_ID);
             }
             else if(obj instanceof com.rabbitmq.stream.Message msg)
             {
-                Properties props = msg.getProperties();
+                Properties props  = msg.getProperties();
+                internalMessageId = props.getMessageIdAsString();
+                
                 Map<String, Object> appProps = msg.getApplicationProperties();
 
-                messageId       = props.getMessageIdAsString();
-                correlationId   = props.getCorrelationIdAsString();
-                sourceRequestId = (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
-                domainName      = (String)appProps.get(HEADER_DOMAIN_NAME);
-                eventName       = (String)appProps.get(HEADER_EVENT_NAME);                
+                
+                if(appProps != null)
+                {
+                    messageId       = (String)appProps.get(HEADER_MSG_ID);
+                    sourceRequestId = (String)appProps.get(HEADER_SOURCE_REQUEST_ID);
+                    domainName      = (String)appProps.get(HEADER_DOMAIN_NAME);
+                    eventName       = (String)appProps.get(HEADER_EVENT_NAME);
+                    correlationId   = (String)appProps.get(HEADER_CORRELATION_ID);
+                                      
+                    if(GeneralHelper.isStrEmpty(correlationId))
+                        correlationId = props.getCorrelationIdAsString();
+                }
             }
+            
+            
+            if(GeneralHelper.isStrEmpty(messageId))
+                messageId = internalMessageId;
             
             if(GeneralHelper.isStrNotEmpty(messageId))
                 mdcAttr.setMessageId(messageId);
+            if(GeneralHelper.isStrNotEmpty(internalMessageId))
+                mdcAttr.setInternalMessageId(internalMessageId);
             if(GeneralHelper.isStrNotEmpty(sourceRequestId))
                 mdcAttr.setSourceRequestId(sourceRequestId);
         }

@@ -2,7 +2,7 @@ package io.github.hpsocket.soa.starter.kafka.util;
 
 import org.springframework.kafka.support.KafkaHeaders;
 
-/** <b>HP-SOA  常量</b> */
+/** <b>HP-SOA Kafka 常量</b> */
 public class KafkaConstant
 {
     /** 消息头：领域名称 */
@@ -14,8 +14,7 @@ public class KafkaConstant
     /** 消息头：源请求 ID */
     public static final String HEADER_SOURCE_REQUEST_ID = "x-source-request-id";
     /** 消息头：关联数据 ID */
-    public static final String HEADER_CORRELA_DATA_ID   = KafkaHeaders.CORRELATION_ID;
-    
+    public static final String HEADER_CORRELATION_ID    = KafkaHeaders.CORRELATION_ID;
     
     /** 消息发送状态：未发送 */
     public static final int SF_NOT_SEND     = 0;

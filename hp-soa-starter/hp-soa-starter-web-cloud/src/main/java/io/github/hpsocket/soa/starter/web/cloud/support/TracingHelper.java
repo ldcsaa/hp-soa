@@ -63,7 +63,7 @@ public class TracingHelper
                 if(GeneralHelper.isStrNotEmpty(key))
                 {
                     String value = CryptHelper.urlDecode(field.substring(i + 1).trim());                
-                    mdcAttr.set(key, value);;
+                    mdcAttr.set(key, value);
                 }
             }
         }
@@ -81,6 +81,8 @@ public class TracingHelper
                                                         GeneralHelper.str2Long(mdcAttr.getGroupId()));
         
         reqAttr.setUserId(GeneralHelper.str2Long(mdcAttr.getUserId()));
+        reqAttr.setRegion(mdcAttr.getRegion());
+        reqAttr.setLanguage(mdcAttr.getLanguage());
         reqAttr.setVersion(mdcAttr.getVersion());
         reqAttr.setExtra(mdcAttr.getExtra());
         reqAttr.setClientAddr(clientAddr);
@@ -93,7 +95,7 @@ public class TracingHelper
     
     public static final Response<CloudExceptionInfo> createExceptionResponse(Exception e)
     {
-        return createExceptionResponse(e, HttpStatus.EXPECTATION_FAILED);
+        return createExceptionResponse(e, HttpStatus.SERVICE_UNAVAILABLE);
     }
     
     public static final Response<CloudExceptionInfo> createExceptionResponse(Exception e, HttpStatus httpStatus)

@@ -27,6 +27,9 @@ public class AppConfig
     public static final String[] REGION_EXCHANGES       = {"EXC_REGION_0", "EXC_REGION_1", "EXC_REGION_2", "EXC_REGION_3"};
     public static final String[] REGION_QUEUES          = {"QUE_REGION_0", "QUE_REGION_1", "QUE_REGION_2", "QUE_REGION_3"};
     
+    public static final String EXC_TEXT                 = "EXC_TEXT";
+
+    
     @Autowired
     @Qualifier("defaultRabbitAmqpAdmin")
     private AmqpAdmin defaultRabbitAmqpAdmin;
@@ -62,5 +65,11 @@ public class AppConfig
     TopicExchange region3TopicExchange()
     {
         return ExchangeBuilder.topicExchange(REGION_EXCHANGES[3]).durable(true).admins(thirdRabbitAmqpAdmin).build();
+    }
+    
+    @Bean
+    TopicExchange textTopicExchange()
+    {
+        return ExchangeBuilder.topicExchange(EXC_TEXT).durable(true).admins(defaultRabbitAmqpAdmin).build();
     }
 }

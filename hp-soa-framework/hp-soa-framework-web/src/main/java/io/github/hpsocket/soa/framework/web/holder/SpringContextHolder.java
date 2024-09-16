@@ -14,6 +14,8 @@ import io.github.hpsocket.soa.framework.web.service.TracingContext;
 /** <b>Spring 上下文持有者</b> */
 public class SpringContextHolder
 {
+    public static final String springContextHolderBeanName = "springContextHolder";
+    
     private static ApplicationContext applicationContext;
     private static TracingContext tracingContext;
 
@@ -253,6 +255,9 @@ public class SpringContextHolder
         }
         
         Method method = ReflectionUtils.findMethod(bean.getClass(), methodName, paramClasses);
+        
+        if(method == null)
+            throw new RuntimeException(String.format("method not found '%s#%s'", bean.getClass().getName(), methodName));
         
         return ReflectionUtils.invokeMethod(method, bean, params);
     }
