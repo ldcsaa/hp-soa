@@ -25,9 +25,6 @@ public interface IAppProperties
     /** 获取应用程序默认 Cookie SameSite */
     String getCookieSameSite();
     
-    /** 检测应用程序是否只读 */
-    //boolean isReadOnly();
-    
-    /** 获取应用程序动态日志配置项目 */
-    //Map<String, LogLevel> getDynamicLogLevels();
+    /** 检测请求响应中是否返回请求 ID */
+    boolean isReturnRequestId();
 }

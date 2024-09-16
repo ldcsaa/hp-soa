@@ -17,6 +17,8 @@ import org.springframework.http.ResponseCookie;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import io.github.hpsocket.soa.framework.core.exception.ServiceException;
+import io.github.hpsocket.soa.framework.core.exception.UnimportantException;
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.thread.SynchronousRejectedExecutionHandler;
@@ -51,6 +53,8 @@ public class WebServerHelper
     public static final String HEADER_APP_CODE              = "X-App-Code";
     public static final String HEADER_SRC_APP_CODE          = "X-Src-App-Code";
     public static final String HEADER_GROUP_ID              = "X-Group-Id";
+    public static final String HEADER_REGION                = "X-Region";
+    public static final String HEADER_LANGUAGE              = "X-Language";
     public static final String HEADER_VERSION               = "X-Version";
     public static final String HEADER_EXTRA                 = "X-Extra";
     
@@ -482,6 +486,20 @@ public class WebServerHelper
             throw new RuntimeException(String.format("invalid rejection execution handler '%s'", rejectionPolicy));
         
         return rjh;
+    }
+    
+    public static final void assertAppIsNotReadOnly()
+    {
+        assertAppIsNotReadOnly(null);
+    }
+    
+    public static final void assertAppIsNotReadOnly(String errorMsg)
+    {
+        if(!isReadOnly())
+            return;
+        
+        String msg = GeneralHelper.isStrEmpty(errorMsg) ? ServiceException.READ_ONLY_EXCEPTION.getMessage() : errorMsg;
+        throw new UnimportantException(msg, ServiceException.READ_ONLY_ERROR);
     }
     
     /** 检查应用程序是否只读 */

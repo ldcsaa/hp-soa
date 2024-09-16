@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration shutdownHook="disable" strict="true">
+
+    <Properties>
+        <Property name="base.package">${project.groupId}</Property>
+        <Property name="project.name">${project.artifactId}</Property>
+        <Property name="app.name">${sys:hp.soa.web.app.name:-${project.name}}</Property>
+        <Property name="app.version">${project.version}</Property>
+        <Property name="log.type">${sys:hpsoa.log4j.logType:-hp-soa}</Property>
+        <Property name="log.level">${sys:hpsoa.log4j.logLevel:-DEBUG}</Property>
+        <Property name="log.includeLocation">${sys:hpsoa.log4j.includeLcation:-true}</Property>
+        <Property name="redis.host">${sys:hpsoa.log4j.redis.host:-localhost}</Property>
+        <Property name="redis.port">${sys:hpsoa.log4j.redis.port:-6379}</Property>
+        <Property name="redis.key">${sys:hpsoa.log4j.redis.key:-hp-soa}</Property>
+        <Property name="redis.pool.testWhileIdle">${sys:hpsoa.log4j.redis.pool.redistestWhileIdle:-true}</Property>
+        <Property name="redis.pool.minEvictableIdleTimeMillis">${sys:hpsoa.log4j.redis.pool.minEvictableIdleTimeMillis:-60000}</Property>
+        <Property name="redis.pool.timeBetweenEvictionRunsMillis">${sys:hpsoa.log4j.redis.pool.timeBetweenEvictionRunsMillis:-30000}</Property>
+        <Property name="redis.pool.numTestsPerEvictionRun">${sys:hpsoa.log4j.redis.pool.numTestsPerEvictionRun:--1}</Property>
+        <Property name="redis.throttler.bufferSize">${sys:hpsoa.log4j.redis.throttler.bufferSize:-500}</Property>
+        <Property name="redis.throttler.batchSize">${sys:hpsoa.log4j.redis.throttler.batchSize:-100}</Property>
+        <Property name="redis.throttler.flushPeriodMillis">${sys:hpsoa.log4j.redis.throttler.flushPeriodMillis:-1000}</Property>
+        <Property name="redis.throttler.maxEventCountPerSecond">${sys:hpsoa.log4j.redis.throttler.maxEventCountPerSecond:-0}</Property>
+        <Property name="redis.throttler.maxByteCountPerSecond">${sys:hpsoa.log4j.redis.throttler.maxByteCountPerSecond:-0}</Property>
+        <Property name="redis.throttler.maxErrorCountPerSecond">${sys:hpsoa.log4j.redis.throttler.maxErrorCountPerSecond:-0.003}</Property>
+        <Property name="logfile.path">${sys:hpsoa.log4j.logfile.path:-/data/logs/access}/${app.name}</Property>
+        <Property name="logfile.max.size">${sys:hpsoa.log4j.logfile.maxSize:-100 MB}</Property>
+        <Property name="logfile.max.count">${sys:hpsoa.log4j.logfile.maxCount:-10}</Property>
+        <Property name="logfile.immediateFlush">${sys:hpsoa.log4j.logfile.immediateFlush:-false}</Property>
+        <Property name="logfile.serviceLogFileName">${sys:hpsoa.log4j.logfile.serviceLogFileName:-service}</Property>
+        <Property name="logfile.monitorLogFileName">${sys:hpsoa.log4j.logfile.monitorLogFileName:-monitor}</Property>
+        <Property name="logfile.archive.path">${sys:hpsoa.log4j.logfile.path:-/data/logs/access}/${app.name}/${date:yyyy-MM}</Property>
+        <Property name="logfile.archive.suffix">%d{yyyy-MM-dd}-%i.log.gz</Property>
+        <Property name="logfile.stacktrace.filters">${sys:hpsoa.log4j.logfile.stacktrace.filters:-org.springframework.security.web,org.apache.catalina,org.apache.coyote,org.apache.tomcat,org.hibernate,org.apache.el,org.apache.cxf,org.junit,junit.framework,org.jboss,org.h2,org.eclipse,org.richfaces,java.lang.reflect,java.base/java.lang.reflect,jdk.internal.reflect,java.base/jdk.internal.reflect,com.sun,javax.servlet,jakarta.servlet,io.netty.handler.codec,org.apache.dubbo.rpc.cluster.filter,org.springframework.security.web,org.springframework.web.servlet.DispatcherServlet,org.springframework.web.filter.OncePerRequestFilter,org.springframework.aop.framework.ReflectiveMethodInvocation,org.springframework.aop.framework.CglibAopProxy}</Property>
+        <Property name="logfile.pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{1.1.1.*}#%M\(L:%L\) -&gt; %m%n%xEx{filters(${logfile.stacktrace.filters})}</Property>
+        <Property name="json.template.layout">${sys:hpsoa.log4j.json.template.layout:-classpath:log4j2-default-template.json}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="${logfile.pattern}"/>
+        </Console>
+        <Console name="STDERR" target="SYSTEM_ERR">
+            <PatternLayout pattern="${logfile.pattern}"/>
+        </Console>
+        
+        <RollingRandomAccessFile name="MONITOR_LOG_FILE" immediateFlush="${logfile.immediateFlush}" fileName="${logfile.path}/${logfile.monitorLogFileName}.log"
+                                 filePattern="${logfile.archive.path}/${logfile.monitorLogFileName}-${logfile.archive.suffix}">
+            <PatternLayout pattern="${logfile.pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${logfile.max.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${logfile.max.count}"/>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="SERVICE_LOG_FILE" immediateFlush="${logfile.immediateFlush}" fileName="${logfile.path}/${logfile.serviceLogFileName}.log"
+                                 filePattern="${logfile.archive.path}/${logfile.serviceLogFileName}-${logfile.archive.suffix}">
+            <PatternLayout pattern="${logfile.pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${logfile.max.size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${logfile.max.count}"/>
+        </RollingRandomAccessFile>
+        
+        <RedisAppender name="REDIS_MONITOR"
+                       host="${redis.host}"
+                       port="${redis.port}"
+                       key="${redis.key}">
+            <RedisConnectionPoolConfig testWhileIdle="${redis.pool.testWhileIdle}"
+                                       minEvictableIdleTimeMillis="${redis.pool.minEvictableIdleTimeMillis}"
+                                       timeBetweenEvictionRunsMillis="${redis.pool.timeBetweenEvictionRunsMillis}"
+                                       numTestsPerEvictionRun="${redis.pool.numTestsPerEvictionRun}"/>
+            <RedisThrottlerConfig bufferSize="${redis.throttler.bufferSize}"
+                                  batchSize="${redis.throttler.batchSize}"
+                                  flushPeriodMillis="${redis.throttler.flushPeriodMillis}"
+                                  maxEventCountPerSecond="${redis.throttler.maxEventCountPerSecond}"
+                                  maxByteCountPerSecond="${redis.throttler.maxByteCountPerSecond}"
+                                  maxErrorCountPerSecond="${redis.throttler.maxErrorCountPerSecond}"/>
+            <JsonTemplateLayout eventTemplateUri="${json.template.layout}">
+                <EventTemplateAdditionalField key="log_type" value="${log.type}"/>
+                <EventTemplateAdditionalField key="facility" value="SOA-MONITOR"/>
+                <EventTemplateAdditionalField key="@version" value="${app.version}"/>
+            </JsonTemplateLayout>
+        </RedisAppender>
+        
+        <RedisAppender name="REDIS_SERVICE"
+                       host="${redis.host}"
+                       port="${redis.port}"
+                       key="${redis.key}">
+            <RedisConnectionPoolConfig testWhileIdle="${redis.pool.testWhileIdle}"
+                                       minEvictableIdleTimeMillis="${redis.pool.minEvictableIdleTimeMillis}"
+                                       timeBetweenEvictionRunsMillis="${redis.pool.timeBetweenEvictionRunsMillis}"
+                                       numTestsPerEvictionRun="${redis.pool.numTestsPerEvictionRun}"/>
+            <RedisThrottlerConfig bufferSize="${redis.throttler.bufferSize}"
+                                  batchSize="${redis.throttler.batchSize}"
+                                  flushPeriodMillis="${redis.throttler.flushPeriodMillis}"
+                                  maxEventCountPerSecond="${redis.throttler.maxEventCountPerSecond}"
+                                  maxByteCountPerSecond="${redis.throttler.maxByteCountPerSecond}"
+                                  maxErrorCountPerSecond="${redis.throttler.maxErrorCountPerSecond}"/>
+            <JsonTemplateLayout eventTemplateUri="${json.template.layout}">
+                <EventTemplateAdditionalField key="log_type" value="${log.type}"/>
+                <EventTemplateAdditionalField key="facility" value="SOA-SERVICE"/>
+                <EventTemplateAdditionalField key="@version" value="${app.version}"/>
+            </JsonTemplateLayout>
+        </RedisAppender>
+        
+    </Appenders>
+
+    <Loggers>
+        <!-- Root Logger -->
+        <Root level="INFO" includeLocation="${log.includeLocation}">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Root>
+        <!-- Service Logger -->
+        <Logger name="${base.package}" level="${log.level}" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDERR"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Logger>
+        <!-- SOA-MONITOR Logger -->
+        <Logger name="SOA-MONITOR" level="${log.level}" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="MONITOR_LOG_FILE"/>
+            <AppenderRef ref="REDIS_MONITOR"/>
+        </Logger>
+        <!-- HP-SOA Logger -->
+        <Logger name="io.github.hpsocket" level="${log.level}" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Logger>
+        <!-- Dubbo Logger -->
+        <Logger name="org.apache.dubbo" level="INFO" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Logger>
+        <!-- XXL-JOB Logger -->
+        <Logger name="com.xxl.job" level="INFO" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Logger>
+        <!-- Kafka Logger -->
+        <Logger name="org.apache.kafka" level="INFO" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Logger>
+        <!-- MyBatis Logger -->
+        <Logger name="org.apache.ibatis" level="WARN" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Logger>
+        <!-- JDBC Logger -->
+        <Logger name="java.sql" level="WARN" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Logger>
+        <!-- Spring JDBC Logger -->
+        <Logger name="org.springframework.jdbc" level="WARN" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Logger>
+        <!-- MongoDB -->
+        <Logger name="com.mongodb" level="WARN" includeLocation="${log.includeLocation}" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SERVICE_LOG_FILE"/>
+            <AppenderRef ref="REDIS_SERVICE"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>

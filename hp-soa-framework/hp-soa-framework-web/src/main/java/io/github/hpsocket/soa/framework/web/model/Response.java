@@ -54,6 +54,12 @@ public class Response<T> implements Serializable
     @Schema(title="参数校验错误列表", example="name is empty", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private Map<String, List<String>> validationErrors;
     
+    /** 请求ID */
+    //@JsonInclude(Include.NON_NULL)
+    @JSONFieldExclude(Exclude.NULL)
+    @Schema(title="请求ID", example="def7866fb25cb84a7652ed5ba9974102", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
+    private String requestId;
+    
     /** 业务模型对象 */
     @Schema(title="业务模型对象", example="Any Object", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private T result;

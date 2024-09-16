@@ -1,6 +1,7 @@
 package io.github.hpsocket.soa.starter.mqtt.config;
 
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.HostnameVerifier;
@@ -33,6 +34,7 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
     public static final String mqttMessagePublisherBeanName = "mqttMessagePublisher";
     public static final String mqttMessageListenerBeanName = "mqttMessageListener";
     public static final String mqttPropertiesCustomizersBeanName = "mqttPropertiesCustomizers";
+    public static final String mqttExecutorServiceBeanName = "mqttExecutorService";
     public static final String mqttSocketFactoryBeanName = "mqttSocketFactory";
     public static final String mqttHostnameVerifierBeanName = "mqttHostnameVerifier";
     
@@ -46,7 +48,7 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
     @Override
     @Bean(name = mqttClientPersistenceBeanName, destroyMethod = "")
     @ConditionalOnMissingBean(name = mqttClientPersistenceBeanName)
-    public MqttClientPersistence mqttClientPersistence()
+    protected MqttClientPersistence mqttClientPersistence()
     {
         return super.mqttClientPersistence();
     }
@@ -56,7 +58,7 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
     @Override
     @Bean(name = mqttCallbackBeanName)
     @ConditionalOnMissingBean(name = mqttCallbackBeanName)
-    public MqttCallback mqttCallback()
+    protected MqttCallback mqttCallback()
     {
         return super.mqttCallback();
     }
@@ -65,11 +67,12 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
     @Primary
     @Override
     @Bean(name = mqttClientBeanName, destroyMethod = "disconnectAndClose")
-    public ExtMqttClient mqttClient(
+    protected ExtMqttClient mqttClient(
         @Qualifier(mqttClientPersistenceBeanName) MqttClientPersistence mqttClientPersistence,
         @Qualifier(mqttMessageListenerBeanName) ObjectProvider<MqttMessageListener> messageListenerProvider,
         @Qualifier(mqttCallbackBeanName) ObjectProvider<MqttCallback> mqttCallbackProvider,
         @Qualifier(mqttPropertiesCustomizersBeanName) ObjectProvider<List<MqttPropertiesCustomizer>> mqttPropertiesCustomizerProviders,
+        @Qualifier(mqttExecutorServiceBeanName) ObjectProvider<ScheduledExecutorService> executorServiceProvider,
         @Qualifier(mqttSocketFactoryBeanName) ObjectProvider<SocketFactory> socketFactoryProvider,
         @Qualifier(mqttHostnameVerifierBeanName) ObjectProvider<HostnameVerifier> hostnameVerifierProvider) throws MqttException
     {
@@ -77,6 +80,7 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
                                 messageListenerProvider,
                                 mqttCallbackProvider,
                                 mqttPropertiesCustomizerProviders,
+                                executorServiceProvider,
                                 socketFactoryProvider,
                                 hostnameVerifierProvider);
     }
@@ -85,7 +89,7 @@ public class SoaDefaultMqttConfig extends SoaAbstractMqttConfig
     @Primary
     @Override
     @Bean(name = mqttMessagePublisherBeanName)
-    public MqttMessagePublisher mqttMessagePublisher(@Qualifier(mqttClientBeanName) ExtMqttClient mqttClient)
+    protected MqttMessagePublisher mqttMessagePublisher(@Qualifier(mqttClientBeanName) ExtMqttClient mqttClient)
     {
         return super.mqttMessagePublisher(mqttClient);
     }

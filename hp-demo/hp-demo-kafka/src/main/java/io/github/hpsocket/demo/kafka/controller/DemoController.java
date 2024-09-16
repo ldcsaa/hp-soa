@@ -7,6 +7,7 @@ import io.github.hpsocket.soa.framework.web.model.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,4 +24,7 @@ public interface DemoController
 
     @PostMapping(value = "/sendDirect")
     Response<DemoCreateOrderResponse> sendDirect(@RequestBody @Valid DemoCreateOrderReuqest request);
+
+    @PostMapping(value = "/sendText")
+    Response<Boolean> sendText(@Valid @NotBlank String text);
 }

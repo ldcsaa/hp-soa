@@ -126,7 +126,7 @@ public class DomainEvent extends BaseLogicDeleteEntity implements Serializable
         KafkaHelper.addHeader(rcHeaders, KafkaConstant.HEADER_SOURCE_REQUEST_ID, sourceRequestId);
         
         if(GeneralHelper.isStrNotEmpty(correlationId))
-            rcHeaders.add(KafkaConstant.HEADER_CORRELA_DATA_ID, correlationId.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
+            rcHeaders.add(KafkaConstant.HEADER_CORRELATION_ID, correlationId.getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ));
         
         if(GeneralHelper.isStrNotEmpty(msgHeaders))
         {

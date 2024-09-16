@@ -1,0 +1,59 @@
+# app
+hp.soa:
+  web:
+    app:
+      id: "0010100104"
+      name: ${project.artifactId}
+      version: ${project.version}
+      organization: HP-Socket
+      owner: Kingfisher
+    component-scan:
+      base-package: ${project.groupId}
+    access-verification:
+      enabled: true
+      default-access-policy: maybe_login
+  # Redisson Client 实例名称（默认：空，自动查找）
+  #job.exclusive.redisson-client-name: firstRedissonClient
+
+## Log4J 配置文件（默认：log4j2.xml）
+#logging.config: classpath:log4j2.xml
+#logging.config: classpath:log4j2-json.xml
+#logging.config: classpath:log4j2-kafka.xml
+#logging.config: classpath:log4j2-redis.xml
+#logging.config: classpath:log4j2-gelf.xml
+
+spring.cloud.nacos.config:
+  #server-addr: 192.168.56.23:8848
+  #username: nacos
+  #password: 123456
+  #namespace: DEV
+  group: DEMO_GROUP
+  name: ${hp.soa.web.app.name}
+  file-extension: yml
+  refresh-enabled: true
+  shared-configs:
+    - group: GLOBAL_GROUP
+      data-id: hp-soa.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: spring-boot.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: rocketmq.yml
+      refresh: true
+    - group: GLOBAL_GROUP
+      data-id: dubbo.yml
+      refresh: true
+
+# dubbo
+dubbo.protocols:
+  dubbo:
+    name: dubbo
+    port: 5104
+  #tri:
+  #  name: tri
+  #  port: 6104
+
+# server
+server.port: 9104
+

@@ -72,7 +72,7 @@ public class SwaggerConfig implements WebMvcConfigurer
     {
         return openApi -> openApi.getPaths().values().stream().flatMap(pathItem -> pathItem.readOperations().stream())
                 .forEach(operation -> operation
-                    .addParametersItem(new HeaderParameter().name(HEADER_REQUEST_INFO).required(false).example("X-App-Code=; X-Token=; X-Group-Id=; X-Request-Id=; X-Client-Id=; X-Session-Id=; X-Src-App-Code=; X-Version=; X-Extra="))
+                    .addParametersItem(new HeaderParameter().name(HEADER_REQUEST_INFO).required(false).example("X-App-Code=; X-Token=; X-Group-Id=; X-Request-Id=; X-Client-Id=; X-Session-Id=; X-Src-App-Code=; X-Region=; X-Language=; X-Version=; X-Extra="))
                     .addParametersItem(new HeaderParameter().name(HEADER_APP_CODE).required(false).example("100"))
                     .addParametersItem(new HeaderParameter().name(HEADER_TOKEN).required(false).example("2d2fc1d30cffa1cf185cfeed9037b658"))
                     .addParametersItem(new HeaderParameter().name(HEADER_GROUP_ID).required(false).example("123456"))
@@ -80,6 +80,8 @@ public class SwaggerConfig implements WebMvcConfigurer
                     .addParametersItem(new HeaderParameter().name(HEADER_CLIENT_ID).required(false).example(""))
                     .addParametersItem(new HeaderParameter().name(HEADER_SESSION_ID).required(false).example(""))
                     .addParametersItem(new HeaderParameter().name(HEADER_SRC_APP_CODE).required(false).example(""))
+                    .addParametersItem(new HeaderParameter().name(HEADER_REGION).required(false).example(""))
+                    .addParametersItem(new HeaderParameter().name(HEADER_LANGUAGE).required(false).example(""))
                     .addParametersItem(new HeaderParameter().name(HEADER_VERSION).required(false).example(""))
                     .addParametersItem(new HeaderParameter().name(HEADER_EXTRA).required(false).example(""))
                 );

@@ -12,6 +12,7 @@
 - MongoDB数据库
 - Elasticsearch搜索引擎
 - RabbitMQ消息队列
+- RocketMQ消息队列
 - Kafka消息队列
 - MQTT发布订阅
 - Spring Task

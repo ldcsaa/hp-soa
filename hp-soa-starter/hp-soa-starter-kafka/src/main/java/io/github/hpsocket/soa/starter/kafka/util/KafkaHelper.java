@@ -9,13 +9,25 @@ public class KafkaHelper
 {
     public static final Headers addHeader(Headers headers, String key, Object value)
     {
-        return headers.add(key, value != null ? value.toString().getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ) : null);
+        return addHeader(headers, key, value != null ? value.toString().getBytes(WebServerHelper.DEFAULT_CHARSET_OBJ) : null);
+    }
+    
+    public static final Headers addHeader(Headers headers, String key, byte[] value)
+    {
+        return headers.add(key, value);
     }
     
     public static final String getHeaderValue(Headers headers, String key)
     {
+        byte[] rowValue = getHeaderRowValue(headers, key);
+        
+        return (rowValue != null) ? new String(rowValue, WebServerHelper.DEFAULT_CHARSET_OBJ) : null;
+    }
+    
+    public static final byte[] getHeaderRowValue(Headers headers, String key)
+    {
         Header header = headers.lastHeader(key);
-        return (header != null) ? new String(header.value(), WebServerHelper.DEFAULT_CHARSET_OBJ) : null;
+        return (header != null) ? header.value() : null;
     }
     
 }

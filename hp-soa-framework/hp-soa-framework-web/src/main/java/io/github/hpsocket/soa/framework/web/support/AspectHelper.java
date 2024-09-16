@@ -151,14 +151,15 @@ public class AspectHelper
         return point.getArgs();
     }
 
-    public static final Object findFirstArgByType(JoinPoint point, Class<?> clazz)
+    @SuppressWarnings("unchecked")
+    public static final <T> T findFirstArgByType(JoinPoint point, Class<? extends T> clazz)
     {
         Object[] args = getArgs(point);
         
         for(Object arg : args)
         {
             if(clazz.isInstance(arg))
-                return arg;
+                return (T)arg;
         }
         
         return null;

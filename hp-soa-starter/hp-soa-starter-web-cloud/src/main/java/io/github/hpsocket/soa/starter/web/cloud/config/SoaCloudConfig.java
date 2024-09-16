@@ -7,8 +7,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerGlobalExceptionAdvice;
-import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerRequestAdvice;
-import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerResponseAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerSpecificExceptionAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.exception.CloudErrorAttributes;
 import io.github.hpsocket.soa.starter.web.cloud.exception.CloudErrorDecoder;
@@ -24,8 +22,6 @@ public class SoaCloudConfig
 {
     public static final String httpMdcFilterRegistrationBeanName                = WebConfig.httpMdcFilterRegistrationBeanName;
     
-    public static final String controllerRequestAdviceBeanName                  = ControllerAdviceConfig.controllerRequestAdviceBeanName;
-    public static final String controllerResponseAdviceBeanName                 = ControllerAdviceConfig.controllerResponseAdviceBeanName;
     public static final String controllerGlobalExceptionAdviceBeanName          = ControllerAdviceConfig.controllerGlobalExceptionAdviceBeanName;
     public static final String cloudControllerSpecificExceptionAdviceBeanName   = "cloudControllerSpecificException";
     
@@ -58,18 +54,6 @@ public class SoaCloudConfig
         registration.setEnabled(true);
         
         return registration;
-    }
-    
-    @Bean(controllerRequestAdviceBeanName)
-    CloudControllerRequestAdvice controllerRequestAdvice()
-    {
-        return new CloudControllerRequestAdvice();
-    }
-    
-    @Bean(controllerResponseAdviceBeanName)
-    CloudControllerResponseAdvice controllerResponseAdvice()
-    {
-        return new CloudControllerResponseAdvice();
     }
     
     @Bean(controllerGlobalExceptionAdviceBeanName)

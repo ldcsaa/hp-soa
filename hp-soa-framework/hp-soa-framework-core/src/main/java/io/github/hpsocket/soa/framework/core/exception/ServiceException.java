@@ -2,7 +2,12 @@ package io.github.hpsocket.soa.framework.core.exception;
 
 import org.slf4j.Logger;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /** <b>HP-SOA 统一异常</b> */
+@Getter
+@Setter
 @SuppressWarnings("serial")
 public class ServiceException extends RuntimeException
 {
@@ -40,10 +45,10 @@ public class ServiceException extends RuntimeException
     public static final int NOT_SUPPORTED           = 517;
     /** 禁止更新 */
     public static final int FORBID_UPDATE_ERROR     = 518;
-    /** 拒绝写入 */
-    public static final int READ_ONLY_ERROR         = 519;
     /** 调用超时 */
-    public static final int TIMEOUT_ERROR           = 520;
+    public static final int TIMEOUT_ERROR           = 519;
+    /** 拒绝写入 */
+    public static final int READ_ONLY_ERROR         = 550;
     /** 应用程序编号验证错误 */
     public static final int APPCODE_CHECK_ERROR     = 601;
     /** 应用程序编号不存在 */
@@ -136,26 +141,6 @@ public class ServiceException extends RuntimeException
         super(message, cause);
         setStatusCode(statusCode);
         setResultCode(statusCode);
-    }
-
-    public Integer getResultCode()
-    {
-        return resultCode;
-    }
-
-    public void setResultCode(Integer resultCode)
-    {
-        this.resultCode = resultCode;
-    }
-
-    public Integer getStatusCode()
-    {
-        return statusCode;
-    }
-
-    public void setStatusCode(Integer statusCode)
-    {
-        this.statusCode = statusCode;
     }
 
     public static final ServiceException wrapServiceException(Throwable e)

@@ -18,12 +18,10 @@ import io.github.hpsocket.soa.starter.web.properties.WebProperties.ProxyProperti
 @AutoConfiguration
 public class ContextConfig
 {
-    public static final String springContextHolderBeanName = "springContextHolder";
-    
     private static final String SERVER_PORT_KEY = "server.port";
 
     /** {@linkplain SpringContextHolder} Spring 上下文持有者配置 */
-    @Bean(springContextHolderBeanName)
+    @Bean(SpringContextHolder.springContextHolderBeanName)
     SpringContextHolder springContextHolder(ApplicationContext applicationContext, WebProperties webProperties, SecurityProperties securityProperties)
     {
         Integer serverPort = GeneralHelper.str2Int(applicationContext.getEnvironment().getProperty(SERVER_PORT_KEY));

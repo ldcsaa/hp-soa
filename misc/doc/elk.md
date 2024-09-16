@@ -48,7 +48,8 @@
     - ***mdc.__requestId*** - 调用链请求ID
     - ***mdc.__clientId*** - 调用链客户端ID（客户端ID标识一个客户，跨多个调用链）
     - ***mdc.__sessionId*** - 调用链会话ID（会话ID跨多个调用链，由调用方传入）
-    - ***mdc.__messageId*** - 消息ID（消息队列消费者当前正在处理的消息ID）
+    - ***mdc.__messageId*** - 消息ID（应用层消息ID，由应用程序创建）
+    - ***mdc.__internalMessageId*** - 内部消息ID（由消息中间件自动创建）
     - ***mdc.__sourceRequestId*** - 源调用链请求ID（消息队列消费者当前正在处理的消息的生产者源调用链请求ID）
     - ***mdc.__appCode*** - 调用目标 App Code
     - ***mdc.__srcAppCode*** - 调用方 App Code
@@ -57,6 +58,8 @@
     - ***mdc.__groupId*** - 组织ID
     - ***mdc.__appId*** - 入口应用程序ID
     - ***mdc.__appName*** - 入口应用程序名称
+    - ***mdc.__region*** - 区域（由调用方传入）
+    - ***mdc.__language*** - 语言（由调用方传入）
     - ***mdc.__version*** - 版本属性（由调用方传入）
     - ***mdc.__extra*** - 附加属性（由调用方传入）
     - ***mdc.__serviceId*** - 当前服务ID
@@ -417,7 +420,16 @@ PUT _index_template/hp-soa-template
                         "__messageId": {
                             "type": "keyword"
                         },
+                        "__internalMessageId": {
+                            "type": "keyword"
+                        },
                         "__sourceRequestId": {
+                            "type": "keyword"
+                        },
+                        "__region": {
+                            "type": "keyword"
+                        },
+                        "__language": {
                             "type": "keyword"
                         },
                         "__version": {

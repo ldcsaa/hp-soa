@@ -4,6 +4,7 @@ package io.github.hpsocket.soa.starter.web.config;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -29,9 +31,12 @@ import org.springframework.security.config.annotation.web.configurers.FormLoginC
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.AbstractLocaleResolver;
 
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
 import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
@@ -49,15 +54,18 @@ import io.github.hpsocket.soa.framework.web.listener.ReadOnlyRefreshEventListene
 import io.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
 import io.github.hpsocket.soa.framework.web.service.AsyncService;
 import io.github.hpsocket.soa.framework.web.service.impl.AsyncServiceImpl;
+import io.github.hpsocket.soa.framework.web.support.I18nHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.web.properties.SecurityProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import static io.github.hpsocket.soa.starter.web.config.ContextConfig.springContextHolderBeanName;
+import static io.github.hpsocket.soa.framework.web.holder.SpringContextHolder.springContextHolderBeanName;
 
 /** <b>HP-SOA Web 基础配置</b> */
-@AutoConfiguration
+@AutoConfiguration(before = WebMvcAutoConfiguration.class)
 @EnableConfigurationProperties({WebProperties.class, SecurityProperties.class})
 public class WebConfig implements WebMvcConfigurer
 {
@@ -210,6 +218,26 @@ public class WebConfig implements WebMvcConfigurer
         executor.allowCoreThreadTimeOut(asyncProperties.isAllowCoreThreadTimeOut());
         
         return executor;
+    }
+    
+    @Bean(DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
+    @ConditionalOnMissingBean(name = DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
+    LocaleResolver localeResolver()
+    {
+        return new AbstractLocaleResolver() {
+            
+            @Override
+            public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale)
+            {
+                throw new UnsupportedOperationException("Cannot change MDC locale - use a different locale resolution strategy");
+            }
+            
+            @Override
+            public Locale resolveLocale(HttpServletRequest request)
+            {
+                return I18nHelper.getLocaleByMdcOrRequest(request);
+            }
+        };
     }
 
     /** {@linkplain AsyncService} 异步服务配置 */
