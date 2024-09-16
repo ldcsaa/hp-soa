@@ -13,6 +13,7 @@ import com.rabbitmq.stream.MessageHandler.Context;
 import com.rabbitmq.stream.Properties;
 
 import io.github.hpsocket.demo.mq.consumer.config.AppConfig;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
@@ -133,13 +134,37 @@ public class MqListenerHandler
     {
         onStreamMessage(AppConfig.STM_REGION_2, message, context);
     }
-    
+
     @RabbitListener(queues = {AppConfig.STM_REGION_3}, autoStartup = "false", containerFactory = "thirdStreamRabbitListenerContainerFactory", messageConverter = "rabbitMessageConverter")
     public void onThirdStreamMessage(org.springframework.messaging.Message<JSONObject> message) throws IOException
     {
         onStreamMessage(AppConfig.STM_REGION_3, message);
     }
-    
+
+    @RabbitListener(queues = {AppConfig.QUE_TEXT}, ackMode = "MANUAL", autoStartup = "false", containerFactory = "defaultSimpleRabbitListenerContainerFactory")
+    public void onTextMessage(Message message, Channel channel) throws IOException
+    {
+        MessageProperties properties = message.getMessageProperties();
+
+        String msgId        = properties.getMessageId();
+        long deliveryTag    = properties.getDeliveryTag();
+        String domainName   = properties.getHeader(HEADER_DOMAIN_NAME);
+        String eventName    = properties.getHeader(HEADER_EVENT_NAME);
+        
+        try
+        {
+            String msg = new String(message.getBody(), WebServerHelper.DEFAULT_CHARSET_OBJ);
+
+            log.info("receive message -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, msg: {}", AppConfig.QUE_TEXT, msgId, domainName, eventName, msg);
+            channel.basicAck(deliveryTag, false);
+        }
+        catch(Exception e)
+        {
+            channel.basicNack(deliveryTag, false, false);
+            log.error("receive message fail -> queue: {}, msgId: {}, domainName: {}, evnetName: {}, exception: {}", AppConfig.QUE_TEXT, msgId, domainName, eventName, e.getMessage(), e);
+        }
+    }
+
     private void onStreamMessage(String stream, com.rabbitmq.stream.Message message, Context context)
     {
         Properties props = message.getProperties();
@@ -152,9 +177,10 @@ public class MqListenerHandler
         
         try
         {
-            JSONObject msg = JSON.parseObject(message.getBodyAsBinary());
+            String msg = new String(message.getBodyAsBinary(), WebServerHelper.DEFAULT_CHARSET_OBJ);
+            //JSONObject msg = JSON.parseObject(message.getBodyAsBinary());
 
-            log.info("receive message -> stream: {}, msgId: {}, corId: {}, domainName: {}, evnetName: {}, msg: {}", stream, msgId, corId, domainName, eventName, msg.toJSONString());
+            log.info("receive message -> stream: {}, msgId: {}, corId: {}, domainName: {}, evnetName: {}, msg: {}", stream, msgId, corId, domainName, eventName, msg.toString());
         }
         catch(Exception e)
         {
@@ -167,7 +193,7 @@ public class MqListenerHandler
         MessageHeaders headers = message.getHeaders();
 
         String msgId        = (String)headers.get(HEADER_MSG_ID);
-        String corId        = (String)headers.get(HEADER_CORRELA_DATA_ID);
+        String corId        = (String)headers.get(HEADER_CORRELATION_ID);
         String domainName   = (String)headers.get(HEADER_DOMAIN_NAME);
         String eventName    = (String)headers.get(HEADER_EVENT_NAME);
         

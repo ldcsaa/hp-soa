@@ -1,6 +1,6 @@
 # https://hub.docker.com/_/eclipse-temurin
 
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:17-jre-noble
 
 ARG PROJECT_BASE_PATH=
 ARG PROJECT=
@@ -44,5 +44,4 @@ ADD --link net-tools/net-tools_$NET_TOOLS_VERSION.deb /tmp/
 
 RUN dpkg -i /tmp/net-tools_$NET_TOOLS_VERSION.deb && rm -rf /tmp/net-tools_$NET_TOOLS_VERSION.deb
 
-#ENTRYPOINT [ "./docker-start.sh" ]
 CMD [ "./start-foreground.sh" ]

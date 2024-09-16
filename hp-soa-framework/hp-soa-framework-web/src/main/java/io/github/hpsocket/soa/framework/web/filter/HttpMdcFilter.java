@@ -86,6 +86,10 @@ public class HttpMdcFilter implements Filter
             mdcAttr.setUserId(reqAttr.getUserId().toString());
         if(reqAttr.getGroupId() != null)
             mdcAttr.setGroupId(reqAttr.getGroupId().toString());
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getRegion()))
+            mdcAttr.setRegion(reqAttr.getRegion());
+        if(GeneralHelper.isStrNotEmpty(reqAttr.getLanguage()))
+            mdcAttr.setLanguage(reqAttr.getLanguage());
         if(GeneralHelper.isStrNotEmpty(reqAttr.getVersion()))
             mdcAttr.setVersion(reqAttr.getVersion());
         if(GeneralHelper.isStrNotEmpty(reqAttr.getExtra()))
