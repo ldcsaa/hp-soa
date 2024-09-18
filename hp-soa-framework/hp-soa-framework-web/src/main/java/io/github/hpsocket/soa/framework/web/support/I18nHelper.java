@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 /** <b>I18n 辅助类</b> */
 public class I18nHelper
 {
+    private static MessageSource defaultMessageSource;
+    
     public static final Locale getLocaleByMdcOrRequest(HttpServletRequest request)
     {
         Locale mdcLocale = getMdcLocale();        
@@ -22,9 +24,8 @@ public class I18nHelper
     }
 
     public static final Locale getMdcLocaleOrDefault()
-    {
-        Locale mdcLocale = getMdcLocale();        
-        return mdcLocale != null ? mdcLocale : Locale.getDefault();
+    { 
+        return getMdcLocaleOrDefault(Locale.getDefault());
     }
     
     public static final Locale getMdcLocaleOrDefault(Locale defaultLocale)
@@ -60,19 +61,35 @@ public class I18nHelper
 
     public static final String getMessage(String code, Object[] args, String defaultMessage)
     {
-        MessageSource messageSource = SpringContextHolder.getBean(MessageSource.class);
+        MessageSource messageSource = getDefaultMessageSource();
         return getMessage(messageSource, code, args, defaultMessage);
     }
 
     public static final String getMessage(String code, Object ... args)
     {
-        MessageSource messageSource = SpringContextHolder.getBean(MessageSource.class);
+        MessageSource messageSource = getDefaultMessageSource();
         return getMessage(messageSource, code, args);
     }
 
     public static final String getMessage(MessageSourceResolvable resolvable)
     {
-        MessageSource messageSource = SpringContextHolder.getBean(MessageSource.class);
+        MessageSource messageSource = getDefaultMessageSource();
         return getMessage(messageSource, resolvable);
+    }
+    
+    private static final MessageSource getDefaultMessageSource()
+    {
+        if(defaultMessageSource == null)
+        {
+            synchronized(MessageSource.class)
+            {
+                if(defaultMessageSource == null)
+                {
+                    defaultMessageSource= SpringContextHolder.getBean(MessageSource.class);
+                }
+            }
+        }
+        
+        return defaultMessageSource;
     }
 }
