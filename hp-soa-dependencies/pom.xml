@@ -21,6 +21,13 @@
         <spring-cloud-alibaba.version>2023.0.1.2</spring-cloud-alibaba.version>
         <dubbo.version>3.3.1</dubbo.version>
         
+        <netty.version>4.1.114.Final</netty.version>
+        <protobuf.version>4.28.2</protobuf.version>
+        <feign.version>13.5</feign.version>
+        <slf4j.version>2.0.16</slf4j.version>
+        <log4j.version>2.24.1</log4j.version>
+        <disruptor.version>3.4.4</disruptor.version>
+        <log4j2-redis-appender.version>0.16.0</log4j2-redis-appender.version>
         <nacos-client.version>2.4.2</nacos-client.version>
         <zookeeper.version>3.9.2</zookeeper.version>
         <kryo.version>5.6.2</kryo.version>
@@ -31,7 +38,6 @@
         
         <caffeine.version>3.1.8</caffeine.version>
         <zstd-jni.version>1.5.6-6</zstd-jni.version>
-        <feign.version>13.5</feign.version>
         <druid.version>1.2.23</druid.version>
         <redisson.version>3.37.0</redisson.version>
         <lock4j.version>2.2.7</lock4j.version>
@@ -61,8 +67,6 @@
         <mqttv5.client.version>1.2.5</mqttv5.client.version>
         <bcpkix.version>1.78.1</bcpkix.version>
 
-        <disruptor.version>3.4.4</disruptor.version>
-        <log4j2-redis-appender.version>0.16.0</log4j2-redis-appender.version>
         <skywalking.apm-toolkit.version>9.3.0</skywalking.apm-toolkit.version>
         <junit.version>4.13.2</junit.version>
         <junit5.version>5.11.2</junit5.version>
@@ -227,37 +231,59 @@
             </dependency>
             
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-bom</artifactId>
+                <version>${log4j.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${disruptor.version}</version>
             </dependency>
             
             <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud-alibaba.version}</version>
+                <groupId>com.vlkan.log4j2</groupId>
+                <artifactId>log4j2-redis-appender</artifactId>
+                <version>${log4j2-redis-appender.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vlkan.log4j2</groupId>
+                <artifactId>log4j2-redis-appender-fatjar</artifactId>
+                <version>${log4j2-redis-appender.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-bom</artifactId>
+                <version>${protobuf.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-bom</artifactId>
-                <version>${dubbo.version}</version>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-bom</artifactId>
+                <version>${feign.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            
+
             <dependency>
                 <groupId>com.alibaba.nacos</groupId>
                 <artifactId>nacos-client</artifactId>
@@ -446,14 +472,6 @@
             </dependency>
             
             <dependency>
-                <groupId>io.github.openfeign</groupId>
-                <artifactId>feign-bom</artifactId>
-                <version>${feign.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
                 <version>${mybatis.version}</version>
@@ -560,24 +578,7 @@
                 <artifactId>lock4j-zookeeper-spring-boot-starter</artifactId>
                 <version>${lock4j.version}</version>
             </dependency>
-            
-            <dependency>
-                <groupId>com.lmax</groupId>
-                <artifactId>disruptor</artifactId>
-                <version>${disruptor.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>com.vlkan.log4j2</groupId>
-                <artifactId>log4j2-redis-appender</artifactId>
-                <version>${log4j2-redis-appender.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.vlkan.log4j2</groupId>
-                <artifactId>log4j2-redis-appender-fatjar</artifactId>
-                <version>${log4j2-redis-appender.version}</version>
-            </dependency>
-            
+                        
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-bom</artifactId>
@@ -941,6 +942,38 @@
                 <groupId>org.jboss.logmanager</groupId>
                 <artifactId>jboss-logmanager</artifactId>
                 <version>${jboss-logmanager.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-bom</artifactId>
+                <version>${dubbo.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             
         </dependencies>
