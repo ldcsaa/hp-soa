@@ -17,7 +17,6 @@
 
     <properties>
         <spring-boot.version>3.3.4</spring-boot.version>
-        <spring-security.version>6.3.3</spring-security.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.1.2</spring-cloud-alibaba.version>
         <spring-amqp.version>3.1.7</spring-amqp.version>
@@ -972,13 +971,6 @@
                 <groupId>com.caucho</groupId>
                 <artifactId>hessian</artifactId>
                 <version>${hessian.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-bom</artifactId>
-                <version>${spring-security.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
             
             <dependency>
