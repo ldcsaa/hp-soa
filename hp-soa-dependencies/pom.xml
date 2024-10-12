@@ -42,6 +42,7 @@
         <jedis.version>5.1.5</jedis.version>
         <lettuce.version>6.3.2.RELEASE</lettuce.version>
         <redisson.version>3.36.0</redisson.version>
+        <lock4j.version>2.2.7</lock4j.version>
         <amqp-client.version>5.22.0</amqp-client.version>
         <stream-client.version>0.17.0</stream-client.version>
         <mysql-connector-j.version>8.4.0</mysql-connector-j.version>
@@ -690,6 +691,28 @@
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>lock4j-redisson-spring-boot-starter</artifactId>
+                <version>${lock4j.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.redisson</groupId>
+                        <artifactId>redisson-spring-boot-starter</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
+                <version>${lock4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>lock4j-zookeeper-spring-boot-starter</artifactId>
+                <version>${lock4j.version}</version>
             </dependency>
 
             <dependency>
