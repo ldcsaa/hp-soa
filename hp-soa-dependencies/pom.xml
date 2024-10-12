@@ -22,7 +22,6 @@
         <dubbo.version>3.3.1</dubbo.version>
         
         <nacos-client.version>2.4.2</nacos-client.version>
-        <netty.version>4.1.114.Final</netty.version>
         <zookeeper.version>3.9.2</zookeeper.version>
         <kryo.version>5.6.2</kryo.version>
         <fst.version>3.0.4-jdk17</fst.version>
@@ -69,7 +68,6 @@
         <junit5.version>5.11.2</junit5.version>
 
         <fastjson.version>2.0.53</fastjson.version>
-        <protobuf-java.version>4.28.2</protobuf-java.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpclient5.version>5.4</httpclient5.version>
         <browscap-java.version>1.4.4</browscap-java.version>
@@ -296,14 +294,6 @@
                         <artifactId>logback-classic</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-bom</artifactId>
-                <version>${netty.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
             
             <dependency>
@@ -715,12 +705,6 @@
                 <groupId>com.alibaba.fastjson2</groupId>
                 <artifactId>fastjson2-extension-spring6</artifactId>
                 <version>${fastjson.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java</artifactId>
-                <version>${protobuf-java.version}</version>
             </dependency>
 
             <dependency>
