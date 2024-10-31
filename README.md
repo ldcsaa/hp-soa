@@ -27,6 +27,7 @@
 - 消息队列：Kafka（支持可靠消息）
 - MQTT发布订阅：Eclipse PAHO mqttv5
 - 分布式Job：xxl-job
+- 分布式Job：snail-job
 - 轻量级Job：Redisson + Spring Scheduled
 - 分布式事务：Seata
 - 全局ID：Leaf（支持 Snowflake ID 和 Segment ID）
@@ -56,6 +57,7 @@
 - **[hp-soa-starter-mqtt](hp-soa-starter/hp-soa-starter-mqtt)** MQTT启动器，开启MQTT发布订阅功能，全面支持mqttv5协议
 - **[hp-soa-starter-job-exclusive](hp-soa-starter/hp-soa-starter-job-exclusive)** 轻量级Job启动器，开启轻量级排他Job功能，提供Job执行日志关联和调用链跟踪能力
 - **[hp-soa-starter-job-xxljob](hp-soa-starter/hp-soa-starter-job-xxljob)** Xxl-Job启动器，开启 Xxl-Job 功能，结合 xxl-job-admin 提供分布式Job能力
+- **[hp-soa-starter-job-snailjob](hp-soa-starter/hp-soa-starter-job-snailjob)** Snail-Job启动器，开启 Snail-Job 功能，结合 snail-job-server 提供分布式Job能力
 - **[hp-soa-starter-leaf](hp-soa-starter/hp-soa-starter-leaf)** Leaf全局ID启动器，开启Leaf全局ID功能，支持通过Snowflake算法和Segment算法生成全局ID
 - **[hp-soa-starter-seata](hp-soa-starter/hp-soa-starter-seata)** Seata启动器，开启Seata分布式事务功能，结合 Seata TC 提供分布式事务能力
 - **[hp-soa-starter-sentinel](hp-soa-starter/hp-soa-starter-sentinel)** Sentinel启动器，开启Sentinel流量控制功能，结合 Sentinel Dashboard 和 Nacos 提供流量控制和流控规则持久化能力
