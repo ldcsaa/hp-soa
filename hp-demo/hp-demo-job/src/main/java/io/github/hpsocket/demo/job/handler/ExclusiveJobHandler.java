@@ -17,9 +17,9 @@ public class ExclusiveJobHandler
     @ExclusiveJob(jobName = "job1", cron = "*/5 * * * * ?")
     public void job1()
     {
+        log.info("traceId: {}", WebServerHelper.getTraceId());
+
         if((++i) % 5 == 0)
             throw new RuntimeException("test thow exceptions");
-        
-        log.info("traceId: {}", WebServerHelper.getTraceId());
     }
 }

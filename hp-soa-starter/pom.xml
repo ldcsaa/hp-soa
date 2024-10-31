@@ -32,6 +32,7 @@
         <module>hp-soa-starter-data-elasticsearch</module>
         <module>hp-soa-starter-job-exclusive</module>
         <module>hp-soa-starter-job-xxljob</module>
+        <module>hp-soa-starter-job-snailjob</module>
         <module>hp-soa-starter-rabbitmq</module>
         <module>hp-soa-starter-rocketmq</module>
         <module>hp-soa-starter-kafka</module>

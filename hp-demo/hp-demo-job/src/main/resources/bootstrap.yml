@@ -42,6 +42,9 @@ spring.cloud.nacos.config:
       data-id: xxl-job.yml
       refresh: true
     - group: GLOBAL_GROUP
+      data-id: snail-job.yml
+      refresh: true
+    - group: GLOBAL_GROUP
       data-id: dubbo.yml
       refresh: true
     - group: GLOBAL_GROUP
@@ -60,5 +63,7 @@ dubbo.protocols:
 # server
 server.port: 9101
 
-# xxl-job
+# xxl-job port
 hp.soa.job.xxl.executor.port: 7101
+# snail-job port
+snail-job.port: 7501

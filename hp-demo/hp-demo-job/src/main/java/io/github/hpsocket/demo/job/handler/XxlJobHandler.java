@@ -16,9 +16,9 @@ public class XxlJobHandler
     @XxlJob("xxlJobHandler1")
     public void xxlJobHandler1()
     {
+        log.info("traceId: {}", WebServerHelper.getTraceId());
+
         if((++i) % 5 == 0)
             throw new RuntimeException("test thow exceptions");
-        
-        log.info("traceId: {}", WebServerHelper.getTraceId());
     }
 }

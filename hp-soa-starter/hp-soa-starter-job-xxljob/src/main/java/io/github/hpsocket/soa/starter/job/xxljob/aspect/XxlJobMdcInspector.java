@@ -28,8 +28,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Aspect
-@Order(XxlJobInspector.ORDER)
-public class XxlJobInspector
+@Order(XxlJobMdcInspector.ORDER)
+public class XxlJobMdcInspector
 {
     public static final int SKIP_RESULT_CODE    = 202;
     public static final int ORDER               = 0;
@@ -39,7 +39,7 @@ public class XxlJobInspector
     private static final AspectHelper.AnnotationHolder<XxlJob> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
     
     @Autowired(required = false)
-    AsyncService asyncService;
+    private AsyncService asyncService;
     @Autowired(required = false)
     private XxlJobExceptionHandler exceptionHandler;
 
@@ -125,14 +125,21 @@ public class XxlJobInspector
 
     private void invokeExceptionHandler(String jobName, long jobId, String param, Exception e)
     {
-        if(exceptionHandler == null)
-            return;
-        
-        long timestamp = System.currentTimeMillis();
-        
-        if(asyncService == null)
-            exceptionHandler.handleException(jobName, jobId, param, timestamp, e);
-        else
-            asyncService.execute(() -> exceptionHandler.handleException(jobName, jobId, param, timestamp, e));
+        try
+        {
+            if(exceptionHandler == null)
+                return;
+            
+            long timestamp = System.currentTimeMillis();
+            
+            if(asyncService == null)
+                exceptionHandler.handleException(jobName, jobId, param, timestamp, e);
+            else
+                asyncService.execute(() -> exceptionHandler.handleException(jobName, jobId, param, timestamp, e));
+        }
+        catch(Exception ex)
+        {
+            log.error("invoke-exception-handler error, xxl-job: {}, exception: {}", jobName, ex.getMessage(), ex);
+        }
     }
 }

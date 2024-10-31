@@ -29,26 +29,26 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Aspect
-@Order(ExclusiveJobInspector.ORDER)
-public class ExclusiveJobInspector
+@Order(ExclusiveJobMdcInspector.ORDER)
+public class ExclusiveJobMdcInspector
 {
     public static final int ORDER                   = 0;
     public static final String POINTCUT_PATTERN     = "execution (public void *.*()) && "
                                                     + "@annotation(io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob)";
-    private static final String JOB_LOCK_KEY_PREFIX = "hp.soa.job:lock:";
+    private static final String JOB_LOCK_KEY_PREFIX = "hp.soa.job:exclusive:lock:";
     
     private static final AtomicBoolean RUNNING = new AtomicBoolean(false);    
     private static final AspectHelper.AnnotationHolder<ExclusiveJob> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
     
     @Autowired(required = false)
-    ExclusiveJobExceptionHandler exceptionHandler;
+    private ExclusiveJobExceptionHandler exceptionHandler;
     
     @Autowired(required = false)
-    AsyncService asyncService;
+    private AsyncService asyncService;
 
     private RedissonClient redissonClient;
     
-    public ExclusiveJobInspector(RedissonClient redissonClient)
+    public ExclusiveJobMdcInspector(RedissonClient redissonClient)
     {
         this.redissonClient = redissonClient;
     }
@@ -84,7 +84,7 @@ public class ExclusiveJobInspector
             {
                 if(log.isTraceEnabled())
                 {
-                    String msg = String.format("current application is read only, skip exclusive job '%s'", fullJobName);
+                    String msg = String.format("current application is read only, skip exclusive-job '%s'", fullJobName);
                     log.trace(msg);
                 }
                 
@@ -102,7 +102,7 @@ public class ExclusiveJobInspector
                 {
                     if(log.isTraceEnabled())
                     {
-                        log.trace("start exclusive job -> {}", fullJobName);
+                        log.trace("start exclusive-job -> {}", fullJobName);
 
                         sw = new StopWatch(fullJobName);
                         sw.start();
@@ -112,7 +112,7 @@ public class ExclusiveJobInspector
                 }
                 catch(Exception e)
                 {
-                    log.error("execute exclusive job -> {} exception : {}", fullJobName, e.getMessage(), e);
+                    log.error("execute exclusive-job -> {} exception : {}", fullJobName, e.getMessage(), e);
                     
                     needThrow = false;
                     throw e;
@@ -125,7 +125,7 @@ public class ExclusiveJobInspector
                     {
                         sw.stop();
                         
-                        log.trace("end exclusive job -> {} (costTime: {})", fullJobName, sw.lastTaskInfo().getTimeMillis());
+                        log.trace("end exclusive-job -> {} (costTime: {})", fullJobName, sw.lastTaskInfo().getTimeMillis());
                     }
                 }
             }
@@ -148,14 +148,21 @@ public class ExclusiveJobInspector
 
     private void invokeExceptionHandler(String prefix, String jobName, Exception e)
     {
-        if(exceptionHandler == null)
-            return;
-        
-        long timestamp = System.currentTimeMillis();
-        
-        if(asyncService == null)
-            exceptionHandler.handleException(prefix, jobName, timestamp, e);
-        else
-            asyncService.execute(() -> exceptionHandler.handleException(prefix, jobName, timestamp, e));
+        try
+        {
+            if(exceptionHandler == null)
+                return;
+            
+            long timestamp = System.currentTimeMillis();
+            
+            if(asyncService == null)
+                exceptionHandler.handleException(prefix, jobName, timestamp, e);
+            else
+                asyncService.execute(() -> exceptionHandler.handleException(prefix, jobName, timestamp, e));
+        }
+        catch(Exception ex)
+        {
+            log.error("invoke-exception-handler error, exclusive-job: {}:{}, exception: {}", prefix, jobName, ex.getMessage(), ex);
+        }
     }
 }
