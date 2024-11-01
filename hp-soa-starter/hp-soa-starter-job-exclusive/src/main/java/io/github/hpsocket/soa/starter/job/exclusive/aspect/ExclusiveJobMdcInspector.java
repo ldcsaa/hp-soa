@@ -163,7 +163,7 @@ public class ExclusiveJobMdcInspector
         }
         catch(Exception ex)
         {
-            log.error("invoke-exception-handler error, exclusive-job: {}:{}, exception: {}", prefix, jobName, ex.getMessage(), ex);
+            log.error("execute exclusive-job Invoke-Exception-Handler exception -> ({}:{}) : {}", prefix, jobName, ex.getMessage(), ex);
         }
     }
 }

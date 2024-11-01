@@ -139,7 +139,7 @@ public class XxlJobMdcInspector
         }
         catch(Exception ex)
         {
-            log.error("invoke-exception-handler error, xxl-job: {}, exception: {}", jobName, ex.getMessage(), ex);
+            log.error("execute xxl-job Invoke-Exception-Handler exception -> ({}) : {}", jobName, ex.getMessage(), ex);
         }
     }
 }

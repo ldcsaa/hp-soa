@@ -114,7 +114,7 @@ public class JobInvoker
         }
         catch(Exception ex)
         {
-            log.error("invoke-exception-handler error, snail-job: {}, exception: {}", jobName, ex.getMessage(), ex);
+            log.error("execute snail-job Invoke-Exception-Handler exception -> ({}) : {}", jobName, ex.getMessage(), ex);
         }
     }
 }
