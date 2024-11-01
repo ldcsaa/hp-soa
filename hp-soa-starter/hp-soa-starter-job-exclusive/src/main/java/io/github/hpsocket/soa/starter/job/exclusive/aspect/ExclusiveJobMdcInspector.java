@@ -126,7 +126,7 @@ public class ExclusiveJobMdcInspector
                     {
                         sw.stop();
                         
-                        log.debug("<<<<<<<<<< end exclusive-job -> (name: {}, costTime: {})", fullJobName, sw.lastTaskInfo().getTimeMillis());
+                        log.debug("<<<<<<<<<< end exclusive-job -> (name: {}, costTime: {})", fullJobName, sw.getTotalTimeMillis());
                     }
                 }
             }

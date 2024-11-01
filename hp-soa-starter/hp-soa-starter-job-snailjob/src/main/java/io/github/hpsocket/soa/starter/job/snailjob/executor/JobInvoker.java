@@ -81,7 +81,7 @@ public class JobInvoker
                 {
                     sw.stop();
                     
-                    log.debug("<<<<<<<<<< end snail-job -> (name: {}, id: {}, method: {}, costTime: {})", jobName, jobId, method, sw.lastTaskInfo().getTimeMillis());
+                    log.debug("<<<<<<<<<< end snail-job -> (name: {}, id: {}, method: {}, costTime: {})", jobName, jobId, method, sw.getTotalTimeMillis());
                 }
             }
         }

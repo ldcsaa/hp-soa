@@ -154,7 +154,7 @@ public class RabbitmqListenerMdcInspector
                 sw.stop();
 
                 log.trace("rabbit listener end consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
-                    , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.lastTaskInfo().getTimeMillis());                
+                    , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getTotalTimeMillis());                
             }
             
             mdcAttr.removeMdc();

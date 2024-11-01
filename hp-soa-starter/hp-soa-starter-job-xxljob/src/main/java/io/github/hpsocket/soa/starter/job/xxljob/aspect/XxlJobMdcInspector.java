@@ -107,7 +107,7 @@ public class XxlJobMdcInspector
                 {
                     sw.stop();
                     
-                    log.debug("<<<<<<<<<< end xxl-job -> (name: {}, id: {}, costTime: {})", jobName, jobId, sw.lastTaskInfo().getTimeMillis());
+                    log.debug("<<<<<<<<<< end xxl-job -> (name: {}, id: {}, costTime: {})", jobName, jobId, sw.getTotalTimeMillis());
                 }
             }
         }
