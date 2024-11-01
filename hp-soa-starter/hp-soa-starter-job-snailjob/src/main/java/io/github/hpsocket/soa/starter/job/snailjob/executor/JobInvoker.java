@@ -97,7 +97,6 @@ public class JobInvoker
         }
     }
 
-
     private void invokeExceptionHandler(String jobName, Long jobId, String method, String param, Exception e)
     {
         try
