@@ -42,8 +42,8 @@ public class JobInvoker
             {
                 String msg = String.format("current application is read only, skip snail-job '%s'", jobName);
 
-                if(log.isTraceEnabled())
-                    log.trace(msg);
+                if(log.isDebugEnabled())
+                    log.debug(msg);
                 
                 return ExecuteResult.failure(null, msg);
             }
@@ -52,9 +52,9 @@ public class JobInvoker
             
             try
             {
-                if(log.isTraceEnabled())
+                if(log.isDebugEnabled())
                 {
-                    log.trace("start snail-job -> {} (id: {}, method: {}, param: '{}')", jobName, jobId, method, param);
+                    log.debug(">>>>>>>>>> start snail-job -> (name: {}, id: {}, method: {}, param: '{}')", jobName, jobId, method, param);
                 
                     sw = new StopWatch(jobName);
                     sw.start();
@@ -71,17 +71,17 @@ public class JobInvoker
                 if(cause == null)
                     cause = e;
                 
-                log.error("execute snail-job -> {} exception : {}", jobName, cause.getMessage(), cause);
+                log.error("execute snail-job exception -> ({}) : {}", jobName, cause.getMessage(), cause);
                 
                 throw cause;
             }
             finally
             {
-                if(log.isTraceEnabled())
+                if(log.isDebugEnabled())
                 {
                     sw.stop();
                     
-                    log.trace("end snail-job -> {} (id: {}, method: {}, costTime: {})", jobName, jobId, method, sw.lastTaskInfo().getTimeMillis());
+                    log.debug("<<<<<<<<<< end snail-job -> (name: {}, id: {}, method: {}, costTime: {})", jobName, jobId, method, sw.lastTaskInfo().getTimeMillis());
                 }
             }
         }

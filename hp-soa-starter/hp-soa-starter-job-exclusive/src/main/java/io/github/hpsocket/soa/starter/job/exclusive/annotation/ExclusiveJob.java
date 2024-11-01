@@ -28,6 +28,9 @@ public @interface ExclusiveJob
     /** {@linkplain ExclusiveJob#maxLockTime maxLockTime} 时间单位（默认：毫秒） */
     TimeUnit lockTimeUnit() default TimeUnit.MILLISECONDS;
     
+    /** 是否记录执行日志（默认：false） */
+    boolean writeExecLog() default false;
+    
     /** 参考 {@linkplain Scheduled#cron} */
     @AliasFor(annotation = Scheduled.class)
     String cron() default "";

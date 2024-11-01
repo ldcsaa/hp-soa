@@ -64,8 +64,9 @@ public class ExclusiveJobMdcInspector
         ExclusiveJob job = ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
         Assert.notNull(job, "@ExclusiveJob annotation not found");
         
-        String prefix   = job.prefix();
-        String jobName  = job.jobName();
+        String prefix    = job.prefix();
+        String jobName   = job.jobName();
+        boolean writeLog = job.writeExecLog();
         
         if(GeneralHelper.isStrEmpty(prefix))
             prefix = AppConfigHolder.getAppName();
@@ -82,10 +83,10 @@ public class ExclusiveJobMdcInspector
             
             if(WebServerHelper.isAppReadOnly())
             {
-                if(log.isTraceEnabled())
+                if(writeLog && log.isDebugEnabled())
                 {
                     String msg = String.format("current application is read only, skip exclusive-job '%s'", fullJobName);
-                    log.trace(msg);
+                    log.debug(msg);
                 }
                 
                 return null;
@@ -100,9 +101,9 @@ public class ExclusiveJobMdcInspector
                 
                 try
                 {
-                    if(log.isTraceEnabled())
+                    if(writeLog && log.isDebugEnabled())
                     {
-                        log.trace("start exclusive-job -> {}", fullJobName);
+                        log.debug(">>>>>>>>>> start exclusive-job -> (name: {})", fullJobName);
 
                         sw = new StopWatch(fullJobName);
                         sw.start();
@@ -112,7 +113,7 @@ public class ExclusiveJobMdcInspector
                 }
                 catch(Exception e)
                 {
-                    log.error("execute exclusive-job -> {} exception : {}", fullJobName, e.getMessage(), e);
+                    log.error("execute exclusive-job exception -> ({}) : {}", fullJobName, e.getMessage(), e);
                     
                     needThrow = false;
                     throw e;
@@ -121,11 +122,11 @@ public class ExclusiveJobMdcInspector
                 {
                     try {lock.unlock();} catch(Exception e) {}
                     
-                    if(log.isTraceEnabled())
+                    if(writeLog && log.isDebugEnabled())
                     {
                         sw.stop();
                         
-                        log.trace("end exclusive-job -> {} (costTime: {})", fullJobName, sw.lastTaskInfo().getTimeMillis());
+                        log.debug("<<<<<<<<<< end exclusive-job -> (name: {}, costTime: {})", fullJobName, sw.lastTaskInfo().getTimeMillis());
                     }
                 }
             }

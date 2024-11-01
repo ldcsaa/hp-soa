@@ -66,8 +66,8 @@ public class XxlJobMdcInspector
             {
                 String msg = String.format("current application is read only, skip xxl-job '%s'", jobName);
 
-                if(log.isTraceEnabled())
-                    log.trace(msg);    
+                if(log.isDebugEnabled())
+                    log.debug(msg);    
                 
                 XxlJobHelper.handleResult(SKIP_RESULT_CODE, msg);
                 
@@ -78,9 +78,9 @@ public class XxlJobMdcInspector
             
             try
             {
-                if(log.isTraceEnabled())
+                if(log.isDebugEnabled())
                 {
-                    log.trace("start xxl-job -> {} (id: {}, param: '{}')", jobName, jobId, param);
+                    log.debug(">>>>>>>>>> start xxl-job -> (name: {}, id: {}, param: '{}')", jobName, jobId, param);
                 
                     sw = new StopWatch(jobName);
                     sw.start();
@@ -97,17 +97,17 @@ public class XxlJobMdcInspector
                 if(cause == null)
                     cause = e;
                 
-                log.error("execute xxl-job -> {} exception : {}", jobName, cause.getMessage(), cause);
+                log.error("execute xxl-job exception -> ({}) : {}", jobName, cause.getMessage(), cause);
                 
                 throw cause;
             }
             finally
             {
-                if(log.isTraceEnabled())
+                if(log.isDebugEnabled())
                 {
                     sw.stop();
                     
-                    log.trace("end xxl-job -> {} (id: {}, costTime: {})", jobName, jobId, sw.lastTaskInfo().getTimeMillis());
+                    log.debug("<<<<<<<<<< end xxl-job -> (name: {}, id: {}, costTime: {})", jobName, jobId, sw.lastTaskInfo().getTimeMillis());
                 }
             }
         }
