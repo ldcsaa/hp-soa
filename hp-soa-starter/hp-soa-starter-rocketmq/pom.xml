@@ -25,10 +25,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
-            <artifactId>rocketmq-v5-client-spring-boot</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-v5-client-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
