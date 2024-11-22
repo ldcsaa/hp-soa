@@ -16,37 +16,37 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <spring-boot.version>3.3.4</spring-boot.version>
+        <spring-boot.version>3.3.5</spring-boot.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.1.2</spring-cloud-alibaba.version>
-        <dubbo.version>3.3.1</dubbo.version>
+        <dubbo.version>3.3.2</dubbo.version>
         
-        <netty.version>4.1.114.Final</netty.version>
-        <protobuf.version>4.28.2</protobuf.version>
+        <netty.version>4.1.115.Final</netty.version>
+        <protobuf.version>4.28.3</protobuf.version>
         <feign.version>13.5</feign.version>
         <slf4j.version>2.0.16</slf4j.version>
         <log4j.version>2.24.1</log4j.version>
         <disruptor.version>3.4.4</disruptor.version>
         <log4j2-redis-appender.version>0.16.0</log4j2-redis-appender.version>
-        <nacos-client.version>2.4.2</nacos-client.version>
-        <zookeeper.version>3.9.2</zookeeper.version>
+        <nacos-client.version>2.4.3</nacos-client.version>
+        <zookeeper.version>3.9.3</zookeeper.version>
         <kryo.version>5.6.2</kryo.version>
         <fst.version>3.0.4-jdk17</fst.version>
-        <xxl-job.version>2.4.1</xxl-job.version>
-        <snail-job.version>1.2.0-beta2</snail-job.version>
+        <xxl-job.version>2.4.2</xxl-job.version>
+        <snail-job.version>1.2.0</snail-job.version>
         <sentinel.version>1.8.8</sentinel.version>
         <rocketmq-v5-client.version>2.3.1</rocketmq-v5-client.version>
         
         <caffeine.version>3.1.8</caffeine.version>
-        <zstd-jni.version>1.5.6-6</zstd-jni.version>
+        <zstd-jni.version>1.5.6-7</zstd-jni.version>
         <druid.version>1.2.23</druid.version>
-        <redisson.version>3.37.0</redisson.version>
+        <redisson.version>3.39.0</redisson.version>
         <lock4j.version>2.2.7</lock4j.version>
-        <mysql-connector-j.version>9.0.0</mysql-connector-j.version>
+        <mysql-connector-j.version>9.1.0</mysql-connector-j.version>
         <mybatis.version>3.5.16</mybatis.version>
         <mybatis-spring.version>3.0.4</mybatis-spring.version>
         <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
-        <mybatis-plus.version>3.5.8</mybatis-plus.version>
+        <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.3.1</dynamic-datasource-spring-boot3-starter.version>
         <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
         <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
@@ -66,19 +66,19 @@
         <jsr305.version>4.8.6</jsr305.version>
         
         <mqttv5.client.version>1.2.5</mqttv5.client.version>
-        <bcpkix.version>1.78.1</bcpkix.version>
+        <bcpkix.version>1.79</bcpkix.version>
 
         <skywalking.apm-toolkit.version>9.3.0</skywalking.apm-toolkit.version>
         <junit.version>4.13.2</junit.version>
-        <junit5.version>5.11.2</junit5.version>
+        <junit5.version>5.11.3</junit5.version>
 
         <fastjson.version>2.0.53</fastjson.version>
         <httpclient.version>4.5.14</httpclient.version>
-        <httpclient5.version>5.4</httpclient5.version>
+        <httpclient5.version>5.4.1</httpclient5.version>
         <browscap-java.version>1.4.4</browscap-java.version>
-        <xstream.version>1.4.20</xstream.version>
+        <xstream.version>1.4.21</xstream.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
-        <velocity.version>2.4</velocity.version>
+        <velocity.version>2.4.1</velocity.version>
         <freemarker.version>2.3.33</freemarker.version>
         <beetl.version>3.17.0.RELEASE</beetl.version>
         <resilience4j.version>2.2.0</resilience4j.version>
@@ -90,7 +90,7 @@
         <guava.version>33.3.1-jre</guava.version>
         
         <jsoup.version>1.18.1</jsoup.version>
-        <selenium.version>4.25.0</selenium.version>
+        <selenium.version>4.26.0</selenium.version>
 
         <poi.version>5.3.0</poi.version>
         <easyexcel.version>4.0.3</easyexcel.version>
@@ -98,8 +98,8 @@
         <aviator.version>5.4.3</aviator.version>
         <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
         
-        <curator.version>5.7.0</curator.version>
-        <hutool.version>5.8.32</hutool.version>
+        <curator.version>5.7.1</curator.version>
+        <hutool.version>5.8.33</hutool.version>
         <jjwt.version>0.12.6</jjwt.version>
         
         <log4j-1.version>1.2.17</log4j-1.version>
@@ -512,6 +512,11 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-core</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-jsqlparser</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
