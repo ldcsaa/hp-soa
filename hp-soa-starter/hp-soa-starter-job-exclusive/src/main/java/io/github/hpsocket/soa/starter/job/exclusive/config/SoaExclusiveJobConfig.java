@@ -13,20 +13,21 @@ import org.springframework.scheduling.SchedulingTaskExecutor;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.starter.data.redis.config.SoaRedisConfig;
-import io.github.hpsocket.soa.starter.job.exclusive.aspect.ExclusiveJobInspector;
+import io.github.hpsocket.soa.starter.job.exclusive.aspect.ExclusiveJobMdcInspector;
+import io.github.hpsocket.soa.starter.task.config.SoaTaskConfig;
 
 /** <b>HP-SOA 分布式独占 Job 配置</b> */
 @AutoConfiguration
-@AutoConfigureAfter(SoaRedisConfig.class)
+@AutoConfigureAfter({SoaRedisConfig.class, SoaTaskConfig.class})
 @ConditionalOnBean({SchedulingTaskExecutor.class, RedissonClient.class})
 public class SoaExclusiveJobConfig
 {
     @Value("${hp.soa.job.exclusive.redisson-client-name:}")
     private String redissonClientName;
-
+    
     @Bean
     @DependsOn(SpringContextHolder.springContextHolderBeanName)
-    ExclusiveJobInspector exclusiveJobInspector()
+    ExclusiveJobMdcInspector exclusiveJobMdcInspector()
     {
         RedissonClient redissonClient = null;
         
@@ -35,6 +36,6 @@ public class SoaExclusiveJobConfig
         else
             redissonClient = SpringContextHolder.getBean(RedissonClient.class);
         
-        return new ExclusiveJobInspector(redissonClient);
+        return new ExclusiveJobMdcInspector(redissonClient);
     }
 }

@@ -9,7 +9,7 @@
         <artifactId>hp-soa-starter</artifactId>
         <version>${revision}</version>
     </parent>
-    <artifactId>hp-soa-starter-web</artifactId>
+    <artifactId>hp-soa-starter-job-snailjob</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
     <description>hp-soa: a fully functional, easy-to-use, and highly scalable microservice framework</description>
@@ -24,18 +24,20 @@
             <artifactId>hp-soa-framework-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-rsa</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.aizuda</groupId>
+            <artifactId>snail-job-client-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-websockets-jsr</artifactId>
+            <groupId>com.aizuda</groupId>
+            <artifactId>snail-job-client-retry-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.aizuda</groupId>
+            <artifactId>snail-job-client-job-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
             <optional>true</optional>
         </dependency>
     </dependencies>

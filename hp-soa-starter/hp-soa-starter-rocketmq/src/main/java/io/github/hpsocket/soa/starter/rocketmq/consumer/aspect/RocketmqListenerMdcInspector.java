@@ -98,7 +98,7 @@ public class RocketmqListenerMdcInspector
                 sw.stop();
 
                 log.trace("end process message -> (topic: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
-                    , topic, correlationId, messageId, sourceRequestId, domainName, eventName, sw.lastTaskInfo().getTimeMillis());
+                    , topic, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getTotalTimeMillis());
             }
 
             mdcAttr.removeMdc();
