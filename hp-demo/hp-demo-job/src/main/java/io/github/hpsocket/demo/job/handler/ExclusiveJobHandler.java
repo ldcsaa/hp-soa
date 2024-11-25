@@ -14,12 +14,12 @@ public class ExclusiveJobHandler
     int i = 0;
     
     //@Scheduled(cron = "*/5 * * * * ?")
-    @ExclusiveJob(jobName = "job1", cron = "*/5 * * * * ?")
+    @ExclusiveJob(jobName = "job1", cron = "*/5 * * * * ?", writeExecLog = true)
     public void job1()
     {
+        log.info("traceId: {}", WebServerHelper.getTraceId());
+
         if((++i) % 5 == 0)
             throw new RuntimeException("test thow exceptions");
-        
-        log.info("traceId: {}", WebServerHelper.getTraceId());
     }
 }

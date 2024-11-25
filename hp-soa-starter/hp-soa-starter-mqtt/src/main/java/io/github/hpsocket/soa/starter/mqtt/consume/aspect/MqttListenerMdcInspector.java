@@ -117,7 +117,7 @@ public class MqttListenerMdcInspector
                 sw.stop();
 
                 log.trace("end process message -> (topic: {}, messageId: {}, sourceRequestId: {}, costTime: {})"
-                    , topic, messageId, sourceRequestId, sw.getLastTaskTimeMillis());
+                    , topic, messageId, sourceRequestId, sw.getTotalTimeMillis());
             }
 
             mdcAttr.removeMdc();
