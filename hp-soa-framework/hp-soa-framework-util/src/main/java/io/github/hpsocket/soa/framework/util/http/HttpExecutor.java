@@ -63,8 +63,9 @@ import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.client5.http.ssl.DefaultClientTlsStrategy;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
-import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
@@ -82,6 +83,7 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.InputStreamEntity;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.reactor.ssl.SSLBufferMode;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.apache.hc.core5.ssl.TrustStrategy;
 import org.apache.hc.core5.util.Timeout;
@@ -195,7 +197,7 @@ public class HttpExecutor
                     if(defaultTlsConfig != null)
                         cmBuilder.setDefaultTlsConfig(defaultTlsConfig);
                     if(trustAllCerts)
-                        cmBuilder.setSSLSocketFactory(createSSLConnectionSocketFactory());
+                        cmBuilder.setTlsSocketStrategy(createTlsSocketStrategy());
                                                                             
                     connManager = cmBuilder.build();
                     
@@ -276,9 +278,9 @@ public class HttpExecutor
         }
     }
     
-    private SSLConnectionSocketFactory createSSLConnectionSocketFactory()
+    private TlsSocketStrategy createTlsSocketStrategy()
     {
-        return new SSLConnectionSocketFactory(createTrustSSLContext(), supportedProtocols, null, NoopHostnameVerifier.INSTANCE);
+        return new DefaultClientTlsStrategy(createTrustSSLContext(), supportedProtocols, null, SSLBufferMode.STATIC, NoopHostnameVerifier.INSTANCE);
     }
     
     public final boolean hasInitialized()

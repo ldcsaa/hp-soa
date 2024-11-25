@@ -1,0 +1,38 @@
+# Snail-Job 配置参考：https://snailjob.opensnail.com/docs/quickstart/client.html
+snail-job:
+  # ------------------基础配置-----------------
+  # 是否启用 Snail-Job（默认：true）
+  enabled: true
+  # 服务端配置
+  server:
+    # 服务端Job注册地址
+    host: 192.168.56.23
+    # 服务端Job注册端口（默认：1789）
+    port: 1788
+  # 客户端本地IP(默认：自动获取本地IP)
+  #host: 127.0.0.1
+  # 客户端本地端口（默认：1789）
+  #port: 1789
+  # 名称空间ID，若不填为默认空间(764d604ec6fc45f68cd92514c40e9e1a)
+  namespace: grC4zkEkwXMAt5pH_vvoL5gV6qOW0X9b
+  # 任务组（默认：空）
+  group: GRP-SOA
+  # 任务组访问令牌，若不填则默认为(SJ_Wyz3dmsdbDOkDujOTSSoBjGQP1BMsVnj)
+  token: SJ_lxIqV51otFrKDwvjjApxr8N2gStd1aQ4
+  # 客户端脚本存储位置（默认：${user.home}/snailJob/worker）
+  #workspace: /data/scripts
+  # ------------------邮箱配置-----------------
+  #mail:
+  #  enabled: false
+  #retry:
+  # ------------------重试：数据批量上报滑动窗口配置-----------------
+    #report-sliding-window:  
+  # ------------------重试：调度日志远程上报滑动窗口配置-----------------
+    #log-sliding-window: 
+  # ------------------调度线程池配置-----------------
+  dispatcher-thread-pool: 
+    core-pool-size: 8
+    maximum-pool-size: 8
+    keep-alive-time: 30
+    time-unit: SECONDS
+    queue-capacity: 1000
