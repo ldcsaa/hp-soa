@@ -36,8 +36,8 @@ public class MailSender
     
     private String host         = "";
     private String from         = "";
-    private String user         = "";
-    private String password     = "";
+    private String user         = null;
+    private String password     = null;
     private String subject      = "";
     private String text         = "";
     private String contentType  = DEFAULT_CONTENT_TYPE;
@@ -163,7 +163,8 @@ public class MailSender
         fileName = MimeUtility.encodeText(fileName, charset, "B");
         mimeFile.setFileName(fileName);
 
-        //ByteArrayDataSource ds = new ByteArrayDataSource(accessory, type, fileName);
+        //ByteArrayDataSource ds = new ByteArrayDataSource(accessory, type);
+        //ds.setName(fileName);
         //mimeFile.setDataHandler(new DataHandler(ds));
         mimeFile.setDataHandler(new DataHandler(accessory, type));
         
