@@ -190,5 +190,21 @@ public class MailSender
     {
         bcc.add(address);
     }
-
+    
+    /*
+    public static void main(String[] args) throws Exception
+    {
+        MailSender sender = new MailSender();
+        sender.setAuth(false);
+        sender.setHost("mx3.qq.com");
+        //sender.setHost("163mx02.mxmail.netease.com");
+        sender.setFrom("ldcsaa@163.com");
+        sender.setTo(Arrays.asList("17044333@qq.com"));
+        //sender.setTo(Arrays.asList("ldcsss@163.com"));
+        sender.setSubject("测试主题-003");
+        sender.setText("我的邮件内容 -- 003");
+        sender.send();
+    }
+    */
+    
 }

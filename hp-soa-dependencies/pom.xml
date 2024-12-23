@@ -101,7 +101,6 @@
         <curator.version>5.7.1</curator.version>
         <hutool.version>5.8.33</hutool.version>
         <jjwt.version>0.12.6</jjwt.version>
-        <jakarta.mail.version>2.0.1</jakarta.mail.version>
         
         <log4j-1.version>1.2.17</log4j-1.version>
         <jboss-logmanager.version>3.0.6.Final</jboss-logmanager.version>
@@ -826,13 +825,6 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-impl</artifactId>
                 <version>${jjwt.version}</version>
-            </dependency>
-            <!-- mail -->
-            <dependency>
-                <groupId>com.sun.mail</groupId>
-                <artifactId>jakarta.mail</artifactId>
-                <version>${jakarta.mail.version}</version>
-                <scope>provided</scope>
             </dependency>
             <!-- lombok -->
             <dependency>
