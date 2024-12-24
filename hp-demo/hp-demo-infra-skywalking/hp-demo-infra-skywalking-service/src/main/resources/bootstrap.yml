@@ -28,20 +28,7 @@ spring.cloud.nacos.config:
   #name: ${hp.soa.web.app.name}
   file-extension: yml
   refresh-enabled: true
-  shared-configs:
-    - group: GLOBAL_GROUP
-      data-id: hp-soa.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: spring-boot.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: dubbo.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: sentinel.yml
-      refresh: true
-      
+
 spring.config.import:
   - nacos:${hp.soa.web.app.name}.yml?group=DEMO_GROUP&refreshEnabled=true
   - nacos:hp-soa.yml?group=GLOBAL_GROUP&refreshEnabled=true
