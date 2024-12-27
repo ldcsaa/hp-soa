@@ -1,11 +1,10 @@
 package io.github.hpsocket.soa.starter.sentinel.exception;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.springframework.http.HttpStatus;
 
-import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
+import com.alibaba.csp.sentinel.adapter.spring.webmvc_v6x.callback.BlockExceptionHandler;
 import com.alibaba.csp.sentinel.slots.block.AbstractRule;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson2.JSON;
@@ -26,7 +25,7 @@ public class DefaultSentinelBlockExceptionHandler implements BlockExceptionHandl
 {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, BlockException e) throws IOException
+    public void handle(HttpServletRequest request, HttpServletResponse response, String resourceName, BlockException e) throws Exception
     {
         AbstractRule rule   = e.getRule();
         String msg          = String.format("接口繁忙 - %s:%s", AppConfigHolder.getAppName(), (rule != null) ? rule.getResource() : "");
