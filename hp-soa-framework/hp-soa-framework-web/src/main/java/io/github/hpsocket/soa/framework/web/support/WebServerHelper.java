@@ -4,10 +4,13 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -99,12 +102,18 @@ public class WebServerHelper
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT        = {WriteByteArrayAsBase64, WriteNonStringKeyAsString, WriteMapNullValue};
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL    = {WriteByteArrayAsBase64, WriteNonStringKeyAsString};
     
+    private static final AtomicInteger THREAD_NUMBER          = new AtomicInteger(0);
     public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor( 4,
                                                                                         16,
                                                                                         60,
                                                                                         TimeUnit.SECONDS,
-                                                                                        new LinkedBlockingDeque<>(2000),
-                                                                                        new ThreadPoolExecutor.CallerRunsPolicy());
+                                                                                        new LinkedBlockingDeque<>(3000),
+                                                                                        (r) -> {Thread t = new Thread(r);
+                                                                                                t.setName("SOA-LOG-" + THREAD_NUMBER.incrementAndGet());
+                                                                                                t.setPriority(Thread.NORM_PRIORITY);
+                                                                                                t.setDaemon(true);
+                                                                                                return t;},
+                                                                                        (r, executor) -> System.err.println("fail to write log SOA log, rejected !"));
     
     private static ObjectMapper jacksonObjectMapper;
     private static LoggingSystem loggingSystem;
