@@ -80,15 +80,22 @@ public class Response<T> implements Serializable
         this.result = result;
     }
 
-    public Response(String msg, Integer statusCode)
+    public Response(Integer statusCode, String msg)
     {
         this.msg = msg;
         this.statusCode = statusCode;
     }
 
+    public Response(Integer statusCode, Integer resultCode, String msg)
+    {
+        this.msg = msg;
+        this.statusCode = statusCode;
+        this.resultCode = resultCode;
+    }
+
     public Response(ServiceException e)
     {
-        this(e.getMessage(), e.getStatusCode(), e.getResultCode());
+        this(e.getStatusCode(), e.getResultCode(), e.getMessage());
     }
 
     public Response(Map<String, List<String>> validationErrors)
@@ -102,11 +109,39 @@ public class Response<T> implements Serializable
         this.validationErrors = validationErrors;
     }
 
-    public Response(String msg, Integer statusCode, Integer resultCode)
+    public static <T> Response<T> of()
     {
-        this.msg = msg;
-        this.statusCode = statusCode;
-        this.resultCode = resultCode;
+        return new Response<>();
     }
-
+    
+    public static <T> Response<T> of(T result)
+    {
+        return new Response<>(result);
+    }
+    
+    public static <T> Response<T> of(Integer statusCode, String msg)
+    {
+        return new Response<>(statusCode, msg);
+    }
+    
+    public static <T> Response<T> of(Integer statusCode, Integer resultCode, String msg)
+    {
+        return new Response<>(statusCode, resultCode, msg);
+    }
+    
+    public static <T> Response<T> of(ServiceException e)
+    {
+        return new Response<>(e);
+    }
+    
+    public static <T> Response<T> of(Map<String, List<String>> validationErrors)
+    {
+        return new Response<>(validationErrors);
+    }
+    
+    public static <T> Response<T> of(ServiceException e, Map<String, List<String>> validationErrors)
+    {
+        return new Response<>(e, validationErrors);
+    }
+    
 }

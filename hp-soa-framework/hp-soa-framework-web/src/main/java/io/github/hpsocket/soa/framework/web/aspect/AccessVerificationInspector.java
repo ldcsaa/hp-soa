@@ -129,7 +129,7 @@ public class AccessVerificationInspector
             if(GeneralHelper.isStrEmpty(msg))
                 msg = APPCODE_CHECK_EXCEPTION.getMessage();
             
-            return new Response<>(msg, APPCODE_CHECK_ERROR);
+            return new Response<>(APPCODE_CHECK_ERROR, msg);
         }
 
         return new Response<>(Boolean.TRUE);
@@ -161,7 +161,7 @@ public class AccessVerificationInspector
                 if(GeneralHelper.isStrEmpty(msg))
                     msg = AUTHEN_EXCEPTION.getMessage();
                 
-                return new Response<>(msg, AUTHEN_ERROR);
+                return new Response<>(AUTHEN_ERROR, msg);
             }
         }
         
@@ -182,7 +182,7 @@ public class AccessVerificationInspector
             if(GeneralHelper.isStrEmpty(msg))
                 msg = AUTHOR_EXCEPTION.getMessage();
             
-            return new Response<>(msg, AUTHOR_ERROR);
+            return new Response<>(AUTHOR_ERROR, msg);
         }
 
         return new Response<>(Boolean.TRUE);
