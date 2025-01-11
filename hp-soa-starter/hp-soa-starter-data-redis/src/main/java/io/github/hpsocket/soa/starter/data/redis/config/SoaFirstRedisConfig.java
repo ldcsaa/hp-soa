@@ -94,7 +94,7 @@ public class SoaFirstRedisConfig extends SoaAbstractRedisConfig
         return super.stringRedisTemplate(redisConnectionFactory);
     }
 
-    /** 默认 {@linkplain NumberRedisTemplate} */
+    /** 第一个 {@linkplain NumberRedisTemplate} */
     @Override
     @Bean(redisNumberTemplateBeanName)
     @ConditionalOnMissingBean(name = redisNumberTemplateBeanName)
