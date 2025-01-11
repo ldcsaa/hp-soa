@@ -30,6 +30,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonAutoConfigurationCustomizer;
 import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
+import io.github.hpsocket.soa.starter.data.redis.template.NumberRedisTemplate;
 
 /** <b>默认 Redis 实例之外第二个 Redis 配置</b> */
 @AutoConfiguration
@@ -42,6 +43,7 @@ public class SoaSecondRedisConfig extends SoaAbstractRedisConfig
     public static final String redisStringKeyGeneratorBeanName = "secondRedisStringKeyGenerator";
     public static final String redisTemplateBeanName = "secondRedisTemplate";
     public static final String redisStringTemplateBeanName = "secondRedisStringTemplate";
+    public static final String redisNumberTemplateBeanName = "secondRedisNumberTemplate";
     public static final String redisJsonTemplateBeanName = "secondRedisJsonTemplate";
     public static final String redisGenericJsonTemplateBeanName = "secondRedisGenericJsonTemplate";
     public static final String redisKryoTemplateBeanName = "secondRedisKryoTemplate";
@@ -90,6 +92,15 @@ public class SoaSecondRedisConfig extends SoaAbstractRedisConfig
     public StringRedisTemplate stringRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
     {
         return super.stringRedisTemplate(redisConnectionFactory);
+    }
+
+    /** 第二个 {@linkplain NumberRedisTemplate} */
+    @Override
+    @Bean(redisNumberTemplateBeanName)
+    @ConditionalOnMissingBean(name = redisNumberTemplateBeanName)
+    public NumberRedisTemplate numberRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
+    {
+        return super.numberRedisTemplate(redisConnectionFactory);
     }
 
     /** 第二个 Redis 基于 FastJson 序列化的 {@linkplain RedisTemplate} */
