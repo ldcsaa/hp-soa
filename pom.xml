@@ -275,7 +275,9 @@
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
                         <compilerArgs>
-                            <arg>-parameters</arg>
+                            <compilerArg>-parameters</compilerArg>
+                            <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
+                            <compilerArg>-Amapstruct.unmappedTargetPolicy=IGNORE</compilerArg>
                         </compilerArgs>
                         <annotationProcessorPaths>
                             <path>
