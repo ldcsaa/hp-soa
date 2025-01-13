@@ -80,6 +80,7 @@
         <xstream.version>1.4.21</xstream.version>
         <hibernate-validator.version>8.0.2.Final</hibernate-validator.version>
         <velocity.version>2.4.1</velocity.version>
+        <velocity-tools.version>3.1</velocity-tools.version>
         <freemarker.version>2.3.34</freemarker.version>
         <beetl.version>3.19.0.RELEASE</beetl.version>
         <resilience4j.version>2.2.0</resilience4j.version>
@@ -475,6 +476,21 @@
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity.tools</groupId>
+                <artifactId>velocity-tools-generic</artifactId>
+                <version>${velocity-tools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity.tools</groupId>
+                <artifactId>velocity-tools-view</artifactId>
+                <version>${velocity-tools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity.tools</groupId>
+                <artifactId>velocity-tools-jsp</artifactId>
+                <version>${velocity-tools.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.freemarker</groupId>
