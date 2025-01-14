@@ -39,15 +39,15 @@
         <rocketmq-v5-client.version>2.3.1</rocketmq-v5-client.version>
         
         <caffeine.version>3.1.8</caffeine.version>
-        <zstd-jni.version>1.5.6-8</zstd-jni.version>
+        <zstd-jni.version>1.5.6-9</zstd-jni.version>
         <druid.version>1.2.24</druid.version>
-        <redisson.version>3.41.0</redisson.version>
+        <redisson.version>3.42.0</redisson.version>
         <lock4j.version>2.2.7</lock4j.version>
         <mysql-connector-j.version>9.1.0</mysql-connector-j.version>
-        <mybatis.version>3.5.17</mybatis.version>
+        <mybatis.version>3.5.19</mybatis.version>
         <mybatis-spring.version>3.0.4</mybatis-spring.version>
         <mybatis-spring-boot-starter.version>3.0.4</mybatis-spring-boot-starter.version>
-        <mybatis-plus.version>3.5.9</mybatis-plus.version>
+        <mybatis-plus.version>3.5.10</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.3.1</dynamic-datasource-spring-boot3-starter.version>
         <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
         <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
@@ -57,10 +57,10 @@
         <commons-net.version>3.11.1</commons-net.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-lang3.version>3.17.0</commons-lang3.version>
-        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <commons-beanutils.version>1.10.0</commons-beanutils.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <commons-codec.version>1.17.1</commons-codec.version>
+        <commons-codec.version>1.17.2</commons-codec.version>
         <commons-pool.version>1.6</commons-pool.version>
         <commons-pool2.version>2.12.0</commons-pool2.version>
 
@@ -73,27 +73,29 @@
         <junit.version>4.13.2</junit.version>
         <junit5.version>5.11.4</junit5.version>
 
-        <fastjson.version>2.0.53</fastjson.version>
+        <fastjson.version>2.0.54</fastjson.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpclient5.version>5.4.1</httpclient5.version>
         <browscap-java.version>1.4.4</browscap-java.version>
         <xstream.version>1.4.21</xstream.version>
         <hibernate-validator.version>8.0.2.Final</hibernate-validator.version>
         <velocity.version>2.4.1</velocity.version>
+        <velocity-tools.version>3.1</velocity-tools.version>
         <freemarker.version>2.3.34</freemarker.version>
         <beetl.version>3.19.0.RELEASE</beetl.version>
-        <resilience4j.version>2.2.0</resilience4j.version>
+        <resilience4j.version>2.3.0</resilience4j.version>
 
         <geoip2.version>4.2.1</geoip2.version>
         <hessian.version>4.0.66</hessian.version>
         <zxing.javase.version>3.5.3</zxing.javase.version>
         <okhttp2.version>2.7.5</okhttp2.version>
+        <okhttp3.version>4.12.0</okhttp3.version>
         <guava.version>33.4.0-jre</guava.version>
         
         <jsoup.version>1.18.3</jsoup.version>
         <selenium.version>4.27.0</selenium.version>
 
-        <poi.version>5.3.0</poi.version>
+        <poi.version>5.4.0</poi.version>
         <easyexcel.version>4.0.3</easyexcel.version>
         <xerces.version>2.12.2</xerces.version>
         <aviator.version>5.4.3</aviator.version>
@@ -470,11 +472,31 @@
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp2.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp3.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity.tools</groupId>
+                <artifactId>velocity-tools-generic</artifactId>
+                <version>${velocity-tools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity.tools</groupId>
+                <artifactId>velocity-tools-view</artifactId>
+                <version>${velocity-tools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity.tools</groupId>
+                <artifactId>velocity-tools-jsp</artifactId>
+                <version>${velocity-tools.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.freemarker</groupId>
@@ -851,18 +873,38 @@
             <!-- POI -->
             <dependency>
                 <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>stax-api</artifactId>
-                        <groupId>stax</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>commons-codec</artifactId>
-                        <groupId>commons-codec</groupId>
-                    </exclusion>
-                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml-full</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml-lite</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-scratchpad</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-excelant</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-examples</artifactId>
+                <version>${poi.version}</version>
             </dependency>
             <!-- easyexcel -->
             <dependency>

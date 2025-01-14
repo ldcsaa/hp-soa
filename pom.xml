@@ -12,7 +12,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <revision>1.0.14</revision>
+        <revision>1.0.15</revision>
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -127,8 +127,8 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        -->
-        <!-- << END << : Develop Repositories -->
+       -->
+         <!-- << END << : Develop Repositories -->
 
         <repository>
             <snapshots>
@@ -275,7 +275,7 @@
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
                         <compilerArgs>
-                            <arg>-parameters</arg>
+                            <compilerArg>-parameters</compilerArg>
                         </compilerArgs>
                         <annotationProcessorPaths>
                             <path>
