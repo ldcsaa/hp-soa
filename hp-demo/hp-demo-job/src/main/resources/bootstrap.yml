@@ -24,32 +24,20 @@ spring.cloud.nacos.config:
   #username: nacos
   #password: 123456
   #namespace: DEV
-  group: DEMO_GROUP
-  name: ${hp.soa.web.app.name}
+  #group: DEMO_GROUP
+  #name: ${hp.soa.web.app.name}
   file-extension: yml
   refresh-enabled: true
-  shared-configs:
-    - group: GLOBAL_GROUP
-      data-id: hp-soa.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: spring-boot.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: spring-task.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: xxl-job.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: snail-job.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: dubbo.yml
-      refresh: true
-    - group: GLOBAL_GROUP
-      data-id: redis.yml
-      refresh: true
+      
+spring.config.import:
+  - nacos:${hp.soa.web.app.name}.yml?group=DEMO_GROUP&refreshEnabled=true
+  - nacos:hp-soa.yml?group=GLOBAL_GROUP&refreshEnabled=true
+  - nacos:spring-boot.yml?group=GLOBAL_GROUP&refreshEnabled=true
+  - nacos:dubbo.yml?group=GLOBAL_GROUP&refreshEnabled=true
+  - nacos:spring-task.yml?group=GLOBAL_GROUP&refreshEnabled=true
+  - nacos:xxl-job.yml?group=GLOBAL_GROUP&refreshEnabled=true
+  - nacos:snail-job.yml?group=GLOBAL_GROUP&refreshEnabled=true
+  - nacos:redis.yml?group=GLOBAL_GROUP&refreshEnabled=true
 
 # dubbo
 dubbo.protocols:

@@ -56,6 +56,7 @@ import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonAutoConfigurat
 import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
 import io.github.hpsocket.soa.starter.data.redis.serializer.KryoNotNullRedisSerializer;
 import io.github.hpsocket.soa.starter.data.redis.serializer.KryoRedisSerializer;
+import io.github.hpsocket.soa.starter.data.redis.template.NumberRedisTemplate;
 
 public abstract class SoaAbstractRedisConfig
 {
@@ -108,6 +109,14 @@ public abstract class SoaAbstractRedisConfig
         
         return template;
     }
+
+    public NumberRedisTemplate numberRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        NumberRedisTemplate template = new NumberRedisTemplate();
+        template.setConnectionFactory(redisConnectionFactory);
+        
+        return template;
+     }
 
     public RedisTemplate<String, Object> jsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
