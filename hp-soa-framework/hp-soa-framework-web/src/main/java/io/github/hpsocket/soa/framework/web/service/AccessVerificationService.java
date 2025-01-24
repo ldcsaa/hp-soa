@@ -1,7 +1,6 @@
 package io.github.hpsocket.soa.framework.web.service;
 
 import io.github.hpsocket.soa.framework.core.util.Pair;
-import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 
 /** <b>HTTP 请求校验服务接口</b><br>
  * 所有需要执行 HTTP 请求校验的应用程序都必须实现该接口
@@ -9,13 +8,11 @@ import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 public interface AccessVerificationService
 {
     /** 校验成功 */
-    Pair<Boolean, String> VERIFY_SUCCESS = new Pair<>(Boolean.TRUE);
+    Pair<Boolean, String> VERIFY_SUCCESS  = new Pair<>(Boolean.TRUE);
     /** 校验失败 */
-    Pair<Boolean, String> VERIFY_FAIL    = new Pair<>(Boolean.FALSE);
-    /** 非法用户 */
-    Pair<Long, String> INVALID_USER      = new Pair<>((Long)null);
+    Pair<Boolean, String> VERIFY_FAIL     = new Pair<>(Boolean.FALSE);
     /** 未登录用户 */
-    Pair<Long, String> GUEST_USER        = new Pair<>(RequestAttribute.GUEST_USER_ID);
+    Pair<Long, String> NOT_LOGGED_IN_USER = new Pair<>((Long)null);
     
     /** 应用程序编号校验，成功：Pair(True, ?)，失败：Pair(False, ?) */
     Pair<Boolean, String> verifyAppCode(String appCode, String srcAppCode);
