@@ -222,7 +222,7 @@ public class WebServerHelper
     /** 获取 HTTP 请求 Cookie */
     public static final Cookie getCookie(HttpServletRequest req, String name)
     {
-        return getCookie(req, name, false);
+        return getCookie(req, name, true);
     }
 
     /** 获取 HTTP 请求 Cookie */
@@ -355,19 +355,24 @@ public class WebServerHelper
     {
         String value = attrs.get(name);
         
-        if(GeneralHelper.isStrEmpty(value))
+        if(value == null)
         {
-            value = getHeader(request, name);
+            value = attrs.get(name.toLowerCase());
             
-            if(GeneralHelper.isStrEmpty(value) && checkCookie)
+            if(value == null)
             {
-                Cookie cookie = getCookie(request, name);
+                value = getHeader(request, name);
                 
-                if(cookie != null)
-                    value = cookie.getValue();
+                if(value == null && checkCookie)
+                {
+                    Cookie cookie = getCookie(request, name);
+                    
+                    if(cookie != null)
+                        value = cookie.getValue();
+                }
             }
         }
-
+        
         return value;
     }
     
