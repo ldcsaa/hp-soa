@@ -159,7 +159,7 @@ if [[ ${ENABLE_REMOTE_DEBUG_ENVS[@]/${RUNTIME_ENV,,}/} != ${ENABLE_REMOTE_DEBUG_
     REMOTE_DEBUG_OPTIONS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$REMOTE_DEBUG_ADDR:$REMOTE_DEBUG_PORT"
 fi
 
-LOG_FILE_PATH=${LOG_FILE_PATH:-/data/logs/access}
+LOG_FILE_PATH=${LOG_FILE_PATH:-/data/logs/app}
 LOG_FILE="${LOG_FILE_PATH}/${APP_NAME}/service.log"
 HEAP_DUMP_PATH="${LOG_FILE_PATH}/${APP_NAME}"
 
