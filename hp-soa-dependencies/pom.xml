@@ -22,18 +22,18 @@
         <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
         <dubbo.version>3.2.16</dubbo.version>
         
-        <netty.version>4.1.116.Final</netty.version>
+        <netty.version>4.1.117.Final</netty.version>
         <protobuf.version>4.29.3</protobuf.version>
         <feign.version>13.5</feign.version>
         <slf4j.version>2.0.16</slf4j.version>
         <log4j.version>2.24.3</log4j.version>
         <disruptor.version>3.4.4</disruptor.version>
         <log4j2-redis-appender.version>0.16.0</log4j2-redis-appender.version>
-        <nacos-client.version>2.4.3</nacos-client.version>
+        <nacos-client.version>2.5.0</nacos-client.version>
         <zookeeper.version>3.9.3</zookeeper.version>
         <kryo.version>5.6.2</kryo.version>
         <fst.version>3.0.4-jdk17</fst.version>
-        <xxl-job.version>2.4.2</xxl-job.version>
+        <xxl-job.version>2.5.0</xxl-job.version>
         <snail-job.version>1.2.0</snail-job.version>
         <sentinel.version>1.8.8</sentinel.version>
         <rocketmq-v5-client.version>2.3.1</rocketmq-v5-client.version>
@@ -41,13 +41,13 @@
         <caffeine.version>3.1.8</caffeine.version>
         <zstd-jni.version>1.5.6-9</zstd-jni.version>
         <druid.version>1.2.24</druid.version>
-        <redisson.version>3.42.0</redisson.version>
+        <redisson.version>3.43.0</redisson.version>
         <lock4j.version>2.2.7</lock4j.version>
-        <mysql-connector-j.version>9.1.0</mysql-connector-j.version>
+        <mysql-connector-j.version>9.2.0</mysql-connector-j.version>
         <mybatis.version>3.5.19</mybatis.version>
         <mybatis-spring.version>3.0.4</mybatis-spring.version>
         <mybatis-spring-boot-starter.version>3.0.4</mybatis-spring-boot-starter.version>
-        <mybatis-plus.version>3.5.10</mybatis-plus.version>
+        <mybatis-plus.version>3.5.10.1</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.3.1</dynamic-datasource-spring-boot3-starter.version>
         <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
         <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
@@ -67,7 +67,7 @@
         <jsr305.version>4.8.6</jsr305.version>
         
         <mqttv5.client.version>1.2.5</mqttv5.client.version>
-        <bcpkix.version>1.79</bcpkix.version>
+        <bcpkix.version>1.80</bcpkix.version>
 
         <skywalking.apm-toolkit.version>9.3.0</skywalking.apm-toolkit.version>
         <junit.version>4.13.2</junit.version>
@@ -93,7 +93,7 @@
         <guava.version>33.4.0-jre</guava.version>
         
         <jsoup.version>1.18.3</jsoup.version>
-        <selenium.version>4.27.0</selenium.version>
+        <selenium.version>4.28.1</selenium.version>
 
         <poi.version>5.4.0</poi.version>
         <easyexcel.version>4.0.3</easyexcel.version>

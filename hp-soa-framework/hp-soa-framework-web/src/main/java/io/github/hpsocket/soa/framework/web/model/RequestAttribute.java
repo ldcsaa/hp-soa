@@ -11,7 +11,7 @@ import lombok.Setter;
 public class RequestAttribute
 {
     /** 游客（未登录）用户 ID */
-    public static final long GUEST_USER_ID = 0L;
+    public static final long GUEST_USER_ID = -1L;
     
     private String appCode;
     private String srcAppCode;

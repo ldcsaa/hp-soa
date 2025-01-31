@@ -25,7 +25,7 @@ check_port()
     return $rs
 }
 
-echo "  > starting ... (SERVER_PORT: $SERVER_PORT)"
+echo "  > starting ... (APP_NAME: $APP_NAME, SERVER_PORT: $SERVER_PORT, RUNTIME_ENV: $RUNTIME_ENV)"
 
 if check_port $SERVER_PORT; then
     echo "  > start failed -> (SERVER_PORT: $SERVER_PORT being in used)"
