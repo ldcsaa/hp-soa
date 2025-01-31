@@ -20,7 +20,7 @@
         <spring-cloud.version>2023.0.5</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.3.2</spring-cloud-alibaba.version>
         <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
-        <dubbo.version>3.3.3</dubbo.version>
+        <dubbo.version>3.2.16</dubbo.version>
         
         <netty.version>4.1.117.Final</netty.version>
         <protobuf.version>4.29.3</protobuf.version>
