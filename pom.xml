@@ -12,7 +12,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <revision>1.2.0-SNAPSHOT</revision>
+        <revision>1.2.0</revision>
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -21,7 +21,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.assembly.descriptor>/opt/deploy/assembly/assembly.xml</maven.assembly.descriptor>
 
-        <spring-boot-maven-plugin.version>3.3.7</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>3.3.8</spring-boot-maven-plugin.version>
         <spring-boot.main_class>io.github.hpsocket.soa.framework.web.server.main.AppStarter</spring-boot.main_class>
         <spring-boot.jvm_arguments>${env.MAVEN_FORK_JVM_ARGS}</spring-boot.jvm_arguments>
 
@@ -81,7 +81,6 @@
 
     <repositories>
         <!-- >> BEGIN >> : Publish Repositories -->
-        <!--
         <repository>
             <id>ossrh-snapshots</id>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
@@ -97,10 +96,10 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        -->
         <!-- << END << : Publish Repositories -->
 
         <!-- >> BEGIN >> : Develop Repositories -->
+        <!--
         <repository>
             <id>private-snapshots</id>
             <name>Private Snapshots</name>
@@ -128,6 +127,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        -->
         <!-- << END << : Develop Repositories -->
 
         <repository>
@@ -164,7 +164,6 @@
 
     <distributionManagement>
         <!-- >> BEGIN >> : Publish Repositories -->
-        <!--
         <repository>
             <id>ossrh</id>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
@@ -173,10 +172,10 @@
             <id>ossrh</id>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-        -->
         <!-- << END << : Publish Repositories -->
 
         <!-- >> BEGIN >> : Develop Repositories -->
+        <!--
         <repository>
             <id>private</id>
             <name>Private Nexus Releases Repository</name>
@@ -187,7 +186,8 @@
             <name>Private Nexus Snapshots Repository</name>
             <url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
-        <!--<< END << : Develop Repositories -->
+        -->
+        <!-- << END << : Develop Repositories -->
     </distributionManagement>
 
     <build>
@@ -576,6 +576,7 @@
             
             <!-- >> BEGIN >> : Publish Plugins -->
             <!--
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -588,7 +589,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
             </plugin>
-            -->
             <!-- << END << : Publish Plugins -->
         </plugins>
         

@@ -54,7 +54,7 @@ public class AccessVerificationInspector
     @Around("inspectMethod()")
     public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
     {
-        MethodSignature signature = (MethodSignature)joinPoint.getSignature();
+        MethodSignature signature    = (MethodSignature)joinPoint.getSignature();
         AccessVerification.Type type = getInspectVerificationType(signature.getMethod());
         
         if(type != NO_CHECK)
@@ -117,10 +117,7 @@ public class AccessVerificationInspector
 
     private Response<Boolean> inspectApp(RequestAttribute reqAttr)
     {
-        String appCode    = reqAttr.getAppCode();
-        String srcAppCode = reqAttr.getSrcAppCode();
-        
-        Pair<Boolean, String> rs = accessVerificationService.verifyAppCode(appCode, srcAppCode);
+        Pair<Boolean, String> rs = accessVerificationService.verifyAppCode(reqAttr.getAppCode(), reqAttr.getSrcAppCode());
         
         if(!Boolean.TRUE.equals(rs.getFirst()))
         {
@@ -137,17 +134,7 @@ public class AccessVerificationInspector
 
     private Response<Long> inspectUser(RequestAttribute reqAttr, AccessVerification.Type type)
     {
-        String token = reqAttr.getToken();
-        
-        if(GeneralHelper.isStrEmpty(token))
-        {
-            if(type == MAYBE_LOGIN)
-                return new Response<>(RequestAttribute.GUEST_USER_ID);
-            else
-                return new Response<>(NOT_LOGGED_IN_EXCEPTION);
-        }
-        
-        Pair<Long, String> rs = accessVerificationService.verifyUser(token, reqAttr.getGroupId());
+        Pair<Long, String> rs = accessVerificationService.verifyUser(reqAttr.getToken(), reqAttr.getGroupId());
         Long userId = rs.getFirst();
         
         if(userId == null)

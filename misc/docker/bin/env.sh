@@ -50,42 +50,23 @@ if [ ! -f "$BOOTSTRAP_YAML_FILE" ]; then
     exit 1
 fi
 
-DEFAULT_JVM_MEMORY_OPTIONS=${DEFAULT_JVM_MEMORY_OPTIONS:--Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m}
-DEFAULT_STARTUP_WAIT_SECONDS=${DEFAULT_STARTUP_WAIT_SECONDS:-180}
-
-RUNTIME_ENV=${RUNTIME_ENV:-local}
-CONFIG_FILE_BASE_PATH=${CONFIG_FILE_BASE_PATH:-/opt/hp-soa/config}
-CONFIG_FILE_PATH=$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV
-
-if [[ ! -d "$CONFIG_FILE_PATH" || "$(ls -A $CONFIG_FILE_PATH)" == "" ]]; then
-    CONFIG_FILE_PATH=$CONFIG_FILE_BASE_PATH
-fi
-
-SYSTEM_PROPERTIES_FILE=${SYSTEM_PROPERTIES_FILE:-$CONFIG_FILE_PATH/system-config.properties}
-EXTENDED_PROPERTIES_FILE=${EXTENDED_PROPERTIES_FILE:-$CONFIG_FILE_PATH/extended-config.properties}
-DUBBO_RESOLVE_PROPERTIES_FILE=${DUBBO_RESOLVE_PROPERTIES_FILE:-$CONFIG_FILE_PATH/dubbo-resolve.properties}
-JAVA_AGENT_CONFIG_FILE=${JAVA_AGENT_CONFIG_FILE:-$CONFIG_FILE_PATH/java-agent.config}
-
-SERVER_PORT_KEY='server.port'
-APP_NAME_KEY='hp.soa.web.app.name'
-REMOTE_DEBUG_PORT_KEY='hp.soa.special.remote-debug.port'
-JVM_OPTIONS_KEY="hp.soa.special.jvm-options.${RUNTIME_ENV}"
-STARTUP_WAIT_SECONDS_KEY="hp.soa.special.startup.max-wait-seconds"
-
-ENABLE_REMOTE_DEBUG_ENVS=("dev" "test" "qa")
-PRODUCTION_ENVS=("pro" "prod" "product" "production")
-
 get_yaml_property()
 {
+    local val=$(yq '.["'$2'"]' $1)
+    
+    if [[ -n "$val" && "${val,,}" != "null" ]]; then
+        echo $val
+        return 0
+    fi
+
     local arr=(${2//./ })
     local keys=()
     local succ=0
     local cur_key=
     local new_key=
     local str=
-    local val=
     local i=0
-
+    
     for var in ${arr[@]}; do
         i=$((i+1))
         new_key=$cur_key
@@ -119,11 +100,43 @@ get_yaml_property()
     done
 }
 
+DEFAULT_JVM_MEMORY_OPTIONS=${DEFAULT_JVM_MEMORY_OPTIONS:--Xms256m -Xmx256m -Xss256k -XX:MaxDirectMemorySize=128m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:ReservedCodeCacheSize=256m}
+DEFAULT_STARTUP_WAIT_SECONDS=${DEFAULT_STARTUP_WAIT_SECONDS:-180}
+
+DEFAULT_RUNTIME_ENV="default"
+PRODUCTION_ENVS=("pro" "prod" "product" "production")
+ENABLE_REMOTE_DEBUG_ENVS=("default" "local" "dev" "test" "qa")
+
+RUNTIME_ENV_KEY='spring.profiles.active'
+SERVER_PORT_KEY='server.port'
+APP_NAME_KEY='hp.soa.web.app.name'
+REMOTE_DEBUG_PORT_KEY='hp.soa.special.remote-debug.port'
+STARTUP_WAIT_SECONDS_KEY="hp.soa.special.startup.max-wait-seconds"
+
+RUNTIME_ENV=${RUNTIME_ENV:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$RUNTIME_ENV_KEY")}
 APP_NAME=${APP_NAME:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$APP_NAME_KEY")}
 SERVER_PORT=${SERVER_PORT:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$SERVER_PORT_KEY")}
 REMOTE_DEBUG_PORT=${REMOTE_DEBUG_PORT:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$REMOTE_DEBUG_PORT_KEY")}
-JVM_OPTIONS=${JVM_OPTIONS:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$JVM_OPTIONS_KEY")}
 STARTUP_WAIT_SECONDS=${STARTUP_WAIT_SECONDS:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$STARTUP_WAIT_SECONDS_KEY")}
+
+if [[ -z "$RUNTIME_ENV" ]]; then
+    RUNTIME_ENV=$DEFAULT_RUNTIME_ENV
+fi
+
+JVM_OPTIONS_KEY="hp.soa.special.jvm-options.${RUNTIME_ENV}"
+JVM_OPTIONS=${JVM_OPTIONS:-$(get_yaml_property $BOOTSTRAP_YAML_FILE "$JVM_OPTIONS_KEY")}
+
+CONFIG_FILE_BASE_PATH=${CONFIG_FILE_BASE_PATH:-/opt/hp-soa/config}
+CONFIG_FILE_PATH=$CONFIG_FILE_BASE_PATH/$RUNTIME_ENV
+
+if [[ ! -d "$CONFIG_FILE_PATH" || "$(ls -A $CONFIG_FILE_PATH)" == "" ]]; then
+    CONFIG_FILE_PATH=$CONFIG_FILE_BASE_PATH
+fi
+
+SYSTEM_PROPERTIES_FILE=${SYSTEM_PROPERTIES_FILE:-$CONFIG_FILE_PATH/system-config.properties}
+EXTENDED_PROPERTIES_FILE=${EXTENDED_PROPERTIES_FILE:-$CONFIG_FILE_PATH/extended-config.properties}
+DUBBO_RESOLVE_PROPERTIES_FILE=${DUBBO_RESOLVE_PROPERTIES_FILE:-$CONFIG_FILE_PATH/dubbo-resolve.properties}
+JAVA_AGENT_CONFIG_FILE=${JAVA_AGENT_CONFIG_FILE:-$CONFIG_FILE_PATH/java-agent.config}
 
 if [[ -z "$APP_NAME" || -z "$SERVER_PORT"  ]]; then
     echo "  > environment check failed -> (can't find '$APP_NAME_KEY' / '$SERVER_PORT_KEY' property in bootstrap yaml file '$BOOTSTRAP_YAML_FILE')"
@@ -146,7 +159,7 @@ if [[ ${ENABLE_REMOTE_DEBUG_ENVS[@]/${RUNTIME_ENV,,}/} != ${ENABLE_REMOTE_DEBUG_
     REMOTE_DEBUG_OPTIONS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$REMOTE_DEBUG_ADDR:$REMOTE_DEBUG_PORT"
 fi
 
-LOG_FILE_PATH=${LOG_FILE_PATH:-/data/logs/access}
+LOG_FILE_PATH=${LOG_FILE_PATH:-/data/logs/app}
 LOG_FILE="${LOG_FILE_PATH}/${APP_NAME}/service.log"
 HEAP_DUMP_PATH="${LOG_FILE_PATH}/${APP_NAME}"
 
