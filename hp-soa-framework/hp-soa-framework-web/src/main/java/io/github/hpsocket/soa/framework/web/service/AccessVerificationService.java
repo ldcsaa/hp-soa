@@ -7,6 +7,13 @@ import io.github.hpsocket.soa.framework.core.util.Pair;
  */
 public interface AccessVerificationService
 {
+    /** 校验成功 */
+    Pair<Boolean, String> VERIFY_SUCCESS  = new Pair<>(Boolean.TRUE);
+    /** 校验失败 */
+    Pair<Boolean, String> VERIFY_FAIL     = new Pair<>(Boolean.FALSE);
+    /** 未登录用户 */
+    Pair<Long, String> NOT_LOGGED_IN_USER = new Pair<>((Long)null);
+    
     /** 应用程序编号校验，成功：Pair(True, ?)，失败：Pair(False, ?) */
     Pair<Boolean, String> verifyAppCode(String appCode, String srcAppCode);
     /** 用户身份校验，成功：Pair(userId, ?)，失败：Pair(null, ?) */

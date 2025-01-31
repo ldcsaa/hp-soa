@@ -12,7 +12,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <revision>1.0.15</revision>
+        <revision>1.0.16</revision>
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -127,8 +127,8 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-       -->
-         <!-- << END << : Develop Repositories -->
+        -->
+        <!-- << END << : Develop Repositories -->
 
         <repository>
             <snapshots>
@@ -187,7 +187,7 @@
             <url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
         -->
-        <!--<< END << : Develop Repositories -->
+        <!-- << END << : Develop Repositories -->
     </distributionManagement>
 
     <build>
