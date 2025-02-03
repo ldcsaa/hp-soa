@@ -303,6 +303,7 @@
                     <version>${maven-resources-plugin.version}</version>
                     <configuration>
                         <encoding>${project.build.sourceEncoding}</encoding>
+                        <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
                     </configuration>
                     <executions>
                         <execution>
