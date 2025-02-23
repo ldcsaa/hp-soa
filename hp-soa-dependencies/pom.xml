@@ -49,8 +49,7 @@
         <mybatis-spring-boot-starter.version>3.0.4</mybatis-spring-boot-starter.version>
         <mybatis-plus.version>3.5.10.1</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.3.1</dynamic-datasource-spring-boot3-starter.version>
-        <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
-        <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
+        <shardingsphere.version>5.5.2</shardingsphere.version>
         <ehcache.version>3.10.8</ehcache.version>
 
         <commons-io.version>2.18.0</commons-io.version>
@@ -575,13 +574,23 @@
             
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>shardingsphere-jdbc-core</artifactId>
-                <version>${shardingsphere-jdbc-core.version}</version>
+                <artifactId>shardingsphere-jdbc</artifactId>
+                <version>${shardingsphere.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
-                <version>${shardingsphere-jdbc-core-spring-boot-starter.version}</version>
+                <artifactId>shardingsphere-proxy-frontend</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-proxy-backend</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-proxy-bootstrap</artifactId>
+                <version>${shardingsphere.version}</version>
             </dependency>
             
             <dependency>
