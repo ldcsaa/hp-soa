@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
-import io.seata.spring.boot.autoconfigure.SeataAutoConfiguration;
+import org.apache.seata.spring.boot.autoconfigure.SeataAutoConfiguration;
 
-import static io.seata.spring.boot.autoconfigure.StarterConstants.SEATA_PREFIX;
+import static org.apache.seata.spring.boot.autoconfigure.StarterConstants.SEATA_PREFIX;
 
 /** <b>HP-SOA Seata 配置</b> */
 @AutoConfiguration

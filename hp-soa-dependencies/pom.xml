@@ -106,7 +106,7 @@
         <log4j-1.version>1.2.17</log4j-1.version>
         <jboss-logmanager.version>3.1.1.Final</jboss-logmanager.version>
         
-        <seata.version>2.0.0</seata.version>
+        <seata.version>2.2.0</seata.version>
     </properties>
     
     <dependencyManagement>
@@ -994,17 +994,17 @@
 
             <!-- seata -->
             <dependency>
-                <groupId>io.seata</groupId>
+                <groupId>org.apache.seata</groupId>
                 <artifactId>seata-all</artifactId>
                 <version>${seata.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.seata</groupId>
+                <groupId>org.apache.seata</groupId>
                 <artifactId>seata-spring-boot-starter</artifactId>
                 <version>${seata.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.seata</groupId>
+                <groupId>org.apache.seata</groupId>
                 <artifactId>seata-dubbo</artifactId>
                 <version>${seata.version}</version>
                 <type>pom</type>
