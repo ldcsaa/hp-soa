@@ -5,7 +5,10 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.kafka.annotation.EnableKafka;
 
+/* enable kafka listener */
+@EnableKafka
 @AutoConfiguration
 /* default mybatis mapper scan package -> ${hp.soa.data.mysql.mapper-scan.base-package} */
 @MapperScan("io.github.hpsocket.demo.kafka.mapper")
