@@ -1,0 +1,108 @@
+## Log4J 配置文件（默认：log4j2.xml）
+#logging.config: classpath:log4j2.xml
+#logging.config: classpath:log4j2-json.xml
+logging.config: classpath:log4j2-kafka.xml
+#logging.config: classpath:log4j2-redis.xml
+#logging.config: classpath:log4j2-gelf.xml
+
+## Spring-Boot 服务配置
+server:
+  # Servlet 配置
+  servlet:
+    context-path: /
+  # Tomcat 配置
+  tomcat:
+    max-connections: 10000
+    connection-timeout: 30000
+    threads:
+      max: 200
+      min-spare: 5
+  # undertow 配置
+  undertow:
+    buffer-size: 1024
+    direct-buffers: true
+    eager-filter-init: true
+    max-http-post-size: 10MB
+    threads:
+      worker: 64
+      io: 4
+
+## Spring 配置
+spring:
+  # Spring 应用程序名称
+  application.name: ${hp.soa.web.app.name}
+  # Spring Cloud 配置
+  cloud.config:
+    # 配置覆盖规则：（开发、测试环境）允许本地配置覆盖远程配置
+    allow-override: true              # 总开关，允许本地配置文件覆盖行为
+    override-none: true               # 不要覆盖本地任何配置（直接将远程配置的优先级降低到最低），前提条件是allowOverride是true
+    override-system-properties: true  # 覆盖本地JAVA属性值（java system property，也就是java -Dxxx传入的参数）
+    # 配置覆盖规则：（生产环境）不允许本地配置覆盖远程配置
+    #allow-override: false
+    #override-system-properties: false
+    #override-none: false
+  # Spring MVC
+  mvc:
+    servlet:
+      load-on-startup: 1
+      path: /
+    throw-exception-if-no-handler-found: false
+  # Spring Web
+  web:
+    resources:
+      add-mappings: false
+  # Spring Security
+  security:
+    user:
+      name: admin
+      password: "123456"
+      roles: ADMIN
+  # Spring Servlet
+  servlet:
+    # 文件上传
+    multipart:
+      enabled: false
+      max-file-size: 10MB
+      max-request-size: 10MB
+  # Spring Message
+  messages:
+    basename: i18n.messages
+    cache-duration: -1
+    encoding: UTF-8
+    fallback-to-system-locale: true
+
+## Spring-Boot Management 配置
+management:
+  endpoint:
+    health.show-details: when-authorized
+    # spring-boot 3.3-
+    #shutdown.enabled: false
+    # spring-boot 3.4+
+    shutdown.access: none
+  endpoints:
+    # spring-boot 3.3-
+    #enabled-by-default: true
+    # spring-boot 3.4+
+    access.default: unrestricted
+    jmx.exposure.exclude: "*"
+    web.base-path: /__admin
+    web.exposure.include: "*"
+  influx.metrics.export.enabled: false
+  metrics.tags.application: ${hp.soa.web.app.name}
+
+## Spring-Doc 配置
+springdoc:
+  api-docs:
+    # 是否开启（生成环境应设置为 false）
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    # 是否开启（生成环境应设置为 false）
+    enabled: true
+    path: /swagger-ui
+  packages-to-scan: com.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}
+  api-infos:
+    group-name: ${hp.soa.web.app.name}
+    title: ${hp.soa.web.app.name}
+    version: ${hp.soa.web.app.version}
+    description: "Spring Boot Project >> ${hp.soa.web.app.name} (v${hp.soa.web.app.version})"
