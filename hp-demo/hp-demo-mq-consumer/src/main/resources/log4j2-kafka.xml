@@ -124,7 +124,7 @@
             <AppenderRef ref="KAFKA_SERVICE"/>
         </Logger>
         <!-- Kafka Logger -->
-        <Logger name="org.apache.kafka" level="INFO" includeLocation="${log.includeLocation}" additivity="false">
+        <Logger name="org.apache.kafka" level="WARN" includeLocation="${log.includeLocation}" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
             <AppenderRef ref="KAFKA_SERVICE"/>
