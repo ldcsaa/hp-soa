@@ -2,5 +2,6 @@
 .project
 .flattened-pom.xml
 .factorypath
-.settings
-/target
+.settings/
+.idea/
+target/
