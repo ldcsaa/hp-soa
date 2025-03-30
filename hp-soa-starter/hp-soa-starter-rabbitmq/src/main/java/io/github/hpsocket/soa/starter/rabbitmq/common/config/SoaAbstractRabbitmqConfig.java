@@ -70,7 +70,7 @@ public abstract class SoaAbstractRabbitmqConfig
             {
                 List<Address> addresses = new ArrayList<>();
                 
-                for (String address : properties.determineAddresses().split(","))
+                for (String address : properties.determineAddresses())
                 {
                     int portSeparatorIndex = address.lastIndexOf(':');
                     String host = address.substring(0, portSeparatorIndex);
