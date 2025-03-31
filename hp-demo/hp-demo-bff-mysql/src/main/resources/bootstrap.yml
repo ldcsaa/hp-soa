@@ -32,7 +32,7 @@ spring.cloud.nacos.config:
 spring.config.import:
   - nacos:${hp.soa.web.app.name}.yml?group=DEMO_GROUP&refreshEnabled=true
   - nacos:hp-soa.yml?group=GLOBAL_GROUP&refreshEnabled=true
-  - nacos:spring-boot.yml?group=GLOBAL_GROUP&refreshEnabled=true
+  - nacos:spring-boot-3.4-later.yml?group=GLOBAL_GROUP&refreshEnabled=true
   - nacos:dubbo.yml?group=GLOBAL_GROUP&refreshEnabled=true
   - nacos:redis.yml?group=GLOBAL_GROUP&refreshEnabled=true
 
