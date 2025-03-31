@@ -76,14 +76,14 @@ management:
   endpoint:
     health.show-details: when-authorized
     # spring-boot 3.3-
-    shutdown.enabled: false
+    #shutdown.enabled: false
     # spring-boot 3.4+
-    #shutdown.access: none
+    shutdown.access: none
   endpoints:
     # spring-boot 3.3-
-    enabled-by-default: true
+    #enabled-by-default: true
     # spring-boot 3.4+
-    #access.default: unrestricted
+    access.default: unrestricted
     jmx.exposure.exclude: "*"
     web.base-path: /__admin
     web.exposure.include: "*"

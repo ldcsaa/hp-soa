@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import io.github.hpsocket.soa.framework.core.util.CryptHelper;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
@@ -418,13 +419,49 @@ public class HttpHelper
         return url;
     }
 
+    /** GZip 压缩 */
+    public final static byte[] gZip(byte[] bytes) throws IOException
+    {
+        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+
+        byte[] rs = gZip(bis);
+        bis.close();
+
+        return rs;
+    }
+
+    /** GZip 压缩 */
+    public final static byte[] gZip(InputStream in) throws IOException
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        gZip(in, baos);
+        byte[] rs = baos.toByteArray();
+
+        baos.close();
+
+        return rs;
+    }
+
+    /** GZip 压缩 */
+    public final static void gZip(InputStream in, OutputStream out) throws IOException
+    {
+        byte[] buffer         = new byte[DEFAULT_BUFFER_SIZE];
+        GZIPOutputStream gzip = new GZIPOutputStream(out);
+
+        int r;
+        while((r = in.read(buffer, 0, buffer.length)) != -1)
+            gzip.write(buffer, 0, r);
+
+        gzip.close();
+    }
+
     /** GZip 解压 */
     public final static byte[] unGZip(byte[] bytes) throws IOException
     {
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-        
+
         byte[] rs = unGZip(bis);
-        
         bis.close();
         
         return rs;
@@ -436,7 +473,6 @@ public class HttpHelper
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         
         unGZip(in, baos);
-        
         byte[] rs = baos.toByteArray();
         
         baos.close();
@@ -447,8 +483,8 @@ public class HttpHelper
     /** GZip 解压 */
     public final static void unGZip(InputStream in, OutputStream out) throws IOException
     {
-        byte[] buffer            = new byte[DEFAULT_BUFFER_SIZE];
-        GZIPInputStream gzip    = new GZIPInputStream(in);
+        byte[] buffer        = new byte[DEFAULT_BUFFER_SIZE];
+        GZIPInputStream gzip = new GZIPInputStream(in);
 
         int r;
         while((r = gzip.read(buffer, 0, buffer.length)) != -1)

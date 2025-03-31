@@ -33,8 +33,8 @@
         <zookeeper.version>3.9.3</zookeeper.version>
         <kryo.version>5.6.2</kryo.version>
         <fst.version>3.0.4-jdk17</fst.version>
-        <xxl-job.version>2.5.0</xxl-job.version>
-        <snail-job.version>1.2.0</snail-job.version>
+        <xxl-job.version>3.0.0</xxl-job.version>
+        <snail-job.version>1.3.0</snail-job.version>
         <sentinel.version>1.8.8</sentinel.version>
         <rocketmq-v5-client.version>2.3.1</rocketmq-v5-client.version>
         
@@ -49,8 +49,7 @@
         <mybatis-spring-boot-starter.version>3.0.4</mybatis-spring-boot-starter.version>
         <mybatis-plus.version>3.5.10.1</mybatis-plus.version>
         <dynamic-datasource-spring-boot3-starter.version>4.3.1</dynamic-datasource-spring-boot3-starter.version>
-        <shardingsphere-jdbc-core.version>5.4.1</shardingsphere-jdbc-core.version>
-        <shardingsphere-jdbc-core-spring-boot-starter.version>5.2.1</shardingsphere-jdbc-core-spring-boot-starter.version>
+        <shardingsphere.version>5.5.2</shardingsphere.version>
         <ehcache.version>3.10.8</ehcache.version>
 
         <commons-io.version>2.18.0</commons-io.version>
@@ -107,7 +106,7 @@
         <log4j-1.version>1.2.17</log4j-1.version>
         <jboss-logmanager.version>3.1.1.Final</jboss-logmanager.version>
         
-        <seata.version>2.0.0</seata.version>
+        <seata.version>2.2.0</seata.version>
     </properties>
     
     <dependencyManagement>
@@ -575,13 +574,23 @@
             
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>shardingsphere-jdbc-core</artifactId>
-                <version>${shardingsphere-jdbc-core.version}</version>
+                <artifactId>shardingsphere-jdbc</artifactId>
+                <version>${shardingsphere.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
-                <version>${shardingsphere-jdbc-core-spring-boot-starter.version}</version>
+                <artifactId>shardingsphere-proxy-frontend</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-proxy-backend</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-proxy-bootstrap</artifactId>
+                <version>${shardingsphere.version}</version>
             </dependency>
             
             <dependency>
@@ -985,17 +994,17 @@
 
             <!-- seata -->
             <dependency>
-                <groupId>io.seata</groupId>
+                <groupId>org.apache.seata</groupId>
                 <artifactId>seata-all</artifactId>
                 <version>${seata.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.seata</groupId>
+                <groupId>org.apache.seata</groupId>
                 <artifactId>seata-spring-boot-starter</artifactId>
                 <version>${seata.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.seata</groupId>
+                <groupId>org.apache.seata</groupId>
                 <artifactId>seata-dubbo</artifactId>
                 <version>${seata.version}</version>
                 <type>pom</type>
