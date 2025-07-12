@@ -12,11 +12,11 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <revision>1.0.17</revision>
+        <revision>1.0.18</revision>
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>17</maven.compiler.source>       
+        <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.assembly.descriptor>/opt/deploy/assembly/assembly.xml</maven.assembly.descriptor>
@@ -25,11 +25,11 @@
         <spring-boot.main_class>io.github.hpsocket.soa.framework.web.server.main.AppStarter</spring-boot.main_class>
         <spring-boot.jvm_arguments>${env.MAVEN_FORK_JVM_ARGS}</spring-boot.jvm_arguments>
 
-        <lombok.version>1.18.36</lombok.version>
+        <lombok.version>1.18.38</lombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <mapstruct.version>1.6.3</mapstruct.version>
 
-        <git-commit-id-maven-plugin.version>9.0.1</git-commit-id-maven-plugin.version>
+        <git-commit-id-maven-plugin.version>9.0.2</git-commit-id-maven-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
@@ -39,11 +39,11 @@
         <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
         <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
         <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
-        <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
-        <nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
-        <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
-        <docker-maven-plugin.version>0.45.1</docker-maven-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+        <flatten-maven-plugin.version>1.7.1</flatten-maven-plugin.version>
+        <docker-maven-plugin.version>0.46.0</docker-maven-plugin.version>
+        <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
 
         <maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
         <maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
@@ -57,7 +57,7 @@
         <module>hp-soa-framework</module>
         <module>hp-soa-starter</module>
     </modules>
-    
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -80,24 +80,6 @@
     </developers>
 
     <repositories>
-        <!-- >> BEGIN >> : Publish Repositories -->
-        <repository>
-            <id>ossrh-snapshots</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>ossrh-releases</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <!-- << END << : Publish Repositories -->
-
         <!-- >> BEGIN >> : Develop Repositories -->
         <!--
         <repository>
@@ -163,17 +145,6 @@
     </repositories>
 
     <distributionManagement>
-        <!-- >> BEGIN >> : Publish Repositories -->
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <!-- << END << : Publish Repositories -->
-
         <!-- >> BEGIN >> : Develop Repositories -->
         <!--
         <repository>
@@ -311,7 +282,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
@@ -320,13 +291,13 @@
                         <tagNameFormat>${project.version}</tagNameFormat>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>${maven-install-plugin.version}</version>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
@@ -350,7 +321,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
@@ -386,7 +357,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -409,7 +380,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -430,20 +401,22 @@
                         </execution>
                     </executions>
                 </plugin>
-                
+
                 <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${nexus-staging-maven-plugin.version}</version>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>${central-publishing-maven-plugin.version}</version>
                     <extensions>true</extensions>
                     <configuration>
-                        <serverId>ossrh</serverId>
-                        <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        <stagingProgressTimeoutMinutes>60</stagingProgressTimeoutMinutes>
+                        <publishingServerId>central</publishingServerId>
+                        <autoPublish>true</autoPublish>
+                        <checksums>required</checksums>
+                        <waitUntil>published</waitUntil>
+                        <waitMaxTime>3600</waitMaxTime>
+                        <deploymentName>${project.groupId}:hp-soa:${project.version}</deploymentName>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
@@ -483,7 +456,7 @@
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok-mapstruct-binding</artifactId>
                             </exclude>
-                         </excludes>                        
+                         </excludes>
                     </configuration>
                     <executions>
                         <execution>
@@ -493,7 +466,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
@@ -568,13 +541,13 @@
 
             </plugins>
         </pluginManagement>
-        
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
             </plugin>
-            
+
             <!-- >> BEGIN >> : Publish Plugins -->
             <!--
             -->
@@ -583,8 +556,8 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
