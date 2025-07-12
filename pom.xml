@@ -12,7 +12,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <revision>1.3.1-SNAPSHOT</revision>
+        <revision>1.3.1</revision>
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -41,9 +41,9 @@
         <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-        <nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
         <flatten-maven-plugin.version>1.7.1</flatten-maven-plugin.version>
         <docker-maven-plugin.version>0.46.0</docker-maven-plugin.version>
+        <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
 
         <maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
         <maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>
@@ -80,27 +80,8 @@
     </developers>
 
     <repositories>
-        <!-- >> BEGIN >> : Publish Repositories -->
-        <!--
-        <repository>
-            <id>ossrh-snapshots</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>ossrh-releases</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        -->
-        <!-- << END << : Publish Repositories -->
-
         <!-- >> BEGIN >> : Develop Repositories -->
+        <!--
         <repository>
             <id>private-snapshots</id>
             <name>Private Snapshots</name>
@@ -128,6 +109,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        -->
         <!-- << END << : Develop Repositories -->
 
         <repository>
@@ -163,20 +145,8 @@
     </repositories>
 
     <distributionManagement>
-        <!-- >> BEGIN >> : Publish Repositories -->
-        <!--
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        -->
-        <!-- << END << : Publish Repositories -->
-
         <!-- >> BEGIN >> : Develop Repositories -->
+        <!--
         <repository>
             <id>private</id>
             <name>Private Nexus Releases Repository</name>
@@ -187,6 +157,7 @@
             <name>Private Nexus Snapshots Repository</name>
             <url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
+        -->
         <!-- << END << : Develop Repositories -->
     </distributionManagement>
 
@@ -432,15 +403,17 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${nexus-staging-maven-plugin.version}</version>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>${central-publishing-maven-plugin.version}</version>
                     <extensions>true</extensions>
                     <configuration>
-                        <serverId>ossrh</serverId>
-                        <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        <stagingProgressTimeoutMinutes>60</stagingProgressTimeoutMinutes>
+                        <publishingServerId>central</publishingServerId>
+                        <autoPublish>true</autoPublish>
+                        <checksums>required</checksums>
+                        <waitUntil>published</waitUntil>
+                        <waitMaxTime>3600</waitMaxTime>
+                        <deploymentName>${project.groupId}:hp-soa:${project.version}</deploymentName>
                     </configuration>
                 </plugin>
 
@@ -577,19 +550,19 @@
 
             <!-- >> BEGIN >> : Publish Plugins -->
             <!--
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
             </plugin>
-            -->
             <!-- << END << : Publish Plugins -->
         </plugins>
         
