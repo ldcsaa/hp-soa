@@ -1,6 +1,7 @@
 
 package io.github.hpsocket.soa.starter.job.snailjob.aspect;
 
+import com.aizuda.snailjob.model.dto.ExecuteResult;
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -12,7 +13,6 @@ import org.springframework.util.Assert;
 
 import com.aizuda.snailjob.client.job.core.annotation.JobExecutor;
 import com.aizuda.snailjob.client.job.core.dto.JobArgs;
-import com.aizuda.snailjob.client.model.ExecuteResult;
 
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.starter.job.snailjob.executor.JobInvoker;
@@ -24,8 +24,8 @@ public class SnailJobMdcInspector
 {
     public static final int ORDER               = 0;
     public static final String POINTCUT_PATTERN = """
-                                                  (execution (public com.aizuda.snailjob.client.model.ExecuteResult *.*(com.aizuda.snailjob.client.job.core.dto.JobArgs)) && @annotation(com.aizuda.snailjob.client.job.core.annotation.JobExecutor)) ||
-                                                  (execution (public com.aizuda.snailjob.client.model.ExecuteResult *.*(com.aizuda.snailjob.client.job.core.dto.JobArgs)) && @within(com.aizuda.snailjob.client.job.core.annotation.JobExecutor))
+                                                  (execution (public com.aizuda.snailjob.model.dto.ExecuteResult *.*(com.aizuda.snailjob.client.job.core.dto.JobArgs)) && @annotation(com.aizuda.snailjob.client.job.core.annotation.JobExecutor)) ||
+                                                  (execution (public com.aizuda.snailjob.model.dto.ExecuteResult *.*(com.aizuda.snailjob.client.job.core.dto.JobArgs)) && @within(com.aizuda.snailjob.client.job.core.annotation.JobExecutor))
                                                   """;
     
     private static final AspectHelper.AnnotationHolder<JobExecutor> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};

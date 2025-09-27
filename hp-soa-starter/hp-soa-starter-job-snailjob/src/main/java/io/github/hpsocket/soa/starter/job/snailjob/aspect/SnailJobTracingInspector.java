@@ -15,7 +15,7 @@ import org.aspectj.lang.annotation.Pointcut;
 public class SnailJobTracingInspector
 {
     private static final String POINTCUT_PATTERN = """
-                                                   (execution (public com.aizuda.snailjob.client.model.ExecuteResult io.github.hpsocket.soa.starter.job.snailjob.executor.JobInvoker.invoke(..)))
+                                                   (execution (public com.aizuda.snailjob.model.dto.ExecuteResult io.github.hpsocket.soa.starter.job.snailjob.executor.JobInvoker.invoke(..)))
                                                    """;
     @Pointcut(POINTCUT_PATTERN)
     protected void aroundMethod() {}
