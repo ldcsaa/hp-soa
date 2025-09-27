@@ -6,7 +6,7 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 import com.aizuda.snailjob.client.job.core.annotation.JobExecutor;
 import com.aizuda.snailjob.client.job.core.dto.JobArgs;
-import com.aizuda.snailjob.client.model.ExecuteResult;
+import com.aizuda.snailjob.model.dto.ExecuteResult;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,7 @@ public class SnailAnnotationJobHandler
 
         if((++i) % 5 == 0)
             throw new RuntimeException("test thow exceptions");
-        
+
         return ExecuteResult.success(jobArgs.getTaskBatchId());
     }
     

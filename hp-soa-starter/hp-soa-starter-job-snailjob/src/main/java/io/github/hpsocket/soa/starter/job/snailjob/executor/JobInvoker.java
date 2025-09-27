@@ -3,11 +3,11 @@ package io.github.hpsocket.soa.starter.job.snailjob.executor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Supplier;
 
+import com.aizuda.snailjob.model.dto.ExecuteResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
 
 import com.aizuda.snailjob.client.job.core.dto.JobArgs;
-import com.aizuda.snailjob.client.model.ExecuteResult;
 
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
