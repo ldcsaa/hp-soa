@@ -58,12 +58,12 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     @Setter
     public static class HttpProperties
     {
-        public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+        public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
         
         private String dateTimeFormat   = DEFAULT_DATE_TIME_FORMAT;
-        
-        private boolean returnRequestId = false;
-        
+        private boolean returnRequestId = true;
+        private boolean useFastJsonMessageConverter = true;
+
         @NestedConfigurationProperty
         private CookieProperties cookie = new CookieProperties();
         @NestedConfigurationProperty
