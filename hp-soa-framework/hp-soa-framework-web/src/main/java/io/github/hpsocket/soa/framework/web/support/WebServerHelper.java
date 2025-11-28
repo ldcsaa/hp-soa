@@ -95,6 +95,10 @@ public class WebServerHelper
     public static final String MONITOR_INGRESS          = "MONITOR-INGRESS";
     public static final String MONITOR_EGRESS           = "MONITOR-EGRESS";
 
+    public static final int REQ_BODY_MAX_LOG_LENGTH     = 4096;
+    public static final int RESP_BODY_MAX_LOG_LENGTH    = 8192;
+
+
     private static final ThreadLocal<Long> TIMESTAMP    = new ThreadLocal<>();
     
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT        = {WriteByteArrayAsBase64, WriteNonStringKeyAsString, WriteMapNullValue};

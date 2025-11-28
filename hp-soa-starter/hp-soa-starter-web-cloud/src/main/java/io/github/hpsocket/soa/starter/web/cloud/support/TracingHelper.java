@@ -119,7 +119,7 @@ public class TracingHelper
         }
         
         Response<CloudExceptionInfo> resp = new Response<>(ServiceException.INNER_API_CALL_EXCEPTION);
-        resp.setResult(info);
+        resp.setData(info);
         
         return resp;
     }

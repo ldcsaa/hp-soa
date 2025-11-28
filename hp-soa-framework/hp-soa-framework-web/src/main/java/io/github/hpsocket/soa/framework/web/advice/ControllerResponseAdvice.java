@@ -104,17 +104,17 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             
             if(rt == Response.RT_LOGIN)
             {
-                Object result = respBody.getResult();
+                Object data = respBody.getData();
                 
-                if(result != null)
+                if(data != null)
                 {
                     String token = null;
                     
-                    if(result instanceof Map<?, ?> map)
+                    if(data instanceof Map<?, ?> map)
                         token = (String)map.get(RESPONSE_TOKEN);
                     else
                     {
-                        BeanMap map = BeanMap.create(result);
+                        BeanMap map = BeanMap.create(data);
                         token = (String)map.get(RESPONSE_TOKEN);
                     }
                     
@@ -149,7 +149,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                 @Override
                 public void doRun()
                 {
-                    log.info("[ RESPONSE: {} ] -> {}", requestAttribute.getRequestPath(), JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_DEFAULT));
+                    String strBody = GeneralHelper.truncateAndMore(JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_NO_NULL_VAL), RESP_BODY_MAX_LOG_LENGTH);
+                    log.info("[ RESPONSE: {} ] -> {}", requestAttribute.getRequestPath(), strBody);
                 }
             });
         }
@@ -180,21 +181,24 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                         jsonLog.put(k, v);
                 });
                 
-                Object reqBody = JSON.toJSON(requestAttribute.getBody());
+                Object reqBody = JSON.toJSON(requestAttribute.getBody(), JSON_SERIAL_FEATURES_NO_NULL_VAL);
                 
                 if(reqBody != null)
-                    jsonLog.put("request", reqBody.toString());
+                {
+                    String reqBodyStr = GeneralHelper.truncateAndMore(reqBody.toString(), REQ_BODY_MAX_LOG_LENGTH);
+                    jsonLog.put("request", reqBodyStr);
+                }
                 
                 jsonLog.put("monitor_type", MONITOR_INGRESS);
                 jsonLog.put("apiName", rt.getDeclaringClass().getSimpleName().concat("#").concat(rt.getMethod().getName()));
-                jsonLog.put("response", JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_DEFAULT));
+                jsonLog.put("response", GeneralHelper.truncateAndMore(JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_NO_NULL_VAL), RESP_BODY_MAX_LOG_LENGTH));
                 
                 if(body instanceof Response<?> respBody)
                 {                    
                     jsonLog.put("resultCode", respBody.getResultCode());
                     jsonLog.put("statusCode", respBody.getStatusCode());
                     jsonLog.put("costTime", respBody.getCostTime());
-                    jsonLog.put("msg", GeneralHelper.equals(respBody.getStatusCode(), PARAM_VERIFY_ERROR) ? respBody.getMsg() + ": " + JSONObject.toJSONString(respBody.getValidationErrors()) : respBody.getMsg());
+                    jsonLog.put("msg", GeneralHelper.equals(respBody.getStatusCode(), PARAM_VERIFY_ERROR) ? respBody.getMessage() + ": " + JSONObject.toJSONString(respBody.getValidationErrors()) : respBody.getMessage());
                 }
                 
                 if(GeneralHelper.isStrNotEmpty(ua))

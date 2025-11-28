@@ -268,6 +268,20 @@ public class GeneralHelper
         return ((st > 0) || (len < str.length())) ? str.substring(st, len) : str;
     }
 
+    /** 截取指定长度字符串并在字符串后面加上“...”，如果字符串不超过指定长度则返回原字符串 */
+    public final static String truncateAndMore(String str, int len)
+    {
+        int strLen = safeString(str).length();
+
+        if(strLen > len)
+        {
+            StringBuilder sb = new StringBuilder(len + 3);
+            return sb.append(str.substring(0, len)).append("...").toString();
+        }
+
+        return str;
+    }
+
     /** 检查字符串是否符合整数格式 */
     public final static boolean isStrNumeric(String str)
     {

@@ -66,21 +66,21 @@ public class AccessVerificationInspector
             
             Response<?> resp = inspectApp(reqAttr);
             
-            if(resp.getResult() == null)
+            if(resp.getData() == null)
                 return resp;
             
             if(type != NO_LOGIN)
             {
                 resp = inspectUser(reqAttr, type);
                 
-                if(resp.getResult() == null)
+                if(resp.getData() == null)
                     return resp;
                 
                 if(type == REQUIRE_AUTHORIZED)
                 {
                     resp = inspectRole(reqAttr);
                     
-                    if(resp.getResult() == null)
+                    if(resp.getData() == null)
                         return resp;
                 }
             }
