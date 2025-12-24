@@ -210,7 +210,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                     jsonUa.put("name", ua);
                     jsonUa.put("browser", browser.getName().concat(GeneralHelper.isStrNotEmpty(agent.getVersion()) ? " " + agent.getVersion() : ""));
                     jsonUa.put("browserType", agent.getEngine().getName().concat(GeneralHelper.isStrNotEmpty(agent.getEngineVersion()) ? " " + agent.getEngineVersion() : ""));
-                    jsonUa.put("deviceType", browser.isUnknown() ? Browser.Unknown.getName() : (agent.isMobile() ? "Mobile" : "Desktop"));
+                    jsonUa.put("deviceType", browser.isUnknown() ? Browser.Unknown.getName() : (agent.getPlatform() != null ? agent.getPlatform().getName() : ""));
                     jsonUa.put("platform", agent.getOs().getName().concat(GeneralHelper.isStrNotEmpty(agent.getOsVersion()) ? " " + agent.getOsVersion() : ""));
                                         
                     jsonLog.put("ua", jsonUa);

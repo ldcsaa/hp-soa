@@ -383,18 +383,7 @@ public class WebServerHelper
     /** 获取 HTTP 请求头（兼容小写） */
     public static final String getHeader(HttpServletRequest request, String name)
     {
-        return getHeader(request, name, true);
-    }
-    
-    /** 获取 HTTP 请求头（可设置是否兼容小写） */
-    public static final String getHeader(HttpServletRequest request, String name, boolean lcCompatible)
-    {
-        String value = request.getHeader(name);
-        
-        if(value == null && lcCompatible)
-            value = request.getHeader(name.toLowerCase());
-        
-        return value;
+        return request.getHeader(name);
     }
 
     /** 创建调用链 MDC 相关属性 */

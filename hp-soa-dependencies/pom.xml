@@ -16,7 +16,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <spring-boot.version>3.4.12</spring-boot.version>
+        <spring-boot.version>3.4.13</spring-boot.version>
         <spring-cloud.version>2024.0.2</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.3.4</spring-cloud-alibaba.version>
         <springdoc-openapi.version>2.8.14</springdoc-openapi.version>

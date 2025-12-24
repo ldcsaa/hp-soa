@@ -21,7 +21,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.assembly.descriptor>/opt/deploy/assembly/assembly.xml</maven.assembly.descriptor>
 
-        <spring-boot-maven-plugin.version>3.4.12</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>3.4.13</spring-boot-maven-plugin.version>
         <spring-boot.main_class>io.github.hpsocket.soa.framework.web.server.main.AppStarter</spring-boot.main_class>
         <spring-boot.jvm_arguments>${env.MAVEN_FORK_JVM_ARGS}</spring-boot.jvm_arguments>
 
