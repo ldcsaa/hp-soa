@@ -1,8 +1,8 @@
 package io.github.hpsocket.soa.framework.core.paging;
 
+import java.io.Serializable;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +11,27 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class PageResult<T>
+@SuppressWarnings("serial")
+public class PageResult<T> implements Serializable
 {
-    private PageInfo page;
-    private List<T> data;
+    private PageInfo pageInfo;
+    private List<? extends T> list;
+
+    public PageResult(PageInfo pageInfo, List<? extends T> list)
+    {
+        int pageRows = pageInfo.getPageRows();
+        int listSize = list.size();
+
+        if(pageRows != listSize)
+            throw new IllegalArgumentException(String.format("page rows (%d) does not match list size (%d)", pageRows, listSize));
+
+        this.pageInfo = pageInfo;
+        this.list     = list;
+    }
+
+    public PageResult(int pageNumber, int pageSize, int totalRows, List<? extends T> list)
+    {
+        this(new PageInfo(pageNumber, pageSize, totalRows), list);
+    }
+
 }

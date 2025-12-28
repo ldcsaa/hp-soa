@@ -93,15 +93,19 @@ public class SystemUtil
             while(ifs.hasMoreElements())
             {
                 NetworkInterface ni = ifs.nextElement();
-                Enumeration<InetAddress> addresses = ni.getInetAddresses();
 
-                while(addresses.hasMoreElements())
+                if(ni.isUp())
                 {
-                    InetAddress ia = addresses.nextElement();
+                    Enumeration<InetAddress> addresses = ni.getInetAddresses();
 
-                    if(isValidUnicastAddress(ia))
+                    while(addresses.hasMoreElements())
                     {
-                        addr.ips.add(ia.getHostAddress());
+                        InetAddress ia = addresses.nextElement();
+
+                        if(isValidUnicastAddress(ia))
+                        {
+                            addr.ips.add(ia.getHostAddress());
+                        }
                     }
                 }
             }
@@ -114,7 +118,9 @@ public class SystemUtil
                 addr.ips.add(addr.ip);
             }
             else if(!addr.ips.isEmpty())
+            {
                 addr.ip = addr.ips.iterator().next();
+            }
 
             addr.host = localAddr.getHostName();
         }
