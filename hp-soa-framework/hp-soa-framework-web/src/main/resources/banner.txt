@@ -7,4 +7,4 @@
           OS : ${os.name} ${os.arch}
         Java : ${java.version}
  Spring Boot : ${spring-boot.version}
-      HP-SOA : ${hpsoa.version}
+      HP-SOA : ${hp-soa.version}
