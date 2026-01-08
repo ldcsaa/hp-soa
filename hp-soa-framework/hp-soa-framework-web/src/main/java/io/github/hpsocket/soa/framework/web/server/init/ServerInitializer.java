@@ -94,7 +94,7 @@ public class ServerInitializer
             PropertySource<?> propertySource = factory.createPropertySource(filePath, new EncodedResource(resource));
             Properties props = (Properties)propertySource.getSource();
             
-            props.forEach((k, v) -> GeneralHelper.setSystemPropertyIfAbsent((String)k, (String)v));
+            props.forEach((k, v) -> GeneralHelper.setSystemPropertyIfAbsent((String)k, v));
         }
         catch(IOException e)
         {

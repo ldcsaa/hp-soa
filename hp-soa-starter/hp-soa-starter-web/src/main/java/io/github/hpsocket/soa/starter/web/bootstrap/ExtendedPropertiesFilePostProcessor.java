@@ -2,6 +2,7 @@ package io.github.hpsocket.soa.starter.web.bootstrap;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.springframework.boot.SpringApplication;
@@ -81,6 +82,9 @@ public class ExtendedPropertiesFilePostProcessor implements EnvironmentPostProce
             PropertySource<?> propertySource = factory.createPropertySource(filePath, new EncodedResource(resource));
             MutablePropertySources propertySources = environment.getPropertySources();
             propertySources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, propertySource);
+
+            Properties props = (Properties)propertySource.getSource();
+            props.forEach((k, v) -> GeneralHelper.setSystemPropertyIfAbsent((String)k, v));
         }
         catch(IOException e)
         {
