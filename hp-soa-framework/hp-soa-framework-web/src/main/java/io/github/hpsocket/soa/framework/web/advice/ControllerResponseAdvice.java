@@ -2,6 +2,7 @@ package io.github.hpsocket.soa.framework.web.advice;
 
 import java.util.Map;
 
+import cn.hutool.http.useragent.Platform;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
@@ -30,7 +31,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 
-import cn.hutool.http.useragent.Browser;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentParser;
 
@@ -205,13 +205,14 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                 {
                     JSONObject jsonUa = new JSONObject();
                     UserAgent agent   = UserAgentParser.parse(ua);
-                    Browser browser   = agent.getBrowser();
+                    Platform platform = agent.getPlatform();
                     
                     jsonUa.put("name", ua);
-                    jsonUa.put("browser", browser.getName().concat(GeneralHelper.isStrNotEmpty(agent.getVersion()) ? " " + agent.getVersion() : ""));
-                    jsonUa.put("browserType", agent.getEngine().getName().concat(GeneralHelper.isStrNotEmpty(agent.getEngineVersion()) ? " " + agent.getEngineVersion() : ""));
-                    jsonUa.put("deviceType", browser.isUnknown() ? Browser.Unknown.getName() : (agent.getPlatform() != null ? agent.getPlatform().getName() : ""));
-                    jsonUa.put("platform", agent.getOs().getName().concat(GeneralHelper.isStrNotEmpty(agent.getOsVersion()) ? " " + agent.getOsVersion() : ""));
+                    jsonUa.put("browser", agent.getBrowser().getName().concat(GeneralHelper.isStrNotEmpty(agent.getVersion()) ? " " + agent.getVersion() : ""));
+                    jsonUa.put("engine", agent.getEngine().getName().concat(GeneralHelper.isStrNotEmpty(agent.getEngineVersion()) ? " " + agent.getEngineVersion() : ""));
+                    jsonUa.put("os", agent.getOs().getName().concat(GeneralHelper.isStrNotEmpty(agent.getOsVersion()) ? " " + agent.getOsVersion() : ""));
+                    jsonUa.put("platform", platform.getName());
+                    jsonUa.put("isMobile", platform.isUnknown() ? null : agent.isMobile());
                                         
                     jsonLog.put("ua", jsonUa);
                 }
