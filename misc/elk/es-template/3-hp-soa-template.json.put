@@ -285,9 +285,12 @@ PUT _index_template/hp-soa-template
                     "type": "keyword"
                 },
                 "requestPath": {
-                    "type": "text"
+                    "type": "keyword"
                 },
                 "requestUri": {
+                    "type": "keyword"
+                },
+                "requestParams": {
                     "type": "text"
                 },
                 "response": {

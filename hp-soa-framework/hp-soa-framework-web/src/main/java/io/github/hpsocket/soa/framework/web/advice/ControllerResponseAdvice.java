@@ -150,7 +150,7 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                 public void doRun()
                 {
                     String strBody = GeneralHelper.truncateAndMore(JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_NO_NULL_VAL), RESP_BODY_MAX_LOG_LENGTH);
-                    log.info("[ RESPONSE: {} ] -> {}", requestAttribute.getRequestPath(), strBody);
+                    log.info("[ RESPONSE ] -> {}", strBody);
                 }
             });
         }
@@ -172,27 +172,21 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             protected void doRun()
             {                
                 JSONObject jsonLog = new JSONObject();
-            
-                @SuppressWarnings("unchecked")
-                final Map<String, ?> reqAttr = BeanMap.create(requestAttribute);
 
-                reqAttr.forEach((k, v) -> {
-                    if(v != null && !k.equals("body"))
-                        jsonLog.put(k, v);
-                });
-                
-                Object reqBody = JSON.toJSON(requestAttribute.getBody(), JSON_SERIAL_FEATURES_NO_NULL_VAL);
-                
-                if(reqBody != null)
-                {
-                    String reqBodyStr = GeneralHelper.truncateAndMore(reqBody.toString(), REQ_BODY_MAX_LOG_LENGTH);
-                    jsonLog.put("request", reqBodyStr);
-                }
-                
                 jsonLog.put("monitor_type", MONITOR_INGRESS);
-                jsonLog.put("apiName", rt.getDeclaringClass().getSimpleName().concat("#").concat(rt.getMethod().getName()));
+                jsonLog.put("apiName", String.join("#", rt.getDeclaringClass().getName(), rt.getMethod().getName()));
+
+                jsonLog.put("clientAddr", requestAttribute.getClientAddr());
+                jsonLog.put("requestUri", requestAttribute.getRequestUri());
+                jsonLog.put("requestPath", requestAttribute.getRequestPath());
+                jsonLog.put("requestMethod", requestAttribute.getRequestMethod());
+                if(GeneralHelper.isNotNullOrEmpty(requestAttribute.getRequestParams()))
+                    jsonLog.put("requestParams", JSON.toJSONString(requestAttribute.getRequestParams(), JSON_SERIAL_FEATURES_NO_NULL_VAL));
+                if(GeneralHelper.isNotNull(requestAttribute.getBody()))
+                    jsonLog.put("request", GeneralHelper.truncateAndMore(JSON.toJSONString(requestAttribute.getBody(), JSON_SERIAL_FEATURES_NO_NULL_VAL), REQ_BODY_MAX_LOG_LENGTH));
+
                 jsonLog.put("response", GeneralHelper.truncateAndMore(JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_NO_NULL_VAL), RESP_BODY_MAX_LOG_LENGTH));
-                
+
                 if(body instanceof Response<?> respBody)
                 {                    
                     jsonLog.put("resultCode", respBody.getResultCode());

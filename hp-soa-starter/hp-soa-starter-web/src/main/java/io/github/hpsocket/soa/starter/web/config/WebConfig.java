@@ -30,7 +30,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractAu
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistration;
@@ -155,8 +155,8 @@ public class WebConfig implements WebMvcConfigurer
             
             http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                .requestMatchers(AntPathRequestMatcher.antMatcher(managementBasePath)).authenticated()
-                .requestMatchers(AntPathRequestMatcher.antMatcher(AppConfigHolder.ANT_PATH_WILDCARD)).permitAll())
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(managementBasePath)).authenticated()
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(AppConfigHolder.ANT_PATH_WILDCARD)).permitAll())
             .csrf((csrf) -> csrf.disable())
             .httpBasic(Customizer.withDefaults())
             .formLogin(new Customizer<FormLoginConfigurer<HttpSecurity>>()

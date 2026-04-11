@@ -1,8 +1,12 @@
 package io.github.hpsocket.soa.framework.web.model;
 
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Map;
 
 /** <b>HTTP 请求属性</b> */
 @Getter
@@ -20,18 +24,18 @@ public class RequestAttribute
     private String requestId;
     private String sessionId;
     private Long groupId;
-    
-    private String clientAddr;
-    private String requestUri;
-    private String requestPath;
-    private String requestMethod;
-    
     private String region;
     private String language;
     private String version;
     private String extra;
-    
-    private transient Long userId;
+
+    private Long userId;
+
+    private String clientAddr;
+    private String requestUri;
+    private String requestPath;
+    private String requestMethod;
+    private Map<String, String> requestParams;
     
     private Object body;
     
@@ -49,5 +53,16 @@ public class RequestAttribute
         this.requestId  = requestId;
         this.sessionId  = sessionId;
         this.groupId    = groupId;
+    }
+
+    public RequestAttribute parseBasicRequestAttributes(HttpServletRequest request)
+    {
+        clientAddr      = WebServerHelper.getRequestAddr(request);
+        requestUri      = WebServerHelper.getRequestUri(request);
+        requestPath     = WebServerHelper.getRequestPath(request);
+        requestMethod   = WebServerHelper.getRequestMethod(request);
+        requestParams   = WebServerHelper.getRequestParams(request);
+
+        return this;
     }
 }

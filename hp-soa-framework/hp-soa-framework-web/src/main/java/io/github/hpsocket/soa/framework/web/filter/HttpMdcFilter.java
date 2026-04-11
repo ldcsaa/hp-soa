@@ -2,6 +2,8 @@
 
 import java.io.IOException;
 
+import com.alibaba.fastjson2.JSONObject;
+import io.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -19,7 +21,9 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 import lombok.extern.slf4j.Slf4j;
 
-/** <b>HTTP 请求 MDC 过滤器</b><br>
+import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
+
+    /** <b>HTTP 请求 MDC 过滤器</b><br>
  * 主要功能：
  * <ol>
  * <li>为 HTTP 请求注入调用链跟踪信息</li>
@@ -42,28 +46,30 @@ public class HttpMdcFilter implements Filter
     @Override
     public void destroy()
     {
-        log.info("({}) shutted down !", DISPLAY_NAME);
+        log.info("({}) shutting down !", DISPLAY_NAME);
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
         WebServerHelper.StartTiming();
-        
+
         MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false, true);
         RequestAttribute reqAttr = RequestContext.parseRequestAttribute((HttpServletRequest)request, (HttpServletResponse)response);
-        
+
         try
         {            
             fillMdcAttr(mdcAttr, reqAttr);
             mdcAttr.putMdc();
+
+            logRequest(reqAttr);
 
             chain.doFilter(request, response);
         }
         finally
         {
             RequestContext.removeRequestAttribute();
-            
+            WebServerHelper.endTiming();
             mdcAttr.removeMdc();
         }
     }
@@ -94,5 +100,25 @@ public class HttpMdcFilter implements Filter
             mdcAttr.setVersion(reqAttr.getVersion());
         if(GeneralHelper.isStrNotEmpty(reqAttr.getExtra()))
             mdcAttr.setExtra(reqAttr.getExtra());
+    }
+
+    private static void logRequest(final RequestAttribute reqAttr)
+    {
+        try
+        {
+            ASYNC_LOG_EXECUTOR.execute(new MdcRunnable()
+            {
+                @Override
+                protected void doRun()
+                {
+                    String strRequest = GeneralHelper.truncateAndMore(JSONObject.toJSONString(reqAttr, JSON_SERIAL_FEATURES_NO_NULL_VAL), REQ_BODY_MAX_LOG_LENGTH);
+                    log.info("[ REQUEST : {} ] -> {}", reqAttr.getRequestPath(), strRequest);
+                }
+            });
+        }
+        catch(Exception e)
+        {
+            log.error("async write request log fail", e);
+        }
     }
 }

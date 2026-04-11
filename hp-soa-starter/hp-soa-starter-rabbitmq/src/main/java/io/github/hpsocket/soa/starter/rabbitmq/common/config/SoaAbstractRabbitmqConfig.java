@@ -172,5 +172,4 @@ public abstract class SoaAbstractRabbitmqConfig
         return (value) -> (value != null) ? value : fallback.get();
     }
 
-
 }

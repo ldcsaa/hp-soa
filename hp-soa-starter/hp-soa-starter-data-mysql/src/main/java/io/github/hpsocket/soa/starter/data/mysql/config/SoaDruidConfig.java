@@ -61,7 +61,19 @@ public class SoaDruidConfig
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
             {
                 chain.doFilter(request, response);
-                response.resetBuffer();
+
+                if(response.isCommitted())
+                    return;
+
+                try
+                {
+                    response.resetBuffer();
+                }
+                catch (Exception e)
+                {
+                    log.warn("(DruidAdRemoverFilter) execute fail: {}", e.getMessage());
+                    return;
+                }
                 
                 if(GeneralHelper.isStrEmpty(commonJs))
                 {
@@ -83,6 +95,7 @@ public class SoaDruidConfig
 
         registrationBean.setFilter(filter);
         registrationBean.addUrlPatterns(commonJsPattern);
+        registrationBean.setOrder(Integer.MAX_VALUE);
 
         return registrationBean;
     }

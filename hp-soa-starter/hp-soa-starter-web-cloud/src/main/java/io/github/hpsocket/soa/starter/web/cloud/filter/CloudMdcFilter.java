@@ -38,7 +38,7 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
     @Override
     public void destroy()
     {
-        log.info("({}) shutted down !", DISPLAY_NAME);
+        log.info("({}) shutting down !", DISPLAY_NAME);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
             MdcAttr mdcAttr = WebServerHelper.createMdcAttr(false, isEntry);
             
             try
-            {            
+            {
                 TracingHelper.fillMdcAttr(mdcAttr, tracingInfo);
                 TracingHelper.setRequestAttribute(mdcAttr, (HttpServletRequest)request);
                 
@@ -66,7 +66,7 @@ public class CloudMdcFilter extends HttpMdcFilter implements Filter
             finally
             {
                 RequestContext.removeRequestAttribute();
-                
+                WebServerHelper.endTiming();
                 mdcAttr.removeMdc();
             }
         }

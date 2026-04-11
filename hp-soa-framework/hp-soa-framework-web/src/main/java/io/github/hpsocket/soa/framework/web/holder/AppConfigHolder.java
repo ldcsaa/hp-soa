@@ -37,6 +37,8 @@ public class AppConfigHolder
     private static int appPort;
     
     private static boolean returnRequestId;
+    private static String cookieDomain;
+    private static String cookiePath;
     private static int cookieMaxAge;
     private static boolean cookieSecure;
     private static boolean cookieHttpOnly;
@@ -69,6 +71,8 @@ public class AppConfigHolder
                     appOrganization  = appProperties.getOrganization();
                     appOwner         = appProperties.getOwner();
                     returnRequestId  = appProperties.isReturnRequestId();
+                    cookieDomain     = appProperties.getCookieDomain();
+                    cookiePath        = appProperties.getCookiePath();
                     cookieMaxAge     = appProperties.getCookieMaxAge();
                     cookieSecure     = appProperties.isCookieSecure();
                     cookieHttpOnly   = appProperties.isCookieHttpOnly();
@@ -178,6 +182,16 @@ public class AppConfigHolder
     public static boolean isReturnRequestId()
     {
         return returnRequestId;
+    }
+
+    public static final String getCookieDomain()
+    {
+        return cookieDomain;
+    }
+
+    public static final String getCookiePath()
+    {
+        return cookiePath;
     }
 
     public static final int getCookieMaxAge()
