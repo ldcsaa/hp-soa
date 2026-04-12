@@ -14,7 +14,6 @@ import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import io.github.hpsocket.soa.framework.web.model.Response;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.web.cloud.exception.CloudExceptionInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -71,24 +70,16 @@ public class TracingHelper
     
     public static final void setRequestAttribute(MdcAttr mdcAttr, HttpServletRequest request)
     {
-        String requestUri    = WebServerHelper.getRequestUri(request);
-        String requestPath   = WebServerHelper.getRequestPath(request);
-        String requestMethod = WebServerHelper.getRequestMethod(request);
-        String clientAddr    = WebServerHelper.getRequestAddr(request);
-        
         RequestAttribute reqAttr = new RequestAttribute(mdcAttr.getAppCode(), mdcAttr.getSrcAppCode(), mdcAttr.getToken(),
                                                         mdcAttr.getClientId(), mdcAttr.getRequestId(), mdcAttr.getSessionId(),
-                                                        GeneralHelper.str2Long(mdcAttr.getGroupId()));
+                                                        GeneralHelper.str2Long(mdcAttr.getGroupId()))
+                                                        .parseBasicRequestAttributes(request);
         
         reqAttr.setUserId(GeneralHelper.str2Long(mdcAttr.getUserId()));
         reqAttr.setRegion(mdcAttr.getRegion());
         reqAttr.setLanguage(mdcAttr.getLanguage());
         reqAttr.setVersion(mdcAttr.getVersion());
         reqAttr.setExtra(mdcAttr.getExtra());
-        reqAttr.setClientAddr(clientAddr);
-        reqAttr.setRequestUri(requestUri);
-        reqAttr.setRequestPath(requestPath);
-        reqAttr.setRequestMethod(requestMethod);
         
         RequestContext.setRequestAttribute(reqAttr);
     }
@@ -119,7 +110,7 @@ public class TracingHelper
         }
         
         Response<CloudExceptionInfo> resp = new Response<>(ServiceException.INNER_API_CALL_EXCEPTION);
-        resp.setResult(info);
+        resp.setData(info);
         
         return resp;
     }

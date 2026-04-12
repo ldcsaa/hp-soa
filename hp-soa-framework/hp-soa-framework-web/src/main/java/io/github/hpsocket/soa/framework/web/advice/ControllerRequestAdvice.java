@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import org.aspectj.lang.annotation.Aspect;
 import io.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpInputMessage;
@@ -52,12 +53,12 @@ public class ControllerRequestAdvice extends RequestBodyAdviceAdapter implements
         RequestContext.setBody(body);
         
         if(WebServerHelper.isEntryOrNull())
-            logRequest();
+            logRequestBody();
         
         return body;
     }
 
-    private void logRequest()
+    private void logRequestBody()
     {
         try
         {
@@ -68,13 +69,14 @@ public class ControllerRequestAdvice extends RequestBodyAdviceAdapter implements
                 @Override
                 protected void doRun()
                 {
-                    log.info("[ REQUEST: {} ] -> {}", requestAttribute.getRequestPath(), JSONObject.toJSONString(requestAttribute, JSON_SERIAL_FEATURES_NO_NULL_VAL));
+                    String strBody = GeneralHelper.truncateAndMore(JSONObject.toJSONString(requestAttribute.getBody(), JSON_SERIAL_FEATURES_NO_NULL_VAL), REQ_BODY_MAX_LOG_LENGTH);
+                    log.info("[ REQUEST BODY ] -> {}", strBody);
                 }
             });
         }
         catch(Exception e)
         {
-            log.error("async write request log fail", e);
+            log.error("async write request body log fail", e);
         }
     }
 

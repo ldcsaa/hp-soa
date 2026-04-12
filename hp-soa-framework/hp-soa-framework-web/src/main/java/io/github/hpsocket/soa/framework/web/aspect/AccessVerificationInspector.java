@@ -54,39 +54,51 @@ public class AccessVerificationInspector
     @Around("inspectMethod()")
     public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
     {
+        Response<?> resp             = null;
         MethodSignature signature    = (MethodSignature)joinPoint.getSignature();
         AccessVerification.Type type = getInspectVerificationType(signature.getMethod());
-        
-        if(type != NO_CHECK)
+
+        try
         {
-            RequestAttribute reqAttr = RequestContext.getRequestAttribute();
-            
-            if(reqAttr == null)
-                return new Response<Boolean>(BAD_REQUEST_EXCEPTION);
-            
-            Response<?> resp = inspectApp(reqAttr);
-            
-            if(resp.getResult() == null)
-                return resp;
-            
-            if(type != NO_LOGIN)
+            if(type != NO_CHECK)
             {
-                resp = inspectUser(reqAttr, type);
-                
-                if(resp.getResult() == null)
+                RequestAttribute reqAttr = RequestContext.getRequestAttribute();
+
+                if(reqAttr == null) {
+                    resp = new Response<Boolean>(BAD_REQUEST_EXCEPTION);
                     return resp;
-                
-                if(type == REQUIRE_AUTHORIZED)
+                }
+
+                resp = inspectApp(reqAttr);
+
+                if(resp.getData() == null)
+                    return resp;
+
+                if(type != NO_LOGIN)
                 {
-                    resp = inspectRole(reqAttr);
-                    
-                    if(resp.getResult() == null)
+                    resp = inspectUser(reqAttr, type);
+
+                    if(resp.getData() == null)
                         return resp;
+
+                    if(type == REQUIRE_AUTHORIZED)
+                    {
+                        resp = inspectRole(reqAttr);
+
+                        if(resp.getData() == null)
+                            return resp;
+                    }
                 }
             }
+
+            resp = (Response<?>)joinPoint.proceed();
+
+            return resp;
         }
-        
-        return joinPoint.proceed();
+        finally
+        {
+            accessVerificationService.afterProcess(resp);
+        }
     }
 
     private AccessVerification.Type getInspectVerificationType(Method method)

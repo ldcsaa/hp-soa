@@ -44,7 +44,7 @@ import java.util.stream.Stream;
 /** <b>通用方法帮助类</b> */
 public class GeneralHelper
 {
-    private static final String DELIMITERR_CHARS    = " ,\t\r\n\f";
+    private static final String DELIMITER_CHARS     = " ,\t\r\n\f";
     
     private static final Pattern PATTERN_NUMERIC    = Pattern.compile("^0$|^\\-?[1-9]+[0-9]*$");
     private static final Pattern PATTERN_EMAIL_ADDR = Pattern.compile("^[a-z0-9_\\-]+(\\.[_a-z0-9\\-]+)*@([_a-z0-9\\-]+\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)$");
@@ -268,6 +268,20 @@ public class GeneralHelper
         return ((st > 0) || (len < str.length())) ? str.substring(st, len) : str;
     }
 
+    /** 截取指定长度字符串并在字符串后面加上“...”，如果字符串不超过指定长度则返回原字符串 */
+    public final static String truncateAndMore(String str, int len)
+    {
+        int strLen = safeString(str).length();
+
+        if(strLen > len)
+        {
+            StringBuilder sb = new StringBuilder(len + 3);
+            return sb.append(str.substring(0, len)).append("...").toString();
+        }
+
+        return str;
+    }
+
     /** 检查字符串是否符合整数格式 */
     public final static boolean isStrNumeric(String str)
     {
@@ -429,12 +443,11 @@ public class GeneralHelper
     /** String -> Integer，如果转换不成功则返回 null */
     public final static Integer str2Int(String s)
     {
-        Integer returnVal;
-        try {
-            returnVal = Integer.valueOf(s);
-        } catch(Exception e) {
-            returnVal = null;
-        }
+        Integer returnVal = null;
+        if(GeneralHelper.isStrEmpty(s))
+            return returnVal;
+
+        try {returnVal = Integer.valueOf(s);} catch(Exception e) {}
         return returnVal;
     }
 
@@ -459,12 +472,11 @@ public class GeneralHelper
     /** String -> Short，如果转换不成功则返回 null */
     public final static Short str2Short(String s)
     {
-        Short returnVal;
-        try {
-            returnVal = Short.valueOf(s);
-        } catch(Exception e) {
-            returnVal = null;
-        }
+        Short returnVal = null;
+        if(GeneralHelper.isStrEmpty(s))
+            return returnVal;
+
+        try {returnVal = Short.valueOf(s);} catch(Exception e) {}
         return returnVal;
     }
 
@@ -489,12 +501,11 @@ public class GeneralHelper
     /** String -> Long，如果转换不成功则返回 null */
     public final static Long str2Long(String s)
     {
-        Long returnVal;
-        try {
-            returnVal = Long.valueOf(s);
-        } catch(Exception e) {
-            returnVal = null;
-        }
+        Long returnVal = null;
+        if(GeneralHelper.isStrEmpty(s))
+            return returnVal;
+
+        try {returnVal = Long.valueOf(s);} catch(Exception e) {}
         return returnVal;
     }
 
@@ -519,12 +530,11 @@ public class GeneralHelper
     /** String -> Float，如果转换不成功则返回 null */
     public final static Float str2Float(String s)
     {
-        Float returnVal;
-        try {
-            returnVal = Float.valueOf(s);
-        } catch(Exception e) {
-            returnVal = null;
-        }
+        Float returnVal = null;
+        if(GeneralHelper.isStrEmpty(s))
+            return returnVal;
+
+        try {returnVal = Float.valueOf(s);} catch(Exception e) {}
         return returnVal;
     }
 
@@ -549,12 +559,11 @@ public class GeneralHelper
     /** String -> Double，如果转换不成功则返回 null */
     public final static Double str2Double(String s)
     {
-        Double returnVal;
-        try {
-            returnVal = Double.valueOf(s);
-        } catch(Exception e) {
-            returnVal = null;
-        }
+        Double returnVal = null;
+        if(GeneralHelper.isStrEmpty(s))
+            return returnVal;
+
+        try {returnVal = Double.valueOf(s);} catch(Exception e) {}
         return returnVal;
     }
 
@@ -579,12 +588,11 @@ public class GeneralHelper
     /** String -> Byte，如果转换不成功则返回 null */
     public final static Byte str2Byte(String s)
     {
-        Byte returnVal;
-        try {
-            returnVal = Byte.valueOf(s);
-        } catch(Exception e) {
-            returnVal = null;
-        }
+        Byte returnVal = null;
+        if(GeneralHelper.isStrEmpty(s))
+            return returnVal;
+
+        try {returnVal = Byte.valueOf(s);} catch(Exception e) {}
         return returnVal;
     }
 
@@ -609,12 +617,11 @@ public class GeneralHelper
     /** String -> Character，如果转换不成功则返回 null */
     public final static Character str2Char(String s)
     {
-        Character returnVal;
-        try {
-            returnVal = s.charAt(0);
-        } catch(Exception e) {
-            returnVal = null;
-        }
+        Character returnVal = null;
+        if(GeneralHelper.isStrEmpty(s))
+            return returnVal;
+
+        try {returnVal = s.charAt(0);} catch(Exception e) {}
         return returnVal;
     }
 
@@ -1642,7 +1649,7 @@ public class GeneralHelper
     
     public static final List<Long> str2LongList(String str)
     {
-        return str2LongList(str, DELIMITERR_CHARS);
+        return str2LongList(str, DELIMITER_CHARS);
     }
     
     public static final List<Long> str2LongList(String str, String delim)
@@ -1663,7 +1670,7 @@ public class GeneralHelper
     
     public static final List<Integer> str2IntList(String str)
     {
-        return str2IntList(str, DELIMITERR_CHARS);
+        return str2IntList(str, DELIMITER_CHARS);
     }
     
     public static final List<Integer> str2IntList(String str, String delim)
@@ -1684,7 +1691,7 @@ public class GeneralHelper
     
     public static final List<String> str2StrList(String str)
     {
-        return str2StrList(str, DELIMITERR_CHARS);
+        return str2StrList(str, DELIMITER_CHARS);
     }
     
     public static final List<String> str2StrList(String str, String delim)

@@ -20,6 +20,10 @@
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.hpsocket</groupId>
+            <artifactId>hp-soa-starter-skywalking</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
