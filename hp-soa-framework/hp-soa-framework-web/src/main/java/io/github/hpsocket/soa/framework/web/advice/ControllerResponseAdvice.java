@@ -2,6 +2,7 @@ package io.github.hpsocket.soa.framework.web.advice;
 
 import java.util.Map;
 
+import cn.hutool.http.useragent.Platform;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
@@ -30,7 +31,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 
-import cn.hutool.http.useragent.Browser;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentParser;
 
@@ -104,17 +104,17 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             
             if(rt == Response.RT_LOGIN)
             {
-                Object result = respBody.getResult();
+                Object data = respBody.getData();
                 
-                if(result != null)
+                if(data != null)
                 {
                     String token = null;
                     
-                    if(result instanceof Map<?, ?> map)
+                    if(data instanceof Map<?, ?> map)
                         token = (String)map.get(RESPONSE_TOKEN);
                     else
                     {
-                        BeanMap map = BeanMap.create(result);
+                        BeanMap map = BeanMap.create(data);
                         token = (String)map.get(RESPONSE_TOKEN);
                     }
                     
@@ -149,7 +149,8 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
                 @Override
                 public void doRun()
                 {
-                    log.info("[ RESPONSE: {} ] -> {}", requestAttribute.getRequestPath(), JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_DEFAULT));
+                    String strBody = GeneralHelper.truncateAndMore(JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_NO_NULL_VAL), RESP_BODY_MAX_LOG_LENGTH);
+                    log.info("[ RESPONSE ] -> {}", strBody);
                 }
             });
         }
@@ -171,43 +172,41 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object>, Ord
             protected void doRun()
             {                
                 JSONObject jsonLog = new JSONObject();
-            
-                @SuppressWarnings("unchecked")
-                final Map<String, ?> reqAttr = BeanMap.create(requestAttribute);
 
-                reqAttr.forEach((k, v) -> {
-                    if(v != null && !k.equals("body"))
-                        jsonLog.put(k, v);
-                });
-                
-                Object reqBody = JSON.toJSON(requestAttribute.getBody());
-                
-                if(reqBody != null)
-                    jsonLog.put("request", reqBody.toString());
-                
                 jsonLog.put("monitor_type", MONITOR_INGRESS);
-                jsonLog.put("apiName", rt.getDeclaringClass().getSimpleName().concat("#").concat(rt.getMethod().getName()));
-                jsonLog.put("response", JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_DEFAULT));
-                
+                jsonLog.put("apiName", String.join("#", rt.getDeclaringClass().getName(), rt.getMethod().getName()));
+
+                jsonLog.put("clientAddr", requestAttribute.getClientAddr());
+                jsonLog.put("requestUri", requestAttribute.getRequestUri());
+                jsonLog.put("requestPath", requestAttribute.getRequestPath());
+                jsonLog.put("requestMethod", requestAttribute.getRequestMethod());
+                if(GeneralHelper.isNotNullOrEmpty(requestAttribute.getRequestParams()))
+                    jsonLog.put("requestParams", JSON.toJSONString(requestAttribute.getRequestParams(), JSON_SERIAL_FEATURES_NO_NULL_VAL));
+                if(GeneralHelper.isNotNull(requestAttribute.getBody()))
+                    jsonLog.put("request", GeneralHelper.truncateAndMore(JSON.toJSONString(requestAttribute.getBody(), JSON_SERIAL_FEATURES_NO_NULL_VAL), REQ_BODY_MAX_LOG_LENGTH));
+
+                jsonLog.put("response", GeneralHelper.truncateAndMore(JSONObject.toJSONString(body, JSON_SERIAL_FEATURES_NO_NULL_VAL), RESP_BODY_MAX_LOG_LENGTH));
+
                 if(body instanceof Response<?> respBody)
                 {                    
                     jsonLog.put("resultCode", respBody.getResultCode());
                     jsonLog.put("statusCode", respBody.getStatusCode());
                     jsonLog.put("costTime", respBody.getCostTime());
-                    jsonLog.put("msg", GeneralHelper.equals(respBody.getStatusCode(), PARAM_VERIFY_ERROR) ? respBody.getMsg() + ": " + JSONObject.toJSONString(respBody.getValidationErrors()) : respBody.getMsg());
+                    jsonLog.put("msg", GeneralHelper.equals(respBody.getStatusCode(), PARAM_VERIFY_ERROR) ? respBody.getMessage() + ": " + JSONObject.toJSONString(respBody.getValidationErrors()) : respBody.getMessage());
                 }
                 
                 if(GeneralHelper.isStrNotEmpty(ua))
                 {
                     JSONObject jsonUa = new JSONObject();
                     UserAgent agent   = UserAgentParser.parse(ua);
-                    Browser browser   = agent.getBrowser();
+                    Platform platform = agent.getPlatform();
                     
                     jsonUa.put("name", ua);
-                    jsonUa.put("browser", browser.getName().concat(GeneralHelper.isStrNotEmpty(agent.getVersion()) ? " " + agent.getVersion() : ""));
-                    jsonUa.put("browserType", agent.getEngine().getName().concat(GeneralHelper.isStrNotEmpty(agent.getEngineVersion()) ? " " + agent.getEngineVersion() : ""));
-                    jsonUa.put("deviceType", browser.isUnknown() ? Browser.Unknown.getName() : (agent.isMobile() ? "Mobile" : "Desktop"));
-                    jsonUa.put("platform", agent.getOs().getName().concat(GeneralHelper.isStrNotEmpty(agent.getOsVersion()) ? " " + agent.getOsVersion() : ""));
+                    jsonUa.put("browser", agent.getBrowser().getName().concat(GeneralHelper.isStrNotEmpty(agent.getVersion()) ? " " + agent.getVersion() : ""));
+                    jsonUa.put("engine", agent.getEngine().getName().concat(GeneralHelper.isStrNotEmpty(agent.getEngineVersion()) ? " " + agent.getEngineVersion() : ""));
+                    jsonUa.put("os", agent.getOs().getName().concat(GeneralHelper.isStrNotEmpty(agent.getOsVersion()) ? " " + agent.getOsVersion() : ""));
+                    jsonUa.put("platform", platform.getName());
+                    jsonUa.put("isMobile", platform.isUnknown() ? null : agent.isMobile());
                                         
                     jsonLog.put("ua", jsonUa);
                 }

@@ -50,10 +50,10 @@ public class CloudErrorDecoder implements ErrorDecoder
             }
             
             Response<CloudExceptionInfo> resp = json.to(new TypeReference<Response<CloudExceptionInfo>>() {});
-            info = resp.getResult();
+            info = resp.getData();
             
             if(info == null)
-                return new ServiceException(String.format("%s (statusCode: %d) -> %s", desc, resp.getStatusCode(), resp.getMsg()), INNER_API_CALL_EXCEPTION);
+                return new ServiceException(String.format("%s (statusCode: %d) -> %s", desc, resp.getStatusCode(), resp.getMessage()), INNER_API_CALL_EXCEPTION);
             
             Class<?> clazz = null;
             

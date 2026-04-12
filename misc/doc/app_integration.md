@@ -483,7 +483,7 @@ public class Response<T> implements Serializable
     /** 请求ID */
     private String requestId;
     /** 业务模型对象 */
-    private T result;
+    private T data;
     /** 响应类型（目前仅用于登录登出操作：{@linkplain #RT_LOGIN} - 登录，{@linkplain #RT_LOGOUT} - 登出） */
     private transient Integer respType;
 }
