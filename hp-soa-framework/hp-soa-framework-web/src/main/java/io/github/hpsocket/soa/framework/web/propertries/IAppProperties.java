@@ -15,7 +15,11 @@ public interface IAppProperties
     String getOrganization();
     /** 获取应用程序拥有者 */
     String getOwner();
-    
+
+    /** 获取应用程序默认 Cookie Domain */
+    String getCookieDomain();
+    /** 获取应用程序默认 Cookie Path */
+    String getCookiePath();
     /** 获取应用程序默认 Cookie Max-Age */
     int getCookieMaxAge();
     /** 获取应用程序默认 Cookie Secure */

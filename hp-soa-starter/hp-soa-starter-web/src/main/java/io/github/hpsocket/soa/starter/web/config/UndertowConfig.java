@@ -26,25 +26,18 @@ public class UndertowConfig
     @ConditionalOnClass({WebSocketDeploymentInfo.class})
     WebServerFactoryCustomizer<UndertowServletWebServerFactory> undertowWebSocketDeploymentInfoCustomizer()
     {
-        return new WebServerFactoryCustomizer<UndertowServletWebServerFactory>()
+        return (factory) -> factory.addDeploymentInfoCustomizers((deploymentInfo) ->
         {
-            @Override
-            public void customize(UndertowServletWebServerFactory factory)
-            {
-                factory.addDeploymentInfoCustomizers((deploymentInfo) ->
-                {
-                    WebSocketDeploymentInfo webSocketDeploymentInfo = new WebSocketDeploymentInfo().setBuffers(
-                        new DefaultByteBufferPool(
-                        undertowProperties.isWsByteBufferPoolDirect(),
-                        undertowProperties.getWsByteBufferPoolBufferSize(),
-                        undertowProperties.getWsByteBufferPoolMaximumPoolSize(),
-                        undertowProperties.getWsByteBufferPoolThreadLocalCacheSize(),
-                        undertowProperties.getWsByteBufferPoolLeakDecetionPercent()));
-                    
-                    deploymentInfo.addServletContextAttribute(WebSocketDeploymentInfo.class.getName(), webSocketDeploymentInfo);
-                });
-            }
-        };
+            WebSocketDeploymentInfo webSocketDeploymentInfo = new WebSocketDeploymentInfo().setBuffers(
+                new DefaultByteBufferPool(
+                undertowProperties.isWsByteBufferPoolDirect(),
+                undertowProperties.getWsByteBufferPoolBufferSize(),
+                undertowProperties.getWsByteBufferPoolMaximumPoolSize(),
+                undertowProperties.getWsByteBufferPoolThreadLocalCacheSize(),
+                undertowProperties.getWsByteBufferPoolLeakDecetionPercent()));
+
+            deploymentInfo.addServletContextAttribute(WebSocketDeploymentInfo.class.getName(), webSocketDeploymentInfo);
+        });
     }
 
 }
