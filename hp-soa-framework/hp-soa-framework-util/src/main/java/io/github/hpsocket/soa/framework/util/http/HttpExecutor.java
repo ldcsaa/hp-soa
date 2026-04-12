@@ -1326,12 +1326,10 @@ public class HttpExecutor
                         response = JSON.parseObject(result, clazz);
                 }
             }
-            else if(!resp.isNoError()){
+            else if(!resp.isNoError())
                 throw new ServiceException(resp.getErrorInfo(), ServiceException.OUTER_API_CALL_FAIL);
-            }
             else
                 throw new IllegalStateException(String.format("unexpected status code '%d'", resp.statusCode));
-            
         }
         catch(Exception e)
         {
@@ -1399,7 +1397,6 @@ public class HttpExecutor
                 throw new ServiceException(resp.getErrorInfo(), ServiceException.OUTER_API_CALL_FAIL);
             else
                 throw new IllegalStateException(String.format("unexpected status code '%d'", resp.statusCode));
-            
         }
         catch(Exception e)
         {
@@ -1453,7 +1450,6 @@ public class HttpExecutor
                 throw new ServiceException(resp.getErrorInfo(), ServiceException.OUTER_API_CALL_FAIL);
             else
                 throw new IllegalStateException(String.format("unexpected status code '%d'", resp.statusCode));
-            
         }
         catch(Exception e)
         {
