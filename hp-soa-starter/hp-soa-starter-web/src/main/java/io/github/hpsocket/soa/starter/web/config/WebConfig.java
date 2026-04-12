@@ -30,7 +30,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractAu
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistration;
@@ -155,8 +155,8 @@ public class WebConfig implements WebMvcConfigurer
             
             http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                .requestMatchers(AntPathRequestMatcher.antMatcher(managementBasePath)).authenticated()
-                .requestMatchers(AntPathRequestMatcher.antMatcher(AppConfigHolder.ANT_PATH_WILDCARD)).permitAll())
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(managementBasePath)).authenticated()
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher(AppConfigHolder.ANT_PATH_WILDCARD)).permitAll())
             .csrf((csrf) -> csrf.disable())
             .httpBasic(Customizer.withDefaults())
             .formLogin(new Customizer<FormLoginConfigurer<HttpSecurity>>()
@@ -252,38 +252,41 @@ public class WebConfig implements WebMvcConfigurer
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters)
     {
-        int i = 0;
-        List<MediaType> mediaTypes = null;
-        
-        for(; i < converters.size(); i++)
-        {
-            if(converters.get(i) instanceof MappingJackson2HttpMessageConverter jackson2Converter)
-            {
-                mediaTypes = jackson2Converter.getSupportedMediaTypes();
-                break;
-            }
-        }
-        
-        if(mediaTypes == null)
-            mediaTypes = Arrays.asList(MediaType.APPLICATION_JSON, new MediaType("application", "*+json"));
-        
-        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
-        converter.setSupportedMediaTypes(mediaTypes);
+        WebProperties.HttpProperties httpProperties = webProperties.getHttp();
 
-        FastJsonConfig config = converter.getFastJsonConfig();
-        config.setWriterFeatures(WebServerHelper.JSON_SERIAL_FEATURES_DEFAULT);
-        config.setWriterFilters(new FastJsonExcludePropertyFilter());
-        config.setJSONB(true);
-        
-        String dateTimeFormat = webProperties.getHttp().getDateTimeFormat();
-        
-        if(GeneralHelper.isStrEmpty(dateTimeFormat))
-            dateTimeFormat = WebProperties.HttpProperties.DEFAULT_DATE_TIME_FORMAT;
-        
-        config.setDateFormat(dateTimeFormat);
-        
-        converters.add(i, converter);
-        
+        if(httpProperties.isUseFastJsonMessageConverter())
+        {
+            int i = 0;
+            List<MediaType> mediaTypes = null;
+
+            for(; i < converters.size(); i++)
+            {
+                if(converters.get(i) instanceof MappingJackson2HttpMessageConverter jackson2Converter)
+                {
+                    mediaTypes = jackson2Converter.getSupportedMediaTypes();
+                    break;
+                }
+            }
+
+            if(mediaTypes == null)
+                mediaTypes = Arrays.asList(MediaType.APPLICATION_JSON, new MediaType("application", "*+json"));
+
+            String dateTimeFormat = httpProperties.getDateTimeFormat();
+            if(GeneralHelper.isStrEmpty(dateTimeFormat))
+                dateTimeFormat = WebProperties.HttpProperties.DEFAULT_DATE_TIME_FORMAT;
+
+            FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+            converter.setSupportedMediaTypes(mediaTypes);
+
+            FastJsonConfig config = converter.getFastJsonConfig();
+            config.setWriterFeatures(WebServerHelper.JSON_SERIAL_FEATURES_DEFAULT);
+            config.setWriterFilters(new FastJsonExcludePropertyFilter());
+            config.setDateFormat(dateTimeFormat);
+            config.setJSONB(true);
+
+            converters.add(i, converter);
+        }
+
         WebMvcConfigurer.super.extendMessageConverters(converters);
     }
 

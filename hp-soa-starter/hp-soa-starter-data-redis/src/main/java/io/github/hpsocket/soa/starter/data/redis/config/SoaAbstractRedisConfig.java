@@ -2,7 +2,9 @@ package io.github.hpsocket.soa.starter.data.redis.config;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -15,18 +17,17 @@ import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.RedissonReactiveClient;
 import org.redisson.api.RedissonRxClient;
-import org.redisson.config.BaseConfig;
 import org.redisson.config.ClusterServersConfig;
 import org.redisson.config.Config;
 import org.redisson.config.SentinelServersConfig;
 import org.redisson.config.SingleServerConfig;
+import org.redisson.misc.RedisURI;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.MapFactoryBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisConnectionDetails;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties.Sentinel;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -60,9 +61,6 @@ import io.github.hpsocket.soa.starter.data.redis.template.NumberRedisTemplate;
 
 public abstract class SoaAbstractRedisConfig
 {
-    private static final String REDIS_PROTOCOL_PREFIX = "redis://";
-    private static final String REDISS_PROTOCOL_PREFIX = "rediss://";
-
     protected static final StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
 
     protected static final FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
@@ -354,7 +352,7 @@ public abstract class SoaAbstractRedisConfig
         if (timeoutValue instanceof Duration) {
             timeout = (int) ((Duration) timeoutValue).toMillis();
         } else if (timeoutValue != null){
-            timeout = (Integer)timeoutValue;
+            timeout = (Integer) timeoutValue;
         }
 
         Integer connectTimeout = null;
@@ -379,39 +377,27 @@ public abstract class SoaAbstractRedisConfig
         if (redissonProperties.getConfig() != null) {
             try {
                 config = Config.fromYAML(redissonProperties.getConfig());
-            } catch (IOException e) {
-                try {
-                    config = Config.fromJSON(redissonProperties.getConfig());
-                } catch (IOException e1) {
-                    e1.addSuppressed(e);
-                    throw new IllegalArgumentException("Can't parse config", e1);
-                }
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Can't parse config", e);
             }
         } else if (redissonProperties.getFile() != null) {
             try {
                 InputStream is = getConfigStream();
                 config = Config.fromYAML(is);
-            } catch (IOException e) {
-                // trying next format
-                try {
-                    InputStream is = getConfigStream();
-                    config = Config.fromJSON(is);
-                } catch (IOException e1) {
-                    e1.addSuppressed(e);
-                    throw new IllegalArgumentException("Can't parse config", e1);
-                }
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Can't parse config", e);
             }
         } else if (redisProperties.getSentinel() != null || isSentinel) {
             String[] nodes = {};
             String sentinelMaster = null;
 
             if (redisProperties.getSentinel() != null) {
-                Method nodesMethod = ReflectionUtils.findMethod(Sentinel.class, "getNodes");
+                Method nodesMethod = ReflectionUtils.findMethod(RedisProperties.Sentinel.class, "getNodes");
                 Object nodesValue = ReflectionUtils.invokeMethod(nodesMethod, redisProperties.getSentinel());
                 if (nodesValue instanceof String) {
-                    nodes = convert(prefix, Arrays.asList(((String)nodesValue).split(",")));
+                    nodes = convert(prefix, Arrays.asList(((String) nodesValue).split(",")));
                 } else {
-                    nodes = convert(prefix, (List<String>)nodesValue);
+                    nodes = convert(prefix, (List<String>) nodesValue);
                 }
                 sentinelMaster = redisProperties.getSentinel().getMaster();
             }
@@ -425,21 +411,22 @@ public abstract class SoaAbstractRedisConfig
                 if (b != null && b.getSentinel() != null) {
                     database = b.getSentinel().getDatabase();
                     sentinelMaster = b.getSentinel().getMaster();
-                    nodes = convertNodes(prefix, (List<Object>) (Object) b.getSentinel().getNodes());
+                    nodes = convertNodes(prefix, b.getSentinel().getNodes());
                     sentinelUsername = b.getSentinel().getUsername();
                     sentinelPassword = b.getSentinel().getPassword();
                 }
             }
 
-            config = new Config();
+            config = new Config()
+                    .setUsername(username)
+                    .setPassword(password);
+
             SentinelServersConfig c = config.useSentinelServers()
                     .setMasterName(sentinelMaster)
                     .addSentinelAddress(nodes)
                     .setSentinelPassword(sentinelPassword)
                     .setSentinelUsername(sentinelUsername)
                     .setDatabase(database)
-                    .setUsername(username)
-                    .setPassword(password)
                     .setClientName(clientName);
             if (connectTimeout != null) {
                 c.setConnectTimeout(connectTimeout);
@@ -447,9 +434,9 @@ public abstract class SoaAbstractRedisConfig
             if (connectTimeoutMethod != null && timeout != null) {
                 c.setTimeout(timeout);
             }
-            initSSL(c);
+            initSSL(config);
         } else if ((clusterMethod != null && ReflectionUtils.invokeMethod(clusterMethod, redisProperties) != null)
-                    || isCluster) {
+                || isCluster) {
 
             String[] nodes = {};
             if (clusterMethod != null && ReflectionUtils.invokeMethod(clusterMethod, redisProperties) != null) {
@@ -464,15 +451,15 @@ public abstract class SoaAbstractRedisConfig
                 ObjectProvider<RedisConnectionDetails> provider = ctx.getBeanProvider(RedisConnectionDetails.class);
                 RedisConnectionDetails b = provider.getIfAvailable();
                 if (b != null && b.getCluster() != null) {
-                    nodes = convertNodes(prefix, (List<Object>) (Object) b.getCluster().getNodes());
+                    nodes = convertNodes(prefix, b.getCluster().getNodes());
                 }
             }
 
-            config = new Config();
+            config = new Config()
+                    .setUsername(username)
+                    .setPassword(password);
             ClusterServersConfig c = config.useClusterServers()
                     .addNodeAddress(nodes)
-                    .setUsername(username)
-                    .setPassword(password)
                     .setClientName(clientName);
             if (connectTimeout != null) {
                 c.setConnectTimeout(connectTimeout);
@@ -480,9 +467,11 @@ public abstract class SoaAbstractRedisConfig
             if (connectTimeoutMethod != null && timeout != null) {
                 c.setTimeout(timeout);
             }
-            initSSL(c);
+            initSSL(config);
         } else {
-            config = new Config();
+            config = new Config()
+                    .setUsername(username)
+                    .setPassword(password);
 
             String singleAddr = prefix + redisProperties.getHost() + ":" + redisProperties.getPort();
 
@@ -498,8 +487,6 @@ public abstract class SoaAbstractRedisConfig
             SingleServerConfig c = config.useSingleServer()
                     .setAddress(singleAddr)
                     .setDatabase(database)
-                    .setUsername(username)
-                    .setPassword(password)
                     .setClientName(clientName);
             if (connectTimeout != null) {
                 c.setConnectTimeout(connectTimeout);
@@ -507,7 +494,7 @@ public abstract class SoaAbstractRedisConfig
             if (connectTimeoutMethod != null && timeout != null) {
                 c.setTimeout(timeout);
             }
-            initSSL(c);
+            initSSL(config);
         }
         if (redissonAutoConfigurationCustomizers != null) {
             for (RedissonAutoConfigurationCustomizer customizer : redissonAutoConfigurationCustomizers) {
@@ -517,7 +504,7 @@ public abstract class SoaAbstractRedisConfig
         return Redisson.create(config);
     }
 
-    private void initSSL(BaseConfig<?> config) {
+    private void initSSL(Config config) {
         Method getSSLMethod = ReflectionUtils.findMethod(RedisProperties.class, "getSsl");
         if (getSSLMethod == null) {
             return;
@@ -544,12 +531,12 @@ public abstract class SoaAbstractRedisConfig
     }
 
     private String getPrefix() {
-        String prefix = REDIS_PROTOCOL_PREFIX;
+        String prefix = RedisURI.REDIS_PROTOCOL;
         Method isSSLMethod = ReflectionUtils.findMethod(RedisProperties.class, "isSsl");
         Method getSSLMethod = ReflectionUtils.findMethod(RedisProperties.class, "getSsl");
         if (isSSLMethod != null) {
             if ((Boolean) ReflectionUtils.invokeMethod(isSSLMethod, redisProperties)) {
-                prefix = REDISS_PROTOCOL_PREFIX;
+                prefix = RedisURI.REDIS_SSL_PROTOCOL;
             }
         } else if (getSSLMethod != null) {
             Object ss = ReflectionUtils.invokeMethod(getSSLMethod, redisProperties);
@@ -557,23 +544,31 @@ public abstract class SoaAbstractRedisConfig
                 Method isEnabledMethod = ReflectionUtils.findMethod(ss.getClass(), "isEnabled");
                 Boolean enabled = (Boolean) ReflectionUtils.invokeMethod(isEnabledMethod, ss);
                 if (enabled) {
-                    prefix = REDISS_PROTOCOL_PREFIX;
+                    prefix = RedisURI.REDIS_SSL_PROTOCOL;
                 }
             }
         }
         return prefix;
     }
 
-    private String[] convertNodes(String prefix, List<Object> nodesObject) {
+    @SuppressWarnings("IllegalCatch")
+    private String[] convertNodes(String prefix, List<?> nodesObject) {
         List<String> nodes = new ArrayList<>(nodesObject.size());
-        for (Object node : nodesObject) {
-            Field hostField = ReflectionUtils.findField(node.getClass(), "host");
-            Field portField = ReflectionUtils.findField(node.getClass(), "port");
-            ReflectionUtils.makeAccessible(hostField);
-            ReflectionUtils.makeAccessible(portField);
-            String host = (String) ReflectionUtils.getField(hostField, node);
-            int port = (int) ReflectionUtils.getField(portField, node);
-            nodes.add(prefix + host + ":" + port);
+        try {
+            MethodHandles.Lookup lookup = MethodHandles.lookup();
+            for (Object node : nodesObject) {
+                MethodType hostType = MethodType.methodType(String.class);
+                MethodHandle hostHandle = lookup.findVirtual(node.getClass(), "host", hostType);
+                String host = (String) hostHandle.invoke(node);
+
+                MethodType portType = MethodType.methodType(int.class);
+                MethodHandle portHandle = lookup.findVirtual(node.getClass(), "port", portType);
+                int port = (int) portHandle.invoke(node);
+
+                nodes.add(prefix + host + ":" + port);
+            }
+        } catch (Throwable e) {
+            throw new IllegalStateException("Failed to convert nodes", e);
         }
         return nodes.toArray(new String[0]);
     }
@@ -581,7 +576,7 @@ public abstract class SoaAbstractRedisConfig
     private String[] convert(String prefix, List<String> nodesObject) {
         List<String> nodes = new ArrayList<>(nodesObject.size());
         for (String node : nodesObject) {
-            if (!node.startsWith(REDIS_PROTOCOL_PREFIX) && !node.startsWith(REDISS_PROTOCOL_PREFIX)) {
+            if (!RedisURI.isValid(node)) {
                 nodes.add(prefix + node);
             } else {
                 nodes.add(node);

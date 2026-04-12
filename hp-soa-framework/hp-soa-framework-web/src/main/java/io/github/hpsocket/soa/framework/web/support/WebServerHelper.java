@@ -67,6 +67,8 @@ public class WebServerHelper
     public static final String COOKIE_SAME_SITE_STRICT      = "Strict";
     public static final String COOKIE_SAME_SITE_LAX         = "Lax";
     public static final String COOKIE_SAME_SITE_NONE        = "None";
+    public static final String DEFAULT_COOKIE_DOMAIN        = null;
+    public static final String DEFAULT_COOKIE_PATH          = "/";
     public static final int DEFAULT_COOKIE_MAX_AGE          = 10 * 365 * 24 * 60 * 60;
     public static final boolean DEFAULT_COOKIE_HTTP_ONLY    = false;
     public static final boolean DEFAULT_COOKIE_SECURE       = false;
@@ -95,14 +97,18 @@ public class WebServerHelper
     public static final String MONITOR_INGRESS          = "MONITOR-INGRESS";
     public static final String MONITOR_EGRESS           = "MONITOR-EGRESS";
 
+    public static final int REQ_BODY_MAX_LOG_LENGTH     = 4096;
+    public static final int RESP_BODY_MAX_LOG_LENGTH    = 4096;
+
+
     private static final ThreadLocal<Long> TIMESTAMP    = new ThreadLocal<>();
     
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_DEFAULT        = {WriteByteArrayAsBase64, WriteNonStringKeyAsString, WriteMapNullValue};
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL    = {WriteByteArrayAsBase64, WriteNonStringKeyAsString};
     
     private static final AtomicInteger THREAD_NUMBER          = new AtomicInteger(0);
-    public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor( 4,
-                                                                                        16,
+    public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor( 1,
+                                                                                        4,
                                                                                         60,
                                                                                         TimeUnit.SECONDS,
                                                                                         new LinkedBlockingDeque<>(3000),
@@ -120,10 +126,22 @@ public class WebServerHelper
     {
         TIMESTAMP.set(System.currentTimeMillis());
     }
+
+    public static final void endTiming()
+    {
+        TIMESTAMP.remove();
+    }
     
     public static final long calcTimestamp()
     {
-        return System.currentTimeMillis() - TIMESTAMP.get();
+        Long ts = TIMESTAMP.get();
+
+        if(ts == null)
+        {
+            return 0;
+        }
+
+        return System.currentTimeMillis() - ts;
     }
 
     /** 检测 HTTP 请求的 User-Agent 是否合法 */
@@ -154,7 +172,7 @@ public class WebServerHelper
     }
 
     /** 解析 HTTP 响应 Cookie 的 Domain */
-    public static final String retriveHostDomain(String host)
+    public static final String retrieveHostDomain(String host)
     {
         int index  = host.lastIndexOf(':');
 
@@ -204,19 +222,28 @@ public class WebServerHelper
     /** 创建 HTTP 响应 Cookie */
     public static final ResponseCookie createCookie(HttpServletRequest req, String name, String value, int maxAge, boolean secure, boolean httpOnly, String sameSite)
     {
-        String domain = getHeader(req, "Host");
+        String domain = getCookieDomain();
 
-        if(GeneralHelper.isStrNotEmpty(domain))
-            domain = retriveHostDomain(domain);
+        if(GeneralHelper.isStrEmpty(domain))
+        {
+            domain = getHeader(req, "Host");
+            if(GeneralHelper.isStrNotEmpty(domain))
+                domain = retrieveHostDomain(domain);
+        }
+
+        String path = getCookiePath();
+
+        if(GeneralHelper.isStrEmpty(path))
+            path = DEFAULT_COOKIE_PATH;
 
         return ResponseCookie.from(name, value)
-                        .path("/")
-                        .maxAge(maxAge)
-                        .domain(domain)
-                        .secure(secure)
-                        .httpOnly(httpOnly)
-                        .sameSite(sameSite)
-                        .build();
+                             .domain(domain)
+                             .path(path)
+                             .maxAge(maxAge)
+                             .secure(secure)
+                             .httpOnly(httpOnly)
+                             .sameSite(sameSite)
+                             .build();
     }
 
     /** 获取 HTTP 请求 Cookie */
@@ -261,24 +288,42 @@ public class WebServerHelper
     /** 获取 HTTP 请求客户端 IP 地址 */
     public static final String getRequestAddr(HttpServletRequest request)
     {
-        String ip = getHeader(request, "X-Real-IP");
-        
+        String ip = getHeader(request, "X-Forwarded-For");
         if(GeneralHelper.isStrEmpty(ip))
         {
-            String forwards = getHeader(request, "X-Forwarded-For");
-            
-            if(GeneralHelper.isStrNotEmpty(forwards))
-            {
-                int i = forwards.indexOf(',');
-                ip = GeneralHelper.safeTrimString(i >= 0 ? forwards.substring(0, i) : forwards);
-            }
-            
+            ip = getHeader(request, "X-Requested-For");
             if(GeneralHelper.isStrEmpty(ip))
             {
-                ip = request.getRemoteAddr();
+                ip = request.getHeader("HTTP_CLIENT_IP");
+                if(GeneralHelper.isStrEmpty(ip))
+                {
+                    ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+                    if(GeneralHelper.isStrEmpty(ip))
+                    {
+                        ip = request.getHeader("Proxy-Client-IP");
+                        if(GeneralHelper.isStrEmpty(ip))
+                        {
+                            ip = request.getHeader("WL-Proxy-Client-IP");
+                            if(GeneralHelper.isStrEmpty(ip))
+                            {
+                                ip = request.getHeader("X-Real-IP");
+                                if(GeneralHelper.isStrEmpty(ip))
+                                {
+                                    ip = request.getRemoteAddr();
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-        
+
+        if(GeneralHelper.isStrNotEmpty(ip))
+        {
+            int i = ip.indexOf(',');
+            ip = GeneralHelper.safeTrimString(i >= 0 ? ip.substring(0, i) : ip);
+        }
+
         return ip;
     }
     
@@ -303,11 +348,39 @@ public class WebServerHelper
         
         return requestPath;
     }
-    
+
     /** 获取 HTTP 请求 Method */
     public static final String getRequestMethod(HttpServletRequest request)
     {
         return request.getMethod();
+    }
+
+    /** 获取 HTTP 请求 参数 */
+    public static final Map<String, String> getRequestParams(HttpServletRequest request)
+    {
+        var requestParameterMap = request.getParameterMap();
+        if(GeneralHelper.isNullOrEmpty(requestParameterMap))
+            return Map.of();
+
+        Map<String, String> params = new HashMap<>(requestParameterMap.size());
+
+        request.getParameterMap().entrySet().forEach(entry ->
+        {
+            String key = entry.getKey();
+            String[] values = entry.getValue();
+
+            if(values == null || values.length == 0)
+                params.put(key, "");
+            else
+            {
+                if(values.length == 1)
+                    params.put(key, values[0]);
+                else
+                    params.put(key, String.join(",", values));
+            }
+        });
+
+        return params;
     }
     
     /** 解析 HTTP 请求信息 */
@@ -379,18 +452,7 @@ public class WebServerHelper
     /** 获取 HTTP 请求头（兼容小写） */
     public static final String getHeader(HttpServletRequest request, String name)
     {
-        return getHeader(request, name, true);
-    }
-    
-    /** 获取 HTTP 请求头（可设置是否兼容小写） */
-    public static final String getHeader(HttpServletRequest request, String name, boolean lcCompatible)
-    {
-        String value = request.getHeader(name);
-        
-        if(value == null && lcCompatible)
-            value = request.getHeader(name.toLowerCase());
-        
-        return value;
+        return request.getHeader(name);
     }
 
     /** 创建调用链 MDC 相关属性 */

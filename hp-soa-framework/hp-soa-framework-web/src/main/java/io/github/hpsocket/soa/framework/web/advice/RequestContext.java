@@ -12,6 +12,7 @@ import io.github.hpsocket.soa.framework.core.util.Result;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -21,6 +22,7 @@ import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 import static org.springframework.web.context.request.ServletRequestAttributes.*;
 
 /** <b>HTTP 请求上下文</b> */
+@Slf4j
 public class RequestContext
 {
     public static final ServletRequestAttributes getServletRequestAttributes()
@@ -56,12 +58,20 @@ public class RequestContext
     @SuppressWarnings("unchecked")
     public static final <T> T getAttribute(String name)
     {
-        return (T)getServletRequestAttributes().getAttribute(name, SCOPE_REQUEST);
+        ServletRequestAttributes servletRequestAttributes = getServletRequestAttributes();
+        if(servletRequestAttributes == null)
+            return null;
+
+        return (T)servletRequestAttributes.getAttribute(name, SCOPE_REQUEST);
     }
-    
+
     static final <T> void setAttribute(String name, T value)
     {
-        getServletRequestAttributes().setAttribute(name, value, SCOPE_REQUEST);
+        ServletRequestAttributes servletRequestAttributes = getServletRequestAttributes();
+        if(servletRequestAttributes == null)
+            return;
+
+        servletRequestAttributes.setAttribute(name, value, SCOPE_REQUEST);
     }
     
     public static final void removeAttribute(String name)
@@ -138,6 +148,11 @@ public class RequestContext
     {
         return getRequestAttribute().getRequestMethod();
     }
+
+    public static final Map<String, String> getRequestParams()
+    {
+        return getRequestAttribute().getRequestParams();
+    }
     
     public static final Long getGroupId()
     {
@@ -208,26 +223,19 @@ public class RequestContext
         if(GeneralHelper.isStrEmpty(requestId))
             requestId = WebServerHelper.randomUUID();
 
-        String requestUri    = WebServerHelper.getRequestUri(request);
-        String requestPath   = WebServerHelper.getRequestPath(request);
-        String requestMethod = WebServerHelper.getRequestMethod(request);
-        String clientAddr    = WebServerHelper.getRequestAddr(request);
-        
         RequestAttribute reqAttr = new RequestAttribute(appCode, srcAppCode, token,
                                                         clientId, requestId, sessionId,
-                                                        GeneralHelper.str2Long(groupId));
+                                                        GeneralHelper.str2Long(groupId))
+                                                        .parseBasicRequestAttributes(request);
         reqAttr.setRegion(region);
         reqAttr.setLanguage(language);
         reqAttr.setVersion(version);
         reqAttr.setExtra(extra);
-        reqAttr.setClientAddr(clientAddr);
-        reqAttr.setRequestUri(requestUri);
-        reqAttr.setRequestPath(requestPath);
-        reqAttr.setRequestMethod(requestMethod);
-        
+
         setRequestAttribute(reqAttr);
         
         return reqAttr;
     }
+
 
 }

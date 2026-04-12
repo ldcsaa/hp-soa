@@ -58,12 +58,12 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     @Setter
     public static class HttpProperties
     {
-        public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+        public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
         
         private String dateTimeFormat   = DEFAULT_DATE_TIME_FORMAT;
-        
-        private boolean returnRequestId = false;
-        
+        private boolean returnRequestId = true;
+        private boolean useFastJsonMessageConverter = true;
+
         @NestedConfigurationProperty
         private CookieProperties cookie = new CookieProperties();
         @NestedConfigurationProperty
@@ -73,6 +73,8 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
         @Setter
         public static class CookieProperties
         {
+            private String domain    = WebServerHelper.DEFAULT_COOKIE_DOMAIN;
+            private String path      = WebServerHelper.DEFAULT_COOKIE_PATH;
             private int maxAge       = WebServerHelper.DEFAULT_COOKIE_MAX_AGE;
             private boolean httpOnly = WebServerHelper.DEFAULT_COOKIE_HTTP_ONLY;
             private boolean secure   = WebServerHelper.DEFAULT_COOKIE_SECURE;
@@ -180,7 +182,19 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     {
         return http.isReturnRequestId();
     }
-    
+
+    @Override
+    public String getCookieDomain()
+    {
+        return http.cookie.getDomain();
+    }
+
+    @Override
+    public String getCookiePath()
+    {
+        return http.cookie.getPath();
+    }
+
     @Override
     public int getCookieMaxAge()
     {
