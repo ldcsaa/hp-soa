@@ -6,7 +6,7 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.job.snailjob.executor.AbstractMdcJobExecutor;
 
 import com.aizuda.snailjob.client.job.core.dto.JobArgs;
-import com.aizuda.snailjob.client.model.ExecuteResult;
+import com.aizuda.snailjob.model.dto.ExecuteResult;
 
 import lombok.extern.slf4j.Slf4j;
 

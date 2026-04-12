@@ -1,6 +1,7 @@
 package io.github.hpsocket.soa.framework.web.support;
 
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import org.slf4j.MDC;
 import org.springframework.context.MessageSource;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 /** <b>I18n 辅助类</b> */
 public class I18nHelper
 {
+    private static final Pattern MESSAGE_KEY_PATTERN = Pattern.compile("^\\{[a-zA-Z0-9][a-zA-Z0-9\\-_.]+[a-zA-Z0-9]\\}$");
+
     private static MessageSource defaultMessageSource;
     
     public static final Locale getLocaleByMdcOrRequest(HttpServletRequest request)
@@ -76,16 +79,33 @@ public class I18nHelper
         MessageSource messageSource = getDefaultMessageSource();
         return getMessage(messageSource, resolvable);
     }
+
+    public static final String ensureI18nMessage(String message, Object ... args) {
+        if(GeneralHelper.isStrEmpty(message)) {
+            return message;
+        }
+
+        if(MESSAGE_KEY_PATTERN.matcher(message).matches()) {
+            String code = message.substring(1, message.length() - 1);
+            return getMessage(getDefaultMessageSource(), code, args);
+        }
+
+        if(args != null && args.length > 0) {
+            return String.format(message, args);
+        }
+
+        return message;
+    }
     
     private static final MessageSource getDefaultMessageSource()
     {
         if(defaultMessageSource == null)
         {
-            synchronized(MessageSource.class)
+            synchronized(I18nHelper.class)
             {
                 if(defaultMessageSource == null)
                 {
-                    defaultMessageSource= SpringContextHolder.getBean(MessageSource.class);
+                    defaultMessageSource = SpringContextHolder.getBean(MessageSource.class);
                 }
             }
         }
