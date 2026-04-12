@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.web.json.JSONFieldExclude;
 import io.github.hpsocket.soa.framework.web.json.JSONFieldExclude.Exclude;
@@ -42,31 +45,31 @@ public class Response<T> implements Serializable
     
     /** 状态描述 */
     @Schema(title="状态描述", example=MSG_OK, requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
-    private String msg = MSG_OK;
+    private String message = MSG_OK;
     
     /** 服务端处理耗时（毫秒） */
     @Schema(title="耗时（毫秒）", example="456", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private long costTime;
 
     /** 参数校验错误列表 */
-    //@JsonInclude(Include.NON_NULL)
     @JSONFieldExclude(Exclude.NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(title="参数校验错误列表", example="name is empty", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private Map<String, List<String>> validationErrors;
     
     /** 请求ID */
-    //@JsonInclude(Include.NON_NULL)
     @JSONFieldExclude(Exclude.NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(title="请求ID", example="def7866fb25cb84a7652ed5ba9974102", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private String requestId;
     
     /** 业务模型对象 */
     @Schema(title="业务模型对象", example="Any Object", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
-    private T result;
+    private T data;
     
     /** 响应类型（目前仅用于登录登出操作：{@linkplain #RT_LOGIN} - 登录，{@linkplain #RT_LOGOUT} - 登出） */
-    //@JsonIgnore
-    //@JSONField(serialize = false)
+    @JsonIgnore
+    @JSONField(serialize = false)
     @Schema(title="响应类型（1 - 登录 - 2：登出）", example="null", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private transient Integer respType;
 
@@ -75,20 +78,20 @@ public class Response<T> implements Serializable
 
     }
 
-    public Response(T result)
+    public Response(T data)
     {
-        this.result = result;
+        this.data = data;
     }
 
-    public Response(Integer statusCode, String msg)
+    public Response(Integer statusCode, String message)
     {
-        this.msg = msg;
+        this.message = message;
         this.statusCode = statusCode;
     }
 
-    public Response(Integer statusCode, Integer resultCode, String msg)
+    public Response(Integer statusCode, Integer resultCode, String message)
     {
-        this.msg = msg;
+        this.message = message;
         this.statusCode = statusCode;
         this.resultCode = resultCode;
     }
@@ -114,19 +117,19 @@ public class Response<T> implements Serializable
         return new Response<>();
     }
     
-    public static <T> Response<T> of(T result)
+    public static <T> Response<T> of(T data)
     {
-        return new Response<>(result);
+        return new Response<>(data);
     }
     
-    public static <T> Response<T> of(Integer statusCode, String msg)
+    public static <T> Response<T> of(Integer statusCode, String message)
     {
-        return new Response<>(statusCode, msg);
+        return new Response<>(statusCode, message);
     }
     
-    public static <T> Response<T> of(Integer statusCode, Integer resultCode, String msg)
+    public static <T> Response<T> of(Integer statusCode, Integer resultCode, String message)
     {
-        return new Response<>(statusCode, resultCode, msg);
+        return new Response<>(statusCode, resultCode, message);
     }
     
     public static <T> Response<T> of(ServiceException e)

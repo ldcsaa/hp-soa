@@ -117,8 +117,7 @@ public class RabbitmqListenerMdcInspector
                         correlationId = props.getCorrelationIdAsString();
                 }
             }
-            
-            
+
             if(GeneralHelper.isStrEmpty(messageId))
                 messageId = internalMessageId;
             

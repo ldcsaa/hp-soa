@@ -80,6 +80,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <annotationProcessorPaths combine.self="override" />
+                    <compilerArgs>
+                        <arg>-Alog4j.graalvm.groupId=${project.groupId}</arg>
+                        <arg>-Alog4j.graalvm.artifactId=${project.artifactId}</arg>
+                    </compilerArgs>
                 </configuration>
                 <executions>
                     <!-- do a processing-only pass to generate plugins .dat file -->

@@ -80,23 +80,27 @@ public class ControllerGlobalExceptionAdvice implements Ordered
     @ExceptionHandler({Exception.class})
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
     {
-        ServiceException se = null;
+        ServiceException se         = null;
+        boolean printWarnStackTrace = true;
         
         if(e instanceof IllegalArgumentException)
             se = wrapServiceException(PARAM_VALIDATION_EXCEPTION, e);
-        else if(e instanceof NoHandlerFoundException)
-            se = wrapServiceException(NOT_EXIST_EXCEPTION, e);
         else if(e instanceof HttpRequestMethodNotSupportedException)
             se = wrapServiceException(NOT_IMPLEMENTED_EXCEPTION, e);
         else if(e instanceof HttpMediaTypeException)
             se = wrapServiceException(NOT_SUPPORTED_EXCEPTION, e);
         else if(e instanceof HttpMessageConversionException)
             se = wrapServiceException(BAD_REQUEST_EXCEPTION, e);
-        
+        else if(e instanceof NoHandlerFoundException)
+        {
+            se = wrapServiceException(NOT_EXIST_EXCEPTION, e);
+            printWarnStackTrace = false;
+        }
+
         if(se == null)
             se = wrapServiceException(GENERAL_EXCEPTION, e);
 
-        logServiceException(log, se.getMessage(), se);
+        logServiceException(log, se.getMessage(), se, printWarnStackTrace);
         
         return new Response<>(se);
     }
