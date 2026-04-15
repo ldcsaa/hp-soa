@@ -32,10 +32,10 @@
     </Properties>
 
     <Appenders>
-        <Console name="STDOUT" target="SYSTEM_OUT" disableAnsi="false">
+        <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="${logfile.console.pattern}"/>
         </Console>
-        <Console name="STDERR" target="SYSTEM_ERR" disableAnsi="false">
+        <Console name="STDERR" target="SYSTEM_ERR">
             <PatternLayout pattern="${logfile.console.pattern}"/>
         </Console>
         
