@@ -276,7 +276,7 @@ public class GeneralHelper
         if(strLen > len)
         {
             StringBuilder sb = new StringBuilder(len + 3);
-            return sb.append(str.substring(0, len)).append("...").toString();
+            return sb.append(str, 0, len).append("...").toString();
         }
 
         return str;
