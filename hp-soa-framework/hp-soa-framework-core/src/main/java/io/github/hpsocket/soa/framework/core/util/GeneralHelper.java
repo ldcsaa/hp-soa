@@ -273,13 +273,11 @@ public class GeneralHelper
     {
         int strLen = safeString(str).length();
 
-        if(strLen > len)
-        {
-            StringBuilder sb = new StringBuilder(len + 3);
-            return sb.append(str, 0, len).append("...").toString();
-        }
+        if(strLen <= len)
+            return str;
 
-        return str;
+        StringBuilder sb = new StringBuilder(len + 3);
+        return sb.append(str, 0, len).append("...").toString();
     }
 
     /** 检查字符串是否符合整数格式 */
