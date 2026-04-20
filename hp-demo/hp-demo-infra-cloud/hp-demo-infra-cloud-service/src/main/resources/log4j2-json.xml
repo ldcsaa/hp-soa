@@ -32,7 +32,7 @@
             <PatternLayout pattern="${logfile.console.pattern}"/>
         </Console>
         
-        <RollingRandomAccessFile name="MONITOR_LOG_FILE" immediateFlush="${logfile.immediateFlush}" fileName="${logfile.path}/${logfile.monitorLogFileName}.log"
+<RollingRandomAccessFile name="MONITOR_LOG_FILE" immediateFlush="${logfile.immediateFlush}" fileName="${logfile.path}/${logfile.monitorLogFileName}.log"
                                  filePattern="${logfile.archive.path}/${logfile.monitorLogFileName}-${logfile.archive.suffix}">
             <JsonTemplateLayout eventTemplateUri="${json.template.layout}">
                 <EventTemplateAdditionalField key="log_type" value="${log.type}"/>
@@ -43,7 +43,12 @@
                 <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="${logfile.max.size}"/>
             </Policies>
-            <DefaultRolloverStrategy max="${logfile.max.count}"/>
+            <DefaultRolloverStrategy max="${logfile.max.count}">
+                <Delete basePath="${logfile.archive.path}">
+                    <IfFileName glob="${logfile.monitorLogFileName}-*.log.gz"/>
+                    <IfLastModified age="${logfile.max.age}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingRandomAccessFile>
         <RollingRandomAccessFile name="SERVICE_LOG_FILE" immediateFlush="${logfile.immediateFlush}" fileName="${logfile.path}/${logfile.serviceLogFileName}.log"
                                  filePattern="${logfile.archive.path}/${logfile.serviceLogFileName}-${logfile.archive.suffix}">
@@ -56,7 +61,12 @@
                 <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="${logfile.max.size}"/>
             </Policies>
-            <DefaultRolloverStrategy max="${logfile.max.count}"/>
+            <DefaultRolloverStrategy max="${logfile.max.count}">
+                <Delete basePath="${logfile.archive.path}">
+                    <IfFileName glob="${logfile.serviceLogFileName}-*.log.gz"/>
+                    <IfLastModified age="${logfile.max.age}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingRandomAccessFile>
     </Appenders>
 
