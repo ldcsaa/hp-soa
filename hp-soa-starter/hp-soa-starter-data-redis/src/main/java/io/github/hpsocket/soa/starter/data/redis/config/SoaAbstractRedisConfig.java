@@ -204,31 +204,32 @@ public abstract class SoaAbstractRedisConfig
     
     public RedisCacheConfiguration redisDefaultCacheConfiguration()
     {
-        return createRedisCacheConfiguration(3600);
+        return createRedisCacheConfiguration(Duration.ofMinutes(10));
     }
     
     public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap()
     {
         Map<String, RedisCacheConfiguration> cfgs = new LinkedHashMap<>();
 
-        cfgs.put("10s", createRedisCacheConfiguration(10));
-        cfgs.put("30s", createRedisCacheConfiguration(30));
-        cfgs.put("1m", createRedisCacheConfiguration(60));
-        cfgs.put("5m", createRedisCacheConfiguration(300));
-        cfgs.put("15m", createRedisCacheConfiguration(900));
-        cfgs.put("30m", createRedisCacheConfiguration(1800));
-        cfgs.put("1h", createRedisCacheConfiguration(3600));
-        cfgs.put("3h", createRedisCacheConfiguration(10800));
-        cfgs.put("6h", createRedisCacheConfiguration(21600));
-        cfgs.put("12h", createRedisCacheConfiguration(43200));
-        cfgs.put("1d", createRedisCacheConfiguration(86400));
-        cfgs.put("3d", createRedisCacheConfiguration(259200));
-        cfgs.put("7d", createRedisCacheConfiguration(604800));
-        cfgs.put("15d", createRedisCacheConfiguration(1296000));
-        cfgs.put("30d", createRedisCacheConfiguration(2592000));
-        cfgs.put("90d", createRedisCacheConfiguration(7776000));
-        cfgs.put("180d", createRedisCacheConfiguration(15552000));
-        cfgs.put("1y", createRedisCacheConfiguration(31536000));
+        cfgs.put("10s", createRedisCacheConfiguration(Duration.ofSeconds(10)));
+        cfgs.put("30s", createRedisCacheConfiguration(Duration.ofSeconds(30)));
+        cfgs.put("1m", createRedisCacheConfiguration(Duration.ofMinutes(1)));
+        cfgs.put("5m", createRedisCacheConfiguration(Duration.ofMinutes(5)));
+        cfgs.put("15m", createRedisCacheConfiguration(Duration.ofMinutes(15)));
+        cfgs.put("30m", createRedisCacheConfiguration(Duration.ofMinutes(30)));
+        cfgs.put("1h", createRedisCacheConfiguration(Duration.ofHours(1)));
+        cfgs.put("3h", createRedisCacheConfiguration(Duration.ofHours(3)));
+        cfgs.put("6h", createRedisCacheConfiguration(Duration.ofHours(6)));
+        cfgs.put("12h", createRedisCacheConfiguration(Duration.ofHours(12)));
+        cfgs.put("1d", createRedisCacheConfiguration(Duration.ofDays(1)));
+        cfgs.put("3d", createRedisCacheConfiguration(Duration.ofDays(3)));
+        cfgs.put("7d", createRedisCacheConfiguration(Duration.ofDays(7)));
+        cfgs.put("15d", createRedisCacheConfiguration(Duration.ofDays(15)));
+        cfgs.put("30d", createRedisCacheConfiguration(Duration.ofDays(30)));
+        cfgs.put("60d", createRedisCacheConfiguration(Duration.ofDays(60)));
+        cfgs.put("90d", createRedisCacheConfiguration(Duration.ofDays(90)));
+        cfgs.put("180d", createRedisCacheConfiguration(Duration.ofDays(180)));
+        cfgs.put("1y", createRedisCacheConfiguration(Duration.ofDays(365)));
         
         return cfgs;
     }
@@ -242,52 +243,37 @@ public abstract class SoaAbstractRedisConfig
         return new MapPropertySource("redisInitialCacheConfigurations", (Map<String, Object>)(Map<?, ?>)redisInitialCacheSourceMap);
     }
 
-    private RedisCacheConfiguration createRedisCacheConfiguration(long ttlSeconds)
+    private RedisCacheConfiguration createRedisCacheConfiguration(Duration duration)
     {
         return RedisCacheConfiguration
             .defaultCacheConfig()
-            .entryTtl(Duration.ofSeconds(ttlSeconds))
+            .entryTtl(duration)
             .serializeKeysWith(SerializationPair.fromSerializer(stringRedisSerializer))
             .serializeValuesWith(SerializationPair.fromSerializer(genericFastJsonRedisSerializer));
     }
 
     public KeyGenerator keyGenerator()
     {
-        return new KeyGenerator()
+        return (target, method, params) ->
         {
-            @Override
-            public Object generate(Object target, Method method, Object... params)
-            {
-                StringBuilder sb1 = new StringBuilder()
+            StringBuilder sb = new StringBuilder(100)
                                     .append(target.getClass().getName())
                                     .append(':')
                                     .append(method.getName());
-                
-                String prefix = sb1.toString();
-                
-                int length = params.length;
-                
-                if(length == 0)
-                    return prefix;
-                
-                StringBuilder sb2 = new StringBuilder();
-                
-                for(int i = 0; i < length; i++)
+
+            if(params.length > 0)
+            {
+                for(int i = 0; i < params.length; i++)
                 {
-                    Object obj = params[i];
-                    sb2.append(obj == null ? "null" : obj.toString());
-                    
-                    if(i < length - 1)
-                        sb2.append(':');
+                    sb.append(':').append(params[i]);
                 }
-                
-                String key = sb2.toString();
-                
-                if(key.length() > 40)
-                    key = CryptHelper.md5(key);
-                
-                return prefix + ':' + key;
             }
+
+            String key = sb.toString();
+            if(key.length() > 60)
+                key = CryptHelper.md5(key);
+
+            return key;
         };
     }
     

@@ -4,12 +4,14 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.github.hpsocket.soa.framework.web.annotation.PreAuth;
+import io.github.hpsocket.soa.framework.web.support.AspectHelper;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.jboss.logging.MDC;
 
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
@@ -20,7 +22,10 @@ import io.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import io.github.hpsocket.soa.framework.web.model.Response;
 import io.github.hpsocket.soa.framework.web.service.AccessVerificationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
 import static io.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type.*;
@@ -32,8 +37,16 @@ import static io.github.hpsocket.soa.framework.web.annotation.AccessVerification
 @Order(0)
 public class AccessVerificationInspector
 {
-    static final String POINTCUT_PATTERN    = "execution (public io.github.hpsocket.soa.framework.web.model.Response *.*(..))"
-                                            + " && @within(org.springframework.web.bind.annotation.RestController)";
+    static final String POINTCUT_PATTERN    = """
+                                                execution (public io.github.hpsocket.soa.framework.web.model.Response *.*(..)) &&
+                                                (
+                                                    @within(org.springframework.web.bind.annotation.RestController) ||
+                                                    @within(org.springframework.stereotype.Controller)
+                                                )
+                                              """;
+
+    private static final AspectHelper.AnnotationHolder<AccessVerification> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
+    private static final AspectHelper.AnnotationHolder<PreAuth> PRE_AUTH_HOLDER = new AspectHelper.AnnotationHolder<>() {};
 
     @Pointcut(POINTCUT_PATTERN)
     protected void inspectMethod() {}
@@ -42,6 +55,7 @@ public class AccessVerificationInspector
     private AccessVerificationService accessVerificationService;
 
     private Map<Method, AccessVerification.Type> annotations = new ConcurrentHashMap<>();
+    private Map<Method, String> permissions = new ConcurrentHashMap<>();
     
     public AccessVerificationInspector(AccessVerification.Type defaultAccessPolicy, AccessVerificationService accessVerificationService)
     {
@@ -54,17 +68,19 @@ public class AccessVerificationInspector
     @Around("inspectMethod()")
     public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
     {
-        Response<?> resp             = null;
-        MethodSignature signature    = (MethodSignature)joinPoint.getSignature();
-        AccessVerification.Type type = getInspectVerificationType(signature.getMethod());
+        Response<?> resp = null;
+        Method method    = AspectHelper.getMethod(joinPoint);
+        AccessVerification.Type type = getInspectVerificationType(joinPoint, method);
 
         try
         {
             if(type != NO_CHECK)
             {
-                RequestAttribute reqAttr = RequestContext.getRequestAttribute();
+                RequestAttribute reqAttr      = RequestContext.getRequestAttribute();
+                HttpServletResponse response  = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();
 
                 if(reqAttr == null) {
+                    response.setStatus(HttpStatus.PRECONDITION_FAILED.value());
                     resp = new Response<Boolean>(BAD_REQUEST_EXCEPTION);
                     return resp;
                 }
@@ -72,27 +88,36 @@ public class AccessVerificationInspector
                 resp = inspectApp(reqAttr);
 
                 if(resp.getData() == null)
+                {
+                    response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
                     return resp;
+                }
 
                 if(type != NO_LOGIN)
                 {
                     resp = inspectUser(reqAttr, type);
 
                     if(resp.getData() == null)
+                    {
+                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
                         return resp;
+                    }
 
                     if(type == REQUIRE_AUTHORIZED)
                     {
-                        resp = inspectRole(reqAttr);
+                        checkPermission(joinPoint, method, reqAttr);
+                        resp = inspectAuth(reqAttr);
 
                         if(resp.getData() == null)
+                        {
+                            response.setStatus(HttpStatus.FORBIDDEN.value());
                             return resp;
+                        }
                     }
                 }
             }
 
             resp = (Response<?>)joinPoint.proceed();
-
             return resp;
         }
         finally
@@ -101,35 +126,24 @@ public class AccessVerificationInspector
         }
     }
 
-    private AccessVerification.Type getInspectVerificationType(Method method)
+    private AccessVerification.Type getInspectVerificationType(ProceedingJoinPoint joinPoint, Method method)
     {
         AccessVerification.Type type = annotations.get(method);
         
         if(type == null)
         {
-            type = getVerificationType(method);
+            AccessVerification annotation = ANNOTATION_HOLDER.findAnnotationByMethodOrClass(joinPoint);
+            type = (annotation != null) ? annotation.value() : defaultAccessPolicy;
+
             annotations.putIfAbsent(method, type);
         }
         
         return type;
     }
 
-    private AccessVerification.Type getVerificationType(Method method)
-    {
-        AccessVerification annotation = method.getAnnotation(AccessVerification.class);
-        
-        if(annotation == null)
-            annotation = method.getDeclaringClass().getAnnotation(AccessVerification.class);
-        
-        if(annotation == null)
-            return defaultAccessPolicy;
-
-        return annotation.value();
-    }
-
     private Response<Boolean> inspectApp(RequestAttribute reqAttr)
     {
-        Pair<Boolean, String> rs = accessVerificationService.verifyAppCode(reqAttr.getAppCode(), reqAttr.getSrcAppCode());
+        Pair<Boolean, String> rs = accessVerificationService.verifyAppCode(reqAttr);
         
         if(!Boolean.TRUE.equals(rs.getFirst()))
         {
@@ -137,7 +151,7 @@ public class AccessVerificationInspector
             
             if(GeneralHelper.isStrEmpty(msg))
                 msg = APPCODE_CHECK_EXCEPTION.getMessage();
-            
+
             return new Response<>(APPCODE_CHECK_ERROR, msg);
         }
 
@@ -146,7 +160,7 @@ public class AccessVerificationInspector
 
     private Response<Long> inspectUser(RequestAttribute reqAttr, AccessVerification.Type type)
     {
-        Pair<Long, String> rs = accessVerificationService.verifyUser(reqAttr.getToken(), reqAttr.getGroupId());
+        Pair<Long, String> rs = accessVerificationService.verifyUser(reqAttr);
         Long userId = rs.getFirst();
         
         if(userId == null)
@@ -170,9 +184,9 @@ public class AccessVerificationInspector
         return new Response<>(userId);
     }
 
-    private Response<Boolean> inspectRole(RequestAttribute reqAttr)
+    private Response<Boolean> inspectAuth(RequestAttribute reqAttr)
     {
-        Pair<Boolean, String> rs = accessVerificationService.verifyAuthorization(reqAttr.getRequestUri(), reqAttr.getAppCode(), reqAttr.getGroupId(), reqAttr.getUserId());
+        Pair<Boolean, String> rs = accessVerificationService.verifyAuthorization(reqAttr);
         
         if(!Boolean.TRUE.equals(rs.getFirst()))
         {
@@ -187,4 +201,18 @@ public class AccessVerificationInspector
         return new Response<>(Boolean.TRUE);
     }
 
+    private void checkPermission(ProceedingJoinPoint joinPoint, Method method, RequestAttribute reqAttr)
+    {
+        String permission = permissions.get(method);
+
+        if(permission == null)
+        {
+            PreAuth annotation = PRE_AUTH_HOLDER.findAnnotationByMethodOrClass(joinPoint);
+            permission = (annotation != null) ? annotation.permission() : "";
+
+            permissions.putIfAbsent(method, permission);
+        }
+
+        reqAttr.setPermission(permission);
+    }
 }

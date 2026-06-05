@@ -63,37 +63,25 @@ public class AspectHelper
         }
         catch(NoSuchMethodException e)
         {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
     public static final Class<?> getMethodReturnType(JoinPoint point)
     {
         Method targetMethod = getMethod(point);
-        
-        if(targetMethod == null)
-            return null;
-        
         return targetMethod.getReturnType();
     }
 
     public static final <T extends Annotation> T getMethodAnnotation(JoinPoint point, Class<T> annotationType)
     {
         Method targetMethod = getMethod(point);
-        
-        if(targetMethod == null)
-            return null;
-        
         return MergedAnnotations.from(targetMethod, SearchStrategy.INHERITED_ANNOTATIONS).get(annotationType).synthesize(MergedAnnotation::isPresent).orElse(null);
     }
 
     public static final Annotation[] getMethodAnnotations(JoinPoint point)
     {
         Method targetMethod = getMethod(point);
-        
-        if(targetMethod == null)
-            return new Annotation[0];
-        
         return MergedAnnotations.from(targetMethod, SearchStrategy.INHERITED_ANNOTATIONS).stream().map(MergedAnnotation::synthesize).toArray(Annotation[]::new);
     }
 

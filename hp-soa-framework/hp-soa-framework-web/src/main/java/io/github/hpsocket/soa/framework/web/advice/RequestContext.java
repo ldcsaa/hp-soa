@@ -163,6 +163,11 @@ public class RequestContext
     {
         return getRequestAttribute().getUserId();
     }
+
+    public static final String getPermission()
+    {
+        return getRequestAttribute().getPermission();
+    }
     
     public static final Object getBody()
     {

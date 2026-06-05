@@ -30,6 +30,7 @@ public class RequestAttribute
     private String extra;
 
     private Long userId;
+    private String permission;
 
     private String clientAddr;
     private String requestUri;
