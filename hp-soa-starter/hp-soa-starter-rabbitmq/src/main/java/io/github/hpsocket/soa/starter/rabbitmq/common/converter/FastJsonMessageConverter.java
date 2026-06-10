@@ -1,20 +1,19 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.common.converter;
 
+import com.alibaba.fastjson2.JSON;
+import io.github.hpsocket.soa.framework.core.id.IdGenerator;
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 import org.slf4j.MDC;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.AbstractMessageConverter;
 import org.springframework.amqp.support.converter.MessageConversionException;
 
-import com.alibaba.fastjson2.JSON;
-
-import io.github.hpsocket.soa.framework.core.id.IdGenerator;
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
-
-import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_MSG_ID;
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_SOURCE_REQUEST_ID;
 
 /** <b>Fastjson 消息转换器</b> */
 public class FastJsonMessageConverter extends AbstractMessageConverter

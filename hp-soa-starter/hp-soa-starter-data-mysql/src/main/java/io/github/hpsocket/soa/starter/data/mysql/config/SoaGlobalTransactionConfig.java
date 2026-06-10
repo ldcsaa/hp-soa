@@ -1,11 +1,6 @@
 
 package io.github.hpsocket.soa.starter.data.mysql.config;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -19,13 +14,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
-import org.springframework.transaction.interceptor.RollbackRuleAttribute;
-import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute;
-import org.springframework.transaction.interceptor.TransactionAttribute;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
+import org.springframework.transaction.interceptor.*;
 
-import static io.github.hpsocket.soa.starter.data.mysql.config.SoaDataSourceConfig.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static io.github.hpsocket.soa.starter.data.mysql.config.SoaDataSourceConfig.dynamicRoutingTransactionManagerBeanName;
 
 /** <b>HP-SOA 全局事务配置</b><br>
  * 当 <i>${hp.soa.data.mysql.global-transaction-management.enabled}</i> 为 true 时，启用全局事务配置

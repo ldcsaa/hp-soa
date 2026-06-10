@@ -1,16 +1,15 @@
 package io.github.hpsocket.soa.framework.logging.gelf.log4j;
 
-import static io.github.hpsocket.soa.framework.logging.gelf.LogMessageField.NamedLogField.*;
-
-import java.util.Collections;
-
-import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.spi.LoggingEvent;
-
 import io.github.hpsocket.soa.framework.logging.RuntimeContainer;
 import io.github.hpsocket.soa.framework.logging.gelf.LogMessageField;
 import io.github.hpsocket.soa.framework.logging.gelf.MdcGelfMessageAssembler;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.*;
+import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.spi.LoggingEvent;
+
+import java.util.Collections;
+
+import static io.github.hpsocket.soa.framework.logging.gelf.LogMessageField.NamedLogField.*;
 
 /**
  * Logging-Handler for GELF (Graylog Extended Logging Format). This Java-Util-Logging Handler creates GELF Messages and posts

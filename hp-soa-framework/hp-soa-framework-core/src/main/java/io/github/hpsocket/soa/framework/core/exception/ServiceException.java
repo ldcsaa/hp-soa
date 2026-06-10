@@ -1,9 +1,8 @@
 package io.github.hpsocket.soa.framework.core.exception;
 
-import org.slf4j.Logger;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
 
 /** <b>HP-SOA 统一异常</b> */
 @Getter

@@ -1,18 +1,17 @@
 package io.github.hpsocket.soa.starter.kafka.producer.interceptor;
 
-import java.util.Map;
-
+import io.github.hpsocket.soa.framework.core.id.IdGenerator;
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.kafka.util.KafkaConstant;
+import io.github.hpsocket.soa.starter.kafka.util.KafkaHelper;
 import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.header.Headers;
 import org.slf4j.MDC;
 
-import io.github.hpsocket.soa.framework.core.id.IdGenerator;
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.kafka.util.KafkaConstant;
-import io.github.hpsocket.soa.starter.kafka.util.KafkaHelper;
+import java.util.Map;
 
 public class ProducerMdcInterceptor<K, V> implements ProducerInterceptor<K, V>
 {

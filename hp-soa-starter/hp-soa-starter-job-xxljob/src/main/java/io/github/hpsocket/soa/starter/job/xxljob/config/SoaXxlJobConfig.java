@@ -1,16 +1,14 @@
 
 package io.github.hpsocket.soa.starter.job.xxljob.config;
 
+import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
+import io.github.hpsocket.soa.starter.job.xxljob.aspect.XxlJobMdcInspector;
+import io.github.hpsocket.soa.starter.job.xxljob.properties.SoaXxlJobProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-
-import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
-
-import io.github.hpsocket.soa.starter.job.xxljob.aspect.XxlJobMdcInspector;
-import io.github.hpsocket.soa.starter.job.xxljob.properties.SoaXxlJobProperties;
 
 /** <b>HP-SOA XxlJob 配置</b> */
 @AutoConfiguration

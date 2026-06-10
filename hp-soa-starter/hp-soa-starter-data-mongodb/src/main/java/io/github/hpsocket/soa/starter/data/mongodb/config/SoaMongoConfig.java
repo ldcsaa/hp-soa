@@ -1,13 +1,8 @@
 
 package io.github.hpsocket.soa.starter.data.mongodb.config;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import io.github.hpsocket.soa.framework.web.support.OffsetDateTimeProvider;
+import io.github.hpsocket.soa.framework.web.support.ZonedDateTimeProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -19,8 +14,12 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 
-import io.github.hpsocket.soa.framework.web.support.OffsetDateTimeProvider;
-import io.github.hpsocket.soa.framework.web.support.ZonedDateTimeProvider;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /** <b>HP-SOA Elasticsearch 配置</b> */
 @AutoConfiguration

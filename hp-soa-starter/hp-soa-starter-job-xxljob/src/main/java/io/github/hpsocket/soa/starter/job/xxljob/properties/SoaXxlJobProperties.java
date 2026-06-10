@@ -1,9 +1,8 @@
 package io.github.hpsocket.soa.starter.job.xxljob.properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** <b>HP-SOA XxlJob 属性</b> */
 @Getter

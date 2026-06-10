@@ -1,11 +1,11 @@
 package io.github.hpsocket.soa.framework.logging.gelf.standalone;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderConfiguration;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.MessagePostprocessingErrorReporter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Default Gelf sender configuration for standalone use.

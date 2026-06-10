@@ -1,14 +1,9 @@
 package io.github.hpsocket.soa.framework.core.thread;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import io.github.hpsocket.soa.framework.core.mdc.MdcRunnableWrapper;
-
 import lombok.Getter;
+
+import java.util.concurrent.*;
 
 /** <b>异步线程池（支持 {@linkplain org.slf4j.MDC MDC} 调用链跟踪）</b> */
 @Getter

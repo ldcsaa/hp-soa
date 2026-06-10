@@ -1,21 +1,8 @@
 
 package io.github.hpsocket.soa.starter.leaf.config;
-        
-import java.util.Map;
-
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.exception.CannotFindDataSourceException;
-
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.leaf.segment.SegmentIdGenImpl;
 import io.github.hpsocket.soa.framework.leaf.segment.dao.impl.IdAllocDaoImpl;
@@ -24,6 +11,16 @@ import io.github.hpsocket.soa.framework.leaf.service.IdGen;
 import io.github.hpsocket.soa.framework.leaf.snowflake.SnowflakeIdGenImpl;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.starter.leaf.service.impl.GlobalIdServiceImpl;
+import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+
+import javax.sql.DataSource;
+import java.util.Map;
 
 /** <b>HP-SOA Leaf 分布式全局 ID 配置</b> */
 @AutoConfiguration

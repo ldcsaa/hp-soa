@@ -1,16 +1,8 @@
 
 package io.github.hpsocket.soa.starter.kafka.producer.entity;
 
-import java.io.Serializable;
-import java.time.OffsetDateTime;
-
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.header.Headers;
-import org.slf4j.MDC;
-
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
@@ -20,6 +12,12 @@ import io.github.hpsocket.soa.starter.kafka.util.KafkaConstant;
 import io.github.hpsocket.soa.starter.kafka.util.KafkaHelper;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.header.Headers;
+import org.slf4j.MDC;
+
+import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 /** <b>领域事件实体</b><br>
  * 对应领域事件数据库表，应用程序可以继承该实体，扩展自定义字段

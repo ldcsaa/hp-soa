@@ -1,11 +1,11 @@
 package io.github.hpsocket.soa.starter.data.redis.serializer;
 
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.SerializationException;
+
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.SerializationException;
 
 public class NumberRedisSerializer implements RedisSerializer<Number>
 {

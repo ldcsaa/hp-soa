@@ -1,14 +1,14 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
 
 /**
  * HTTP-based Gelf sender. This sender uses Java's HTTP client to {@code POST} JSON Gelf messages to an endpoint.

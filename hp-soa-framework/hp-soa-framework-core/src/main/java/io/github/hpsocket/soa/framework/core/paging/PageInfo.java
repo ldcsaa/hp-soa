@@ -1,11 +1,11 @@
 
 package io.github.hpsocket.soa.framework.core.paging;
 
-import java.io.Serializable;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 /** <b>通用分页信息</b> */
 @Getter

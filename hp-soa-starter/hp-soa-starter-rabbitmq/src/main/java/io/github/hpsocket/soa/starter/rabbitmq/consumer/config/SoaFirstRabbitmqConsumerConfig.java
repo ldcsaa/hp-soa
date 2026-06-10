@@ -1,5 +1,8 @@
 package io.github.hpsocket.soa.starter.rabbitmq.consumer.config;
 
+import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.OffsetSpecification;
+import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaFirstRabbitmqProperties;
 import org.springframework.amqp.rabbit.config.ContainerCustomizer;
 import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
@@ -22,11 +25,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
 import org.springframework.rabbit.stream.listener.StreamListenerContainer;
-
-import com.rabbitmq.stream.Environment;
-import com.rabbitmq.stream.OffsetSpecification;
-
-import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaFirstRabbitmqProperties;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaRabbitmqConsumerConfig.class, SoaFirstRabbitmqProperties.class})

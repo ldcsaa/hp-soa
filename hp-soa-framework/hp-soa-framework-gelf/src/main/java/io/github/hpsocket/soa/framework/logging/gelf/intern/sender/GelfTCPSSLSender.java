@@ -1,18 +1,17 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLEngineResult;
+import javax.net.ssl.SSLSession;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.SSLEngineResult;
-import javax.net.ssl.SSLSession;
-
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
 
 /**
  * TCP with SSL {@link io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender}.

@@ -1,10 +1,9 @@
 package io.github.hpsocket.soa.starter.web.cloud.interceptor;
 
-import org.springframework.core.Ordered;
-
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
+import org.springframework.core.Ordered;
 
 /** <b>Feign 请求拦截器</b><p>
  * 注入调用链跟踪信息

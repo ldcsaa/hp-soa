@@ -1,21 +1,19 @@
 
 package io.github.hpsocket.soa.starter.sentinel.config;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.alibaba.csp.sentinel.adapter.spring.webmvc_v6x.callback.BlockExceptionHandler;
+import com.alibaba.csp.sentinel.adapter.web.common.UrlCleaner;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.starter.sentinel.advice.SentinelExceptionAdvice;
+import io.github.hpsocket.soa.starter.sentinel.exception.DefaultSentinelBlockExceptionHandler;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 
-import com.alibaba.csp.sentinel.adapter.spring.webmvc_v6x.callback.BlockExceptionHandler;
-import com.alibaba.csp.sentinel.adapter.web.common.UrlCleaner;
-
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.starter.sentinel.advice.SentinelExceptionAdvice;
-import io.github.hpsocket.soa.starter.sentinel.exception.DefaultSentinelBlockExceptionHandler;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /** <b>HP-SOA Sentinel 配置</b> */
 @AutoConfiguration

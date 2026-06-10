@@ -1,11 +1,10 @@
 package io.github.hpsocket.soa.starter.skywalking.async;
 
-import java.util.function.Consumer;
-
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import org.apache.skywalking.apm.toolkit.trace.ConsumerWrapper;
 import org.apache.skywalking.apm.toolkit.trace.TraceCrossThread;
 
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import java.util.function.Consumer;
 
 /** <b>{@linkplain Consumer} 包装类（注入 {@linkplain org.slf4j.MDC MDC} 和 traceId 调用链跟踪信息）</b> */
 @TraceCrossThread

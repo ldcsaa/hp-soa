@@ -1,11 +1,10 @@
 package io.github.hpsocket.soa.starter.mqtt.config;
 
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-
-import javax.net.SocketFactory;
-import javax.net.ssl.HostnameVerifier;
-
+import io.github.hpsocket.soa.starter.mqtt.properties.SoaDefaultMqttProperties;
+import io.github.hpsocket.soa.starter.mqtt.service.MqttMessageListener;
+import io.github.hpsocket.soa.starter.mqtt.service.MqttMessagePublisher;
+import io.github.hpsocket.soa.starter.mqtt.service.MqttPropertiesCustomizer;
+import io.github.hpsocket.soa.starter.mqtt.support.ExtMqttClient;
 import org.eclipse.paho.mqttv5.client.MqttCallback;
 import org.eclipse.paho.mqttv5.client.MqttClientPersistence;
 import org.eclipse.paho.mqttv5.common.MqttException;
@@ -17,11 +16,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
-import io.github.hpsocket.soa.starter.mqtt.properties.SoaDefaultMqttProperties;
-import io.github.hpsocket.soa.starter.mqtt.service.MqttMessageListener;
-import io.github.hpsocket.soa.starter.mqtt.service.MqttMessagePublisher;
-import io.github.hpsocket.soa.starter.mqtt.service.MqttPropertiesCustomizer;
-import io.github.hpsocket.soa.starter.mqtt.support.ExtMqttClient;
+import javax.net.SocketFactory;
+import javax.net.ssl.HostnameVerifier;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 /** <b>默认 MQTT 配置</b> */
 @AutoConfiguration

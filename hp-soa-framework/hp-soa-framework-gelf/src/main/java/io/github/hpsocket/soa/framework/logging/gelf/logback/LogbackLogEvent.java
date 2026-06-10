@@ -1,17 +1,16 @@
 package io.github.hpsocket.soa.framework.logging.gelf.logback;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.slf4j.Marker;
-
-import io.github.hpsocket.soa.framework.logging.gelf.*;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxy;
+import io.github.hpsocket.soa.framework.logging.gelf.*;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import org.slf4j.Marker;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:tobiassebastian.kaefer@1und1.de">Tobias Kaefer</a>

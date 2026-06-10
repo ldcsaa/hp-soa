@@ -1,8 +1,15 @@
 
 package io.github.hpsocket.soa.starter.job.exclusive.aspect;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import io.github.hpsocket.soa.framework.web.service.AsyncService;
+import io.github.hpsocket.soa.framework.web.support.AspectHelper;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob;
+import io.github.hpsocket.soa.starter.job.exclusive.exception.ExclusiveJobExceptionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,15 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
-import io.github.hpsocket.soa.framework.web.service.AsyncService;
-import io.github.hpsocket.soa.framework.web.support.AspectHelper;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob;
-import io.github.hpsocket.soa.starter.job.exclusive.exception.ExclusiveJobExceptionHandler;
-import lombok.extern.slf4j.Slf4j;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /** <b>分布式独占 Job 拦截器</b><br>
  * （注：当应用程序为只读时，不执行任何 Job 业务逻辑）

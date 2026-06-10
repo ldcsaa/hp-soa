@@ -1,16 +1,10 @@
 package io.github.hpsocket.soa.framework.logging.gelf.jboss7;
 
-import java.util.Set;
-
+import io.github.hpsocket.soa.framework.logging.gelf.*;
+import io.github.hpsocket.soa.framework.logging.gelf.jul.JulLogEvent;
 import org.jboss.logmanager.ExtLogRecord;
 
-import io.github.hpsocket.soa.framework.logging.gelf.DynamicMdcMessageField;
-import io.github.hpsocket.soa.framework.logging.gelf.GelfUtil;
-import io.github.hpsocket.soa.framework.logging.gelf.LogMessageField;
-import io.github.hpsocket.soa.framework.logging.gelf.MdcMessageField;
-import io.github.hpsocket.soa.framework.logging.gelf.MessageField;
-import io.github.hpsocket.soa.framework.logging.gelf.Values;
-import io.github.hpsocket.soa.framework.logging.gelf.jul.JulLogEvent;
+import java.util.Set;
 
 /**
  * @author Mark Paluch

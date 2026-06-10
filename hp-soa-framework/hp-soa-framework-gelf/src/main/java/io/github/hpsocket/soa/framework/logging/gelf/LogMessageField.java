@@ -1,12 +1,12 @@
 package io.github.hpsocket.soa.framework.logging.gelf;
 
-import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.getProperty;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.Closer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import io.github.hpsocket.soa.framework.logging.gelf.intern.Closer;
+import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.getProperty;
 
 /**
  * Field with reference to the log event.

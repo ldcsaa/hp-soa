@@ -1,25 +1,23 @@
 package io.github.hpsocket.soa.framework.web.advice;
 
-import java.io.IOException;
-import java.util.Map;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.Result;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.io.IOException;
+import java.util.Map;
+
 import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
-import static org.springframework.web.context.request.ServletRequestAttributes.*;
+import static org.springframework.web.context.request.ServletRequestAttributes.SCOPE_REQUEST;
 
 /** <b>HTTP 请求上下文</b> */
 @Slf4j

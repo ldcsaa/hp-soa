@@ -1,18 +1,17 @@
 package io.github.hpsocket.soa.framework.logging.gelf.log4j;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
+import io.github.hpsocket.soa.framework.logging.gelf.*;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 import org.apache.log4j.Level;
 import org.apache.log4j.MDC;
 import org.apache.log4j.spi.LocationInfo;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
-import io.github.hpsocket.soa.framework.logging.gelf.*;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Mark Paluch

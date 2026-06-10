@@ -1,20 +1,18 @@
 package io.github.hpsocket.soa.starter.job.snailjob.executor;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.Supplier;
-
-import com.aizuda.snailjob.model.dto.ExecuteResult;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StopWatch;
-
 import com.aizuda.snailjob.client.job.core.dto.JobArgs;
-
+import com.aizuda.snailjob.model.dto.ExecuteResult;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.service.AsyncService;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.job.snailjob.exception.SnailJobExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StopWatch;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.function.Supplier;
 
 /** <b>SnailJob 执行者</b><br>
  * （注：当应用程序为只读时，不执行任何 Job 业务逻辑）

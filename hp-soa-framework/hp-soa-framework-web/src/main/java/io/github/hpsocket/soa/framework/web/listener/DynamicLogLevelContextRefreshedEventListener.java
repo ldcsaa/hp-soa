@@ -1,17 +1,16 @@
 package io.github.hpsocket.soa.framework.web.listener;
 
-import java.util.Map;
-
-import org.springframework.boot.logging.LogLevel;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.Ordered;
-
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.logging.LogLevel;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.Ordered;
+
+import java.util.Map;
 
 /** <b>动态日志初始化监听器</b> */
 @Slf4j

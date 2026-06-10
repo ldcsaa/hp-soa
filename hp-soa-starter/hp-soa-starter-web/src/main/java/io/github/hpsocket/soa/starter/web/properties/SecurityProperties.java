@@ -1,12 +1,10 @@
 package io.github.hpsocket.soa.starter.web.properties;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import io.github.hpsocket.soa.framework.web.propertries.IServletPathsPropertries;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter

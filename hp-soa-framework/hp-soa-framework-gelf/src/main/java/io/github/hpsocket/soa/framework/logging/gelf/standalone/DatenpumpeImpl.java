@@ -1,13 +1,13 @@
 package io.github.hpsocket.soa.framework.logging.gelf.standalone;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.github.hpsocket.soa.framework.logging.gelf.GelfMessageBuilder;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderConfiguration;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Default implementation of {@link Datenpumpe}.

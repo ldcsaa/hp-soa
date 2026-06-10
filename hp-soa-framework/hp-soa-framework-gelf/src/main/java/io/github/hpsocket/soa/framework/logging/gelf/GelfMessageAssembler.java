@@ -1,6 +1,11 @@
 package io.github.hpsocket.soa.framework.logging.gelf;
 
-import static io.github.hpsocket.soa.framework.logging.gelf.GelfMessageBuilder.newInstance;
+import io.github.hpsocket.soa.framework.logging.RuntimeContainer;
+import io.github.hpsocket.soa.framework.logging.StackTraceFilter;
+import io.github.hpsocket.soa.framework.logging.gelf.LogMessageField.NamedLogField;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.HostAndPortProvider;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.PoolingGelfMessageBuilder;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -8,12 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import io.github.hpsocket.soa.framework.logging.RuntimeContainer;
-import io.github.hpsocket.soa.framework.logging.StackTraceFilter;
-import io.github.hpsocket.soa.framework.logging.gelf.LogMessageField.NamedLogField;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.HostAndPortProvider;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.PoolingGelfMessageBuilder;
+import static io.github.hpsocket.soa.framework.logging.gelf.GelfMessageBuilder.newInstance;
 
 /**
  * Creates {@link GelfMessage} based on various {@link LogEvent}. A {@link LogEvent} encapsulates log-framework specifics and

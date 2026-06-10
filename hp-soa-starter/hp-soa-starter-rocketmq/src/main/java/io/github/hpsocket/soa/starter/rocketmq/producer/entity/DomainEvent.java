@@ -1,19 +1,18 @@
 
 package io.github.hpsocket.soa.starter.rocketmq.producer.entity;
 
-import java.io.Serializable;
-import java.util.Map;
-
-import org.slf4j.MDC;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
-
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.MDC;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+
+import java.io.Serializable;
+import java.util.Map;
 
 /** <b>领域事件实体</b><br>
  * 通用领域时间封装类，应用程序可以继承该实体，扩展自定义字段

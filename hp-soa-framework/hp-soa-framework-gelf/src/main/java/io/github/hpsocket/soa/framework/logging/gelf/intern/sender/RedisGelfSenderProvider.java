@@ -1,14 +1,14 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
-import java.io.IOException;
-import java.net.URI;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Protocol;
-import redis.clients.jedis.util.Pool;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderConfiguration;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderProvider;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Protocol;
+import redis.clients.jedis.util.Pool;
+
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * {@link GelfSenderProvider} to provide {@link GelfREDISSender}.

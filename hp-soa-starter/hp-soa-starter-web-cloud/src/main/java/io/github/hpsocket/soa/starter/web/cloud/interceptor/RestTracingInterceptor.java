@@ -1,14 +1,13 @@
 package io.github.hpsocket.soa.starter.web.cloud.interceptor;
 
-import java.io.IOException;
-
+import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-import io.github.hpsocket.soa.starter.web.cloud.support.TracingHelper;
+import java.io.IOException;
 
 /** <b>Rest Template 请求拦截器</b><p>
  * 注入调用链跟踪信息

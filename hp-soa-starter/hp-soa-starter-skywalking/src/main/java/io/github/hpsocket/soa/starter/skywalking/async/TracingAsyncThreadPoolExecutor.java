@@ -1,11 +1,11 @@
 package io.github.hpsocket.soa.starter.skywalking.async;
 
+import io.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-
-import io.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 
 /** <b>异步线程池（注入 {@linkplain org.slf4j.MDC MDC} 和 traceId 调用链跟踪信息）</b> */
 public class TracingAsyncThreadPoolExecutor extends AsyncThreadPoolExecutor

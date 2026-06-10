@@ -1,19 +1,23 @@
 package io.github.hpsocket.soa.starter.rocketmq.consumer.aspect;
 
-import java.util.Map;
-
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.service.AsyncService;
+import io.github.hpsocket.soa.framework.web.support.AspectHelper;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.rocketmq.exception.RocketmqExceptionHandler;
+import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.core.config.Order;
 import org.apache.rocketmq.client.apis.message.MessageView;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
 
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.support.AspectHelper;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
 
 /** <b>RocketMQ Listener MDC 拦截器</b><br>
  * 用于注入 MDC 调用链跟踪信息
@@ -28,6 +32,11 @@ public class RocketmqListenerMdcInspector
                                                 + "(execution (public void *.consume(org.apache.rocketmq.client.apis.message.MessageView+, io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate+)) && @within(io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleMessageListener)) ||"
                                                 + "(execution (public org.apache.rocketmq.client.apis.producer.TransactionResolution *.check(org.apache.rocketmq.client.apis.message.MessageView+)) && @within(org.apache.rocketmq.client.annotation.RocketMQTransactionListener))"
                                                 ;
+
+    @Autowired(required = false)
+    private AsyncService asyncService;
+    @Autowired(required = false)
+    private RocketmqExceptionHandler exceptionHandler;
 
     @Pointcut(POINTCUT_PATTERN)
     protected void aroundMethod() {}
@@ -79,10 +88,10 @@ public class RocketmqListenerMdcInspector
         
         try
         {
-            if(log.isTraceEnabled())
+            if(log.isDebugEnabled())
             {
-                log.trace("start process message -> (topic: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
-                    , topic, correlationId, messageId, sourceRequestId, domainName, eventName);
+                log.debug("start process message -> (topic: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
+                        , topic, correlationId, messageId, sourceRequestId, domainName, eventName);
                 
                 sw = new StopWatch();
                 sw.start();
@@ -90,18 +99,43 @@ public class RocketmqListenerMdcInspector
             
             return joinPoint.proceed();
         }
+        catch(Exception e)
+        {
+            invokeExceptionHandler(msg, messageId, e);
+            throw e;
+        }
         finally
         {
             
-            if(log.isTraceEnabled())
+            if(log.isDebugEnabled())
             {
                 sw.stop();
 
-                log.trace("end process message -> (topic: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
-                    , topic, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getTotalTimeMillis());
+                log.debug("end process message -> (topic: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
+                        , topic, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getTotalTimeMillis());
             }
 
             mdcAttr.removeMdc();
+        }
+    }
+
+    private void invokeExceptionHandler(MessageView msg, String messageId, Exception e)
+    {
+        try
+        {
+            if(exceptionHandler == null)
+                return;
+
+            long timestamp = System.currentTimeMillis();
+
+            if(asyncService == null)
+                exceptionHandler.handleException(msg, messageId, timestamp, e);
+            else
+                asyncService.execute(() -> exceptionHandler.handleException(msg, messageId, timestamp, e));
+        }
+        catch(Exception ex)
+        {
+            log.error("execute Invoke-Exception-Handler exception -> (messageId: {}) : {}", messageId, ex.getMessage(), ex);
         }
     }
 }

@@ -1,9 +1,9 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
-
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 
 /**
  * Utility to create TCP/UDP buffers from a {@link GelfMessage} by working with {@link ByteBuffer}. Buffers are provided by

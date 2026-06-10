@@ -1,6 +1,11 @@
 
 package io.github.hpsocket.soa.starter.job.exclusive.config;
 
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
+import io.github.hpsocket.soa.starter.data.redis.config.SoaRedisConfig;
+import io.github.hpsocket.soa.starter.job.exclusive.aspect.ExclusiveJobMdcInspector;
+import io.github.hpsocket.soa.starter.task.config.SoaTaskConfig;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -9,12 +14,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.scheduling.SchedulingTaskExecutor;
-
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
-import io.github.hpsocket.soa.starter.data.redis.config.SoaRedisConfig;
-import io.github.hpsocket.soa.starter.job.exclusive.aspect.ExclusiveJobMdcInspector;
-import io.github.hpsocket.soa.starter.task.config.SoaTaskConfig;
 
 /** <b>HP-SOA 分布式独占 Job 配置</b> */
 @AutoConfiguration

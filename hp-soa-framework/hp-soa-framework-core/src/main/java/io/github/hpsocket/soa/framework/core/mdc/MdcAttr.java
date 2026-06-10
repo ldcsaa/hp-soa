@@ -1,9 +1,9 @@
 package io.github.hpsocket.soa.framework.core.mdc;
 
+import org.slf4j.MDC;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.slf4j.MDC;
 
 /** <b>调用链跟踪 {@linkplain MDC} 属性</b> */
 public class MdcAttr

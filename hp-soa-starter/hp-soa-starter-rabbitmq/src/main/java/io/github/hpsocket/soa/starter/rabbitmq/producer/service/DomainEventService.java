@@ -1,11 +1,10 @@
 package io.github.hpsocket.soa.starter.rabbitmq.producer.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
+
 import java.util.Collection;
 import java.util.List;
-
-import com.baomidou.mybatisplus.extension.service.IService;
-
-import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 
 /** <b>领域事件服务接口</b> */
 public interface DomainEventService<T extends DomainEvent> extends IService<T>

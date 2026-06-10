@@ -1,10 +1,9 @@
 
 package io.github.hpsocket.soa.starter.data.redis.config;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
+import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonAutoConfigurationCustomizer;
+import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
+import io.github.hpsocket.soa.starter.data.redis.template.NumberRedisTemplate;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.RedissonReactiveClient;
 import org.redisson.api.RedissonRxClient;
@@ -28,9 +27,9 @@ import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonAutoConfigurationCustomizer;
-import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
-import io.github.hpsocket.soa.starter.data.redis.template.NumberRedisTemplate;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /** <b>默认 Redis 实例之外第一个 Redis 配置</b> */
 @AutoConfiguration
@@ -46,6 +45,8 @@ public class SoaFirstRedisConfig extends SoaAbstractRedisConfig
     public static final String redisNumberTemplateBeanName = "firstRedisNumberTemplate";
     public static final String redisJsonTemplateBeanName = "firstRedisJsonTemplate";
     public static final String redisGenericJsonTemplateBeanName = "firstRedisGenericJsonTemplate";
+    public static final String redisJackson2TemplateBeanName = "firstRedisJackson2Template";
+    public static final String redisGenericJackson2TemplateBeanName = "firstRedisGenericJackson2Template";
     public static final String redisKryoTemplateBeanName = "firstRedisKryoTemplate";
     public static final String redisKryoNotNullTemplateBeanName = "firstRedisKryoNotNullTemplate";
     public static final String redisReactiveTemplateBeanName = "firstRedisReactiveTemplate";
@@ -80,7 +81,7 @@ public class SoaFirstRedisConfig extends SoaAbstractRedisConfig
     @Override
     @Bean(redisTemplateBeanName)
     @ConditionalOnMissingBean(name = redisTemplateBeanName)
-    public <T> RedisTemplate<String, T> redisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
+    public RedisTemplate<String, Object> redisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
     {
         return super.redisTemplate(redisConnectionFactory);
     }
@@ -130,6 +131,24 @@ public class SoaFirstRedisConfig extends SoaAbstractRedisConfig
         return super.kryoRedisTemplate(redisConnectionFactory);
     }
 
+    /** 基于 Jackson2 序列化的 {@linkplain RedisTemplate} */
+    @Override
+    @Bean(redisJackson2TemplateBeanName)
+    @ConditionalOnMissingBean(name = redisJackson2TemplateBeanName)
+    public RedisTemplate<String, Object> jackson2RedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
+    {
+        return super.jackson2RedisTemplate(redisConnectionFactory);
+    }
+
+    /** 基于通用 Jackson2 序列化的 {@linkplain RedisTemplate} */
+    @Override
+    @Bean(redisGenericJackson2TemplateBeanName)
+    @ConditionalOnMissingBean(name = redisGenericJackson2TemplateBeanName)
+    public <T> RedisTemplate<String, T> genericJackson2RedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
+    {
+        return super.genericJackson2RedisTemplate(redisConnectionFactory);
+    }
+
     /** 第一个 Redis 基于 Kryo 序列化的 {@linkplain RedisTemplate} （不支持存储 null 值）*/
     @Override
     @Bean(redisKryoNotNullTemplateBeanName)
@@ -143,7 +162,7 @@ public class SoaFirstRedisConfig extends SoaAbstractRedisConfig
     @Override
     @Bean(redisReactiveTemplateBeanName)
     @ConditionalOnMissingBean(name = redisReactiveTemplateBeanName)
-    public <T> ReactiveRedisTemplate<String, T> reactiveRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
+    public ReactiveRedisTemplate<String, Object> reactiveRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
     {
         return super.reactiveRedisTemplate(reactiveRedisConnectionFactory);
     }

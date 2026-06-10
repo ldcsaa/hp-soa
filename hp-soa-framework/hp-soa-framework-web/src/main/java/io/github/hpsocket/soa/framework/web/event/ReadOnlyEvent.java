@@ -1,9 +1,8 @@
 package io.github.hpsocket.soa.framework.web.event;
 
-import org.springframework.context.ApplicationEvent;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.ApplicationEvent;
 
 /** <b>应用程序只读事件</b><br>
  * 触发时机：

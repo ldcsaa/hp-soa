@@ -1,9 +1,6 @@
 package io.github.hpsocket.soa.starter.web.bootstrap;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Properties;
-
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.apache.commons.logging.Log;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
@@ -19,7 +16,9 @@ import org.springframework.core.io.support.DefaultPropertySourceFactory;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
 
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import java.io.File;
+import java.io.IOException;
+import java.util.Properties;
 
 /** <b>HP-SOA 扩展属性配置文件加载器</b><br>
  * <ul>

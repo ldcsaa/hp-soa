@@ -1,16 +1,16 @@
 package io.github.hpsocket.soa.framework.logging.gelf.jul;
 
-import static io.github.hpsocket.soa.framework.logging.gelf.LogMessageField.NamedLogField.*;
+import io.github.hpsocket.soa.framework.logging.gelf.LogMessageField;
+import io.github.hpsocket.soa.framework.logging.gelf.MdcGelfMessageAssembler;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ConfigurationSupport;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 
 import java.util.*;
 import java.util.logging.Formatter;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 
-import io.github.hpsocket.soa.framework.logging.gelf.LogMessageField;
-import io.github.hpsocket.soa.framework.logging.gelf.MdcGelfMessageAssembler;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ConfigurationSupport;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import static io.github.hpsocket.soa.framework.logging.gelf.LogMessageField.NamedLogField.*;
 
 /**
  * Log-Formatter for JSON using fields specified within GELF. This formatter will produce a JSON object for each log event.

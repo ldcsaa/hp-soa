@@ -1,9 +1,8 @@
 package io.github.hpsocket.soa.starter.kafka.util;
 
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.header.Headers;
-
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 
 public class KafkaHelper
 {

@@ -1,17 +1,16 @@
 package io.github.hpsocket.soa.framework.logging.gelf.jboss7;
 
-import static io.github.hpsocket.soa.framework.logging.gelf.LogMessageField.NamedLogField.*;
-
-import java.util.logging.ErrorManager;
-import java.util.logging.LogRecord;
-
-import org.jboss.logmanager.ExtLogRecord;
-import org.jboss.logmanager.errormanager.OnlyOnceErrorManager;
-
 import io.github.hpsocket.soa.framework.logging.gelf.GelfMessageAssembler;
 import io.github.hpsocket.soa.framework.logging.gelf.LogMessageField;
 import io.github.hpsocket.soa.framework.logging.gelf.MdcGelfMessageAssembler;
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import org.jboss.logmanager.ExtLogRecord;
+import org.jboss.logmanager.errormanager.OnlyOnceErrorManager;
+
+import java.util.logging.ErrorManager;
+import java.util.logging.LogRecord;
+
+import static io.github.hpsocket.soa.framework.logging.gelf.LogMessageField.NamedLogField.*;
 
 /**
  * Logging-Handler for GELF (Graylog Extended Logging Format). This Java-Util-Logging Handler creates GELF Messages and posts

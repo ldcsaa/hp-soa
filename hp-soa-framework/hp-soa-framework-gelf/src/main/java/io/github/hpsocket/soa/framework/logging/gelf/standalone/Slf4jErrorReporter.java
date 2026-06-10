@@ -1,9 +1,8 @@
 package io.github.hpsocket.soa.framework.logging.gelf.standalone;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
 
 /**
  * @author Mark Paluch

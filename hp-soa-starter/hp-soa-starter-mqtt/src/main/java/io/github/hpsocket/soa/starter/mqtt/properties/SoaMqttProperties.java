@@ -1,10 +1,11 @@
 package io.github.hpsocket.soa.starter.mqtt.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.net.SocketFactory;
-
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.core.util.SystemUtil;
+import io.github.hpsocket.soa.framework.util.ssl.SSLUtil;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.paho.mqttv5.client.MqttConnectionOptions;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
@@ -12,12 +13,9 @@ import org.eclipse.paho.mqttv5.common.MqttSubscription;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.core.util.SystemUtil;
-import io.github.hpsocket.soa.framework.util.ssl.SSLUtil;
-import jakarta.annotation.PostConstruct;
-import lombok.Getter;
-import lombok.Setter;
+import javax.net.SocketFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 /** <b>MQTT 属性定义类</b><p> 
  * 参考配置文件说明

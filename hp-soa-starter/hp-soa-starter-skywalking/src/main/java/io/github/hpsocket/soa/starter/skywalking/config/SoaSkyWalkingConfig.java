@@ -1,8 +1,12 @@
 
 package io.github.hpsocket.soa.starter.skywalking.config;
 
-import java.util.List;
-
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.service.TracingContext;
+import io.micrometer.core.instrument.observation.MeterObservationHandler;
+import io.micrometer.observation.ObservationHandler;
+import io.micrometer.observation.ObservationPredicate;
+import io.micrometer.observation.ObservationRegistry;
 import org.apache.skywalking.apm.meter.micrometer.SkywalkingMeterRegistry;
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingDefaultTracingHandler;
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingMeterHandler;
@@ -16,12 +20,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.service.TracingContext;
-import io.micrometer.core.instrument.observation.MeterObservationHandler;
-import io.micrometer.observation.ObservationHandler;
-import io.micrometer.observation.ObservationPredicate;
-import io.micrometer.observation.ObservationRegistry;
+import java.util.List;
 
 /** <b>HP-SOA Skywalking 基本配置</b> */
 @AutoConfiguration(before = ObservationAutoConfiguration.class)

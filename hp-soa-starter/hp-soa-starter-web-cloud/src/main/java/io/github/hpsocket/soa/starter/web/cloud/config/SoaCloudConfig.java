@@ -1,11 +1,6 @@
 
 package io.github.hpsocket.soa.starter.web.cloud.config;
 
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.Bean;
-
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerGlobalExceptionAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.advice.CloudControllerSpecificExceptionAdvice;
 import io.github.hpsocket.soa.starter.web.cloud.exception.CloudErrorAttributes;
@@ -14,6 +9,10 @@ import io.github.hpsocket.soa.starter.web.cloud.filter.CloudMdcFilter;
 import io.github.hpsocket.soa.starter.web.cloud.interceptor.FeignTracingInterceptor;
 import io.github.hpsocket.soa.starter.web.config.ControllerAdviceConfig;
 import io.github.hpsocket.soa.starter.web.config.WebConfig;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.Bean;
 
 /** <b>HP-SOA Spring Cloud 基本配置</b> */
 @EnableDiscoveryClient

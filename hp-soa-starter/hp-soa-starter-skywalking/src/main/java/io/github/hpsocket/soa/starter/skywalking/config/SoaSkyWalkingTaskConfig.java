@@ -1,15 +1,14 @@
 
 package io.github.hpsocket.soa.starter.skywalking.config;
 
+import io.github.hpsocket.soa.starter.skywalking.async.TracingRunnableWrapper;
+import io.github.hpsocket.soa.starter.task.config.SoaTaskConfig;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.TaskDecorator;
-
-import io.github.hpsocket.soa.starter.skywalking.async.TracingRunnableWrapper;
-import io.github.hpsocket.soa.starter.task.config.SoaTaskConfig;
 
 /** <b>HP-SOA Skywalking Task 配置</b> */
 @AutoConfiguration

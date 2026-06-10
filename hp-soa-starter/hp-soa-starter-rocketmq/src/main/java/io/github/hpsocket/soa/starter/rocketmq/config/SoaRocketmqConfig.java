@@ -1,6 +1,11 @@
 
 package io.github.hpsocket.soa.starter.rocketmq.config;
 
+import io.github.hpsocket.soa.starter.rocketmq.consumer.aspect.RocketmqListenerMdcInspector;
+import io.github.hpsocket.soa.starter.rocketmq.consumer.aspect.RocketmqListenerTracingInspector;
+import io.github.hpsocket.soa.starter.rocketmq.consumer.listener.RocketmqReadOnlyEventListener;
+import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate;
+import io.github.hpsocket.soa.starter.rocketmq.support.SoaSimpleConsumerReceiveProperties;
 import org.apache.rocketmq.client.apis.consumer.SimpleConsumerBuilder;
 import org.apache.rocketmq.client.apis.producer.ProducerBuilder;
 import org.apache.rocketmq.client.autoconfigure.RocketMQAutoConfiguration;
@@ -15,12 +20,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-
-import io.github.hpsocket.soa.starter.rocketmq.consumer.aspect.RocketmqListenerMdcInspector;
-import io.github.hpsocket.soa.starter.rocketmq.consumer.aspect.RocketmqListenerTracingInspector;
-import io.github.hpsocket.soa.starter.rocketmq.consumer.listener.RocketmqReadOnlyEventListener;
-import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate;
-import io.github.hpsocket.soa.starter.rocketmq.support.SoaSimpleConsumerReceiveProperties;
 
 import static org.apache.rocketmq.client.autoconfigure.RocketMQAutoConfiguration.*;
 

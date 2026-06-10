@@ -1,8 +1,8 @@
 package io.github.hpsocket.soa.framework.logging.gelf.jul;
 
-import java.util.logging.LogManager;
-
 import io.github.hpsocket.soa.framework.logging.gelf.PropertyProvider;
+
+import java.util.logging.LogManager;
 
 /**
  * @author Mark Paluch

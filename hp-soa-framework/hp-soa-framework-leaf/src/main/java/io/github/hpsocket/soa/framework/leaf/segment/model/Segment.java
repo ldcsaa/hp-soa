@@ -1,10 +1,10 @@
 
 package io.github.hpsocket.soa.framework.leaf.segment.model;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
 @Setter

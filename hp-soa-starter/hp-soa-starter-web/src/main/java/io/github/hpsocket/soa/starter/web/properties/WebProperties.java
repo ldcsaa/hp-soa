@@ -7,12 +7,10 @@ import io.github.hpsocket.soa.framework.web.propertries.IAccessVerificationPrope
 import io.github.hpsocket.soa.framework.web.propertries.IAppProperties;
 import io.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @Getter
 @Setter

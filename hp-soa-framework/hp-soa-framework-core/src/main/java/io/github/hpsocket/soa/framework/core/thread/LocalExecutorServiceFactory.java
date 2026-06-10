@@ -1,11 +1,6 @@
 package io.github.hpsocket.soa.framework.core.thread;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /** <b>线程局部线程池工厂</b>：每个线程拥有独立线程池<br><br>
  * （支持 {@linkplain org.slf4j.MDC MDC} 调用链跟踪）

@@ -1,8 +1,8 @@
 package io.github.hpsocket.soa.framework.logging.gelf.standalone;
 
-import java.util.Map;
-
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+
+import java.util.Map;
 
 /**
  * Datenpumpe allows to submit arbitrary values (flat data set) using Gelf.

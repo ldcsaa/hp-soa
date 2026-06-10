@@ -1,26 +1,16 @@
 package io.github.hpsocket.soa.starter.web.dubbo.filter;
 
-import org.slf4j.MDC;
-
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import org.apache.dubbo.common.extension.Activate;
+import org.apache.dubbo.rpc.*;
+import org.slf4j.MDC;
 
 import java.util.Arrays;
 
-import org.apache.dubbo.common.extension.Activate;
-import org.apache.dubbo.rpc.Filter;
-import org.apache.dubbo.rpc.Invocation;
-import org.apache.dubbo.rpc.Invoker;
-import org.apache.dubbo.rpc.Result;
-import org.apache.dubbo.rpc.RpcContext;
-import org.apache.dubbo.rpc.RpcContextAttachment;
-import org.apache.dubbo.rpc.RpcException;
-import org.apache.dubbo.rpc.RpcServiceContext;
-
+import static io.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 import static org.apache.dubbo.common.constants.CommonConstants.CONSUMER;
 import static org.apache.dubbo.common.constants.CommonConstants.PROVIDER;
-
-import static io.github.hpsocket.soa.framework.core.mdc.MdcAttr.*;
 
 /** <b>Dubbo MDC 过滤器</b><br>
  * 为 Dubbo 服务调用注入调用链跟踪信息

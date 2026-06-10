@@ -1,5 +1,9 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import redis.clients.jedis.*;
+import redis.clients.jedis.util.Pool;
+
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,15 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.JedisSentinelPool;
-import redis.clients.jedis.Protocol;
-import redis.clients.jedis.util.Pool;
 
 /**
  * Pool holder for {@link Pool} that keeps track of Jedis pools identified by {@link URI}.

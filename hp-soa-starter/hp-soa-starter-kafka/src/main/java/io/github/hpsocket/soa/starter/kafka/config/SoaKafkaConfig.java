@@ -1,6 +1,10 @@
 
 package io.github.hpsocket.soa.starter.kafka.config;
 
+import io.github.hpsocket.soa.starter.kafka.consumer.aspect.KafkaListenerMdcInspector;
+import io.github.hpsocket.soa.starter.kafka.consumer.aspect.KafkaListenerTracingInspector;
+import io.github.hpsocket.soa.starter.kafka.consumer.listener.KafkaReadOnlyEventListener;
+import io.github.hpsocket.soa.starter.kafka.producer.interceptor.ProducerMdcInterceptor;
 import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.mybatis.spring.annotation.MapperScan;
@@ -17,11 +21,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.ProducerListener;
 import org.springframework.kafka.support.converter.RecordMessageConverter;
-
-import io.github.hpsocket.soa.starter.kafka.consumer.aspect.KafkaListenerMdcInspector;
-import io.github.hpsocket.soa.starter.kafka.consumer.aspect.KafkaListenerTracingInspector;
-import io.github.hpsocket.soa.starter.kafka.consumer.listener.KafkaReadOnlyEventListener;
-import io.github.hpsocket.soa.starter.kafka.producer.interceptor.ProducerMdcInterceptor;
 
 /** <b>HP-SOA Kafka 配置</b> */
 @AutoConfiguration(before = {KafkaAutoConfiguration.class})

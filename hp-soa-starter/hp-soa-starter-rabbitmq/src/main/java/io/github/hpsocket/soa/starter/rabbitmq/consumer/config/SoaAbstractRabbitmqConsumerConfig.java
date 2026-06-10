@@ -1,13 +1,9 @@
 package io.github.hpsocket.soa.starter.rabbitmq.consumer.config;
 
-import java.time.Duration;
-import java.util.List;
-
-import org.springframework.amqp.rabbit.config.AbstractRabbitListenerContainerFactory;
-import org.springframework.amqp.rabbit.config.ContainerCustomizer;
-import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
-import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.OffsetSpecification;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import org.springframework.amqp.rabbit.config.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.DirectMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
@@ -17,9 +13,9 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.amqp.DirectRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties.ListenerRetry;
 import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties.ListenerRetry;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
@@ -28,10 +24,8 @@ import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 
-import com.rabbitmq.stream.Environment;
-import com.rabbitmq.stream.OffsetSpecification;
-
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import java.time.Duration;
+import java.util.List;
 
 public abstract class SoaAbstractRabbitmqConsumerConfig
 {

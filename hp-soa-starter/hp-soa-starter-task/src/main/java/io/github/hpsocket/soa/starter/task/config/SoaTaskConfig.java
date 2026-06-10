@@ -1,14 +1,11 @@
 
 package io.github.hpsocket.soa.starter.task.config;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.task.aspect.ScheduledTraceIdInspector;
+import io.github.hpsocket.soa.starter.task.properties.SoaTaskProperties;
+import io.github.hpsocket.soa.starter.task.properties.SoaTaskProperties.Scheduling;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,11 +19,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.task.aspect.ScheduledTraceIdInspector;
-import io.github.hpsocket.soa.starter.task.properties.SoaTaskProperties;
-import io.github.hpsocket.soa.starter.task.properties.SoaTaskProperties.Scheduling;
+import java.util.concurrent.*;
 
 /** <b>HP-SOA Task 配置</b> */
 @EnableAsync

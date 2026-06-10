@@ -1,7 +1,6 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern;
 
-import static io.github.hpsocket.soa.framework.logging.gelf.intern.JsonWriter.writeKeyValueSeparator;
-import static io.github.hpsocket.soa.framework.logging.gelf.intern.JsonWriter.writeMapEntry;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ValueDiscovery.Result;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,7 +14,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ValueDiscovery.Result;
+import static io.github.hpsocket.soa.framework.logging.gelf.intern.JsonWriter.writeKeyValueSeparator;
+import static io.github.hpsocket.soa.framework.logging.gelf.intern.JsonWriter.writeMapEntry;
 
 /**
  * Represents a Gelf message. A Gelf message contains all required Fields according to the Gelf Spec.

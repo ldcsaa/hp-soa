@@ -1,24 +1,23 @@
 
 package io.github.hpsocket.soa.framework.web.model;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.web.json.JSONFieldExclude;
 import io.github.hpsocket.soa.framework.web.json.JSONFieldExclude.Exclude;
-
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import lombok.Getter;
 import lombok.Setter;
 
-import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+import static io.github.hpsocket.soa.framework.core.exception.ServiceException.OK;
+import static io.github.hpsocket.soa.framework.core.exception.ServiceException.PARAM_VERIFY_EXCEPTION;
 
 /** <b>HTTP 请求统一响应对象</b> */
 @Getter

@@ -1,9 +1,8 @@
 package io.github.hpsocket.soa.starter.rocketmq.support;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** <b>Simple Consumer 默认消息接收属性</b><p>
  * 属性配置前缀："rocketmq.simple-consumer.receive"

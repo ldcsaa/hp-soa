@@ -1,16 +1,10 @@
 
 package io.github.hpsocket.soa.framework.web.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import org.springframework.core.annotation.AliasFor;
 
-import io.github.hpsocket.soa.framework.core.exception.ServiceException;
+import java.lang.annotation.*;
 
 /** <b>只读保护注解</b><p>
  * 只读应用程序（${hp.soa.web.app.read-only=true}），当调用声明了 {@linkplain ReadOnlyGuard} 注解的类或方式时，会抛出 {@linkplain ServiceException#READ_ONLY_ERROR} 异常

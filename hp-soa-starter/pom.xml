@@ -39,6 +39,7 @@
         <module>hp-soa-starter-seata</module>
         <module>hp-soa-starter-mqtt</module>
         <module>hp-soa-starter-leaf</module>
+        <module>hp-soa-starter-websocket</module>
     </modules>
     
     <dependencyManagement>

@@ -1,16 +1,16 @@
 package io.github.hpsocket.soa.framework.web.support;
 
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.Properties;
-
-import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
 
 /** <b>YAML 属性加载器</b> */
 public class YamlPropertiesLoader

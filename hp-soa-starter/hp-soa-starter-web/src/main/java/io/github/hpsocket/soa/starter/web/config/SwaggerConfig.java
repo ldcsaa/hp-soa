@@ -2,10 +2,11 @@
 package io.github.hpsocket.soa.starter.web.config;
 
 import io.github.hpsocket.soa.starter.web.properties.SwaggerProperties;
-
-import java.lang.reflect.Field;
-import java.util.List;
-
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.parameters.HeaderParameter;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,13 +20,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
+import java.lang.reflect.Field;
+import java.util.List;
 
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.ExternalDocumentation;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.parameters.HeaderParameter;
+import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 
 /** <b>HP-SOA Web Swagger 配置</b> */
 @AutoConfiguration

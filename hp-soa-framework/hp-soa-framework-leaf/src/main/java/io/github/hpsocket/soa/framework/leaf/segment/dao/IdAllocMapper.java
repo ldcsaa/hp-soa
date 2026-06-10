@@ -1,8 +1,7 @@
 package io.github.hpsocket.soa.framework.leaf.segment.dao;
 
-import org.apache.ibatis.annotations.*;
-
 import io.github.hpsocket.soa.framework.leaf.segment.model.LeafAlloc;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 

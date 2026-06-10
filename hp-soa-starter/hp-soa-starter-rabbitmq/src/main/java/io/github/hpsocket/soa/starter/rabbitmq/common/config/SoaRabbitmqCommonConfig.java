@@ -1,5 +1,7 @@
 package io.github.hpsocket.soa.starter.rabbitmq.common.config;
 
+import io.github.hpsocket.soa.starter.rabbitmq.common.converter.FastJsonMessageConverter;
+import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConverter;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -8,9 +10,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
-
-import io.github.hpsocket.soa.starter.rabbitmq.common.converter.FastJsonMessageConverter;
-import io.github.hpsocket.soa.starter.rabbitmq.common.converter.TextMessageConverter;
 
 /** <b>HP-SOA Rabbitmq 公共配置</b> */
 @AutoConfiguration

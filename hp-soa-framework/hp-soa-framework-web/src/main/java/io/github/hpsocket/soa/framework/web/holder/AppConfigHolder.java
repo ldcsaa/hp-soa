@@ -1,19 +1,18 @@
 
 package io.github.hpsocket.soa.framework.web.holder;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 import io.github.hpsocket.soa.framework.web.propertries.IAppProperties;
 import io.github.hpsocket.soa.framework.web.propertries.IServletPathsPropertries;
-
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /** <b>应用程序 Web 基本配置持有者</b> */
 public class AppConfigHolder

@@ -1,11 +1,10 @@
 package io.github.hpsocket.soa.framework.logging.gelf.log4j2;
 
+import io.github.hpsocket.soa.framework.logging.RuntimeContainer;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.pattern.ConverterKeys;
 import org.apache.logging.log4j.core.pattern.LogEventPatternConverter;
-
-import io.github.hpsocket.soa.framework.logging.RuntimeContainer;
 
 /**
  * Provides the servername/Hostname.

@@ -1,8 +1,7 @@
 
 package io.github.hpsocket.soa.framework.core.log;
 
-import java.util.regex.Pattern;
-
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.Filter;
@@ -15,7 +14,7 @@ import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
 
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import java.util.regex.Pattern;
 
 /** <b>log4j2 logger 日志过滤器</b><br>
  * 用于调整 logger 名称匹配特定正则表达式的 logger 的日志级别

@@ -1,15 +1,15 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.util.Pool;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.util.Pool;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
 
 /**
  * @author https://github.com/strima/logstash-gelf.git

@@ -1,16 +1,15 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
-import java.net.URI;
-import java.util.Map;
-import java.util.Properties;
-
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderConfiguration;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderProvider;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderConfiguration;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderProvider;
+import java.net.URI;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * {@link GelfSenderProvider} providing {@link KafkaGelfSender}.

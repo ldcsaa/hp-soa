@@ -1,8 +1,14 @@
 
 package io.github.hpsocket.soa.starter.job.xxljob.aspect;
 
-import java.lang.reflect.InvocationTargetException;
-
+import com.xxl.job.core.context.XxlJobHelper;
+import com.xxl.job.core.handler.annotation.XxlJob;
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.web.service.AsyncService;
+import io.github.hpsocket.soa.framework.web.support.AspectHelper;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.job.xxljob.exception.XxlJobExceptionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -12,16 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.web.service.AsyncService;
-import io.github.hpsocket.soa.framework.web.support.AspectHelper;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.job.xxljob.exception.XxlJobExceptionHandler;
-
-import com.xxl.job.core.context.XxlJobHelper;
-import com.xxl.job.core.handler.annotation.XxlJob;
-
-import lombok.extern.slf4j.Slf4j;
+import java.lang.reflect.InvocationTargetException;
 
 /** <b>XxlJob 拦截器</b><br>
  * （注：当应用程序为只读时，不执行任何 Job 业务逻辑）
@@ -114,7 +111,6 @@ public class XxlJobMdcInspector
         catch(Exception e)
         {
             invokeExceptionHandler(jobName, jobId, param, e);
-            
             throw e;
         }
         finally

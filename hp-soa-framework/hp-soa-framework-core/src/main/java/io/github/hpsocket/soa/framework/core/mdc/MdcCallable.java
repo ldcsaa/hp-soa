@@ -1,8 +1,8 @@
 package io.github.hpsocket.soa.framework.core.mdc;
 
-import java.util.concurrent.Callable;
-
 import lombok.Getter;
+
+import java.util.concurrent.Callable;
 
 /** <b>{@linkplain Callable} 基类（支持 {@linkplain org.slf4j.MDC MDC} 调用链跟踪）</b> */
 @Getter

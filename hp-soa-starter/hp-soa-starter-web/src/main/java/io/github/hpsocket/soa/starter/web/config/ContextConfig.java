@@ -1,8 +1,11 @@
 package io.github.hpsocket.soa.starter.web.config;
 
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
+import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
+import io.github.hpsocket.soa.starter.web.properties.SecurityProperties;
+import io.github.hpsocket.soa.starter.web.properties.WebProperties;
+import io.github.hpsocket.soa.starter.web.properties.WebProperties.ProxyProperties;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import org.springframework.beans.factory.ObjectProvider;
@@ -14,12 +17,8 @@ import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
-import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
-import io.github.hpsocket.soa.starter.web.properties.SecurityProperties;
-import io.github.hpsocket.soa.starter.web.properties.WebProperties;
-import io.github.hpsocket.soa.starter.web.properties.WebProperties.ProxyProperties;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 
 /**
  * <b>HP-SOA Web 上下文配置</b>

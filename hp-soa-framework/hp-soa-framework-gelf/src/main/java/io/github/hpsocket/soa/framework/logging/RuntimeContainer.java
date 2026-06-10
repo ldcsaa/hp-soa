@@ -1,12 +1,6 @@
 package io.github.hpsocket.soa.framework.logging;
 
-import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.PROPERTY_LOGSTASH_GELF_FQDN_HOSTNAME;
-import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.PROPERTY_LOGSTASH_GELF_HOSTNAME;
-import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.PROPERTY_LOGSTASH_GELF_HOSTNAME_RESOLUTION_ORDER;
-import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.PROPERTY_LOGSTASH_GELF_SKIP_HOSTNAME_RESOLUTION;
-import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.RESOLUTION_ORDER_LOCALHOST_NETWORK_FALLBACK;
-import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.RESOLUTION_ORDER_NETWORK_LOCALHOST_FALLBACK;
-import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.getProperty;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -14,7 +8,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
+import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.*;
 
 /**
  * Static Details about the runtime container: Hostname (simple/fqdn), Address and timestamp of the first access (time when the

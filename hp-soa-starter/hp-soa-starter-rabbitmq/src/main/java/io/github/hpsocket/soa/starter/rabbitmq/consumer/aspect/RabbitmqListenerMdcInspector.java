@@ -1,5 +1,13 @@
 package io.github.hpsocket.soa.starter.rabbitmq.consumer.aspect;
 
+import com.rabbitmq.stream.Properties;
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.service.AsyncService;
+import io.github.hpsocket.soa.framework.web.support.AspectHelper;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.rabbitmq.exception.RabbitmqExceptionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -8,21 +16,14 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
-import com.rabbitmq.stream.Properties;
-
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.support.AspectHelper;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
 
 import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
-
-import java.util.Map;
 
 /** <b>Rabbitmq Listener MDC 拦截器</b><br>
  * 用于注入 MDC 调用链跟踪信息
@@ -43,6 +44,11 @@ public class RabbitmqListenerMdcInspector
                                                 + ")";
 
     private static final AspectHelper.AnnotationHolder<RabbitListener> ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
+
+    @Autowired(required = false)
+    private AsyncService asyncService;
+    @Autowired(required = false)
+    private RabbitmqExceptionHandler exceptionHandler;
 
     @Pointcut(POINTCUT_PATTERN)
     protected void aroundMethod() {}
@@ -135,10 +141,10 @@ public class RabbitmqListenerMdcInspector
         
         try
         {
-            if(log.isTraceEnabled())
+            if(log.isDebugEnabled())
             {
-                log.trace("rabbit listener start consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
-                    , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName);
+                log.debug("start process message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {})"
+                        , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName);
             
                 sw = new StopWatch(listenerId);
                 sw.start();
@@ -146,17 +152,42 @@ public class RabbitmqListenerMdcInspector
             
             return joinPoint.proceed();
         }
+        catch(Exception e)
+        {
+            invokeExceptionHandler(obj, messageId, e);
+            throw e;
+        }
         finally
         {
-            if(log.isTraceEnabled())
+            if(log.isDebugEnabled())
             {
                 sw.stop();
 
-                log.trace("rabbit listener end consume message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
-                    , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getTotalTimeMillis());                
+                log.debug("end process message -> (listenerId: {}, correlationId: {}, messageId: {}, sourceRequestId: {}, domainName: {}, eventName: {}, costTime: {})"
+                        , listenerId, correlationId, messageId, sourceRequestId, domainName, eventName, sw.getTotalTimeMillis());
             }
             
             mdcAttr.removeMdc();
+        }
+    }
+
+    private void invokeExceptionHandler(Object msg, String messageId, Exception e)
+    {
+        try
+        {
+            if(exceptionHandler == null)
+                return;
+
+            long timestamp = System.currentTimeMillis();
+
+            if(asyncService == null)
+                exceptionHandler.handleException(msg, messageId, timestamp, e);
+            else
+                asyncService.execute(() -> exceptionHandler.handleException(msg, messageId, timestamp, e));
+        }
+        catch(Exception ex)
+        {
+            log.error("execute Invoke-Exception-Handler exception -> (messageId: {}) : {}", messageId, ex.getMessage(), ex);
         }
     }
 }

@@ -1,9 +1,9 @@
 package io.github.hpsocket.soa.framework.core.thread;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
-
-import lombok.extern.slf4j.Slf4j;
 
 /** <b>阻塞式 {@linkplain RejectedExecutionHandler}</b><br>
  * 当线程池的工作队列已满时，阻塞任务提交并等待。

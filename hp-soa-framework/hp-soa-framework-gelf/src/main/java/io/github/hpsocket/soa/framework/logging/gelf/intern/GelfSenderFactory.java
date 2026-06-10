@@ -1,13 +1,13 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.sender.DefaultGelfSenderProvider;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.sender.KafkaGelfSenderProvider;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.sender.RedisGelfSenderProvider;
+
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.*;
-
-import io.github.hpsocket.soa.framework.logging.gelf.intern.sender.DefaultGelfSenderProvider;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.sender.KafkaGelfSenderProvider;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.sender.RedisGelfSenderProvider;
 
 /**
  * Factory to create a {@link GelfSender} based on the host and protocol details. This factory uses Java's {@link ServiceLoader}

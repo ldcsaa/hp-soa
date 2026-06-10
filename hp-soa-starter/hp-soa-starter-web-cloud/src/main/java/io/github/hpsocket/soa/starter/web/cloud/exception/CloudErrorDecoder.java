@@ -1,5 +1,8 @@
 package io.github.hpsocket.soa.starter.web.cloud.exception;
 
+import cn.hutool.core.io.IoUtil;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.TypeReference;
 import feign.Response.Body;
 import feign.codec.ErrorDecoder;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
@@ -8,14 +11,9 @@ import io.github.hpsocket.soa.framework.web.model.Response;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.extern.slf4j.Slf4j;
 
-import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
-
 import java.lang.reflect.Constructor;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.TypeReference;
-
-import cn.hutool.core.io.IoUtil;
+import static io.github.hpsocket.soa.framework.core.exception.ServiceException.INNER_API_CALL_EXCEPTION;
 
 /** <b>Spring Cloud 异常解析器</b> */
 @Slf4j

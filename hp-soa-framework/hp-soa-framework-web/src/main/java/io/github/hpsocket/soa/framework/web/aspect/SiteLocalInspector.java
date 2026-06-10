@@ -1,15 +1,15 @@
 package io.github.hpsocket.soa.framework.web.aspect;
 
+import io.github.hpsocket.soa.framework.core.util.SystemUtil;
+import io.github.hpsocket.soa.framework.web.advice.RequestContext;
+import io.github.hpsocket.soa.framework.web.annotation.SiteLocal;
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import io.github.hpsocket.soa.framework.core.util.SystemUtil;
-import io.github.hpsocket.soa.framework.web.advice.RequestContext;
-import io.github.hpsocket.soa.framework.web.annotation.SiteLocal;
 
-import static io.github.hpsocket.soa.framework.core.exception.ServiceException.*;
+import static io.github.hpsocket.soa.framework.core.exception.ServiceException.FORBID_EXCEPTION;
 
 /** <b>内网 HTTP 请求拦截器</b><p>
  * 处理 {@linkplain SiteLocal} 注解

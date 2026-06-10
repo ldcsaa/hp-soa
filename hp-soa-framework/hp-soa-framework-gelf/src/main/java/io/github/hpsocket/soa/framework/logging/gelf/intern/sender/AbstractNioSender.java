@@ -1,5 +1,9 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
+import io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.Closer;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.PortUnreachableException;
@@ -7,10 +11,6 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 import java.nio.channels.spi.AbstractSelectableChannel;
-
-import io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.Closer;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
 
 /**
  * Base class for NIO-channel senders.

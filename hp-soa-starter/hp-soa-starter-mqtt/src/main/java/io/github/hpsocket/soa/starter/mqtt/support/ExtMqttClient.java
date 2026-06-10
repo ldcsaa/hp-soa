@@ -1,23 +1,5 @@
 package io.github.hpsocket.soa.starter.mqtt.support;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.eclipse.paho.mqttv5.client.IMqttMessageListener;
-import org.eclipse.paho.mqttv5.client.IMqttToken;
-import org.eclipse.paho.mqttv5.client.MqttClient;
-import org.eclipse.paho.mqttv5.client.MqttClientPersistence;
-import org.eclipse.paho.mqttv5.client.MqttConnectionOptions;
-import org.eclipse.paho.mqttv5.common.MqttException;
-import org.eclipse.paho.mqttv5.common.MqttMessage;
-import org.eclipse.paho.mqttv5.common.MqttPersistenceException;
-import org.eclipse.paho.mqttv5.common.MqttSecurityException;
-import org.eclipse.paho.mqttv5.common.MqttSubscription;
-import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
-import org.eclipse.paho.mqttv5.common.packet.UserProperty;
-import org.slf4j.MDC;
-
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
@@ -26,6 +8,15 @@ import io.github.hpsocket.soa.starter.mqtt.util.MqttConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.paho.mqttv5.client.*;
+import org.eclipse.paho.mqttv5.common.*;
+import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
+import org.eclipse.paho.mqttv5.common.packet.UserProperty;
+import org.slf4j.MDC;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 /** <b>扩展 MQTT Client 对象</b> */
 @Slf4j

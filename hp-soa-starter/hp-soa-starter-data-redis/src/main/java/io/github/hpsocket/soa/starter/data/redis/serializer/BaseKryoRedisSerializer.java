@@ -1,12 +1,11 @@
 
 package io.github.hpsocket.soa.starter.data.redis.serializer;
 
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.SerializationException;
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.SerializationException;
 
 /** <b>Kryo 序列化器基类</b> */
 public abstract class BaseKryoRedisSerializer<T> implements RedisSerializer<T>

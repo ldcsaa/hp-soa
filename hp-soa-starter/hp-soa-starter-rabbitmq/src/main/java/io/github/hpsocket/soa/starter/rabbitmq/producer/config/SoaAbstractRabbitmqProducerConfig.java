@@ -1,6 +1,13 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.producer.config;
 
+import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.Properties;
+import io.github.hpsocket.soa.framework.core.id.IdGenerator;
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.core.util.BeanHelper;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import org.slf4j.MDC;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
@@ -15,31 +22,19 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate.ConfirmCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate.ReturnsCallback;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
-import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
-import org.springframework.boot.autoconfigure.amqp.RabbitStreamTemplateConfigurer;
-import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
-import org.springframework.boot.autoconfigure.amqp.RabbitTemplateCustomizer;
+import org.springframework.boot.autoconfigure.amqp.*;
 import org.springframework.rabbit.stream.producer.ProducerCustomizer;
 import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
 import org.springframework.rabbit.stream.support.converter.StreamMessageConverter;
 import org.springframework.retry.RecoveryCallback;
 import org.springframework.retry.RetryContext;
 
-import com.rabbitmq.stream.Environment;
-import com.rabbitmq.stream.Properties;
-
-import io.github.hpsocket.soa.framework.core.id.IdGenerator;
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.core.util.BeanHelper;
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-
-import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_MSG_ID;
+import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.HEADER_SOURCE_REQUEST_ID;
 
 public abstract class SoaAbstractRabbitmqProducerConfig
 {

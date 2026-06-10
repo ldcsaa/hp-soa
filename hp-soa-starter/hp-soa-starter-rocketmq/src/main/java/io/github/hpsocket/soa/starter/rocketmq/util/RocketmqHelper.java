@@ -1,13 +1,12 @@
 
 package io.github.hpsocket.soa.starter.rocketmq.util;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-
-import org.apache.rocketmq.client.apis.message.MessageView;
-
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import org.apache.rocketmq.client.apis.message.MessageView;
+
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 /** <b>RocketMQ 通用辅助类</b> */
 public class RocketmqHelper

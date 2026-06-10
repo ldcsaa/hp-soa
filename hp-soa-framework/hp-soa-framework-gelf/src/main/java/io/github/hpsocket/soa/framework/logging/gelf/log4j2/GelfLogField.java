@@ -1,7 +1,5 @@
 package io.github.hpsocket.soa.framework.logging.gelf.log4j2;
 
-import static org.apache.logging.log4j.core.layout.PatternLayout.newBuilder;
-
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
@@ -11,6 +9,8 @@ import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.apache.logging.log4j.status.StatusLogger;
 import org.apache.logging.log4j.util.Strings;
+
+import static org.apache.logging.log4j.core.layout.PatternLayout.newBuilder;
 
 /**
  * Configuration for a log field.

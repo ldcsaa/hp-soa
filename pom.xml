@@ -82,7 +82,6 @@
     <repositories>
         <!-- >> BEGIN >> : Develop Repositories -->
         <!--
-        -->
         <repository>
             <id>private-snapshots</id>
             <name>Private Snapshots</name>
@@ -110,44 +109,13 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        -->
         <!-- << END << : Develop Repositories -->
-
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>alimaven-public</id>
-            <name>aliyun maven</name>
-            <url>https://maven.aliyun.com/repository/public/</url>
-        </repository>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>alimaven-central</id>
-            <name>aliyun maven</name>
-            <url>https://maven.aliyun.com/repository/central/</url>
-        </repository>
-
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>central</id>
-            <name>Maven Repository Switchboard</name>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-
-        <repository>
-            <id>JBoss repository public</id>
-            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-        </repository>
     </repositories>
 
     <distributionManagement>
         <!-- >> BEGIN >> : Develop Repositories -->
         <!--
-        -->
         <repository>
             <id>private</id>
             <name>Private Nexus Releases Repository</name>
@@ -158,6 +126,7 @@
             <name>Private Nexus Snapshots Repository</name>
             <url>http://192.168.56.23:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
+        -->
         <!-- << END << : Develop Repositories -->
     </distributionManagement>
 
@@ -409,8 +378,8 @@
                     <extensions>true</extensions>
                     <configuration>
                         <publishingServerId>central</publishingServerId>
-                        <autoPublish>true</autoPublish>
                         <checksums>required</checksums>
+                        <autoPublish>true</autoPublish>
                         <waitUntil>published</waitUntil>
                         <waitMaxTime>3600</waitMaxTime>
                         <deploymentName>${project.groupId}:hp-soa:${project.version}</deploymentName>
@@ -497,48 +466,6 @@
                         <flattenMode>resolveCiFriendliesOnly</flattenMode>
                     </configuration>
                 </plugin>
-
-                <!--
-                <plugin>
-                    <groupId>io.fabric8</groupId>
-                    <artifactId>docker-maven-plugin</artifactId>
-                    <version>${docker-maven-plugin.version}</version>
-                    <configuration>
-                        # Docker 推送镜像仓库地址
-                        <pushRegistry>http://hub.myserver.com:5000</pushRegistry>
-                        <images>
-                            <image>
-                                # 推送到私有镜像仓库，镜像名需要添加仓库地址
-                                <name>hub.myserver.com:5000/${project.name}:${project.version}</name>
-                                #定义镜像构建行为
-                                <build>
-                                    <dockerFileDir>${project.basedir}</dockerFileDir>
-                                </build>
-                                #定义容器启动行为
-                                <run>
-                                    # 设置容器名，可采用通配符
-                                    <containerNamePattern>${project.artifactId}</containerNamePattern>
-                                    # 设置端口映射
-                                    <ports>
-                                        <port>8082:8082</port>
-                                    </ports>
-                                    # 设置容器间连接
-                                    <links>
-                                        <link>mysql:db</link>
-                                    </links>
-                                    # 设置容器和宿主机目录挂载
-                                    <volumes>
-                                        <bind>
-                                            <volume>/etc/localtime:/etc/localtime</volume>
-                                        </bind>
-                                    </volumes>
-                                </run>
-                            </image>
-                        </images>
-                    </configuration>
-                </plugin>
-                -->
-
             </plugins>
         </pluginManagement>
 
@@ -550,19 +477,19 @@
 
             <!-- >> BEGIN >> : Publish Plugins -->
             <!--
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
             </plugin>
-            -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+            </plugin>
             <!-- << END << : Publish Plugins -->
         </plugins>
         

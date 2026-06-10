@@ -1,9 +1,9 @@
 package io.github.hpsocket.soa.framework.logging.gelf.log4j;
 
+import org.apache.log4j.spi.LoggingEvent;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import org.apache.log4j.spi.LoggingEvent;
 
 /**
  * @author Mark Paluch

@@ -1,12 +1,11 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.common.config;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
+import com.rabbitmq.client.impl.CredentialsProvider;
+import com.rabbitmq.client.impl.CredentialsRefreshService;
+import com.rabbitmq.stream.ByteCapacity;
+import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.EnvironmentBuilder;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -14,21 +13,16 @@ import org.springframework.amqp.rabbit.connection.ConnectionNameStrategy;
 import org.springframework.amqp.rabbit.connection.RabbitConnectionFactoryBean;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.amqp.CachingConnectionFactoryConfigurer;
-import org.springframework.boot.autoconfigure.amqp.ConnectionFactoryCustomizer;
-import org.springframework.boot.autoconfigure.amqp.EnvironmentBuilderCustomizer;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionFactoryBeanConfigurer;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.boot.autoconfigure.amqp.*;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.rabbit.stream.support.StreamAdmin;
 
-import com.rabbitmq.client.impl.CredentialsProvider;
-import com.rabbitmq.client.impl.CredentialsRefreshService;
-import com.rabbitmq.stream.ByteCapacity;
-import com.rabbitmq.stream.Environment;
-import com.rabbitmq.stream.EnvironmentBuilder;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class SoaAbstractRabbitmqConfig
 {

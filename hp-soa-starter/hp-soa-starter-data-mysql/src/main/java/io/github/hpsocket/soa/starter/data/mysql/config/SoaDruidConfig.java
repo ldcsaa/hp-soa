@@ -1,8 +1,12 @@
 
 package io.github.hpsocket.soa.starter.data.mysql.config;
 
-import java.io.IOException;
-
+import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure;
+import com.alibaba.druid.spring.boot3.autoconfigure.properties.DruidStatProperties;
+import com.alibaba.druid.util.Utils;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import jakarta.servlet.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -10,18 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
-import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure;
-import com.alibaba.druid.spring.boot3.autoconfigure.properties.DruidStatProperties;
-import com.alibaba.druid.util.Utils;
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
 
 /** <b>HP-SOA Druid 数据库连接池配置</b> */
 @Slf4j

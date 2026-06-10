@@ -1,11 +1,10 @@
 package io.github.hpsocket.soa.starter.task.properties;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Setter

@@ -1,10 +1,10 @@
 
 package io.github.hpsocket.soa.starter.data.mysql.config;
 
-import java.util.List;
-
-import javax.sql.DataSource;
-
+import com.baomidou.dynamic.datasource.provider.DynamicDataSourceProvider;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceAutoConfiguration;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourcePropertiesCustomizer;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -16,10 +16,8 @@ import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.baomidou.dynamic.datasource.provider.DynamicDataSourceProvider;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceAutoConfiguration;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourcePropertiesCustomizer;
+import javax.sql.DataSource;
+import java.util.List;
 
 /** <b>HP-SOA 数据源配置</b><br>
  * 当 <i>${hp.soa.data.global-transaction-management.enabled}</i> 为 true 时，启用全局事务配置

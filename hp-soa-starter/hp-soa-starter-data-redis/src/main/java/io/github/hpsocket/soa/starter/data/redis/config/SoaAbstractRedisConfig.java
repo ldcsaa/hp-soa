@@ -1,18 +1,14 @@
 package io.github.hpsocket.soa.starter.data.redis.config;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.lang.reflect.Method;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson2.support.config.FastJsonConfig;
+import com.alibaba.fastjson2.support.spring6.data.redis.FastJsonRedisSerializer;
+import com.alibaba.fastjson2.support.spring6.data.redis.GenericFastJsonRedisSerializer;
+import io.github.hpsocket.soa.framework.core.util.CryptHelper;
+import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonAutoConfigurationCustomizer;
+import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
+import io.github.hpsocket.soa.starter.data.redis.serializer.KryoNotNullRedisSerializer;
+import io.github.hpsocket.soa.starter.data.redis.serializer.KryoRedisSerializer;
+import io.github.hpsocket.soa.starter.data.redis.template.NumberRedisTemplate;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.RedissonReactiveClient;
@@ -42,29 +38,28 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.*;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.util.ReflectionUtils;
 
-import com.alibaba.fastjson2.support.config.FastJsonConfig;
-import com.alibaba.fastjson2.support.spring6.data.redis.FastJsonRedisSerializer;
-import com.alibaba.fastjson2.support.spring6.data.redis.GenericFastJsonRedisSerializer;
-
-import io.github.hpsocket.soa.framework.core.util.CryptHelper;
-import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonAutoConfigurationCustomizer;
-import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
-import io.github.hpsocket.soa.starter.data.redis.serializer.KryoNotNullRedisSerializer;
-import io.github.hpsocket.soa.starter.data.redis.serializer.KryoRedisSerializer;
-import io.github.hpsocket.soa.starter.data.redis.template.NumberRedisTemplate;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Method;
+import java.time.Duration;
+import java.util.*;
 
 public abstract class SoaAbstractRedisConfig
 {
     protected static final StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
 
     protected static final FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
-    protected static final GenericFastJsonRedisSerializer genericFastJsonRedisSerializer = new GenericFastJsonRedisSerializer(true);
+    protected static final GenericFastJsonRedisSerializer genericFastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
+
+    protected static final Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+    protected static final GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
 
     protected static final KryoRedisSerializer<Object> kryoRedisSerializer = new KryoRedisSerializer<Object>();
     protected static final KryoNotNullRedisSerializer<Object> kryoNotNullRedisSerializer = new KryoNotNullRedisSerializer<Object>();
@@ -95,9 +90,9 @@ public abstract class SoaAbstractRedisConfig
         this.redisProperties = redisProperties.getIfUnique(() -> new RedisProperties());
     }
     
-    public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory redisConnectionFactory)
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
-        return genericJsonRedisTemplate(redisConnectionFactory);
+        return jsonRedisTemplate(redisConnectionFactory);
     }
     
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory)
@@ -142,6 +137,32 @@ public abstract class SoaAbstractRedisConfig
         return template;
     }
 
+    public RedisTemplate<String, Object> jackson2RedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
+
+        template.setKeySerializer(RedisSerializer.string());
+        template.setValueSerializer(jackson2JsonRedisSerializer);
+        template.setHashKeySerializer(RedisSerializer.string());
+        template.setHashValueSerializer(jackson2JsonRedisSerializer);
+        template.setConnectionFactory(redisConnectionFactory);
+
+        return template;
+    }
+
+    public <T> RedisTemplate<String, T> genericJackson2RedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        RedisTemplate<String, T> template = new RedisTemplate<String, T>();
+
+        template.setKeySerializer(RedisSerializer.string());
+        template.setValueSerializer(genericJackson2JsonRedisSerializer);
+        template.setHashKeySerializer(RedisSerializer.string());
+        template.setHashValueSerializer(genericJackson2JsonRedisSerializer);
+        template.setConnectionFactory(redisConnectionFactory);
+
+        return template;
+    }
+
     public <T> RedisTemplate<String, T> kryoRedisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
         RedisTemplate<String, T> template = new RedisTemplate<String, T>();
@@ -169,19 +190,17 @@ public abstract class SoaAbstractRedisConfig
     }
     
     @SuppressWarnings("unchecked")
-    public <T> ReactiveRedisTemplate<String, T> reactiveRedisTemplate(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
+    public ReactiveRedisTemplate<String, Object> reactiveRedisTemplate(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
     {
-        RedisSerializationContext<String, T> serializationContext = (RedisSerializationContext<String, T>)
-                                                                    (RedisSerializationContext<?, ?>)
-                                                                    RedisSerializationContext
-                                                                        .<String, T>newSerializationContext()
-                                                                        .key(RedisSerializer.string())
-                                                                        .value((RedisSerializer<T>)genericFastJsonRedisSerializer)
-                                                                        .hashKey(RedisSerializer.string())
-                                                                        .hashValue(genericFastJsonRedisSerializer)
-                                                                        .build();
+        RedisSerializationContext<String, Object> serializationContext = RedisSerializationContext
+                                                                            .<String, Object>newSerializationContext()
+                                                                            .key(RedisSerializer.string())
+                                                                            .value(fastJsonRedisSerializer)
+                                                                            .hashKey(RedisSerializer.string())
+                                                                            .hashValue(fastJsonRedisSerializer)
+                                                                            .build();
         
-        return new ReactiveRedisTemplate<String, T>(reactiveRedisConnectionFactory, serializationContext);
+        return new ReactiveRedisTemplate<String, Object>(reactiveRedisConnectionFactory, serializationContext);
     }
 
     public ReactiveStringRedisTemplate reactiveStringRedisTemplate(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)

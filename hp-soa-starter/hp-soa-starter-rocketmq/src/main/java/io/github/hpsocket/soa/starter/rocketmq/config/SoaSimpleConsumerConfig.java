@@ -1,20 +1,19 @@
 
 package io.github.hpsocket.soa.starter.rocketmq.config;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
+import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
+import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleMessageListener;
+import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate;
+import io.github.hpsocket.soa.starter.rocketmq.support.SoaSimpleConsumerListener;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
-import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleMessageListener;
-import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate;
-import io.github.hpsocket.soa.starter.rocketmq.support.SoaSimpleConsumerListener;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /** <b>Simple Consumer 配置</b><br>
  * 用于粘合 {@linkplain org.apache.rocketmq.client.core.RocketMQClientTemplate RocketMQClientTemplate} 与 {@linkplain SoaSimpleMessageListener}，

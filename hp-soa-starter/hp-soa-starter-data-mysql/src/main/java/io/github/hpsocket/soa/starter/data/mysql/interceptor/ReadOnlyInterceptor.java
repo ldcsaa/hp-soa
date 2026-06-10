@@ -1,14 +1,12 @@
 package io.github.hpsocket.soa.starter.data.mysql.interceptor;
 
-import java.sql.SQLException;
-
+import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 
-import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
-
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import java.sql.SQLException;
 
 import static org.apache.ibatis.mapping.SqlCommandType.*;
 

@@ -1,5 +1,10 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderConfiguration;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderProvider;
+
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -8,12 +13,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
-
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderConfiguration;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSenderProvider;
 
 /**
  * Default provider for {@link GelfSender} that creates UDP, TCP and HTTP senders.

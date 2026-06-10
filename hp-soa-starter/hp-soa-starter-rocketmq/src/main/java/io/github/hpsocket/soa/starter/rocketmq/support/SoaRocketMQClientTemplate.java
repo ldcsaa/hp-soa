@@ -1,10 +1,15 @@
 package io.github.hpsocket.soa.starter.rocketmq.support;
 
-import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.stream.IntStream;
-
+import io.github.hpsocket.soa.framework.core.id.IdGenerator;
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleConsumerReceiveConfiguration;
+import io.github.hpsocket.soa.starter.rocketmq.consumer.listener.RocketmqReadOnlyEventListener;
+import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.apis.ClientException;
 import org.apache.rocketmq.client.apis.message.MessageView;
 import org.apache.rocketmq.client.core.RocketMQClientTemplate;
@@ -19,16 +24,15 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.messaging.MessageHeaders;
 
-import io.github.hpsocket.soa.framework.core.id.IdGenerator;
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleConsumerReceiveConfiguration;
-import io.github.hpsocket.soa.starter.rocketmq.consumer.listener.RocketmqReadOnlyEventListener;
-import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 /** <b>{@linkplain org.apache.rocketmq.client.core.RocketMQClientTemplate RocketMQClientTemplate} 增强类</b><br>
  * {@linkplain RocketmqReadOnlyEventListener} 是 HP-SOA 的默认 Template<p>

@@ -1,8 +1,8 @@
 package io.github.hpsocket.soa.framework.core.mdc;
 
-import java.util.function.Consumer;
-
 import lombok.Getter;
+
+import java.util.function.Consumer;
 
 /** <b>{@linkplain Consumer} 包装类（支持 {@linkplain org.slf4j.MDC MDC} 调用链跟踪）</b> */
 @Getter

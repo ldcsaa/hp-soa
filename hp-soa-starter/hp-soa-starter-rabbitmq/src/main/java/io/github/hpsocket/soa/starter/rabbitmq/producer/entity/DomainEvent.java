@@ -1,15 +1,6 @@
 
 package io.github.hpsocket.soa.starter.rabbitmq.producer.entity;
 
-import java.io.Serializable;
-import java.time.OffsetDateTime;
-
-import org.slf4j.MDC;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageBuilder;
-import org.springframework.amqp.core.MessageProperties;
-import org.springframework.rabbit.stream.support.StreamMessageProperties;
-
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
@@ -18,6 +9,14 @@ import io.github.hpsocket.soa.starter.data.mysql.entity.BaseLogicDeleteEntity;
 import io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.MDC;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.rabbit.stream.support.StreamMessageProperties;
+
+import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 import static io.github.hpsocket.soa.starter.rabbitmq.common.util.RabbitmqConstant.*;
 

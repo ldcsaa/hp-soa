@@ -1,15 +1,14 @@
 package io.github.hpsocket.soa.starter.leaf.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.leaf.common.BatchResult;
 import io.github.hpsocket.soa.framework.leaf.common.Result;
 import io.github.hpsocket.soa.framework.leaf.common.Status;
+import io.github.hpsocket.soa.framework.leaf.service.GlobalIdService;
 import io.github.hpsocket.soa.framework.leaf.service.IdGen;
 import lombok.Getter;
-import io.github.hpsocket.soa.framework.leaf.service.GlobalIdService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @Getter
 public class GlobalIdServiceImpl implements GlobalIdService

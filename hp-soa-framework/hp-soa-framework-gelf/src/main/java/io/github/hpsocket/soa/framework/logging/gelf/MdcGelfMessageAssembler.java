@@ -1,8 +1,8 @@
 package io.github.hpsocket.soa.framework.logging.gelf;
 
-import java.util.Set;
-
 import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+
+import java.util.Set;
 
 /**
  * Message-Assembler using MDC.

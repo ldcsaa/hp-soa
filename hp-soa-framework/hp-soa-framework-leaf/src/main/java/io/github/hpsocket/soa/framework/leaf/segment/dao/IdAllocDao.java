@@ -1,9 +1,9 @@
 
 package io.github.hpsocket.soa.framework.leaf.segment.dao;
 
-import java.util.List;
-
 import io.github.hpsocket.soa.framework.leaf.segment.model.LeafAlloc;
+
+import java.util.List;
 
 public interface IdAllocDao
 {

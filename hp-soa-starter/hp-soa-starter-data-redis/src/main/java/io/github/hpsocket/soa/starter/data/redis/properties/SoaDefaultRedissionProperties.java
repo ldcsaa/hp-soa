@@ -1,11 +1,10 @@
 package io.github.hpsocket.soa.starter.data.redis.properties;
 
+import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-
-import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
 
 @Primary
 @Component("soaDefaultRedissionProperties")

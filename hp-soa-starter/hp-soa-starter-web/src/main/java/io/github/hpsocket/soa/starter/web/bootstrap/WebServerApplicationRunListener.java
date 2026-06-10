@@ -1,10 +1,9 @@
 package io.github.hpsocket.soa.starter.web.bootstrap;
 
+import io.github.hpsocket.soa.framework.web.server.init.ServerInitializer;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
-
-import io.github.hpsocket.soa.framework.web.server.init.ServerInitializer;
 
 public class WebServerApplicationRunListener implements SpringApplicationRunListener, Ordered
 {

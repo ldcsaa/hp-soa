@@ -1,5 +1,8 @@
 package io.github.hpsocket.soa.framework.logging.gelf.jul;
 
+import io.github.hpsocket.soa.framework.logging.gelf.*;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.IllegalFormatException;
@@ -8,9 +11,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-
-import io.github.hpsocket.soa.framework.logging.gelf.*;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 
 /**
  * {@link LogEvent} implementation for a Java Util Logging {@link LogRecord}.

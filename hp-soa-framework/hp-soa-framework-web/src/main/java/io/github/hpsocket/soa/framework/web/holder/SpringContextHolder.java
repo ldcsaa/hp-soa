@@ -1,15 +1,14 @@
 
 package io.github.hpsocket.soa.framework.web.holder;
 
-import java.lang.reflect.Method;
-
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.service.TracingContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.ReflectionUtils;
 
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.service.TracingContext;
+import java.lang.reflect.Method;
 
 /** <b>Spring 上下文持有者</b> */
 public class SpringContextHolder

@@ -1,12 +1,11 @@
 package io.github.hpsocket.soa.starter.data.redis.template;
 
+import io.github.hpsocket.soa.starter.data.redis.serializer.NumberRedisSerializer;
 import org.springframework.data.redis.connection.DefaultStringRedisConnection;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
-
-import io.github.hpsocket.soa.starter.data.redis.serializer.NumberRedisSerializer;
 
 public class NumberRedisTemplate extends RedisTemplate<String, Number>
 {

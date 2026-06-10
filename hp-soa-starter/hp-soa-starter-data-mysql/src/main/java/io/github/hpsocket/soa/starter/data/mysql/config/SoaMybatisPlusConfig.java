@@ -1,22 +1,20 @@
 
 package io.github.hpsocket.soa.starter.data.mysql.config;
 
-import java.time.OffsetDateTime;
-
-import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-
 import io.github.hpsocket.soa.starter.data.mysql.interceptor.ReadOnlyInterceptor;
+import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+
+import java.time.OffsetDateTime;
 
 /** <b>HP-SOA mybatis-plus 配置</b> */
 @AutoConfiguration

@@ -1,27 +1,20 @@
     package io.github.hpsocket.soa.framework.web.filter;
 
-import java.io.IOException;
+    import com.alibaba.fastjson2.JSONObject;
+    import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
+    import io.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
+    import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+    import io.github.hpsocket.soa.framework.web.advice.RequestContext;
+    import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
+    import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+    import jakarta.servlet.*;
+    import jakarta.servlet.http.HttpServletRequest;
+    import jakarta.servlet.http.HttpServletResponse;
+    import lombok.extern.slf4j.Slf4j;
 
-import com.alibaba.fastjson2.JSONObject;
-import io.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+    import java.io.IOException;
 
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
-import io.github.hpsocket.soa.framework.web.advice.RequestContext;
-import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-
-import lombok.extern.slf4j.Slf4j;
-
-import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
+    import static io.github.hpsocket.soa.framework.web.support.WebServerHelper.*;
 
     /** <b>HTTP 请求 MDC 过滤器</b><br>
  * 主要功能：

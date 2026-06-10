@@ -1,6 +1,7 @@
 
 package io.github.hpsocket.soa.framework.leaf.snowflake;
 
+import com.google.common.base.Preconditions;
 import io.github.hpsocket.soa.framework.leaf.common.Result;
 import io.github.hpsocket.soa.framework.leaf.common.Status;
 import io.github.hpsocket.soa.framework.leaf.common.Utils;
@@ -8,8 +9,6 @@ import io.github.hpsocket.soa.framework.leaf.service.IdGen;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
-
-import com.google.common.base.Preconditions;
 
 /** Snowflake ID 生成器 */
 @Slf4j

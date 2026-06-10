@@ -1,11 +1,11 @@
 package io.github.hpsocket.soa.framework.logging.gelf.log4j2;
 
-import java.util.regex.Pattern;
-
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.util.Strings;
+
+import java.util.regex.Pattern;
 
 /**
  * Configuration for dynamic log fields pulled from MDC.

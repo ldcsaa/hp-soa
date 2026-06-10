@@ -1,17 +1,5 @@
 package io.github.hpsocket.soa.starter.mqtt.config;
 
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-
-import javax.net.SocketFactory;
-import javax.net.ssl.HostnameVerifier;
-
-import org.eclipse.paho.mqttv5.client.MqttCallback;
-import org.eclipse.paho.mqttv5.client.MqttClientPersistence;
-import org.eclipse.paho.mqttv5.client.persist.MqttDefaultFilePersistence;
-import org.eclipse.paho.mqttv5.common.MqttException;
-import org.springframework.beans.factory.ObjectProvider;
-
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties;
@@ -21,6 +9,16 @@ import io.github.hpsocket.soa.starter.mqtt.service.MqttPropertiesCustomizer;
 import io.github.hpsocket.soa.starter.mqtt.service.impl.MqttMessagePublisherImpl;
 import io.github.hpsocket.soa.starter.mqtt.support.DefaultMqttCallback;
 import io.github.hpsocket.soa.starter.mqtt.support.ExtMqttClient;
+import org.eclipse.paho.mqttv5.client.MqttCallback;
+import org.eclipse.paho.mqttv5.client.MqttClientPersistence;
+import org.eclipse.paho.mqttv5.client.persist.MqttDefaultFilePersistence;
+import org.eclipse.paho.mqttv5.common.MqttException;
+import org.springframework.beans.factory.ObjectProvider;
+
+import javax.net.SocketFactory;
+import javax.net.ssl.HostnameVerifier;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 public abstract class SoaAbstractMqttConfig
 {

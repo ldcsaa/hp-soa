@@ -1,12 +1,5 @@
 package io.github.hpsocket.soa.starter.kafka.producer.sender;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.kafka.core.KafkaTemplate;
-
 import io.github.hpsocket.soa.starter.kafka.producer.entity.DomainEvent;
 import io.github.hpsocket.soa.starter.kafka.producer.service.DomainEventService;
 import lombok.AllArgsConstructor;
@@ -14,6 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.kafka.core.KafkaTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /** <b>领域事件消息发送器基类（经典消息）</b><br>
  * 使用步骤：<br>

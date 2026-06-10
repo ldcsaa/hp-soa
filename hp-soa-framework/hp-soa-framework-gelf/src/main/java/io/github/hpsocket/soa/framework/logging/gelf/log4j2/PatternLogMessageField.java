@@ -1,8 +1,7 @@
 package io.github.hpsocket.soa.framework.logging.gelf.log4j2;
 
-import org.apache.logging.log4j.core.layout.PatternLayout;
-
 import io.github.hpsocket.soa.framework.logging.gelf.LogMessageField;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 
 /**
  * @author Mark Paluch

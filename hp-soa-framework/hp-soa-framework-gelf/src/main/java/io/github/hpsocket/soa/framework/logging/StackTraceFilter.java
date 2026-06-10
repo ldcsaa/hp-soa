@@ -1,12 +1,12 @@
 package io.github.hpsocket.soa.framework.logging;
 
-import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.getProperty;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.Closer;
 
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import io.github.hpsocket.soa.framework.logging.gelf.intern.Closer;
+import static io.github.hpsocket.soa.framework.logging.RuntimeContainerProperties.getProperty;
 
 /**
  * Filtering Facility for stack traces. This is to shorten very long Traces. It creates a redacted trace containing only the

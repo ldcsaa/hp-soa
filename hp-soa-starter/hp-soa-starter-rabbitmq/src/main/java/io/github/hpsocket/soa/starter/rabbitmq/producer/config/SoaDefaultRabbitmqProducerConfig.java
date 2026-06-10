@@ -1,5 +1,7 @@
 package io.github.hpsocket.soa.starter.rabbitmq.producer.config;
 
+import com.rabbitmq.stream.Environment;
+import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbitmqProperties;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -24,10 +26,6 @@ import org.springframework.rabbit.stream.producer.ProducerCustomizer;
 import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
 import org.springframework.rabbit.stream.support.converter.StreamMessageConverter;
 import org.springframework.retry.RecoveryCallback;
-
-import com.rabbitmq.stream.Environment;
-
-import io.github.hpsocket.soa.starter.rabbitmq.common.properties.SoaDefaultRabbitmqProperties;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaRabbitmqProducerConfig.class, SoaDefaultRabbitmqProperties.class})

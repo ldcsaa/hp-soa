@@ -1,5 +1,10 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.Closer;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
+
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
@@ -7,11 +12,6 @@ import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.TimeUnit;
-
-import io.github.hpsocket.soa.framework.logging.gelf.intern.Closer;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
 
 /**
  * @author https://github.com/t0xa/gelfj

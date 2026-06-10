@@ -1,12 +1,10 @@
 
 package io.github.hpsocket.soa.starter.skywalking.config;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.TimeUnit;
-
+import io.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.skywalking.async.TracingAsyncThreadPoolExecutor;
+import io.github.hpsocket.soa.starter.web.config.WebConfig;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -14,10 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 
-import io.github.hpsocket.soa.framework.web.propertries.IAsyncProperties;
-import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.skywalking.async.TracingAsyncThreadPoolExecutor;
-import io.github.hpsocket.soa.starter.web.config.WebConfig;
+import java.util.concurrent.*;
 
 /** <b>HP-SOA Skywalking Async 配置</b> */
 @AutoConfiguration

@@ -1,15 +1,16 @@
 package io.github.hpsocket.soa.starter.mqtt.config;
 
-import org.apache.skywalking.apm.toolkit.trace.Trace;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.*;
-
 import io.github.hpsocket.soa.framework.web.support.NumberByteArrayConverter;
 import io.github.hpsocket.soa.framework.web.support.StringByteArrayConverter;
 import io.github.hpsocket.soa.starter.mqtt.consume.aspect.MqttListenerMdcInspector;
 import io.github.hpsocket.soa.starter.mqtt.consume.aspect.MqttListenerTracingInspector;
 import io.github.hpsocket.soa.starter.mqtt.listener.MqttReadOnlyEventListener;
+import org.apache.skywalking.apm.toolkit.trace.Trace;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 
 /** <b>MQTT 公共配置类</b> */
 @AutoConfiguration

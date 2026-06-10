@@ -1,16 +1,14 @@
 package io.github.hpsocket.soa.starter.web.cloud.config;
 
+import com.alibaba.csp.sentinel.adapter.spring.webmvc_v6x.callback.BlockExceptionHandler;
+import io.github.hpsocket.soa.starter.sentinel.config.SoaSentinelConfig;
+import io.github.hpsocket.soa.starter.web.cloud.advice.CloudSentinelExceptionAdvice;
+import io.github.hpsocket.soa.starter.web.cloud.exception.CloudSentinelBlockExceptionHandler;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-
-import com.alibaba.csp.sentinel.adapter.spring.webmvc_v6x.callback.BlockExceptionHandler;
-
-import io.github.hpsocket.soa.starter.sentinel.config.SoaSentinelConfig;
-import io.github.hpsocket.soa.starter.web.cloud.advice.CloudSentinelExceptionAdvice;
-import io.github.hpsocket.soa.starter.web.cloud.exception.CloudSentinelBlockExceptionHandler;
 
 /** <b>HP-SOA Spring Cloud Sentinel 配置</b> */
 @AutoConfiguration(before = SoaSentinelConfig.class)

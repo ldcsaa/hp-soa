@@ -1,14 +1,13 @@
 package io.github.hpsocket.soa.starter.data.mysql.entity;
 
-import java.io.Serializable;
-import java.time.OffsetDateTime;
-
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 /** <b>基础实体</b><br>
  * 数据库实体的基类，定义了 {@linkplain #id}、{@linkplain #createTime}、{@linkplain #updateTime} 字段

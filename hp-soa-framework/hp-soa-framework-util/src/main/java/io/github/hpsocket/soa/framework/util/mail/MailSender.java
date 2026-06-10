@@ -1,12 +1,5 @@
 package io.github.hpsocket.soa.framework.util.mail;
 
-import java.io.File;
-
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Properties;
-
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
@@ -14,13 +7,15 @@ import jakarta.activation.FileDataSource;
 import jakarta.mail.Message;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeBodyPart;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMultipart;
-import jakarta.mail.internet.MimeUtility;
+import jakarta.mail.internet.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 /** 邮件发送器 */
 @Getter

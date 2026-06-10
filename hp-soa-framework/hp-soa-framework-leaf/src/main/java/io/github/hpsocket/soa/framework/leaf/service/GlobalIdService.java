@@ -1,9 +1,9 @@
 package io.github.hpsocket.soa.framework.leaf.service;
 
-import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.io.Serializable;
 
 /**
  * 全局 ID 服务

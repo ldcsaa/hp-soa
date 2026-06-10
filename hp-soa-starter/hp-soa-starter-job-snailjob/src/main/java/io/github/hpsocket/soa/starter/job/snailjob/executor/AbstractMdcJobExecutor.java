@@ -1,10 +1,9 @@
 package io.github.hpsocket.soa.starter.job.snailjob.executor;
 
-import com.aizuda.snailjob.model.dto.ExecuteResult;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.aizuda.snailjob.client.job.core.dto.JobArgs;
 import com.aizuda.snailjob.client.job.core.executor.AbstractJobExecutor;
+import com.aizuda.snailjob.model.dto.ExecuteResult;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /** <b>SnailJob 执行器基类</b> */
 abstract public class AbstractMdcJobExecutor extends AbstractJobExecutor

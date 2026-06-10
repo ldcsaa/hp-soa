@@ -1,10 +1,10 @@
 package io.github.hpsocket.soa.framework.logging.gelf;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 
 /**
  * @author Mark Paluch

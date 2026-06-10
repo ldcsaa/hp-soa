@@ -1,13 +1,5 @@
 package io.github.hpsocket.soa.starter.rabbitmq.producer.sender;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.connection.CorrelationData;
-import org.springframework.amqp.rabbit.connection.CorrelationData.Confirm;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-
 import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 import io.github.hpsocket.soa.starter.rabbitmq.producer.service.DomainEventService;
 import lombok.AllArgsConstructor;
@@ -15,6 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.connection.CorrelationData.Confirm;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** <b>领域事件消息发送器基类（经典消息）</b><br>
  * 使用步骤：<br>

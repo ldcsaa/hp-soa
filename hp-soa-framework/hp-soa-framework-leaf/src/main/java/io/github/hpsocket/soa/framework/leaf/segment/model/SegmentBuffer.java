@@ -1,14 +1,14 @@
 
 package io.github.hpsocket.soa.framework.leaf.segment.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 双buffer

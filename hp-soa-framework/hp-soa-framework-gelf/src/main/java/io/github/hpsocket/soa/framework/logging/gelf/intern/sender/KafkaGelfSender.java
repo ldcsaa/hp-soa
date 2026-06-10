@@ -1,16 +1,15 @@
 package io.github.hpsocket.soa.framework.logging.gelf.intern.sender;
 
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
+import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
-import io.github.hpsocket.soa.framework.logging.gelf.intern.ErrorReporter;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfSender;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * {@link GelfSender} using Kafka.

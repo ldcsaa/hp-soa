@@ -1,11 +1,11 @@
 package io.github.hpsocket.soa.framework.logging.gelf;
 
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 
 /**
  * Builder to create a GelfMessage.

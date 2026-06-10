@@ -1,13 +1,12 @@
 package io.github.hpsocket.soa.framework.logging.gelf.log4j2;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import io.github.hpsocket.soa.framework.logging.gelf.*;
+import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.util.ReadOnlyStringMap;
 
-import io.github.hpsocket.soa.framework.logging.gelf.*;
-import io.github.hpsocket.soa.framework.logging.gelf.intern.GelfMessage;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Mark Paluch
