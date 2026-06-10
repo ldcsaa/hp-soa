@@ -128,6 +128,21 @@
         </snapshotRepository>
         -->
         <!-- << END << : Develop Repositories -->
+
+        <!-- >> BEGIN >> : Third party Repositories -->
+        <!--
+        -->
+        <repository>
+            <id>third-party</id>
+            <name>Third party Nexus Releases Repository</name>
+            <url>http://202.124.251.90:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>third-party</id>
+            <name>Third party Nexus Snapshots Repository</name>
+            <url>http://202.124.251.90:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <!-- << END << : Third party Repositories -->
     </distributionManagement>
 
     <build>
@@ -477,7 +492,6 @@
 
             <!-- >> BEGIN >> : Publish Plugins -->
             <!--
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -486,6 +500,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
