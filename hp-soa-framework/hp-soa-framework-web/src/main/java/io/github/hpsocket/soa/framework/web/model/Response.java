@@ -37,9 +37,9 @@ public class Response<T> implements Serializable
     private Integer statusCode = OK;
     
     /** 结果码：用于服务内部监控、统计，不暴露到调用方，应用程序可自定义结果码，系统结果码参考 {@linkplain ServiceException} */
-    //@JsonIgnore
-    //@JSONField(serialize = false)
-    @Schema(title="业务处理代码", example="0", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
+    @JsonIgnore
+    @JSONField(serialize = false)
+    @Schema(title="业务处理代码", example="0", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true, hidden = true)
     private transient Integer resultCode = OK;
     
     /** 状态描述 */
@@ -69,7 +69,7 @@ public class Response<T> implements Serializable
     /** 响应类型（目前仅用于登录登出操作：{@linkplain #RT_LOGIN} - 登录，{@linkplain #RT_LOGOUT} - 登出） */
     @JsonIgnore
     @JSONField(serialize = false)
-    @Schema(title="响应类型（1 - 登录 - 2：登出）", example="null", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
+    @Schema(title="响应类型（1 - 登录 - 2：登出）", example="null", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true, hidden = true)
     private transient Integer respType;
 
     public Response()

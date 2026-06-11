@@ -67,12 +67,12 @@ get_yaml_property()
     local str=
     local i=0
     
-    for var in ${arr[@]}; do
+    for var in "${arr[@]}"; do
         i=$((i+1))
         new_key=$cur_key
         str="."
 
-        for n in ${keys[@]}; do
+        for n in "${keys[@]}"; do
             str=$str'["'$n'"]'
         done
 
@@ -80,7 +80,7 @@ get_yaml_property()
             new_key=$var
         else
             new_key=$cur_key'.'$var
-        fi  
+        fi
 
         str=$str'["'$new_key'"]'
 
@@ -92,11 +92,11 @@ get_yaml_property()
         else
             keys+=($new_key)
             cur_key=
-        fi  
+        fi
 
         if [[ "$i" -eq ${#arr[@]} ]]; then
             echo $val
-        fi  
+        fi
     done
 }
 
@@ -155,7 +155,7 @@ if [[ -z "$REMOTE_DEBUG_ADDR" ]]; then
     REMOTE_DEBUG_ADDR="0.0.0.0"
 fi
 
-if [[ ${ENABLE_REMOTE_DEBUG_ENVS[@]/${RUNTIME_ENV,,}/} != ${ENABLE_REMOTE_DEBUG_ENVS[@]} ]]; then
+if [[ ${ENABLE_REMOTE_DEBUG_ENVS[*]/${RUNTIME_ENV,,}/} != ${ENABLE_REMOTE_DEBUG_ENVS[*]} ]]; then
     REMOTE_DEBUG_OPTIONS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$REMOTE_DEBUG_ADDR:$REMOTE_DEBUG_PORT"
 fi
 
@@ -164,14 +164,14 @@ LOG_FILE="${LOG_FILE_PATH}/${APP_NAME}/service.log"
 HEAP_DUMP_PATH="${LOG_FILE_PATH}/${APP_NAME}"
 
 if [ -z "$LOG_LEVEL" ]; then
-    if [[ ${PRODUCTION_ENVS[@]/${RUNTIME_ENV,,}/} != ${PRODUCTION_ENVS[@]} ]]; then
+    if [[ ${PRODUCTION_ENVS[*]/${RUNTIME_ENV,,}/} != ${PRODUCTION_ENVS[*]} ]]; then
         LOG_LEVEL="INFO"
     else
         LOG_LEVEL="DEBUG"
     fi
 fi
 
-if [ -z "$JAVA_AGENT"]; then
+if [ -z "$JAVA_AGENT" ]; then
     if [ -f "$JAVA_AGENT_CONFIG_FILE" ]; then
         while read LINE
         do
