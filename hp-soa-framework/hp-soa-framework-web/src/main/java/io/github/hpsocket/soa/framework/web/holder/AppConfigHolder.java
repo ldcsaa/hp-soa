@@ -99,11 +99,11 @@ public class AppConfigHolder
                     
                     
                     excludedPaths.add(managementEndpointsBaseFullPath + ANT_PATH_WILDCARD);
+                    excludedPaths.add(FAVICON_PATH);
                     /*
                     excludedPaths.add(springdocApiDocsFullPath + ANT_PATH_WILDCARD);
                     excludedPaths.add(springdocSwaggerUiFullPath + ANT_PATH_WILDCARD);
                     excludedPaths.add(servletUriPrefix + LOGIN_PATH);
-                    excludedPaths.add(FAVICON_PATH);
                     */
                     
                     initialized = true;
