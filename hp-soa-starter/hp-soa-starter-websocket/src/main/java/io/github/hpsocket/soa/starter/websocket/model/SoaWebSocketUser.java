@@ -17,8 +17,12 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class SoaWebSocketUser implements Serializable
 {
+    /** 用户编号 */
     private Long userId;
+    /** 用户名称 */
     private String userName;
+    /** 用户类型 */
     private Integer userType;
+    /** 用户组编号 */
     private Long groupId;
 }
