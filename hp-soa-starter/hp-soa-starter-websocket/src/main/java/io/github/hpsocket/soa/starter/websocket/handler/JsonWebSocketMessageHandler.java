@@ -11,6 +11,7 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +42,8 @@ public class JsonWebSocketMessageHandler extends TextWebSocketHandler
             return;
         }
 
-        if(message.getPayloadLength() == 4 && Objects.equals(message.getPayload(), "ping"))
+        if(handleSpecialMessage(session, message))
         {
-            session.sendMessage(new TextMessage("pong"));
             return;
         }
 
@@ -74,5 +74,15 @@ public class JsonWebSocketMessageHandler extends TextWebSocketHandler
         Object messageObj = JSONObject.parseObject(jsonMessage.getContent(), type);
 
         messageListener.onMessage(session, messageObj);
+    }
+
+    private static boolean handleSpecialMessage(WebSocketSession session, TextMessage message) throws IOException
+    {
+        if(message.getPayloadLength() == 4 && Objects.equals(message.getPayload(), "ping"))
+        {
+            session.sendMessage(new TextMessage("pong"));
+            return true;
+        }
+        return false;
     }
 }

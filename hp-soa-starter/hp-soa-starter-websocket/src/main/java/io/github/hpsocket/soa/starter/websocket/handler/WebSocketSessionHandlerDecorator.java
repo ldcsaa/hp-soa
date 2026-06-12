@@ -67,7 +67,6 @@ public class WebSocketSessionHandlerDecorator extends WebSocketHandlerDecorator
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception
     {
         MdcAttr mdcAttr = WebServerHelper.createMdcAttr();
-        Object payload  = message.getPayload();
 
         try
         {
