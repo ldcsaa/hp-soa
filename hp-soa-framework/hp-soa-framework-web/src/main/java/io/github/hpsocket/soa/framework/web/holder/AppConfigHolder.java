@@ -96,8 +96,7 @@ public class AppConfigHolder
                     managementEndpointsBaseFullPath = servletUriPrefix + managementEndpointsBasePath;
                     springdocApiDocsFullPath        = servletUriPrefix + springdocApiDocsPath;
                     springdocSwaggerUiFullPath      = servletUriPrefix + springdocSwaggerUiPath;
-                    
-                    
+
                     excludedPaths.add(managementEndpointsBaseFullPath + ANT_PATH_WILDCARD);
                     excludedPaths.add(FAVICON_PATH);
                     /*
