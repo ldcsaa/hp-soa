@@ -3,6 +3,7 @@ package io.github.hpsocket.soa.starter.web.config;
 
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
 import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
@@ -26,6 +27,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -34,6 +36,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -240,6 +243,22 @@ public class WebConfig implements WebMvcConfigurer
     AsyncService asyncService(AsyncThreadPoolExecutor asyncThreadPoolExecutor)
     {
         return new AsyncServiceImpl(asyncThreadPoolExecutor);
+    }
+
+    /** {@linkplain Jackson2ObjectMapperBuilder} 默认配置 */
+    @Bean
+    @ConditionalOnMissingBean
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer()
+    {
+        return builder -> WebServerHelper.configJackson2ObjectMapperBuilder(builder);
+    }
+
+    /** {@linkplain ObjectMapper} 默认配置 */
+    @Bean
+    @ConditionalOnMissingBean
+    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder)
+    {
+        return WebServerHelper.createObjectMapper(builder);
     }
     
     /** HTTP 请求报文转换器配置 */

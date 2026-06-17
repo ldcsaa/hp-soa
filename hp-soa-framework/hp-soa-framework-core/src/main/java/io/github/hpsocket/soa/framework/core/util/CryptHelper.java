@@ -1,13 +1,16 @@
 package io.github.hpsocket.soa.framework.core.util;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.*;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 /** <b>编解码、加解密帮助类</b> */
 public class CryptHelper
@@ -34,10 +37,20 @@ public class CryptHelper
     public static final String AES              = "AES";
     /** 加密方法：DES */
     public static final String DES              = "DES";
+    /** 加密方法：RSA */
+    public static final String RSA              = "RSA";
     
     private static final String SEC_RAN_ALG     = "SHA1PRNG";
+
+    private static final int DEFAULT_RSA_KEY_SIZE   = 2048;
+
+    private static final String DEFAULT_RSA_SIGN_ALGORITHM  = "SHA256withRSA";
+
+    private static final String DEFAULT_RSA_CIPHER          = "RSA/ECB/PKCS1Padding";
     
-    private static final String MYSQL_CIPHER    = "AES/ECB/PKCS5Padding";
+    private static final String MYSQL_CIPHER                = "AES/ECB/PKCS5Padding";
+
+
 
     /** byte[] -> 十六进制字符串 (小写) */
     public final static String bytes2HexStr(byte[] bytes)
@@ -401,8 +414,8 @@ public class CryptHelper
     {
         try
         {
-            byte[] bytes    = content.getBytes(safeCharset(charset));
-            byte[] output    = crypt(method, ENCRYPT_MODE, keysize, bytes, password);
+            byte[] bytes  = content.getBytes(safeCharset(charset));
+            byte[] output = crypt(method, ENCRYPT_MODE, keysize, bytes, password);
             
             return bytes2HexStr(output);
         }
@@ -478,8 +491,246 @@ public class CryptHelper
     {
         if(GeneralHelper.isStrEmpty(charset))
             charset = DEFAULT_ENCODING;
-        
+            
         return charset;
+    }
+
+    /**
+     * 生成RSA密钥对
+     *
+     * @return KeyPair 密钥对
+     */
+    public final static KeyPair generateRSAKeyPair()
+    {
+        return generateRSAKeyPair(DEFAULT_RSA_KEY_SIZE);
+    }
+        
+    /**
+     * 生成RSA密钥对
+     * 
+     * @param keySize 密钥长度
+     * @return KeyPair 密钥对
+     */
+    public final static KeyPair generateRSAKeyPair(int keySize)
+    {
+        try
+        {
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance(RSA);
+            kpg.initialize(keySize);
+            return kpg.generateKeyPair();
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+        
+    /**
+     * 获取公钥字符串（Base64编码）
+     * 
+     * @param keyPair 密钥对
+     * @return String 公钥字符串
+     */
+    public final static String getRSAPublicKey(KeyPair keyPair)
+    {
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        return Base64.getEncoder().encodeToString(publicKey.getEncoded());
+    }
+        
+    /**
+     * 获取私钥字符串（Base64编码）
+     * 
+     * @param keyPair 密钥对
+     * @return String 私钥字符串
+     */
+    public final static String getRSAPrivateKey(KeyPair keyPair)
+    {
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+        return Base64.getEncoder().encodeToString(privateKey.getEncoded());
+    }
+        
+    /**
+     * RSA加密
+     * 
+     * @param content 待加密内容
+     * @param publicKey 公钥字符串
+     * @return String 加密后字符串
+     */
+    public final static String rsaEncrypt(String content, String publicKey)
+    {
+        return rsaEncrypt(content, publicKey, null);
+    }
+        
+    /**
+     * RSA加密
+     * 
+     * @param content 待加密内容
+     * @param publicKey 公钥字符串
+     * @param charset 字符编码
+     * @return String 加密后字符串
+     */
+    public final static String rsaEncrypt(String content, String publicKey, String charset)
+    {
+        try
+        {
+            Cipher cipher = Cipher.getInstance(DEFAULT_RSA_CIPHER);
+            cipher.init(Cipher.ENCRYPT_MODE, getPublicKey(publicKey));
+            byte[] encryptedBytes = cipher.doFinal(content.getBytes(safeCharset(charset)));
+            return Base64.getEncoder().encodeToString(encryptedBytes);
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+        
+    /**
+     * RSA解密
+     * 
+     * @param content 待解密内容
+     * @param privateKey 私钥字符串
+     * @return String 解密后字符串
+     */
+    public final static String rsaDecrypt(String content, String privateKey)
+    {
+        return rsaDecrypt(content, privateKey, null);
+    }
+        
+    /**
+     * RSA解密
+     * 
+     * @param content 待解密内容
+     * @param privateKey 私钥字符串
+     * @param charset 字符编码
+     * @return String 解密后字符串
+     */
+    public final static String rsaDecrypt(String content, String privateKey, String charset)
+    {
+        try
+        {
+            Cipher cipher = Cipher.getInstance(DEFAULT_RSA_CIPHER);
+            cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(privateKey));
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(content));
+            return new String(decryptedBytes, safeCharset(charset));
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 签名
+     *
+     * @param content 待签名内容
+     * @param privateKey 私钥字符串
+     * @return String 签名结果
+     */
+    public final static String rsaSign(String content, String privateKey)
+    {
+        return rsaSign(content, privateKey, DEFAULT_RSA_SIGN_ALGORITHM);
+    }
+        
+    /**
+     * 签名
+     * 
+     * @param content 待签名内容
+     * @param privateKey 私钥字符串
+     * @param algorithm 签名算法
+     * @return String 签名结果
+     */
+    public final static String rsaSign(String content, String privateKey, String algorithm)
+    {
+        try
+        {
+            Signature signature = Signature.getInstance(algorithm);
+            signature.initSign(getPrivateKey(privateKey));
+            signature.update(content.getBytes(DEFAULT_ENCODING));
+            return Base64.getEncoder().encodeToString(signature.sign());
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 验签
+     *
+     * @param content 已签名内容
+     * @param publicKey 公钥字符串
+     * @param sign 签名值
+     * @return boolean 验签结果
+     */
+    public final static boolean rsaVerify(String content, String publicKey, String sign)
+    {
+        return rsaVerify(content, publicKey, DEFAULT_RSA_SIGN_ALGORITHM, sign);
+    }
+        
+    /**
+     * 验签
+     * 
+     * @param content 已签名内容
+     * @param publicKey 公钥字符串
+     * @param algorithm 签名算法
+     * @param sign 签名值
+     * @return boolean 验签结果
+     */
+    public final static boolean rsaVerify(String content, String publicKey, String algorithm, String sign)
+    {
+        try
+        {
+            Signature signature = Signature.getInstance(algorithm);
+            signature.initVerify(getPublicKey(publicKey));
+            signature.update(content.getBytes(DEFAULT_ENCODING));
+            return signature.verify(Base64.getDecoder().decode(sign));
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+        
+    /**
+     * 从Base64编码的公钥字符串获取PublicKey对象
+     * 
+     * @param publicKey 公钥字符串
+     * @return PublicKey PublicKey对象
+     */
+    private final static PublicKey getPublicKey(String publicKey)
+    {
+        try
+        {
+            byte[] publicKeyBytes = Base64.getDecoder().decode(publicKey);
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+            return keyFactory.generatePublic(keySpec);
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+        
+    /**
+     * 从Base64编码的私钥字符串获取PrivateKey对象
+     * 
+     * @param privateKey 私钥字符串
+     * @return PrivateKey PrivateKey对象
+     */
+    private final static PrivateKey getPrivateKey(String privateKey)
+    {
+        try
+        {
+            byte[] privateKeyBytes = Base64.getDecoder().decode(privateKey);
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+            return keyFactory.generatePrivate(keySpec);
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
     public static String mysqlAESEncrypt(String content, String password)

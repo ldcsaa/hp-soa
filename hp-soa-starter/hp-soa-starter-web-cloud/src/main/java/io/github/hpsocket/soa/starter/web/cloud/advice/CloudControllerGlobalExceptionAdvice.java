@@ -20,7 +20,7 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
 {
     /** {@linkplain MethodArgumentNotValidException} 异常处理器 */
     @Override
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e)
     {
@@ -35,7 +35,7 @@ public class CloudControllerGlobalExceptionAdvice extends ControllerGlobalExcept
 
     /** {@linkplain Exception} 异常处理器 */
     @Override
-    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler({Exception.class})
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
     {

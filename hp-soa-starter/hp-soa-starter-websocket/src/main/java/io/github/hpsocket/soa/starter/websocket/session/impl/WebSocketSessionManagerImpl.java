@@ -1,9 +1,12 @@
-package io.github.hpsocket.soa.starter.websocket.session;
+package io.github.hpsocket.soa.starter.websocket.session.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
+import io.github.hpsocket.soa.starter.websocket.listener.WebSocketSessionListener;
 import io.github.hpsocket.soa.starter.websocket.model.SoaWebSocketUser;
+import io.github.hpsocket.soa.starter.websocket.session.WebSocketSessionManager;
 import io.github.hpsocket.soa.starter.websocket.util.WebSocketUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
@@ -17,8 +20,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * 默认的 {@link WebSocketSessionManager} 实现类
  */
+@RequiredArgsConstructor
 public class WebSocketSessionManagerImpl implements WebSocketSessionManager
 {
+    private final WebSocketSessionListener webSocketSessionListener;
 
     /**
      * id 与 WebSocketSession 映射
@@ -36,15 +41,14 @@ public class WebSocketSessionManagerImpl implements WebSocketSessionManager
     @Override
     public void addSession(WebSocketSession session)
     {
-        // 添加到 idSessions 中
-        idSessions.put(session.getId(), session);
-        // 添加到 userSessions 中
         SoaWebSocketUser user = WebSocketUtils.getLoginUser(session);
 
         if(user == null)
         {
             return;
         }
+
+        idSessions.put(session.getId(), session);
 
         ConcurrentMap<Long, CopyOnWriteArrayList<WebSocketSession>> userSessionsMap = userSessions.get(user.getUserType());
 
@@ -69,14 +73,18 @@ public class WebSocketSessionManagerImpl implements WebSocketSessionManager
         }
 
         sessions.add(session);
+
+        if(webSocketSessionListener != null)
+        {
+            webSocketSessionListener.onAddSession(session, user);
+        }
     }
 
     @Override
     public void removeSession(WebSocketSession session)
     {
-        // 移除从 idSessions 中
         idSessions.remove(session.getId());
-        // 移除从 idSessions 中
+
         SoaWebSocketUser user = WebSocketUtils.getLoginUser(session);
 
         if(user == null)
@@ -97,6 +105,11 @@ public class WebSocketSessionManagerImpl implements WebSocketSessionManager
         if(CollUtil.isEmpty(sessions))
         {
             userSessionsMap.remove(user.getUserId(), sessions);
+        }
+
+        if(webSocketSessionListener != null)
+        {
+            webSocketSessionListener.onRemoveSession(session, user);
         }
     }
 

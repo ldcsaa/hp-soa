@@ -1,7 +1,18 @@
 package io.github.hpsocket.soa.framework.web.support;
 
 import com.alibaba.fastjson2.JSONWriter;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.core.exception.UnimportantException;
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
@@ -18,11 +29,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.MDC;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -640,4 +656,64 @@ public class WebServerHelper
         return loggingSystem;
     }
 
+    public static ObjectMapper getInstance()
+    {
+        return JacksonHolder.INSTANCE;
+    }
+
+    private static class JacksonHolder
+    {
+        private static final ObjectMapper INSTANCE = createObjectMapper(createJackson2ObjectMapperBuilder());
+    }
+
+    public static Jackson2ObjectMapperBuilder createJackson2ObjectMapperBuilder()
+    {
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        return configJackson2ObjectMapperBuilder(builder);
+    }
+
+    public static Jackson2ObjectMapperBuilder configJackson2ObjectMapperBuilder(Jackson2ObjectMapperBuilder builder)
+    {
+        builder
+                .simpleDateFormat(GeneralHelper.DEFAULT_CHARSET)
+                .deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(GeneralHelper.PATTERN_DATETIME)))
+                .deserializerByType(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(GeneralHelper.PATTERN_DATE)))
+                .deserializerByType(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(GeneralHelper.PATTERN_TIME)))
+                .serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(GeneralHelper.PATTERN_DATETIME)))
+                .serializerByType(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(GeneralHelper.PATTERN_DATE)))
+                .serializerByType(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(GeneralHelper.PATTERN_TIME)))
+                .serializerByType(Long.class, ToStringSerializer.instance)
+                .serializerByType(Long.TYPE, ToStringSerializer.instance);
+
+        return builder;
+    }
+
+    public static ObjectMapper createObjectMapper(Jackson2ObjectMapperBuilder builder) {
+        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+
+        objectMapper
+                //设置地点为中国
+                .setLocale(Locale.CHINA)
+                //去掉默认的时间戳格式
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                //设置为中国上海时区
+                .setTimeZone(TimeZone.getTimeZone(ZoneId.systemDefault()))
+                //序列化时，日期的统一格式
+                .setDateFormat(new SimpleDateFormat(GeneralHelper.PATTERN_DATETIME, Locale.CHINA))
+                //序列化处理
+                .configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true)
+                .configure(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature(), true)
+                //失败处理
+                .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                //单引号处理
+                .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
+                //允许空字符串序列化为null对象
+                .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
+                .findAndRegisterModules()
+                //反序列化时，属性不存在的兼容处理s
+                .getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        return objectMapper;
+    }
 }

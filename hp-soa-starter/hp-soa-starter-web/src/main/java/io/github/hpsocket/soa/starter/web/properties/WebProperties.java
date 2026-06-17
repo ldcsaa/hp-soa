@@ -56,7 +56,7 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
     @Setter
     public static class HttpProperties
     {
-        public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+        public static final String DEFAULT_DATE_TIME_FORMAT = GeneralHelper.PATTERN_DATETIME;
         
         private String dateTimeFormat   = DEFAULT_DATE_TIME_FORMAT;
         private boolean returnRequestId = true;

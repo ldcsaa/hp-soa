@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.framework.util.file.excel;
 
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.NumberToTextConverter;
@@ -236,7 +237,7 @@ public class PoiHelper
                 else
                 {
                     Date theDate = cell.getDateCellValue();
-                    rs = date2Str(theDate, "yyyy-MM-dd HH:mm:ss");
+                    rs = date2Str(theDate, GeneralHelper.PATTERN_DATETIME);
                 }
                 break;
             case BOOLEAN:

@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.framework.util.file.excel;
 
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import lombok.Getter;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
@@ -414,7 +415,7 @@ public class XlsxReader
                         formatString.contains("-yy") || formatString.contains("yy-"))
                 {
                     dataType     = CellDataType.DATE;
-                    formatString = "yyyy-MM-dd hh:mm:ss";
+                    formatString = GeneralHelper.PATTERN_DATETIME;
                 }
             }
         }

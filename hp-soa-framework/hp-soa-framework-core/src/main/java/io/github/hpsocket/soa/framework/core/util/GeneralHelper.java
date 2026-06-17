@@ -52,6 +52,12 @@ public class GeneralHelper
     public static final boolean IS_WINDOWS_PLATFORM = isWindowsPlatform();
     /** 当前操作系统平台的换行符 */
     public static final String NEWLINE_CHAR         = IS_WINDOWS_PLATFORM ? "\r\n" : "\n";
+    /** 时间日期格式 */
+    public static final String PATTERN_DATETIME     = "yyyy-MM-dd HH:mm:ss";
+    /** 日期格式 */
+    public static final String PATTERN_DATE         = "yyyy-MM-dd";
+    /** 时间格式 */
+    public static final String PATTERN_TIME         = "HH:mm:ss";
     
     static
     {

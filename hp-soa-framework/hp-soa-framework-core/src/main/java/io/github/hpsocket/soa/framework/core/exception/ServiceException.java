@@ -70,6 +70,8 @@ public class ServiceException extends RuntimeException
     public static final int LOGIN_INVALID           = 904;
     /** 未登录 */
     public static final int NOT_LOGGED_IN           = 907;
+    /** 业务逻辑错误 */
+    public static final int BUSINESS_ERROR          = 999;
     
     public static final ServiceException BAD_REQUEST_EXCEPTION      = new ServiceException("非法请求", BAD_REQUEST);
     public static final ServiceException NOT_EXIST_EXCEPTION        = new ServiceException("目标不存在", NOT_EXIST);
@@ -91,6 +93,7 @@ public class ServiceException extends RuntimeException
     public static final ServiceException OUTER_API_CALL_EXCEPTION   = new ServiceException("外部服务调用失败", OUTER_API_CALL_FAIL);
     public static final ServiceException INNER_API_CALL_EXCEPTION   = new ServiceException("内部服务调用失败", INNER_API_CALL_FAIL);
     public static final ServiceException SIGN_VERIFY_EXCEPTION      = new ServiceException("签名验证失败", SIGN_VERIFY_ERROR);
+    public static final ServiceException BUSINESS_EXCEPTION         = new ServiceException("业务逻辑错误", BUSINESS_ERROR);
 
     public static final UnimportantException FREQUENCY_LIMIT_EXCEPTION  = new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
     public static final UnimportantException FORBID_EXCEPTION           = new UnimportantException("拒绝访问", FORBID_ERROR);
@@ -98,11 +101,11 @@ public class ServiceException extends RuntimeException
     public static final UnimportantException READ_ONLY_EXCEPTION        = new UnimportantException("拒绝写入", READ_ONLY_ERROR);
     public static final UnimportantException LOGIN_INVALID_EXCEPTION    = new UnimportantException("登录已失效", LOGIN_INVALID);
     public static final UnimportantException NOT_LOGGED_IN_EXCEPTION    = new UnimportantException("未登录", NOT_LOGGED_IN);
-    
+
     /** 状态码：{@linkplain ServiceException#OK OK} - 成功，其它 - 失败 */
     private Integer statusCode;
     /** 结果码：用于服务内部监控、统计，不暴露到调用方，{@linkplain ServiceException#OK OK} - 成功，其它 - 失败 */
-    private transient Integer resultCode;    
+    private transient Integer resultCode;
     
     public ServiceException()
     {

@@ -5,6 +5,7 @@ import io.github.hpsocket.soa.starter.websocket.exception.WebSocketExceptionHand
 import io.github.hpsocket.soa.starter.websocket.handler.JsonWebSocketMessageHandler;
 import io.github.hpsocket.soa.starter.websocket.handler.WebSocketSessionHandlerDecorator;
 import io.github.hpsocket.soa.starter.websocket.listener.WebSocketMessageListener;
+import io.github.hpsocket.soa.starter.websocket.listener.WebSocketSessionListener;
 import io.github.hpsocket.soa.starter.websocket.properties.SoaWebSocketProperties;
 import io.github.hpsocket.soa.starter.websocket.interceptor.DefaultLoginUserHandshakeInterceptor;
 import io.github.hpsocket.soa.starter.websocket.sender.kafka.KafkaWebSocketMessageConsumer;
@@ -17,7 +18,7 @@ import io.github.hpsocket.soa.starter.websocket.sender.redis.RedisWebSocketMessa
 import io.github.hpsocket.soa.starter.websocket.sender.rocketmq.RocketMQWebSocketMessageConsumer;
 import io.github.hpsocket.soa.starter.websocket.sender.rocketmq.RocketMQWebSocketMessageSender;
 import io.github.hpsocket.soa.starter.websocket.session.WebSocketSessionManager;
-import io.github.hpsocket.soa.starter.websocket.session.WebSocketSessionManagerImpl;
+import io.github.hpsocket.soa.starter.websocket.session.impl.WebSocketSessionManagerImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.core.RocketMQClientTemplate;
 import org.redisson.api.RedissonClient;
@@ -105,9 +106,10 @@ public class SoaWebSocketAutoConfiguration
         }
 
         @Bean
-        public WebSocketSessionManager webSocketSessionManager()
+        public WebSocketSessionManager webSocketSessionManager(ObjectProvider<WebSocketSessionListener> sessionListener)
         {
-            return new WebSocketSessionManagerImpl();
+            WebSocketSessionListener listener  = sessionListener.getIfAvailable();
+            return new WebSocketSessionManagerImpl(listener);
         }
 
         @Bean
