@@ -102,6 +102,7 @@
         <curator.version>5.9.0</curator.version>
         <hutool.version>5.8.46</hutool.version>
         <jjwt.version>0.13.0</jjwt.version>
+        <minio.version>9.0.3</minio.version>
         
         <log4j-1.version>1.2.17</log4j-1.version>
         <jboss-logmanager.version>3.2.2.Final</jboss-logmanager.version>
@@ -868,6 +869,17 @@
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt.version}</version>
                 <scope>runtime</scope>
+            </dependency>
+            <!-- minio -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio-admin</artifactId>
+                <version>${minio.version}</version>
             </dependency>
             <!-- lombok -->
             <dependency>
