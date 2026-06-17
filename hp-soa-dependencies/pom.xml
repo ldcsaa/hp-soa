@@ -102,6 +102,7 @@
         <curator.version>5.9.0</curator.version>
         <hutool.version>5.8.46</hutool.version>
         <jjwt.version>0.13.0</jjwt.version>
+        <mica-auto.version>4.0.1</mica-auto.version>
         <minio.version>9.0.3</minio.version>
         
         <log4j-1.version>1.2.17</log4j-1.version>
@@ -150,6 +151,11 @@
             <dependency>
                 <groupId>io.github.hpsocket</groupId>
                 <artifactId>hp-soa-starter-web-cloud</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.hpsocket</groupId>
+                <artifactId>hp-soa-starter-websocket</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -869,6 +875,13 @@
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt.version}</version>
                 <scope>runtime</scope>
+            </dependency>
+            <!-- mica-auto -->
+            <dependency>
+                <groupId>net.dreamlu</groupId>
+                <artifactId>mica-auto</artifactId>
+                <version>${mica-auto.version}</version>
+                <scope>provided</scope>
             </dependency>
             <!-- minio -->
             <dependency>
