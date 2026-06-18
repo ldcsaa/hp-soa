@@ -675,7 +675,7 @@ public class WebServerHelper
     public static Jackson2ObjectMapperBuilder configJackson2ObjectMapperBuilder(Jackson2ObjectMapperBuilder builder)
     {
         builder
-                .simpleDateFormat(GeneralHelper.DEFAULT_CHARSET)
+                .simpleDateFormat(GeneralHelper.PATTERN_DATETIME)
                 .deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(GeneralHelper.PATTERN_DATETIME)))
                 .deserializerByType(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(GeneralHelper.PATTERN_DATE)))
                 .deserializerByType(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(GeneralHelper.PATTERN_TIME)))

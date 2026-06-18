@@ -10,21 +10,21 @@ import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /** <b>默认应用程序启动器</b> */
 /* 排除部分自动配置 */
-@SpringBootApplication(exclude = {  DataSourceAutoConfiguration.class,
+@SpringBootApplication(
+                        /* 扫描 Spring Bean */
+                        scanBasePackages = {"${hp.soa.web.component-scan.base-package:}"},
+                        exclude = { DataSourceAutoConfiguration.class,
                                     RedisAutoConfiguration.class,
                                     RedisReactiveAutoConfiguration.class,
                                     RedisRepositoriesAutoConfiguration.class,
                                     RabbitAutoConfiguration.class
-                                })
+                                  })
 /* 开启 AspectJ AOP */
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
-/* 扫描 Spring Bean */
-@ComponentScan(basePackages = {"${hp.soa.web.component-scan.base-package:}"})
 public class AppStarter
 {
     static

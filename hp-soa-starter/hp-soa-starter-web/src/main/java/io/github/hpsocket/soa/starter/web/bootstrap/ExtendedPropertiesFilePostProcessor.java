@@ -16,13 +16,11 @@ import org.springframework.core.io.support.DefaultPropertySourceFactory;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
 /** <b>HP-SOA 扩展属性配置文件加载器</b><br>
  * <ul>
- * <li>默认扩展属性配置文件：{@linkplain #DEFAULT_EXTENDED_PROPERTIES_FILE_PATH}</li>
  * <li>可通过 JVM 启动参数 {@linkplain #EXTENDED_PROPERTIES_FILE_KEY} 指定扩展属性配置文件路径</li>
  * <li>如果扩展属性配置文件不存在则忽略</li>
  * </ul>
@@ -30,9 +28,7 @@ import java.util.Properties;
 public class ExtendedPropertiesFilePostProcessor implements EnvironmentPostProcessor, Ordered
 {
     /** 扩展属性配置文件 Key */
-    public static final String EXTENDED_PROPERTIES_FILE_KEY          = "hp.soa.extended.properties.file";
-    /** 默认扩展属性配置文件 */
-    public static final String DEFAULT_EXTENDED_PROPERTIES_FILE_PATH = "/opt/hp-soa/config/extended-config.properties";
+    public static final String EXTENDED_PROPERTIES_FILE_KEY = "hp.soa.extended.properties.file";
     
     private static boolean hasPrintLog;
     
@@ -50,21 +46,13 @@ public class ExtendedPropertiesFilePostProcessor implements EnvironmentPostProce
         String filePath = environment.getProperty(EXTENDED_PROPERTIES_FILE_KEY);
         
         if(GeneralHelper.isStrEmpty(filePath))
-            filePath = DEFAULT_EXTENDED_PROPERTIES_FILE_PATH;
-        
-        if(!(new File(filePath).isFile()))
-        {
-            if(!hasPrintLog)
-                logger.warn(String.format("hp-soa ignore extended properties file (File Not Exist) -> '%s'", filePath));
-            
             return;
-        }
 
         if(!hasPrintLog)
             logger.info("hp-soa load extended properties file -> " + filePath);
 
-        String resolvedLocation = "file:" + environment.resolveRequiredPlaceholders(filePath);
-        
+        String resolvedLocation = environment.resolveRequiredPlaceholders(filePath);
+
         loadProperties(environment, filePath, resolvedLocation);
         
         if(!hasPrintLog)
