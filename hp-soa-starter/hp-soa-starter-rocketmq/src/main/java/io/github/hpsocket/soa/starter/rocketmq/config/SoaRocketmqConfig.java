@@ -15,6 +15,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -51,6 +52,7 @@ public class SoaRocketmqConfig
     /** 默认 RocketMQ Client Template */
     @Primary
     @ConditionalOnMissingBean(name = ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME)
+    @ConditionalOnExpression("'${rocketmq.producer.endpoints:}' != '' || '${rocketmq.simple-consumer.endpoints:}' != ''")
     @Bean(name = ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME, destroyMethod = "destroy")
     SoaRocketMQClientTemplate rocketMQClientTemplate
     (
@@ -64,12 +66,10 @@ public class SoaRocketmqConfig
         producerBuilder.ifUnique(rocketMQClientTemplate::setProducerBuilder);
         simpleConsumerBuilder.ifUnique(rocketMQClientTemplate::setSimpleConsumerBuilder);
 
-        /*
         if(rocketMQClientTemplate.getProducerBuilder() == null && rocketMQClientTemplate.getSimpleConsumerBuilder() == null)
             throw new IllegalStateException(String.format("no bean named '%s' or '%s' for target bean '%s' to inject",
                                             PRODUCER_BUILDER_BEAN_NAME, SIMPLE_CONSUMER_BUILDER_BEAN_NAME, ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME));
-        */
-        
+
         rocketMQClientTemplate.setMessageConverter(rocketMQMessageConverter.getMessageConverter());
 
         return rocketMQClientTemplate;

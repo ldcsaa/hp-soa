@@ -214,6 +214,16 @@ public class SpringContextHolder
         return obj;
     }
 
+    public static final boolean containsBean(String beanId)
+    {
+        return getApplicationContext().containsBean(beanId);
+    }
+
+    public static final boolean containsBean(ApplicationContext ctx, String beanId)
+    {
+        return ctx.containsBean(beanId);
+    }
+
     public static final void close()
     {
         ((ConfigurableApplicationContext)getApplicationContext()).close();
