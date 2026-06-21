@@ -86,12 +86,12 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements
             return;
         
         SoaSimpleConsumerReceiveProperties receiveProperties = parseReceiveProperties();
-        
-        if(!receiveProperties.isAutoStart())
-            return;
-        
+
         if(this.getSimpleConsumerListener() == null)
             throw new IllegalStateException("No simpleConsumerListener for bean: '" + beanName + "'");
+
+        if(!receiveProperties.isAutoStart())
+            return;
         
         int threadCount = receiveProperties.getConsumptionThreadCount();
         executorService = Executors.newFixedThreadPool(threadCount);

@@ -64,12 +64,14 @@ public class SoaRocketmqConfig
         producerBuilder.ifUnique(rocketMQClientTemplate::setProducerBuilder);
         simpleConsumerBuilder.ifUnique(rocketMQClientTemplate::setSimpleConsumerBuilder);
 
+        /*
         if(rocketMQClientTemplate.getProducerBuilder() == null && rocketMQClientTemplate.getSimpleConsumerBuilder() == null)
-            throw new IllegalStateException(String.format("no bean named '%s' or '%s' for target bean '%s' to inject", 
+            throw new IllegalStateException(String.format("no bean named '%s' or '%s' for target bean '%s' to inject",
                                             PRODUCER_BUILDER_BEAN_NAME, SIMPLE_CONSUMER_BUILDER_BEAN_NAME, ROCKETMQ_TEMPLATE_DEFAULT_GLOBAL_NAME));
+        */
         
         rocketMQClientTemplate.setMessageConverter(rocketMQMessageConverter.getMessageConverter());
-        
+
         return rocketMQClientTemplate;
     }
     
