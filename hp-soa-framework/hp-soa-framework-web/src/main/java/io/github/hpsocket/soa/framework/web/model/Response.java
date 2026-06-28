@@ -131,17 +131,17 @@ public class Response<T> implements Serializable
         return new Response<>(statusCode, resultCode, message);
     }
     
-    public static <T> Response<T> of(ServiceException e)
+    public static <T> Response<T> fail(ServiceException e)
     {
         return new Response<>(e);
     }
     
-    public static <T> Response<T> of(Map<String, List<String>> validationErrors)
+    public static <T> Response<T> fail(Map<String, List<String>> validationErrors)
     {
         return new Response<>(validationErrors);
     }
     
-    public static <T> Response<T> of(ServiceException e, Map<String, List<String>> validationErrors)
+    public static <T> Response<T> fail(ServiceException e, Map<String, List<String>> validationErrors)
     {
         return new Response<>(e, validationErrors);
     }

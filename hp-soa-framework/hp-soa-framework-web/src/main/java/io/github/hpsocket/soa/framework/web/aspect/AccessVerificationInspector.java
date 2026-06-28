@@ -207,7 +207,7 @@ public class AccessVerificationInspector
         if(permission == null)
         {
             PreAuth annotation = PRE_AUTH_HOLDER.findAnnotationByMethodOrClass(joinPoint);
-            permission = (annotation != null) ? annotation.permission() : "";
+            permission = (annotation != null) ? annotation.value() : "";
 
             permissions.putIfAbsent(method, permission);
         }
