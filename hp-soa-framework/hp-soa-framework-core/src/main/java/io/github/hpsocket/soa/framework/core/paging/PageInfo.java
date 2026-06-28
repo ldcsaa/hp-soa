@@ -14,10 +14,8 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class PageInfo implements Serializable
 {
-    public static final int DEFAULT_PAGE_SIZE = 20;
-
     private int pageNumber  = 1;
-    private int pageSize    = DEFAULT_PAGE_SIZE;
+    private int pageSize    = PageRequest.DEFAULT_PAGE_SIZE;
     private int totalRows   = 0;
     private int pageCount   = 0;
     private int pageRows    = 0;
