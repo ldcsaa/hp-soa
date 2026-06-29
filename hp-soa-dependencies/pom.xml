@@ -66,6 +66,7 @@
         <commons-pool2.version>2.13.1</commons-pool2.version>
 
         <jsr305.version>4.9.8</jsr305.version>
+        <knife4j.version>4.5.0</knife4j.version>
         
         <mqttv5.client.version>1.2.5</mqttv5.client.version>
         <bcpkix.version>1.83</bcpkix.version>
@@ -1051,6 +1052,13 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${springdoc-openapi.version}</version>
+            </dependency>
+
+            <!-- knife4j -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
 
             <!-- seata -->
