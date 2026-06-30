@@ -33,6 +33,26 @@ public class Pair<F, S> implements Serializable
         set(other.first, other.second);
     }
 
+    public static <F, S> Pair<F, S> of()
+    {
+        return new Pair<>();
+    }
+
+    public static <F, S> Pair<F, S> of(F first)
+    {
+        return new Pair(first);
+    }
+
+    public static <F, S> Pair<F, S> of(F first, S second)
+    {
+        return new Pair(first, second);
+    }
+
+    public static <F, S> Pair<F, S> of(Pair<F, S> other)
+    {
+        return new Pair(other);
+    }
+
     public F getFirst()
     {
         return first;

@@ -24,6 +24,16 @@ public class KV<K extends Object, V extends Object>
         this.value = value;
     }
 
+    public static <K, V> KV<K, V> of()
+    {
+        return new KV<>();
+    }
+
+    public static <K, V> KV<K, V> of(K key, V value)
+    {
+        return new KV<>(key, value);
+    }
+
     public K getKey()
     {
         return key;
