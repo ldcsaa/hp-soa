@@ -30,6 +30,7 @@ public class RequestAttribute
     private String extra;
 
     private Long userId;
+    private String userName;
     private String permission;
 
     private String clientAddr;
@@ -66,4 +67,5 @@ public class RequestAttribute
 
         return this;
     }
+
 }

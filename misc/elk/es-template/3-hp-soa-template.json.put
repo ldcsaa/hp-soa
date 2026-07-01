@@ -254,6 +254,9 @@ PUT _index_template/hp-soa-template
                         },
                         "__userId": {
                             "type": "keyword"
+                        },
+                        "__userName": {
+                            "type": "keyword"
                         }
                     }
                 },
@@ -326,6 +329,9 @@ PUT _index_template/hp-soa-template
                 "token": {
                     "type": "keyword"
                 },
+                "env": {
+                    "type": "keyword"
+                },
                 "ua": {
                     "properties": {
                         "browser": {
@@ -344,9 +350,6 @@ PUT _index_template/hp-soa-template
                             "type": "keyword"
                         }
                     }
-                },
-                "userId": {
-                    "type": "long"
                 }
             }
         }

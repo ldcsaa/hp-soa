@@ -75,6 +75,7 @@ public class TracingHelper
                                                         .parseBasicRequestAttributes(request);
         
         reqAttr.setUserId(GeneralHelper.str2Long(mdcAttr.getUserId()));
+        reqAttr.setUserName(mdcAttr.getUserName());
         reqAttr.setRegion(mdcAttr.getRegion());
         reqAttr.setLanguage(mdcAttr.getLanguage());
         reqAttr.setVersion(mdcAttr.getVersion());

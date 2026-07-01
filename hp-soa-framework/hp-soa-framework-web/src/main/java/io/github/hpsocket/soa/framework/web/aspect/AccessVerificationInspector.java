@@ -121,7 +121,7 @@ public class AccessVerificationInspector
         }
         finally
         {
-            accessVerificationService.afterProcess(resp);
+            accessVerificationService.afterProcess(joinPoint, resp);
         }
     }
 
@@ -178,8 +178,10 @@ public class AccessVerificationInspector
         }
         
         reqAttr.setUserId(userId);
+        reqAttr.setUserName(rs.getSecond());
         MDC.put(MdcAttr.MDC_USER_ID_KEY, userId.toString());
-        
+        MDC.put(MdcAttr.MDC_USER_NAME_KEY, rs.getSecond());
+
         return new Response<>(userId);
     }
 

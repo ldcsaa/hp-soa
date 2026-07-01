@@ -16,6 +16,7 @@ public class MdcAttr
     public static final String MDC_SRC_APP_CODE_KEY = "__srcAppCode";
     public static final String MDC_TOKEN_KEY        = "__token";
     public static final String MDC_USER_ID_KEY      = "__userId";
+    public static final String MDC_USER_NAME_KEY    = "__userName";
     public static final String MDC_GROUP_ID_KEY     = "__groupId";
     public static final String MDC_APP_ID_KEY       = "__appId";
     public static final String MDC_APP_NAME_KEY     = "__appName";
@@ -53,6 +54,7 @@ public class MdcAttr
                                                         MDC_SRC_APP_CODE_KEY,
                                                         MDC_TOKEN_KEY,
                                                         MDC_USER_ID_KEY,
+                                                        MDC_USER_NAME_KEY,
                                                         MDC_GROUP_ID_KEY,
                                                         MDC_APP_ID_KEY,
                                                         MDC_APP_NAME_KEY,
@@ -74,6 +76,7 @@ public class MdcAttr
                                                             MDC_SRC_APP_CODE_KEY,
                                                             MDC_TOKEN_KEY,
                                                             MDC_USER_ID_KEY,
+                                                            MDC_USER_NAME_KEY,
                                                             MDC_GROUP_ID_KEY,
                                                             MDC_APP_ID_KEY,
                                                             MDC_APP_NAME_KEY,
@@ -239,6 +242,16 @@ public class MdcAttr
     public void setUserId(String userId)
     {
         set(MDC_USER_ID_KEY, userId);
+    }
+
+    public String getUserName()
+    {
+        return get(MDC_USER_NAME_KEY);
+    }
+
+    public void setUserName(String userName)
+    {
+        set(MDC_USER_NAME_KEY, userName);
     }
 
     public String getGroupId()

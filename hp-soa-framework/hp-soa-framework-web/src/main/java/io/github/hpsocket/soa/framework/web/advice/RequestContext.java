@@ -162,6 +162,11 @@ public class RequestContext
         return getRequestAttribute().getUserId();
     }
 
+    public static final String getUserName()
+    {
+        return getRequestAttribute().getUserName();
+    }
+
     public static final String getPermission()
     {
         return getRequestAttribute().getPermission();
