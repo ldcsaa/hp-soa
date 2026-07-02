@@ -23,7 +23,7 @@ import static io.github.hpsocket.soa.framework.core.exception.ServiceException.P
 @Getter
 @Setter
 @SuppressWarnings("serial")
-@Schema(description="接口方法返回值对象")
+@Schema(description="接口调用响应对象")
 public class Response<T> implements Serializable
 {
     public static final String MSG_OK       = "ok";
@@ -33,43 +33,43 @@ public class Response<T> implements Serializable
     public static final Integer RT_LOGOUT   = Integer.valueOf(2);
 
     /** 状态码：应用程序可自定义状态码，系统状态码参考 {@linkplain ServiceException} */
-    @Schema(title="状态码", example="0", requiredMode=RequiredMode.REQUIRED, nullable=false)
+    @Schema(title="状态码", example="0", description="状态码（0 - 成功，其他 - 失败）", requiredMode=RequiredMode.REQUIRED, nullable=false)
     private Integer statusCode = OK;
     
     /** 结果码：用于服务内部监控、统计，不暴露到调用方，应用程序可自定义结果码，系统结果码参考 {@linkplain ServiceException} */
     @JsonIgnore
     @JSONField(serialize = false)
-    @Schema(title="业务处理代码", example="0", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true, hidden = true)
+    @Schema(title="业务处理代码", example="0", description="结果码（0 - 正常，其他 - 异常）", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true, hidden = true)
     private transient Integer resultCode = OK;
     
     /** 状态描述 */
-    @Schema(title="状态描述", example=MSG_OK, requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
+    @Schema(title="状态描述", example=MSG_OK, description="状态描述", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private String message = MSG_OK;
     
     /** 服务端处理耗时（毫秒） */
-    @Schema(title="耗时（毫秒）", example="456", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
+    @Schema(title="耗时（毫秒）", example="456", description = "服务端处理耗时（毫秒）", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private long costTime;
 
     /** 参数校验错误列表 */
     @JSONFieldExclude(Exclude.NULL)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Schema(title="参数校验错误列表", example="name is empty", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
+    @Schema(title="参数校验错误列表", example="name is empty", description="参数校验错误列表", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private Map<String, List<String>> validationErrors;
     
     /** 请求ID */
     @JSONFieldExclude(Exclude.NULL)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Schema(title="请求ID", example="def7866fb25cb84a7652ed5ba9974102", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
+    @Schema(title="请求ID", example="def7866fb25cb84a7652ed5ba9974102", description="请求ID", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private String requestId;
     
     /** 业务模型对象 */
-    @Schema(title="业务模型对象", example="Any Object", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
+    @Schema(title="业务模型对象", example="Any Object", description="业务模型对象", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true)
     private T data;
     
     /** 响应类型（目前仅用于登录登出操作：{@linkplain #RT_LOGIN} - 登录，{@linkplain #RT_LOGOUT} - 登出） */
     @JsonIgnore
     @JSONField(serialize = false)
-    @Schema(title="响应类型（1 - 登录 - 2：登出）", example="null", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true, hidden = true)
+    @Schema(title="响应类型（1 - 登录 - 2：登出）", example="null", description="响应类型（1 - 登录 - 2：登出）", requiredMode=RequiredMode.NOT_REQUIRED, nullable=true, hidden = true)
     private transient Integer respType;
 
     public Response()
