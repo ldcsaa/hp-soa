@@ -49,6 +49,11 @@ public class Constant implements Comparable<Constant>
         return (byte)CODE;
     }
 
+    public final long LONG_VAL()
+    {
+        return (long)CODE;
+    }
+
     public final String STR_VAL()
     {
         return Integer.toString(CODE);

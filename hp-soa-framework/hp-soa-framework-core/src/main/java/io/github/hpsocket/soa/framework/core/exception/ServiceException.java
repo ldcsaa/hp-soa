@@ -249,6 +249,46 @@ public class ServiceException extends RuntimeException
         return wrapFormattedServiceException(PARAM_VALIDATION_EXCEPTION, format, args);
     }
 
+    public static final void throwAuthenticateException(String message)
+    {
+        throw wrapAuthenticateException(message);
+    }
+
+    public static final ServiceException wrapAuthenticateException(String message)
+    {
+        return new ServiceException(message, AUTHEN_ERROR);
+    }
+
+    public static final void throwAuthenticateException(String format, Object... args)
+    {
+        throwFormattedServiceException(AUTHEN_EXCEPTION, format, args);
+    }
+
+    public static final ServiceException wrapAuthenticateException(String format, Object... args)
+    {
+        return wrapFormattedServiceException(AUTHEN_EXCEPTION, format, args);
+    }
+
+    public static final void throwAuthorizeException(String message)
+    {
+        throw wrapAuthorizeException(message);
+    }
+
+    public static final ServiceException wrapAuthorizeException(String message)
+    {
+        return new ServiceException(message, AUTHOR_ERROR);
+    }
+
+    public static final void throwAuthorizeException(String format, Object... args)
+    {
+        throwFormattedServiceException(AUTHOR_EXCEPTION, format, args);
+    }
+
+    public static final ServiceException wrapAuthorizeException(String format, Object... args)
+    {
+        return wrapFormattedServiceException(AUTHOR_EXCEPTION, format, args);
+    }
+
     public static void logException(Logger logger, Throwable e)
     {
         if(e instanceof ServiceException)
