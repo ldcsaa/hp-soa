@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Primary
-@Component("soaDefaultRedissionProperties")
+@Component("soaDefaultRedissonProperties")
 @ConfigurationProperties(prefix = "spring.redis.redisson")
 @ConditionalOnExpression("'${spring.redis.redisson.config:}' != '' || '${spring.redis.redisson.file:}' != ''")
-public class SoaDefaultRedissionProperties extends RedissonProperties
+public class SoaDefaultRedissonProperties extends RedissonProperties
 {
 
 }

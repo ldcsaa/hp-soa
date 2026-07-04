@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Component("soaFirstRedissionProperties")
+@Component("soaFirstRedissonProperties")
 @ConfigurationProperties(prefix = "spring.redis.redisson-first")
 @ConditionalOnExpression("'${spring.redis.redisson-first.config:}' != '' || '${spring.redis.redisson-first.file:}' != ''")
-public class SoaFirstRedissionProperties extends RedissonProperties
+public class SoaFirstRedissonProperties extends RedissonProperties
 {
 
 }

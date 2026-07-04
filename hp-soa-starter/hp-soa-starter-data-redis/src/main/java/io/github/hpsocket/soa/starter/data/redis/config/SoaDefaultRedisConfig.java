@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.MapPropertySource;
+import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
@@ -38,9 +39,10 @@ import java.util.Map;
 public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
 {
     public static final String redissonAutoConfigurationCustomizerBeanName = "redissonAutoConfigurationCustomizer";
-    public static final String soaDefaultRedissionPropertiesBeanName = "soaDefaultRedissionProperties";
-    public static final String soaDefaultRedisPropertiesBeanName = "soaDefaultRedisProperties";
+    public static final String soaRedissonPropertiesBeanName = "soaDefaultRedissonProperties";
+    public static final String soaRedisPropertiesBeanName = "soaDefaultRedisProperties";
     public static final String redisStringKeyGeneratorBeanName = "redisStringKeyGenerator";
+    public static final String redisCacheKeyPrefixBeanName = "redisCacheKeyPrefix";
     public static final String redisTemplateBeanName = "redisTemplate";
     public static final String redisStringTemplateBeanName = "redisStringTemplate";
     public static final String redisNumberTemplateBeanName = "redisNumberTemplate";
@@ -53,7 +55,7 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     public static final String redisReactiveTemplateBeanName = "redisReactiveTemplate";
     public static final String redisReactiveStringTemplateBeanName = "redisReactiveStringTemplate";
     public static final String redisCacheManagerBeanName = "redisCacheManager";
-    public static final String redisDefaultCacheConfigurationBeanName = "redisDefaultCacheConfiguration";
+    public static final String redisCacheConfigurationBeanName = "redisCacheConfiguration";
     public static final String redisInitialCacheSourceMapBeanName = "redisInitialCacheSourceMap";
     public static final String redisInitialCacheConfigurationsBeanName = "redisInitialCacheConfigurations";
     public static final String redisConnectionFactoryBeanName = "redisConnectionFactory";
@@ -63,10 +65,10 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
 
     public SoaDefaultRedisConfig(
         @Qualifier(redissonAutoConfigurationCustomizerBeanName) ObjectProvider<List<RedissonAutoConfigurationCustomizer>> redissonAutoConfigurationCustomizers,
-        @Qualifier(soaDefaultRedissionPropertiesBeanName) ObjectProvider<RedissonProperties> SoaRedissionProperties,
-        @Qualifier(soaDefaultRedisPropertiesBeanName) ObjectProvider<RedisProperties> SoaRedisProperties)
+        @Qualifier(soaRedissonPropertiesBeanName) ObjectProvider<RedissonProperties> SoaRedissonProperties,
+        @Qualifier(soaRedisPropertiesBeanName) ObjectProvider<RedisProperties> SoaRedisProperties)
     {
-        super(redissonAutoConfigurationCustomizers, SoaRedissionProperties, SoaRedisProperties);
+        super(redissonAutoConfigurationCustomizers, SoaRedissonProperties, SoaRedisProperties);
     }
 
     /** 默认 Redis {@linkplain KeyGenerator} */
@@ -189,29 +191,29 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     @ConditionalOnMissingBean(name = redisCacheManagerBeanName)
     public RedisCacheManager redisCacheManager(
         @Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory,
-        @Qualifier(redisDefaultCacheConfigurationBeanName) RedisCacheConfiguration redisDefaultCacheConfiguration,
+        @Qualifier(redisCacheConfigurationBeanName) RedisCacheConfiguration redisCacheConfiguration,
         @Qualifier(redisInitialCacheConfigurationsBeanName) MapPropertySource redisInitialCacheConfigurations)
     {
-        return super.redisCacheManager(redisConnectionFactory, redisDefaultCacheConfiguration, redisInitialCacheConfigurations);
+        return super.redisCacheManager(redisConnectionFactory, redisCacheConfiguration, redisInitialCacheConfigurations);
     }
     
     /** 默认 {@linkplain RedisCacheConfiguration} */
     @Primary
     @Override
-    @Bean(redisDefaultCacheConfigurationBeanName)
-    @ConditionalOnMissingBean(name = redisDefaultCacheConfigurationBeanName)
-    public RedisCacheConfiguration redisDefaultCacheConfiguration()
+    @Bean(redisCacheConfigurationBeanName)
+    @ConditionalOnMissingBean(name = redisCacheConfigurationBeanName)
+    public RedisCacheConfiguration redisCacheConfiguration(@Qualifier(redisCacheKeyPrefixBeanName) ObjectProvider<CacheKeyPrefix> cacheKeyPrefix)
     {
-        return super.redisDefaultCacheConfiguration();
+        return super.redisCacheConfiguration(cacheKeyPrefix);
     }
     
     @Primary
     @Override
     @Bean(redisInitialCacheSourceMapBeanName)
     @ConditionalOnMissingBean(name = redisInitialCacheSourceMapBeanName)
-    public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap()
+    public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap(@Qualifier(redisCacheConfigurationBeanName) RedisCacheConfiguration redisCacheConfiguration)
     {
-        return super.redisInitialCacheSourceMap();
+        return super.redisInitialCacheSourceMap(redisCacheConfiguration);
     }
     
     /** 初始 {@linkplain RedisCacheConfiguration} {@linkplain Map} */

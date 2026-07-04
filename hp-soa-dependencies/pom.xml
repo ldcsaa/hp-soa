@@ -106,7 +106,7 @@
         <jjwt.version>0.13.0</jjwt.version>
         <mica-auto.version>4.0.1</mica-auto.version>
 
-        <easy-captcha.version>1.6.2</easy-captcha.version>
+        <easy-captcha.version>2.0.0</easy-captcha.version>
         <tianai-captcha.version>1.5.5</tianai-captcha.version>
 
 
@@ -898,7 +898,7 @@
             </dependency>
             <!-- easy-captcha -->
             <dependency>
-                <groupId>com.github.whvcse</groupId>
+                <groupId>io.github.luckywh0</groupId>
                 <artifactId>easy-captcha</artifactId>
                 <version>${easy-captcha.version}</version>
             </dependency>

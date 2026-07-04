@@ -21,7 +21,6 @@ import org.redisson.misc.RedisURI;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.MapFactoryBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisConnectionDetails;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.ssl.SslBundle;
@@ -30,6 +29,7 @@ import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
@@ -70,12 +70,10 @@ public abstract class SoaAbstractRedisConfig
         config.setJSONB(true);
         fastJsonRedisSerializer.setFastJsonConfig(config);
     }
-    
-    protected final List<RedissonAutoConfigurationCustomizer> redissonAutoConfigurationCustomizers;
 
-    protected final RedissonProperties redissonProperties;
-
-    protected final RedisProperties redisProperties;
+    private final List<RedissonAutoConfigurationCustomizer> redissonAutoConfigurationCustomizers;
+    private final RedissonProperties redissonProperties;
+    private final RedisProperties redisProperties;
 
     @Autowired
     private ApplicationContext ctx;
@@ -209,66 +207,71 @@ public abstract class SoaAbstractRedisConfig
     }
 
     @SuppressWarnings("unchecked")
-    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory,
-        RedisCacheConfiguration redisDefaultCacheConfiguration,
+    public RedisCacheManager redisCacheManager(
+        RedisConnectionFactory redisConnectionFactory,
+        RedisCacheConfiguration redisCacheConfiguration,
         MapPropertySource redisInitialCacheConfigurations)
     {
         RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(redisConnectionFactory)
-            .cacheDefaults(redisDefaultCacheConfiguration)
+            .cacheDefaults(redisCacheConfiguration)
             .withInitialCacheConfigurations((Map<String, RedisCacheConfiguration>)(Map<?, ?>)redisInitialCacheConfigurations.getSource())
             .allowCreateOnMissingCache(false);
 
         return builder.build();
     }
     
-    public RedisCacheConfiguration redisDefaultCacheConfiguration()
+    public RedisCacheConfiguration redisCacheConfiguration(ObjectProvider<CacheKeyPrefix> cacheKeyPrefix)
     {
-        return createRedisCacheConfiguration(Duration.ofMinutes(10));
-    }
-    
-    public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap()
-    {
-        Map<String, RedisCacheConfiguration> cfgs = new LinkedHashMap<>();
+        RedisCacheConfiguration cfg = RedisCacheConfiguration
+                                        .defaultCacheConfig()
+                                        .entryTtl(Duration.ofMinutes(10))
+                                        .serializeKeysWith(SerializationPair.fromSerializer(stringRedisSerializer))
+                                        .serializeValuesWith(SerializationPair.fromSerializer(genericFastJsonRedisSerializer));
 
-        cfgs.put("10s", createRedisCacheConfiguration(Duration.ofSeconds(10)));
-        cfgs.put("30s", createRedisCacheConfiguration(Duration.ofSeconds(30)));
-        cfgs.put("1m", createRedisCacheConfiguration(Duration.ofMinutes(1)));
-        cfgs.put("5m", createRedisCacheConfiguration(Duration.ofMinutes(5)));
-        cfgs.put("15m", createRedisCacheConfiguration(Duration.ofMinutes(15)));
-        cfgs.put("30m", createRedisCacheConfiguration(Duration.ofMinutes(30)));
-        cfgs.put("1h", createRedisCacheConfiguration(Duration.ofHours(1)));
-        cfgs.put("3h", createRedisCacheConfiguration(Duration.ofHours(3)));
-        cfgs.put("6h", createRedisCacheConfiguration(Duration.ofHours(6)));
-        cfgs.put("12h", createRedisCacheConfiguration(Duration.ofHours(12)));
-        cfgs.put("1d", createRedisCacheConfiguration(Duration.ofDays(1)));
-        cfgs.put("3d", createRedisCacheConfiguration(Duration.ofDays(3)));
-        cfgs.put("7d", createRedisCacheConfiguration(Duration.ofDays(7)));
-        cfgs.put("15d", createRedisCacheConfiguration(Duration.ofDays(15)));
-        cfgs.put("30d", createRedisCacheConfiguration(Duration.ofDays(30)));
-        cfgs.put("60d", createRedisCacheConfiguration(Duration.ofDays(60)));
-        cfgs.put("90d", createRedisCacheConfiguration(Duration.ofDays(90)));
-        cfgs.put("180d", createRedisCacheConfiguration(Duration.ofDays(180)));
-        cfgs.put("1y", createRedisCacheConfiguration(Duration.ofDays(365)));
-        
-        return cfgs;
+        CacheKeyPrefix prefix = cacheKeyPrefix.getIfAvailable();
+        if(prefix != null) {
+            cfg = cfg.computePrefixWith(prefix);
+        }
+
+        return cfg;
     }
 
     @SuppressWarnings("unchecked")
     public MapPropertySource redisInitialCacheConfigurations(Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap)
     {
-        MapFactoryBean bean = new MapFactoryBean();
-        bean.setSourceMap(redisInitialCacheSourceMap);
-
         return new MapPropertySource("redisInitialCacheConfigurations", (Map<String, Object>)(Map<?, ?>)redisInitialCacheSourceMap);
     }
 
-    private RedisCacheConfiguration createRedisCacheConfiguration(Duration duration)
+    private RedisCacheConfiguration getRedisCacheConfiguration(RedisCacheConfiguration redisCacheConfiguration, Duration duration)
     {
-        return RedisCacheConfiguration
-            .defaultCacheConfig()
-            .entryTtl(duration)
-            .serializeKeysWith(SerializationPair.fromSerializer(stringRedisSerializer))
-            .serializeValuesWith(SerializationPair.fromSerializer(genericFastJsonRedisSerializer));
+        return redisCacheConfiguration.entryTtl(duration);
+    }
+
+    public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap(RedisCacheConfiguration redisCacheConfiguration)
+    {
+        Map<String, RedisCacheConfiguration> cfgs = new LinkedHashMap<>();
+
+        cfgs.put("10s", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofSeconds(10)));
+        cfgs.put("30s", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofSeconds(30)));
+        cfgs.put("1m", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofMinutes(1)));
+        cfgs.put("5m", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofMinutes(5)));
+        cfgs.put("15m", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofMinutes(15)));
+        cfgs.put("30m", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofMinutes(30)));
+        cfgs.put("1h", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofHours(1)));
+        cfgs.put("3h", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofHours(3)));
+        cfgs.put("6h", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofHours(6)));
+        cfgs.put("12h", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofHours(12)));
+        cfgs.put("1d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(1)));
+        cfgs.put("3d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(3)));
+        cfgs.put("7d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(7)));
+        cfgs.put("15d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(15)));
+        cfgs.put("30d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(30)));
+        cfgs.put("60d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(60)));
+        cfgs.put("90d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(90)));
+        cfgs.put("180d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(180)));
+        cfgs.put("1y", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(365)));
+        
+        return cfgs;
     }
 
     public KeyGenerator keyGenerator()

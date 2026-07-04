@@ -289,6 +289,46 @@ public class ServiceException extends RuntimeException
         return wrapFormattedServiceException(AUTHOR_EXCEPTION, format, args);
     }
 
+    public static final void throwForbidException(String message)
+    {
+        throw wrapForbidException(message);
+    }
+
+    public static final ServiceException wrapForbidException(String message)
+    {
+        return new ServiceException(message, FORBID_ERROR);
+    }
+
+    public static final void throwForbidException(String format, Object... args)
+    {
+        throwFormattedServiceException(FORBID_EXCEPTION, format, args);
+    }
+
+    public static final ServiceException wrapForbidException(String format, Object... args)
+    {
+        return wrapFormattedServiceException(FORBID_EXCEPTION, format, args);
+    }
+
+    public static final void throwNotExistException(String message)
+    {
+        throw wrapNotExistException(message);
+    }
+
+    public static final ServiceException wrapNotExistException(String message)
+    {
+        return new ServiceException(message, NOT_EXIST);
+    }
+
+    public static final void throwNotExistException(String format, Object... args)
+    {
+        throwFormattedServiceException(NOT_EXIST_EXCEPTION, format, args);
+    }
+
+    public static final ServiceException wrapNotExistException(String format, Object... args)
+    {
+        return wrapFormattedServiceException(NOT_EXIST_EXCEPTION, format, args);
+    }
+
     public static void logException(Logger logger, Throwable e)
     {
         if(e instanceof ServiceException)
@@ -325,18 +365,26 @@ public class ServiceException extends RuntimeException
 
         if(GENERAL_ERROR == statusCode)
             logger.error(FORMAT, statusCode, resultCode, msg, e);
+        else if(isNotPrintWarnStackTrace(printWarnStackTrace, statusCode, e))
+            logger.warn(FORMAT, statusCode, resultCode, msg);
         else
         {
-            if(e instanceof UnimportantException)
-                logger.warn(FORMAT, statusCode, resultCode, msg);
-            else
-            {
-                if(printWarnStackTrace)
-                    logger.warn(FORMAT, statusCode, resultCode, msg, e);
-                else
-                    logger.warn(FORMAT, statusCode, resultCode, msg);
-            }
+            logger.warn(FORMAT, statusCode, resultCode, msg, e);
         }
+    }
+
+    private static boolean isNotPrintWarnStackTrace(boolean printWarnStackTrace, int statusCode, Throwable e)
+    {
+        return  FORBID_ERROR == statusCode
+                || TRAFFIC_LIMIT_ERROR == statusCode
+                || LOGIN_INVALID == statusCode
+                || NOT_LOGGED_IN  == statusCode
+                || PARAMS_ERROR == statusCode
+                || PARAM_VALIDATION_ERROR == statusCode
+                || AUTHEN_ERROR == statusCode
+                || AUTHOR_ERROR == statusCode
+                || !printWarnStackTrace
+                || e instanceof UnimportantException;
     }
 
 }
