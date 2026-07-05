@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.support.config.FastJsonConfig;
 import com.alibaba.fastjson2.support.spring6.data.redis.FastJsonRedisSerializer;
 import com.alibaba.fastjson2.support.spring6.data.redis.GenericFastJsonRedisSerializer;
 import io.github.hpsocket.soa.framework.core.util.CryptHelper;
+import io.github.hpsocket.soa.starter.data.redis.constant.CacheConstant;
 import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonAutoConfigurationCustomizer;
 import io.github.hpsocket.soa.starter.data.redis.redisson.RedissonProperties;
 import io.github.hpsocket.soa.starter.data.redis.serializer.KryoNotNullRedisSerializer;
@@ -249,29 +250,10 @@ public abstract class SoaAbstractRedisConfig
 
     public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap(RedisCacheConfiguration redisCacheConfiguration)
     {
-        Map<String, RedisCacheConfiguration> cfgs = new LinkedHashMap<>();
-
-        cfgs.put("10s", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofSeconds(10)));
-        cfgs.put("30s", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofSeconds(30)));
-        cfgs.put("1m", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofMinutes(1)));
-        cfgs.put("5m", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofMinutes(5)));
-        cfgs.put("15m", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofMinutes(15)));
-        cfgs.put("30m", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofMinutes(30)));
-        cfgs.put("1h", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofHours(1)));
-        cfgs.put("3h", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofHours(3)));
-        cfgs.put("6h", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofHours(6)));
-        cfgs.put("12h", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofHours(12)));
-        cfgs.put("1d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(1)));
-        cfgs.put("3d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(3)));
-        cfgs.put("7d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(7)));
-        cfgs.put("15d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(15)));
-        cfgs.put("30d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(30)));
-        cfgs.put("60d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(60)));
-        cfgs.put("90d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(90)));
-        cfgs.put("180d", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(180)));
-        cfgs.put("1y", getRedisCacheConfiguration(redisCacheConfiguration, Duration.ofDays(365)));
+        Map<String, RedisCacheConfiguration> map = new LinkedHashMap<>();
+        Arrays.stream(CacheConstant.InitialCache.values()).forEach(c -> map.put(c.getName(), getRedisCacheConfiguration(redisCacheConfiguration, c.getExpire())));
         
-        return cfgs;
+        return map;
     }
 
     public KeyGenerator keyGenerator()

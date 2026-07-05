@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.framework.web.advice;
 
+import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.Result;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jboss.logging.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -190,6 +192,15 @@ public class RequestContext
     public static final void sendServletResponseError(int sc, String sm) throws IOException
     {
         getServletResponse().sendError(sc, sm);
+    }
+
+    public static final void setUser(Long userId, String userName)
+    {
+        RequestAttribute reqAttr = getRequestAttribute();
+        reqAttr.setUserId(userId);
+        reqAttr.setUserName(userName);
+        MDC.put(MdcAttr.MDC_USER_ID_KEY, GeneralHelper.safeString(userId));
+        MDC.put(MdcAttr.MDC_USER_NAME_KEY, userName);
     }
     
     public static final RequestAttribute parseRequestAttribute(HttpServletRequest request, HttpServletResponse response)

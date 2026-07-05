@@ -1,6 +1,5 @@
 package io.github.hpsocket.soa.framework.web.aspect;
 
-import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.core.util.Pair;
 import io.github.hpsocket.soa.framework.web.advice.RequestContext;
@@ -16,7 +15,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.jboss.logging.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -176,12 +174,8 @@ public class AccessVerificationInspector
                 return new Response<>(AUTHEN_ERROR, msg);
             }
         }
-        
-        reqAttr.setUserId(userId);
-        reqAttr.setUserName(rs.getSecond());
-        MDC.put(MdcAttr.MDC_USER_ID_KEY, userId.toString());
-        MDC.put(MdcAttr.MDC_USER_NAME_KEY, rs.getSecond());
 
+        RequestContext.setUser(userId, rs.getSecond());
         return new Response<>(userId);
     }
 
