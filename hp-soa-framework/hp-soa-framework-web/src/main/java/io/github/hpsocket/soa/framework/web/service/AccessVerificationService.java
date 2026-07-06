@@ -36,7 +36,7 @@ public interface AccessVerificationService
     }
 
     /** 请求处理完成 */
-    default void afterProcess(ProceedingJoinPoint joinPoint, Response<?> resp)
+    default void afterProcess(ProceedingJoinPoint joinPoint, Response<?> resp, Throwable error)
     {
 
     }

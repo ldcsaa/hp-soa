@@ -1,6 +1,7 @@
 package io.github.hpsocket.soa.framework.web.advice;
 
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
+import io.github.hpsocket.soa.framework.core.exception.UnimportantException;
 import io.github.hpsocket.soa.framework.web.model.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -80,7 +81,6 @@ public class ControllerGlobalExceptionAdvice implements Ordered
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
     {
         ServiceException se         = null;
-        boolean printWarnStackTrace = true;
         HttpStatus httpStatus       = HttpStatus.INTERNAL_SERVER_ERROR;
         
         if(e instanceof IllegalArgumentException)
@@ -107,7 +107,6 @@ public class ControllerGlobalExceptionAdvice implements Ordered
         {
             httpStatus = HttpStatus.NOT_FOUND;
             se = wrapServiceException(NOT_EXIST_EXCEPTION, e);
-            printWarnStackTrace = false;
         }
         else if(e instanceof AuthenticationException)
         {
@@ -131,9 +130,10 @@ public class ControllerGlobalExceptionAdvice implements Ordered
             se = wrapServiceException(GENERAL_EXCEPTION, e);
         }
 
+        boolean printStackTrace = judgePrintStackTrace(se);
+        logServiceException(log, se.getMessage(), se, printStackTrace);
+
         response.setStatus(httpStatus.value());
-        logServiceException(log, se.getMessage(), se, printWarnStackTrace);
-        
         return new Response<>(se);
     }
 
@@ -176,6 +176,21 @@ public class ControllerGlobalExceptionAdvice implements Ordered
         }
 
         return httpStatus;
+    }
+
+    private boolean judgePrintStackTrace(ServiceException se)
+    {
+        if(se instanceof UnimportantException)
+            return false;
+
+        return switch(se.getStatusCode())
+        {
+            case OK, ACCEPTED, NO_CONTENT, PARTIAL_OK, NOT_EXIST,
+                 FORBID_ERROR, TRAFFIC_LIMIT_ERROR, LOGIN_INVALID,
+                 NOT_LOGGED_IN, PARAMS_ERROR, PARAM_VALIDATION_ERROR,
+                 AUTHEN_ERROR, AUTHOR_ERROR -> false;
+            default -> true;
+        };
     }
 
 }

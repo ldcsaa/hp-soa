@@ -363,28 +363,10 @@ public class ServiceException extends RuntimeException
         final Integer statusCode = e.getStatusCode();
         final Integer resultCode = e.getResultCode();
 
-        if(GENERAL_ERROR == statusCode)
+        if(printWarnStackTrace || GENERAL_ERROR == statusCode)
             logger.error(FORMAT, statusCode, resultCode, msg, e);
-        else if(isNotPrintWarnStackTrace(printWarnStackTrace, statusCode, e))
-            logger.warn(FORMAT, statusCode, resultCode, msg);
         else
-        {
-            logger.warn(FORMAT, statusCode, resultCode, msg, e);
-        }
-    }
-
-    private static boolean isNotPrintWarnStackTrace(boolean printWarnStackTrace, int statusCode, Throwable e)
-    {
-        return  FORBID_ERROR == statusCode
-                || TRAFFIC_LIMIT_ERROR == statusCode
-                || LOGIN_INVALID == statusCode
-                || NOT_LOGGED_IN  == statusCode
-                || PARAMS_ERROR == statusCode
-                || PARAM_VALIDATION_ERROR == statusCode
-                || AUTHEN_ERROR == statusCode
-                || AUTHOR_ERROR == statusCode
-                || !printWarnStackTrace
-                || e instanceof UnimportantException;
+            logger.warn(FORMAT, statusCode, resultCode, msg);
     }
 
 }

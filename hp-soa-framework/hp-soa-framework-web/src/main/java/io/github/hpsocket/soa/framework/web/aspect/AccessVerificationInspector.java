@@ -65,6 +65,7 @@ public class AccessVerificationInspector
     @Around("inspectMethod()")
     public Object inspect(ProceedingJoinPoint joinPoint) throws Throwable
     {
+        Throwable error  = null;
         Response<?> resp = null;
         Method method    = AspectHelper.getMethod(joinPoint);
         AccessVerification.Type type = getInspectVerificationType(joinPoint, method);
@@ -117,9 +118,14 @@ public class AccessVerificationInspector
             resp = (Response<?>)joinPoint.proceed();
             return resp;
         }
+        catch(Throwable e)
+        {
+            error = e;
+            throw e;
+        }
         finally
         {
-            accessVerificationService.afterProcess(joinPoint, resp);
+            accessVerificationService.afterProcess(joinPoint, resp, error);
         }
     }
 
