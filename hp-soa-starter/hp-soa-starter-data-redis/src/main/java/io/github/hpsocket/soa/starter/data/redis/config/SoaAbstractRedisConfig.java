@@ -229,7 +229,7 @@ public abstract class SoaAbstractRedisConfig
                                         .serializeKeysWith(SerializationPair.fromSerializer(stringRedisSerializer))
                                         .serializeValuesWith(SerializationPair.fromSerializer(genericFastJsonRedisSerializer));
 
-        CacheKeyPrefix prefix = cacheKeyPrefix.getIfAvailable();
+        CacheKeyPrefix prefix = cacheKeyPrefix.getIfUnique();
         if(prefix != null) {
             cfg = cfg.computePrefixWith(prefix);
         }
@@ -238,22 +238,19 @@ public abstract class SoaAbstractRedisConfig
     }
 
     @SuppressWarnings("unchecked")
-    public MapPropertySource redisInitialCacheConfigurations(Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap)
+    public MapPropertySource redisInitialCacheConfigurations(RedisCacheConfiguration redisCacheConfiguration, ObjectProvider<Map<String, Duration>> redisCustomizeCacheMap)
     {
-        return new MapPropertySource("redisInitialCacheConfigurations", (Map<String, Object>)(Map<?, ?>)redisInitialCacheSourceMap);
+        Map<String, RedisCacheConfiguration> map = new LinkedHashMap<>();
+
+        Arrays.stream(CacheConstant.InitialCache.values()).forEach(c -> map.put(c.getName(), getRedisCacheConfiguration(redisCacheConfiguration, c.getExpire())));
+        redisCustomizeCacheMap.ifUnique(caches -> caches.forEach((k, v) -> map.put(k, getRedisCacheConfiguration(redisCacheConfiguration, v))));
+
+        return new MapPropertySource("redisInitialCacheConfigurations", (Map<String, Object>)(Map<?, ?>)map);
     }
 
     private RedisCacheConfiguration getRedisCacheConfiguration(RedisCacheConfiguration redisCacheConfiguration, Duration duration)
     {
         return redisCacheConfiguration.entryTtl(duration);
-    }
-
-    public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap(RedisCacheConfiguration redisCacheConfiguration)
-    {
-        Map<String, RedisCacheConfiguration> map = new LinkedHashMap<>();
-        Arrays.stream(CacheConstant.InitialCache.values()).forEach(c -> map.put(c.getName(), getRedisCacheConfiguration(redisCacheConfiguration, c.getExpire())));
-        
-        return map;
     }
 
     public KeyGenerator keyGenerator()

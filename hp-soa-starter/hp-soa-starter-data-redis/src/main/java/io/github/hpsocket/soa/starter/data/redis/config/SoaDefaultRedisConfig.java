@@ -30,6 +30,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
     public static final String redisReactiveStringTemplateBeanName = "redisReactiveStringTemplate";
     public static final String redisCacheManagerBeanName = "redisCacheManager";
     public static final String redisCacheConfigurationBeanName = "redisCacheConfiguration";
-    public static final String redisInitialCacheSourceMapBeanName = "redisInitialCacheSourceMap";
+    public static final String redisCustomizeCacheMapBeanName = "redisCustomizeCacheMap";
     public static final String redisInitialCacheConfigurationsBeanName = "redisInitialCacheConfigurations";
     public static final String redisConnectionFactoryBeanName = "redisConnectionFactory";
     public static final String redissonReactiveClientBeanName = "redissonReactiveClient";
@@ -207,23 +208,16 @@ public class SoaDefaultRedisConfig extends SoaAbstractRedisConfig
         return super.redisCacheConfiguration(cacheKeyPrefix);
     }
     
-    @Primary
-    @Override
-    @Bean(redisInitialCacheSourceMapBeanName)
-    @ConditionalOnMissingBean(name = redisInitialCacheSourceMapBeanName)
-    public Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap(@Qualifier(redisCacheConfigurationBeanName) RedisCacheConfiguration redisCacheConfiguration)
-    {
-        return super.redisInitialCacheSourceMap(redisCacheConfiguration);
-    }
-    
     /** 初始 {@linkplain RedisCacheConfiguration} {@linkplain Map} */
     @Primary
     @Override
     @Bean(redisInitialCacheConfigurationsBeanName)
     @ConditionalOnMissingBean(name = redisInitialCacheConfigurationsBeanName)
-    public MapPropertySource redisInitialCacheConfigurations(@Qualifier(redisInitialCacheSourceMapBeanName) Map<String, RedisCacheConfiguration> redisInitialCacheSourceMap)
+    public MapPropertySource redisInitialCacheConfigurations(
+        @Qualifier(redisCacheConfigurationBeanName) RedisCacheConfiguration redisCacheConfiguration,
+        @Qualifier(redisCustomizeCacheMapBeanName) ObjectProvider<Map<String, Duration>> redisCustomizeCacheMap)
     {
-        return super.redisInitialCacheConfigurations(redisInitialCacheSourceMap);
+        return super.redisInitialCacheConfigurations(redisCacheConfiguration, redisCustomizeCacheMap);
     }
     
     @Primary
