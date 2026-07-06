@@ -63,11 +63,15 @@ public class CryptHelper
     
     private static final String MYSQL_CIPHER                = "AES/ECB/PKCS5Padding";
 
+    private static final String SM2_GM_NAME_CURVES          = "sm2p256v1";
+
+    private static final byte SM2_ENC_CONTENT_PREFIX        = 0x04;
+
     private static final ECDomainParameters DOMAIN_PARAMS;
 
     static {
         Security.addProvider(new BouncyCastleProvider());
-        X9ECParameters spec = GMNamedCurves.getByName("sm2p256v1");
+        X9ECParameters spec = GMNamedCurves.getByName(SM2_GM_NAME_CURVES);
         DOMAIN_PARAMS = new ECDomainParameters(spec.getCurve(), spec.getG(), spec.getN(), spec.getH());
     }
 
@@ -901,6 +905,17 @@ public class CryptHelper
      */
     public static final String sm2Decrypt(byte[] encrypted, String privateKey)
     {
+        if(encrypted == null || encrypted.length == 0) {
+            throw new IllegalArgumentException("encrypted content is empty");
+        }
+
+        if(encrypted[0] != SM2_ENC_CONTENT_PREFIX) {
+            byte[] origin = encrypted;
+            encrypted     = new byte[encrypted.length + 1];
+            encrypted[0]  = SM2_ENC_CONTENT_PREFIX;
+            System.arraycopy(origin, 0, encrypted, 1, origin.length);
+        }
+
         return sm2Decrypt(encrypted, stringToSm2PrivateKey(privateKey));
     }
 
