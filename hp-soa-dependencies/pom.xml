@@ -108,7 +108,7 @@
 
         <easy-captcha.version>2.0.0</easy-captcha.version>
         <tianai-captcha.version>1.5.5</tianai-captcha.version>
-
+        <telegram-bot-api.version>10.1.0</telegram-bot-api.version>
 
         <log4j-1.version>1.2.17</log4j-1.version>
         <jboss-logmanager.version>3.2.2.Final</jboss-logmanager.version>
@@ -907,6 +907,12 @@
                 <groupId>cloud.tianai.captcha</groupId>
                 <artifactId>tianai-captcha-springboot-starter</artifactId>
                 <version>${tianai-captcha.version}</version>
+            </dependency>
+            <!-- telegram -->
+            <dependency>
+                <groupId>com.github.pengrad</groupId>
+                <artifactId>java-telegram-bot-api</artifactId>
+                <version>${telegram-bot-api.version}</version>
             </dependency>
             <!-- minio -->
             <dependency>

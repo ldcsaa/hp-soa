@@ -2,7 +2,6 @@ package io.github.hpsocket.soa.framework.web.event;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.ApplicationEvent;
 
 /** <b>应用程序只读事件</b><br>
  * 触发时机：
@@ -14,7 +13,7 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 @Setter
 @SuppressWarnings("serial")
-public class ReadOnlyEvent extends ApplicationEvent
+public class ReadOnlyEvent extends MdcApplicationEvent
 {
     /** 是否只读 */
     private boolean readOnly;

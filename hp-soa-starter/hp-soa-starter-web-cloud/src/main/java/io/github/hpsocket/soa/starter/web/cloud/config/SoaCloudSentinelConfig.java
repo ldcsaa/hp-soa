@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 /** <b>HP-SOA Spring Cloud Sentinel 配置</b> */
 @AutoConfiguration(before = SoaSentinelConfig.class)
 @ConditionalOnClass(SoaSentinelConfig.class)
-public class SoaClouldSentinelConfig
+public class SoaCloudSentinelConfig
 {
     public static final String sentinelExceptionAdviceBeanName       = SoaSentinelConfig.sentinelExceptionAdviceBeanName;
     public static final String sentinelBlockExceptionHandlerBeanName = SoaSentinelConfig.sentinelBlockExceptionHandlerBeanName;

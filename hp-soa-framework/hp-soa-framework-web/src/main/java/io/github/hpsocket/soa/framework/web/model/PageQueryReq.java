@@ -34,7 +34,7 @@ public class PageQueryReq<T> implements Serializable
     @Schema(description = "排序类型（由接口提供方指定字段含义）", example = "1")
     private Integer orderBy;
 
-    @Schema(description = "查询参数")
+    @Schema(description = "查询参数", required = true)
     private T param;
 
     @Schema(description = "开始记录索引", hidden = true)

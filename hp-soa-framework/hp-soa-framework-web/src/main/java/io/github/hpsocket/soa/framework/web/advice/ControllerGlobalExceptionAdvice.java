@@ -2,6 +2,8 @@ package io.github.hpsocket.soa.framework.web.advice;
 
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.core.exception.UnimportantException;
+import io.github.hpsocket.soa.framework.web.event.SeriousExceptionEvent;
+import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.model.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,7 +47,6 @@ public class ControllerGlobalExceptionAdvice implements Ordered
     public Response<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e)
     {
         BindingResult rs = e.getBindingResult();
-        
         Map<String, List<String>> validationErrors = new LinkedHashMap<>();
         
         for(ObjectError obj : rs.getAllErrors())
@@ -70,7 +71,6 @@ public class ControllerGlobalExceptionAdvice implements Ordered
             validationErrors.put(rs.getObjectName(), Arrays.asList(rs.toString()));
         
         ServiceException se = wrapServiceException(PARAM_VERIFY_EXCEPTION, e);
-        
         logServiceException(log, se.getMessage(), se);
         
         return new Response<>(se, validationErrors);
@@ -80,8 +80,8 @@ public class ControllerGlobalExceptionAdvice implements Ordered
     @ExceptionHandler({Exception.class})
     public Response<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception e)
     {
-        ServiceException se         = null;
-        HttpStatus httpStatus       = HttpStatus.INTERNAL_SERVER_ERROR;
+        ServiceException se   = null;
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         
         if(e instanceof IllegalArgumentException)
         {
@@ -130,8 +130,13 @@ public class ControllerGlobalExceptionAdvice implements Ordered
             se = wrapServiceException(GENERAL_EXCEPTION, e);
         }
 
-        boolean printStackTrace = judgePrintStackTrace(se);
-        logServiceException(log, se.getMessage(), se, printStackTrace);
+        boolean isSerious = isSeriousException(se);
+        logServiceException(log, se.getMessage(), se, isSerious);
+
+        if(isSerious)
+        {
+            SpringContextHolder.publishEvent(new SeriousExceptionEvent(e));
+        }
 
         response.setStatus(httpStatus.value());
         return new Response<>(se);
@@ -178,7 +183,7 @@ public class ControllerGlobalExceptionAdvice implements Ordered
         return httpStatus;
     }
 
-    private boolean judgePrintStackTrace(ServiceException se)
+    private boolean isSeriousException(ServiceException se)
     {
         if(se instanceof UnimportantException)
             return false;
@@ -187,8 +192,9 @@ public class ControllerGlobalExceptionAdvice implements Ordered
         {
             case OK, ACCEPTED, NO_CONTENT, PARTIAL_OK, NOT_EXIST,
                  FORBID_ERROR, TRAFFIC_LIMIT_ERROR, LOGIN_INVALID,
-                 NOT_LOGGED_IN, PARAMS_ERROR, PARAM_VALIDATION_ERROR,
-                 AUTHEN_ERROR, AUTHOR_ERROR -> false;
+                 NOT_LOGGED_IN, PARAM_VERIFY_ERROR, PARAM_VALIDATION_ERROR,
+                 AUTHEN_ERROR, AUTHOR_ERROR, APPCODE_CHECK_ERROR,
+                 APPCODE_NOT_EXIST_ERROR, APPCODE_EXIST_ERROR -> false;
             default -> true;
         };
     }
