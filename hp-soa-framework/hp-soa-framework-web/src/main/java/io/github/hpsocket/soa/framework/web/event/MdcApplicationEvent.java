@@ -17,7 +17,7 @@ public class MdcApplicationEvent extends ApplicationEvent
 
     public MdcApplicationEvent(Object source)
     {
-        super(source, Clock.systemDefaultZone());
+        this(source, Clock.systemDefaultZone());
     }
 
     public MdcApplicationEvent(Object source, Clock clock)

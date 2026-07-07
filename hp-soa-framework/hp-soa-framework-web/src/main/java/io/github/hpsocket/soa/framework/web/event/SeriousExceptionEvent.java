@@ -11,8 +11,6 @@ import java.time.Clock;
 @Getter
 public class SeriousExceptionEvent extends MdcApplicationEvent
 {
-    private Throwable error;
-
     public SeriousExceptionEvent(Throwable error)
     {
         super(error);
@@ -23,8 +21,8 @@ public class SeriousExceptionEvent extends MdcApplicationEvent
         super(error, clock);
     }
 
-    public Throwable getSource()
-    {
-        return error;
+    @Override
+    public Throwable getSource() {
+        return (Throwable)super.getSource();
     }
 }
