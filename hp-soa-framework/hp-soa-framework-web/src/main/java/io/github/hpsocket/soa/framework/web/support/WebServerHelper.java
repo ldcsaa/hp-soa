@@ -121,8 +121,8 @@ public class WebServerHelper
     public static final JSONWriter.Feature[] JSON_SERIAL_FEATURES_NO_NULL_VAL    = {WriteByteArrayAsBase64, WriteNonStringKeyAsString};
     
     private static final AtomicInteger THREAD_NUMBER          = new AtomicInteger(0);
-    public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor( 1,
-                                                                                        4,
+    public static final ThreadPoolExecutor ASYNC_LOG_EXECUTOR = new ThreadPoolExecutor( 2,
+                                                                                        8,
                                                                                         60,
                                                                                         TimeUnit.SECONDS,
                                                                                         new LinkedBlockingDeque<>(3000),
