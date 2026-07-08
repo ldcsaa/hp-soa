@@ -48,7 +48,7 @@ public class WebProperties implements IAppProperties, IAsyncProperties, IAccessV
         private int maxPoolSize = 16;
         private int keepAliveSeconds = 30;
         private int queueCapacity = 2000;
-        private String rejectionPolicy = "CALLER_RUNS";
+        private String rejectionPolicy = WebServerHelper.DEFAULT_REJECTION_POLICY;
         private boolean allowCoreThreadTimeOut = true;
     }
     

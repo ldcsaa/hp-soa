@@ -24,7 +24,9 @@ import io.github.hpsocket.soa.starter.web.properties.WebProperties;
 import io.github.hpsocket.soa.starter.web.properties.WebProperties.AppProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
@@ -58,6 +60,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static io.github.hpsocket.soa.framework.web.holder.SpringContextHolder.springContextHolderBeanName;
 
@@ -199,24 +202,30 @@ public class WebConfig implements WebMvcConfigurer
     @ConditionalOnProperty(name = "hp.soa.web.async.enabled", havingValue = "true", matchIfMissing = true)
     AsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
     {
-        RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
+        RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy());
         BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 
                                         ? new SynchronousQueue<>() 
                                         : new LinkedBlockingDeque<>(asyncProperties.getQueueCapacity());
-        
+
+        AtomicInteger THREAD_NUMBER = new AtomicInteger();
         AsyncThreadPoolExecutor executor = new AsyncThreadPoolExecutor(
                                             asyncProperties.getCorePoolSize(),
                                             asyncProperties.getMaxPoolSize(),
                                             asyncProperties.getKeepAliveSeconds(),
                                             TimeUnit.SECONDS,
                                             queue,
+                                            (r) -> {Thread t = new Thread(r);
+                                                t.setName("HP-SOA-ASYNC-" + THREAD_NUMBER.incrementAndGet());
+                                                t.setPriority(Thread.NORM_PRIORITY);
+                                                t.setDaemon(false);
+                                                return t;},
                                             rjh);
-        
+
         executor.allowCoreThreadTimeOut(asyncProperties.isAllowCoreThreadTimeOut());
-        
+
         return executor;
     }
-    
+
     @Bean(DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
     @ConditionalOnMissingBean(name = DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
     LocaleResolver localeResolver()
@@ -239,8 +248,8 @@ public class WebConfig implements WebMvcConfigurer
 
     /** {@linkplain AsyncService} 异步服务配置 */
     @Bean
-    @ConditionalOnProperty(name = "hp.soa.web.async.enabled", havingValue = "true", matchIfMissing = true)
-    AsyncService asyncService(AsyncThreadPoolExecutor asyncThreadPoolExecutor)
+    @ConditionalOnBean(name = asyncThreadPoolExecutorBeanName)
+    AsyncService asyncService(@Qualifier(asyncThreadPoolExecutorBeanName) AsyncThreadPoolExecutor asyncThreadPoolExecutor)
     {
         return new AsyncServiceImpl(asyncThreadPoolExecutor);
     }

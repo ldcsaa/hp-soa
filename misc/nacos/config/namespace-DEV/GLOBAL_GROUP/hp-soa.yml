@@ -34,5 +34,5 @@ hp.soa.web:
     keep-alive-seconds: 30
     queue-capacity: 2000
     # CALLER_RUNS, ABORT, DISCARD, DISCARD_OLDEST, SYNC
-    rejection-policy: CALLER_RUNS
+    rejection-policy: SYNC
     allow-core-thread-time-out: true

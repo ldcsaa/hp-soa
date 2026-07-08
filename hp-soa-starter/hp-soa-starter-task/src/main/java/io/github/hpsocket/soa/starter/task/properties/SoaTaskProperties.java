@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.starter.task.properties;
 
+import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -24,7 +25,7 @@ public class SoaTaskProperties
     @Setter
     public static class Execution
     {
-        private String threadNamePrefix = "task-";
+        private String threadNamePrefix = "HP-SOA-TASK-";
         
         private Pool pool = new Pool();
         private Shutdown shutdown = new Shutdown();
@@ -38,7 +39,7 @@ public class SoaTaskProperties
             private int queueCapacity = 1000;
             private int keepAlive = 60;
             private boolean allowCoreThreadTimeout = true;
-            private String rejectionPolicy = "CALLER_RUNS";
+            private String rejectionPolicy = WebServerHelper.DEFAULT_REJECTION_POLICY;
         }
         
         @Getter
@@ -54,7 +55,7 @@ public class SoaTaskProperties
     @Setter
     public static class Scheduling
     {
-        private String threadNamePrefix = "scheduling-";
+        private String threadNamePrefix = "HP-SOA-SCHEDULING-";
         
         private Pool pool = new Pool();
         private Shutdown shutdown = new Shutdown();

@@ -80,12 +80,12 @@ public class SoaTaskConfig
             public void customize(ThreadPoolTaskExecutor taskExecutor)
             {
                 String executionRejectionPolicy = soaTaskProperties.getExecution().getPool().getRejectionPolicy();
-                RejectedExecutionHandler rjh = WebServerHelper.parseRejectedExecutionHandler(executionRejectionPolicy, "CALLER_RUNS");                
+                RejectedExecutionHandler rjh = WebServerHelper.parseRejectedExecutionHandler(executionRejectionPolicy, WebServerHelper.DEFAULT_REJECTION_POLICY);
                 taskExecutor.setRejectedExecutionHandler(rjh);
             }
         };
     }
-    
+
     @Bean
     @SuppressWarnings("serial")
     ThreadPoolTaskScheduler taskScheduler()

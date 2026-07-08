@@ -11,7 +11,7 @@ spring.task:
       keep-alive: 60000
       allow-core-thread-timeout: true
       # CALLER_RUNS, ABORT, DISCARD, DISCARD_OLDEST, SYNC
-      rejection-policy: CALLER_RUNS
+      rejection-policy: SYNC
     shutdown:
       await-termination: false
       # milliseconds
@@ -22,7 +22,7 @@ spring.task:
     pool:
       size: 4
       # CALLER_RUNS, ABORT, DISCARD, DISCARD_OLDEST, SYNC
-      rejection-policy: CALLER_RUNS
+      rejection-policy: SYNC
     shutdown:
       await-termination: false
       # milliseconds

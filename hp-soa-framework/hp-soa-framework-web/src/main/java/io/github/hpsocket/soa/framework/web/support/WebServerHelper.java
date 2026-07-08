@@ -112,6 +112,8 @@ public class WebServerHelper
     public static final int REQ_BODY_MAX_LOG_LENGTH     = 4096;
     public static final int RESP_BODY_MAX_LOG_LENGTH    = 4096;
 
+    public static final String DEFAULT_REJECTION_POLICY = "SYNC";
+
 
     private static final ThreadLocal<Long> TIMESTAMP    = new ThreadLocal<>();
     
@@ -125,7 +127,7 @@ public class WebServerHelper
                                                                                         TimeUnit.SECONDS,
                                                                                         new LinkedBlockingDeque<>(3000),
                                                                                         (r) -> {Thread t = new Thread(r);
-                                                                                                t.setName("SOA-LOG-" + THREAD_NUMBER.incrementAndGet());
+                                                                                                t.setName("HP-SOA-LOG-" + THREAD_NUMBER.incrementAndGet());
                                                                                                 t.setPriority(Thread.NORM_PRIORITY);
                                                                                                 t.setDaemon(true);
                                                                                                 return t;},
@@ -551,13 +553,19 @@ public class WebServerHelper
     }
 
     /** 字符串转换为 {@linkplain RejectedExecutionHandler} 对象 */
+    public static final RejectedExecutionHandler parseRejectedExecutionHandler(String rejectionPolicy)
+    {
+        return parseRejectedExecutionHandler(rejectionPolicy, DEFAULT_REJECTION_POLICY);
+    }
+
+    /** 字符串转换为 {@linkplain RejectedExecutionHandler} 对象 */
     public static final RejectedExecutionHandler parseRejectedExecutionHandler(String rejectionPolicy, String defaultRejectionPolicy)
     {
-        RejectedExecutionHandler rjh = null;
-        
         if(GeneralHelper.isStrEmpty(rejectionPolicy))
             rejectionPolicy = defaultRejectionPolicy;
-        
+
+        RejectedExecutionHandler rjh;
+
         if("CALLER_RUNS".equalsIgnoreCase(rejectionPolicy))
             rjh = new ThreadPoolExecutor.CallerRunsPolicy();
         else if("ABORT".equalsIgnoreCase(rejectionPolicy))

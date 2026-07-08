@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /** <b>HP-SOA Skywalking Async 配置</b> */
 @AutoConfiguration
@@ -27,17 +28,23 @@ public class SoaSkyWalkingAsyncConfig
     @ConditionalOnProperty(name = "hp.soa.web.async.enabled", havingValue = "true", matchIfMissing = true)
     TracingAsyncThreadPoolExecutor asyncThreadPoolExecutor(IAsyncProperties asyncProperties)
     {
-        RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy(), "CALLER_RUNS");
+        RejectedExecutionHandler rjh  = WebServerHelper.parseRejectedExecutionHandler(asyncProperties.getRejectionPolicy());
         BlockingQueue<Runnable> queue = asyncProperties.getQueueCapacity() == 0 
                                         ? new SynchronousQueue<>() 
                                         : new LinkedBlockingDeque<>(asyncProperties.getQueueCapacity());
-        
+
+        AtomicInteger THREAD_NUMBER = new AtomicInteger();
         TracingAsyncThreadPoolExecutor executor = new TracingAsyncThreadPoolExecutor(
                                             asyncProperties.getCorePoolSize(),
                                             asyncProperties.getMaxPoolSize(),
                                             asyncProperties.getKeepAliveSeconds(),
                                             TimeUnit.SECONDS,
                                             queue,
+                                            (r) -> {Thread t = new Thread(r);
+                                                t.setName("HP-SOA-TRACING-ASYNC-" + THREAD_NUMBER.incrementAndGet());
+                                                t.setPriority(Thread.NORM_PRIORITY);
+                                                t.setDaemon(false);
+                                                return t;},
                                             rjh);
         
         executor.allowCoreThreadTimeOut(asyncProperties.isAllowCoreThreadTimeOut());
