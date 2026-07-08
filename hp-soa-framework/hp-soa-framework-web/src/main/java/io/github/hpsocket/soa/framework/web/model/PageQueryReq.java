@@ -1,6 +1,7 @@
 package io.github.hpsocket.soa.framework.web.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class PageQueryReq<T> implements Serializable
     private Integer orderBy;
 
     @Schema(description = "查询参数", required = true)
+    @NotNull
     private T param;
 
     @Schema(description = "开始记录索引", hidden = true)

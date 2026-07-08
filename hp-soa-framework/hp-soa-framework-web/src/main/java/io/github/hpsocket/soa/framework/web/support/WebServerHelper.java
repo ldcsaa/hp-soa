@@ -14,7 +14,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
-import io.github.hpsocket.soa.framework.core.exception.UnimportantException;
+import io.github.hpsocket.soa.framework.core.exception.UnseriousException;
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.thread.SynchronousRejectedExecutionHandler;
@@ -585,7 +585,7 @@ public class WebServerHelper
             return;
         
         String msg = GeneralHelper.isStrEmpty(errorMsg) ? ServiceException.READ_ONLY_EXCEPTION.getMessage() : errorMsg;
-        throw new UnimportantException(msg, ServiceException.READ_ONLY_ERROR);
+        throw new UnseriousException(msg, ServiceException.READ_ONLY_ERROR);
     }
     
     /** 检查应用程序是否只读 */

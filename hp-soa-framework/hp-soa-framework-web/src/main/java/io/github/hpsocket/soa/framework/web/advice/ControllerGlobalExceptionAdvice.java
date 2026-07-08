@@ -1,7 +1,7 @@
 package io.github.hpsocket.soa.framework.web.advice;
 
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
-import io.github.hpsocket.soa.framework.core.exception.UnimportantException;
+import io.github.hpsocket.soa.framework.core.exception.UnseriousException;
 import io.github.hpsocket.soa.framework.web.event.SeriousExceptionEvent;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.model.Response;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.*;
 
@@ -71,7 +72,7 @@ public class ControllerGlobalExceptionAdvice implements Ordered
             validationErrors.put(rs.getObjectName(), Arrays.asList(rs.toString()));
         
         ServiceException se = wrapServiceException(PARAM_VERIFY_EXCEPTION, e);
-        logServiceException(log, se.getMessage(), se);
+        logServiceException(log, se.getMessage(), se, false);
         
         return new Response<>(se, validationErrors);
     }
@@ -103,7 +104,7 @@ public class ControllerGlobalExceptionAdvice implements Ordered
             httpStatus = HttpStatus.BAD_REQUEST;
             se = wrapServiceException(BAD_REQUEST_EXCEPTION, e);
         }
-        else if(e instanceof NoHandlerFoundException)
+        else if(e instanceof NoHandlerFoundException || e instanceof NoResourceFoundException)
         {
             httpStatus = HttpStatus.NOT_FOUND;
             se = wrapServiceException(NOT_EXIST_EXCEPTION, e);
@@ -153,7 +154,7 @@ public class ControllerGlobalExceptionAdvice implements Ordered
             case NO_CONTENT -> httpStatus = HttpStatus.NO_CONTENT;
             case PARTIAL_OK -> httpStatus = HttpStatus.PARTIAL_CONTENT;
             case BAD_REQUEST,
-                 PARAMS_ERROR -> httpStatus = HttpStatus.BAD_REQUEST;
+                 BAD_REQUEST_PARAM -> httpStatus = HttpStatus.BAD_REQUEST;
             case NOT_EXIST -> httpStatus = HttpStatus.NOT_FOUND;
             case PARAM_VERIFY_ERROR,
                  PARAM_VALIDATION_ERROR -> httpStatus = HttpStatus.PRECONDITION_FAILED;
@@ -185,15 +186,16 @@ public class ControllerGlobalExceptionAdvice implements Ordered
 
     private boolean isSeriousException(ServiceException se)
     {
-        if(se instanceof UnimportantException)
+        if(se instanceof UnseriousException)
             return false;
 
         return switch(se.getStatusCode())
         {
             case OK, ACCEPTED, NO_CONTENT, PARTIAL_OK, NOT_EXIST,
+                 REPEATED_REQ_ERROR, FREQUENCY_LIMIT_ERROR, READ_ONLY_ERROR,
                  FORBID_ERROR, TRAFFIC_LIMIT_ERROR, LOGIN_INVALID,
                  NOT_LOGGED_IN, PARAM_VERIFY_ERROR, PARAM_VALIDATION_ERROR,
-                 AUTHEN_ERROR, AUTHOR_ERROR, APPCODE_CHECK_ERROR,
+                 AUTHEN_ERROR, AUTHOR_ERROR, SIGN_VERIFY_ERROR, APPCODE_CHECK_ERROR,
                  APPCODE_NOT_EXIST_ERROR, APPCODE_EXIST_ERROR -> false;
             default -> true;
         };

@@ -26,8 +26,8 @@ public class ServiceException extends RuntimeException
     public static final int PARAM_VERIFY_ERROR      = 409;
     /** 参数验证错误 */
     public static final int PARAM_VALIDATION_ERROR  = 410;
-    /** 请求参数非法 */
-    public static final int PARAMS_ERROR            = 411;
+    /** 非法请求参数 */
+    public static final int BAD_REQUEST_PARAM       = 411;
     /** 重复请求 */
     public static final int REPEATED_REQ_ERROR      = 412;
     /** 服务器内部错误 */
@@ -74,33 +74,33 @@ public class ServiceException extends RuntimeException
     public static final int BUSINESS_ERROR          = 999;
     
     public static final ServiceException BAD_REQUEST_EXCEPTION      = new ServiceException("非法请求", BAD_REQUEST);
-    public static final ServiceException NOT_EXIST_EXCEPTION        = new ServiceException("目标不存在", NOT_EXIST);
-    public static final ServiceException PARAM_VERIFY_EXCEPTION     = new ServiceException("参数校验失败", PARAM_VERIFY_ERROR);
-    public static final ServiceException PARAM_VALIDATION_EXCEPTION = new ServiceException("参数验证错误", PARAM_VALIDATION_ERROR);
-    public static final ServiceException PARAMS_EXCEPTION           = new ServiceException("请求参数非法", PARAMS_ERROR);
-    public static final ServiceException REPEATED_REQ_EXCEPTION     = new ServiceException("重复请求", REPEATED_REQ_ERROR);
+    public static final ServiceException PARAMS_EXCEPTION           = new ServiceException("非法请求参数", BAD_REQUEST_PARAM);
     public static final ServiceException GENERAL_EXCEPTION          = new ServiceException("服务器内部错误", GENERAL_ERROR);
     public static final ServiceException NOT_IMPLEMENTED_EXCEPTION  = new ServiceException("接口未实现", NOT_IMPLEMENTED);
     public static final ServiceException NOT_SUPPORTED_EXCEPTION    = new ServiceException("接口不支持", NOT_SUPPORTED);
     public static final ServiceException FORBID_SERVICE_EXCEPTION   = new ServiceException("禁止更新", FORBID_UPDATE_ERROR);
-    public static final ServiceException APPCODE_CHECK_EXCEPTION    = new ServiceException("应用程序编号验证错误", APPCODE_CHECK_ERROR);
-    public static final ServiceException APPCODE_NOT_EXIST_EXCEPTION= new ServiceException("应用程序编号不存在", APPCODE_NOT_EXIST_ERROR);
-    public static final ServiceException APPCODE_EXIST_EXCEPTION    = new ServiceException("应用程序编号已存在", APPCODE_EXIST_ERROR);
-    public static final ServiceException AUTHEN_EXCEPTION           = new ServiceException("用户认证失败", AUTHEN_ERROR);
-    public static final ServiceException AUTHOR_EXCEPTION           = new ServiceException("授权验证失败", AUTHOR_ERROR);
     public static final ServiceException NETWORK_EXCEPTION          = new ServiceException("网络错误", NETWORK_ERROR);
     public static final ServiceException TIMEOUT_EXCEPTION          = new ServiceException("调用超时", TIMEOUT_ERROR);
     public static final ServiceException OUTER_API_CALL_EXCEPTION   = new ServiceException("外部服务调用失败", OUTER_API_CALL_FAIL);
     public static final ServiceException INNER_API_CALL_EXCEPTION   = new ServiceException("内部服务调用失败", INNER_API_CALL_FAIL);
-    public static final ServiceException SIGN_VERIFY_EXCEPTION      = new ServiceException("签名验证失败", SIGN_VERIFY_ERROR);
     public static final ServiceException BUSINESS_EXCEPTION         = new ServiceException("业务逻辑错误", BUSINESS_ERROR);
 
-    public static final UnimportantException FREQUENCY_LIMIT_EXCEPTION  = new UnimportantException("系统繁忙", FREQUENCY_LIMIT_ERROR);
-    public static final UnimportantException FORBID_EXCEPTION           = new UnimportantException("拒绝访问", FORBID_ERROR);
-    public static final UnimportantException TRAFFIC_LIMIT_EXCEPTION    = new UnimportantException("系统繁忙", TRAFFIC_LIMIT_ERROR);
-    public static final UnimportantException READ_ONLY_EXCEPTION        = new UnimportantException("拒绝写入", READ_ONLY_ERROR);
-    public static final UnimportantException LOGIN_INVALID_EXCEPTION    = new UnimportantException("登录已失效", LOGIN_INVALID);
-    public static final UnimportantException NOT_LOGGED_IN_EXCEPTION    = new UnimportantException("未登录", NOT_LOGGED_IN);
+    public static final UnseriousException NOT_EXIST_EXCEPTION        = new UnseriousException("目标不存在", NOT_EXIST);
+    public static final UnseriousException PARAM_VERIFY_EXCEPTION     = new UnseriousException("参数校验失败", PARAM_VERIFY_ERROR);
+    public static final UnseriousException PARAM_VALIDATION_EXCEPTION = new UnseriousException("参数验证错误", PARAM_VALIDATION_ERROR);
+    public static final UnseriousException REPEATED_REQ_EXCEPTION     = new UnseriousException("重复请求", REPEATED_REQ_ERROR);
+    public static final UnseriousException APPCODE_CHECK_EXCEPTION    = new UnseriousException("应用程序编号验证错误", APPCODE_CHECK_ERROR);
+    public static final UnseriousException APPCODE_NOT_EXIST_EXCEPTION= new UnseriousException("应用程序编号不存在", APPCODE_NOT_EXIST_ERROR);
+    public static final UnseriousException APPCODE_EXIST_EXCEPTION    = new UnseriousException("应用程序编号已存在", APPCODE_EXIST_ERROR);
+    public static final UnseriousException AUTHEN_EXCEPTION           = new UnseriousException("用户认证失败", AUTHEN_ERROR);
+    public static final UnseriousException AUTHOR_EXCEPTION           = new UnseriousException("授权验证失败", AUTHOR_ERROR);
+    public static final UnseriousException SIGN_VERIFY_EXCEPTION      = new UnseriousException("签名验证失败", SIGN_VERIFY_ERROR);
+    public static final UnseriousException FREQUENCY_LIMIT_EXCEPTION  = new UnseriousException("系统繁忙", FREQUENCY_LIMIT_ERROR);
+    public static final UnseriousException FORBID_EXCEPTION           = new UnseriousException("拒绝访问", FORBID_ERROR);
+    public static final UnseriousException TRAFFIC_LIMIT_EXCEPTION    = new UnseriousException("系统繁忙", TRAFFIC_LIMIT_ERROR);
+    public static final UnseriousException READ_ONLY_EXCEPTION        = new UnseriousException("拒绝写入", READ_ONLY_ERROR);
+    public static final UnseriousException LOGIN_INVALID_EXCEPTION    = new UnseriousException("登录已失效", LOGIN_INVALID);
+    public static final UnseriousException NOT_LOGGED_IN_EXCEPTION    = new UnseriousException("未登录", NOT_LOGGED_IN);
 
     /** 状态码：{@linkplain ServiceException#OK OK} - 成功，其它 - 失败 */
     private Integer statusCode;
@@ -163,17 +163,17 @@ public class ServiceException extends RuntimeException
         return (ServiceException)e;
     }
 
-    public static final UnimportantException wrapUnimportantException(UnimportantException se, Throwable e)
+    public static final UnseriousException wrapUnseriousException(UnseriousException se, Throwable e)
     {
-        return wrapUnimportantException(se.getMessage(), se.getStatusCode(), e);
+        return wrapUnseriousException(se.getMessage(), se.getStatusCode(), e);
     }
 
-    public static final UnimportantException wrapUnimportantException(String message, Integer statusCode, Throwable e)
+    public static final UnseriousException wrapUnseriousException(String message, Integer statusCode, Throwable e)
     {
-        if(!(e instanceof UnimportantException))
-            e = new UnimportantException(message, statusCode, e);
+        if(!(e instanceof UnseriousException))
+            e = new UnseriousException(message, statusCode, e);
 
-        return (UnimportantException)e;
+        return (UnseriousException)e;
     }
 
     public static final void throwServiceException(Throwable e)

@@ -27,7 +27,7 @@ public class DefaultSentinelBlockExceptionHandler implements BlockExceptionHandl
     {
         AbstractRule rule   = e.getRule();
         String msg          = String.format("接口繁忙 - %s:%s", AppConfigHolder.getAppName(), (rule != null) ? rule.getResource() : "");
-        ServiceException se = wrapUnimportantException(msg, FREQUENCY_LIMIT_ERROR, e);
+        ServiceException se = wrapUnseriousException(msg, FREQUENCY_LIMIT_ERROR, e);
 
         logServiceException(log, se, false);
 

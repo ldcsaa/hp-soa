@@ -39,7 +39,7 @@ public class SentinelExceptionAdvice implements Ordered
     @ExceptionHandler({BlockException.class})
     public Response<?> handleBlockException(HttpServletRequest request, HttpServletResponse response, BlockException e)
     {
-        ServiceException se = wrapUnimportantException(FREQUENCY_LIMIT_EXCEPTION, e);
+        ServiceException se = wrapUnseriousException(FREQUENCY_LIMIT_EXCEPTION, e);
         logServiceException(log, se.getMessage(), se);
         
         return new Response<>(se);            
@@ -67,7 +67,7 @@ public class SentinelExceptionAdvice implements Ordered
         if(GeneralHelper.isStrNotEmpty(message))
         {
             if(message.startsWith(BLOCK_EXCEPTION_MESSAGE_PREFIX))
-                se = wrapUnimportantException(FREQUENCY_LIMIT_EXCEPTION, e);
+                se = wrapUnseriousException(FREQUENCY_LIMIT_EXCEPTION, e);
         }
         
         if(se == null)
