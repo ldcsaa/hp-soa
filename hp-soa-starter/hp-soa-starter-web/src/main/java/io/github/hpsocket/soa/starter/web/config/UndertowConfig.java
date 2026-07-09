@@ -34,7 +34,7 @@ public class UndertowConfig
                 undertowProperties.getWsByteBufferPoolBufferSize(),
                 undertowProperties.getWsByteBufferPoolMaximumPoolSize(),
                 undertowProperties.getWsByteBufferPoolThreadLocalCacheSize(),
-                undertowProperties.getWsByteBufferPoolLeakDecetionPercent()));
+                undertowProperties.getWsByteBufferPoolLeakDetectionPercent()));
 
             deploymentInfo.addServletContextAttribute(WebSocketDeploymentInfo.class.getName(), webSocketDeploymentInfo);
         });

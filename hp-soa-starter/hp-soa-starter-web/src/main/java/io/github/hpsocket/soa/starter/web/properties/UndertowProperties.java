@@ -18,7 +18,7 @@ public class UndertowProperties
     private int wsByteBufferPoolMaximumPoolSize;
     @Value("${server.undertow.websocket.byte-buffer-pool.thread-local-cache-size:12}")
     private int wsByteBufferPoolThreadLocalCacheSize;
-    @Value("${server.undertow.websocket.byte-buffer-pool.leak-decetion-percent:0}")
-    private int wsByteBufferPoolLeakDecetionPercent;
+    @Value("${server.undertow.websocket.byte-buffer-pool.leak-detection-percent:0}")
+    private int wsByteBufferPoolLeakDetectionPercent;
 
 }
