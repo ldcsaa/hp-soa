@@ -48,6 +48,8 @@ public class SoaFirstRedisConfig extends SoaAbstractRedisConfig
     public static final String redisNumberTemplateBeanName = "firstRedisNumberTemplate";
     public static final String redisJsonTemplateBeanName = "firstRedisJsonTemplate";
     public static final String redisGenericJsonTemplateBeanName = "firstRedisGenericJsonTemplate";
+    public static final String redisJsonBTemplateBeanName = "firstRedisJsonBTemplate";
+    public static final String redisGenericJsonBTemplateBeanName = "firstRedisGenericJsonBTemplate";
     public static final String redisJackson2TemplateBeanName = "firstRedisJackson2Template";
     public static final String redisGenericJackson2TemplateBeanName = "firstRedisGenericJackson2Template";
     public static final String redisKryoTemplateBeanName = "firstRedisKryoTemplate";
@@ -111,18 +113,36 @@ public class SoaFirstRedisConfig extends SoaAbstractRedisConfig
     @Override
     @Bean(redisJsonTemplateBeanName)
     @ConditionalOnMissingBean(name = redisJsonTemplateBeanName)
-    public RedisTemplate<String, Object> jsonRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
+    public RedisTemplate<String, Object> fastJsonRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
     {
-        return super.jsonRedisTemplate(redisConnectionFactory);
+        return super.fastJsonRedisTemplate(redisConnectionFactory);
     }
 
     /** 第一个 Redis 基于通用 FastJson 序列化的 {@linkplain RedisTemplate} */
     @Override
     @Bean(redisGenericJsonTemplateBeanName)
     @ConditionalOnMissingBean(name = redisGenericJsonTemplateBeanName)
-    public <T> RedisTemplate<String, T> genericJsonRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
+    public <T> RedisTemplate<String, T> genericFastJsonRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
     {
-        return super.genericJsonRedisTemplate(redisConnectionFactory);
+        return super.genericFastJsonRedisTemplate(redisConnectionFactory);
+    }
+
+    /** 基于 FastJsonB 序列化的 {@linkplain RedisTemplate} */
+    @Override
+    @Bean(redisJsonBTemplateBeanName)
+    @ConditionalOnMissingBean(name = redisJsonBTemplateBeanName)
+    public RedisTemplate<String, Object> fastJsonBRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
+    {
+        return super.fastJsonBRedisTemplate(redisConnectionFactory);
+    }
+
+    /** 基于通用 FastJsonB 序列化的 {@linkplain RedisTemplate} */
+    @Override
+    @Bean(redisGenericJsonBTemplateBeanName)
+    @ConditionalOnMissingBean(name = redisGenericJsonBTemplateBeanName)
+    public <T> RedisTemplate<String, T> genericFastJsonBRedisTemplate(@Qualifier(redisConnectionFactoryBeanName) RedisConnectionFactory redisConnectionFactory)
+    {
+        return super.genericFastJsonBRedisTemplate(redisConnectionFactory);
     }
 
     /** 第一个 Redis 基于 Kryo 序列化的 {@linkplain RedisTemplate} */

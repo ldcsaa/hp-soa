@@ -59,6 +59,9 @@ public abstract class SoaAbstractRedisConfig
     protected static final FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
     protected static final GenericFastJsonRedisSerializer genericFastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
 
+    protected static final FastJsonRedisSerializer<Object> fastJsonBRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+    protected static final GenericFastJsonRedisSerializer genericFastJsonBRedisSerializer = new GenericFastJsonRedisSerializer(true);
+
     protected static final Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
     protected static final GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
 
@@ -69,7 +72,7 @@ public abstract class SoaAbstractRedisConfig
     {
         FastJsonConfig config = new FastJsonConfig();
         config.setJSONB(true);
-        fastJsonRedisSerializer.setFastJsonConfig(config);
+        fastJsonBRedisSerializer.setFastJsonConfig(config);
     }
 
     private final List<RedissonAutoConfigurationCustomizer> redissonAutoConfigurationCustomizers;
@@ -91,7 +94,7 @@ public abstract class SoaAbstractRedisConfig
     
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
-        return jsonRedisTemplate(redisConnectionFactory);
+        return fastJsonRedisTemplate(redisConnectionFactory);
     }
     
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory)
@@ -110,84 +113,59 @@ public abstract class SoaAbstractRedisConfig
         return template;
      }
 
-    public RedisTemplate<String, Object> jsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    public RedisTemplate<String, Object> fastJsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
-        RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
-
-        template.setKeySerializer(RedisSerializer.string());
-        template.setValueSerializer(fastJsonRedisSerializer);
-        template.setHashKeySerializer(RedisSerializer.string());
-        template.setHashValueSerializer(fastJsonRedisSerializer);
-        template.setConnectionFactory(redisConnectionFactory);
-
-        return template;
+        return createRedisTemplate(redisConnectionFactory, fastJsonRedisSerializer);
     }
 
-    public <T> RedisTemplate<String, T> genericJsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    public <T> RedisTemplate<String, T> genericFastJsonRedisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
-        RedisTemplate<String, T> template = new RedisTemplate<String, T>();
+        return createRedisTemplate(redisConnectionFactory, genericFastJsonRedisSerializer);
+    }
 
-        template.setKeySerializer(RedisSerializer.string());
-        template.setValueSerializer(genericFastJsonRedisSerializer);
-        template.setHashKeySerializer(RedisSerializer.string());
-        template.setHashValueSerializer(genericFastJsonRedisSerializer);
-        template.setConnectionFactory(redisConnectionFactory);
+    public RedisTemplate<String, Object> fastJsonBRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        return createRedisTemplate(redisConnectionFactory, fastJsonBRedisSerializer);
+    }
 
-        return template;
+    public <T> RedisTemplate<String, T> genericFastJsonBRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        return createRedisTemplate(redisConnectionFactory, genericFastJsonBRedisSerializer);
     }
 
     public RedisTemplate<String, Object> jackson2RedisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
-        RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
-
-        template.setKeySerializer(RedisSerializer.string());
-        template.setValueSerializer(jackson2JsonRedisSerializer);
-        template.setHashKeySerializer(RedisSerializer.string());
-        template.setHashValueSerializer(jackson2JsonRedisSerializer);
-        template.setConnectionFactory(redisConnectionFactory);
-
-        return template;
+        return createRedisTemplate(redisConnectionFactory, jackson2JsonRedisSerializer);
     }
 
     public <T> RedisTemplate<String, T> genericJackson2RedisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
-        RedisTemplate<String, T> template = new RedisTemplate<String, T>();
-
-        template.setKeySerializer(RedisSerializer.string());
-        template.setValueSerializer(genericJackson2JsonRedisSerializer);
-        template.setHashKeySerializer(RedisSerializer.string());
-        template.setHashValueSerializer(genericJackson2JsonRedisSerializer);
-        template.setConnectionFactory(redisConnectionFactory);
-
-        return template;
+        return createRedisTemplate(redisConnectionFactory, genericJackson2JsonRedisSerializer);
     }
 
     public <T> RedisTemplate<String, T> kryoRedisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
-        RedisTemplate<String, T> template = new RedisTemplate<String, T>();
-
-        template.setKeySerializer(RedisSerializer.string());
-        template.setValueSerializer(kryoRedisSerializer);
-        template.setHashKeySerializer(RedisSerializer.string());
-        template.setHashValueSerializer(kryoRedisSerializer);
-        template.setConnectionFactory(redisConnectionFactory);
-
-        return template;
+        return createRedisTemplate(redisConnectionFactory, kryoRedisSerializer);
     }
 
     public <T> RedisTemplate<String, T> kryoNotNullRedisTemplate(RedisConnectionFactory redisConnectionFactory)
     {
+        return createRedisTemplate(redisConnectionFactory, kryoNotNullRedisSerializer);
+    }
+
+    public static <T> RedisTemplate<String, T> createRedisTemplate(RedisConnectionFactory redisConnectionFactory, RedisSerializer<?> serializer)
+    {
         RedisTemplate<String, T> template = new RedisTemplate<String, T>();
 
         template.setKeySerializer(RedisSerializer.string());
-        template.setValueSerializer(kryoNotNullRedisSerializer);
+        template.setValueSerializer(serializer);
         template.setHashKeySerializer(RedisSerializer.string());
-        template.setHashValueSerializer(kryoNotNullRedisSerializer);
+        template.setHashValueSerializer(serializer);
         template.setConnectionFactory(redisConnectionFactory);
 
         return template;
     }
-    
+
     @SuppressWarnings("unchecked")
     public ReactiveRedisTemplate<String, Object> reactiveRedisTemplate(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory)
     {
