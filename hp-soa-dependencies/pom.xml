@@ -87,11 +87,13 @@
         <resilience4j.version>2.4.0</resilience4j.version>
 
         <geoip2.version>5.1.0</geoip2.version>
+        <ip2region.version>3.3.7</ip2region.version>
         <hessian.version>4.0.66</hessian.version>
         <zxing.javase.version>3.5.4</zxing.javase.version>
         <okhttp2.version>2.7.5</okhttp2.version>
         <okhttp3.version>5.4.0</okhttp3.version>
         <guava.version>33.6.0-jre</guava.version>
+        <simplejavamail.version>9.0.1</simplejavamail.version>
         
         <jsoup.version>1.22.2</jsoup.version>
         <selenium.version>4.44.0</selenium.version>
@@ -771,6 +773,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>ip2region</artifactId>
+                <version>${ip2region.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
@@ -861,6 +869,38 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+
+            <!-- simple-java-mail -->
+            <dependency>
+                <groupId>org.simplejavamail</groupId>
+                <artifactId>simple-java-mail</artifactId>
+                <version>${simplejavamail.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.simplejavamail</groupId>
+                <artifactId>dkim-module</artifactId>
+                <version>${simplejavamail.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.simplejavamail</groupId>
+                <artifactId>batch-module</artifactId>
+                <version>${simplejavamail.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.simplejavamail</groupId>
+                <artifactId>smime-module</artifactId>
+                <version>${simplejavamail.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.simplejavamail</groupId>
+                <artifactId>authenticated-socks-module</artifactId>
+                <version>${simplejavamail.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.simplejavamail</groupId>
+                <artifactId>spring-module</artifactId>
+                <version>${simplejavamail.version}</version>
             </dependency>
             
             <!-- hutool -->
