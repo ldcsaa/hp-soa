@@ -29,18 +29,19 @@ public class RequestAttribute
     private String version;
     private String extra;
 
-    private Long userId;
-    private String userName;
-    private String permission;
-
     private String clientAddr;
     private String requestUri;
     private String requestPath;
     private String requestMethod;
     private Map<String, String> requestParams;
-    
+
     private Object body;
-    
+
+    private Long userId;
+    private String userName;
+    private Object userData;
+    private String permission;
+
     public RequestAttribute(String appCode, String srcAppCode, String token, String clientId, String requestId, String sessionId)
     {
         this(appCode, srcAppCode, token, clientId, requestId, sessionId, null);
