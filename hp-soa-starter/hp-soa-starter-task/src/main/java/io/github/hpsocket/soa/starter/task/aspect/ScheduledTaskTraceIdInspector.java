@@ -3,7 +3,7 @@ package io.github.hpsocket.soa.starter.task.aspect;
 import io.github.hpsocket.soa.framework.web.service.AsyncService;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.task.exception.ScheduledJobExceptionHandler;
+import io.github.hpsocket.soa.starter.task.exception.ScheduledTaskExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -19,8 +19,8 @@ import org.springframework.scheduling.annotation.Scheduled;
  */
 @Slf4j
 @Aspect
-@Order(ScheduledTraceIdInspector.ORDER)
-public class ScheduledTraceIdInspector
+@Order(ScheduledTaskTraceIdInspector.ORDER)
+public class ScheduledTaskTraceIdInspector
 {
     public static final int ORDER = Ordered.HIGHEST_PRECEDENCE;
     
@@ -28,7 +28,7 @@ public class ScheduledTraceIdInspector
                                                 + "@annotation(org.springframework.scheduling.annotation.Scheduled)";
 
     @Autowired(required = false)
-    private ScheduledJobExceptionHandler exceptionHandler;
+    private ScheduledTaskExceptionHandler exceptionHandler;
 
     @Autowired(required = false)
     private AsyncService asyncService;

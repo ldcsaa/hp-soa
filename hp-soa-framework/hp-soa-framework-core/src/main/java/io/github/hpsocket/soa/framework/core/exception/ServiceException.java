@@ -192,6 +192,11 @@ public class ServiceException extends RuntimeException
         throw wrapServiceException(message, GENERAL_ERROR, e);
     }
 
+    public static final void throwServiceException(String message)
+    {
+        throw new ServiceException(message);
+    }
+
     public static final void throwServiceException(String message, Integer statusCode)
     {
         throw new ServiceException(message, statusCode);

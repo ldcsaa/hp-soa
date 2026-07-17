@@ -3,7 +3,7 @@ package io.github.hpsocket.soa.starter.task.config;
 
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import io.github.hpsocket.soa.starter.task.aspect.ScheduledTraceIdInspector;
+import io.github.hpsocket.soa.starter.task.aspect.ScheduledTaskTraceIdInspector;
 import io.github.hpsocket.soa.starter.task.properties.SoaTaskProperties;
 import io.github.hpsocket.soa.starter.task.properties.SoaTaskProperties.Scheduling;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -25,7 +25,7 @@ import java.util.concurrent.*;
 @EnableAsync
 @EnableScheduling
 @AutoConfiguration
-@Import(ScheduledTraceIdInspector.class)
+@Import(ScheduledTaskTraceIdInspector.class)
 @EnableConfigurationProperties({SoaTaskProperties.class})
 @ConditionalOnProperty(name = "spring.task.enabled", matchIfMissing = true)
 public class SoaTaskConfig
