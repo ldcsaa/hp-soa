@@ -176,6 +176,11 @@ public class ServiceException extends RuntimeException
         return (UnseriousException)e;
     }
 
+    public static final UnseriousException wrapUnseriousException(String message, Integer statusCode)
+    {
+        return new UnseriousException(message, statusCode);
+    }
+
     public static final void throwServiceException(Throwable e)
     {
         throw wrapServiceException(e);
@@ -210,6 +215,11 @@ public class ServiceException extends RuntimeException
     public static final void throwServiceException(ServiceException e, Object... args)
     {
         throwFormattedServiceException(e, e.getMessage(), args);
+    }
+
+    public static final void throwUnseriousException(String message, Integer statusCode)
+    {
+        throw new UnseriousException(message, statusCode);
     }
 
     public static final void throwFormattedServiceException(Integer statusCode, String format, Object... args)

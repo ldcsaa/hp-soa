@@ -3,6 +3,7 @@ package io.github.hpsocket.soa.framework.util.http;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.TypeReference;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
@@ -63,6 +64,7 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -1259,13 +1261,13 @@ public class HttpExecutor
         }
     }
 
-    public <Q, R> R postJsonRequest(String uri, Q request, Class<R> clazz)
+    public <Q, R> R postJsonRequest(String uri, Q request, Object classOrType)
     {
-        return postJsonRequest(uri, request, clazz, null);
+        return postJsonRequest(uri, request, classOrType, null);
     }
 
     @SuppressWarnings("unchecked")
-    public <Q, R> R postJsonRequest(String uri, Q request, Class<R> clazz, List<NameValuePair> extraHeaders)
+    public <Q, R> R postJsonRequest(String uri, Q request, Object classOrType, List<NameValuePair> extraHeaders)
     {
         R response                    = null;
         List<NameValuePair> headers    = new ArrayList<NameValuePair>();
@@ -1289,16 +1291,30 @@ public class HttpExecutor
             
             if(resp.isSuccess())
             {
-                if(clazz.equals(byte[].class))
-                    response = (R)resp.getContent();
-                else
+                if(classOrType instanceof Class clazz)
+                {
+                    if(clazz.equals(byte[].class)) response = (R)resp.getContent();
+                    else
+                    {
+                        String result = resp.toString();
+
+                        if(clazz.equals(String.class)) response = (R)result;
+                        else response = (R)JSON.parseObject(result, clazz);
+                    }
+                }
+                else if(classOrType instanceof Type type)
                 {
                     String result = resp.toString();
-                    
-                    if(clazz.equals(String.class))
-                        response = (R)result;
-                    else
-                        response = JSON.parseObject(result, clazz);
+                    response = JSON.parseObject(result, type);
+                }
+                else if(classOrType instanceof TypeReference typeReference)
+                {
+                    String result = resp.toString();
+                    response = (R)JSON.parseObject(result, typeReference);
+                }
+                else
+                {
+                    throw new IllegalArgumentException("invalid classOrType argument");
                 }
             }
             else if(!resp.isNoError())

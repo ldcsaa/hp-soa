@@ -24,7 +24,7 @@ public class ScheduledTaskTraceIdInspector
 {
     public static final int ORDER = Ordered.HIGHEST_PRECEDENCE;
     
-    public static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
+    public static final String POINTCUT_PATTERN = "execution (public * *.*()) && "
                                                 + "@annotation(org.springframework.scheduling.annotation.Scheduled)";
 
     @Autowired(required = false)
