@@ -30,7 +30,6 @@ public class TracingSupplierWrapper<V> extends SupplierWrapper<V>
         try
         {
             mdcAttr.putMdc();
-            
             return super.get();
         }
         finally

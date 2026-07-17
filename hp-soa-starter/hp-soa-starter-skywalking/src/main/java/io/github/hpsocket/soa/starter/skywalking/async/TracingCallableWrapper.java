@@ -30,7 +30,6 @@ public class TracingCallableWrapper<V> extends CallableWrapper<V>
         try
         {
             mdcAttr.putMdc();
-            
             return super.call();
         }
         finally

@@ -30,7 +30,6 @@ public class TracingFunctionWrapper<T, R> extends FunctionWrapper<T, R>
         try
         {
             mdcAttr.putMdc();
-            
             return super.apply(t);
         }
         finally

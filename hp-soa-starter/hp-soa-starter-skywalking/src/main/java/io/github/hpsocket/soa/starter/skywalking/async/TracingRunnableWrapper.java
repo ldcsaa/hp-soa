@@ -28,7 +28,6 @@ public class TracingRunnableWrapper extends RunnableWrapper
         try
         {
             mdcAttr.putMdc();
-            
             super.run();
         }
         finally

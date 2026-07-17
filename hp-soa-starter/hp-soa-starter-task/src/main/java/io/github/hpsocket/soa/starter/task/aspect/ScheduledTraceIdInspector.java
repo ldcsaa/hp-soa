@@ -1,13 +1,16 @@
 package io.github.hpsocket.soa.starter.task.aspect;
 
+import io.github.hpsocket.soa.framework.web.service.AsyncService;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import io.github.hpsocket.soa.starter.task.exception.ScheduledJobExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -24,6 +27,12 @@ public class ScheduledTraceIdInspector
     public static final String POINTCUT_PATTERN = "execution (public void *.*()) && "
                                                 + "@annotation(org.springframework.scheduling.annotation.Scheduled)";
 
+    @Autowired(required = false)
+    private ScheduledJobExceptionHandler exceptionHandler;
+
+    @Autowired(required = false)
+    private AsyncService asyncService;
+
     @Pointcut(POINTCUT_PATTERN)
     protected void aroundMethod() {}
     
@@ -34,11 +43,9 @@ public class ScheduledTraceIdInspector
         
         if(WebServerHelper.isAppReadOnly())
         {
-            String methodName = AspectHelper.getMethod(joinPoint).getName();
-            String msg = String.format("current application is read only, skip scheduled task '%s'", methodName);
-            
-            log.debug(msg);
-            
+            if(log.isDebugEnabled())
+                log.debug("current application is read only, skip scheduled-task '{}'", AspectHelper.getMethod(joinPoint).getName());
+
             return null;
         }
         
@@ -46,11 +53,37 @@ public class ScheduledTraceIdInspector
         {
             return joinPoint.proceed();
         }
+        catch(Exception e)
+        {
+            String methodName = AspectHelper.getMethod(joinPoint).getName();
+            invokeExceptionHandler(methodName, e);
+
+            throw e;
+        }
         finally
         {
             WebServerHelper.removeMdcTraceId();
         }
     }
 
+    private void invokeExceptionHandler(String methodName, Exception e)
+    {
+        try
+        {
+            if(exceptionHandler == null)
+                return;
+
+            long timestamp = System.currentTimeMillis();
+
+            if(asyncService == null)
+                exceptionHandler.handleException(methodName, timestamp, e);
+            else
+                asyncService.execute(() -> exceptionHandler.handleException(methodName, timestamp, e));
+        }
+        catch(Exception ex)
+        {
+            log.error("execute scheduled-task Invoke-Exception-Handler exception -> ({}) : {}", methodName, ex.getMessage(), ex);
+        }
+    }
 }
 

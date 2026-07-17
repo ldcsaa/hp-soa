@@ -30,7 +30,6 @@ public class TracingConsumerWrapper<V> extends ConsumerWrapper<V>
         try
         {
             mdcAttr.putMdc();
-            
             super.accept(v);
         }
         finally
