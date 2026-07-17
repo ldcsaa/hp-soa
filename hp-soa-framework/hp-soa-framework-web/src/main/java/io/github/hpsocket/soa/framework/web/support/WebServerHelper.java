@@ -131,7 +131,7 @@ public class WebServerHelper
                                                                                                 t.setPriority(Thread.NORM_PRIORITY);
                                                                                                 t.setDaemon(true);
                                                                                                 return t;},
-                                                                                        (r, executor) -> System.err.println("fail to write log SOA log, rejected !"));
+                                                                                        (r, executor) -> System.err.println("fail to write SOA log, rejected !"));
     
     private static ObjectMapper jacksonObjectMapper;
     private static LoggingSystem loggingSystem;

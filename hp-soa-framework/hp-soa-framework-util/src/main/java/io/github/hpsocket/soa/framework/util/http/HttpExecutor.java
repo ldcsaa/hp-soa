@@ -79,6 +79,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Getter
@@ -96,18 +97,26 @@ public class HttpExecutor
     public static final int DEFAULT_SOCKET_TIMEOUT              = 30 * 1000;
     public static final String DEFAULT_ENCODING                 = "UTF-8";
     
-    private static final int MAX_LOG_CONTENT_LENGTH             = 5 * 1000;
+    private static final int MAX_LOG_CONTENT_LENGTH             = 10 * 1024;
+    private static final int REQ_BODY_MAX_LOG_LENGTH            = 4096;
+    private static final int RESP_BODY_MAX_LOG_LENGTH           = 4096;
     private static final String MONITOR_LOGGER_NAME             = "SOA-MONITOR";
     private static final String MONITOR_LOG_TYPE                = "MONITOR-EGRESS";
     private static final Logger MONITOR_LOGGER                  = LoggerFactory.getLogger(MONITOR_LOGGER_NAME);
-    
-    private static final ThreadPoolExecutor LOG_EXECUTOR = new ThreadPoolExecutor(
-                                                                                    1,
-                                                                                    8,
-                                                                                    30,
-                                                                                    TimeUnit.SECONDS,
-                                                                                    new LinkedBlockingDeque<>(2000),
-                                                                                    new ThreadPoolExecutor.CallerRunsPolicy());                                                                         
+
+    private static final AtomicInteger THREAD_NUMBER            = new AtomicInteger(0);
+    private static final ThreadPoolExecutor LOG_EXECUTOR        = new ThreadPoolExecutor(
+                                                                                        1,
+                                                                                        8,
+                                                                                        30,
+                                                                                        TimeUnit.SECONDS,
+                                                                                        new LinkedBlockingDeque<>(3000),
+                                                                                        (r) -> {Thread t = new Thread(r);
+                                                                                            t.setName("HP-SOA-HTTP-EXECUTOR-LOG-" + THREAD_NUMBER.incrementAndGet());
+                                                                                            t.setPriority(Thread.NORM_PRIORITY);
+                                                                                            t.setDaemon(true);
+                                                                                            return t;},
+                                                                                        (r, executor) -> System.err.println("fail to write http-executor log, rejected !"));
 
     private TlsConfig defaultTlsConfig;
     private RequestConfig defaultRequestConfig;
@@ -882,7 +891,7 @@ public class HttpExecutor
                             is = entity.getContent();
                             is.read(content);
                             
-                            jsonEntity.put("content", new String(content, Charset.forName(encoding)));
+                            jsonEntity.put("content", GeneralHelper.truncateAndMore(new String(content, Charset.forName(encoding)), REQ_BODY_MAX_LOG_LENGTH));
                         }
                         catch(IOException e)
                         {
@@ -937,7 +946,7 @@ public class HttpExecutor
                     jsonResp.put("contentLength", respContentLength);
                     
                     if(respContentLength > 0 && respContentLength <= MAX_LOG_CONTENT_LENGTH)
-                        jsonResp.put("content", response.toString());                        
+                        jsonResp.put("content", GeneralHelper.truncateAndMore(response.toString(), RESP_BODY_MAX_LOG_LENGTH));
                 }
                 
                 String msg = jsonLog.toJSONString();
