@@ -31,7 +31,7 @@ public class GeneralHelper
     private static final Pattern PATTERN_IPV4_ADDR  = Pattern.compile("^([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$");
     private static final Pattern PATTERN_LINK       = Pattern.compile("<a[^>]*href=\\\"[^\\s\\\"]+\\\"[^>]*>[^<]*<\\/a>");
     private static final Pattern PATTERN_HTTP_URL   = Pattern.compile("^(https?:\\/\\/)?([a-z]([a-z0-9\\-]*\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))(\\/[a-z0-9_\\-\\.~]+)*(\\/([a-z0-9_\\-\\.]*)(\\?[a-z0-9+_\\-\\.%=&amp;]*)?)?(#[a-z][a-z0-9_]*)?$");
-    private static final Pattern PATTERN_XML_ESCAPES= Pattern.compile(".*[&|\"|\'|<|>].*");
+    private static final Pattern PATTERN_XML_ESCAPES= Pattern.compile(".*[&|\"|<|>].*");
     
     private static final String[] SHORT_DATE_PATTERN                = {"yyyy-MM-dd", "yyyy/MM/dd", "yyyy\\MM\\dd", "yyyyMMdd"};
     private static final String[] LONG_DATE_PATTERN                 = {"yyyy-MM-dd HH:mm:ss", "yyyy/MM/dd HH:mm:ss", "yyyy\\MM\\dd HH:mm:ss", "yyyyMMddHHmmss"};
@@ -69,7 +69,6 @@ public class GeneralHelper
         XML_ESCAPE_CHARS[60] = "&lt;"   .toCharArray();
         XML_ESCAPE_CHARS[62] = "&gt;"   .toCharArray();
         XML_ESCAPE_CHARS[34] = "&quot;" .toCharArray();
-        XML_ESCAPE_CHARS[39] = "&apos;" .toCharArray();
     }
     
     /** 字符串转换为字节数组 */
