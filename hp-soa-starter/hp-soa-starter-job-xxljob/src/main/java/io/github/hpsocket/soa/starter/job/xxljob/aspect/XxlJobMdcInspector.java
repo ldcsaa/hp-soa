@@ -61,10 +61,10 @@ public class XxlJobMdcInspector
             
             if(WebServerHelper.isAppReadOnly())
             {
-                String msg = String.format("current application is read only, skip xxl-job '%s'", jobName);
+                String msg = String.format("current application is read only, skip xxl-job (name: {}, id: {})", jobName, jobId);
 
-                if(log.isDebugEnabled())
-                    log.debug(msg);    
+                if(log.isInfoEnabled())
+                    log.info(msg);
                 
                 XxlJobHelper.handleResult(SKIP_RESULT_CODE, msg);
                 
@@ -75,9 +75,9 @@ public class XxlJobMdcInspector
             
             try
             {
-                if(log.isDebugEnabled())
+                if(log.isInfoEnabled())
                 {
-                    log.debug(">>>>>>>>>> start xxl-job -> (name: {}, id: {}, param: '{}')", jobName, jobId, param);
+                    log.info(">>>>>>>>>> start xxl-job -> (name: {}, id: {}, param: '{}')", jobName, jobId, param);
                 
                     sw = new StopWatch(jobName);
                     sw.start();
@@ -94,17 +94,17 @@ public class XxlJobMdcInspector
                 if(cause == null)
                     cause = e;
                 
-                log.error("execute xxl-job exception -> ({}) : {}", jobName, cause.getMessage(), cause);
+                log.error("execute xxl-job exception -> (name: {}, id: {}) : {}", jobName, jobId, cause.getMessage(), cause);
                 
                 throw cause;
             }
             finally
             {
-                if(log.isDebugEnabled())
+                if(log.isInfoEnabled())
                 {
                     sw.stop();
                     
-                    log.debug("<<<<<<<<<< end xxl-job -> (name: {}, id: {}, costTime: {})", jobName, jobId, sw.getTotalTimeMillis());
+                    log.info("<<<<<<<<<< end xxl-job -> (name: {}, id: {}, costTime: {})", jobName, jobId, sw.getTotalTimeMillis());
                 }
             }
         }
@@ -135,7 +135,7 @@ public class XxlJobMdcInspector
         }
         catch(Exception ex)
         {
-            log.error("execute xxl-job Invoke-Exception-Handler exception -> ({}) : {}", jobName, ex.getMessage(), ex);
+            log.error("execute xxl-job Invoke-Exception-Handler exception -> (name: {}, id: {}) : {}", jobName, jobId, ex.getMessage(), ex);
         }
     }
 }

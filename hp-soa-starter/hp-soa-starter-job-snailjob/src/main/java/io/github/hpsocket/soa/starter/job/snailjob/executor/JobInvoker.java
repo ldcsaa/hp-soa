@@ -38,10 +38,10 @@ public class JobInvoker
             
             if(WebServerHelper.isAppReadOnly())
             {
-                String msg = String.format("current application is read only, skip snail-job '%s'", jobName);
+                String msg = String.format("current application is read only, skip snail-job (name: {}, id: {})", jobName, jobId);
 
-                if(log.isDebugEnabled())
-                    log.debug(msg);
+                if(log.isInfoEnabled())
+                    log.info(msg);
                 
                 return ExecuteResult.failure(null, msg);
             }
@@ -50,9 +50,9 @@ public class JobInvoker
             
             try
             {
-                if(log.isDebugEnabled())
+                if(log.isInfoEnabled())
                 {
-                    log.debug(">>>>>>>>>> start snail-job -> (name: {}, id: {}, method: {}, param: '{}')", jobName, jobId, method, param);
+                    log.info(">>>>>>>>>> start snail-job -> (name: {}, id: {}, method: {}, param: '{}')", jobName, jobId, method, param);
                 
                     sw = new StopWatch(jobName);
                     sw.start();
@@ -69,17 +69,17 @@ public class JobInvoker
                 if(cause == null)
                     cause = e;
                 
-                log.error("execute snail-job exception -> ({}) : {}", jobName, cause.getMessage(), cause);
+                log.error("execute snail-job exception -> (name: {}, id: {}) : {}", jobName, jobId, cause.getMessage(), cause);
                 
                 throw cause;
             }
             finally
             {
-                if(log.isDebugEnabled())
+                if(log.isInfoEnabled())
                 {
                     sw.stop();
                     
-                    log.debug("<<<<<<<<<< end snail-job -> (name: {}, id: {}, method: {}, costTime: {})", jobName, jobId, method, sw.getTotalTimeMillis());
+                    log.info("<<<<<<<<<< end snail-job -> (name: {}, id: {}, method: {}, costTime: {})", jobName, jobId, method, sw.getTotalTimeMillis());
                 }
             }
         }
@@ -111,7 +111,7 @@ public class JobInvoker
         }
         catch(Exception ex)
         {
-            log.error("execute snail-job Invoke-Exception-Handler exception -> ({}) : {}", jobName, ex.getMessage(), ex);
+            log.error("execute snail-job Invoke-Exception-Handler exception -> (name: {}, id: {}) : {}", jobName, jobId, ex.getMessage(), ex);
         }
     }
 }
