@@ -16,6 +16,7 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1909,10 +1910,18 @@ public class GeneralHelper
         return (int)(double)(n.doubleValue() + 0.5D);
     }
 
+    public static final long randomLong(int length)
+    {
+        long min = (long)Math.pow(10, length - 1);
+        long max = (long)Math.pow(10, length);
+
+        return ThreadLocalRandom.current().nextLong(min, max);
+    }
+
     public static final String mask(String str, int size, int offset)
     {
         if(GeneralHelper.isStrEmpty(str))
-            return "";
+            return str;
         
         int len   = str.length();
         int end   = len - offset;
@@ -1945,17 +1954,17 @@ public class GeneralHelper
             : stream.filter((e) -> e.name().equals(name)).findFirst().orElse(null);
     }
 
-    public static void asynRun(Runnable runnable)
+    public static final Thread asyncRun(Runnable runnable)
     {
-        asynRun(runnable, false, null);
+        return asyncRun(runnable, false, null);
     }
     
-    public static void asynRun(Runnable runnable, boolean daemon)
+    public static final Thread asyncRun(Runnable runnable, boolean daemon)
     {
-        asynRun(runnable, daemon, null);
+        return asyncRun(runnable, daemon, null);
     }
     
-    public static void asynRun(Runnable runnable, boolean daemon, String threadName)
+    public static final Thread asyncRun(Runnable runnable, boolean daemon, String threadName)
     {
         Thread t = new Thread(runnable);
         t.setDaemon(daemon);
@@ -1964,6 +1973,7 @@ public class GeneralHelper
             t.setName(threadName);
         
         t.start();
+        return t;
     }
     
 }
