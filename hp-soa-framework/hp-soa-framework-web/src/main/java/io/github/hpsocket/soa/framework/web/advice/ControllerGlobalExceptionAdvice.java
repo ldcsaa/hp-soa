@@ -8,6 +8,7 @@ import io.github.hpsocket.soa.framework.web.model.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -16,12 +17,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -49,31 +52,63 @@ public class ControllerGlobalExceptionAdvice implements Ordered
     {
         BindingResult rs = e.getBindingResult();
         Map<String, List<String>> validationErrors = new LinkedHashMap<>();
-        
+
         for(ObjectError obj : rs.getAllErrors())
         {
             if(obj instanceof FieldError field)
+                parseError(field.getField(), field.getDefaultMessage(), validationErrors);
+            else
+                parseError("param-" + obj.getObjectName(), obj.getDefaultMessage(), validationErrors);
+        }
+
+        return makeValidationErrorResponse(e, validationErrors);
+    }
+
+
+    /** {@linkplain HandlerMethodValidationException} 异常处理器 */
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public Response<?> handleHandlerMethodValidationException(HttpServletRequest request, HttpServletResponse response, HandlerMethodValidationException e)
+    {
+        List<ParameterValidationResult> rs = e.getParameterValidationResults();
+        Map<String, List<String>> validationErrors = new LinkedHashMap<>();
+
+        for(int i = 0; i < rs.size(); i++)
+        {
+            ParameterValidationResult obj = rs.get(i);
+            List<MessageSourceResolvable> resolvableErrors = obj.getResolvableErrors();
+
+            for(MessageSourceResolvable resolvable : resolvableErrors)
             {
-                String name = field.getField();
-                
-                List<String> errs = validationErrors.get(name);
-                
-                if(errs == null)
-                {
-                    errs = new LinkedList<>();
-                    validationErrors.put(name, errs);
-                }
-                
-                errs.add(field.getDefaultMessage());
+                if(resolvable instanceof FieldError field)
+                    parseError(field.getField(), resolvable.getDefaultMessage(), validationErrors);
+                else
+                    parseError("param-" + i, resolvable.getDefaultMessage(), validationErrors);
             }
         }
-        
-        if(validationErrors.isEmpty())
-            validationErrors.put(rs.getObjectName(), Arrays.asList(rs.toString()));
-        
+
+        return makeValidationErrorResponse(e, validationErrors);
+    }
+
+    private static void parseError(String fieldName, String errorMessage, Map<String, List<String>> validationErrors)
+    {
+        String name = fieldName;
+        List<String> errs = validationErrors.get(name);
+
+        if(errs == null)
+        {
+            errs = new LinkedList<>();
+            validationErrors.put(name, errs);
+        }
+
+        errs.add(errorMessage);
+    }
+
+    private static Response<Object> makeValidationErrorResponse(Exception e, Map<String, List<String>> validationErrors)
+    {
         ServiceException se = wrapServiceException(PARAM_VERIFY_EXCEPTION, e);
         logServiceException(log, se.getMessage(), se, false);
-        
+
         return new Response<>(se, validationErrors);
     }
 
