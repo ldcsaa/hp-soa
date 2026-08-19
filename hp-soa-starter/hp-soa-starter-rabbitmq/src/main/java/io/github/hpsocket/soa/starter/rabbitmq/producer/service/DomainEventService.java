@@ -1,6 +1,6 @@
 package io.github.hpsocket.soa.starter.rabbitmq.producer.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.spring.service.IService;
 import io.github.hpsocket.soa.starter.rabbitmq.producer.entity.DomainEvent;
 
 import java.util.Collection;

@@ -2,7 +2,7 @@ package io.github.hpsocket.soa.starter.kafka.producer.service.impl;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import io.github.hpsocket.soa.framework.core.util.Pair;
 import io.github.hpsocket.soa.starter.kafka.producer.entity.DomainEvent;
 import io.github.hpsocket.soa.starter.kafka.producer.service.DomainEventService;
