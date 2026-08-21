@@ -5,7 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import io.github.hpsocket.soa.starter.websocket.listener.WebSocketSessionListener;
 import io.github.hpsocket.soa.starter.websocket.model.SoaWebSocketUser;
 import io.github.hpsocket.soa.starter.websocket.session.WebSocketSessionManager;
-import io.github.hpsocket.soa.starter.websocket.util.WebSocketUtils;
+import io.github.hpsocket.soa.starter.websocket.util.WebSocketUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -41,7 +41,7 @@ public class WebSocketSessionManagerImpl implements WebSocketSessionManager
     @Override
     public void addSession(WebSocketSession session)
     {
-        SoaWebSocketUser user = WebSocketUtils.getLoginUser(session);
+        SoaWebSocketUser user = WebSocketUtil.getLoginUser(session);
 
         if(user == null)
         {
@@ -85,7 +85,7 @@ public class WebSocketSessionManagerImpl implements WebSocketSessionManager
     {
         idSessions.remove(session.getId());
 
-        SoaWebSocketUser user = WebSocketUtils.getLoginUser(session);
+        SoaWebSocketUser user = WebSocketUtil.getLoginUser(session);
 
         if(user == null)
         {

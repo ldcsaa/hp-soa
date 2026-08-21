@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * WebSocket 工具类
  */
-public class WebSocketUtils
+public class WebSocketUtil
 {
 
     public static final String ATTRIBUTE_LOGIN_USER = "__WS_LOGIN_USER__";

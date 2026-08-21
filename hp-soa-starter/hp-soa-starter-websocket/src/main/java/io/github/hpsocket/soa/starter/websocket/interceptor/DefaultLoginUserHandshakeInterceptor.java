@@ -1,7 +1,7 @@
 package io.github.hpsocket.soa.starter.websocket.interceptor;
 
 import io.github.hpsocket.soa.starter.websocket.model.SoaWebSocketUser;
-import io.github.hpsocket.soa.starter.websocket.util.WebSocketUtils;
+import io.github.hpsocket.soa.starter.websocket.util.WebSocketUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -34,7 +34,7 @@ public class DefaultLoginUserHandshakeInterceptor implements HandshakeIntercepto
             return false;
         }
 
-        WebSocketUtils.setLoginUser(loginUser, attributes);
+        WebSocketUtil.setLoginUser(loginUser, attributes);
         return true;
     }
 
