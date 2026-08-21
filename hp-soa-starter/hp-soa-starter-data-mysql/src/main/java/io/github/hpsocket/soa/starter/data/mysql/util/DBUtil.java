@@ -11,10 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-/**
- * @author Bruce
- * @date 2026/7/2 21:47
- */
+/** <b>数据库工具类</b> */
 public class DBUtil
 {
 
