@@ -21,12 +21,12 @@ public class RedissonHelper
         this.redissonClient = redissonClient;
     }
 
-    public void tryRun(String lockKey, long waitTime, TimeUnit timeUnit, Runnable runnable)
+    public void tryLockRun(String lockKey, long waitTime, TimeUnit timeUnit, Runnable runnable)
     {
-        tryRun(lockKey, waitTime, -1, timeUnit, runnable);
+        tryLockRun(lockKey, waitTime, -1, timeUnit, runnable);
     }
 
-    public void tryRun(String lockKey, long waitTime, long leaseTime, TimeUnit timeUnit, Runnable runnable)
+    public void tryLockRun(String lockKey, long waitTime, long leaseTime, TimeUnit timeUnit, Runnable runnable)
     {
         RLock lock = redissonClient.getLock(lockKey);
         boolean isLocked = false;
@@ -52,12 +52,12 @@ public class RedissonHelper
         }
     }
 
-    public void run(String lockKey, Runnable runnable)
+    public void lockRun(String lockKey, Runnable runnable)
     {
-        run(lockKey, -1, TimeUnit.SECONDS, runnable);
+        lockRun(lockKey, -1, TimeUnit.SECONDS, runnable);
     }
 
-    public void run(String lockKey, long leaseTime, TimeUnit timeUnit, Runnable runnable)
+    public void lockRun(String lockKey, long leaseTime, TimeUnit timeUnit, Runnable runnable)
     {
         RLock lock = redissonClient.getLock(lockKey);
 
@@ -79,12 +79,12 @@ public class RedissonHelper
         }
     }
 
-    public <T> T tryCall(String lockKey, long waitTime, TimeUnit timeUnit, Callable<T> callable)
+    public <T> T tryLockCall(String lockKey, long waitTime, TimeUnit timeUnit, Callable<T> callable)
     {
-        return tryCall(lockKey, waitTime, -1, timeUnit, callable);
+        return tryLockCall(lockKey, waitTime, -1, timeUnit, callable);
     }
 
-    public <T> T tryCall(String lockKey, long waitTime, long leaseTime, TimeUnit timeUnit, Callable<T> callable)
+    public <T> T tryLockCall(String lockKey, long waitTime, long leaseTime, TimeUnit timeUnit, Callable<T> callable)
     {
         RLock lock = redissonClient.getLock(lockKey);
         boolean isLocked = false;
@@ -112,12 +112,12 @@ public class RedissonHelper
         return null;
     }
 
-    public <T> T call(String lockKey, Callable<T> callable)
+    public <T> T lockCall(String lockKey, Callable<T> callable)
     {
-        return call(lockKey, -1, TimeUnit.SECONDS, callable);
+        return lockCall(lockKey, -1, TimeUnit.SECONDS, callable);
     }
 
-    public <T> T call(String lockKey, long leaseTime, TimeUnit timeUnit, Callable<T> callable)
+    public <T> T lockCall(String lockKey, long leaseTime, TimeUnit timeUnit, Callable<T> callable)
     {
         RLock lock = redissonClient.getLock(lockKey);
 

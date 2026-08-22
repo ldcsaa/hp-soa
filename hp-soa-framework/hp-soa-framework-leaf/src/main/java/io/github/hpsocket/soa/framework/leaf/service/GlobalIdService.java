@@ -11,14 +11,14 @@ import java.io.Serializable;
 public interface GlobalIdService
 {
     /** 默认段号标签 */
-    final String UNIQUE_SEGMENT_TAG = "__default__";
+    String UNIQUE_SEGMENT_TAG = "__default__";
     /** 测试段号标签 */
-    final String TEST_SEGMENT_TAG   = "__test__";
+    String TEST_SEGMENT_TAG   = "__test__";
     
     /** 段号 ID 生成器 Bean 名称 */
-    final String LEAF_SEGMENT_ID_GENERATOR_BEAN     = "leafSegmentIdGenerator";
+    String LEAF_SEGMENT_ID_GENERATOR_BEAN     = "leafSegmentIdGenerator";
     /** 雪花 ID 生成器 Bean 名称 */
-    final String LEAF_SNOWFLAKE_ID_GENERATOR_BEAN   = "leafSnowflakeIdGenerator";
+    String LEAF_SNOWFLAKE_ID_GENERATOR_BEAN   = "leafSnowflakeIdGenerator";
     
     /** 通过 snowflake 方式获取 ID */
     long getSnowflakeId();
@@ -56,7 +56,7 @@ public interface GlobalIdService
     @Getter
     @AllArgsConstructor
     @SuppressWarnings("serial")
-    public static class SnowflakeId implements Serializable
+    class SnowflakeId implements Serializable
     {
         private long timestamp;
         private int workerId;
@@ -65,7 +65,7 @@ public interface GlobalIdService
         @Override
         public String toString()
         {
-            final StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             
             return sb.append("{timestamp=").append(timestamp)
                      .append(", workerId=").append(workerId)
