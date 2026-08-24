@@ -82,6 +82,8 @@ public class DistributedLockAspect
         {
             for(int i = 0; i < parameterNames.length; i++)
             {
+                context.setVariable("p" + i, args[i]);
+                context.setVariable("arg" + i, args[i]);
                 context.setVariable(parameterNames[i], args[i]);
             }
         }
