@@ -2,7 +2,9 @@
 package io.github.hpsocket.soa.framework.web.support;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
@@ -27,8 +29,9 @@ import java.util.function.Function;
 /** <b>Aspect 拦截信息检索辅助类</b> */
 public class AspectHelper
 {
-    private static ExpressionParser expressionParser = new SpelExpressionParser();
-    private static ConcurrentMap<String, Expression> expressionMap = new ConcurrentHashMap<>();
+    private static final ExpressionParser EL_PARSER = new SpelExpressionParser();
+    private static final ConcurrentMap<String, Expression> EL_MAP = new ConcurrentHashMap<>();
+    private static final DefaultParameterNameDiscoverer PARAM_NAME_DISCOVERER = new DefaultParameterNameDiscoverer();
 
     public static final EvaluationContext buildContext(JoinPoint point, Object result)
     {
@@ -111,13 +114,37 @@ public class AspectHelper
 
     public static final Expression getExpressionByKey(String key)
     {
-        if(expressionMap.containsKey(key))
-            return expressionMap.get(key);
+        Expression expression = EL_MAP.get(key);
 
-        Expression expression = expressionParser.parseExpression(key);
-        expressionMap.putIfAbsent(key, expression);
+        if(expression == null)
+        {
+            expression = EL_PARSER.parseExpression(key);
+            EL_MAP.putIfAbsent(key, expression);
+        }
         
         return expression;
+    }
+
+    public static final <T> T parseExpressionValue(String keySpel, ProceedingJoinPoint joinPoint, Class<T> targetType)
+    {
+        MethodSignature signature = (MethodSignature)joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Object[] args = joinPoint.getArgs();
+        String[] parameterNames = PARAM_NAME_DISCOVERER.getParameterNames(method);
+        EvaluationContext context = new StandardEvaluationContext();
+
+        if(parameterNames != null)
+        {
+            for(int i = 0; i < parameterNames.length; i++)
+            {
+                context.setVariable("p" + i, args[i]);
+                context.setVariable("arg" + i, args[i]);
+                context.setVariable(parameterNames[i], args[i]);
+            }
+        }
+
+        Expression expression = getExpressionByKey(keySpel);
+        return expression.getValue(context, targetType);
     }
 
     public static final Map<String, Object> getParameters(JoinPoint point)

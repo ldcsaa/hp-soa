@@ -230,7 +230,7 @@
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
                         <compilerArgs>
-                            <compilerArg>-parameters</compilerArg>
+                            <arg>-parameters</arg>
                         </compilerArgs>
                         <annotationProcessorPaths>
                             <path>
