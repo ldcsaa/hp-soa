@@ -388,6 +388,24 @@ public class GeneralHelper
         return array;
     }
 
+    /** 异常对象包装为 RuntimeException */
+    public final static RuntimeException wrapRuntimeException(Exception e)
+    {
+        return wrapRuntimeException(e, null);
+    }
+
+    /** 异常对象包装为 RuntimeException */
+    public final static RuntimeException wrapRuntimeException(Exception e, String msg)
+    {
+        if(e instanceof RuntimeException re)
+            return re;
+
+        if(isStrEmpty(msg))
+            return new RuntimeException(e);
+        else
+            return new RuntimeException(msg, e);
+    }
+
     /** 调用 {@linkplain Thread#sleep(long)} 方法使当前线程睡眠 period 毫秒 <br>
      * 
      * 如果 {@linkplain Thread#sleep(long)} 方法被中断则返回 false

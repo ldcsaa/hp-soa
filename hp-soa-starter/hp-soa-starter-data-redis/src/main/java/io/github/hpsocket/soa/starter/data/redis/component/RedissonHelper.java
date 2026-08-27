@@ -1,5 +1,6 @@
 package io.github.hpsocket.soa.starter.data.redis.component;
 
+import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import lombok.Getter;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -41,7 +42,7 @@ public class RedissonHelper
         }
         catch(Exception e)
         {
-            throw new RuntimeException(e);
+            throw GeneralHelper.wrapRuntimeException(e);
         }
         finally
         {
@@ -68,7 +69,7 @@ public class RedissonHelper
         }
         catch(Exception e)
         {
-            throw new RuntimeException(e);
+            throw GeneralHelper.wrapRuntimeException(e);
         }
         finally
         {
@@ -99,7 +100,7 @@ public class RedissonHelper
         }
         catch(Exception e)
         {
-            throw new RuntimeException(e);
+            throw GeneralHelper.wrapRuntimeException(e);
         }
         finally
         {
@@ -128,7 +129,7 @@ public class RedissonHelper
         }
         catch(Exception e)
         {
-            throw new RuntimeException(e);
+            throw GeneralHelper.wrapRuntimeException(e);
         }
         finally
         {
