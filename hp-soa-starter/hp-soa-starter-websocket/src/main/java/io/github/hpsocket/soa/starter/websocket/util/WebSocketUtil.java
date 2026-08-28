@@ -11,6 +11,8 @@ import java.util.Map;
 public class WebSocketUtil
 {
 
+    public static final String MESSAGE_PING = "$ping";
+    public static final String MESSAGE_PONG = "$pong";
     public static final String ATTRIBUTE_LOGIN_USER = "__WS_LOGIN_USER__";
 
     /**

@@ -42,7 +42,6 @@ public class WebSocketSessionHandlerDecorator extends WebSocketHandlerDecorator
     @Override
     public void afterConnectionEstablished(WebSocketSession session)
     {
-        // 实现 session 支持并发，可参考 https://blog.csdn.net/abu935009066/article/details/131218149
         session = new ConcurrentWebSocketSessionDecorator(session, soaWebSocketProperties.getMessageSendTimeLimit(), soaWebSocketProperties.getMessageBufferSizeLimit());
         sessionManager.addSession(session);
     }

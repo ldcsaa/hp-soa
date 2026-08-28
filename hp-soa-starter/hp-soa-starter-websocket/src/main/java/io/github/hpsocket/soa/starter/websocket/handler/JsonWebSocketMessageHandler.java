@@ -4,6 +4,7 @@ import cn.hutool.core.util.TypeUtil;
 import com.alibaba.fastjson2.JSONObject;
 import io.github.hpsocket.soa.starter.websocket.listener.WebSocketMessageListener;
 import io.github.hpsocket.soa.starter.websocket.message.JsonWebSocketMessage;
+import io.github.hpsocket.soa.starter.websocket.util.WebSocketUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.socket.TextMessage;
@@ -38,14 +39,10 @@ public class JsonWebSocketMessageHandler extends TextWebSocketHandler
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception
     {
         if(message.getPayloadLength() == 0)
-        {
             return;
-        }
 
         if(handleSpecialMessage(session, message))
-        {
             return;
-        }
 
         String payload = message.getPayload();
         JsonWebSocketMessage jsonMessage = JSONObject.parseObject(payload, JsonWebSocketMessage.class);
@@ -78,11 +75,12 @@ public class JsonWebSocketMessageHandler extends TextWebSocketHandler
 
     private static boolean handleSpecialMessage(WebSocketSession session, TextMessage message) throws IOException
     {
-        if(message.getPayloadLength() == 4 && Objects.equals(message.getPayload(), "ping"))
+        if(message.getPayloadLength() == WebSocketUtil.MESSAGE_PING.length() && Objects.equals(message.getPayload(), WebSocketUtil.MESSAGE_PING))
         {
-            session.sendMessage(new TextMessage("pong"));
+            session.sendMessage(new TextMessage(WebSocketUtil.MESSAGE_PONG));
             return true;
         }
+
         return false;
     }
 }

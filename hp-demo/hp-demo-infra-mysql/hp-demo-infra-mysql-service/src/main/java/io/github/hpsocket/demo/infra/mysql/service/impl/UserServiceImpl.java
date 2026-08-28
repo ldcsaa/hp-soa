@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import io.github.hpsocket.demo.infra.mysql.bo.UserBo;
 import io.github.hpsocket.demo.infra.mysql.converter.UserConverter;
 import io.github.hpsocket.demo.infra.mysql.entity.User;

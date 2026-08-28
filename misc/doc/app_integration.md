@@ -293,8 +293,8 @@ logging.config: classpath:log4j2-kafka.xml
 &nbsp;&nbsp;在分布式应用系统中，多个应用共享配置中心地址、注册中心地址、日志收集器地址和功能特性开关等全局配置，这些配置与应用无关，只与部署环境有关。因此，最好把这些配置从应用程序配置中抽离出来作为共享配置，统一管理。对于部署在Docker中的应用，共享配置文件可以预置到Docker镜像，或者运行时Mount到Docker容器；对于部署在k8s中的应用，可以通过 Config Map 为容器生成共享配置文件。
 
 &nbsp;&nbsp;HP-SOA 应用启动时，会查找并加载下列共享配置文件：
-- 系统配置文件：启动 spring-boot 前由Java系统加载，用于配置那些需要在 spring-boot 启动前已配置好的系统属性（如：lo4j日志相关配置）。默认配置文件：`/opt/hp-soa/config/system-config.properties`，可通过JVM启动参数`-Dhp.soa.system.properties.file`修改系统配置文件路径。参考：[system-config.properties](../../misc/opt/hp-soa/config/system-config.properties)
-- 扩展配置文件：由 spring-boot 加载，用于配置注册中心地址、配置中心地址和系统全局设置等公共应用属性，默认配置文件：`/opt/hp-soa/config/extended-config.properties`，可通过JVM启动参数`-Dhp.soa.extended.properties.file`修改扩展配置文件路径。参考：[extended-config.properties](../../misc/opt/hp-soa/config/extended-config.properties)
+- 系统配置文件：启动 spring-boot 前由Java系统加载，用于配置那些需要在 spring-boot 启动前已配置好的系统属性（如：lo4j日志相关配置）。如：`file:/opt/hp-soa/config/system-config.properties`，可通过JVM启动参数`-Dhp.soa.system.properties.file`修改系统配置文件路径。参考：[system-config.properties](../../misc/opt/hp-soa/config/system-config.properties)
+- 扩展配置文件：由 spring-boot 加载，用于配置注册中心地址、配置中心地址和系统全局设置等公共应用属性，如：`file:/opt/hp-soa/config/extended-config.properties`，可通过JVM启动参数`-Dhp.soa.extended.properties.file`修改扩展配置文件路径。参考：[extended-config.properties](../../misc/opt/hp-soa/config/extended-config.properties)
 
 #### 4. 实现 HTTP 鉴权接口（Gateway/BFF应用）
 &nbsp;&nbsp;Gateway/BFF应用作为系统访问入口接收外部HTTP请求，通常需要对请求执行认证和授权。HP-SOA 通过以下3个步骤实现HTTP请求鉴权：
@@ -410,8 +410,8 @@ java \
 -DskipTests=true \
 -Dfile.encoding=UTF-8 \
 -Djava.awt.headless=true \
--Dhp.soa.system.properties.file=/opt/hp-soa/config/system-config.properties \
--Dhp.soa.extended.properties.file=/opt/hp-soa/config/extended-config.properties \
+-Dhp.soa.system.properties.file=file:/opt/hp-soa/config/system-config.properties \
+-Dhp.soa.extended.properties.file=file:/opt/hp-soa/config/extended-config.properties \
 -Ddubbo.resolve.file=/opt/hp-soa/config/dubbo-resolve.properties \
 -Djava.security.egd=file:/dev/./urandom \
 -Dnetworkaddress.cache.ttl=10 -Dnetworkaddress.cache.negative.ttl=1 \

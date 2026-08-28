@@ -235,11 +235,11 @@ if [ -f "$DUBBO_RESOLVE_PROPERTIES_FILE" ]; then
 fi
 
 if [ -f "$EXTENDED_PROPERTIES_FILE" ]; then
-    JAVA_OPTS="-Dhp.soa.extended.properties.file=$EXTENDED_PROPERTIES_FILE $JAVA_OPTS"
+    JAVA_OPTS="-Dhp.soa.extended.properties.file=file:$EXTENDED_PROPERTIES_FILE $JAVA_OPTS"
 fi
 
 if [ -f "$SYSTEM_PROPERTIES_FILE" ]; then
-    JAVA_OPTS="-Dhp.soa.system.properties.file=$SYSTEM_PROPERTIES_FILE $JAVA_OPTS"
+    JAVA_OPTS="-Dhp.soa.system.properties.file=file:$SYSTEM_PROPERTIES_FILE $JAVA_OPTS"
 fi
 
 if [ -n "$RUNTIME_ENV" ]; then
