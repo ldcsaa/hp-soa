@@ -65,6 +65,7 @@
         <commons-pool.version>1.6</commons-pool.version>
         <commons-pool2.version>2.13.1</commons-pool2.version>
 
+        <googleauth.version>1.5.0</googleauth.version>
         <jsr305.version>4.10.3</jsr305.version>
         <knife4j.version>5.3.3</knife4j.version>
         
@@ -344,7 +345,14 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            
+
+            <!-- google auth -->
+            <dependency>
+                <groupId>com.warrenstrange</groupId>
+                <artifactId>googleauth</artifactId>
+                <version>${googleauth.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-annotations</artifactId>
