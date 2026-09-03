@@ -351,6 +351,12 @@
                 <groupId>com.warrenstrange</groupId>
                 <artifactId>googleauth</artifactId>
                 <version>${googleauth.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>commons-logging</artifactId>
+                        <groupId>commons-logging</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
