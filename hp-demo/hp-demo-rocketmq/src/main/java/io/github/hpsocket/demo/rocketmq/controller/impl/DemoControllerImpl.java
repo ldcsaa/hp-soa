@@ -17,7 +17,7 @@ import io.github.hpsocket.demo.rocketmq.controller.DemoController;
 import io.github.hpsocket.demo.rocketmq.converter.OrderConverter;
 import io.github.hpsocket.demo.rocketmq.entity.Order;
 import io.github.hpsocket.demo.rocketmq.listener.TransCheckerListener;
-import io.github.hpsocket.demo.rocketmq.template.FifoPruducerTemplate;
+import io.github.hpsocket.demo.rocketmq.template.FifoProducerTemplate;
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification;
 import io.github.hpsocket.soa.framework.web.annotation.AccessVerification.Type;
@@ -47,8 +47,8 @@ public class DemoControllerImpl implements DemoController
     private SoaRocketMQClientTemplate defaultTemplate;
     
     @Autowired
-    //@Qualifier(FifoPruducerTemplate.BEAN_NAME)
-    private FifoPruducerTemplate fifoPruducerTemplate;
+    //@Qualifier(fifoProducerTemplate.BEAN_NAME)
+    private FifoProducerTemplate fifoProducerTemplate;
     
     @Autowired
     TransCheckerListener transCheckerListener;
@@ -72,7 +72,7 @@ public class DemoControllerImpl implements DemoController
     {
         DomainEvent<Order> event = createEvent(request, fifoTopic);
         
-        SendReceipt receipt = fifoPruducerTemplate.syncSendFifoMessage(event.getDestination(), event.toMessage(), FIFO_MESSAGE_GROUP);
+        SendReceipt receipt = fifoProducerTemplate.syncSendFifoMessage(event.getDestination(), event.toMessage(), FIFO_MESSAGE_GROUP);
         
         return response(event.getMsgId(), receipt.getMessageId(), request.getOrderNumber());
     }

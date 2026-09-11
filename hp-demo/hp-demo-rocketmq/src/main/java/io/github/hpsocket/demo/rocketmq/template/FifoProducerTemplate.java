@@ -7,10 +7,10 @@ import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate
 /** 自定义 Producer Template */
 @ExtProducerResetConfiguration
 (
-    //value = FifoPruducerTemplate.BEAN_NAME,
+    //value = FifoProducerTemplate.BEAN_NAME,
     topic = "${rocketmq-fifo.simple-consumer.topic}"
 )
-public class FifoPruducerTemplate extends SoaRocketMQClientTemplate
+public class FifoProducerTemplate extends SoaRocketMQClientTemplate
 {
-    public static final String BEAN_NAME = "fifoPruducerTemplate";
+    public static final String BEAN_NAME = "fifoProducerTemplate";
 }

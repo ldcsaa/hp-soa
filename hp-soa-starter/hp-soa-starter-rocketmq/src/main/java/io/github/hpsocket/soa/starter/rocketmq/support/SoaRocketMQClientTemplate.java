@@ -82,13 +82,10 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements
     @EventListener
     public void onApplicationContextRefreshedEvent(ContextRefreshedEvent event)
     {
-        if(this.getSimpleConsumerBuilder() == null)
+        if(this.getSimpleConsumerBuilder() == null || this.getSimpleConsumerListener() == null)
             return;
         
         SoaSimpleConsumerReceiveProperties receiveProperties = parseReceiveProperties();
-
-        if(this.getSimpleConsumerListener() == null)
-            throw new IllegalStateException("No simpleConsumerListener for bean: '" + beanName + "'");
 
         if(!receiveProperties.isAutoStart())
             return;
