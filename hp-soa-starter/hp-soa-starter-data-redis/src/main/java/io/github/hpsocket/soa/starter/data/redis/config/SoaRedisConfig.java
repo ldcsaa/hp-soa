@@ -3,6 +3,7 @@ package io.github.hpsocket.soa.starter.data.redis.config;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.starter.data.redis.aspect.DistributedLockAspect;
+import io.github.hpsocket.soa.starter.data.redis.aspect.RateLimitAspect;
 import io.github.hpsocket.soa.starter.data.redis.consumer.aspect.RedisListenerMdcInspector;
 import io.github.hpsocket.soa.starter.data.redis.consumer.aspect.RedisListenerTracingInspector;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
@@ -22,7 +23,10 @@ import org.springframework.context.annotation.DependsOn;
 public class SoaRedisConfig
 {
     @Value("${hp.soa.data.redis.distributed-lock.redisson-client-name:}")
-    private String redissonClientName;
+    private String distributedLockRedissonClientName;
+
+    @Value("${hp.soa.data.redis.rate-limit.redisson-client-name:}")
+    private String rateLimitRedissonClientName;
 
     @Bean
     @ConditionalOnClass(Trace.class)
@@ -43,11 +47,25 @@ public class SoaRedisConfig
     {
         RedissonClient redissonClient = null;
 
-        if(GeneralHelper.isStrNotEmpty(redissonClientName))
-            redissonClient = SpringContextHolder.getBean(redissonClientName, RedissonClient.class);
+        if(GeneralHelper.isStrNotEmpty(distributedLockRedissonClientName))
+            redissonClient = SpringContextHolder.getBean(distributedLockRedissonClientName, RedissonClient.class);
         else
             redissonClient = SpringContextHolder.getBean(RedissonClient.class);
 
         return new DistributedLockAspect(redissonClient);
+    }
+
+    @Bean
+    @DependsOn(SpringContextHolder.springContextHolderBeanName)
+    RateLimitAspect rateLimitAspect()
+    {
+        RedissonClient redissonClient = null;
+
+        if(GeneralHelper.isStrNotEmpty(rateLimitRedissonClientName))
+            redissonClient = SpringContextHolder.getBean(rateLimitRedissonClientName, RedissonClient.class);
+        else
+            redissonClient = SpringContextHolder.getBean(RedissonClient.class);
+
+        return new RateLimitAspect(redissonClient);
     }
 }
