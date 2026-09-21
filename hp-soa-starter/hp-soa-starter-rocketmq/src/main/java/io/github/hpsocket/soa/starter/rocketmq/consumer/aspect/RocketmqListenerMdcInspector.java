@@ -8,13 +8,13 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.rocketmq.exception.RocketmqExceptionHandler;
 import io.github.hpsocket.soa.starter.rocketmq.util.RocketmqConstant;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.core.config.Order;
 import org.apache.rocketmq.client.apis.message.MessageView;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.StopWatch;
 
 import java.util.Map;

@@ -10,7 +10,6 @@ import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.job.exclusive.annotation.ExclusiveJob;
 import io.github.hpsocket.soa.starter.job.exclusive.exception.ExclusiveJobExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,6 +17,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 

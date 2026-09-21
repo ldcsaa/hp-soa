@@ -9,12 +9,12 @@ import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.job.xxljob.exception.XxlJobExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 

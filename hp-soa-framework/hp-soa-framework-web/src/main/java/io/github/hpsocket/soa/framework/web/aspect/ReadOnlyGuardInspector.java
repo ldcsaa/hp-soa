@@ -4,11 +4,11 @@ import io.github.hpsocket.soa.framework.web.annotation.ReadOnlyGuard;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
-import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.Assert;
 
 /** <b>只读保护请求拦截器</b><p>

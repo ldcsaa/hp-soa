@@ -3,11 +3,11 @@ package io.github.hpsocket.soa.framework.web.aspect;
 import io.github.hpsocket.soa.framework.core.util.SystemUtil;
 import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import io.github.hpsocket.soa.framework.web.annotation.SiteLocal;
-import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
 
 import static io.github.hpsocket.soa.framework.core.exception.ServiceException.FORBID_EXCEPTION;
 

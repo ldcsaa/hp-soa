@@ -1,11 +1,11 @@
 package io.github.hpsocket.soa.starter.job.snailjob.aspect;
 
-import org.apache.logging.log4j.core.config.Order;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
 
 /** <b>SnailJob Tracing 拦截器</b><br>
  * 用于注入 traceId

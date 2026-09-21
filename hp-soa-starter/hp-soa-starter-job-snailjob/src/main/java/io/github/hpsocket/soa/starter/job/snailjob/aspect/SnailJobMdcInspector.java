@@ -6,13 +6,13 @@ import com.aizuda.snailjob.client.job.core.dto.JobArgs;
 import com.aizuda.snailjob.model.dto.ExecuteResult;
 import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.starter.job.snailjob.executor.JobInvoker;
-import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.Assert;
 
 /** <b>SnailJob 拦截器</b> */

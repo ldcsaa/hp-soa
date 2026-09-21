@@ -6,12 +6,12 @@ import io.github.hpsocket.soa.framework.web.service.AsyncService;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.data.redis.exception.RedisListenerExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.core.config.Order;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.StopWatch;
 
 /** <b>Redis Listener MDC 拦截器</b><br>

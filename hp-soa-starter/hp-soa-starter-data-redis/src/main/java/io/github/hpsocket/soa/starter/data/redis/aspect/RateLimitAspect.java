@@ -5,19 +5,21 @@ import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.advice.RequestContext;
 import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
 import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
+import io.github.hpsocket.soa.framework.web.support.AspectHelper;
 import io.github.hpsocket.soa.starter.data.redis.annotation.RateLimit;
 import io.github.hpsocket.soa.starter.data.redis.annotation.RateLimits;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RRateLimiter;
 import org.redisson.api.RedissonClient;
 import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
+import java.time.Duration;
 
 /**
  * <b>Redis 限流切面</b>
@@ -28,6 +30,18 @@ import java.lang.reflect.Method;
 public class RateLimitAspect
 {
     public static final int ORDER = 300;
+    public static final String POINTCUT_PATTERN = """
+                                                    @annotation(io.github.hpsocket.soa.starter.data.redis.annotation.RateLimit)
+                                                    ||
+                                                    @annotation(io.github.hpsocket.soa.starter.data.redis.annotation.RateLimits)
+                                                  """;
+
+    private static final AspectHelper.AnnotationHolder<RateLimit> RATE_LIMIT_ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
+    private static final AspectHelper.AnnotationHolder<RateLimits> RATE_LIMITS_ANNOTATION_HOLDER = new AspectHelper.AnnotationHolder<>() {};
+
+    @Pointcut(POINTCUT_PATTERN)
+    protected void aroundMethod() {}
+
     private final RedissonClient redissonClient;
 
     public RateLimitAspect(RedissonClient redissonClient)
@@ -35,17 +49,25 @@ public class RateLimitAspect
         this.redissonClient = redissonClient;
     }
 
-    @Around("@annotation(rateLimits) || @annotation(rateLimit)")
-    public Object around(ProceedingJoinPoint joinPoint, RateLimits rateLimits, RateLimit rateLimit) throws Throwable
+    @Around(value = "aroundMethod()")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable
     {
-        RateLimit[] rateLimitsArray;
-        if(ArrayUtils.isEmpty(rateLimits.value()))
-            rateLimitsArray = new RateLimit[] {rateLimit};
-        else
+        RateLimit[] rateLimitsArray = null;
+        RateLimits rateLimits = RATE_LIMITS_ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
+        if(rateLimits != null)
             rateLimitsArray = rateLimits.value();
+        else
+        {
+            RateLimit rateLimit = RATE_LIMIT_ANNOTATION_HOLDER.findAnnotationByMethod(joinPoint);
+            if(rateLimit != null)
+                rateLimitsArray = new RateLimit[] {rateLimit};
+        }
 
-        for(RateLimit limit : rateLimitsArray)
-            checkRateLimit(joinPoint, limit);
+        if(rateLimitsArray != null)
+        {
+            for(RateLimit limit : rateLimitsArray)
+                checkRateLimit(joinPoint, limit);
+        }
 
         return joinPoint.proceed();
     }
@@ -57,11 +79,12 @@ public class RateLimitAspect
             return;
 
         RRateLimiter rateLimiter = redissonClient.getRateLimiter(limitKey);
+        Duration duration = Duration.of(rateLimit.interval(), rateLimit.timeUnit().toChronoUnit());
         rateLimiter.trySetRate(
                     rateLimit.rateType(),
-                    rateLimit.rate(),
-                    rateLimit.interval(),
-                    rateLimit.timeUnit());
+                    rateLimit.value(),
+                    duration,
+                    duration.multipliedBy(10));
 
         if(!rateLimiter.tryAcquire(1))
         {

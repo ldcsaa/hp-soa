@@ -1,9 +1,9 @@
 package io.github.hpsocket.soa.starter.data.redis.annotation;
 
-import org.redisson.api.RateIntervalUnit;
 import org.redisson.api.RateType;
 
 import java.lang.annotation.*;
+import java.util.concurrent.TimeUnit;
 
 /** <b>Redis 限流注解</b> */
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
@@ -17,14 +17,14 @@ public @interface RateLimit
     /** 限流 Key 前缀（默认：rate_limit:${APP_NAME}） */
     String keyPrefix() default "";
 
-    /** 速率周期内允许的最大请求数（默认：10） */
-    long rate() default 10;
+    /** 限流值 */
+    long value();
 
     /** 时间窗口（默认：1） */
     long interval() default 1;
 
     /** 时间单位（默认：秒） */
-    RateIntervalUnit timeUnit() default RateIntervalUnit.SECONDS;
+    TimeUnit timeUnit() default TimeUnit.SECONDS;
 
     /** 限流维度类型 */
     LimitType limitType() default LimitType.INTERFACE;
