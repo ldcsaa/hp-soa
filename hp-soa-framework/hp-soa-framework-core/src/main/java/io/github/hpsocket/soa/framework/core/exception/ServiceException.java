@@ -50,6 +50,8 @@ public class ServiceException extends RuntimeException
     public static final int READ_ONLY_ERROR         = 550;
     /** 重复请求 */
     public static final int DUPLICATE_ERROR         = 551;
+    /** 获取锁失败 */
+    public static final int ACQUIRE_LOCK_FAIL       = 552;
     /** 应用程序编号验证错误 */
     public static final int APPCODE_CHECK_ERROR     = 601;
     /** 应用程序编号不存在 */
@@ -102,6 +104,7 @@ public class ServiceException extends RuntimeException
     public static final UnseriousException TRAFFIC_LIMIT_EXCEPTION    = new UnseriousException("系统繁忙", TRAFFIC_LIMIT_ERROR);
     public static final UnseriousException READ_ONLY_EXCEPTION        = new UnseriousException("拒绝写入", READ_ONLY_ERROR);
     public static final UnseriousException DUPLICATE_EXCEPTION        = new UnseriousException("重复请求", DUPLICATE_ERROR);
+    public static final UnseriousException ACQUIRE_LOCK_EXCEPTION     = new UnseriousException("获取锁失败", ACQUIRE_LOCK_FAIL);
     public static final UnseriousException LOGIN_INVALID_EXCEPTION    = new UnseriousException("登录已失效", LOGIN_INVALID);
     public static final UnseriousException NOT_LOGGED_IN_EXCEPTION    = new UnseriousException("未登录", NOT_LOGGED_IN);
 

@@ -25,14 +25,16 @@ import java.util.stream.Stream;
 /** <b>通用方法帮助类</b> */
 public class GeneralHelper
 {
-    private static final String DELIMITER_CHARS     = " ,\t\r\n\f";
+    public static final String DELIMITER_CHARS     = " ,\t\r\n\f";
     
-    private static final Pattern PATTERN_NUMERIC    = Pattern.compile("^0$|^\\-?[1-9]+[0-9]*$");
-    private static final Pattern PATTERN_EMAIL_ADDR = Pattern.compile("^[a-z0-9_\\-]+(\\.[_a-z0-9\\-]+)*@([_a-z0-9\\-]+\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)$");
-    private static final Pattern PATTERN_IPV4_ADDR  = Pattern.compile("^([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$");
-    private static final Pattern PATTERN_LINK       = Pattern.compile("<a[^>]*href=\\\"[^\\s\\\"]+\\\"[^>]*>[^<]*<\\/a>");
-    private static final Pattern PATTERN_HTTP_URL   = Pattern.compile("^(https?:\\/\\/)?([a-z]([a-z0-9\\-]*\\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))(\\/[a-z0-9_\\-\\.~]+)*(\\/([a-z0-9_\\-\\.]*)(\\?[a-z0-9+_\\-\\.%=&amp;]*)?)?(#[a-z][a-z0-9_]*)?$");
-    private static final Pattern PATTERN_XML_ESCAPES= Pattern.compile(".*[&|\"|<|>].*");
+    public static final Pattern PATTERN_NUMERIC     = Pattern.compile("^0$|^\\-?[1-9]+[0-9]*$");
+    public static final Pattern PATTERN_EMAIL_ADDR  = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
+    public static final Pattern PATTERN_IPV4_ADDR   = Pattern.compile("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.){3}(25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)$");
+    public static final Pattern PATTERN_IPV6_ADDR   = Pattern.compile("^s*(((?=.*:.*:)[0-9a-fA-F^:]*(:(?=[0-9a-fA-F^:]*)|$)){1,7}|(?=(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$)[0-9a-fA-F:]+)$");
+    public static final Pattern PATTERN_IP_ADDR     = Pattern.compile(PATTERN_IPV4_ADDR + "|" + PATTERN_IPV6_ADDR);
+    public static final Pattern PATTERN_LINK        = Pattern.compile("<a\\b[^>]*\\bhref\\s*=\\s*[\"']([^\"']*)[\"'][^>]*>(.*?)</a>");
+    public static final Pattern PATTERN_HTTP_URL    = Pattern.compile("^https?://[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:[0-9]{1,5})?(/.*)?$");
+    public static final Pattern PATTERN_XML_ESCAPES = Pattern.compile(".*[&|\"|<|>].*");
     
     private static final String[] SHORT_DATE_PATTERN                = {"yyyy-MM-dd", "yyyy/MM/dd", "yyyy\\MM\\dd", "yyyyMMdd"};
     private static final String[] LONG_DATE_PATTERN                 = {"yyyy-MM-dd HH:mm:ss", "yyyy/MM/dd HH:mm:ss", "yyyy\\MM\\dd HH:mm:ss", "yyyyMMddHHmmss"};
@@ -278,10 +280,22 @@ public class GeneralHelper
         return PATTERN_EMAIL_ADDR.matcher(safeString(str)).matches();
     }
 
-    /** 检查字符串是否符合 IP 地址格式 */
+    /** 检查字符串是否符合 IPv4 地址格式 */
     public final static boolean isStrIPv4Address(String str)
     {
         return PATTERN_IPV4_ADDR.matcher(safeString(str)).matches();
+    }
+
+    /** 检查字符串是否符合 IPv6 地址格式 */
+    public final static boolean isStrIPv6Address(String str)
+    {
+        return PATTERN_IPV6_ADDR.matcher(safeString(str)).matches();
+    }
+
+    /** 检查字符串是否符合 IP 地址格式 */
+    public final static boolean isStrIPAddress(String str)
+    {
+        return PATTERN_IP_ADDR.matcher(safeString(str)).matches();
     }
 
     /** 检查字符串是否符合 HTML 超链接元素格式 */
