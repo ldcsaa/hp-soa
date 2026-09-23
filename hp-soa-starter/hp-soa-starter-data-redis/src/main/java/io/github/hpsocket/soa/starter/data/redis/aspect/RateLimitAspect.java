@@ -89,7 +89,9 @@ public class RateLimitAspect
         if(!rateLimiter.tryAcquire(1))
         {
             log.warn("Access frequency limit exceeded for key: {}", limitKey);
-            throw ServiceException.FREQUENCY_LIMIT_EXCEPTION;
+
+            String desc = GeneralHelper.isStrNotEmpty(rateLimit.desc()) ? rateLimit.desc() : ServiceException.FREQUENCY_LIMIT_EXCEPTION.getMessage();
+            throw new ServiceException(desc, ServiceException.FREQUENCY_LIMIT_EXCEPTION.getStatusCode());
         }
     }
 

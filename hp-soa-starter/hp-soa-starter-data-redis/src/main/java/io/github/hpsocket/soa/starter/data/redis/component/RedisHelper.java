@@ -1,15 +1,20 @@
 package io.github.hpsocket.soa.starter.data.redis.component;
 
+import io.github.hpsocket.soa.framework.core.util.CryptHelper;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import lombok.Getter;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisKeyCommands;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.scripting.support.ResourceScriptSource;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -29,6 +34,31 @@ public class RedisHelper
     private final ListOperations<String, Object> listOps;
     private final SetOperations<String, Object> setOps;
     private final ZSetOperations<String, Object> zSetOps;
+
+    // 脚本缓存容器，避免重复创建 DefaultRedisScript 对象
+    private final Map<String, DefaultRedisScript<?>> scriptCache = new ConcurrentHashMap<>();
+
+    private static final String INCR_SCRIPT = """
+                                                  local counter = tonumber(redis.call('get', KEYS[1]))
+                                                  if counter then
+                                                      return redis.call('incr', KEYS[1])
+                                                  else
+                                                      redis.call('set', KEYS[1], 1)
+                                                      redis.call('expire', KEYS[1], ARGV[1])
+                                                      return 1
+                                                  end
+                                              """;
+
+    private static final String INCRBY_SCRIPT = """
+                                                    local counter = tonumber(redis.call('get', KEYS[1]))
+                                                    if counter then
+                                                        return redis.call('incrby', KEYS[1], ARGV[1])
+                                                    else
+                                                        redis.call('set', KEYS[1], ARGV[1])
+                                                        redis.call('expire', KEYS[1], ARGV[2])
+                                                        return tonumber(ARGV[1])
+                                                    end
+                                                """;
 
     /**
      * 构造函数，初始化 Redis 操作模板和相关操作接口
@@ -417,6 +447,18 @@ public class RedisHelper
     }
 
     /**
+     * 将 key 中存储的数字值加一
+     *
+     * @param key     键
+     * @param expire  过期时间
+     * @return 加一后的值
+     */
+    public Long incr(String key, Duration expire)
+    {
+        return executeBySource(INCR_SCRIPT, Long.class, Collections.singletonList(key), expire.toSeconds());
+    }
+
+    /**
      * 将 key 中存储的数字值加上指定的值
      *
      * @param key       键
@@ -426,6 +468,19 @@ public class RedisHelper
     public Long incrBy(String key, long longValue)
     {
         return stringRedisTemplate.opsForValue().increment(key, longValue);
+    }
+
+    /**
+     * 将 key 中存储的数字值加上指定的值
+     *
+     * @param key       键
+     * @param longValue 加上的值
+     * @param expire    过期时间
+     * @return 加上后的值
+     */
+    public Long incrBy(String key, long longValue, Duration expire)
+    {
+        return executeBySource(INCRBY_SCRIPT, Long.class, Collections.singletonList(key), longValue, expire.toSeconds());
     }
 
     /**
@@ -1475,6 +1530,69 @@ public class RedisHelper
     {
         RedisSerializer<String> hashKeySerializer = (RedisSerializer<String>)this.redisTemplate.getHashKeySerializer();
         return hashKeySerializer.deserialize(redisKey);
+    }
+
+    /**
+     * 通用方法：通过【classpath 路径下的 .lua 文件】执行 Lua 脚本
+     *
+     * @param scriptPath lua 文件路径，如 "scripts/incr_and_expire.lua"
+     * @param resultType 返回值类型（如 Long.class, Boolean.class, List.class 等）
+     * @param keys       Redis Key 列表
+     * @param args       其他参数列表（如过期时间、Token 等）
+     * @param <T>        返回值泛型
+     * @return 脚本执行结果
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T executeByFile(String scriptPath, Class<T> resultType, List<String> keys, Object... args)
+    {
+        String cacheKey = String.join(":", "FILE", scriptPath, resultType.getName());
+        DefaultRedisScript<T> script = (DefaultRedisScript<T>) scriptCache.computeIfAbsent(cacheKey, k ->
+        {
+            DefaultRedisScript<T> redisScript = new DefaultRedisScript<>();
+            redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource(scriptPath)));
+            redisScript.setResultType(resultType);
+            return redisScript;
+        });
+
+        return execute(script, keys, args);
+    }
+
+    /**
+     * 通用方法：通过【Lua 源码字符串】执行 Lua 脚本
+     *
+     * @param luaSource  Lua 脚本内容文本
+     * @param resultType 返回值类型
+     * @param keys       Redis Key 列表
+     * @param args       其他参数列表
+     * @param <T>        返回值泛型
+     * @return 脚本执行结果
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T executeBySource(String luaSource, Class<T> resultType, List<String> keys, Object... args)
+    {
+        String cacheKey = String.join(":", "SOURCE", CryptHelper.md5(luaSource), resultType.getName());
+        DefaultRedisScript<T> script = (DefaultRedisScript<T>) scriptCache.computeIfAbsent(cacheKey, k ->
+        {
+            DefaultRedisScript<T> redisScript = new DefaultRedisScript<>();
+            redisScript.setScriptText(luaSource);
+            redisScript.setResultType(resultType);
+            return redisScript;
+        });
+
+        return execute(script, keys, args);
+    }
+
+    /**
+     * 底层统一下发 Redis 执行
+     */
+    public <T> T execute(DefaultRedisScript<T> script, List<String> keys, Object... args)
+    {
+        List<String> keyList = (keys == null) ? Collections.emptyList() : keys;
+        String[] stringArgs = Arrays.stream(args)
+                                .map(Object::toString)
+                                .toArray(String[]::new);
+
+        return stringRedisTemplate.execute(script, keyList, (Object[]) stringArgs);
     }
 
 }

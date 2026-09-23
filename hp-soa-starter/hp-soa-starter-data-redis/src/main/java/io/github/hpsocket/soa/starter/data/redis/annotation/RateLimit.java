@@ -17,6 +17,9 @@ public @interface RateLimit
     /** 限流 Key 前缀（默认：rate_limit:${APP_NAME}） */
     String keyPrefix() default "";
 
+    /** 限流描述（默认：系统繁忙） */
+    String desc() default "";
+
     /** 限流值 */
     long value();
 

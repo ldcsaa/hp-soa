@@ -1,15 +1,20 @@
 package io.github.hpsocket.soa.starter.data.redis.component;
 
+import io.github.hpsocket.soa.framework.core.util.CryptHelper;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import lombok.Getter;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisKeyCommands;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.scripting.support.ResourceScriptSource;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -22,12 +27,37 @@ import java.util.function.Supplier;
 @Getter
 public class StrRedisHelper
 {
-    private final StringRedisTemplate redisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
     private final ValueOperations<String, String> valueOps;
     private final HashOperations<String, String, String> hashOps;
     private final ListOperations<String, String> listOps;
     private final SetOperations<String, String> setOps;
     private final ZSetOperations<String, String> zSetOps;
+
+    // 脚本缓存容器，避免重复创建 DefaultRedisScript 对象
+    private final Map<String, DefaultRedisScript<?>> scriptCache = new ConcurrentHashMap<>();
+
+    private static final String INCR_SCRIPT = """
+                                                  local counter = tonumber(redis.call('get', KEYS[1]))
+                                                  if counter then
+                                                      return redis.call('incr', KEYS[1])
+                                                  else
+                                                      redis.call('set', KEYS[1], 1)
+                                                      redis.call('expire', KEYS[1], ARGV[1])
+                                                      return 1
+                                                  end
+                                              """;
+
+    private static final String INCRBY_SCRIPT = """
+                                                    local counter = tonumber(redis.call('get', KEYS[1]))
+                                                    if counter then
+                                                        return redis.call('incrby', KEYS[1], ARGV[1])
+                                                    else
+                                                        redis.call('set', KEYS[1], ARGV[1])
+                                                        redis.call('expire', KEYS[1], ARGV[2])
+                                                        return tonumber(ARGV[1])
+                                                    end
+                                                """;
 
     /**
      * 构造函数，初始化 Redis 操作模板和相关操作接口
@@ -37,7 +67,7 @@ public class StrRedisHelper
      */
     public StrRedisHelper(StringRedisTemplate stringRedisTemplate)
     {
-        this.redisTemplate = stringRedisTemplate;
+        this.stringRedisTemplate = stringRedisTemplate;
         valueOps = stringRedisTemplate.opsForValue();
         hashOps = stringRedisTemplate.opsForHash();
         listOps = stringRedisTemplate.opsForList();
@@ -79,7 +109,7 @@ public class StrRedisHelper
      */
     public void set(String key, String value, Function<String, byte[]> mapper)
     {
-        redisTemplate.execute((RedisCallback<Object>)redis -> redis.stringCommands().set(keySerialize(key), mapper.apply(value)));
+        stringRedisTemplate.execute((RedisCallback<Object>)redis -> redis.stringCommands().set(keySerialize(key), mapper.apply(value)));
     }
 
     /**
@@ -155,7 +185,7 @@ public class StrRedisHelper
     @Nullable
     public String get(String key, Function<byte[], String> mapper)
     {
-        return redisTemplate.execute((RedisCallback<String>)redis ->
+        return stringRedisTemplate.execute((RedisCallback<String>)redis ->
         {
             byte[] value = redis.stringCommands().get(keySerialize(key));
             if(value == null)
@@ -209,7 +239,7 @@ public class StrRedisHelper
      */
     public Boolean del(String key)
     {
-        return redisTemplate.delete(key);
+        return stringRedisTemplate.delete(key);
     }
 
     /**
@@ -231,7 +261,7 @@ public class StrRedisHelper
      */
     public Long del(Collection<String> keys)
     {
-        return redisTemplate.delete(keys);
+        return stringRedisTemplate.delete(keys);
     }
 
     /**
@@ -242,7 +272,7 @@ public class StrRedisHelper
      */
     public Set<String> keys(String pattern)
     {
-        return redisTemplate.keys(pattern);
+        return stringRedisTemplate.keys(pattern);
     }
 
 
@@ -303,7 +333,7 @@ public class StrRedisHelper
      */
     public void scanBytes(String pattern, @Nullable Long count, Consumer<byte[]> consumer)
     {
-        redisTemplate.execute((RedisCallback<String>)redis ->
+        stringRedisTemplate.execute((RedisCallback<String>)redis ->
         {
             ScanOptions.ScanOptionsBuilder builder = ScanOptions.scanOptions().match(pattern);
             if(count != null)
@@ -384,7 +414,7 @@ public class StrRedisHelper
      */
     public Long decr(String key)
     {
-        return redisTemplate.opsForValue().decrement(key);
+        return stringRedisTemplate.opsForValue().decrement(key);
     }
 
     /**
@@ -396,7 +426,7 @@ public class StrRedisHelper
      */
     public Long decrBy(String key, long longValue)
     {
-        return redisTemplate.opsForValue().decrement(key, longValue);
+        return stringRedisTemplate.opsForValue().decrement(key, longValue);
     }
 
     /**
@@ -419,7 +449,19 @@ public class StrRedisHelper
      */
     public Long incr(String key)
     {
-        return redisTemplate.opsForValue().increment(key);
+        return stringRedisTemplate.opsForValue().increment(key);
+    }
+
+    /**
+     * 将 key 中存储的数字值加一
+     *
+     * @param key     键
+     * @param expire  过期时间
+     * @return 加一后的值
+     */
+    public Long incr(String key, Duration expire)
+    {
+        return executeBySource(INCR_SCRIPT, Long.class, Collections.singletonList(key), expire.toSeconds());
     }
 
     /**
@@ -443,7 +485,20 @@ public class StrRedisHelper
      */
     public Long incrBy(String key, long longValue)
     {
-        return redisTemplate.opsForValue().increment(key, longValue);
+        return stringRedisTemplate.opsForValue().increment(key, longValue);
+    }
+
+    /**
+     * 将 key 中存储的数字值加上指定的值
+     *
+     * @param key       键
+     * @param longValue 加上的值
+     * @param expire    过期时间
+     * @return 加上后的值
+     */
+    public Long incrBy(String key, long longValue, Duration expire)
+    {
+        return executeBySource(INCRBY_SCRIPT, Long.class, Collections.singletonList(key), longValue, expire.toSeconds());
     }
 
     /**
@@ -476,7 +531,7 @@ public class StrRedisHelper
      */
     public Boolean exists(String key)
     {
-        return redisTemplate.hasKey(key);
+        return stringRedisTemplate.hasKey(key);
     }
 
     /**
@@ -486,7 +541,7 @@ public class StrRedisHelper
      */
     public String randomKey()
     {
-        return redisTemplate.randomKey();
+        return stringRedisTemplate.randomKey();
     }
 
     /**
@@ -497,7 +552,7 @@ public class StrRedisHelper
      */
     public void rename(String oldkey, String newkey)
     {
-        redisTemplate.rename(oldkey, newkey);
+        stringRedisTemplate.rename(oldkey, newkey);
     }
 
     /**
@@ -509,7 +564,7 @@ public class StrRedisHelper
      */
     public Boolean move(String key, int dbIndex)
     {
-        return redisTemplate.move(key, dbIndex);
+        return stringRedisTemplate.move(key, dbIndex);
     }
 
     /**
@@ -521,7 +576,7 @@ public class StrRedisHelper
      */
     public Boolean expire(String key, long seconds)
     {
-        return redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
+        return stringRedisTemplate.expire(key, seconds, TimeUnit.SECONDS);
     }
 
     /**
@@ -545,7 +600,7 @@ public class StrRedisHelper
      */
     public Boolean expireAt(String key, Date date)
     {
-        return redisTemplate.expireAt(key, date);
+        return stringRedisTemplate.expireAt(key, date);
     }
 
     /**
@@ -569,7 +624,7 @@ public class StrRedisHelper
      */
     public Boolean pexpire(String key, long milliseconds)
     {
-        return redisTemplate.expire(key, milliseconds, TimeUnit.MILLISECONDS);
+        return stringRedisTemplate.expire(key, milliseconds, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -592,7 +647,7 @@ public class StrRedisHelper
      */
     public Boolean persist(String key)
     {
-        return redisTemplate.persist(key);
+        return stringRedisTemplate.persist(key);
     }
 
     /**
@@ -603,7 +658,7 @@ public class StrRedisHelper
      */
     public String type(String key)
     {
-        return redisTemplate.type(key).code();
+        return stringRedisTemplate.type(key).code();
     }
 
     /**
@@ -614,7 +669,7 @@ public class StrRedisHelper
      */
     public Long ttl(String key)
     {
-        return redisTemplate.getExpire(key);
+        return stringRedisTemplate.getExpire(key);
     }
 
     /**
@@ -625,7 +680,7 @@ public class StrRedisHelper
      */
     public Long pttl(String key)
     {
-        return redisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
+        return stringRedisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -1421,7 +1476,7 @@ public class StrRedisHelper
     @Nullable
     public Long publish(String channel, String message, Function<String, byte[]> mapper)
     {
-        return redisTemplate.execute((RedisCallback<Long>)redis ->
+        return stringRedisTemplate.execute((RedisCallback<Long>)redis ->
         {
             byte[] channelBytes = keySerialize(channel);
             return redis.publish(channelBytes, mapper.apply(message));
@@ -1436,7 +1491,7 @@ public class StrRedisHelper
      */
     public byte[] keySerialize(@NonNull String redisKey)
     {
-        RedisSerializer<String> keySerializer = (RedisSerializer<String>)this.redisTemplate.getKeySerializer();
+        RedisSerializer<String> keySerializer = (RedisSerializer<String>)this.stringRedisTemplate.getKeySerializer();
         return keySerializer.serialize(redisKey);
     }
 
@@ -1448,7 +1503,7 @@ public class StrRedisHelper
      */
     public byte[] hashKeySerializer(@NonNull Object redisKey)
     {
-        RedisSerializer<Object> hashKeySerializer = (RedisSerializer<Object>)this.redisTemplate.getHashKeySerializer();
+        RedisSerializer<Object> hashKeySerializer = (RedisSerializer<Object>)this.stringRedisTemplate.getHashKeySerializer();
         return hashKeySerializer.serialize(redisKey);
     }
 
@@ -1460,7 +1515,7 @@ public class StrRedisHelper
      */
     public String keyDeserialize(@NonNull byte[] redisKey)
     {
-        RedisSerializer<String> keySerializer = (RedisSerializer<String>)this.redisTemplate.getKeySerializer();
+        RedisSerializer<String> keySerializer = (RedisSerializer<String>)this.stringRedisTemplate.getKeySerializer();
         return keySerializer.deserialize(redisKey);
     }
 
@@ -1472,8 +1527,71 @@ public class StrRedisHelper
      */
     public String hashKeyDeserialize(@NonNull byte[] redisKey)
     {
-        RedisSerializer<String> hashKeySerializer = (RedisSerializer<String>)this.redisTemplate.getHashKeySerializer();
+        RedisSerializer<String> hashKeySerializer = (RedisSerializer<String>)this.stringRedisTemplate.getHashKeySerializer();
         return hashKeySerializer.deserialize(redisKey);
+    }
+
+    /**
+     * 通用方法：通过【classpath 路径下的 .lua 文件】执行 Lua 脚本
+     *
+     * @param scriptPath lua 文件路径，如 "scripts/incr_and_expire.lua"
+     * @param resultType 返回值类型（如 Long.class, Boolean.class, List.class 等）
+     * @param keys       Redis Key 列表
+     * @param args       其他参数列表（如过期时间、Token 等）
+     * @param <T>        返回值泛型
+     * @return 脚本执行结果
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T executeByFile(String scriptPath, Class<T> resultType, List<String> keys, Object... args)
+    {
+        String cacheKey = String.join(":", "FILE", scriptPath, resultType.getName());
+        DefaultRedisScript<T> script = (DefaultRedisScript<T>) scriptCache.computeIfAbsent(cacheKey, k ->
+        {
+            DefaultRedisScript<T> redisScript = new DefaultRedisScript<>();
+            redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource(scriptPath)));
+            redisScript.setResultType(resultType);
+            return redisScript;
+        });
+
+        return execute(script, keys, args);
+    }
+
+    /**
+     * 通用方法：通过【Lua 源码字符串】执行 Lua 脚本
+     *
+     * @param luaSource  Lua 脚本内容文本
+     * @param resultType 返回值类型
+     * @param keys       Redis Key 列表
+     * @param args       其他参数列表
+     * @param <T>        返回值泛型
+     * @return 脚本执行结果
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T executeBySource(String luaSource, Class<T> resultType, List<String> keys, Object... args)
+    {
+        String cacheKey = String.join(":", "SOURCE", CryptHelper.md5(luaSource), resultType.getName());
+        DefaultRedisScript<T> script = (DefaultRedisScript<T>) scriptCache.computeIfAbsent(cacheKey, k ->
+        {
+            DefaultRedisScript<T> redisScript = new DefaultRedisScript<>();
+            redisScript.setScriptText(luaSource);
+            redisScript.setResultType(resultType);
+            return redisScript;
+        });
+
+        return execute(script, keys, args);
+    }
+
+    /**
+     * 底层统一下发 Redis 执行
+     */
+    public <T> T execute(DefaultRedisScript<T> script, List<String> keys, Object... args)
+    {
+        List<String> keyList = (keys == null) ? Collections.emptyList() : keys;
+        String[] stringArgs = Arrays.stream(args)
+                                .map(Object::toString)
+                                .toArray(String[]::new);
+
+        return stringRedisTemplate.execute(script, keyList, (Object[]) stringArgs);
     }
 
 }
