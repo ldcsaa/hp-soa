@@ -628,6 +628,27 @@ public class StrRedisHelper
     }
 
     /**
+     * 获取 key 的剩余生存时间（以秒为单位）
+     *
+     * @param key 键
+     * @return 剩余生存时间（秒）
+     */
+    public Long getExpire(String key) {
+        return stringRedisTemplate.getExpire(key);
+    }
+
+    /**
+     * 获取 key 的剩余生存时间
+     *
+     * @param key     键
+     * @param timeUnit 时间单位
+     * @return 剩余生存时间
+     */
+    public Long getExpire(String key, TimeUnit timeUnit) {
+        return stringRedisTemplate.getExpire(key, timeUnit);
+    }
+
+    /**
      * 设置 key 的值并返回旧值
      *
      * @param key   键

@@ -2,6 +2,7 @@
 package io.github.hpsocket.soa.framework.core.util;
 
 import java.lang.management.ManagementFactory;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
@@ -12,6 +13,9 @@ import java.util.Set;
 /** <b>系统信息帮助类</b> */
 public class SystemUtil
 {
+    // CGNAT 范围：100.64.0.0 ~ 100.127.255.255
+    public static final long CGNAT_ADDR_START = ipToLong("100.64.0.0");
+    public static final long CGNAT_ADDR__END  = ipToLong("100.127.255.255");
 
     private static String pid;
     private static Addr addr;
@@ -150,7 +154,7 @@ public class SystemUtil
     
     public static final boolean isLocalNetworkAddress(InetAddress addr)
     {
-        return addr != null && (addr.isSiteLocalAddress() || addr.isLoopbackAddress());
+        return addr != null && (addr.isSiteLocalAddress() || addr.isLoopbackAddress()) || isCgnatIp(addr);
     }
     
     public static final boolean isValidUnicastAddress(String ip)
@@ -178,6 +182,54 @@ public class SystemUtil
                     addr.isLinkLocalAddress() ||
                     addr.isMulticastAddress()
                 ));
+    }
+
+    public static boolean isCgnatIp(InetAddress address)
+    {
+        if(!(address instanceof Inet4Address))
+            return false;
+
+        long ipLong = ipToLong(address);
+        return ipLong >= CGNAT_ADDR_START && ipLong <= CGNAT_ADDR__END;
+    }
+
+    public static boolean isCgnatIp(String ipStr)
+    {
+        if(GeneralHelper.isStrEmpty(ipStr))
+            return false;
+
+        try
+        {
+            InetAddress address = InetAddress.getByName(ipStr);
+            return isCgnatIp(address);
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
+    public static long ipToLong(InetAddress address)
+    {
+        byte[] bytes = address.getAddress();
+        long result = 0;
+
+        for(byte b : bytes)
+            result = (result << 8) | (b & 0xFF);
+
+        return result;
+    }
+
+    public static long ipToLong(String ipStr)
+    {
+        try
+        {
+            return ipToLong(InetAddress.getByName(ipStr));
+        }
+        catch(Exception e)
+        {
+            throw new IllegalArgumentException("Invalid IP: " + ipStr, e);
+        }
     }
 
 }
