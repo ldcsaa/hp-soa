@@ -12,7 +12,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <revision>2.0.1</revision>
+        <revision>2.0.2-SNAPSHOT</revision>
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -131,6 +131,7 @@
 
         <!-- >> BEGIN >> : Third party Repositories -->
         <!--
+        -->
         <repository>
             <id>third-party</id>
             <name>Third party Nexus Releases Repository</name>
@@ -141,7 +142,6 @@
             <name>Third party Nexus Snapshots Repository</name>
             <url>http://202.124.251.90:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
-        -->
         <!-- << END << : Third party Repositories -->
     </distributionManagement>
 
@@ -512,7 +512,6 @@
 
             <!-- >> BEGIN >> : Publish Plugins -->
             <!--
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -521,6 +520,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
