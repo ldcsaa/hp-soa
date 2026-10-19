@@ -12,7 +12,7 @@
     <url>https://github.com/ldcsaa/hp-soa</url>
 
     <properties>
-        <revision>2.0.2-SNAPSHOT</revision>
+        <revision>3.0.1-SNAPSHOT</revision>
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -21,7 +21,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.assembly.descriptor>/opt/deploy/assembly/assembly.xml</maven.assembly.descriptor>
 
-        <spring-boot-maven-plugin.version>3.5.16</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>4.1.1</spring-boot-maven-plugin.version>
         <spring-boot.main_class>io.github.hpsocket.soa.framework.web.server.main.AppStarter</spring-boot.main_class>
         <spring-boot.jvm_arguments></spring-boot.jvm_arguments>
 

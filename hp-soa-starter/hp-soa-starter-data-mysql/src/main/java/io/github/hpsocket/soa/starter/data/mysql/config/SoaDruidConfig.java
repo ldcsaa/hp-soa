@@ -1,8 +1,8 @@
 
 package io.github.hpsocket.soa.starter.data.mysql.config;
 
-import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure;
-import com.alibaba.druid.spring.boot3.autoconfigure.properties.DruidStatProperties;
+import com.alibaba.druid.spring.boot4.autoconfigure.DruidDataSourceAutoConfigure;
+import com.alibaba.druid.spring.boot4.autoconfigure.properties.DruidStatProperties;
 import com.alibaba.druid.util.Utils;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import jakarta.servlet.*;

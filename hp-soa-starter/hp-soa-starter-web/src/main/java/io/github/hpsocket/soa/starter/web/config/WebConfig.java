@@ -3,7 +3,7 @@ package io.github.hpsocket.soa.starter.web.config;
 
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
 import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import io.github.hpsocket.soa.framework.core.thread.AsyncThreadPoolExecutor;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.filter.HttpMdcFilter;
@@ -29,17 +29,14 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverters;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -254,44 +251,23 @@ public class WebConfig implements WebMvcConfigurer
         return new AsyncServiceImpl(asyncThreadPoolExecutor);
     }
 
-    /** {@linkplain Jackson2ObjectMapperBuilder} 默认配置 */
+    /** {@linkplain JsonMapper} 默认配置 */
     @Bean
     @ConditionalOnMissingBean
-    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer()
+    public JsonMapper jsonMapper()
     {
-        return builder -> WebServerHelper.configJackson2ObjectMapperBuilder(builder);
+        return WebServerHelper.createJsonMapper(WebServerHelper.createJsonMapperBuilder());
     }
 
-    /** {@linkplain ObjectMapper} 默认配置 */
-    @Bean
-    @ConditionalOnMissingBean
-    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder)
-    {
-        return WebServerHelper.createObjectMapper(builder);
-    }
-    
     /** HTTP 请求报文转换器配置 */
     @Override
-    public void extendMessageConverters(List<HttpMessageConverter<?>> converters)
+    public void configureMessageConverters(HttpMessageConverters.ServerBuilder builder)
     {
         WebProperties.HttpProperties httpProperties = webProperties.getHttp();
 
         if(httpProperties.isUseFastJsonMessageConverter())
         {
-            int i = 0;
-            List<MediaType> mediaTypes = null;
-
-            for(; i < converters.size(); i++)
-            {
-                if(converters.get(i) instanceof MappingJackson2HttpMessageConverter jackson2Converter)
-                {
-                    mediaTypes = jackson2Converter.getSupportedMediaTypes();
-                    break;
-                }
-            }
-
-            if(mediaTypes == null)
-                mediaTypes = Arrays.asList(MediaType.APPLICATION_JSON, new MediaType("application", "*+json"));
+            List<MediaType> mediaTypes = Arrays.asList(MediaType.APPLICATION_JSON, new MediaType("application", "*+json"));
 
             String dateTimeFormat = httpProperties.getDateTimeFormat();
             if(GeneralHelper.isStrEmpty(dateTimeFormat))
@@ -306,10 +282,8 @@ public class WebConfig implements WebMvcConfigurer
             config.setDateFormat(dateTimeFormat);
             config.setJSONB(true);
 
-            converters.add(i, converter);
+            builder.withJsonConverter(converter);
         }
-
-        WebMvcConfigurer.super.extendMessageConverters(converters);
     }
 
     /** 跨域配置 */

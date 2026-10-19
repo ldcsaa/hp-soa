@@ -12,8 +12,8 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.boot.kafka.autoconfigure.KafkaAutoConfiguration;
+import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -64,14 +64,14 @@ public class SoaKafkaConfig
         ObjectProvider<RecordMessageConverter> messageConverter, 
         ObjectProvider<ProducerInterceptor<Object, Object>> producerInterceptor)
     {
-        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
         KafkaTemplate<Object, Object> kafkaTemplate = new KafkaTemplate<>(kafkaProducerFactory);
-        
         messageConverter.ifUnique(kafkaTemplate::setMessageConverter);
         producerInterceptor.ifUnique(kafkaTemplate::setProducerInterceptor);
-        map.from(kafkaProducerListener).to(kafkaTemplate::setProducerListener);
-        map.from(properties.getTemplate().getDefaultTopic()).to(kafkaTemplate::setDefaultTopic);
-        map.from(properties.getTemplate().getTransactionIdPrefix()).to(kafkaTemplate::setTransactionIdPrefix);
+
+        PropertyMapper map = PropertyMapper.get();
+        map.from(kafkaProducerListener).when(l -> l != null).to(kafkaTemplate::setProducerListener);
+        map.from(properties.getTemplate().getDefaultTopic()).when(t -> t != null).to(kafkaTemplate::setDefaultTopic);
+        map.from(properties.getTemplate().getTransactionIdPrefix()).when(p -> p != null).to(kafkaTemplate::setTransactionIdPrefix);
         kafkaTemplate.setAllowNonTransactional(true);
         
         return kafkaTemplate;

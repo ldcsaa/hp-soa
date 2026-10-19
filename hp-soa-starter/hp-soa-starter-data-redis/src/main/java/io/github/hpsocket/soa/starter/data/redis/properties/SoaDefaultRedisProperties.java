@@ -1,7 +1,7 @@
 package io.github.hpsocket.soa.starter.data.redis.properties;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component("soaDefaultRedisProperties")
 @ConfigurationProperties(prefix = "spring.data.redis")
 @ConditionalOnExpression("'${spring.data.redis.host:}' != '' || '${spring.data.redis.url:}' != ''")
-public class SoaDefaultRedisProperties extends RedisProperties
+public class SoaDefaultRedisProperties extends DataRedisProperties
 {
 
 }

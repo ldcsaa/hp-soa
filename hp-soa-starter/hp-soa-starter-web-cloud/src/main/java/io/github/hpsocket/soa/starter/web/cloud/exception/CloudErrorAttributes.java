@@ -2,7 +2,7 @@ package io.github.hpsocket.soa.starter.web.cloud.exception;
 
 import io.github.hpsocket.soa.framework.core.exception.ServiceException;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
-import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
+import org.springframework.boot.webmvc.error.DefaultErrorAttributes;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.Map;

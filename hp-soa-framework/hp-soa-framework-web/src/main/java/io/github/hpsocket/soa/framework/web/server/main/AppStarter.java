@@ -5,11 +5,11 @@ import io.github.hpsocket.soa.framework.web.server.init.ServerInitializer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.amqp.autoconfigure.RabbitAutoConfiguration;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisReactiveAutoConfiguration;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisRepositoriesAutoConfiguration;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /** <b>默认应用程序启动器</b> */
@@ -18,9 +18,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
                         /* 扫描 Spring Bean */
                         scanBasePackages = {"${hp.soa.web.component-scan.base-package:}"},
                         exclude = { DataSourceAutoConfiguration.class,
-                                    RedisAutoConfiguration.class,
-                                    RedisReactiveAutoConfiguration.class,
-                                    RedisRepositoriesAutoConfiguration.class,
+                                    DataRedisAutoConfiguration.class,
+                                    DataRedisReactiveAutoConfiguration.class,
+                                    DataRedisRepositoriesAutoConfiguration.class,
                                     RabbitAutoConfiguration.class
                                   })
 /* 开启 AspectJ AOP */

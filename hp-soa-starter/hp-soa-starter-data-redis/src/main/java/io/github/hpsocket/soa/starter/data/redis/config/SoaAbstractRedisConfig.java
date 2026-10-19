@@ -22,8 +22,8 @@ import org.redisson.misc.RedisURI;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.redis.RedisConnectionDetails;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisConnectionDetails;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisProperties;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -42,6 +42,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.*;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
 import org.springframework.util.ReflectionUtils;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,8 +63,8 @@ public abstract class SoaAbstractRedisConfig
     protected static final FastJsonRedisSerializer<Object> fastJsonBRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
     protected static final GenericFastJsonRedisSerializer genericFastJsonBRedisSerializer = new GenericFastJsonRedisSerializer(true);
 
-    protected static final Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
-    protected static final GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
+    protected static final JacksonJsonRedisSerializer<Object> jackson2JsonRedisSerializer = new JacksonJsonRedisSerializer<>(Object.class);
+    protected static final GenericJacksonJsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJacksonJsonRedisSerializer(JsonMapper.shared());
 
     protected static final KryoRedisSerializer<Object> kryoRedisSerializer = new KryoRedisSerializer<Object>();
     protected static final KryoNotNullRedisSerializer<Object> kryoNotNullRedisSerializer = new KryoNotNullRedisSerializer<Object>();
@@ -77,7 +78,7 @@ public abstract class SoaAbstractRedisConfig
 
     private final List<RedissonAutoConfigurationCustomizer> redissonAutoConfigurationCustomizers;
     private final RedissonProperties redissonProperties;
-    private final RedisProperties redisProperties;
+    private final DataRedisProperties redisProperties;
 
     @Autowired
     private ApplicationContext ctx;
@@ -85,11 +86,11 @@ public abstract class SoaAbstractRedisConfig
     public SoaAbstractRedisConfig(
         ObjectProvider<List<RedissonAutoConfigurationCustomizer>> redissonAutoConfigurationCustomizers,
         ObjectProvider<RedissonProperties> redissonProperties,
-        ObjectProvider<RedisProperties> redisProperties)
+        ObjectProvider<DataRedisProperties> redisProperties)
     {
         this.redissonAutoConfigurationCustomizers = redissonAutoConfigurationCustomizers.getIfUnique();
         this.redissonProperties = redissonProperties.getIfUnique(() -> new RedissonProperties());
-        this.redisProperties = redisProperties.getIfUnique(() -> new RedisProperties());
+        this.redisProperties = redisProperties.getIfUnique(() -> new DataRedisProperties());
     }
     
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory)
@@ -273,7 +274,7 @@ public abstract class SoaAbstractRedisConfig
 
     private boolean hasConnectionDetails() {
         try {
-            Class.forName("org.springframework.boot.autoconfigure.data.redis.RedisConnectionDetails");
+            Class.forName("org.springframework.boot.data.redis.autoconfigure.DataRedisConnectionDetails");
             return true;
         } catch (ClassNotFoundException e) {
             return false;
@@ -283,11 +284,11 @@ public abstract class SoaAbstractRedisConfig
     @SuppressWarnings({ "deprecation", "unchecked", "rawtypes"})
     public RedissonClient redisson() throws IOException {
         Config config;
-        Method clusterMethod = ReflectionUtils.findMethod(RedisProperties.class, "getCluster");
-        Method usernameMethod = ReflectionUtils.findMethod(RedisProperties.class, "getUsername");
-        Method timeoutMethod = ReflectionUtils.findMethod(RedisProperties.class, "getTimeout");
-        Method connectTimeoutMethod = ReflectionUtils.findMethod(RedisProperties.class, "getConnectTimeout");
-        Method clientNameMethod = ReflectionUtils.findMethod(RedisProperties.class, "getClientName");
+        Method clusterMethod = ReflectionUtils.findMethod(DataRedisProperties.class, "getCluster");
+        Method usernameMethod = ReflectionUtils.findMethod(DataRedisProperties.class, "getUsername");
+        Method timeoutMethod = ReflectionUtils.findMethod(DataRedisProperties.class, "getTimeout");
+        Method connectTimeoutMethod = ReflectionUtils.findMethod(DataRedisProperties.class, "getConnectTimeout");
+        Method clientNameMethod = ReflectionUtils.findMethod(DataRedisProperties.class, "getClientName");
 
         Object timeoutValue = ReflectionUtils.invokeMethod(timeoutMethod, redisProperties);
         String prefix = getPrefix();
@@ -298,8 +299,8 @@ public abstract class SoaAbstractRedisConfig
         boolean isSentinel = false;
         boolean isCluster = false;
         if (hasConnectionDetails()) {
-            ObjectProvider<RedisConnectionDetails> provider = ctx.getBeanProvider(RedisConnectionDetails.class);
-            RedisConnectionDetails b = provider.getIfAvailable();
+            ObjectProvider<DataRedisConnectionDetails> provider = ctx.getBeanProvider(DataRedisConnectionDetails.class);
+            DataRedisConnectionDetails b = provider.getIfAvailable();
             if (b != null) {
                 password = b.getPassword();
                 username = b.getUsername();
@@ -357,7 +358,7 @@ public abstract class SoaAbstractRedisConfig
             String sentinelMaster = null;
 
             if (redisProperties.getSentinel() != null) {
-                Method nodesMethod = ReflectionUtils.findMethod(RedisProperties.Sentinel.class, "getNodes");
+                Method nodesMethod = ReflectionUtils.findMethod(DataRedisProperties.Sentinel.class, "getNodes");
                 Object nodesValue = ReflectionUtils.invokeMethod(nodesMethod, redisProperties.getSentinel());
                 if (nodesValue instanceof String) {
                     nodes = convert(prefix, Arrays.asList(((String) nodesValue).split(",")));
@@ -371,8 +372,8 @@ public abstract class SoaAbstractRedisConfig
             String sentinelUsername = null;
             String sentinelPassword = null;
             if (hasConnectionDetails()) {
-                ObjectProvider<RedisConnectionDetails> provider = ctx.getBeanProvider(RedisConnectionDetails.class);
-                RedisConnectionDetails b = provider.getIfAvailable();
+                ObjectProvider<DataRedisConnectionDetails> provider = ctx.getBeanProvider(DataRedisConnectionDetails.class);
+                DataRedisConnectionDetails b = provider.getIfAvailable();
                 if (b != null && b.getSentinel() != null) {
                     database = b.getSentinel().getDatabase();
                     sentinelMaster = b.getSentinel().getMaster();
@@ -413,8 +414,8 @@ public abstract class SoaAbstractRedisConfig
             }
 
             if (hasConnectionDetails()) {
-                ObjectProvider<RedisConnectionDetails> provider = ctx.getBeanProvider(RedisConnectionDetails.class);
-                RedisConnectionDetails b = provider.getIfAvailable();
+                ObjectProvider<DataRedisConnectionDetails> provider = ctx.getBeanProvider(DataRedisConnectionDetails.class);
+                DataRedisConnectionDetails b = provider.getIfAvailable();
                 if (b != null && b.getCluster() != null) {
                     nodes = convertNodes(prefix, b.getCluster().getNodes());
                 }
@@ -441,8 +442,8 @@ public abstract class SoaAbstractRedisConfig
             String singleAddr = prefix + redisProperties.getHost() + ":" + redisProperties.getPort();
 
             if (hasConnectionDetails()) {
-                ObjectProvider<RedisConnectionDetails> provider = ctx.getBeanProvider(RedisConnectionDetails.class);
-                RedisConnectionDetails b = provider.getIfAvailable();
+                ObjectProvider<DataRedisConnectionDetails> provider = ctx.getBeanProvider(DataRedisConnectionDetails.class);
+                DataRedisConnectionDetails b = provider.getIfAvailable();
                 if (b != null && b.getStandalone() != null) {
                     database = b.getStandalone().getDatabase();
                     singleAddr = prefix + b.getStandalone().getHost() + ":" + b.getStandalone().getPort();
@@ -470,12 +471,12 @@ public abstract class SoaAbstractRedisConfig
     }
 
     private void initSSL(Config config) {
-        Method getSSLMethod = ReflectionUtils.findMethod(RedisProperties.class, "getSsl");
+        Method getSSLMethod = ReflectionUtils.findMethod(DataRedisProperties.class, "getSsl");
         if (getSSLMethod == null) {
             return;
         }
 
-        RedisProperties.Ssl ssl = redisProperties.getSsl();
+        DataRedisProperties.Ssl ssl = redisProperties.getSsl();
         if (ssl.getBundle() == null) {
             return;
         }
@@ -497,8 +498,8 @@ public abstract class SoaAbstractRedisConfig
 
     private String getPrefix() {
         String prefix = RedisURI.REDIS_PROTOCOL;
-        Method isSSLMethod = ReflectionUtils.findMethod(RedisProperties.class, "isSsl");
-        Method getSSLMethod = ReflectionUtils.findMethod(RedisProperties.class, "getSsl");
+        Method isSSLMethod = ReflectionUtils.findMethod(DataRedisProperties.class, "isSsl");
+        Method getSSLMethod = ReflectionUtils.findMethod(DataRedisProperties.class, "getSsl");
         if (isSSLMethod != null) {
             if ((Boolean) ReflectionUtils.invokeMethod(isSSLMethod, redisProperties)) {
                 prefix = RedisURI.REDIS_SSL_PROTOCOL;

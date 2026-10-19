@@ -13,7 +13,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionNameStrategy;
 import org.springframework.amqp.rabbit.connection.RabbitConnectionFactoryBean;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.amqp.*;
+import org.springframework.boot.amqp.autoconfigure.*;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.rabbit.stream.support.StreamAdmin;
@@ -151,7 +151,7 @@ public abstract class SoaAbstractRabbitmqConfig
         builder.lazyInitialization(true);
         RabbitProperties.Stream stream = properties.getStream();
         PropertyMapper map = PropertyMapper.get();
-        
+
         map.from(stream.getHost()).to(builder::host);
         map.from(stream.getPort()).to(builder::port);
         map.from(properties::getVirtualHost).to(builder::virtualHost);
