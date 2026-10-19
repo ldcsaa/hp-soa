@@ -36,7 +36,7 @@
         <xxl-job.version>3.4.2</xxl-job.version>
         <snail-job.version>1.10.0</snail-job.version>
         <sentinel.version>1.8.10</sentinel.version>
-        <rocketmq-v5-client.version>2.3.6</rocketmq-v5-client.version>
+        <rocketmq-spring-boot.version>2.3.6</rocketmq-spring-boot.version>
         
         <caffeine.version>3.2.4</caffeine.version>
         <zstd-jni.version>1.5.7-17</zstd-jni.version>
@@ -472,16 +472,16 @@
                 <artifactId>sentinel-web-servlet</artifactId>
                 <version>${sentinel.version}</version>
             </dependency>
-            
-            <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-v5-client-spring-boot</artifactId>
-                <version>${rocketmq-v5-client.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-v5-client-spring-boot-starter</artifactId>
-                <version>${rocketmq-v5-client.version}</version>
+                <version>${rocketmq-spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq-spring-boot.version}</version>
             </dependency>
             
             <dependency>
