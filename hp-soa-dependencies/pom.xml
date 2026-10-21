@@ -41,7 +41,7 @@
         <caffeine.version>3.2.4</caffeine.version>
         <zstd-jni.version>1.5.7-17</zstd-jni.version>
         <druid.version>1.2.28</druid.version>
-        <redisson.version>4.7.0</redisson.version>
+        <redisson.version>4.8.0</redisson.version>
         <lock4j.version>2.2.7</lock4j.version>
         <mysql-connector-j.version>26.7.0</mysql-connector-j.version>
         <mybatis.version>3.5.19</mybatis.version>

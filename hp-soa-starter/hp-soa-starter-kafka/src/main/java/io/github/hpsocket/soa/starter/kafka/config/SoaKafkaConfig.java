@@ -57,7 +57,7 @@ public class SoaKafkaConfig
     @Bean
     @Primary
     @ConditionalOnMissingBean(KafkaTemplate.class)
-    KafkaTemplate<?, ?> allowNonTransactionalKafkaTemplate(
+    KafkaTemplate<?, ?> kafkaTemplate(
         KafkaProperties properties,
         ProducerFactory<Object, Object> kafkaProducerFactory,
         ProducerListener<Object, Object> kafkaProducerListener,
@@ -66,14 +66,16 @@ public class SoaKafkaConfig
     {
         PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
         KafkaTemplate<Object, Object> kafkaTemplate = new KafkaTemplate<>(kafkaProducerFactory);
-        
+
+        kafkaTemplate.setAllowNonTransactional(true);
         messageConverter.ifUnique(kafkaTemplate::setMessageConverter);
         producerInterceptor.ifUnique(kafkaTemplate::setProducerInterceptor);
+
         map.from(kafkaProducerListener).to(kafkaTemplate::setProducerListener);
         map.from(properties.getTemplate().getDefaultTopic()).to(kafkaTemplate::setDefaultTopic);
         map.from(properties.getTemplate().getTransactionIdPrefix()).to(kafkaTemplate::setTransactionIdPrefix);
-        kafkaTemplate.setAllowNonTransactional(true);
-        
+        map.from(properties.getTemplate().isObservationEnabled()).to(kafkaTemplate::setObservationEnabled);
+
         return kafkaTemplate;
     }
     
