@@ -58,12 +58,12 @@ public class SoaKafkaConfig
     @Primary
     @ConditionalOnMissingBean(KafkaTemplate.class)
     KafkaTemplate<?, ?> kafkaTemplate(
-                            KafkaProperties properties,
-                            ProducerFactory<Object, Object> kafkaProducerFactory,
-                            ProducerListener<Object, Object> kafkaProducerListener,
-                            ObjectProvider<RecordMessageConverter> messageConverter,
-                            ObjectProvider<KafkaTemplateObservationConvention> observationConvention,
-                            ObjectProvider<ProducerInterceptor<Object, Object>> producerInterceptor)
+                                        KafkaProperties properties,
+                                        ProducerFactory<Object, Object> kafkaProducerFactory,
+                                        ProducerListener<Object, Object> kafkaProducerListener,
+                                        ObjectProvider<RecordMessageConverter> messageConverter,
+                                        ObjectProvider<KafkaTemplateObservationConvention> observationConvention,
+                                        ObjectProvider<ProducerInterceptor<Object, Object>> producerInterceptor)
     {
         PropertyMapper map = PropertyMapper.get();
         KafkaTemplate<Object, Object> kafkaTemplate = new KafkaTemplate<>(kafkaProducerFactory);
@@ -82,4 +82,5 @@ public class SoaKafkaConfig
 
         return kafkaTemplate;
     }
+
 }
