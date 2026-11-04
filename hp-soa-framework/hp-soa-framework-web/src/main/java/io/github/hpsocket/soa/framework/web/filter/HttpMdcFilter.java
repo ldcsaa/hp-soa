@@ -5,6 +5,7 @@
     import io.github.hpsocket.soa.framework.core.mdc.MdcRunnable;
     import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
     import io.github.hpsocket.soa.framework.web.advice.RequestContext;
+    import io.github.hpsocket.soa.framework.web.holder.AppConfigHolder;
     import io.github.hpsocket.soa.framework.web.model.RequestAttribute;
     import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
     import jakarta.servlet.*;
@@ -99,6 +100,11 @@ public class HttpMdcFilter implements Filter
 
     private static void logRequest(final RequestAttribute reqAttr)
     {
+        String requestUri = reqAttr.getRequestUri();
+        if(AppConfigHolder.excludedPath(requestUri)) {
+            return;
+        }
+
         try
         {
             ASYNC_LOG_EXECUTOR.execute(new MdcRunnable()
