@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.ssl.SslBundles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
@@ -25,6 +26,7 @@ import org.springframework.rabbit.stream.support.StreamAdmin;
 @ConditionalOnBean({SoaFirstRabbitmqProperties.class})
 public class SoaFirstRabbitmqConfig extends SoaAbstractRabbitmqConfig
 {
+    public static final String rabbitSslBundlesBeanName = "firstRabbitSslBundles";
     public static final String rabbitConnectionDetailsBeanName = "firstRabbitConnectionDetails";
     public static final String rabbitConnectionFactoryBeanConfigurerBeanName = "firstRabbitConnectionFactoryBeanConfigurer";
     public static final String rabbitCredentialsProviderBeanName = "firstRabbitCredentialsProvider";
@@ -45,8 +47,9 @@ public class SoaFirstRabbitmqConfig extends SoaAbstractRabbitmqConfig
 
     @Override
     @Bean(rabbitConnectionDetailsBeanName)
-    RabbitConnectionDetails rabbitConnectionDetails() {
-        return super.rabbitConnectionDetails();
+    RabbitConnectionDetails rabbitConnectionDetails(@Qualifier(rabbitSslBundlesBeanName) ObjectProvider<SslBundles> sslBundles)
+    {
+        return super.rabbitConnectionDetails(sslBundles);
     }
 
     @Override
