@@ -8,6 +8,7 @@ import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.BeanHelper;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.MDC;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
@@ -20,14 +21,13 @@ import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate.ConfirmCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate.ReturnsCallback;
+import org.springframework.amqp.rabbit.support.micrometer.RabbitTemplateObservationConvention;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.amqp.autoconfigure.*;
 import org.springframework.rabbit.stream.producer.ProducerCustomizer;
 import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
 import org.springframework.rabbit.stream.support.converter.StreamMessageConverter;
-import org.springframework.retry.RecoveryCallback;
-import org.springframework.retry.RetryContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,12 +46,14 @@ public abstract class SoaAbstractRabbitmqProducerConfig
     }
 
     public RabbitTemplateConfigurer rabbitTemplateConfigurer(
-        ObjectProvider<MessageConverter> messageConverter, 
-        ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers)
+        ObjectProvider<MessageConverter> messageConverter,
+        ObjectProvider<RabbitTemplateRetrySettingsCustomizer> retrySettingsCustomizers,
+        ObjectProvider<RabbitTemplateObservationConvention> observationConvention)
     {
         RabbitTemplateConfigurer configurer = new RabbitTemplateConfigurer(properties);
         configurer.setMessageConverter(messageConverter.getIfUnique());
-        configurer.setRetryTemplateCustomizers(retryTemplateCustomizers.orderedStream().toList());
+        configurer.setRetrySettingsCustomizers(retrySettingsCustomizers.orderedStream().toList());
+        configurer.setObservationConvention(observationConvention.getIfUnique());
         
         return configurer;
     }
@@ -62,7 +64,7 @@ public abstract class SoaAbstractRabbitmqProducerConfig
         ObjectProvider<RabbitTemplateCustomizer> customizers,
         ObjectProvider<ReturnsCallback> returnsCallback,
         ObjectProvider<ConfirmCallback> confirmCallback,
-        ObjectProvider<RecoveryCallback<?>> recoveryCallback)
+        ObjectProvider<RabbitTemplate.RecoveryCallback> recoveryCallback)
     {
         RabbitTemplate template = new RabbitTemplate();
         configurer.configure(template, connectionFactory);
@@ -77,10 +79,10 @@ public abstract class SoaAbstractRabbitmqProducerConfig
             @Override
             public Message postProcessMessage(Message message) throws AmqpException
             {
-                injectMdcProperties(message);;
+                injectMdcProperties(message);
 
                 return message;
-            } 
+            }
         });
         
         return template;
@@ -106,21 +108,21 @@ public abstract class SoaAbstractRabbitmqProducerConfig
     public ConfirmCallback confirmCallback()
     {
         return new ConfirmCallback()
-        {    
+        {
             @Override
             public void confirm(CorrelationData correlationData, boolean ack, String cause)
             {
-                
+
             }
         };
     }
     
-    public <T> RecoveryCallback<T> recoveryCallback()
+    public RabbitTemplate.RecoveryCallback recoveryCallback()
     {
-        return new RecoveryCallback<T>()
+        return new RabbitTemplate.RecoveryCallback()
         {
             @Override
-            public T recover(RetryContext context) throws Exception
+            public @Nullable Object recover(Throwable lastException)
             {
                 return null;
             }

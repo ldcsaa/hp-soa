@@ -79,8 +79,8 @@ abstract public class AbstractRabbitmqDomainEventSender<T extends DomainEvent>
                     template.send(event.getExchange(), event.getRoutingKey(), message, corData);
                     Confirm confirm = corData.getFuture().get();
                     
-                    if(!confirm.isAck())
-                        log.warn("send MQ message un-ack -> (id: {}, msgId: {}, corId: {}) : {}", id, msgId, corId, confirm.getReason());
+                    if(!confirm.ack())
+                        log.warn("send MQ message un-ack -> (id: {}, msgId: {}, corId: {}) : {}", id, msgId, corId, confirm.reason());
                     
                     succ.add(id);
                 }

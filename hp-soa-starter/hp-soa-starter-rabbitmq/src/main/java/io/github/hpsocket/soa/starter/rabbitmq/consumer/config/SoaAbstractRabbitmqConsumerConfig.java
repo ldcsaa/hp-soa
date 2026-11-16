@@ -2,61 +2,88 @@ package io.github.hpsocket.soa.starter.rabbitmq.consumer.config;
 
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.OffsetSpecification;
-import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
 import org.springframework.amqp.rabbit.config.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.DirectMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.retry.MessageRecoverer;
-import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
+import org.springframework.amqp.rabbit.support.micrometer.RabbitListenerObservationConvention;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.amqp.autoconfigure.DirectRabbitListenerContainerFactoryConfigurer;
-import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
-import org.springframework.boot.amqp.autoconfigure.RabbitProperties.ListenerRetry;
-import org.springframework.boot.amqp.autoconfigure.RabbitRetryTemplateCustomizer;
-import org.springframework.boot.amqp.autoconfigure.SimpleRabbitListenerContainerFactoryConfigurer;
-import org.springframework.boot.context.properties.PropertyMapper;
+import org.springframework.boot.amqp.autoconfigure.*;
+import org.springframework.core.task.VirtualThreadTaskExecutor;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
 import org.springframework.rabbit.stream.listener.StreamListenerContainer;
-import org.springframework.retry.backoff.ExponentialBackOffPolicy;
-import org.springframework.retry.policy.SimpleRetryPolicy;
-import org.springframework.retry.support.RetryTemplate;
+import org.springframework.rabbit.stream.micrometer.RabbitStreamListenerObservationConvention;
 
-import java.time.Duration;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public abstract class SoaAbstractRabbitmqConsumerConfig
 {
     protected final ObjectProvider<MessageConverter> messageConverter;
     protected final ObjectProvider<MessageRecoverer> messageRecoverer;
-    protected final ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers;
+    protected final ObjectProvider<RabbitListenerRetrySettingsCustomizer> retrySettingsCustomizers;
+    protected final ObjectProvider<RabbitListenerObservationConvention> observationConvention;
+
 
     protected final RabbitProperties properties;
 
     public SoaAbstractRabbitmqConsumerConfig(
         ObjectProvider<MessageConverter> messageConverter,
         ObjectProvider<MessageRecoverer> messageRecoverer,
-        ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers,
+        ObjectProvider<RabbitListenerRetrySettingsCustomizer> retrySettingsCustomizers,
+        ObjectProvider<RabbitListenerObservationConvention> observationConvention,
         RabbitProperties properties)
     {
         this.messageConverter = messageConverter;
         this.messageRecoverer = messageRecoverer;
-        this.retryTemplateCustomizers = retryTemplateCustomizers;
+        this.retrySettingsCustomizers = retrySettingsCustomizers;
+        this.observationConvention = observationConvention;
         this.properties = properties;
     }
     
-    public SimpleRabbitListenerContainerFactoryConfigurer simpleRabbitListenerContainerFactoryConfigurer()
+    public SimpleRabbitListenerContainerFactoryConfigurer platformSimpleRabbitListenerContainerFactoryConfigurer()
+    {
+        return simpleListenerConfigurer();
+    }
+
+    public SimpleRabbitListenerContainerFactoryConfigurer virtualSimpleRabbitListenerContainerFactoryConfigurerVirtualThreads()
+    {
+        SimpleRabbitListenerContainerFactoryConfigurer configurer = simpleListenerConfigurer();
+        configurer.setTaskExecutor(new VirtualThreadTaskExecutor("rabbit-simple-"));
+
+        return configurer;
+    }
+
+    private SimpleRabbitListenerContainerFactoryConfigurer simpleListenerConfigurer()
     {
         SimpleRabbitListenerContainerFactoryConfigurer configurer = new SimpleRabbitListenerContainerFactoryConfigurer(this.properties);
-        
-        /*
-        configurer.setMessageConverter(this.messageConverter.getIfUnique());
-        configurer.setMessageRecoverer(this.messageRecoverer.getIfUnique());
-        configurer.setRetryTemplateCustomizers(this.retryTemplateCustomizers.orderedStream().toList());
-        */
-        
+
+        try
+        {
+            Method setMessageConverter = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageConverter", MessageConverter.class);
+            setMessageConverter.setAccessible(true);
+            setMessageConverter.invoke(configurer, this.messageConverter.getIfUnique());
+
+            Method setMessageRecoverer = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageRecoverer", MessageRecoverer.class);
+            setMessageRecoverer.setAccessible(true);
+            setMessageRecoverer.invoke(configurer, this.messageRecoverer.getIfUnique());
+
+            Method setObservationConvention = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setObservationConvention", RabbitListenerObservationConvention.class);
+            setObservationConvention.setAccessible(true);
+            setObservationConvention.invoke(configurer, this.observationConvention.getIfUnique());
+
+            Method setRetrySettingsCustomizers = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setRetrySettingsCustomizers", List.class);
+            setRetrySettingsCustomizers.setAccessible(true);
+            setRetrySettingsCustomizers.invoke(configurer, this.retrySettingsCustomizers.orderedStream().toList());
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+
         return configurer;
     }
     
@@ -65,24 +92,21 @@ public abstract class SoaAbstractRabbitmqConsumerConfig
         ObjectProvider<ContainerCustomizer<SimpleMessageListenerContainer>> simpleContainerCustomizer)
     {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setMessageConverter(this.messageConverter.getIfUnique());
         configurer.configure(factory, connectionFactory);
-        parseRetryConfig(factory);
-        
         simpleContainerCustomizer.ifUnique(factory::setContainerCustomizer);
-        
+
         return factory;
     }
 
-    public DirectRabbitListenerContainerFactoryConfigurer directRabbitListenerContainerFactoryConfigurer()
+    public DirectRabbitListenerContainerFactoryConfigurer platformDirectRabbitListenerContainerFactoryConfigurer()
     {
-        DirectRabbitListenerContainerFactoryConfigurer configurer = new DirectRabbitListenerContainerFactoryConfigurer(this.properties);
-        
-        /*
-        configurer.setMessageConverter(this.messageConverter.getIfUnique());
-        configurer.setMessageRecoverer(this.messageRecoverer.getIfUnique());
-        configurer.setRetryTemplateCustomizers(this.retryTemplateCustomizers.orderedStream().toList());
-        */
+        return directListenerConfigurer();
+    }
+
+    public DirectRabbitListenerContainerFactoryConfigurer virtualDirectRabbitListenerContainerFactoryConfigurerVirtualThreads()
+    {
+        DirectRabbitListenerContainerFactoryConfigurer configurer = directListenerConfigurer();
+        configurer.setTaskExecutor(new VirtualThreadTaskExecutor("rabbit-direct-"));
 
         return configurer;
     }
@@ -92,67 +116,42 @@ public abstract class SoaAbstractRabbitmqConsumerConfig
         ObjectProvider<ContainerCustomizer<DirectMessageListenerContainer>> directContainerCustomizer)
     {
         DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
-        factory.setMessageConverter(this.messageConverter.getIfUnique());
         configurer.configure(factory, connectionFactory);
-        parseRetryConfig(factory);
-        
         directContainerCustomizer.ifUnique(factory::setContainerCustomizer);
-        
+
         return factory;
     }
-    
-    protected void parseRetryConfig(AbstractRabbitListenerContainerFactory<?> factory)
+
+    private DirectRabbitListenerContainerFactoryConfigurer directListenerConfigurer()
     {
-        ListenerRetry retryConfig = this.properties.getListener().getSimple().getRetry();
-        
-        if (retryConfig.isEnabled())
+        DirectRabbitListenerContainerFactoryConfigurer configurer = new DirectRabbitListenerContainerFactoryConfigurer(this.properties);
+
+        try
         {
-            RetryInterceptorBuilder<?, ?> builder = (retryConfig.isStateless())
-                                                    ? RetryInterceptorBuilder.stateless()
-                                                    : RetryInterceptorBuilder.stateful();
-            RetryTemplate retryTemplate = createRetryTemplate(retryConfig, RabbitRetryTemplateCustomizer.Target.LISTENER);
-            builder.retryOperations(retryTemplate);
-            
-            MessageRecoverer recoverer = this.messageRecoverer.getIfUnique();
-            
-            if(recoverer == null)
-                recoverer = new RejectAndDontRequeueRecoverer();
-            
-            builder.recoverer(recoverer);
-            factory.setAdviceChain(builder.build());
+            Method setMessageConverter = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageConverter", MessageConverter.class);
+            setMessageConverter.setAccessible(true);
+            setMessageConverter.invoke(configurer, this.messageConverter.getIfUnique());
+
+            Method setMessageRecoverer = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageRecoverer", MessageRecoverer.class);
+            setMessageRecoverer.setAccessible(true);
+            setMessageRecoverer.invoke(configurer, this.messageRecoverer.getIfUnique());
+
+            Method setObservationConvention = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setObservationConvention", RabbitListenerObservationConvention.class);
+            setObservationConvention.setAccessible(true);
+            setObservationConvention.invoke(configurer, this.observationConvention.getIfUnique());
+
+            Method setRetrySettingsCustomizers = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setRetrySettingsCustomizers", List.class);
+            setRetrySettingsCustomizers.setAccessible(true);
+            setRetrySettingsCustomizers.invoke(configurer, this.retrySettingsCustomizers.orderedStream().toList());
         }
-    }
-    
-    private RetryTemplate createRetryTemplate(RabbitProperties.Retry properties, RabbitRetryTemplateCustomizer.Target target)
-    {
-        PropertyMapper map = PropertyMapper.get();
-        RetryTemplate template = new RetryTemplate();
-        SimpleRetryPolicy policy = new SimpleRetryPolicy();
-        
-        map.from(properties::getMaxAttempts).to(policy::setMaxAttempts);
-        template.setRetryPolicy(policy);
-        ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
-        map.from(properties::getInitialInterval)
-            .whenNonNull()
-            .as(Duration::toMillis)
-            .to(backOffPolicy::setInitialInterval);
-        map.from(properties::getMultiplier).to(backOffPolicy::setMultiplier);
-        map.from(properties::getMaxInterval).whenNonNull().as(Duration::toMillis).to(backOffPolicy::setMaxInterval);
-        template.setBackOffPolicy(backOffPolicy);
-        
-        List<RabbitRetryTemplateCustomizer> customizers = this.retryTemplateCustomizers.orderedStream().toList();
-        
-        if (GeneralHelper.isNotNullOrEmpty(customizers))
+        catch (Exception e)
         {
-            for (RabbitRetryTemplateCustomizer customizer : customizers)
-            {
-                customizer.customize(target, template);
-            }
+            throw new RuntimeException(e);
         }
-        
-        return template;
+
+        return configurer;
     }
-    
+
     public ConsumerCustomizer defaultConsumerCustomizer(String name, OffsetSpecification offset)
     {
         return (id, builder) -> {
@@ -165,10 +164,14 @@ public abstract class SoaAbstractRabbitmqConsumerConfig
     public StreamRabbitListenerContainerFactory streamRabbitListenerContainerFactory(
         Environment rabbitStreamEnvironment,
         ObjectProvider<ConsumerCustomizer> consumerCustomizer,
-        ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer)
+        ObjectProvider<ContainerCustomizer<StreamListenerContainer>> containerCustomizer,
+        ObjectProvider<RabbitStreamListenerObservationConvention> observationConvention)
     {
         StreamRabbitListenerContainerFactory factory = new StreamRabbitListenerContainerFactory(rabbitStreamEnvironment);
-        factory.setNativeListener(this.properties.getListener().getStream().isNativeListener());
+        RabbitProperties.StreamContainer stream = properties.getListener().getStream();
+        factory.setObservationEnabled(stream.isObservationEnabled());
+        factory.setNativeListener(stream.isNativeListener());
+        observationConvention.ifUnique(factory::setStreamListenerObservationConvention);
         consumerCustomizer.ifUnique(factory::setConsumerCustomizer);
         containerCustomizer.ifUnique(factory::setContainerCustomizer);
         

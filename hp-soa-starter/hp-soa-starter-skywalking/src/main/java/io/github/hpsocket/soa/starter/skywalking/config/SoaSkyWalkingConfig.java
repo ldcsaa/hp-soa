@@ -13,7 +13,7 @@ import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingMeterH
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingReceiverTracingHandler;
 import org.apache.skywalking.apm.toolkit.micrometer.observation.SkywalkingSenderTracingHandler;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
-import org.springframework.boot.actuate.autoconfigure.observation.ObservationAutoConfiguration;
+import org.springframework.boot.micrometer.observation.autoconfigure.ObservationAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

@@ -7,11 +7,12 @@ import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate.ConfirmCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate.ReturnsCallback;
+import org.springframework.amqp.rabbit.support.micrometer.RabbitTemplateObservationConvention;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.amqp.autoconfigure.RabbitTemplateRetrySettingsCustomizer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.amqp.autoconfigure.RabbitRetryTemplateCustomizer;
 import org.springframework.boot.amqp.autoconfigure.RabbitStreamTemplateConfigurer;
 import org.springframework.boot.amqp.autoconfigure.RabbitTemplateConfigurer;
 import org.springframework.boot.amqp.autoconfigure.RabbitTemplateCustomizer;
@@ -24,7 +25,6 @@ import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFac
 import org.springframework.rabbit.stream.producer.ProducerCustomizer;
 import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
 import org.springframework.rabbit.stream.support.converter.StreamMessageConverter;
-import org.springframework.retry.RecoveryCallback;
 
 @AutoConfiguration
 @ConditionalOnBean({SoaRabbitmqProducerConfig.class, SoaThirdRabbitmqProperties.class})
@@ -51,10 +51,11 @@ public class SoaThirdRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerC
     @Override
     @Bean(rabbitTemplateConfigurerBeanName)
     public RabbitTemplateConfigurer rabbitTemplateConfigurer(
-        ObjectProvider<MessageConverter> messageConverter,
-        ObjectProvider<RabbitRetryTemplateCustomizer> retryTemplateCustomizers)
+            ObjectProvider<MessageConverter> messageConverter,
+            ObjectProvider<RabbitTemplateRetrySettingsCustomizer> retrySettingsCustomizers,
+            ObjectProvider<RabbitTemplateObservationConvention> observationConvention)
     {
-        return super.rabbitTemplateConfigurer(messageConverter, retryTemplateCustomizers);
+        return super.rabbitTemplateConfigurer(messageConverter, retrySettingsCustomizers, observationConvention);
     }
     
     @Override
@@ -65,7 +66,7 @@ public class SoaThirdRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerC
         @Qualifier(rabbitTemplateCustomizerBeanName) ObjectProvider<RabbitTemplateCustomizer> customizers,
         @Qualifier(rabbitReturnsCallbackBeanName) ObjectProvider<ReturnsCallback> returnsCallback,
         @Qualifier(rabbitConfirmCallbackBeanName) ObjectProvider<ConfirmCallback> confirmCallback,
-        @Qualifier(rabbitRecoveryCallbackBeanName) ObjectProvider<RecoveryCallback<?>> recoveryCallback)
+        @Qualifier(rabbitRecoveryCallbackBeanName) ObjectProvider<RabbitTemplate.RecoveryCallback> recoveryCallback)
     {
         return super.rabbitTemplate(configurer, connectionFactory, customizers, returnsCallback, confirmCallback, recoveryCallback);
     }
@@ -89,7 +90,7 @@ public class SoaThirdRabbitmqProducerConfig extends SoaAbstractRabbitmqProducerC
     @Override
     @Bean(rabbitRecoveryCallbackBeanName)
     @ConditionalOnMissingBean(name = rabbitRecoveryCallbackBeanName)
-    public <T> RecoveryCallback<T> recoveryCallback()
+    public RabbitTemplate.RecoveryCallback recoveryCallback()
     {
         return super.recoveryCallback();
     }
