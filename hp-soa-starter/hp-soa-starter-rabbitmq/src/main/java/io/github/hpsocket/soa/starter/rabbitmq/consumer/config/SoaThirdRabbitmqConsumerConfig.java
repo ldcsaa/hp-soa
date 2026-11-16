@@ -17,10 +17,8 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.DirectRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.*;
+import org.springframework.boot.autoconfigure.thread.Threading;
 import org.springframework.context.annotation.Bean;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.rabbit.stream.listener.ConsumerCustomizer;
@@ -51,12 +49,21 @@ public class SoaThirdRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
     {
         super(messageConverter, messageRecoverer, retryTemplateCustomizers, properties);
     }
-    
+
     @Override
+    @ConditionalOnThreading(Threading.PLATFORM)
     @Bean(simpleRabbitListenerContainerFactoryConfigurerBeanName)
-    public SimpleRabbitListenerContainerFactoryConfigurer simpleRabbitListenerContainerFactoryConfigurer()
+    public SimpleRabbitListenerContainerFactoryConfigurer platformSimpleRabbitListenerContainerFactoryConfigurer()
     {
-        return super.simpleRabbitListenerContainerFactoryConfigurer();
+        return super.platformSimpleRabbitListenerContainerFactoryConfigurer();
+    }
+
+    @Override
+    @ConditionalOnThreading(Threading.VIRTUAL)
+    @Bean(simpleRabbitListenerContainerFactoryConfigurerBeanName)
+    public SimpleRabbitListenerContainerFactoryConfigurer virtualSimpleRabbitListenerContainerFactoryConfigurer()
+    {
+        return super.virtualSimpleRabbitListenerContainerFactoryConfigurer();
     }
     
     @Override
@@ -69,12 +76,21 @@ public class SoaThirdRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
     {
         return super.simpleRabbitListenerContainerFactory(configurer, connectionFactory, simpleContainerCustomizer);
     }
-    
+
     @Override
+    @ConditionalOnThreading(Threading.PLATFORM)
     @Bean(directRabbitListenerContainerFactoryConfigurerBeanName)
-    public DirectRabbitListenerContainerFactoryConfigurer directRabbitListenerContainerFactoryConfigurer()
+    public DirectRabbitListenerContainerFactoryConfigurer platformDirectRabbitListenerContainerFactoryConfigurer()
     {
-        return super.directRabbitListenerContainerFactoryConfigurer();
+        return super.platformDirectRabbitListenerContainerFactoryConfigurer();
+    }
+
+    @Override
+    @ConditionalOnThreading(Threading.VIRTUAL)
+    @Bean(directRabbitListenerContainerFactoryConfigurerBeanName)
+    public DirectRabbitListenerContainerFactoryConfigurer virtualDirectRabbitListenerContainerFactoryConfigurer()
+    {
+        return super.virtualDirectRabbitListenerContainerFactoryConfigurer();
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.rabbitmq.client.impl.CredentialsRefreshService;
 import com.rabbitmq.stream.ByteCapacity;
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.EnvironmentBuilder;
+import io.github.hpsocket.soa.starter.rabbitmq.support.PropertiesRabbitConnectionDetails;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -15,12 +16,11 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.amqp.*;
 import org.springframework.boot.context.properties.PropertyMapper;
+import org.springframework.boot.ssl.SslBundles;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.rabbit.stream.support.StreamAdmin;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -37,45 +37,9 @@ public abstract class SoaAbstractRabbitmqConfig
         this.properties = properties;
     }
 
-    RabbitConnectionDetails rabbitConnectionDetails()
+    RabbitConnectionDetails rabbitConnectionDetails(ObjectProvider<SslBundles> sslBundles)
     {
-        return new RabbitConnectionDetails() {
-
-            @Override
-            public String getUsername()
-            {
-                return properties.determineUsername();
-            }
-
-            @Override
-            public String getPassword()
-            {
-                return properties.determinePassword();
-            }
-
-            @Override
-            public String getVirtualHost()
-            {
-                return properties.determineVirtualHost();
-            }
-
-            @Override
-            public List<Address> getAddresses()
-            {
-                List<Address> addresses = new ArrayList<>();
-                
-                for (String address : properties.determineAddresses())
-                {
-                    int portSeparatorIndex = address.lastIndexOf(':');
-                    String host = address.substring(0, portSeparatorIndex);
-                    String port = address.substring(portSeparatorIndex + 1);
-                    
-                    addresses.add(new Address(host, Integer.parseInt(port)));
-                }
-                
-                return addresses;
-            }
-        };
+        return new PropertiesRabbitConnectionDetails(properties, sslBundles.getIfAvailable());
     }
 
     public RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer(
@@ -151,7 +115,7 @@ public abstract class SoaAbstractRabbitmqConfig
         builder.lazyInitialization(true);
         RabbitProperties.Stream stream = properties.getStream();
         PropertyMapper map = PropertyMapper.get();
-        
+
         map.from(stream.getHost()).to(builder::host);
         map.from(stream.getPort()).to(builder::port);
         map.from(properties::getVirtualHost).to(builder::virtualHost);
