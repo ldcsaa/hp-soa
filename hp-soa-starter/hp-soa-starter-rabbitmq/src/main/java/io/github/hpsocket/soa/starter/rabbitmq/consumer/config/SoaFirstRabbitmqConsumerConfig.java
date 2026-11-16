@@ -54,6 +54,7 @@ public class SoaFirstRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
         super(messageConverter, messageRecoverer, retrySettingsCustomizers, observationConvention, properties);
     }
 
+    @Override
     @ConditionalOnThreading(Threading.PLATFORM)
     @Bean(simpleRabbitListenerContainerFactoryConfigurerBeanName)
     public SimpleRabbitListenerContainerFactoryConfigurer platformSimpleRabbitListenerContainerFactoryConfigurer()
@@ -61,11 +62,12 @@ public class SoaFirstRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
         return super.platformSimpleRabbitListenerContainerFactoryConfigurer();
     }
 
+    @Override
     @ConditionalOnThreading(Threading.VIRTUAL)
     @Bean(simpleRabbitListenerContainerFactoryConfigurerBeanName)
     public SimpleRabbitListenerContainerFactoryConfigurer virtualSimpleRabbitListenerContainerFactoryConfigurer()
     {
-        return super.virtualSimpleRabbitListenerContainerFactoryConfigurerVirtualThreads();
+        return super.virtualSimpleRabbitListenerContainerFactoryConfigurer();
     }
     
     @Override
@@ -79,6 +81,7 @@ public class SoaFirstRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
         return super.simpleRabbitListenerContainerFactory(configurer, connectionFactory, simpleContainerCustomizer);
     }
 
+    @Override
     @ConditionalOnThreading(Threading.PLATFORM)
     @Bean(directRabbitListenerContainerFactoryConfigurerBeanName)
     public DirectRabbitListenerContainerFactoryConfigurer platformDirectRabbitListenerContainerFactoryConfigurer()
@@ -86,11 +89,12 @@ public class SoaFirstRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsumerC
         return super.platformDirectRabbitListenerContainerFactoryConfigurer();
     }
 
+    @Override
     @ConditionalOnThreading(Threading.VIRTUAL)
     @Bean(directRabbitListenerContainerFactoryConfigurerBeanName)
     public DirectRabbitListenerContainerFactoryConfigurer virtualDirectRabbitListenerContainerFactoryConfigurer()
     {
-        return super.virtualDirectRabbitListenerContainerFactoryConfigurerVirtualThreads();
+        return super.virtualDirectRabbitListenerContainerFactoryConfigurer();
     }
 
     @Override

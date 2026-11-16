@@ -57,6 +57,7 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
     }
 
     @Primary
+    @Override
     @ConditionalOnThreading(Threading.PLATFORM)
     @Bean(simpleRabbitListenerContainerFactoryConfigurerBeanName)
     public SimpleRabbitListenerContainerFactoryConfigurer platformSimpleRabbitListenerContainerFactoryConfigurer()
@@ -65,11 +66,12 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
     }
 
     @Primary
+    @Override
     @ConditionalOnThreading(Threading.VIRTUAL)
     @Bean(simpleRabbitListenerContainerFactoryConfigurerBeanName)
     public SimpleRabbitListenerContainerFactoryConfigurer virtualSimpleRabbitListenerContainerFactoryConfigurer()
     {
-        return super.virtualSimpleRabbitListenerContainerFactoryConfigurerVirtualThreads();
+        return super.virtualSimpleRabbitListenerContainerFactoryConfigurer();
     }
     
     @Primary
@@ -85,6 +87,7 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
     }
 
     @Primary
+    @Override
     @ConditionalOnThreading(Threading.PLATFORM)
     @Bean(directRabbitListenerContainerFactoryConfigurerBeanName)
     public DirectRabbitListenerContainerFactoryConfigurer platformDirectRabbitListenerContainerFactoryConfigurer()
@@ -93,11 +96,12 @@ public class SoaDefaultRabbitmqConsumerConfig extends SoaAbstractRabbitmqConsume
     }
 
     @Primary
+    @Override
     @ConditionalOnThreading(Threading.VIRTUAL)
     @Bean(directRabbitListenerContainerFactoryConfigurerBeanName)
     public DirectRabbitListenerContainerFactoryConfigurer virtualDirectRabbitListenerContainerFactoryConfigurer()
     {
-        return super.virtualDirectRabbitListenerContainerFactoryConfigurerVirtualThreads();
+        return super.virtualDirectRabbitListenerContainerFactoryConfigurer();
     }
 
     @Primary

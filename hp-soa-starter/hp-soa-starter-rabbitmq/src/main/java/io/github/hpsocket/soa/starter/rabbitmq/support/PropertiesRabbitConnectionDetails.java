@@ -16,8 +16,6 @@ public class PropertiesRabbitConnectionDetails implements RabbitConnectionDetail
     private final RabbitProperties properties;
     private final @Nullable SslBundles sslBundles;
 
-    private RabbitProperties.Ssl ssl;
-
     public PropertiesRabbitConnectionDetails(RabbitProperties properties, @Nullable SslBundles sslBundles)
     {
         this.properties = properties;

@@ -49,7 +49,7 @@ public abstract class SoaAbstractRabbitmqConsumerConfig
         return simpleListenerConfigurer();
     }
 
-    public SimpleRabbitListenerContainerFactoryConfigurer virtualSimpleRabbitListenerContainerFactoryConfigurerVirtualThreads()
+    public SimpleRabbitListenerContainerFactoryConfigurer virtualSimpleRabbitListenerContainerFactoryConfigurer()
     {
         SimpleRabbitListenerContainerFactoryConfigurer configurer = simpleListenerConfigurer();
         configurer.setTaskExecutor(new VirtualThreadTaskExecutor("rabbit-simple-"));
@@ -57,36 +57,6 @@ public abstract class SoaAbstractRabbitmqConsumerConfig
         return configurer;
     }
 
-    private SimpleRabbitListenerContainerFactoryConfigurer simpleListenerConfigurer()
-    {
-        SimpleRabbitListenerContainerFactoryConfigurer configurer = new SimpleRabbitListenerContainerFactoryConfigurer(this.properties);
-
-        try
-        {
-            Method setMessageConverter = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageConverter", MessageConverter.class);
-            setMessageConverter.setAccessible(true);
-            setMessageConverter.invoke(configurer, this.messageConverter.getIfUnique());
-
-            Method setMessageRecoverer = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageRecoverer", MessageRecoverer.class);
-            setMessageRecoverer.setAccessible(true);
-            setMessageRecoverer.invoke(configurer, this.messageRecoverer.getIfUnique());
-
-            Method setObservationConvention = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setObservationConvention", RabbitListenerObservationConvention.class);
-            setObservationConvention.setAccessible(true);
-            setObservationConvention.invoke(configurer, this.observationConvention.getIfUnique());
-
-            Method setRetrySettingsCustomizers = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setRetrySettingsCustomizers", List.class);
-            setRetrySettingsCustomizers.setAccessible(true);
-            setRetrySettingsCustomizers.invoke(configurer, this.retrySettingsCustomizers.orderedStream().toList());
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-
-        return configurer;
-    }
-    
     public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
         SimpleRabbitListenerContainerFactoryConfigurer configurer, ConnectionFactory connectionFactory,
         ObjectProvider<ContainerCustomizer<SimpleMessageListenerContainer>> simpleContainerCustomizer)
@@ -103,7 +73,7 @@ public abstract class SoaAbstractRabbitmqConsumerConfig
         return directListenerConfigurer();
     }
 
-    public DirectRabbitListenerContainerFactoryConfigurer virtualDirectRabbitListenerContainerFactoryConfigurerVirtualThreads()
+    public DirectRabbitListenerContainerFactoryConfigurer virtualDirectRabbitListenerContainerFactoryConfigurer()
     {
         DirectRabbitListenerContainerFactoryConfigurer configurer = directListenerConfigurer();
         configurer.setTaskExecutor(new VirtualThreadTaskExecutor("rabbit-direct-"));
@@ -120,36 +90,6 @@ public abstract class SoaAbstractRabbitmqConsumerConfig
         directContainerCustomizer.ifUnique(factory::setContainerCustomizer);
 
         return factory;
-    }
-
-    private DirectRabbitListenerContainerFactoryConfigurer directListenerConfigurer()
-    {
-        DirectRabbitListenerContainerFactoryConfigurer configurer = new DirectRabbitListenerContainerFactoryConfigurer(this.properties);
-
-        try
-        {
-            Method setMessageConverter = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageConverter", MessageConverter.class);
-            setMessageConverter.setAccessible(true);
-            setMessageConverter.invoke(configurer, this.messageConverter.getIfUnique());
-
-            Method setMessageRecoverer = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageRecoverer", MessageRecoverer.class);
-            setMessageRecoverer.setAccessible(true);
-            setMessageRecoverer.invoke(configurer, this.messageRecoverer.getIfUnique());
-
-            Method setObservationConvention = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setObservationConvention", RabbitListenerObservationConvention.class);
-            setObservationConvention.setAccessible(true);
-            setObservationConvention.invoke(configurer, this.observationConvention.getIfUnique());
-
-            Method setRetrySettingsCustomizers = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setRetrySettingsCustomizers", List.class);
-            setRetrySettingsCustomizers.setAccessible(true);
-            setRetrySettingsCustomizers.invoke(configurer, this.retrySettingsCustomizers.orderedStream().toList());
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-
-        return configurer;
     }
 
     public ConsumerCustomizer defaultConsumerCustomizer(String name, OffsetSpecification offset)
@@ -177,4 +117,45 @@ public abstract class SoaAbstractRabbitmqConsumerConfig
         
         return factory;
     }
+
+    private SimpleRabbitListenerContainerFactoryConfigurer simpleListenerConfigurer()
+    {
+        SimpleRabbitListenerContainerFactoryConfigurer configurer = new SimpleRabbitListenerContainerFactoryConfigurer(this.properties);
+        return listenerConfigurer(configurer);
+    }
+
+    private DirectRabbitListenerContainerFactoryConfigurer directListenerConfigurer()
+    {
+        DirectRabbitListenerContainerFactoryConfigurer configurer = new DirectRabbitListenerContainerFactoryConfigurer(this.properties);
+        return listenerConfigurer(configurer);
+    }
+
+    private <T extends AbstractRabbitListenerContainerFactoryConfigurer> T listenerConfigurer(T configurer)
+    {
+        try
+        {
+            Method setMessageConverter = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageConverter", MessageConverter.class);
+            setMessageConverter.setAccessible(true);
+            setMessageConverter.invoke(configurer, this.messageConverter.getIfUnique());
+
+            Method setMessageRecoverer = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setMessageRecoverer", MessageRecoverer.class);
+            setMessageRecoverer.setAccessible(true);
+            setMessageRecoverer.invoke(configurer, this.messageRecoverer.getIfUnique());
+
+            Method setObservationConvention = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setObservationConvention", RabbitListenerObservationConvention.class);
+            setObservationConvention.setAccessible(true);
+            setObservationConvention.invoke(configurer, this.observationConvention.getIfUnique());
+
+            Method setRetrySettingsCustomizers = AbstractRabbitListenerContainerFactoryConfigurer.class.getDeclaredMethod("setRetrySettingsCustomizers", List.class);
+            setRetrySettingsCustomizers.setAccessible(true);
+            setRetrySettingsCustomizers.invoke(configurer, this.retrySettingsCustomizers.orderedStream().toList());
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        return configurer;
+    }
+
 }
