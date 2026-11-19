@@ -3,6 +3,7 @@ package io.github.hpsocket.soa.starter.rocketmq.support;
 import io.github.hpsocket.soa.framework.core.id.IdGenerator;
 import io.github.hpsocket.soa.framework.core.mdc.MdcAttr;
 import io.github.hpsocket.soa.framework.core.util.GeneralHelper;
+import io.github.hpsocket.soa.framework.web.holder.SpringContextHolder;
 import io.github.hpsocket.soa.framework.web.support.WebServerHelper;
 import io.github.hpsocket.soa.starter.rocketmq.annotation.SoaSimpleConsumerReceiveConfiguration;
 import io.github.hpsocket.soa.starter.rocketmq.consumer.listener.RocketmqReadOnlyEventListener;
@@ -11,8 +12,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.apis.ClientException;
+import org.apache.rocketmq.client.apis.consumer.SimpleConsumerBuilder;
 import org.apache.rocketmq.client.apis.message.MessageView;
+import org.apache.rocketmq.client.apis.producer.ProducerBuilder;
 import org.apache.rocketmq.client.core.RocketMQClientTemplate;
+import org.apache.rocketmq.client.support.RocketMQMessageConverter;
 import org.slf4j.MDC;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.BeanNameAware;
@@ -34,6 +38,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
+import static org.apache.rocketmq.client.autoconfigure.RocketMQAutoConfiguration.*;
+
 /** <b>{@linkplain org.apache.rocketmq.client.core.RocketMQClientTemplate RocketMQClientTemplate} 增强类</b><br>
  * {@linkplain RocketmqReadOnlyEventListener} 是 HP-SOA 的默认 Template<p>
  * <b>Producer 增强：</b>
@@ -49,10 +55,6 @@ import java.util.stream.IntStream;
 @Slf4j
 public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements BeanNameAware
 {
-    public static final int DEFAULT_CONSUMPTION_THREAD_COUNT = 1;
-    public static final int DEFAULT_MAX_MESSAGE_NUM          = 16;
-    public static final int DEFAULT_INVISIBLE_DURATION       = 15;
-    
     private static final int RETRY_WAIT_TIME                 = 5;
     public static final int AWAIT_TERMINATION_TIME           = 15;
     
@@ -72,6 +74,33 @@ public class SoaRocketMQClientTemplate extends RocketMQClientTemplate implements
     private volatile boolean stopped;
 
     private String beanName;
+
+    public SoaRocketMQClientTemplate()
+    {
+        ProducerBuilder producerBuilder = SpringContextHolder.getBean(PRODUCER_BUILDER_BEAN_NAME, ProducerBuilder.class, false);
+        SimpleConsumerBuilder simpleConsumerBuilder = SpringContextHolder.getBean(SIMPLE_CONSUMER_BUILDER_BEAN_NAME, SimpleConsumerBuilder.class, false);
+
+        init(producerBuilder, simpleConsumerBuilder);
+    }
+
+    public SoaRocketMQClientTemplate(ProducerBuilder producerBuilder, SimpleConsumerBuilder simpleConsumerBuilder)
+    {
+        init(producerBuilder, simpleConsumerBuilder);
+    }
+
+    public void init(ProducerBuilder producerBuilder, SimpleConsumerBuilder simpleConsumerBuilder)
+    {
+        if(producerBuilder == null && simpleConsumerBuilder == null)
+            throw new IllegalStateException(String.format("no bean named '%s' or '%s' for target bean '%s' to inject",
+                                            PRODUCER_BUILDER_BEAN_NAME, SIMPLE_CONSUMER_BUILDER_BEAN_NAME, this.getClass().getSimpleName()));
+
+        setProducerBuilder(producerBuilder);
+        setSimpleConsumerBuilder(simpleConsumerBuilder);
+
+        RocketMQMessageConverter messageConverter = SpringContextHolder.getBean(RocketMQMessageConverter.class, false);
+        if(messageConverter != null)
+            setMessageConverter(messageConverter.getMessageConverter());
+    }
 
     @Override
     public void setBeanName(String beanName)

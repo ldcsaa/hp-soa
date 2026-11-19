@@ -10,7 +10,9 @@ import io.github.hpsocket.soa.starter.rocketmq.support.SoaRocketMQClientTemplate
 (
     //value = FifoConsumerTemplate.BEAN_NAME,
     topic = "${rocketmq-fifo.simple-consumer.topic}",
-    consumerGroup = "${rocketmq-fifo.simple-consumer.consumer-group}"
+    consumerGroup = "${rocketmq-fifo.simple-consumer.consumer-group}",
+    requestTimeout = 5,
+    awaitDuration = 12
 )
 @SoaSimpleConsumerReceiveConfiguration
 (

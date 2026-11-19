@@ -1,14 +1,14 @@
 
 package io.github.hpsocket.demo.infra.mongodb.config;
 
-import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import io.github.hpsocket.soa.starter.data.mongodb.config.SoaMongoConfig;
 
 /** <b>应用程序配置类</b> */
-@AutoConfiguration
+@Configuration
 //激活审计功能（"offsetDateTimeProvider" Bean 作为日期时间提供者）
 @EnableMongoAuditing(dateTimeProviderRef = SoaMongoConfig.offsetDateTimeProviderBeanName)
 //激活 Repository DAO Bean

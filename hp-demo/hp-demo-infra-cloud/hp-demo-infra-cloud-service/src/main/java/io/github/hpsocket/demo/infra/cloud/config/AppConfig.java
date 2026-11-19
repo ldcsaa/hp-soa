@@ -4,12 +4,12 @@ import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 
 import io.github.hpsocket.soa.starter.rabbitmq.annotation.EnableSoaRabbitmqProducer;
 
-@AutoConfiguration
+@Configuration
 @EnableSoaRabbitmqProducer
 /* default mybatis mapper scan package -> ${hp.soa.data.mysql.mapper-scan.base-package} */
 //@MapperScan("io.github.hpsocket.demo.infra.cloud.mapper")
