@@ -3,14 +3,14 @@ package io.github.hpsocket.demo.mqtt.config;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 
 import io.github.hpsocket.soa.starter.mqtt.config.SoaDefaultMqttConfig;
 import io.github.hpsocket.soa.starter.mqtt.properties.SoaMqttProperties;
 import io.github.hpsocket.soa.starter.mqtt.service.MqttPropertiesCustomizer;
 
-@AutoConfiguration
+@Configuration
 public class AppConfig
 {
     @Bean(SoaDefaultMqttConfig.mqttPropertiesCustomizersBeanName)

@@ -8,12 +8,12 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 
 import io.github.hpsocket.soa.starter.rabbitmq.annotation.EnableSoaRabbitmqConsumer;
 
-@AutoConfiguration
+@Configuration
 @EnableSoaRabbitmqConsumer
 /* default feign clients scan package -> ${hp.soa.web.cloud.feign-clients.base-package} */
 //@EnableFeignClients("io.github.hpsocket.demo.bff.cloud.client")

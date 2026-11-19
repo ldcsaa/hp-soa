@@ -17,9 +17,9 @@ public class SoaSimpleConsumerReceiveProperties implements Cloneable
     /** 消息接收线程数：{@linkplain org.apache.rocketmq.client.core.RocketMQClientTemplate#receive(int, java.time.Duration) receive(int maxMessageNum, Duration invisibleDuration)} 并发线程数 */
     private int consumptionThreadCount  = 1;
     /** 最大消息数量：{@linkplain org.apache.rocketmq.client.core.RocketMQClientTemplate#receive(int, java.time.Duration) receive(int maxMessageNum, Duration invisibleDuration)} 的 maxMessageNum 参数 */
-    private int maxMessageNum           = 16;
+    private int maxMessageNum           = 10;
     /** 消息不可见期限（秒）：{@linkplain org.apache.rocketmq.client.core.RocketMQClientTemplate#receive(int, java.time.Duration) receive(int maxMessageNum, Duration invisibleDuration)} 的 invisibleDuration 参数 */
-    private int invisibleDuration       = 15;
+    private int invisibleDuration       = 10;
     
     @Override
     public SoaSimpleConsumerReceiveProperties clone()
