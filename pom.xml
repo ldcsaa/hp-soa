@@ -16,12 +16,12 @@
         <hp-soa.version>${revision}</hp-soa.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.assembly.descriptor>/opt/deploy/assembly/assembly.xml</maven.assembly.descriptor>
 
-        <spring-boot-maven-plugin.version>4.1.1</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>4.1.2</spring-boot-maven-plugin.version>
         <spring-boot.main_class>io.github.hpsocket.soa.framework.web.server.main.AppStarter</spring-boot.main_class>
         <spring-boot.jvm_arguments></spring-boot.jvm_arguments>
 
@@ -39,11 +39,11 @@
         <maven-deploy-plugin.version>3.2.0</maven-deploy-plugin.version>
         <maven-install-plugin.version>3.2.0</maven-install-plugin.version>
         <maven-assembly-plugin.version>3.8.0</maven-assembly-plugin.version>
-        <maven-surefire-plugin.version>3.6.0</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.6.1</maven-surefire-plugin.version>
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-        <flatten-maven-plugin.version>1.8.0</flatten-maven-plugin.version>
+        <flatten-maven-plugin.version>1.9.0</flatten-maven-plugin.version>
         <docker-maven-plugin.version>0.49.0</docker-maven-plugin.version>
-        <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
+        <central-publishing-maven-plugin.version>0.12.0</central-publishing-maven-plugin.version>
 
         <maven.surefire.conf.forkCount>1C</maven.surefire.conf.forkCount>
         <maven.surefire.conf.reuseForks>true</maven.surefire.conf.reuseForks>

@@ -23,7 +23,7 @@ import java.util.List;
 
 /** <b>HP-SOA Elasticsearch 配置</b> */
 @AutoConfiguration
-@ConditionalOnExpression("'${spring.data.mongodb.uri:}' != '' || '${spring.data.mongodb.host:}' != ''")
+@ConditionalOnExpression("'${spring.mongodb.uri:}' != '' || '${spring.mongodb.host:}' != ''")
 public class SoaMongoConfig
 {
     public static final String zonedDateTimeProviderBeanName  = "zonedDateTimeProvider";
