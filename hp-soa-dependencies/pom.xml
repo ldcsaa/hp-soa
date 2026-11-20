@@ -46,10 +46,10 @@
         <redisson.version>4.8.0</redisson.version>
         <lock4j.version>2.2.7</lock4j.version>
         <mysql-connector-j.version>26.10.0</mysql-connector-j.version>
-        <mybatis.version>3.6.0</mybatis.version>
+        <mybatis.version>3.5.19</mybatis.version>
         <mybatis-plus.version>3.5.18.1</mybatis-plus.version>
         <mybatis-plus-join.version>1.5.9</mybatis-plus-join.version>
-        <dynamic-datasource-spring-boot4-starter.version>4.6.0</dynamic-datasource-spring-boot4-starter.version>
+        <dynamic-datasource-spring-boot-starter.version>4.6.0</dynamic-datasource-spring-boot-starter.version>
         <pagehelper.version>4.1.1</pagehelper.version>
         <shardingsphere.version>5.5.3</shardingsphere.version>
         <ehcache.version>3.12.0</ehcache.version>
@@ -595,12 +595,12 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot4-starter</artifactId>
-                <version>${dynamic-datasource-spring-boot4-starter.version}</version>
+                <version>${dynamic-datasource-spring-boot-starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring</artifactId>
-                <version>${dynamic-datasource-spring-boot4-starter.version}</version>
+                <version>${dynamic-datasource-spring-boot-starter.version}</version>
             </dependency>
 
             <dependency>
