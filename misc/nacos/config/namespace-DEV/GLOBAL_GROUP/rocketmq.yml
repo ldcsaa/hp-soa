@@ -1,6 +1,6 @@
 rocketmq:
   producer:
-    endpoints: 192.168.56.23:9980
+    endpoints: 192.168.56.23:9981
     topic: test-normal-topic-001
     request-timeout: 3
     max-attempts: 3
@@ -9,13 +9,13 @@ rocketmq:
     access-key: 
     secret-key: 
   simple-consumer: 
-    endpoints: 192.168.56.23:9980
+    endpoints: 192.168.56.23:9981
     topic: test-normal-topic-001
     tag: "*"
     filter-expression-type: "tag"
     consumer-group: normal-group-001
-    await-duration: 5
-    request-timeout: 3
+    await-duration: 12
+    request-timeout: 5
     ssl-enabled: true
     namespace: 
     access-key: 
@@ -34,18 +34,18 @@ rocketmq-fifo:
       auto-start: true
       consumption-thread-count: 3
       max-message-num: 20
-      invisible-duration: 12
+      invisible-duration: 10
       
 rocketmq-delay:
   push-consumer:
-    endpoints: 192.168.56.23:9980
+    endpoints: 192.168.56.23:9981
     topic: test-delay-topic-001
     tag: "*"
     consumer-group: delay-group-001
       
 rocketmq-trans:
   push-consumer:
-    endpoints: 192.168.56.23:9980
+    endpoints: 192.168.56.23:9981
     topic: test-trans-topic-001
     tag: "*"
     consumer-group: trans-group-001

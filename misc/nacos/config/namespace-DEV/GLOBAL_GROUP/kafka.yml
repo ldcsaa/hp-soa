@@ -1,6 +1,8 @@
 ## Kafka 配置
 spring.kafka:
   bootstrap-servers: 192.168.56.23:9092
+  template:
+    allow-non-transactional: true
   # 生产者
   producer:
     # 重试次数

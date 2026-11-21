@@ -3,10 +3,10 @@
 spring.elasticsearch:
   # ES 服务地址，多个地址用','分隔
   uris: http://192.168.56.23:9200
-#  username:
-#  password:
-#  connectionTimeout:
-#  socketTimeout:
+  username: elastic
+  password: 1a2B3c4D
+  connectionTimeout: 5s
+  socketTimeout: 30s
 #  socketKeepAlive:
 #  pathPrefix:
 #  restclient:

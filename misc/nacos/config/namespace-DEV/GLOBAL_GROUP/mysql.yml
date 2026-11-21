@@ -12,7 +12,7 @@ spring.datasource:
       url-pattern: "/__druid/*"
       login-username: admin
       login-password: 123456
-      allow: 127.0.0.1,192.168.0.0/16
+      allow: 127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.0.0.0/8
       reset-enable: true
     aop-patterns:
       - ${hp.soa.web.component-scan.base-package:}
@@ -20,7 +20,7 @@ spring.datasource:
       stat:
         enabled: true
         log-slow-sql: true
-        slow-sql-millis: 500
+        slow-sql-millis: 1000
       wall:
         enabled: true
       slf4j:

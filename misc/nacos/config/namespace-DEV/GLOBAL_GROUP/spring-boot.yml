@@ -17,6 +17,15 @@ server:
     threads:
       max: 200
       min-spare: 5
+  # undertow 配置
+  undertow:
+    buffer-size: 1024
+    direct-buffers: true
+    eager-filter-init: true
+    max-http-post-size: 10MB
+    threads:
+      worker: 64
+      io: 4
 
 ## Spring 配置
 spring:
@@ -41,7 +50,7 @@ spring:
   # Spring Web
   web:
     resources:
-      add-mappings: false
+      add-mappings: true
   # Spring Security
   security:
     user:
@@ -84,16 +93,29 @@ management:
 ## Spring-Doc 配置
 springdoc:
   api-docs:
-    # 是否开启（生成环境应设置为 false）
+    # 是否开启（生产环境应设置为 false）
     enabled: true
     path: /v3/api-docs
   swagger-ui:
-    # 是否开启（生成环境应设置为 false）
+    # 是否开启（生产环境应设置为 false）
     enabled: true
     path: /swagger-ui
-  packages-to-scan: com.github.hpsocket.soa,${hp.soa.web.component-scan.base-package}
+  packages-to-scan: ${hp.soa.web.component-scan.base-package}
   api-infos:
     group-name: ${hp.soa.web.app.name}
     title: ${hp.soa.web.app.name}
     version: ${hp.soa.web.app.version}
-    description: "Spring Boot Project >> ${hp.soa.web.app.name} (v${hp.soa.web.app.version})"
+    description: "Spring Boot Project >> ${hp.soa.web.app.name}"
+
+knife4j:  
+  # 增强配置  
+  enable: true
+  # 是否生产环境
+  production: false
+  # 是否打印 banner
+  banner: false
+  # 账号密码
+  basic:  
+    enable: true  
+    username: admin  
+    password: 123456
