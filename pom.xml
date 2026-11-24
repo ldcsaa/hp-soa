@@ -217,6 +217,9 @@
                             <includeOnlyProperty>git.commit.message.short</includeOnlyProperty>
                             <includeOnlyProperty>git.dirty</includeOnlyProperty>
                         </includeOnlyProperties>
+                        <gitDescribe>
+                            <tags>true</tags>
+                        </gitDescribe>
                         <dateFormat>yyyyMMddHHmmss</dateFormat>
                         <abbrevLength>8</abbrevLength>
                         <generateGitPropertiesFile>true</generateGitPropertiesFile>
