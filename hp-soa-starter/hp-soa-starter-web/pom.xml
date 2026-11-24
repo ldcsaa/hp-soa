@@ -33,9 +33,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- prometheus metrics supported -->
         <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-websockets-jsr</artifactId>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
             <optional>true</optional>
         </dependency>
     </dependencies>
