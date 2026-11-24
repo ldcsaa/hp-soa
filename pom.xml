@@ -205,6 +205,9 @@
                     <configuration>
                         <includeOnlyProperties>
                             <includeOnlyProperty>git.branch</includeOnlyProperty>
+                            <includeOnlyProperty>git.tags</includeOnlyProperty>
+                            <includeOnlyProperty>git.closest.tag.name</includeOnlyProperty>
+                            <includeOnlyProperty>git.closest.tag.commit.count</includeOnlyProperty>
                             <includeOnlyProperty>git.build.time</includeOnlyProperty>
                             <includeOnlyProperty>git.build.version</includeOnlyProperty>
                             <includeOnlyProperty>git.commit.id</includeOnlyProperty>
