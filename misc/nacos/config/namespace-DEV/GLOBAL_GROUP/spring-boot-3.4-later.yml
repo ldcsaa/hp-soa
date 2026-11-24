@@ -17,15 +17,6 @@ server:
     threads:
       max: 200
       min-spare: 5
-  # undertow 配置
-  undertow:
-    buffer-size: 1024
-    direct-buffers: true
-    eager-filter-init: true
-    max-http-post-size: 10MB
-    threads:
-      worker: 64
-      io: 4
 
 ## Spring 配置
 spring:
