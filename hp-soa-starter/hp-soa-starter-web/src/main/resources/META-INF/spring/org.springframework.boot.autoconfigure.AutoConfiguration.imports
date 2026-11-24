@@ -1,4 +1,5 @@
 io.github.hpsocket.soa.starter.web.config.ContextConfig
+io.github.hpsocket.soa.starter.web.config.GitMetricsConfig
 io.github.hpsocket.soa.starter.web.config.WebConfig
 io.github.hpsocket.soa.starter.web.config.SwaggerConfig
 io.github.hpsocket.soa.starter.web.config.ControllerAdviceConfig

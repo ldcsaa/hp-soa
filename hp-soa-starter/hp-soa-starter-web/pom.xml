@@ -33,5 +33,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- prometheus metrics supported -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 </project>
